@@ -1,0 +1,1521 @@
+=== tests/cases/conformance/booleanCoercion/booleanCoercion1.ts ===
+declare let anyValue: any;
+>anyValue : any
+
+declare let unknownValue: unknown;
+>unknownValue : unknown
+
+declare let undefinedValue: undefined;
+>undefinedValue : undefined
+
+declare let nullValue: null;
+>nullValue : null
+>null : null
+
+declare let stringValue: string;
+>stringValue : string
+
+declare let stringLiteral: "123";
+>stringLiteral : "123"
+
+declare let numberValue: number;
+>numberValue : number
+
+declare let numberLiteral: 123;
+>numberLiteral : 123
+
+declare let booleanValue: boolean;
+>booleanValue : boolean
+
+declare let booleanLiteral: true;
+>booleanLiteral : true
+>true : true
+
+declare let bigintValue: bigint;
+>bigintValue : bigint
+
+declare let bugintLiteral: 123n;
+>bugintLiteral : 123n
+
+enum Enum {
+>Enum : Enum
+
+    EnumValue
+>EnumValue : Enum.EnumValue
+}
+
+
+interface Interface {
+    foo: string
+>foo : string
+}
+
+type Type = {
+>Type : Type
+
+    foo: string
+>foo : string
+}
+
+class Class {
+>Class : Class
+
+    foo: string
+>foo : string
+}
+
+declare function functionValue(): void;
+>functionValue : () => void
+
+declare let interfaceLiteralValue: Interface
+>interfaceLiteralValue : Interface
+
+declare let typeLiteralValue: Type;
+>typeLiteralValue : Type
+
+declare let symbolValue: Symbol
+>symbolValue : Symbol
+
+declare let array: string[]
+>array : string[]
+
+declare let classValue: Class
+>classValue : Class
+
+declare let unionTypeWork1: number | string
+>unionTypeWork1 : string | number
+
+declare let unionTypeWork2: number | undefined
+>unionTypeWork2 : number
+
+declare let unionTypeWork3: number | Type
+>unionTypeWork3 : number | Type
+
+declare let intersectionTypeWork1: number & Type
+>intersectionTypeWork1 : number & Type
+
+declare let unionTypeNotWork1: Type | Interface
+>unionTypeNotWork1 : Interface | Type
+
+declare let intersectionTypeNotWork1: Type & Interface
+>intersectionTypeNotWork1 : Type & Interface
+
+function testExoression<T>(typeParameter: T) {
+>testExoression : <T>(typeParameter: T) => void
+>typeParameter : T
+
+    // if
+    if (anyValue) { }
+>anyValue : any
+
+    if (unknownValue) { }
+>unknownValue : unknown
+
+    if (undefinedValue) { }
+>undefinedValue : undefined
+
+    if (nullValue) { }
+>nullValue : null
+
+    if (stringValue) { }
+>stringValue : string
+
+    if (stringLiteral) { }
+>stringLiteral : "123"
+
+    if (numberValue) { }
+>numberValue : number
+
+    if (numberLiteral) { }
+>numberLiteral : 123
+
+    if (booleanValue) { }
+>booleanValue : boolean
+
+    if (booleanLiteral) { }
+>booleanLiteral : true
+
+    if (bigintValue) { }
+>bigintValue : bigint
+
+    if (bugintLiteral) { }
+>bugintLiteral : 123n
+
+    if (typeParameter) { }
+>typeParameter : T
+
+    if (Enum.EnumValue) { }
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+
+    if (unionTypeWork1) { }
+>unionTypeWork1 : string | number
+
+    if (unionTypeWork2) { }
+>unionTypeWork2 : number
+
+    if (unionTypeWork3) { }
+>unionTypeWork3 : number | Type
+
+    if (intersectionTypeWork1) { }
+>intersectionTypeWork1 : number & Type
+
+    if (functionValue) { }
+>functionValue : () => void
+
+    if (interfaceLiteralValue) { }
+>interfaceLiteralValue : Interface
+
+    if (typeLiteralValue) { }
+>typeLiteralValue : Type
+
+    if (symbolValue) { }
+>symbolValue : Symbol
+
+    if (array) { }
+>array : string[]
+
+    if (classValue) { }
+>classValue : Class
+
+    if (unionTypeNotWork1) { }
+>unionTypeNotWork1 : Interface | Type
+
+    if (intersectionTypeNotWork1) { }
+>intersectionTypeNotWork1 : Type & Interface
+
+    // while
+    while (anyValue) { }
+>anyValue : any
+
+    while (unknownValue) { }
+>unknownValue : unknown
+
+    while (undefinedValue) { }
+>undefinedValue : undefined
+
+    while (nullValue) { }
+>nullValue : null
+
+    while (stringValue) { }
+>stringValue : string
+
+    while (stringLiteral) { }
+>stringLiteral : "123"
+
+    while (numberValue) { }
+>numberValue : number
+
+    while (numberLiteral) { }
+>numberLiteral : 123
+
+    while (booleanValue) { }
+>booleanValue : boolean
+
+    while (booleanLiteral) { }
+>booleanLiteral : true
+
+    while (bigintValue) { }
+>bigintValue : bigint
+
+    while (bugintLiteral) { }
+>bugintLiteral : 123n
+
+    while (typeParameter) { }
+>typeParameter : T
+
+    while (Enum.EnumValue) { }
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+
+    while (unionTypeWork1) { }
+>unionTypeWork1 : string | number
+
+    while (unionTypeWork2) { }
+>unionTypeWork2 : number
+
+    while (unionTypeWork3) { }
+>unionTypeWork3 : number | Type
+
+    while (intersectionTypeWork1) { }
+>intersectionTypeWork1 : number & Type
+
+    while (functionValue) { }
+>functionValue : () => void
+
+    while (interfaceLiteralValue) { }
+>interfaceLiteralValue : Interface
+
+    while (typeLiteralValue) { }
+>typeLiteralValue : Type
+
+    while (symbolValue) { }
+>symbolValue : Symbol
+
+    while (array) { }
+>array : string[]
+
+    while (classValue) { }
+>classValue : Class
+
+    while (unionTypeNotWork1) { }
+>unionTypeNotWork1 : Interface | Type
+
+    while (intersectionTypeNotWork1) { }
+>intersectionTypeNotWork1 : Type & Interface
+
+    // do while
+    do { } while (anyValue)
+>anyValue : any
+
+    do { } while (unknownValue)
+>unknownValue : unknown
+
+    do { } while (undefinedValue)
+>undefinedValue : undefined
+
+    do { } while (nullValue)
+>nullValue : null
+
+    do { } while (stringValue)
+>stringValue : string
+
+    do { } while (stringLiteral)
+>stringLiteral : "123"
+
+    do { } while (numberValue)
+>numberValue : number
+
+    do { } while (numberLiteral)
+>numberLiteral : 123
+
+    do { } while (booleanValue)
+>booleanValue : boolean
+
+    do { } while (booleanLiteral)
+>booleanLiteral : true
+
+    do { } while (bigintValue)
+>bigintValue : bigint
+
+    do { } while (bugintLiteral)
+>bugintLiteral : 123n
+
+    do { } while (typeParameter)
+>typeParameter : T
+
+    do { } while (Enum.EnumValue)
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+
+    do {} while (unionTypeWork1)
+>unionTypeWork1 : string | number
+
+    do {} while (unionTypeWork2)
+>unionTypeWork2 : number
+
+    do {} while (unionTypeWork3)
+>unionTypeWork3 : number | Type
+
+    do {} while (intersectionTypeWork1)
+>intersectionTypeWork1 : number & Type
+
+    do { } while (functionValue)
+>functionValue : () => void
+
+    do {} while (interfaceLiteralValue)
+>interfaceLiteralValue : Interface
+
+    do {} while (typeLiteralValue)
+>typeLiteralValue : Type
+
+    do {} while (symbolValue)
+>symbolValue : Symbol
+
+    do {} while (array)
+>array : string[]
+
+    do {} while (classValue)
+>classValue : Class
+
+    do {} while (unionTypeNotWork1)
+>unionTypeNotWork1 : Interface | Type
+
+    do {} while (intersectionTypeNotWork1)
+>intersectionTypeNotWork1 : Type & Interface
+}
+
+function middleExpression<T>(typeParameter: T) {
+>middleExpression : <T>(typeParameter: T) => void
+>typeParameter : T
+
+    // for
+    for (; anyValue;) { }
+>anyValue : any
+
+    for (; unknownValue;) { }
+>unknownValue : unknown
+
+    for (; undefinedValue;) { }
+>undefinedValue : undefined
+
+    for (; nullValue;) { }
+>nullValue : null
+
+    for (; stringValue;) { }
+>stringValue : string
+
+    for (; stringLiteral;) { }
+>stringLiteral : "123"
+
+    for (; numberValue;) { }
+>numberValue : number
+
+    for (; numberLiteral;) { }
+>numberLiteral : 123
+
+    for (; booleanValue;) { }
+>booleanValue : boolean
+
+    for (; booleanLiteral;) { }
+>booleanLiteral : true
+
+    for (; bigintValue;) { }
+>bigintValue : bigint
+
+    for (; bugintLiteral;) { }
+>bugintLiteral : 123n
+
+    for (; typeParameter;) { }
+>typeParameter : T
+
+    for (; Enum.EnumValue;) { }
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+
+    for (;unionTypeWork1;) { }
+>unionTypeWork1 : string | number
+
+    for (;unionTypeWork2;) { }
+>unionTypeWork2 : number
+
+    for (;unionTypeWork3;) { }
+>unionTypeWork3 : number | Type
+
+    for (;intersectionTypeWork1;) { }
+>intersectionTypeWork1 : number & Type
+
+    for (; functionValue;) { }
+>functionValue : () => void
+
+    for (;interfaceLiteralValue;) { }
+>interfaceLiteralValue : Interface
+
+    for (;typeLiteralValue;) { }
+>typeLiteralValue : Type
+
+    for (;symbolValue;) { }
+>symbolValue : Symbol
+
+    for (;array;) { }
+>array : string[]
+
+    for (;classValue;) { }
+>classValue : Class
+
+    for (;unionTypeNotWork1;) { }
+>unionTypeNotWork1 : Interface | Type
+
+    for (;intersectionTypeNotWork1;) { }
+>intersectionTypeNotWork1 : Type & Interface
+}
+
+function firstOperand<T>(typeParameter: T) {
+>firstOperand : <T>(typeParameter: T) => void
+>typeParameter : T
+
+    // conditional
+    anyValue ? 1 : 2;
+>anyValue ? 1 : 2 : 1 | 2
+>anyValue : any
+>1 : 1
+>2 : 2
+
+    unknownValue ? 1 : 2;
+>unknownValue ? 1 : 2 : 1 | 2
+>unknownValue : unknown
+>1 : 1
+>2 : 2
+
+    undefinedValue ? 1 : 2;
+>undefinedValue ? 1 : 2 : 1 | 2
+>undefinedValue : undefined
+>1 : 1
+>2 : 2
+
+    nullValue ? 1 : 2;
+>nullValue ? 1 : 2 : 1 | 2
+>nullValue : null
+>1 : 1
+>2 : 2
+
+    stringValue ? 1 : 2;
+>stringValue ? 1 : 2 : 1 | 2
+>stringValue : string
+>1 : 1
+>2 : 2
+
+    stringLiteral ? 1 : 2;
+>stringLiteral ? 1 : 2 : 1 | 2
+>stringLiteral : "123"
+>1 : 1
+>2 : 2
+
+    numberValue ? 1 : 2;
+>numberValue ? 1 : 2 : 1 | 2
+>numberValue : number
+>1 : 1
+>2 : 2
+
+    numberLiteral ? 1 : 2;
+>numberLiteral ? 1 : 2 : 1 | 2
+>numberLiteral : 123
+>1 : 1
+>2 : 2
+
+    booleanValue ? 1 : 2;
+>booleanValue ? 1 : 2 : 1 | 2
+>booleanValue : boolean
+>1 : 1
+>2 : 2
+
+    booleanLiteral ? 1 : 2;
+>booleanLiteral ? 1 : 2 : 1 | 2
+>booleanLiteral : true
+>1 : 1
+>2 : 2
+
+    bigintValue ? 1 : 2;
+>bigintValue ? 1 : 2 : 1 | 2
+>bigintValue : bigint
+>1 : 1
+>2 : 2
+
+    bugintLiteral ? 1 : 2;
+>bugintLiteral ? 1 : 2 : 1 | 2
+>bugintLiteral : 123n
+>1 : 1
+>2 : 2
+
+    typeParameter ? 1 : 2;
+>typeParameter ? 1 : 2 : 1 | 2
+>typeParameter : T
+>1 : 1
+>2 : 2
+
+    Enum.EnumValue ? 1 : 2;
+>Enum.EnumValue ? 1 : 2 : 1 | 2
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+>1 : 1
+>2 : 2
+
+    unionTypeWork1 ? 1 : 2
+>unionTypeWork1 ? 1 : 2 : 1 | 2
+>unionTypeWork1 : string | number
+>1 : 1
+>2 : 2
+
+    unionTypeWork2 ? 1 : 2
+>unionTypeWork2 ? 1 : 2 : 1 | 2
+>unionTypeWork2 : number
+>1 : 1
+>2 : 2
+
+    unionTypeWork3 ? 1 : 2
+>unionTypeWork3 ? 1 : 2 : 1 | 2
+>unionTypeWork3 : number | Type
+>1 : 1
+>2 : 2
+
+    intersectionTypeWork1 ? 1 : 2
+>intersectionTypeWork1 ? 1 : 2 : 1 | 2
+>intersectionTypeWork1 : number & Type
+>1 : 1
+>2 : 2
+
+    functionValue ? 1 : 2;
+>functionValue ? 1 : 2 : 1 | 2
+>functionValue : () => void
+>1 : 1
+>2 : 2
+
+    interfaceLiteralValue ? 1 : 2;
+>interfaceLiteralValue ? 1 : 2 : 1 | 2
+>interfaceLiteralValue : Interface
+>1 : 1
+>2 : 2
+
+    typeLiteralValue ? 1 : 2;
+>typeLiteralValue ? 1 : 2 : 1 | 2
+>typeLiteralValue : Type
+>1 : 1
+>2 : 2
+
+    symbolValue ? 1 : 2;
+>symbolValue ? 1 : 2 : 1 | 2
+>symbolValue : Symbol
+>1 : 1
+>2 : 2
+
+    array ? 1 : 2;
+>array ? 1 : 2 : 1 | 2
+>array : string[]
+>1 : 1
+>2 : 2
+
+    classValue ? 1 : 2;
+>classValue ? 1 : 2 : 1 | 2
+>classValue : Class
+>1 : 1
+>2 : 2
+
+    unionTypeNotWork1 ? 1 : 2;
+>unionTypeNotWork1 ? 1 : 2 : 1 | 2
+>unionTypeNotWork1 : Interface | Type
+>1 : 1
+>2 : 2
+
+    intersectionTypeNotWork1 ? 1 : 2;
+>intersectionTypeNotWork1 ? 1 : 2 : 1 | 2
+>intersectionTypeNotWork1 : Type & Interface
+>1 : 1
+>2 : 2
+
+    // and
+    anyValue && 1;
+>anyValue && 1 : 0 | 1
+>anyValue : any
+>1 : 1
+
+    unknownValue && 1;
+>unknownValue && 1 : 0 | 1
+>unknownValue : unknown
+>1 : 1
+
+    undefinedValue && 1;
+>undefinedValue && 1 : undefined
+>undefinedValue : undefined
+>1 : 1
+
+    nullValue && 1;
+>nullValue && 1 : null
+>nullValue : null
+>1 : 1
+
+    stringValue && 1;
+>stringValue && 1 : 0 | 1
+>stringValue : string
+>1 : 1
+
+    stringLiteral && 1;
+>stringLiteral && 1 : 0 | 1
+>stringLiteral : "123"
+>1 : 1
+
+    numberValue && 1;
+>numberValue && 1 : 0 | 1
+>numberValue : number
+>1 : 1
+
+    numberLiteral && 1;
+>numberLiteral && 1 : 0 | 1
+>numberLiteral : 123
+>1 : 1
+
+    booleanValue && 1;
+>booleanValue && 1 : 0 | 1
+>booleanValue : boolean
+>1 : 1
+
+    booleanLiteral && 1;
+>booleanLiteral && 1 : 0 | 1
+>booleanLiteral : true
+>1 : 1
+
+    bigintValue && 1;
+>bigintValue && 1 : 0 | 1
+>bigintValue : bigint
+>1 : 1
+
+    bugintLiteral && 1;
+>bugintLiteral && 1 : 0 | 1
+>bugintLiteral : 123n
+>1 : 1
+
+    typeParameter && 1;
+>typeParameter && 1 : 0 | 1
+>typeParameter : T
+>1 : 1
+
+    Enum.EnumValue && 1;
+>Enum.EnumValue && 1 : Enum
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+>1 : 1
+
+    unionTypeWork1 && 1;
+>unionTypeWork1 && 1 : 0 | 1
+>unionTypeWork1 : string | number
+>1 : 1
+
+    unionTypeWork2 && 1;
+>unionTypeWork2 && 1 : 0 | 1
+>unionTypeWork2 : number
+>1 : 1
+
+    unionTypeWork3 && 1;
+>unionTypeWork3 && 1 : 0 | 1
+>unionTypeWork3 : number | Type
+>1 : 1
+
+    intersectionTypeWork1 && 1;
+>intersectionTypeWork1 && 1 : 0 | 1
+>intersectionTypeWork1 : number & Type
+>1 : 1
+
+    functionValue && 1;
+>functionValue && 1 : 0 | 1
+>functionValue : () => void
+>1 : 1
+
+    interfaceLiteralValue && 1;
+>interfaceLiteralValue && 1 : 0 | 1
+>interfaceLiteralValue : Interface
+>1 : 1
+
+    typeLiteralValue && 1;
+>typeLiteralValue && 1 : 0 | 1
+>typeLiteralValue : Type
+>1 : 1
+
+    symbolValue && 1;
+>symbolValue && 1 : 0 | 1
+>symbolValue : Symbol
+>1 : 1
+
+    array && 1;
+>array && 1 : 0 | 1
+>array : string[]
+>1 : 1
+
+    classValue && 1;
+>classValue && 1 : 0 | 1
+>classValue : Class
+>1 : 1
+
+    unionTypeNotWork1 && 1;
+>unionTypeNotWork1 && 1 : 0 | 1
+>unionTypeNotWork1 : Interface | Type
+>1 : 1
+
+    intersectionTypeNotWork1 && 1;
+>intersectionTypeNotWork1 && 1 : 0 | 1
+>intersectionTypeNotWork1 : Type & Interface
+>1 : 1
+
+    // or
+    anyValue || 1;
+>anyValue || 1 : any
+>anyValue : any
+>1 : 1
+
+    unknownValue || 1;
+>unknownValue || 1 : unknown
+>unknownValue : unknown
+>1 : 1
+
+    undefinedValue || 1;
+>undefinedValue || 1 : 1
+>undefinedValue : undefined
+>1 : 1
+
+    nullValue || 1;
+>nullValue || 1 : 1
+>nullValue : null
+>1 : 1
+
+    stringValue || 1;
+>stringValue || 1 : string | 1
+>stringValue : string
+>1 : 1
+
+    stringLiteral || 1;
+>stringLiteral || 1 : "123" | 1
+>stringLiteral : "123"
+>1 : 1
+
+    numberValue || 1;
+>numberValue || 1 : number
+>numberValue : number
+>1 : 1
+
+    numberLiteral || 1;
+>numberLiteral || 1 : 123 | 1
+>numberLiteral : 123
+>1 : 1
+
+    booleanValue || 1;
+>booleanValue || 1 : true | 1
+>booleanValue : boolean
+>1 : 1
+
+    booleanLiteral || 1;
+>booleanLiteral || 1 : true | 1
+>booleanLiteral : true
+>1 : 1
+
+    bigintValue || 1;
+>bigintValue || 1 : bigint | 1
+>bigintValue : bigint
+>1 : 1
+
+    bugintLiteral || 1;
+>bugintLiteral || 1 : 123n | 1
+>bugintLiteral : 123n
+>1 : 1
+
+    typeParameter || 1;
+>typeParameter || 1 : T | 1
+>typeParameter : T
+>1 : 1
+
+    Enum.EnumValue || 1;
+>Enum.EnumValue || 1 : 1
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+>1 : 1
+
+    unionTypeWork1 || 1;
+>unionTypeWork1 || 1 : string | number
+>unionTypeWork1 : string | number
+>1 : 1
+
+    unionTypeWork2 || 1;
+>unionTypeWork2 || 1 : number
+>unionTypeWork2 : number
+>1 : 1
+
+    unionTypeWork3 || 1;
+>unionTypeWork3 || 1 : number | Type
+>unionTypeWork3 : number | Type
+>1 : 1
+
+    intersectionTypeWork1 || 1;
+>intersectionTypeWork1 || 1 : (number & Type) | 1
+>intersectionTypeWork1 : number & Type
+>1 : 1
+
+    functionValue || 1;
+>functionValue || 1 : (() => void) | 1
+>functionValue : () => void
+>1 : 1
+
+    interfaceLiteralValue || 1;
+>interfaceLiteralValue || 1 : Interface | 1
+>interfaceLiteralValue : Interface
+>1 : 1
+
+    typeLiteralValue || 1;
+>typeLiteralValue || 1 : Type | 1
+>typeLiteralValue : Type
+>1 : 1
+
+    symbolValue || 1;
+>symbolValue || 1 : Symbol | 1
+>symbolValue : Symbol
+>1 : 1
+
+    array || 1;
+>array || 1 : string[] | 1
+>array : string[]
+>1 : 1
+
+    classValue || 1;
+>classValue || 1 : Class | 1
+>classValue : Class
+>1 : 1
+
+    unionTypeNotWork1 || 1;
+>unionTypeNotWork1 || 1 : Interface | 1
+>unionTypeNotWork1 : Interface | Type
+>1 : 1
+
+    intersectionTypeNotWork1 || 1;
+>intersectionTypeNotWork1 || 1 : (Type & Interface) | 1
+>intersectionTypeNotWork1 : Type & Interface
+>1 : 1
+}
+
+function notOperand<T>(typeParameter: T) {
+>notOperand : <T>(typeParameter: T) => void
+>typeParameter : T
+
+    // not
+    !anyValue;
+>!anyValue : boolean
+>anyValue : any
+
+    !unknownValue;
+>!unknownValue : boolean
+>unknownValue : unknown
+
+    !undefinedValue;
+>!undefinedValue : true
+>undefinedValue : undefined
+
+    !nullValue;
+>!nullValue : true
+>nullValue : null
+
+    !stringValue;
+>!stringValue : boolean
+>stringValue : string
+
+    !stringLiteral;
+>!stringLiteral : boolean
+>stringLiteral : "123"
+
+    !numberValue;
+>!numberValue : boolean
+>numberValue : number
+
+    !numberLiteral;
+>!numberLiteral : boolean
+>numberLiteral : 123
+
+    !booleanValue;
+>!booleanValue : boolean
+>booleanValue : boolean
+
+    !booleanLiteral;
+>!booleanLiteral : boolean
+>booleanLiteral : true
+
+    !bigintValue;
+>!bigintValue : boolean
+>bigintValue : bigint
+
+    !bugintLiteral;
+>!bugintLiteral : boolean
+>bugintLiteral : 123n
+
+    !typeParameter;
+>!typeParameter : boolean
+>typeParameter : T
+
+    !Enum.EnumValue;
+>!Enum.EnumValue : true
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+
+    !unionTypeWork1;
+>!unionTypeWork1 : boolean
+>unionTypeWork1 : string | number
+
+    !unionTypeWork2;
+>!unionTypeWork2 : boolean
+>unionTypeWork2 : number
+
+    !unionTypeWork3;
+>!unionTypeWork3 : boolean
+>unionTypeWork3 : number | Type
+
+    !intersectionTypeWork1;
+>!intersectionTypeWork1 : boolean
+>intersectionTypeWork1 : number & Type
+
+    !functionValue;
+>!functionValue : boolean
+>functionValue : () => void
+
+    !interfaceLiteralValue;
+>!interfaceLiteralValue : boolean
+>interfaceLiteralValue : Interface
+
+    !typeLiteralValue;
+>!typeLiteralValue : boolean
+>typeLiteralValue : Type
+
+    !symbolValue;
+>!symbolValue : boolean
+>symbolValue : Symbol
+
+    !array;
+>!array : boolean
+>array : string[]
+
+    !classValue;
+>!classValue : boolean
+>classValue : Class
+
+    !unionTypeNotWork1;
+>!unionTypeNotWork1 : boolean
+>unionTypeNotWork1 : Interface | Type
+
+    !intersectionTypeNotWork1;
+>!intersectionTypeNotWork1 : boolean
+>intersectionTypeNotWork1 : Type & Interface
+}
+
+declare const guard: number
+>guard : number
+
+function questionOrAssignment<T>(typeParameter: T) {
+>questionOrAssignment : <T>(typeParameter: T) => void
+>typeParameter : T
+
+    // question
+    anyValue ?? 1;
+>anyValue ?? 1 : any
+>anyValue : any
+>1 : 1
+
+    unknownValue ?? 1;
+>unknownValue ?? 1 : unknown
+>unknownValue : unknown
+>1 : 1
+
+    undefinedValue ?? 1;
+>undefinedValue ?? 1 : 1
+>undefinedValue : undefined
+>1 : 1
+
+    nullValue ?? 1;
+>nullValue ?? 1 : 1
+>nullValue : null
+>1 : 1
+
+    stringValue ?? 1;
+>stringValue ?? 1 : string | 1
+>stringValue : string
+>1 : 1
+
+    stringLiteral ?? 1;
+>stringLiteral ?? 1 : "123" | 1
+>stringLiteral : "123"
+>1 : 1
+
+    numberValue ?? 1;
+>numberValue ?? 1 : number
+>numberValue : number
+>1 : 1
+
+    numberLiteral ?? 1;
+>numberLiteral ?? 1 : 123 | 1
+>numberLiteral : 123
+>1 : 1
+
+    booleanValue ?? 1;
+>booleanValue ?? 1 : boolean | 1
+>booleanValue : boolean
+>1 : 1
+
+    booleanLiteral ?? 1;
+>booleanLiteral ?? 1 : true | 1
+>booleanLiteral : true
+>1 : 1
+
+    bigintValue ?? 1;
+>bigintValue ?? 1 : bigint | 1
+>bigintValue : bigint
+>1 : 1
+
+    bugintLiteral ?? 1;
+>bugintLiteral ?? 1 : 123n | 1
+>bugintLiteral : 123n
+>1 : 1
+
+    typeParameter ?? 1;
+>typeParameter ?? 1 : 1 | T
+>typeParameter : T
+>1 : 1
+
+    Enum.EnumValue ?? 1;
+>Enum.EnumValue ?? 1 : Enum | 1
+>Enum.EnumValue : Enum
+>Enum : typeof Enum
+>EnumValue : Enum
+>1 : 1
+
+    unionTypeWork1 ?? 1;
+>unionTypeWork1 ?? 1 : string | number
+>unionTypeWork1 : string | number
+>1 : 1
+
+    unionTypeWork2 ?? 1;
+>unionTypeWork2 ?? 1 : number
+>unionTypeWork2 : number
+>1 : 1
+
+    unionTypeWork3 ?? 1;
+>unionTypeWork3 ?? 1 : number | Type
+>unionTypeWork3 : number | Type
+>1 : 1
+
+    intersectionTypeWork1 ?? 1;
+>intersectionTypeWork1 ?? 1 : (number & Type) | 1
+>intersectionTypeWork1 : number & Type
+>1 : 1
+
+    functionValue ?? 1;
+>functionValue ?? 1 : (() => void) | 1
+>functionValue : () => void
+>1 : 1
+
+    interfaceLiteralValue ?? 1;
+>interfaceLiteralValue ?? 1 : Interface | 1
+>interfaceLiteralValue : Interface
+>1 : 1
+
+    typeLiteralValue ?? 1;
+>typeLiteralValue ?? 1 : Type | 1
+>typeLiteralValue : Type
+>1 : 1
+
+    symbolValue ?? 1;
+>symbolValue ?? 1 : Symbol | 1
+>symbolValue : Symbol
+>1 : 1
+
+    array ?? 1;
+>array ?? 1 : string[] | 1
+>array : string[]
+>1 : 1
+
+    classValue ?? 1;
+>classValue ?? 1 : Class | 1
+>classValue : Class
+>1 : 1
+
+    unionTypeNotWork1 ?? 1;
+>unionTypeNotWork1 ?? 1 : Interface | 1
+>unionTypeNotWork1 : Interface | Type
+>1 : 1
+
+    intersectionTypeNotWork1 ?? 1;
+>intersectionTypeNotWork1 ?? 1 : (Type & Interface) | 1
+>intersectionTypeNotWork1 : Type & Interface
+>1 : 1
+
+    // &&=
+    if (guard === 1) {
+>guard === 1 : boolean
+>guard : number
+>1 : 1
+
+        anyValue &&= 1;
+>anyValue &&= 1 : 0 | 1
+>anyValue : any
+>1 : 1
+
+        unknownValue &&= 1;
+>unknownValue &&= 1 : 0 | 1
+>unknownValue : unknown
+>1 : 1
+
+        undefinedValue &&= undefined;
+>undefinedValue &&= undefined : undefined
+>undefinedValue : undefined
+>undefined : undefined
+
+        nullValue &&= null;
+>nullValue &&= null : null
+>nullValue : null
+>null : null
+
+        stringValue &&= "";
+>stringValue &&= "" : ""
+>stringValue : string
+>"" : ""
+
+        stringLiteral &&= "123";
+>stringLiteral &&= "123" : "" | "123"
+>stringLiteral : "123"
+>"123" : "123"
+
+        numberValue &&= 1;
+>numberValue &&= 1 : 0 | 1
+>numberValue : number
+>1 : 1
+
+        numberLiteral &&= 123;
+>numberLiteral &&= 123 : 0 | 123
+>numberLiteral : 123
+>123 : 123
+
+        booleanValue &&= true;
+>booleanValue &&= true : boolean
+>booleanValue : boolean
+>true : true
+
+        booleanLiteral &&= true;
+>booleanLiteral &&= true : boolean
+>booleanLiteral : true
+>true : true
+
+        bigintValue &&= 1n;
+>bigintValue &&= 1n : 0n | 1n
+>bigintValue : bigint
+>1n : 1n
+
+        bugintLiteral &&= 123n;
+>bugintLiteral &&= 123n : 0n | 123n
+>bugintLiteral : 123n
+>123n : 123n
+
+        typeParameter &&= {} as any;
+>typeParameter &&= {} as any : any
+>typeParameter : T
+>{} as any : any
+>{} : {}
+
+        unionTypeWork1 &&= 1;
+>unionTypeWork1 &&= 1 : 0 | 1
+>unionTypeWork1 : string | number
+>1 : 1
+
+        unionTypeWork2 &&= 1;
+>unionTypeWork2 &&= 1 : 0 | 1
+>unionTypeWork2 : number
+>1 : 1
+
+        unionTypeWork3 &&= 1;
+>unionTypeWork3 &&= 1 : 0 | 1
+>unionTypeWork3 : number | Type
+>1 : 1
+
+        intersectionTypeWork1 &&= 1 as any;
+>intersectionTypeWork1 &&= 1 as any : any
+>intersectionTypeWork1 : number & Type
+>1 as any : any
+>1 : 1
+
+        interfaceLiteralValue &&= { foo: '' };
+>interfaceLiteralValue &&= { foo: '' } : { foo: string; }
+>interfaceLiteralValue : Interface
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        typeLiteralValue &&= { foo: '' };;
+>typeLiteralValue &&= { foo: '' } : { foo: string; }
+>typeLiteralValue : Type
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        symbolValue &&= Symbol("");
+>symbolValue &&= Symbol("") : symbol
+>symbolValue : Symbol
+>Symbol("") : symbol
+>Symbol : SymbolConstructor
+>"" : ""
+
+        array &&= [];
+>array &&= [] : undefined[]
+>array : string[]
+>[] : undefined[]
+
+        unionTypeNotWork1 &&= { foo: '' };;
+>unionTypeNotWork1 &&= { foo: '' } : { foo: string; }
+>unionTypeNotWork1 : Interface | Type
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        intersectionTypeNotWork1 &&= { foo: '' };;
+>intersectionTypeNotWork1 &&= { foo: '' } : { foo: string; }
+>intersectionTypeNotWork1 : Type & Interface
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+    }
+
+    // ||=
+    if (guard === 1) {
+>guard === 1 : boolean
+>guard : number
+>1 : 1
+
+        anyValue ||= 1;
+>anyValue ||= 1 : any
+>anyValue : any
+>1 : 1
+
+        unknownValue ||= 1;
+>unknownValue ||= 1 : unknown
+>unknownValue : unknown
+>1 : 1
+
+        undefinedValue ||= undefined;
+>undefinedValue ||= undefined : undefined
+>undefinedValue : undefined
+>undefined : undefined
+
+        nullValue ||= null;
+>nullValue ||= null : null
+>nullValue : null
+>null : null
+
+        stringValue ||= "";
+>stringValue ||= "" : string
+>stringValue : string
+>"" : ""
+
+        stringLiteral ||= "123";
+>stringLiteral ||= "123" : "123"
+>stringLiteral : "123"
+>"123" : "123"
+
+        numberValue ||= 1;
+>numberValue ||= 1 : number
+>numberValue : number
+>1 : 1
+
+        numberLiteral ||= 123;
+>numberLiteral ||= 123 : 123
+>numberLiteral : 123
+>123 : 123
+
+        booleanValue ||= true;
+>booleanValue ||= true : true
+>booleanValue : boolean
+>true : true
+
+        booleanLiteral ||= true;
+>booleanLiteral ||= true : true
+>booleanLiteral : true
+>true : true
+
+        bigintValue ||= 1n;
+>bigintValue ||= 1n : bigint
+>bigintValue : bigint
+>1n : 1n
+
+        bugintLiteral ||= 123n;
+>bugintLiteral ||= 123n : 123n
+>bugintLiteral : 123n
+>123n : 123n
+
+        typeParameter ||= {} as any;
+>typeParameter ||= {} as any : any
+>typeParameter : T
+>{} as any : any
+>{} : {}
+
+        unionTypeWork1 ||= 1;
+>unionTypeWork1 ||= 1 : string | number
+>unionTypeWork1 : string | number
+>1 : 1
+
+        unionTypeWork2 ||= 1;
+>unionTypeWork2 ||= 1 : number
+>unionTypeWork2 : number
+>1 : 1
+
+        unionTypeWork3 ||= 1;
+>unionTypeWork3 ||= 1 : number | Type
+>unionTypeWork3 : number | Type
+>1 : 1
+
+        intersectionTypeWork1 ||= 1 as any;
+>intersectionTypeWork1 ||= 1 as any : any
+>intersectionTypeWork1 : number & Type
+>1 as any : any
+>1 : 1
+
+        interfaceLiteralValue ||= { foo: '' };
+>interfaceLiteralValue ||= { foo: '' } : Interface
+>interfaceLiteralValue : Interface
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        typeLiteralValue ||= { foo: '' };;
+>typeLiteralValue ||= { foo: '' } : Type
+>typeLiteralValue : Type
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        symbolValue ||= Symbol("");
+>symbolValue ||= Symbol("") : Symbol
+>symbolValue : Symbol
+>Symbol("") : symbol
+>Symbol : SymbolConstructor
+>"" : ""
+
+        array ||= [];
+>array ||= [] : string[]
+>array : string[]
+>[] : undefined[]
+
+        unionTypeNotWork1 ||= { foo: '' };;
+>unionTypeNotWork1 ||= { foo: '' } : Interface
+>unionTypeNotWork1 : Interface | Type
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        intersectionTypeNotWork1 ||= { foo: '' };;
+>intersectionTypeNotWork1 ||= { foo: '' } : Type & Interface
+>intersectionTypeNotWork1 : Type & Interface
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+    }
+
+    // ??=
+    if (guard === 1) {
+>guard === 1 : boolean
+>guard : number
+>1 : 1
+
+        anyValue ??= 1;
+>anyValue ??= 1 : any
+>anyValue : any
+>1 : 1
+
+        unknownValue ??= 1;
+>unknownValue ??= 1 : unknown
+>unknownValue : unknown
+>1 : 1
+
+        undefinedValue ??= undefined;
+>undefinedValue ??= undefined : undefined
+>undefinedValue : undefined
+>undefined : undefined
+
+        nullValue ??= null;
+>nullValue ??= null : null
+>nullValue : null
+>null : null
+
+        stringValue ??= "";
+>stringValue ??= "" : string
+>stringValue : string
+>"" : ""
+
+        stringLiteral ??= "123";
+>stringLiteral ??= "123" : "123"
+>stringLiteral : "123"
+>"123" : "123"
+
+        numberValue ??= 1;
+>numberValue ??= 1 : number
+>numberValue : number
+>1 : 1
+
+        numberLiteral ??= 123;
+>numberLiteral ??= 123 : 123
+>numberLiteral : 123
+>123 : 123
+
+        booleanValue ??= true;
+>booleanValue ??= true : boolean
+>booleanValue : boolean
+>true : true
+
+        booleanLiteral ??= true;
+>booleanLiteral ??= true : true
+>booleanLiteral : true
+>true : true
+
+        bigintValue ??= 1n;
+>bigintValue ??= 1n : bigint
+>bigintValue : bigint
+>1n : 1n
+
+        bugintLiteral ??= 123n;
+>bugintLiteral ??= 123n : 123n
+>bugintLiteral : 123n
+>123n : 123n
+
+        typeParameter ??= {} as any;
+>typeParameter ??= {} as any : any
+>typeParameter : T
+>{} as any : any
+>{} : {}
+
+        unionTypeWork1 ??= 1;
+>unionTypeWork1 ??= 1 : string | number
+>unionTypeWork1 : string | number
+>1 : 1
+
+        unionTypeWork2 ??= 1;
+>unionTypeWork2 ??= 1 : number
+>unionTypeWork2 : number
+>1 : 1
+
+        unionTypeWork3 ??= 1;
+>unionTypeWork3 ??= 1 : number | Type
+>unionTypeWork3 : number | Type
+>1 : 1
+
+        intersectionTypeWork1 ??= 1 as any;
+>intersectionTypeWork1 ??= 1 as any : any
+>intersectionTypeWork1 : number & Type
+>1 as any : any
+>1 : 1
+
+        interfaceLiteralValue ??= { foo: '' };
+>interfaceLiteralValue ??= { foo: '' } : Interface
+>interfaceLiteralValue : Interface
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        typeLiteralValue ??= { foo: '' };;
+>typeLiteralValue ??= { foo: '' } : Type
+>typeLiteralValue : Type
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        symbolValue ??= Symbol("");
+>symbolValue ??= Symbol("") : Symbol
+>symbolValue : Symbol
+>Symbol("") : symbol
+>Symbol : SymbolConstructor
+>"" : ""
+
+        array ??= [];
+>array ??= [] : string[]
+>array : string[]
+>[] : undefined[]
+
+        unionTypeNotWork1 ??= { foo: '' };;
+>unionTypeNotWork1 ??= { foo: '' } : Interface
+>unionTypeNotWork1 : Interface | Type
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+
+        intersectionTypeNotWork1 ??= { foo: '' };;
+>intersectionTypeNotWork1 ??= { foo: '' } : Type & Interface
+>intersectionTypeNotWork1 : Type & Interface
+>{ foo: '' } : { foo: string; }
+>foo : string
+>'' : ""
+    }
+}
+

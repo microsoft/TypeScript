@@ -1,0 +1,1119 @@
+=== tests/cases/conformance/booleanCoercion/booleanCoercion1.ts ===
+declare let anyValue: any;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+declare let unknownValue: unknown;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+declare let undefinedValue: undefined;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+declare let nullValue: null;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+declare let stringValue: string;
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+declare let stringLiteral: "123";
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+declare let numberValue: number;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+declare let numberLiteral: 123;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+declare let booleanValue: boolean;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+declare let booleanLiteral: true;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+declare let bigintValue: bigint;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+declare let bugintLiteral: 123n;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+enum Enum {
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+
+    EnumValue
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+}
+
+
+interface Interface {
+>Interface : Symbol(Interface, Decl(booleanCoercion1.ts, 15, 1))
+
+    foo: string
+>foo : Symbol(Interface.foo, Decl(booleanCoercion1.ts, 18, 21))
+}
+
+type Type = {
+>Type : Symbol(Type, Decl(booleanCoercion1.ts, 20, 1))
+
+    foo: string
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 22, 13))
+}
+
+class Class {
+>Class : Symbol(Class, Decl(booleanCoercion1.ts, 24, 1))
+
+    foo: string
+>foo : Symbol(Class.foo, Decl(booleanCoercion1.ts, 26, 13))
+}
+
+declare function functionValue(): void;
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+declare let interfaceLiteralValue: Interface
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+>Interface : Symbol(Interface, Decl(booleanCoercion1.ts, 15, 1))
+
+declare let typeLiteralValue: Type;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+>Type : Symbol(Type, Decl(booleanCoercion1.ts, 20, 1))
+
+declare let symbolValue: Symbol
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+declare let array: string[]
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+declare let classValue: Class
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+>Class : Symbol(Class, Decl(booleanCoercion1.ts, 24, 1))
+
+declare let unionTypeWork1: number | string
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+declare let unionTypeWork2: number | undefined
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+declare let unionTypeWork3: number | Type
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+>Type : Symbol(Type, Decl(booleanCoercion1.ts, 20, 1))
+
+declare let intersectionTypeWork1: number & Type
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+>Type : Symbol(Type, Decl(booleanCoercion1.ts, 20, 1))
+
+declare let unionTypeNotWork1: Type | Interface
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+>Type : Symbol(Type, Decl(booleanCoercion1.ts, 20, 1))
+>Interface : Symbol(Interface, Decl(booleanCoercion1.ts, 15, 1))
+
+declare let intersectionTypeNotWork1: Type & Interface
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+>Type : Symbol(Type, Decl(booleanCoercion1.ts, 20, 1))
+>Interface : Symbol(Interface, Decl(booleanCoercion1.ts, 15, 1))
+
+function testExoression<T>(typeParameter: T) {
+>testExoression : Symbol(testExoression, Decl(booleanCoercion1.ts, 43, 54))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 45, 24))
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 45, 27))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 45, 24))
+
+    // if
+    if (anyValue) { }
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    if (unknownValue) { }
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    if (undefinedValue) { }
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    if (nullValue) { }
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    if (stringValue) { }
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    if (stringLiteral) { }
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    if (numberValue) { }
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    if (numberLiteral) { }
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    if (booleanValue) { }
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    if (booleanLiteral) { }
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    if (bigintValue) { }
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    if (bugintLiteral) { }
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    if (typeParameter) { }
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 45, 27))
+
+    if (Enum.EnumValue) { }
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    if (unionTypeWork1) { }
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    if (unionTypeWork2) { }
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    if (unionTypeWork3) { }
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    if (intersectionTypeWork1) { }
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    if (functionValue) { }
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    if (interfaceLiteralValue) { }
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    if (typeLiteralValue) { }
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    if (symbolValue) { }
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    if (array) { }
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    if (classValue) { }
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    if (unionTypeNotWork1) { }
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    if (intersectionTypeNotWork1) { }
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+
+    // while
+    while (anyValue) { }
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    while (unknownValue) { }
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    while (undefinedValue) { }
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    while (nullValue) { }
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    while (stringValue) { }
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    while (stringLiteral) { }
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    while (numberValue) { }
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    while (numberLiteral) { }
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    while (booleanValue) { }
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    while (booleanLiteral) { }
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    while (bigintValue) { }
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    while (bugintLiteral) { }
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    while (typeParameter) { }
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 45, 27))
+
+    while (Enum.EnumValue) { }
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    while (unionTypeWork1) { }
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    while (unionTypeWork2) { }
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    while (unionTypeWork3) { }
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    while (intersectionTypeWork1) { }
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    while (functionValue) { }
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    while (interfaceLiteralValue) { }
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    while (typeLiteralValue) { }
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    while (symbolValue) { }
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    while (array) { }
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    while (classValue) { }
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    while (unionTypeNotWork1) { }
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    while (intersectionTypeNotWork1) { }
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+
+    // do while
+    do { } while (anyValue)
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    do { } while (unknownValue)
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    do { } while (undefinedValue)
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    do { } while (nullValue)
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    do { } while (stringValue)
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    do { } while (stringLiteral)
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    do { } while (numberValue)
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    do { } while (numberLiteral)
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    do { } while (booleanValue)
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    do { } while (booleanLiteral)
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    do { } while (bigintValue)
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    do { } while (bugintLiteral)
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    do { } while (typeParameter)
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 45, 27))
+
+    do { } while (Enum.EnumValue)
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    do {} while (unionTypeWork1)
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    do {} while (unionTypeWork2)
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    do {} while (unionTypeWork3)
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    do {} while (intersectionTypeWork1)
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    do { } while (functionValue)
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    do {} while (interfaceLiteralValue)
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    do {} while (typeLiteralValue)
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    do {} while (symbolValue)
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    do {} while (array)
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    do {} while (classValue)
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    do {} while (unionTypeNotWork1)
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    do {} while (intersectionTypeNotWork1)
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+}
+
+function middleExpression<T>(typeParameter: T) {
+>middleExpression : Symbol(middleExpression, Decl(booleanCoercion1.ts, 132, 1))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 134, 26))
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 134, 29))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 134, 26))
+
+    // for
+    for (; anyValue;) { }
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    for (; unknownValue;) { }
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    for (; undefinedValue;) { }
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    for (; nullValue;) { }
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    for (; stringValue;) { }
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    for (; stringLiteral;) { }
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    for (; numberValue;) { }
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    for (; numberLiteral;) { }
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    for (; booleanValue;) { }
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    for (; booleanLiteral;) { }
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    for (; bigintValue;) { }
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    for (; bugintLiteral;) { }
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    for (; typeParameter;) { }
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 134, 29))
+
+    for (; Enum.EnumValue;) { }
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    for (;unionTypeWork1;) { }
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    for (;unionTypeWork2;) { }
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    for (;unionTypeWork3;) { }
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    for (;intersectionTypeWork1;) { }
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    for (; functionValue;) { }
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    for (;interfaceLiteralValue;) { }
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    for (;typeLiteralValue;) { }
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    for (;symbolValue;) { }
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    for (;array;) { }
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    for (;classValue;) { }
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    for (;unionTypeNotWork1;) { }
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    for (;intersectionTypeNotWork1;) { }
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+}
+
+function firstOperand<T>(typeParameter: T) {
+>firstOperand : Symbol(firstOperand, Decl(booleanCoercion1.ts, 163, 1))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 165, 22))
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 165, 25))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 165, 22))
+
+    // conditional
+    anyValue ? 1 : 2;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    unknownValue ? 1 : 2;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    undefinedValue ? 1 : 2;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    nullValue ? 1 : 2;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    stringValue ? 1 : 2;
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    stringLiteral ? 1 : 2;
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    numberValue ? 1 : 2;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    numberLiteral ? 1 : 2;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    booleanValue ? 1 : 2;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    booleanLiteral ? 1 : 2;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    bigintValue ? 1 : 2;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    bugintLiteral ? 1 : 2;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    typeParameter ? 1 : 2;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 165, 25))
+
+    Enum.EnumValue ? 1 : 2;
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    unionTypeWork1 ? 1 : 2
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    unionTypeWork2 ? 1 : 2
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    unionTypeWork3 ? 1 : 2
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    intersectionTypeWork1 ? 1 : 2
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    functionValue ? 1 : 2;
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    interfaceLiteralValue ? 1 : 2;
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    typeLiteralValue ? 1 : 2;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    symbolValue ? 1 : 2;
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    array ? 1 : 2;
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    classValue ? 1 : 2;
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    unionTypeNotWork1 ? 1 : 2;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    intersectionTypeNotWork1 ? 1 : 2;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+
+    // and
+    anyValue && 1;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    unknownValue && 1;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    undefinedValue && 1;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    nullValue && 1;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    stringValue && 1;
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    stringLiteral && 1;
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    numberValue && 1;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    numberLiteral && 1;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    booleanValue && 1;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    booleanLiteral && 1;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    bigintValue && 1;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    bugintLiteral && 1;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    typeParameter && 1;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 165, 25))
+
+    Enum.EnumValue && 1;
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    unionTypeWork1 && 1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    unionTypeWork2 && 1;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    unionTypeWork3 && 1;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    intersectionTypeWork1 && 1;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    functionValue && 1;
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    interfaceLiteralValue && 1;
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    typeLiteralValue && 1;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    symbolValue && 1;
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    array && 1;
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    classValue && 1;
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    unionTypeNotWork1 && 1;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    intersectionTypeNotWork1 && 1;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+
+    // or
+    anyValue || 1;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    unknownValue || 1;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    undefinedValue || 1;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    nullValue || 1;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    stringValue || 1;
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    stringLiteral || 1;
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    numberValue || 1;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    numberLiteral || 1;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    booleanValue || 1;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    booleanLiteral || 1;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    bigintValue || 1;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    bugintLiteral || 1;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    typeParameter || 1;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 165, 25))
+
+    Enum.EnumValue || 1;
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    unionTypeWork1 || 1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    unionTypeWork2 || 1;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    unionTypeWork3 || 1;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    intersectionTypeWork1 || 1;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    functionValue || 1;
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    interfaceLiteralValue || 1;
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    typeLiteralValue || 1;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    symbolValue || 1;
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    array || 1;
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    classValue || 1;
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    unionTypeNotWork1 || 1;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    intersectionTypeNotWork1 || 1;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+}
+
+function notOperand<T>(typeParameter: T) {
+>notOperand : Symbol(notOperand, Decl(booleanCoercion1.ts, 252, 1))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 254, 20))
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 254, 23))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 254, 20))
+
+    // not
+    !anyValue;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    !unknownValue;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    !undefinedValue;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    !nullValue;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    !stringValue;
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    !stringLiteral;
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    !numberValue;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    !numberLiteral;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    !booleanValue;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    !booleanLiteral;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    !bigintValue;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    !bugintLiteral;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    !typeParameter;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 254, 23))
+
+    !Enum.EnumValue;
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    !unionTypeWork1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    !unionTypeWork2;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    !unionTypeWork3;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    !intersectionTypeWork1;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    !functionValue;
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    !interfaceLiteralValue;
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    !typeLiteralValue;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    !symbolValue;
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    !array;
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    !classValue;
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    !unionTypeNotWork1;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    !intersectionTypeNotWork1;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+}
+
+declare const guard: number
+>guard : Symbol(guard, Decl(booleanCoercion1.ts, 285, 13))
+
+function questionOrAssignment<T>(typeParameter: T) {
+>questionOrAssignment : Symbol(questionOrAssignment, Decl(booleanCoercion1.ts, 285, 27))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 286, 30))
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 286, 33))
+>T : Symbol(T, Decl(booleanCoercion1.ts, 286, 30))
+
+    // question
+    anyValue ?? 1;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+    unknownValue ?? 1;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+    undefinedValue ?? 1;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+
+    nullValue ?? 1;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+    stringValue ?? 1;
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+    stringLiteral ?? 1;
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+    numberValue ?? 1;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+    numberLiteral ?? 1;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+    booleanValue ?? 1;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+    booleanLiteral ?? 1;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+    bigintValue ?? 1;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+    bugintLiteral ?? 1;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+    typeParameter ?? 1;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 286, 33))
+
+    Enum.EnumValue ?? 1;
+>Enum.EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+>Enum : Symbol(Enum, Decl(booleanCoercion1.ts, 11, 32))
+>EnumValue : Symbol(Enum.EnumValue, Decl(booleanCoercion1.ts, 13, 11))
+
+    unionTypeWork1 ?? 1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+    unionTypeWork2 ?? 1;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+    unionTypeWork3 ?? 1;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+    intersectionTypeWork1 ?? 1;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+    functionValue ?? 1;
+>functionValue : Symbol(functionValue, Decl(booleanCoercion1.ts, 28, 1))
+
+    interfaceLiteralValue ?? 1;
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+
+    typeLiteralValue ?? 1;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+
+    symbolValue ?? 1;
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+
+    array ?? 1;
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+    classValue ?? 1;
+>classValue : Symbol(classValue, Decl(booleanCoercion1.ts, 35, 11))
+
+    unionTypeNotWork1 ?? 1;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+
+    intersectionTypeNotWork1 ?? 1;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+
+    // &&=
+    if (guard === 1) {
+>guard : Symbol(guard, Decl(booleanCoercion1.ts, 285, 13))
+
+        anyValue &&= 1;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+        unknownValue &&= 1;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+        undefinedValue &&= undefined;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+>undefined : Symbol(undefined)
+
+        nullValue &&= null;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+        stringValue &&= "";
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+        stringLiteral &&= "123";
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+        numberValue &&= 1;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+        numberLiteral &&= 123;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+        booleanValue &&= true;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+        booleanLiteral &&= true;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+        bigintValue &&= 1n;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+        bugintLiteral &&= 123n;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+        typeParameter &&= {} as any;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 286, 33))
+
+        unionTypeWork1 &&= 1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+        unionTypeWork2 &&= 1;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+        unionTypeWork3 &&= 1;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+        intersectionTypeWork1 &&= 1 as any;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+        interfaceLiteralValue &&= { foo: '' };
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 334, 35))
+
+        typeLiteralValue &&= { foo: '' };;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 335, 30))
+
+        symbolValue &&= Symbol("");
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+        array &&= [];
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+        unionTypeNotWork1 &&= { foo: '' };;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 338, 31))
+
+        intersectionTypeNotWork1 &&= { foo: '' };;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 339, 38))
+    }
+
+    // ||=
+    if (guard === 1) {
+>guard : Symbol(guard, Decl(booleanCoercion1.ts, 285, 13))
+
+        anyValue ||= 1;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+        unknownValue ||= 1;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+        undefinedValue ||= undefined;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+>undefined : Symbol(undefined)
+
+        nullValue ||= null;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+        stringValue ||= "";
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+        stringLiteral ||= "123";
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+        numberValue ||= 1;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+        numberLiteral ||= 123;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+        booleanValue ||= true;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+        booleanLiteral ||= true;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+        bigintValue ||= 1n;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+        bugintLiteral ||= 123n;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+        typeParameter ||= {} as any;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 286, 33))
+
+        unionTypeWork1 ||= 1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+        unionTypeWork2 ||= 1;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+        unionTypeWork3 ||= 1;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+        intersectionTypeWork1 ||= 1 as any;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+        interfaceLiteralValue ||= { foo: '' };
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 361, 35))
+
+        typeLiteralValue ||= { foo: '' };;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 362, 30))
+
+        symbolValue ||= Symbol("");
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+        array ||= [];
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+        unionTypeNotWork1 ||= { foo: '' };;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 365, 31))
+
+        intersectionTypeNotWork1 ||= { foo: '' };;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 366, 38))
+    }
+
+    // ??=
+    if (guard === 1) {
+>guard : Symbol(guard, Decl(booleanCoercion1.ts, 285, 13))
+
+        anyValue ??= 1;
+>anyValue : Symbol(anyValue, Decl(booleanCoercion1.ts, 0, 11))
+
+        unknownValue ??= 1;
+>unknownValue : Symbol(unknownValue, Decl(booleanCoercion1.ts, 1, 11))
+
+        undefinedValue ??= undefined;
+>undefinedValue : Symbol(undefinedValue, Decl(booleanCoercion1.ts, 2, 11))
+>undefined : Symbol(undefined)
+
+        nullValue ??= null;
+>nullValue : Symbol(nullValue, Decl(booleanCoercion1.ts, 3, 11))
+
+        stringValue ??= "";
+>stringValue : Symbol(stringValue, Decl(booleanCoercion1.ts, 4, 11))
+
+        stringLiteral ??= "123";
+>stringLiteral : Symbol(stringLiteral, Decl(booleanCoercion1.ts, 5, 11))
+
+        numberValue ??= 1;
+>numberValue : Symbol(numberValue, Decl(booleanCoercion1.ts, 6, 11))
+
+        numberLiteral ??= 123;
+>numberLiteral : Symbol(numberLiteral, Decl(booleanCoercion1.ts, 7, 11))
+
+        booleanValue ??= true;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion1.ts, 8, 11))
+
+        booleanLiteral ??= true;
+>booleanLiteral : Symbol(booleanLiteral, Decl(booleanCoercion1.ts, 9, 11))
+
+        bigintValue ??= 1n;
+>bigintValue : Symbol(bigintValue, Decl(booleanCoercion1.ts, 10, 11))
+
+        bugintLiteral ??= 123n;
+>bugintLiteral : Symbol(bugintLiteral, Decl(booleanCoercion1.ts, 11, 11))
+
+        typeParameter ??= {} as any;
+>typeParameter : Symbol(typeParameter, Decl(booleanCoercion1.ts, 286, 33))
+
+        unionTypeWork1 ??= 1;
+>unionTypeWork1 : Symbol(unionTypeWork1, Decl(booleanCoercion1.ts, 37, 11))
+
+        unionTypeWork2 ??= 1;
+>unionTypeWork2 : Symbol(unionTypeWork2, Decl(booleanCoercion1.ts, 38, 11))
+
+        unionTypeWork3 ??= 1;
+>unionTypeWork3 : Symbol(unionTypeWork3, Decl(booleanCoercion1.ts, 39, 11))
+
+        intersectionTypeWork1 ??= 1 as any;
+>intersectionTypeWork1 : Symbol(intersectionTypeWork1, Decl(booleanCoercion1.ts, 40, 11))
+
+        interfaceLiteralValue ??= { foo: '' };
+>interfaceLiteralValue : Symbol(interfaceLiteralValue, Decl(booleanCoercion1.ts, 31, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 388, 35))
+
+        typeLiteralValue ??= { foo: '' };;
+>typeLiteralValue : Symbol(typeLiteralValue, Decl(booleanCoercion1.ts, 32, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 389, 30))
+
+        symbolValue ??= Symbol("");
+>symbolValue : Symbol(symbolValue, Decl(booleanCoercion1.ts, 33, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+        array ??= [];
+>array : Symbol(array, Decl(booleanCoercion1.ts, 34, 11))
+
+        unionTypeNotWork1 ??= { foo: '' };;
+>unionTypeNotWork1 : Symbol(unionTypeNotWork1, Decl(booleanCoercion1.ts, 42, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 392, 31))
+
+        intersectionTypeNotWork1 ??= { foo: '' };;
+>intersectionTypeNotWork1 : Symbol(intersectionTypeNotWork1, Decl(booleanCoercion1.ts, 43, 11))
+>foo : Symbol(foo, Decl(booleanCoercion1.ts, 393, 38))
+    }
+}
+
