@@ -1,0 +1,63 @@
+=== tests/cases/conformance/booleanCoercion/booleanCoercion2.ts ===
+declare const trueValue: true;
+>trueValue : true
+>true : true
+
+declare let booleanValue: boolean;
+>booleanValue : boolean
+
+while (true) {
+>true : true
+
+    break;
+}
+
+for (; true;) {
+>true : true
+
+    break;
+}
+
+do {
+    break;
+} while (true)
+>true : true
+
+while (trueValue) {
+>trueValue : true
+
+    break;
+}
+
+while (booleanValue) {
+>booleanValue : boolean
+
+    break;
+}
+
+while (booleanValue) {
+>booleanValue : boolean
+
+    while (booleanValue) {
+>booleanValue : boolean
+
+        booleanValue = false;
+>booleanValue = false : false
+>booleanValue : boolean
+>false : false
+    }
+}
+
+if (booleanValue) {
+>booleanValue : boolean
+
+    if (booleanValue) {
+>booleanValue : true
+
+        booleanValue = false;
+>booleanValue = false : false
+>booleanValue : boolean
+>false : false
+    }
+}
+

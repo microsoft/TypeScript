@@ -1,0 +1,53 @@
+=== tests/cases/conformance/booleanCoercion/booleanCoercion2.ts ===
+declare const trueValue: true;
+>trueValue : Symbol(trueValue, Decl(booleanCoercion2.ts, 0, 13))
+
+declare let booleanValue: boolean;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+
+while (true) {
+    break;
+}
+
+for (; true;) {
+    break;
+}
+
+do {
+    break;
+} while (true)
+
+while (trueValue) {
+>trueValue : Symbol(trueValue, Decl(booleanCoercion2.ts, 0, 13))
+
+    break;
+}
+
+while (booleanValue) {
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+
+    break;
+}
+
+while (booleanValue) {
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+
+    while (booleanValue) {
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+
+        booleanValue = false;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+    }
+}
+
+if (booleanValue) {
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+
+    if (booleanValue) {
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+
+        booleanValue = false;
+>booleanValue : Symbol(booleanValue, Decl(booleanCoercion2.ts, 1, 11))
+    }
+}
+
