@@ -1,0 +1,10 @@
+tests/cases/compiler/index.js(2,25): error TS2307: Cannot find module './mod' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/index.js (1 errors) ====
+    (function(require, module, exports){
+        const mod = require("./mod");
+                            ~~~~~~~
+!!! error TS2307: Cannot find module './mod' or its corresponding type declarations.
+        mod.foo;
+    })(null, null, null);

@@ -1,8 +1,8 @@
 === tests/cases/conformance/salsa/use.js ===
 /// <reference path='./types.d.ts'/>
 var mod = require('./mod');
->mod : typeof import("tests/cases/conformance/salsa/mod")
->require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>mod : typeof mod
+>require('./mod') : typeof mod
 >require : (name: string) => any
 >'./mod' : "./mod"
 
@@ -10,14 +10,14 @@ var a = new mod.A()
 >a : A
 >new mod.A() : A
 >mod.A : typeof A
->mod : typeof import("tests/cases/conformance/salsa/mod")
+>mod : typeof mod
 >A : typeof A
 
 var b = new mod.B()
 >b : B
 >new mod.B() : B
 >mod.B : typeof B
->mod : typeof import("tests/cases/conformance/salsa/mod")
+>mod : typeof mod
 >B : typeof B
 
 a.m('nope')

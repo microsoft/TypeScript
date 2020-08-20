@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.0";
+    const versionMajorMinor = "4.1";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -2159,7 +2159,7 @@ declare namespace ts {
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
-        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
          * Otherwise returns its input.
@@ -2605,8 +2605,6 @@ declare namespace ts {
         node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
@@ -3818,7 +3816,7 @@ declare namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
@@ -4306,6 +4304,7 @@ declare namespace ts {
     function isTypeLiteralNode(node: Node): node is TypeLiteralNode;
     function isArrayTypeNode(node: Node): node is ArrayTypeNode;
     function isTupleTypeNode(node: Node): node is TupleTypeNode;
+    function isNamedTupleMember(node: Node): node is NamedTupleMember;
     function isOptionalTypeNode(node: Node): node is OptionalTypeNode;
     function isRestTypeNode(node: Node): node is RestTypeNode;
     function isUnionTypeNode(node: Node): node is UnionTypeNode;
@@ -5313,6 +5312,11 @@ declare namespace ts {
     interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
+    }
+    enum LanguageServiceMode {
+        Semantic = 0,
+        PartialSemantic = 1,
+        Syntactic = 2
     }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
@@ -6325,7 +6329,7 @@ declare namespace ts {
     function getSupportedCodeFixes(): string[];
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
-    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnly?: boolean): LanguageService;
+    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
     /**
      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
      * node package.
@@ -8897,7 +8901,7 @@ declare namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -9483,7 +9487,9 @@ declare namespace ts.server {
         pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;
@@ -9555,7 +9561,9 @@ declare namespace ts.server {
         readonly allowLocalPluginLoads: boolean;
         private currentPluginConfigOverrides;
         readonly typesMapLocation: string | undefined;
-        readonly syntaxOnly?: boolean;
+        /** @deprecated use serverMode instead */
+        readonly syntaxOnly: boolean;
+        readonly serverMode: LanguageServiceMode;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         private performanceEventHandler?;
@@ -9773,7 +9781,9 @@ declare namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         /** Has no effect if eventHandler is also specified. */
         suppressDiagnosticEvents?: boolean;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
         throttleWaitMilliseconds?: number;
         noGetErrOnBackgroundUpdate?: boolean;
         globalPlugins?: readonly string[];

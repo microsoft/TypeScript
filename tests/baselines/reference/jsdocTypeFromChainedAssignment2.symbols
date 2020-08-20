@@ -2,27 +2,27 @@
 var mod = require('./mod');
 >mod : Symbol(mod, Decl(use.js, 0, 3))
 >require : Symbol(require)
->'./mod' : Symbol("tests/cases/conformance/jsdoc/mod", Decl(mod.js, 0, 0))
+>'./mod' : Symbol(mod, Decl(mod.js, 0, 0))
 
 mod.f('no')
->mod.f : Symbol(f, Decl(mod.js, 0, 0))
+>mod.f : Symbol(mod.f, Decl(mod.js, 0, 0))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->f : Symbol(f, Decl(mod.js, 0, 0))
+>f : Symbol(mod.f, Decl(mod.js, 0, 0))
 
 mod.g('also no')
->mod.g : Symbol(g, Decl(mod.js, 1, 11))
+>mod.g : Symbol(mod.g, Decl(mod.js, 1, 11))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->g : Symbol(g, Decl(mod.js, 1, 11))
+>g : Symbol(mod.g, Decl(mod.js, 1, 11))
 
 mod.h(0)
->mod.h : Symbol(h, Decl(mod.js, 3, 1))
+>mod.h : Symbol(mod.h, Decl(mod.js, 3, 1))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->h : Symbol(h, Decl(mod.js, 3, 1))
+>h : Symbol(mod.h, Decl(mod.js, 3, 1))
 
 mod.i(1)
->mod.i : Symbol(i, Decl(mod.js, 5, 18))
+>mod.i : Symbol(mod.i, Decl(mod.js, 5, 18))
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->i : Symbol(i, Decl(mod.js, 5, 18))
+>i : Symbol(mod.i, Decl(mod.js, 5, 18))
 
 === tests/cases/conformance/jsdoc/mod.js ===
 /** @param {number} n */

@@ -483,7 +483,8 @@ namespace ts {
             return node.pos;
         }
 
-        if (isJSDocNode(node)) {
+        if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
+            // JsxText cannot actually contain comments, even though the scanner will think it sees comments
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
@@ -516,6 +517,10 @@ namespace ts {
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
         return !!findAncestor(node, isJSDocTypeExpression);
+    }
+
+    export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
+        return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
@@ -1613,6 +1618,10 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
     }
 
+    export function isThisInitializedDeclaration(node: Node | undefined): boolean {
+        return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
+    }
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
@@ -1847,6 +1856,11 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
+    export function getExternalModuleRequireArgument(node: Node) {
+        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
+            && (getLeftmostPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+    }
+
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
@@ -1914,7 +1928,8 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
+        node = getRootDeclaration(node);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
@@ -4769,7 +4784,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
+        if (!isExportDefaultSymbol(symbol)) return undefined;
+        for (const decl of symbol.declarations) {
+            if (decl.localSymbol) return decl.localSymbol;
+        }
+        return undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
@@ -5431,6 +5450,13 @@ namespace ts {
 
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
+    }
+
+    export function getLeftmostPropertyAccessExpression(expr: Expression): Expression {
+        while (isPropertyAccessExpression(expr)) {
+            expr = expr.expression;
+        }
+        return expr;
     }
 
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {

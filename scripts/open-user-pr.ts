@@ -22,7 +22,7 @@ runSequence([
     ["node", ["./node_modules/gulp/bin/gulp.js", "baseline-accept"]], // accept baselines
     ["git", ["checkout", "-b", branchName]], // create a branch
     ["git", ["add", "."]], // Add all changes
-    ["git", ["commit", "-m", `"Update user baselines"`]], // Commit all changes
+    ["git", ["commit", "-m", `"Update user baselines${+process.env.SOURCE_ISSUE === 33716 ? " +cc @sandersn" : ""}"`]], // Commit all changes (ping nathan if we would post to CI thread)
     ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
 ]);
 

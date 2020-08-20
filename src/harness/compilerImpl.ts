@@ -256,9 +256,29 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
+        const preProgram = ts.createProgram(rootFiles || [], { ...compilerOptions, traceResolution: false }, host);
+        const preErrors = ts.getPreEmitDiagnostics(preProgram);
+
         const program = ts.createProgram(rootFiles || [], compilerOptions, host);
         const emitResult = program.emit();
-        const errors = ts.getPreEmitDiagnostics(program);
+        const postErrors = ts.getPreEmitDiagnostics(program);
+        const errors = (preErrors.length !== postErrors.length) ? [...postErrors,
+            ts.addRelatedInfo(
+                ts.createCompilerDiagnostic({
+                    category: ts.DiagnosticCategory.Error,
+                    code: -1,
+                    key: "-1",
+                    message: `Pre-emit (${preErrors.length}) and post-emit (${postErrors.length}) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!`
+                }),
+                ts.createCompilerDiagnostic({
+                    category: ts.DiagnosticCategory.Error,
+                    code: -1,
+                    key: "-1",
+                    message: `The excess diagnostics are:`
+                }),
+                ...ts.filter(postErrors, p => !ts.some(preErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
+            )
+        ] : postErrors;
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);
     }
 }

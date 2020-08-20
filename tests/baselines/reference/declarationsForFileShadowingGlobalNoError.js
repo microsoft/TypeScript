@@ -39,7 +39,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.mixin = void 0;
-exports.mixin = function (Base) {
+var mixin = function (Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
@@ -49,6 +49,7 @@ exports.mixin = function (Base) {
         return class_1;
     }(Base));
 };
+exports.mixin = mixin;
 
 
 //// [dom.d.ts]
