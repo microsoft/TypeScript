@@ -29286,7 +29286,8 @@ namespace ts {
                         workStacks.leftType[stackIndex] = leftType;
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                            checkTruthinessOfType(leftType, node.left);
+                            const checkPossibilyFalsy = operator !== SyntaxKind.QuestionQuestionToken;
+                            checkTruthinessOfType(leftType, node.left, checkPossibilyFalsy);
                         }
                         advanceState(CheckBinaryExpressionState.FinishCheck);
                         maybeCheckExpression(node.right);
@@ -33130,15 +33131,32 @@ namespace ts {
             checkSourceElement(node.statement);
         }
 
-        function checkTruthinessOfType(type: Type, node: Node) {
+        function checkTruthinessOfType(type: Type, node: Node, checkPossibilyFalsy: boolean) {
             if (type.flags & TypeFlags.Void) {
                 error(node, Diagnostics.An_expression_of_type_void_cannot_be_tested_for_truthiness);
+            }
+            if (checkPossibilyFalsy && compilerOptions.pedanticBooleanCoercions) {
+                checkPedanticBooleanCoercions(type, node);
             }
             return type;
         }
 
+        function checkPedanticBooleanCoercions(type: Type, node: Node) {
+            if (!isPossibilyFalsyType(type)) {
+                error(node, Diagnostics.The_type_0_is_disallowed_in_truthiness_position, typeToString(type));
+            }
+        }
+
+        function isPossibilyFalsyType(type: Type): boolean {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                return some((<UnionOrIntersectionType>type).types, isPossibilyFalsyType)
+            }
+
+            return !!(type.flags & TypeFlags.PossibilyFalsy)
+        }
+
         function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {
-            return checkTruthinessOfType(checkExpression(node, checkMode), node);
+            return checkTruthinessOfType(checkExpression(node, checkMode), node, /*checkPossibilyFalsy*/ true);
         }
 
         function checkForStatement(node: ForStatement) {

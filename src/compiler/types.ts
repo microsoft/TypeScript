@@ -4876,6 +4876,8 @@ namespace ts {
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
         Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution,
+        /* @internal */
+        PossibilyFalsy = TypeFlags.AnyOrUnknown | TypeFlags.Nullable | TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.BooleanLike | TypeFlags.EnumLike | TypeFlags.TypeParameter,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -5714,6 +5716,7 @@ namespace ts {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        pedanticBooleanCoercions?: boolean
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;

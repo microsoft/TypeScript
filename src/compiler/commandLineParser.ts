@@ -606,6 +606,14 @@ namespace ts {
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
+        {
+            name: "pedanticBooleanCoercions",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Disallow_truthiness_coercions_on_known_true_Slashknown_false_values
+        },
 
         // Module Resolution
         {

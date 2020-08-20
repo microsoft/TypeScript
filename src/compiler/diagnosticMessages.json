@@ -3386,6 +3386,10 @@
         "category": "Error",
         "code": 4110
     },
+    "The type '{0}' is disallowed in truthiness position": {
+        "category": "Error",
+        "code": 4111
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4685,6 +4689,10 @@
     "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
         "category": "Error",
         "code": 6504
+    },
+    "Disallow truthiness coercions on known-true/known-false values": {
+        "category": "Error",
+        "code": 6802
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
