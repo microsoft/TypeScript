@@ -5,12 +5,16 @@ declare let undefinedValue: undefined;
 declare let nullValue: null;
 declare let stringValue: string;
 declare let stringLiteral: "123";
+declare let emptyStringLiteral: "";
 declare let numberValue: number;
 declare let numberLiteral: 123;
+declare let zeroNumberLiteral: 0;
 declare let booleanValue: boolean;
 declare let booleanLiteral: true;
+declare let falseBooleanLiteral: false;
 declare let bigintValue: bigint;
-declare let bugintLiteral: 123n;
+declare let bigintLiteral: 123n;
+declare let zeroBigintLiteral: 0;
 
 enum Enum {
     EnumValue
@@ -52,12 +56,16 @@ function testExoression<T>(typeParameter: T) {
     if (nullValue) { }
     if (stringValue) { }
     if (stringLiteral) { }
+    if (emptyStringLiteral) { }
     if (numberValue) { }
     if (numberLiteral) { }
+    if (zeroNumberLiteral) { }
     if (booleanValue) { }
     if (booleanLiteral) { }
+    if (falseBooleanLiteral) { }
     if (bigintValue) { }
-    if (bugintLiteral) { }
+    if (bigintLiteral) { }
+    if (zeroBigintLiteral) { }
     if (typeParameter) { }
     if (Enum.EnumValue) { }
     if (unionTypeWork1) { }
@@ -81,12 +89,16 @@ function testExoression<T>(typeParameter: T) {
     while (nullValue) { }
     while (stringValue) { }
     while (stringLiteral) { }
+    while (emptyStringLiteral) { }
     while (numberValue) { }
     while (numberLiteral) { }
+    while (zeroNumberLiteral) { }
     while (booleanValue) { }
     while (booleanLiteral) { }
+    while (falseBooleanLiteral) { }
     while (bigintValue) { }
-    while (bugintLiteral) { }
+    while (bigintLiteral) { }
+    while (zeroBigintLiteral) { }
     while (typeParameter) { }
     while (Enum.EnumValue) { }
     while (unionTypeWork1) { }
@@ -110,12 +122,16 @@ function testExoression<T>(typeParameter: T) {
     do { } while (nullValue)
     do { } while (stringValue)
     do { } while (stringLiteral)
+    do { } while (emptyStringLiteral)
     do { } while (numberValue)
     do { } while (numberLiteral)
+    do { } while (zeroNumberLiteral)
     do { } while (booleanValue)
     do { } while (booleanLiteral)
+    do { } while (falseBooleanLiteral)
     do { } while (bigintValue)
-    do { } while (bugintLiteral)
+    do { } while (bigintLiteral)
+    do { } while (zeroBigintLiteral)
     do { } while (typeParameter)
     do { } while (Enum.EnumValue)
     do {} while (unionTypeWork1)
@@ -141,12 +157,16 @@ function middleExpression<T>(typeParameter: T) {
     for (; nullValue;) { }
     for (; stringValue;) { }
     for (; stringLiteral;) { }
+    for (; emptyStringLiteral;) { }
     for (; numberValue;) { }
     for (; numberLiteral;) { }
+    for (; zeroNumberLiteral;) { }
     for (; booleanValue;) { }
     for (; booleanLiteral;) { }
+    for (; falseBooleanLiteral;) { }
     for (; bigintValue;) { }
-    for (; bugintLiteral;) { }
+    for (; bigintLiteral;) { }
+    for (; zeroBigintLiteral;) { }
     for (; typeParameter;) { }
     for (; Enum.EnumValue;) { }
     for (;unionTypeWork1;) { }
@@ -172,12 +192,16 @@ function firstOperand<T>(typeParameter: T) {
     nullValue ? 1 : 2;
     stringValue ? 1 : 2;
     stringLiteral ? 1 : 2;
+    emptyStringLiteral ? 1 : 2;
     numberValue ? 1 : 2;
     numberLiteral ? 1 : 2;
+    zeroNumberLiteral ? 1 : 2;
     booleanValue ? 1 : 2;
     booleanLiteral ? 1 : 2;
+    falseBooleanLiteral ? 1 : 2;
     bigintValue ? 1 : 2;
-    bugintLiteral ? 1 : 2;
+    bigintLiteral ? 1 : 2;
+    zeroBigintLiteral ? 1 : 2;
     typeParameter ? 1 : 2;
     Enum.EnumValue ? 1 : 2;
     unionTypeWork1 ? 1 : 2
@@ -201,12 +225,16 @@ function firstOperand<T>(typeParameter: T) {
     nullValue && 1;
     stringValue && 1;
     stringLiteral && 1;
+    emptyStringLiteral && 1;
     numberValue && 1;
     numberLiteral && 1;
+    zeroNumberLiteral && 1;
     booleanValue && 1;
     booleanLiteral && 1;
+    falseBooleanLiteral && 1;
     bigintValue && 1;
-    bugintLiteral && 1;
+    bigintLiteral && 1;
+    zeroBigintLiteral && 1;
     typeParameter && 1;
     Enum.EnumValue && 1;
     unionTypeWork1 && 1;
@@ -230,12 +258,16 @@ function firstOperand<T>(typeParameter: T) {
     nullValue || 1;
     stringValue || 1;
     stringLiteral || 1;
+    emptyStringLiteral || 1;
     numberValue || 1;
     numberLiteral || 1;
+    zeroNumberLiteral || 1;
     booleanValue || 1;
     booleanLiteral || 1;
+    falseBooleanLiteral || 1;
     bigintValue || 1;
-    bugintLiteral || 1;
+    bigintLiteral || 1;
+    zeroBigintLiteral || 1;
     typeParameter || 1;
     Enum.EnumValue || 1;
     unionTypeWork1 || 1;
@@ -261,12 +293,16 @@ function notOperand<T>(typeParameter: T) {
     !nullValue;
     !stringValue;
     !stringLiteral;
+    !emptyStringLiteral;
     !numberValue;
     !numberLiteral;
+    !zeroNumberLiteral;
     !booleanValue;
     !booleanLiteral;
+    !falseBooleanLiteral;
     !bigintValue;
-    !bugintLiteral;
+    !bigintLiteral;
+    !zeroBigintLiteral;
     !typeParameter;
     !Enum.EnumValue;
     !unionTypeWork1;
@@ -293,12 +329,16 @@ function questionOrAssignment<T>(typeParameter: T) {
     nullValue ?? 1;
     stringValue ?? 1;
     stringLiteral ?? 1;
+    emptyStringLiteral ?? 1;
     numberValue ?? 1;
     numberLiteral ?? 1;
+    zeroNumberLiteral ?? 1;
     booleanValue ?? 1;
     booleanLiteral ?? 1;
+    falseBooleanLiteral ?? 1;
     bigintValue ?? 1;
-    bugintLiteral ?? 1;
+    bigintLiteral ?? 1;
+    zeroBigintLiteral ?? 1;
     typeParameter ?? 1;
     Enum.EnumValue ?? 1;
     unionTypeWork1 ?? 1;
@@ -322,12 +362,16 @@ function questionOrAssignment<T>(typeParameter: T) {
         nullValue &&= null;
         stringValue &&= "";
         stringLiteral &&= "123";
+        emptyStringLiteral &&= "";
         numberValue &&= 1;
         numberLiteral &&= 123;
+        zeroNumberLiteral &&= 0;
         booleanValue &&= true;
         booleanLiteral &&= true;
+        falseBooleanLiteral &&= false;
         bigintValue &&= 1n;
-        bugintLiteral &&= 123n;
+        bigintLiteral &&= 123n;
+        zeroBigintLiteral &&= 0;
         typeParameter &&= {} as any;
         unionTypeWork1 &&= 1;
         unionTypeWork2 &&= 1;
@@ -349,12 +393,16 @@ function questionOrAssignment<T>(typeParameter: T) {
         nullValue ||= null;
         stringValue ||= "";
         stringLiteral ||= "123";
+        emptyStringLiteral ||= "";
         numberValue ||= 1;
         numberLiteral ||= 123;
+        zeroNumberLiteral ||= 0;
         booleanValue ||= true;
         booleanLiteral ||= true;
+        falseBooleanLiteral ||= false;
         bigintValue ||= 1n;
-        bugintLiteral ||= 123n;
+        bigintLiteral ||= 123n;
+        zeroBigintLiteral ||= 0;
         typeParameter ||= {} as any;
         unionTypeWork1 ||= 1;
         unionTypeWork2 ||= 1;
@@ -376,12 +424,16 @@ function questionOrAssignment<T>(typeParameter: T) {
         nullValue ??= null;
         stringValue ??= "";
         stringLiteral ??= "123";
+        emptyStringLiteral ??= "";
         numberValue ??= 1;
         numberLiteral ??= 123;
+        zeroNumberLiteral ??= 0;
         booleanValue ??= true;
         booleanLiteral ??= true;
+        falseBooleanLiteral ??= false;
         bigintValue ??= 1n;
-        bugintLiteral ??= 123n;
+        bigintLiteral ??= 123n;
+        zeroBigintLiteral ??= 0;
         typeParameter ??= {} as any;
         unionTypeWork1 ??= 1;
         unionTypeWork2 ??= 1;
@@ -412,12 +464,16 @@ function testExoression(typeParameter) {
     if (nullValue) { }
     if (stringValue) { }
     if (stringLiteral) { }
+    if (emptyStringLiteral) { }
     if (numberValue) { }
     if (numberLiteral) { }
+    if (zeroNumberLiteral) { }
     if (booleanValue) { }
     if (booleanLiteral) { }
+    if (falseBooleanLiteral) { }
     if (bigintValue) { }
-    if (bugintLiteral) { }
+    if (bigintLiteral) { }
+    if (zeroBigintLiteral) { }
     if (typeParameter) { }
     if (Enum.EnumValue) { }
     if (unionTypeWork1) { }
@@ -439,12 +495,16 @@ function testExoression(typeParameter) {
     while (nullValue) { }
     while (stringValue) { }
     while (stringLiteral) { }
+    while (emptyStringLiteral) { }
     while (numberValue) { }
     while (numberLiteral) { }
+    while (zeroNumberLiteral) { }
     while (booleanValue) { }
     while (booleanLiteral) { }
+    while (falseBooleanLiteral) { }
     while (bigintValue) { }
-    while (bugintLiteral) { }
+    while (bigintLiteral) { }
+    while (zeroBigintLiteral) { }
     while (typeParameter) { }
     while (Enum.EnumValue) { }
     while (unionTypeWork1) { }
@@ -466,12 +526,16 @@ function testExoression(typeParameter) {
     do { } while (nullValue);
     do { } while (stringValue);
     do { } while (stringLiteral);
+    do { } while (emptyStringLiteral);
     do { } while (numberValue);
     do { } while (numberLiteral);
+    do { } while (zeroNumberLiteral);
     do { } while (booleanValue);
     do { } while (booleanLiteral);
+    do { } while (falseBooleanLiteral);
     do { } while (bigintValue);
-    do { } while (bugintLiteral);
+    do { } while (bigintLiteral);
+    do { } while (zeroBigintLiteral);
     do { } while (typeParameter);
     do { } while (Enum.EnumValue);
     do { } while (unionTypeWork1);
@@ -495,12 +559,16 @@ function middleExpression(typeParameter) {
     for (; nullValue;) { }
     for (; stringValue;) { }
     for (; stringLiteral;) { }
+    for (; emptyStringLiteral;) { }
     for (; numberValue;) { }
     for (; numberLiteral;) { }
+    for (; zeroNumberLiteral;) { }
     for (; booleanValue;) { }
     for (; booleanLiteral;) { }
+    for (; falseBooleanLiteral;) { }
     for (; bigintValue;) { }
-    for (; bugintLiteral;) { }
+    for (; bigintLiteral;) { }
+    for (; zeroBigintLiteral;) { }
     for (; typeParameter;) { }
     for (; Enum.EnumValue;) { }
     for (; unionTypeWork1;) { }
@@ -524,12 +592,16 @@ function firstOperand(typeParameter) {
     nullValue ? 1 : 2;
     stringValue ? 1 : 2;
     stringLiteral ? 1 : 2;
+    emptyStringLiteral ? 1 : 2;
     numberValue ? 1 : 2;
     numberLiteral ? 1 : 2;
+    zeroNumberLiteral ? 1 : 2;
     booleanValue ? 1 : 2;
     booleanLiteral ? 1 : 2;
+    falseBooleanLiteral ? 1 : 2;
     bigintValue ? 1 : 2;
-    bugintLiteral ? 1 : 2;
+    bigintLiteral ? 1 : 2;
+    zeroBigintLiteral ? 1 : 2;
     typeParameter ? 1 : 2;
     Enum.EnumValue ? 1 : 2;
     unionTypeWork1 ? 1 : 2;
@@ -551,12 +623,16 @@ function firstOperand(typeParameter) {
     nullValue && 1;
     stringValue && 1;
     stringLiteral && 1;
+    emptyStringLiteral && 1;
     numberValue && 1;
     numberLiteral && 1;
+    zeroNumberLiteral && 1;
     booleanValue && 1;
     booleanLiteral && 1;
+    falseBooleanLiteral && 1;
     bigintValue && 1;
-    bugintLiteral && 1;
+    bigintLiteral && 1;
+    zeroBigintLiteral && 1;
     typeParameter && 1;
     Enum.EnumValue && 1;
     unionTypeWork1 && 1;
@@ -578,12 +654,16 @@ function firstOperand(typeParameter) {
     nullValue || 1;
     stringValue || 1;
     stringLiteral || 1;
+    emptyStringLiteral || 1;
     numberValue || 1;
     numberLiteral || 1;
+    zeroNumberLiteral || 1;
     booleanValue || 1;
     booleanLiteral || 1;
+    falseBooleanLiteral || 1;
     bigintValue || 1;
-    bugintLiteral || 1;
+    bigintLiteral || 1;
+    zeroBigintLiteral || 1;
     typeParameter || 1;
     Enum.EnumValue || 1;
     unionTypeWork1 || 1;
@@ -607,12 +687,16 @@ function notOperand(typeParameter) {
     !nullValue;
     !stringValue;
     !stringLiteral;
+    !emptyStringLiteral;
     !numberValue;
     !numberLiteral;
+    !zeroNumberLiteral;
     !booleanValue;
     !booleanLiteral;
+    !falseBooleanLiteral;
     !bigintValue;
-    !bugintLiteral;
+    !bigintLiteral;
+    !zeroBigintLiteral;
     !typeParameter;
     !Enum.EnumValue;
     !unionTypeWork1;
@@ -636,12 +720,16 @@ function questionOrAssignment(typeParameter) {
     nullValue ?? 1;
     stringValue ?? 1;
     stringLiteral ?? 1;
+    emptyStringLiteral ?? 1;
     numberValue ?? 1;
     numberLiteral ?? 1;
+    zeroNumberLiteral ?? 1;
     booleanValue ?? 1;
     booleanLiteral ?? 1;
+    falseBooleanLiteral ?? 1;
     bigintValue ?? 1;
-    bugintLiteral ?? 1;
+    bigintLiteral ?? 1;
+    zeroBigintLiteral ?? 1;
     typeParameter ?? 1;
     Enum.EnumValue ?? 1;
     unionTypeWork1 ?? 1;
@@ -664,12 +752,16 @@ function questionOrAssignment(typeParameter) {
         nullValue &&= null;
         stringValue &&= "";
         stringLiteral &&= "123";
+        emptyStringLiteral &&= "";
         numberValue &&= 1;
         numberLiteral &&= 123;
+        zeroNumberLiteral &&= 0;
         booleanValue &&= true;
         booleanLiteral &&= true;
+        falseBooleanLiteral &&= false;
         bigintValue &&= 1n;
-        bugintLiteral &&= 123n;
+        bigintLiteral &&= 123n;
+        zeroBigintLiteral &&= 0;
         typeParameter &&= {};
         unionTypeWork1 &&= 1;
         unionTypeWork2 &&= 1;
@@ -693,12 +785,16 @@ function questionOrAssignment(typeParameter) {
         nullValue ||= null;
         stringValue ||= "";
         stringLiteral ||= "123";
+        emptyStringLiteral ||= "";
         numberValue ||= 1;
         numberLiteral ||= 123;
+        zeroNumberLiteral ||= 0;
         booleanValue ||= true;
         booleanLiteral ||= true;
+        falseBooleanLiteral ||= false;
         bigintValue ||= 1n;
-        bugintLiteral ||= 123n;
+        bigintLiteral ||= 123n;
+        zeroBigintLiteral ||= 0;
         typeParameter ||= {};
         unionTypeWork1 ||= 1;
         unionTypeWork2 ||= 1;
@@ -722,12 +818,16 @@ function questionOrAssignment(typeParameter) {
         nullValue ??= null;
         stringValue ??= "";
         stringLiteral ??= "123";
+        emptyStringLiteral ??= "";
         numberValue ??= 1;
         numberLiteral ??= 123;
+        zeroNumberLiteral ??= 0;
         booleanValue ??= true;
         booleanLiteral ??= true;
+        falseBooleanLiteral ??= false;
         bigintValue ??= 1n;
-        bugintLiteral ??= 123n;
+        bigintLiteral ??= 123n;
+        zeroBigintLiteral ??= 0;
         typeParameter ??= {};
         unionTypeWork1 ??= 1;
         unionTypeWork2 ??= 1;

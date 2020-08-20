@@ -33152,7 +33152,11 @@ namespace ts {
                 return some((<UnionOrIntersectionType>type).types, isPossibilyFalsyType)
             }
 
-            return !!(type.flags & TypeFlags.PossibilyFalsy)
+            const possiblyFalsy = !!getFalsyFlags(type);
+            if (!(type.flags & ~TypeFlags.PossiblyFalsy)) {
+                return possiblyFalsy;
+            }
+            return !!(type.flags & TypeFlags.PedanticPossiblyFalsy)
         }
 
         function checkTruthinessExpression(node: Expression, checkMode?: CheckMode) {

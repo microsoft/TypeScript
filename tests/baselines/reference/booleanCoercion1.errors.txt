@@ -1,82 +1,118 @@
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(67,9): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(68,9): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(69,9): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(70,9): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(71,9): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(72,9): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(73,9): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(74,9): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(96,12): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(97,12): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(98,12): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(99,12): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(100,12): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(101,12): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(102,12): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(103,12): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(125,19): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(126,18): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(127,18): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(128,18): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(129,18): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(130,18): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(131,18): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(132,18): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(156,12): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(157,11): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(158,11): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(159,11): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(160,11): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(161,11): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(162,11): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(163,11): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(187,5): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(188,5): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(189,5): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(190,5): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(191,5): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(192,5): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(193,5): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(194,5): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(216,5): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(217,5): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(218,5): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(219,5): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(220,5): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(221,5): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(222,5): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(223,5): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(245,5): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(246,5): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(247,5): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(248,5): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(249,5): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(250,5): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(251,5): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(252,5): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(276,6): error TS4111: The type '() => void' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(277,6): error TS4111: The type 'Interface' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(278,6): error TS4111: The type 'Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(279,6): error TS4111: The type 'Symbol' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(280,6): error TS4111: The type 'string[]' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(281,6): error TS4111: The type 'Class' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(282,6): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
-tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(57,9): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(60,9): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(63,9): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(66,9): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(75,9): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(76,9): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(77,9): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(78,9): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(79,9): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(80,9): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(81,9): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(82,9): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(90,12): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(93,12): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(96,12): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(99,12): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(108,12): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(109,12): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(110,12): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(111,12): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(112,12): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(113,12): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(114,12): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(115,12): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(123,19): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(126,19): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(129,19): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(132,19): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(141,19): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(142,18): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(143,18): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(144,18): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(145,18): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(146,18): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(147,18): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(148,18): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(158,12): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(161,12): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(164,12): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(167,12): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(176,12): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(177,11): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(178,11): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(179,11): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(180,11): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(181,11): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(182,11): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(183,11): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(193,5): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(196,5): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(199,5): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(202,5): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(211,5): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(212,5): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(213,5): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(214,5): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(215,5): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(216,5): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(217,5): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(218,5): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(226,5): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(229,5): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(232,5): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(235,5): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(244,5): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(245,5): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(246,5): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(247,5): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(248,5): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(249,5): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(250,5): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(251,5): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(259,5): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(262,5): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(265,5): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(268,5): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(277,5): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(278,5): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(279,5): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(280,5): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(281,5): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(282,5): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,5): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(284,5): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(294,6): error TS4111: The type '"123"' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(297,6): error TS4111: The type '123' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(300,6): error TS4111: The type 'true' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(303,6): error TS4111: The type '123n' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(312,6): error TS4111: The type '() => void' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(313,6): error TS4111: The type 'Interface' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(314,6): error TS4111: The type 'Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(315,6): error TS4111: The type 'Symbol' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(316,6): error TS4111: The type 'string[]' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(317,6): error TS4111: The type 'Class' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(318,6): error TS4111: The type 'Interface | Type' is disallowed in truthiness position
+tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(319,6): error TS4111: The type 'Type & Interface' is disallowed in truthiness position
 
 
-==== tests/cases/conformance/booleanCoercion/booleanCoercion1.ts (64 errors) ====
+==== tests/cases/conformance/booleanCoercion/booleanCoercion1.ts (96 errors) ====
     declare let anyValue: any;
     declare let unknownValue: unknown;
     declare let undefinedValue: undefined;
     declare let nullValue: null;
     declare let stringValue: string;
     declare let stringLiteral: "123";
+    declare let emptyStringLiteral: "";
     declare let numberValue: number;
     declare let numberLiteral: 123;
+    declare let zeroNumberLiteral: 0;
     declare let booleanValue: boolean;
     declare let booleanLiteral: true;
+    declare let falseBooleanLiteral: false;
     declare let bigintValue: bigint;
-    declare let bugintLiteral: 123n;
+    declare let bigintLiteral: 123n;
+    declare let zeroBigintLiteral: 0;
     
     enum Enum {
         EnumValue
@@ -118,12 +154,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         if (nullValue) { }
         if (stringValue) { }
         if (stringLiteral) { }
+            ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        if (emptyStringLiteral) { }
         if (numberValue) { }
         if (numberLiteral) { }
+            ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        if (zeroNumberLiteral) { }
         if (booleanValue) { }
         if (booleanLiteral) { }
+            ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        if (falseBooleanLiteral) { }
         if (bigintValue) { }
-        if (bugintLiteral) { }
+        if (bigintLiteral) { }
+            ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        if (zeroBigintLiteral) { }
         if (typeParameter) { }
         if (Enum.EnumValue) { }
         if (unionTypeWork1) { }
@@ -163,12 +211,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         while (nullValue) { }
         while (stringValue) { }
         while (stringLiteral) { }
+               ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        while (emptyStringLiteral) { }
         while (numberValue) { }
         while (numberLiteral) { }
+               ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        while (zeroNumberLiteral) { }
         while (booleanValue) { }
         while (booleanLiteral) { }
+               ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        while (falseBooleanLiteral) { }
         while (bigintValue) { }
-        while (bugintLiteral) { }
+        while (bigintLiteral) { }
+               ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        while (zeroBigintLiteral) { }
         while (typeParameter) { }
         while (Enum.EnumValue) { }
         while (unionTypeWork1) { }
@@ -208,12 +268,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         do { } while (nullValue)
         do { } while (stringValue)
         do { } while (stringLiteral)
+                      ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        do { } while (emptyStringLiteral)
         do { } while (numberValue)
         do { } while (numberLiteral)
+                      ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        do { } while (zeroNumberLiteral)
         do { } while (booleanValue)
         do { } while (booleanLiteral)
+                      ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        do { } while (falseBooleanLiteral)
         do { } while (bigintValue)
-        do { } while (bugintLiteral)
+        do { } while (bigintLiteral)
+                      ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        do { } while (zeroBigintLiteral)
         do { } while (typeParameter)
         do { } while (Enum.EnumValue)
         do {} while (unionTypeWork1)
@@ -255,12 +327,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         for (; nullValue;) { }
         for (; stringValue;) { }
         for (; stringLiteral;) { }
+               ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        for (; emptyStringLiteral;) { }
         for (; numberValue;) { }
         for (; numberLiteral;) { }
+               ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        for (; zeroNumberLiteral;) { }
         for (; booleanValue;) { }
         for (; booleanLiteral;) { }
+               ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        for (; falseBooleanLiteral;) { }
         for (; bigintValue;) { }
-        for (; bugintLiteral;) { }
+        for (; bigintLiteral;) { }
+               ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        for (; zeroBigintLiteral;) { }
         for (; typeParameter;) { }
         for (; Enum.EnumValue;) { }
         for (;unionTypeWork1;) { }
@@ -302,12 +386,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         nullValue ? 1 : 2;
         stringValue ? 1 : 2;
         stringLiteral ? 1 : 2;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        emptyStringLiteral ? 1 : 2;
         numberValue ? 1 : 2;
         numberLiteral ? 1 : 2;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        zeroNumberLiteral ? 1 : 2;
         booleanValue ? 1 : 2;
         booleanLiteral ? 1 : 2;
+        ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        falseBooleanLiteral ? 1 : 2;
         bigintValue ? 1 : 2;
-        bugintLiteral ? 1 : 2;
+        bigintLiteral ? 1 : 2;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        zeroBigintLiteral ? 1 : 2;
         typeParameter ? 1 : 2;
         Enum.EnumValue ? 1 : 2;
         unionTypeWork1 ? 1 : 2
@@ -347,12 +443,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         nullValue && 1;
         stringValue && 1;
         stringLiteral && 1;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        emptyStringLiteral && 1;
         numberValue && 1;
         numberLiteral && 1;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        zeroNumberLiteral && 1;
         booleanValue && 1;
         booleanLiteral && 1;
+        ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        falseBooleanLiteral && 1;
         bigintValue && 1;
-        bugintLiteral && 1;
+        bigintLiteral && 1;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        zeroBigintLiteral && 1;
         typeParameter && 1;
         Enum.EnumValue && 1;
         unionTypeWork1 && 1;
@@ -392,12 +500,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         nullValue || 1;
         stringValue || 1;
         stringLiteral || 1;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        emptyStringLiteral || 1;
         numberValue || 1;
         numberLiteral || 1;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        zeroNumberLiteral || 1;
         booleanValue || 1;
         booleanLiteral || 1;
+        ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        falseBooleanLiteral || 1;
         bigintValue || 1;
-        bugintLiteral || 1;
+        bigintLiteral || 1;
+        ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        zeroBigintLiteral || 1;
         typeParameter || 1;
         Enum.EnumValue || 1;
         unionTypeWork1 || 1;
@@ -439,12 +559,24 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         !nullValue;
         !stringValue;
         !stringLiteral;
+         ~~~~~~~~~~~~~
+!!! error TS4111: The type '"123"' is disallowed in truthiness position
+        !emptyStringLiteral;
         !numberValue;
         !numberLiteral;
+         ~~~~~~~~~~~~~
+!!! error TS4111: The type '123' is disallowed in truthiness position
+        !zeroNumberLiteral;
         !booleanValue;
         !booleanLiteral;
+         ~~~~~~~~~~~~~~
+!!! error TS4111: The type 'true' is disallowed in truthiness position
+        !falseBooleanLiteral;
         !bigintValue;
-        !bugintLiteral;
+        !bigintLiteral;
+         ~~~~~~~~~~~~~
+!!! error TS4111: The type '123n' is disallowed in truthiness position
+        !zeroBigintLiteral;
         !typeParameter;
         !Enum.EnumValue;
         !unionTypeWork1;
@@ -487,12 +619,16 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
         nullValue ?? 1;
         stringValue ?? 1;
         stringLiteral ?? 1;
+        emptyStringLiteral ?? 1;
         numberValue ?? 1;
         numberLiteral ?? 1;
+        zeroNumberLiteral ?? 1;
         booleanValue ?? 1;
         booleanLiteral ?? 1;
+        falseBooleanLiteral ?? 1;
         bigintValue ?? 1;
-        bugintLiteral ?? 1;
+        bigintLiteral ?? 1;
+        zeroBigintLiteral ?? 1;
         typeParameter ?? 1;
         Enum.EnumValue ?? 1;
         unionTypeWork1 ?? 1;
@@ -516,12 +652,16 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
             nullValue &&= null;
             stringValue &&= "";
             stringLiteral &&= "123";
+            emptyStringLiteral &&= "";
             numberValue &&= 1;
             numberLiteral &&= 123;
+            zeroNumberLiteral &&= 0;
             booleanValue &&= true;
             booleanLiteral &&= true;
+            falseBooleanLiteral &&= false;
             bigintValue &&= 1n;
-            bugintLiteral &&= 123n;
+            bigintLiteral &&= 123n;
+            zeroBigintLiteral &&= 0;
             typeParameter &&= {} as any;
             unionTypeWork1 &&= 1;
             unionTypeWork2 &&= 1;
@@ -543,12 +683,16 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
             nullValue ||= null;
             stringValue ||= "";
             stringLiteral ||= "123";
+            emptyStringLiteral ||= "";
             numberValue ||= 1;
             numberLiteral ||= 123;
+            zeroNumberLiteral ||= 0;
             booleanValue ||= true;
             booleanLiteral ||= true;
+            falseBooleanLiteral ||= false;
             bigintValue ||= 1n;
-            bugintLiteral ||= 123n;
+            bigintLiteral ||= 123n;
+            zeroBigintLiteral ||= 0;
             typeParameter ||= {} as any;
             unionTypeWork1 ||= 1;
             unionTypeWork2 ||= 1;
@@ -570,12 +714,16 @@ tests/cases/conformance/booleanCoercion/booleanCoercion1.ts(283,6): error TS4111
             nullValue ??= null;
             stringValue ??= "";
             stringLiteral ??= "123";
+            emptyStringLiteral ??= "";
             numberValue ??= 1;
             numberLiteral ??= 123;
+            zeroNumberLiteral ??= 0;
             booleanValue ??= true;
             booleanLiteral ??= true;
+            falseBooleanLiteral ??= false;
             bigintValue ??= 1n;
-            bugintLiteral ??= 123n;
+            bigintLiteral ??= 123n;
+            zeroBigintLiteral ??= 0;
             typeParameter ??= {} as any;
             unionTypeWork1 ??= 1;
             unionTypeWork2 ??= 1;

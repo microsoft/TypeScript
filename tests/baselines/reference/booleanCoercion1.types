@@ -18,11 +18,17 @@ declare let stringValue: string;
 declare let stringLiteral: "123";
 >stringLiteral : "123"
 
+declare let emptyStringLiteral: "";
+>emptyStringLiteral : ""
+
 declare let numberValue: number;
 >numberValue : number
 
 declare let numberLiteral: 123;
 >numberLiteral : 123
+
+declare let zeroNumberLiteral: 0;
+>zeroNumberLiteral : 0
 
 declare let booleanValue: boolean;
 >booleanValue : boolean
@@ -31,11 +37,18 @@ declare let booleanLiteral: true;
 >booleanLiteral : true
 >true : true
 
+declare let falseBooleanLiteral: false;
+>falseBooleanLiteral : false
+>false : false
+
 declare let bigintValue: bigint;
 >bigintValue : bigint
 
-declare let bugintLiteral: 123n;
->bugintLiteral : 123n
+declare let bigintLiteral: 123n;
+>bigintLiteral : 123n
+
+declare let zeroBigintLiteral: 0;
+>zeroBigintLiteral : 0
 
 enum Enum {
 >Enum : Enum
@@ -123,11 +136,17 @@ function testExoression<T>(typeParameter: T) {
     if (stringLiteral) { }
 >stringLiteral : "123"
 
+    if (emptyStringLiteral) { }
+>emptyStringLiteral : ""
+
     if (numberValue) { }
 >numberValue : number
 
     if (numberLiteral) { }
 >numberLiteral : 123
+
+    if (zeroNumberLiteral) { }
+>zeroNumberLiteral : 0
 
     if (booleanValue) { }
 >booleanValue : boolean
@@ -135,11 +154,17 @@ function testExoression<T>(typeParameter: T) {
     if (booleanLiteral) { }
 >booleanLiteral : true
 
+    if (falseBooleanLiteral) { }
+>falseBooleanLiteral : false
+
     if (bigintValue) { }
 >bigintValue : bigint
 
-    if (bugintLiteral) { }
->bugintLiteral : 123n
+    if (bigintLiteral) { }
+>bigintLiteral : 123n
+
+    if (zeroBigintLiteral) { }
+>zeroBigintLiteral : 0
 
     if (typeParameter) { }
 >typeParameter : T
@@ -204,11 +229,17 @@ function testExoression<T>(typeParameter: T) {
     while (stringLiteral) { }
 >stringLiteral : "123"
 
+    while (emptyStringLiteral) { }
+>emptyStringLiteral : ""
+
     while (numberValue) { }
 >numberValue : number
 
     while (numberLiteral) { }
 >numberLiteral : 123
+
+    while (zeroNumberLiteral) { }
+>zeroNumberLiteral : 0
 
     while (booleanValue) { }
 >booleanValue : boolean
@@ -216,11 +247,17 @@ function testExoression<T>(typeParameter: T) {
     while (booleanLiteral) { }
 >booleanLiteral : true
 
+    while (falseBooleanLiteral) { }
+>falseBooleanLiteral : false
+
     while (bigintValue) { }
 >bigintValue : bigint
 
-    while (bugintLiteral) { }
->bugintLiteral : 123n
+    while (bigintLiteral) { }
+>bigintLiteral : 123n
+
+    while (zeroBigintLiteral) { }
+>zeroBigintLiteral : 0
 
     while (typeParameter) { }
 >typeParameter : T
@@ -285,11 +322,17 @@ function testExoression<T>(typeParameter: T) {
     do { } while (stringLiteral)
 >stringLiteral : "123"
 
+    do { } while (emptyStringLiteral)
+>emptyStringLiteral : ""
+
     do { } while (numberValue)
 >numberValue : number
 
     do { } while (numberLiteral)
 >numberLiteral : 123
+
+    do { } while (zeroNumberLiteral)
+>zeroNumberLiteral : 0
 
     do { } while (booleanValue)
 >booleanValue : boolean
@@ -297,11 +340,17 @@ function testExoression<T>(typeParameter: T) {
     do { } while (booleanLiteral)
 >booleanLiteral : true
 
+    do { } while (falseBooleanLiteral)
+>falseBooleanLiteral : false
+
     do { } while (bigintValue)
 >bigintValue : bigint
 
-    do { } while (bugintLiteral)
->bugintLiteral : 123n
+    do { } while (bigintLiteral)
+>bigintLiteral : 123n
+
+    do { } while (zeroBigintLiteral)
+>zeroBigintLiteral : 0
 
     do { } while (typeParameter)
 >typeParameter : T
@@ -371,11 +420,17 @@ function middleExpression<T>(typeParameter: T) {
     for (; stringLiteral;) { }
 >stringLiteral : "123"
 
+    for (; emptyStringLiteral;) { }
+>emptyStringLiteral : ""
+
     for (; numberValue;) { }
 >numberValue : number
 
     for (; numberLiteral;) { }
 >numberLiteral : 123
+
+    for (; zeroNumberLiteral;) { }
+>zeroNumberLiteral : 0
 
     for (; booleanValue;) { }
 >booleanValue : boolean
@@ -383,11 +438,17 @@ function middleExpression<T>(typeParameter: T) {
     for (; booleanLiteral;) { }
 >booleanLiteral : true
 
+    for (; falseBooleanLiteral;) { }
+>falseBooleanLiteral : false
+
     for (; bigintValue;) { }
 >bigintValue : bigint
 
-    for (; bugintLiteral;) { }
->bugintLiteral : 123n
+    for (; bigintLiteral;) { }
+>bigintLiteral : 123n
+
+    for (; zeroBigintLiteral;) { }
+>zeroBigintLiteral : 0
 
     for (; typeParameter;) { }
 >typeParameter : T
@@ -475,6 +536,12 @@ function firstOperand<T>(typeParameter: T) {
 >1 : 1
 >2 : 2
 
+    emptyStringLiteral ? 1 : 2;
+>emptyStringLiteral ? 1 : 2 : 1 | 2
+>emptyStringLiteral : ""
+>1 : 1
+>2 : 2
+
     numberValue ? 1 : 2;
 >numberValue ? 1 : 2 : 1 | 2
 >numberValue : number
@@ -484,6 +551,12 @@ function firstOperand<T>(typeParameter: T) {
     numberLiteral ? 1 : 2;
 >numberLiteral ? 1 : 2 : 1 | 2
 >numberLiteral : 123
+>1 : 1
+>2 : 2
+
+    zeroNumberLiteral ? 1 : 2;
+>zeroNumberLiteral ? 1 : 2 : 1 | 2
+>zeroNumberLiteral : 0
 >1 : 1
 >2 : 2
 
@@ -499,15 +572,27 @@ function firstOperand<T>(typeParameter: T) {
 >1 : 1
 >2 : 2
 
+    falseBooleanLiteral ? 1 : 2;
+>falseBooleanLiteral ? 1 : 2 : 1 | 2
+>falseBooleanLiteral : false
+>1 : 1
+>2 : 2
+
     bigintValue ? 1 : 2;
 >bigintValue ? 1 : 2 : 1 | 2
 >bigintValue : bigint
 >1 : 1
 >2 : 2
 
-    bugintLiteral ? 1 : 2;
->bugintLiteral ? 1 : 2 : 1 | 2
->bugintLiteral : 123n
+    bigintLiteral ? 1 : 2;
+>bigintLiteral ? 1 : 2 : 1 | 2
+>bigintLiteral : 123n
+>1 : 1
+>2 : 2
+
+    zeroBigintLiteral ? 1 : 2;
+>zeroBigintLiteral ? 1 : 2 : 1 | 2
+>zeroBigintLiteral : 0
 >1 : 1
 >2 : 2
 
@@ -628,6 +713,11 @@ function firstOperand<T>(typeParameter: T) {
 >stringLiteral : "123"
 >1 : 1
 
+    emptyStringLiteral && 1;
+>emptyStringLiteral && 1 : ""
+>emptyStringLiteral : ""
+>1 : 1
+
     numberValue && 1;
 >numberValue && 1 : 0 | 1
 >numberValue : number
@@ -636,6 +726,11 @@ function firstOperand<T>(typeParameter: T) {
     numberLiteral && 1;
 >numberLiteral && 1 : 0 | 1
 >numberLiteral : 123
+>1 : 1
+
+    zeroNumberLiteral && 1;
+>zeroNumberLiteral && 1 : 0
+>zeroNumberLiteral : 0
 >1 : 1
 
     booleanValue && 1;
@@ -648,14 +743,24 @@ function firstOperand<T>(typeParameter: T) {
 >booleanLiteral : true
 >1 : 1
 
+    falseBooleanLiteral && 1;
+>falseBooleanLiteral && 1 : false
+>falseBooleanLiteral : false
+>1 : 1
+
     bigintValue && 1;
 >bigintValue && 1 : 0 | 1
 >bigintValue : bigint
 >1 : 1
 
-    bugintLiteral && 1;
->bugintLiteral && 1 : 0 | 1
->bugintLiteral : 123n
+    bigintLiteral && 1;
+>bigintLiteral && 1 : 0 | 1
+>bigintLiteral : 123n
+>1 : 1
+
+    zeroBigintLiteral && 1;
+>zeroBigintLiteral && 1 : 0
+>zeroBigintLiteral : 0
 >1 : 1
 
     typeParameter && 1;
@@ -761,6 +866,11 @@ function firstOperand<T>(typeParameter: T) {
 >stringLiteral : "123"
 >1 : 1
 
+    emptyStringLiteral || 1;
+>emptyStringLiteral || 1 : 1
+>emptyStringLiteral : ""
+>1 : 1
+
     numberValue || 1;
 >numberValue || 1 : number
 >numberValue : number
@@ -769,6 +879,11 @@ function firstOperand<T>(typeParameter: T) {
     numberLiteral || 1;
 >numberLiteral || 1 : 123 | 1
 >numberLiteral : 123
+>1 : 1
+
+    zeroNumberLiteral || 1;
+>zeroNumberLiteral || 1 : 1
+>zeroNumberLiteral : 0
 >1 : 1
 
     booleanValue || 1;
@@ -781,14 +896,24 @@ function firstOperand<T>(typeParameter: T) {
 >booleanLiteral : true
 >1 : 1
 
+    falseBooleanLiteral || 1;
+>falseBooleanLiteral || 1 : 1
+>falseBooleanLiteral : false
+>1 : 1
+
     bigintValue || 1;
 >bigintValue || 1 : bigint | 1
 >bigintValue : bigint
 >1 : 1
 
-    bugintLiteral || 1;
->bugintLiteral || 1 : 123n | 1
->bugintLiteral : 123n
+    bigintLiteral || 1;
+>bigintLiteral || 1 : 123n | 1
+>bigintLiteral : 123n
+>1 : 1
+
+    zeroBigintLiteral || 1;
+>zeroBigintLiteral || 1 : 1
+>zeroBigintLiteral : 0
 >1 : 1
 
     typeParameter || 1;
@@ -893,6 +1018,10 @@ function notOperand<T>(typeParameter: T) {
 >!stringLiteral : boolean
 >stringLiteral : "123"
 
+    !emptyStringLiteral;
+>!emptyStringLiteral : true
+>emptyStringLiteral : ""
+
     !numberValue;
 >!numberValue : boolean
 >numberValue : number
@@ -900,6 +1029,10 @@ function notOperand<T>(typeParameter: T) {
     !numberLiteral;
 >!numberLiteral : boolean
 >numberLiteral : 123
+
+    !zeroNumberLiteral;
+>!zeroNumberLiteral : true
+>zeroNumberLiteral : 0
 
     !booleanValue;
 >!booleanValue : boolean
@@ -909,13 +1042,21 @@ function notOperand<T>(typeParameter: T) {
 >!booleanLiteral : boolean
 >booleanLiteral : true
 
+    !falseBooleanLiteral;
+>!falseBooleanLiteral : true
+>falseBooleanLiteral : false
+
     !bigintValue;
 >!bigintValue : boolean
 >bigintValue : bigint
 
-    !bugintLiteral;
->!bugintLiteral : boolean
->bugintLiteral : 123n
+    !bigintLiteral;
+>!bigintLiteral : boolean
+>bigintLiteral : 123n
+
+    !zeroBigintLiteral;
+>!zeroBigintLiteral : true
+>zeroBigintLiteral : 0
 
     !typeParameter;
 >!typeParameter : boolean
@@ -1014,6 +1155,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >stringLiteral : "123"
 >1 : 1
 
+    emptyStringLiteral ?? 1;
+>emptyStringLiteral ?? 1 : "" | 1
+>emptyStringLiteral : ""
+>1 : 1
+
     numberValue ?? 1;
 >numberValue ?? 1 : number
 >numberValue : number
@@ -1022,6 +1168,11 @@ function questionOrAssignment<T>(typeParameter: T) {
     numberLiteral ?? 1;
 >numberLiteral ?? 1 : 123 | 1
 >numberLiteral : 123
+>1 : 1
+
+    zeroNumberLiteral ?? 1;
+>zeroNumberLiteral ?? 1 : 0 | 1
+>zeroNumberLiteral : 0
 >1 : 1
 
     booleanValue ?? 1;
@@ -1034,14 +1185,24 @@ function questionOrAssignment<T>(typeParameter: T) {
 >booleanLiteral : true
 >1 : 1
 
+    falseBooleanLiteral ?? 1;
+>falseBooleanLiteral ?? 1 : false | 1
+>falseBooleanLiteral : false
+>1 : 1
+
     bigintValue ?? 1;
 >bigintValue ?? 1 : bigint | 1
 >bigintValue : bigint
 >1 : 1
 
-    bugintLiteral ?? 1;
->bugintLiteral ?? 1 : 123n | 1
->bugintLiteral : 123n
+    bigintLiteral ?? 1;
+>bigintLiteral ?? 1 : 123n | 1
+>bigintLiteral : 123n
+>1 : 1
+
+    zeroBigintLiteral ?? 1;
+>zeroBigintLiteral ?? 1 : 0 | 1
+>zeroBigintLiteral : 0
 >1 : 1
 
     typeParameter ?? 1;
@@ -1152,6 +1313,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >stringLiteral : "123"
 >"123" : "123"
 
+        emptyStringLiteral &&= "";
+>emptyStringLiteral &&= "" : ""
+>emptyStringLiteral : ""
+>"" : ""
+
         numberValue &&= 1;
 >numberValue &&= 1 : 0 | 1
 >numberValue : number
@@ -1161,6 +1327,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >numberLiteral &&= 123 : 0 | 123
 >numberLiteral : 123
 >123 : 123
+
+        zeroNumberLiteral &&= 0;
+>zeroNumberLiteral &&= 0 : 0
+>zeroNumberLiteral : 0
+>0 : 0
 
         booleanValue &&= true;
 >booleanValue &&= true : boolean
@@ -1172,15 +1343,25 @@ function questionOrAssignment<T>(typeParameter: T) {
 >booleanLiteral : true
 >true : true
 
+        falseBooleanLiteral &&= false;
+>falseBooleanLiteral &&= false : false
+>falseBooleanLiteral : false
+>false : false
+
         bigintValue &&= 1n;
 >bigintValue &&= 1n : 0n | 1n
 >bigintValue : bigint
 >1n : 1n
 
-        bugintLiteral &&= 123n;
->bugintLiteral &&= 123n : 0n | 123n
->bugintLiteral : 123n
+        bigintLiteral &&= 123n;
+>bigintLiteral &&= 123n : 0n | 123n
+>bigintLiteral : 123n
 >123n : 123n
+
+        zeroBigintLiteral &&= 0;
+>zeroBigintLiteral &&= 0 : 0
+>zeroBigintLiteral : 0
+>0 : 0
 
         typeParameter &&= {} as any;
 >typeParameter &&= {} as any : any
@@ -1286,6 +1467,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >stringLiteral : "123"
 >"123" : "123"
 
+        emptyStringLiteral ||= "";
+>emptyStringLiteral ||= "" : ""
+>emptyStringLiteral : ""
+>"" : ""
+
         numberValue ||= 1;
 >numberValue ||= 1 : number
 >numberValue : number
@@ -1295,6 +1481,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >numberLiteral ||= 123 : 123
 >numberLiteral : 123
 >123 : 123
+
+        zeroNumberLiteral ||= 0;
+>zeroNumberLiteral ||= 0 : 0
+>zeroNumberLiteral : 0
+>0 : 0
 
         booleanValue ||= true;
 >booleanValue ||= true : true
@@ -1306,15 +1497,25 @@ function questionOrAssignment<T>(typeParameter: T) {
 >booleanLiteral : true
 >true : true
 
+        falseBooleanLiteral ||= false;
+>falseBooleanLiteral ||= false : false
+>falseBooleanLiteral : false
+>false : false
+
         bigintValue ||= 1n;
 >bigintValue ||= 1n : bigint
 >bigintValue : bigint
 >1n : 1n
 
-        bugintLiteral ||= 123n;
->bugintLiteral ||= 123n : 123n
->bugintLiteral : 123n
+        bigintLiteral ||= 123n;
+>bigintLiteral ||= 123n : 123n
+>bigintLiteral : 123n
 >123n : 123n
+
+        zeroBigintLiteral ||= 0;
+>zeroBigintLiteral ||= 0 : 0
+>zeroBigintLiteral : 0
+>0 : 0
 
         typeParameter ||= {} as any;
 >typeParameter ||= {} as any : any
@@ -1420,6 +1621,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >stringLiteral : "123"
 >"123" : "123"
 
+        emptyStringLiteral ??= "";
+>emptyStringLiteral ??= "" : ""
+>emptyStringLiteral : ""
+>"" : ""
+
         numberValue ??= 1;
 >numberValue ??= 1 : number
 >numberValue : number
@@ -1429,6 +1635,11 @@ function questionOrAssignment<T>(typeParameter: T) {
 >numberLiteral ??= 123 : 123
 >numberLiteral : 123
 >123 : 123
+
+        zeroNumberLiteral ??= 0;
+>zeroNumberLiteral ??= 0 : 0
+>zeroNumberLiteral : 0
+>0 : 0
 
         booleanValue ??= true;
 >booleanValue ??= true : boolean
@@ -1440,15 +1651,25 @@ function questionOrAssignment<T>(typeParameter: T) {
 >booleanLiteral : true
 >true : true
 
+        falseBooleanLiteral ??= false;
+>falseBooleanLiteral ??= false : false
+>falseBooleanLiteral : false
+>false : false
+
         bigintValue ??= 1n;
 >bigintValue ??= 1n : bigint
 >bigintValue : bigint
 >1n : 1n
 
-        bugintLiteral ??= 123n;
->bugintLiteral ??= 123n : 123n
->bugintLiteral : 123n
+        bigintLiteral ??= 123n;
+>bigintLiteral ??= 123n : 123n
+>bigintLiteral : 123n
 >123n : 123n
+
+        zeroBigintLiteral ??= 0;
+>zeroBigintLiteral ??= 0 : 0
+>zeroBigintLiteral : 0
+>0 : 0
 
         typeParameter ??= {} as any;
 >typeParameter ??= {} as any : any
