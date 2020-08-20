@@ -25745,6 +25745,10 @@ namespace ts {
             return !!(t.flags & TypeFlags.Void);
         }
 
+        function acceptsVoidUndefinedUnknownOrAny(t: Type): boolean {
+            return !!(t.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Unknown | TypeFlags.Any));
+        }
+
         function hasCorrectArity(node: CallLikeExpression, args: readonly Expression[], signature: Signature, signatureHelpTrailingComma = false) {
             let argCount: number;
             let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
@@ -25810,7 +25814,7 @@ namespace ts {
             }
             for (let i = argCount; i < effectiveMinimumArguments; i++) {
                 const type = getTypeAtPosition(signature, i);
-                if (filterType(type, acceptsVoid).flags & TypeFlags.Never) {
+                if (filterType(type, isInJSFile(node) && !strictNullChecks ? acceptsVoidUndefinedUnknownOrAny : acceptsVoid).flags & TypeFlags.Never) {
                     return false;
                 }
             }
