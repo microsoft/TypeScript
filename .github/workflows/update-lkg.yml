@@ -17,7 +17,7 @@ jobs:
 
     - name: Configure Git and Update LKG
       run: |
-        git config user.email "ts_bot@rcavanaugh.com"
+        git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
         npm ci
         gulp LKG
