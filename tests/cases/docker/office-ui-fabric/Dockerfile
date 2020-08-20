@@ -1,5 +1,5 @@
-# Lock to node 13 because the codebase throws hundreds of `Warning: Accessing non-existent property` warnings in node 14
-FROM node:13
+# Lock to node 12 because the codebase throws hundreds of `Warning: Accessing non-existent property` warnings in node 14
+FROM node:12
 ENV CI=true
 ENV TF_BUILD=true
 # Download repo version, sets up better layer caching for the following clone
