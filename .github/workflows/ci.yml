@@ -31,7 +31,6 @@ jobs:
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
     - run:  npm ci
-    - run:  npm update
 
     # Re: https://github.com/actions/setup-node/pull/125
     - name: Register Problem Matcher for TSC
