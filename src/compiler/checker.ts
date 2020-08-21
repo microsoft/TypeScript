@@ -25611,7 +25611,7 @@ namespace ts {
             if (objectType === errorType || objectType === silentNeverType) {
                 return objectType;
             }
-            
+
             if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
