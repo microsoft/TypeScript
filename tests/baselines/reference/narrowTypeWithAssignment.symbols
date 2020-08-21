@@ -1,0 +1,44 @@
+=== tests/cases/compiler/narrowTypeWithAssignment.ts ===
+class A {
+>A : Symbol(A, Decl(narrowTypeWithAssignment.ts, 0, 0))
+
+    isA(): this is A { return true; }
+>isA : Symbol(A.isA, Decl(narrowTypeWithAssignment.ts, 0, 9))
+>A : Symbol(A, Decl(narrowTypeWithAssignment.ts, 0, 0))
+
+    doA() { }
+>doA : Symbol(A.doA, Decl(narrowTypeWithAssignment.ts, 1, 37))
+}
+  
+class B {
+>B : Symbol(B, Decl(narrowTypeWithAssignment.ts, 3, 1))
+
+    isA(): this is A { return false; }
+>isA : Symbol(B.isA, Decl(narrowTypeWithAssignment.ts, 5, 9))
+>A : Symbol(A, Decl(narrowTypeWithAssignment.ts, 0, 0))
+}
+
+type AorB = A | B;
+>AorB : Symbol(AorB, Decl(narrowTypeWithAssignment.ts, 7, 1))
+>A : Symbol(A, Decl(narrowTypeWithAssignment.ts, 0, 0))
+>B : Symbol(B, Decl(narrowTypeWithAssignment.ts, 3, 1))
+
+declare function f(): AorB;
+>f : Symbol(f, Decl(narrowTypeWithAssignment.ts, 9, 18))
+>AorB : Symbol(AorB, Decl(narrowTypeWithAssignment.ts, 7, 1))
+
+let aorb: AorB
+>aorb : Symbol(aorb, Decl(narrowTypeWithAssignment.ts, 13, 3))
+>AorB : Symbol(AorB, Decl(narrowTypeWithAssignment.ts, 7, 1))
+
+if ((aorb = f()).isA()) {
+>(aorb = f()).isA : Symbol(isA, Decl(narrowTypeWithAssignment.ts, 0, 9), Decl(narrowTypeWithAssignment.ts, 5, 9))
+>aorb : Symbol(aorb, Decl(narrowTypeWithAssignment.ts, 13, 3))
+>f : Symbol(f, Decl(narrowTypeWithAssignment.ts, 9, 18))
+>isA : Symbol(isA, Decl(narrowTypeWithAssignment.ts, 0, 9), Decl(narrowTypeWithAssignment.ts, 5, 9))
+
+    aorb.doA();
+>aorb.doA : Symbol(A.doA, Decl(narrowTypeWithAssignment.ts, 1, 37))
+>aorb : Symbol(aorb, Decl(narrowTypeWithAssignment.ts, 13, 3))
+>doA : Symbol(A.doA, Decl(narrowTypeWithAssignment.ts, 1, 37))
+}

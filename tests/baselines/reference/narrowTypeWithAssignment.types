@@ -1,0 +1,45 @@
+=== tests/cases/compiler/narrowTypeWithAssignment.ts ===
+class A {
+>A : A
+
+    isA(): this is A { return true; }
+>isA : () => this is A
+>true : true
+
+    doA() { }
+>doA : () => void
+}
+  
+class B {
+>B : B
+
+    isA(): this is A { return false; }
+>isA : () => this is A
+>false : false
+}
+
+type AorB = A | B;
+>AorB : AorB
+
+declare function f(): AorB;
+>f : () => AorB
+
+let aorb: AorB
+>aorb : AorB
+
+if ((aorb = f()).isA()) {
+>(aorb = f()).isA() : boolean
+>(aorb = f()).isA : (() => this is A) | (() => this is A)
+>(aorb = f()) : AorB
+>aorb = f() : AorB
+>aorb : AorB
+>f() : AorB
+>f : () => AorB
+>isA : (() => this is A) | (() => this is A)
+
+    aorb.doA();
+>aorb.doA() : void
+>aorb.doA : () => void
+>aorb : A
+>doA : () => void
+}
