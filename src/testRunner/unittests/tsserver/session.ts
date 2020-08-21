@@ -7,11 +7,9 @@ namespace ts.server {
         args: [],
         newLine: "\n",
         useCaseSensitiveFileNames: true,
-        write(s, _fd: number): void { lastWrittenToHost = s; },
+        write(s): void { lastWrittenToHost = s; },
         readFile: returnUndefined,
         writeFile: noop,
-        openFile: returnUndefined,
-        closeFile: noop,
         resolvePath(): string { return undefined!; }, // TODO: GH#18217
         fileExists: () => false,
         directoryExists: () => false,

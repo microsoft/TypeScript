@@ -1,27 +1,83 @@
 /*@internal*/
 /** Tracing events for the compiler. */
 namespace ts.tracing {
-    type WriteFn = (data: string) => void;
+    let fs: typeof import("fs") | false | undefined;
 
-    let write: WriteFn | undefined;
+    let traceCount = 0;
+    let traceFd: number | undefined;
 
-    /** Enables (and resets) tracing events for the compiler. */
-    export function startTracing(w: WriteFn) {
-        write = w;
-        write(`[\n`);
+    let legendPath: string | undefined;
+    const legend: TraceRecord[] = [];
+
+    /** Starts tracing for the given project (unless the `fs` module is unavailable). */
+    export function startTracing(configFilePath: string | undefined, traceDir: string, isBuildMode: boolean) {
+        Debug.assert(!traceFd, "Tracing already started");
+
+        if (fs === undefined) {
+            try {
+                fs = require("fs");
+            }
+            catch {
+                fs = false;
+            }
+        }
+
+        if (!fs) {
+            return;
+        }
+
+        if (legendPath === undefined) {
+            legendPath = combinePaths(traceDir, "legend.json");
+        }
+
+        // Note that writing will fail later on if it exists and is not a directory
+        if (!fs.existsSync(traceDir)) {
+            fs.mkdirSync(traceDir, { recursive: true });
+        }
+
+        const countPart = isBuildMode ? `.${++traceCount}` : ``;
+        const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
+        const typesPath = combinePaths(traceDir, `types${countPart}.json`);
+
+        legend.push({
+            configFilePath,
+            tracePath,
+            typesPath,
+        });
+
+        traceFd = fs.openSync(tracePath, "w");
+        fs.writeSync(traceFd, `[\n`);
     }
 
-    /** Disables tracing events for the compiler. */
-    export function stopTracing() {
+    /** Stops tracing for the in-progress project and dumps the type catalog (unless the `fs` module is unavailable). */
+    export function stopTracing(typeCatalog: readonly Type[]) {
+        if (!traceFd) {
+            Debug.assert(!fs, "Tracing is not in progress");
+            return;
+        }
+
+        Debug.assert(fs);
+
         // This both indicates that the trace is untruncated and conveniently
         // ensures that the last array element won't have a trailing comma.
-        write?.(`{"pid":1,"tid":1,"ph":"i","ts":${1000 * timestamp()},"name":"done","s":"g"}\n`);
-        write?.(`]\n`);
-        write = undefined;
+        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","ts":${1000 * timestamp()},"name":"done","s":"g"}\n`);
+        fs.writeSync(traceFd, `]\n`);
+
+        fs.closeSync(traceFd);
+        traceFd = undefined;
+
+        if (typeCatalog) {
+            dumpTypes(typeCatalog);
+        }
+        else {
+            // We pre-computed this path for convenience, but clear it
+            // now that the file won't be created.
+            legend[legend.length - 1].typesPath = undefined;
+        }
     }
 
     export function isTracing() {
-        return !!write;
+        return !!traceFd;
     }
 
     export const enum Phase {
@@ -33,15 +89,25 @@ namespace ts.tracing {
     }
 
     export function begin(phase: Phase, name: string, args: object) {
+        if (!traceFd) {
+            return;
+        }
+        Debug.assert(fs);
+
         performance.mark("beginTracing");
-        write?.(`{"pid":1,"tid":1,"ph":"B","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","args":{ "ts": ${JSON.stringify(args)} }},\n`);
+        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"B","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","args":{ "ts": ${JSON.stringify(args)} }},\n`);
         performance.mark("endTracing");
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
 
     export function end() {
+        if (!traceFd) {
+            return;
+        }
+        Debug.assert(fs);
+
         performance.mark("beginTracing");
-        write?.(`{"pid":1,"tid":1,"ph":"E","ts":${1000 * timestamp()}},\n`);
+        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"E","ts":${1000 * timestamp()}},\n`);
         performance.mark("endTracing");
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
@@ -53,13 +119,18 @@ namespace ts.tracing {
         };
     }
 
-    export function dumpTypes(types: readonly Type[], write: WriteFn) {
+    function dumpTypes(types: readonly Type[]) {
+        Debug.assert(fs);
+
         performance.mark("beginDumpTypes");
 
-        const numTypes = types.length;
+        const typesPath = legend[legend.length - 1].typesPath!;
+        const typesFd = fs.openSync(typesPath, "w");
 
-        // Cleverness: no line break hear so that the type ID will match the line number
-        write("[");
+        // Cleverness: no line break here so that the type ID will match the line number
+        fs.writeSync(typesFd, "[");
+
+        const numTypes = types.length;
         for (let i = 0; i < numTypes; i++) {
             const type = types[i];
             const objectFlags = (type as any).objectFlags;
@@ -127,14 +198,32 @@ namespace ts.tracing {
                 display,
             };
 
-            write(JSON.stringify(descriptor));
+            fs.writeSync(typesFd, JSON.stringify(descriptor));
             if (i < numTypes - 1) {
-                write(",\n");
+                fs.writeSync(typesFd, ",\n");
             }
         }
-        write("]\n");
+
+        fs.writeSync(typesFd, "]\n");
+
+        fs.closeSync(typesFd);
 
         performance.mark("endDumpTypes");
         performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
+    }
+
+    export function dumpLegend() {
+        if (!legendPath) {
+            return;
+        }
+        Debug.assert(fs);
+
+        fs.writeFileSync(legendPath, JSON.stringify(legend));
+    }
+
+    interface TraceRecord {
+        configFilePath?: string;
+        tracePath: string;
+        typesPath?: string;
     }
 }

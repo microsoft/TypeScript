@@ -1047,13 +1047,11 @@ namespace ts {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
-        write(s: string, fd?: number): void;
+        write(s: string): void;
         writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        openFile(path: string, mode: "w"): number | undefined;
-        closeFile(fd: number): void;
 
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
@@ -1185,32 +1183,11 @@ namespace ts {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames,
-                write(s: string, fd?: number): void {
-                    if (fd) {
-                        _fs.writeSync(fd, s);
-                    }
-                    else {
-                        process.stdout.write(s);
-                    }
+                write(s: string): void {
+                    process.stdout.write(s);
                 },
                 writeOutputIsTTY() {
                     return process.stdout.isTTY;
-                },
-                openFile: (path, mode) => {
-                    try {
-                        return _fs.openSync(path, mode);
-                    }
-                    catch {
-                        return undefined;
-                    }
-                },
-                closeFile: (fd) => {
-                    try {
-                        _fs.closeSync(fd);
-                    }
-                    catch {
-                        // ignore
-                    }
                 },
                 readFile,
                 writeFile,

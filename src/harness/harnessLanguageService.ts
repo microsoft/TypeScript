@@ -724,8 +724,7 @@ namespace Harness.LanguageService {
 
         onMessage = ts.noop;
         writeMessage = ts.noop; // overridden
-        write(message: string, fd?: number): void {
-            assert.isUndefined(fd);
+        write(message: string): void {
             this.writeMessage(message);
         }
 
@@ -744,9 +743,6 @@ namespace Harness.LanguageService {
         }
 
         writeFile = ts.noop;
-
-        openFile = ts.returnUndefined;
-        closeFile = ts.noop;
 
         resolvePath(path: string): string {
             return path;

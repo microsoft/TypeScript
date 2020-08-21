@@ -201,7 +201,8 @@ namespace ts {
             name: "generateTrace",
             type: "string",
             isFilePath: true,
-            paramType: Diagnostics.FILE_OR_DIRECTORY,
+            isCommandLineOnly: true,
+            paramType: Diagnostics.DIRECTORY,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Generates_an_event_trace_and_a_list_of_types
         },

@@ -3841,13 +3841,11 @@ declare namespace ts {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
-        write(s: string, fd?: number): void;
+        write(s: string): void;
         writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        openFile(path: string, mode: "w"): number | undefined;
-        closeFile(fd: number): void;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching

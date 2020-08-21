@@ -456,6 +456,7 @@ namespace ts {
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
+        tracing.dumpLegend();
         return sys.exit(exitStatus);
     }
 
@@ -476,7 +477,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        enableStatisticsAndTracing(sys, options);
+        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
 
         const programOptions: CreateProgramOptions = {
             rootNames: fileNames,
@@ -504,7 +505,7 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
-        enableStatisticsAndTracing(sys, options);
+        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
         const host = createIncrementalCompilerHost(options, sys);
         const exitStatus = ts.performIncrementalCompilation({
             host,
@@ -541,7 +542,7 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatisticsAndTracing(sys, options);
+                enableStatisticsAndTracing(sys, options, /*isBuildMode*/ true);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
@@ -610,41 +611,25 @@ namespace ts {
         return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
     }
 
-    let traceCount = 0;
-    let tracingFd: number | undefined;
+    function canTrace(system: System, compilerOptions: CompilerOptions) {
+        return system === sys && compilerOptions.generateTrace;
+    }
 
-    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions) {
+    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
         if (canReportDiagnostics(system, compilerOptions)) {
             performance.enable();
         }
 
-        Debug.assert(!tracingFd, "Tracing already started");
-        if (system === sys) {
-            const tracePath = compilerOptions.generateTrace;
-            if (tracePath) {
-                const extension = getAnyExtensionFromPath(tracePath);
-                tracingFd = sys.openFile(changeAnyExtension(tracePath, `${++traceCount}${extension}`), "w");
-                if (tracingFd) {
-                    tracing.startTracing(event => sys.write(event, tracingFd));
-                }
-            }
+        if (canTrace(system, compilerOptions)) {
+            tracing.startTracing(compilerOptions.configFilePath, compilerOptions.generateTrace!, isBuildMode);
         }
     }
 
     function reportStatistics(sys: System, program: Program) {
         const compilerOptions = program.getCompilerOptions();
 
-        if (tracingFd) {
-            tracing.stopTracing();
-            sys.closeFile(tracingFd);
-            tracingFd = undefined;
-
-            const typesPath = changeAnyExtension(compilerOptions.generateTrace!, `${traceCount}.types.json`);
-            const typesFd = sys.openFile(typesPath, "w");
-            if (typesFd) {
-                tracing.dumpTypes(program.getTypeCatalog(), type => sys.write(type, typesFd));
-                sys.closeFile(typesFd);
-            }
+        if (canTrace(sys, compilerOptions)) {
+            tracing.stopTracing(program.getTypeCatalog());
         }
 
         let statistics: Statistic[];

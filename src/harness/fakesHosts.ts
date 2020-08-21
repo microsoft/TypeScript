@@ -37,8 +37,7 @@ namespace fakes {
             return true;
         }
 
-        public write(message: string, fd?: number) {
-            assert.isUndefined(fd);
+        public write(message: string) {
             this.output.push(message);
         }
 
@@ -59,15 +58,6 @@ namespace fakes {
 
         public deleteFile(path: string) {
             this.vfs.unlinkSync(path);
-        }
-
-        public openFile(_path: string, _mode: "w"): number | undefined {
-            assert.fail("NYI");
-            return undefined;
-        }
-
-        public closeFile(_fd: number): void{
-            assert.fail("NYI");
         }
 
         public fileExists(path: string) {
