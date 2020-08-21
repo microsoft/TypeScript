@@ -5,7 +5,7 @@ tests/cases/compiler/jsxFactoryAndFragment.tsx(4,17): error TS17016: The 'jsxFra
 
 ==== tests/cases/compiler/jsxFactoryAndFragment.tsx (3 errors) ====
     declare var h: any;
-
+    
     <></>;
     ~~~~~
 !!! error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
