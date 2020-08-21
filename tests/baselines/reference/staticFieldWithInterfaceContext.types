@@ -114,9 +114,49 @@ let [ c7 ]: I[] = [class { static x = { a: "a" } }];
 >a : "a"
 >"a" : "a"
 
-// These are broken because of #40158
-// let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
-// let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
-// let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
-// let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a" } }];
+let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
+>c8 : I
+>class { static x = { a: "a" } } : typeof c8
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[] : []
+
+let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
+>c9 : I
+>class { static x = { a: "a" } } : typeof c9
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[] : undefined[]
+
+let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
+>c10 : I
+>class { static x = { a: "a" } } : typeof c10
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[class { static x = { a: "a" } }] : [typeof (Anonymous class)]
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a" } }];
+>c11 : I
+>class { static x = { a: "a" } } : typeof c11
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
 

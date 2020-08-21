@@ -19,8 +19,7 @@ let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static 
 let [ c6 ]: [I] = [class { static x = { a: "a" } }];
 let [ c7 ]: I[] = [class { static x = { a: "a" } }];
 
-// These are broken because of #40158
-// let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
-// let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
-// let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
-// let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a" } }];
+let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
+let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
+let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
+let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a" } }];
