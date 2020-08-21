@@ -1,0 +1,27 @@
+name: Update package-lock.json
+
+on:
+    schedule:
+        # This is probably 6am UTC, which is 10pm PST or 11pm PDT
+        # Alternatively, 6am local is also fine
+        - cron: '0 6 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+
+    - name: Configure git and update package-lock.json
+      run: |
+        git config user.email "typescriptbot@microsoft.com"
+        git config user.name "TypeScript Bot"
+        npm install --package-lock-only
+        git add -f package-lock.json
+        git commit -m "Update package-lock.json"
+        git push
