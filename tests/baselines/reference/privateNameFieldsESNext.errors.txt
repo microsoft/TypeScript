@@ -28,4 +28,5 @@ tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(
         }
         #something = () => 1234;
     }
-
+    
+    
