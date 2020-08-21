@@ -1858,7 +1858,7 @@ namespace ts {
 
     export function getExternalModuleRequireArgument(node: Node) {
         return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
-            && (getLeftmostPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+            && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -1929,7 +1929,7 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
         node = getRootDeclaration(node);
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
@@ -5452,8 +5452,8 @@ namespace ts {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
 
-    export function getLeftmostPropertyAccessExpression(expr: Expression): Expression {
-        while (isPropertyAccessExpression(expr)) {
+    export function getLeftmostAccessExpression(expr: Expression): Expression {
+        while (isAccessExpression(expr)) {
             expr = expr.expression;
         }
         return expr;

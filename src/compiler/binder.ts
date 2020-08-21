@@ -2974,6 +2974,10 @@ namespace ts {
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
+            const rootExpr = getLeftmostAccessExpression(node.left);
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+                return;
+            }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             setParent(node.left, node);
             setParent(node.right, node);
