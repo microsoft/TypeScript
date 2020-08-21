@@ -25174,6 +25174,10 @@ namespace ts {
                     error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
                 }
                 propType = indexInfo.type;
+
+                if (compilerOptions.pedanticPropertyLookup && isPropertyAccessExpression(node)) {
+                    error(node, Diagnostics.Access_property_0_by_index_signature_is_disallowed, unescapeLeadingUnderscores(right.escapedText));
+                }
             }
             else {
                 if (prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {

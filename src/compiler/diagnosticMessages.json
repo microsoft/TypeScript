@@ -3386,6 +3386,10 @@
         "category": "Error",
         "code": 4110
     },
+    "Access property '{0}' by index signature is disallowed.": {
+        "category": "Error",
+        "code": 4111
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4686,6 +4690,10 @@
         "category": "Error",
         "code": 6504
     },
+    "Force access member from index signature with element access expression.": {
+        "category": "Error",
+        "code": 6803
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -5875,6 +5883,14 @@
     "Can only convert logical AND access chains": {
         "category": "Message",
         "code": 95142
+    },
+    "Use element access for '{0}'": {
+        "category": "Message",
+        "code": 95143
+    },
+    "Use element access for all property access": {
+        "category": "Message",
+        "code": 95144
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
