@@ -16,7 +16,7 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, pos);
         const decorator = findAncestor(token, isDecorator)!;
         Debug.assert(!!decorator, "Expected position to be owned by a decorator.");
-        const replacement = createCall(decorator.expression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        const replacement = factory.createCallExpression(decorator.expression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
         changeTracker.replaceNode(sourceFile, decorator.expression, replacement);
     }
 }

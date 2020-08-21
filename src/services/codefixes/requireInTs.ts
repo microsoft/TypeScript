@@ -24,8 +24,8 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
         const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
         changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
-            ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, defaultImportName, createExternalModuleReference(required))
-            : createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(defaultImportName, namedImports), required));
+            ? factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, defaultImportName, factory.createExternalModuleReference(required))
+            : factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, namedImports), required));
     }
 
     interface Info {
@@ -62,11 +62,11 @@ namespace ts.codefix {
             if (!isIdentifier(element.name) || element.initializer) {
                 return undefined;
             }
-            importSpecifiers.push(createImportSpecifier(tryCast(element.propertyName, isIdentifier), element.name));
+            importSpecifiers.push(factory.createImportSpecifier(tryCast(element.propertyName, isIdentifier), element.name));
         }
 
         if (importSpecifiers.length) {
-            return createNamedImports(importSpecifiers);
+            return factory.createNamedImports(importSpecifiers);
         }
     }
 }

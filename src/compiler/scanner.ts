@@ -21,15 +21,20 @@ namespace ts {
         hasUnicodeEscape(): boolean;
         hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
+        /* @internal */
+        hasPrecedingJSDocComment(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
         isUnterminated(): boolean;
+        /* @internal */
+        getNumericLiteralFlags(): TokenFlags;
         /* @internal */
         getCommentDirectives(): CommentDirective[] | undefined;
         /* @internal */
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -149,9 +154,9 @@ namespace ts {
         of: SyntaxKind.OfKeyword,
     };
 
-    const textToKeyword = createMapFromTemplate(textToKeywordObj);
+    const textToKeyword = new Map(getEntries(textToKeywordObj));
 
-    const textToToken = createMapFromTemplate<SyntaxKind>({
+    const textToToken = new Map(getEntries({
         ...textToKeywordObj,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
@@ -213,7 +218,7 @@ namespace ts {
         "??=": SyntaxKind.QuestionQuestionEqualsToken,
         "@": SyntaxKind.AtToken,
         "`": SyntaxKind.BacktickToken
-    });
+    }));
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -326,7 +331,7 @@ namespace ts {
                 lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: Map<number>): string[] {
+    function makeReverseMap(source: ESMap<string, number>): string[] {
         const result: string[] = [];
         source.forEach((value, name) => {
             result[value] = name;
@@ -942,12 +947,15 @@ namespace ts {
             hasUnicodeEscape: () => (tokenFlags & TokenFlags.UnicodeEscape) !== 0,
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
+            hasPrecedingJSDocComment: () => (tokenFlags & TokenFlags.PrecedingJSDocComment) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
             getCommentDirectives: () => commentDirectives,
+            getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
             getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
+            reScanAsteriskEqualsToken,
             reScanSlashToken,
             reScanTemplateToken,
             reScanTemplateHeadOrNoSubstitutionTemplate,
@@ -2080,6 +2088,12 @@ namespace ts {
             return token;
         }
 
+        function reScanAsteriskEqualsToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.EqualsToken;
+        }
+
         function reScanSlashToken(): SyntaxKind {
             if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
                 let p = tokenPos + 1;
@@ -2346,8 +2360,12 @@ namespace ts {
                     return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
                     return token = SyntaxKind.AtToken;
-                case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
+                    if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
+                    // falls through
+                case CharacterCodes.lineFeed:
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:

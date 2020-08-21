@@ -1,0 +1,73 @@
+=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.js ===
+function Foonly() {
+>Foonly : typeof Foonly
+
+    var self = this
+>self : this
+>this : this
+
+    self.x = 1
+>self.x = 1 : 1
+>self.x : any
+>self : this
+>x : any
+>1 : 1
+
+    self.m = function() {
+>self.m = function() {        console.log(self.x)    } : () => void
+>self.m : any
+>self : this
+>m : any
+>function() {        console.log(self.x)    } : () => void
+
+        console.log(self.x)
+>console.log(self.x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>self.x : number
+>self : this
+>x : number
+    }
+}
+Foonly.prototype.mreal = function() {
+>Foonly.prototype.mreal = function() {    var self = this    self.y = 2} : () => void
+>Foonly.prototype.mreal : any
+>Foonly.prototype : any
+>Foonly : typeof Foonly
+>prototype : any
+>mreal : any
+>function() {    var self = this    self.y = 2} : () => void
+
+    var self = this
+>self : this
+>this : this
+
+    self.y = 2
+>self.y = 2 : 2
+>self.y : number | undefined
+>self : this
+>y : number | undefined
+>2 : 2
+}
+const foo = new Foonly()
+>foo : Foonly
+>new Foonly() : Foonly
+>Foonly : typeof Foonly
+
+foo.x
+>foo.x : number
+>foo : Foonly
+>x : number
+
+foo.y
+>foo.y : number | undefined
+>foo : Foonly
+>y : number | undefined
+
+foo.m()
+>foo.m() : void
+>foo.m : () => void
+>foo : Foonly
+>m : () => void
+

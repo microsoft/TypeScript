@@ -16,7 +16,7 @@ namespace ts.projectSystem {
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<CalledWithFiveArgs>> = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, MultiMap<string, CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 assert.equal(calledMap.size, 0, `${callback} shouldn't be called: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
+            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: ESMap<string, number>) {
                 TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
@@ -204,7 +204,7 @@ namespace ts.projectSystem {
             }
 
             function getLocationsForDirectoryLookup() {
-                const result = createMap<number>();
+                const result = new Map<string, number>();
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     // To resolve modules
                     result.set(ancestor, 2);
@@ -240,8 +240,8 @@ namespace ts.projectSystem {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 1);
             const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code);
-            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar' or its corresponding type declarations.");
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option.code);
+            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?");
             callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
 
@@ -544,6 +544,7 @@ namespace ts.projectSystem {
                 const otherFiles = [packageJson];
                 const host = createServerHost(projectFiles.concat(otherFiles));
                 const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
                 const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));

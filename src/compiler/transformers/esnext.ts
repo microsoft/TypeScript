@@ -2,9 +2,10 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
-            hoistVariableDeclaration
+            hoistVariableDeclaration,
+            factory
         } = context;
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -24,7 +25,7 @@ namespace ts {
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
                         return transformLogicalAssignment(binaryExpression);
                     }
-                    // falls through
+                // falls through
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -36,41 +37,50 @@ namespace ts {
             let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
             let assignmentTarget = left;
             const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
+
             if (isAccessExpression(left)) {
-                const tempVariable = createTempVariable(hoistVariableDeclaration);
+                const propertyAccessTargetSimpleCopiable = isSimpleCopiableExpression(left.expression);
+                const propertyAccessTarget = propertyAccessTargetSimpleCopiable ? left.expression :
+                    factory.createTempVariable(hoistVariableDeclaration);
+                const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
+                    propertyAccessTarget,
+                    left.expression
+                );
+
                 if (isPropertyAccessExpression(left)) {
-                    assignmentTarget = createPropertyAccess(
-                        tempVariable,
+                    assignmentTarget = factory.createPropertyAccessExpression(
+                        propertyAccessTarget,
                         left.name
                     );
-                    left = createPropertyAccess(
-                        createAssignment(
-                            tempVariable,
-                            left.expression
-                        ),
+                    left = factory.createPropertyAccessExpression(
+                        propertyAccessTargetAssignment,
                         left.name
                     );
                 }
                 else {
-                    assignmentTarget = createElementAccess(
-                        tempVariable,
-                        left.argumentExpression
+                    const elementAccessArgumentSimpleCopiable = isSimpleCopiableExpression(left.argumentExpression);
+                    const elementAccessArgument = elementAccessArgumentSimpleCopiable ? left.argumentExpression :
+                        factory.createTempVariable(hoistVariableDeclaration);
+
+                    assignmentTarget = factory.createElementAccessExpression(
+                        propertyAccessTarget,
+                        elementAccessArgument
                     );
-                    left = createElementAccess(
-                        createAssignment(
-                            tempVariable,
-                            left.expression
-                        ),
-                        left.argumentExpression
+                    left = factory.createElementAccessExpression(
+                        propertyAccessTargetAssignment,
+                        elementAccessArgumentSimpleCopiable ? left.argumentExpression : factory.createAssignment(
+                            elementAccessArgument,
+                            left.argumentExpression
+                        )
                     );
                 }
             }
 
-            return createBinary(
+            return factory.createBinaryExpression(
                 left,
                 nonAssignmentOperator,
-                createParen(
-                    createAssignment(
+                factory.createParenthesizedExpression(
+                    factory.createAssignment(
                         assignmentTarget,
                         right
                     )

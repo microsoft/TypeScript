@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
 node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; ... 13 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
@@ -83,7 +83,6 @@ node_modules/npm/lib/cache.js(16,34): error TS2339: Property 'commands' does not
 node_modules/npm/lib/cache.js(49,30): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/cache.js(69,35): error TS2339: Property 'cache' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/cache.js(70,12): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/cache.js(82,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/lib/cache.js(114,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/cache.js(116,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
@@ -144,18 +143,15 @@ node_modules/npm/lib/config/bin-links.js(26,11): error TS2339: Property 'globalD
 node_modules/npm/lib/config/bin-links.js(27,11): error TS2339: Property 'bin' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(28,11): error TS2339: Property 'globalBin' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/bin-links.js(30,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/config/clear-credentials-by-uri.js(8,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/lib/config/core.js(17,1): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(18,1): error TS2323: Cannot redeclare exported variable 'rootConf'.
 node_modules/npm/lib/config/core.js(19,1): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
 node_modules/npm/lib/config/core.js(77,7): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(87,3): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
 node_modules/npm/lib/config/core.js(88,12): error TS2323: Cannot redeclare exported variable 'rootConf'.
-node_modules/npm/lib/config/core.js(88,31): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/core.js(95,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(98,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(105,8): error TS2339: Property 'usingBuiltin' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(107,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/core.js(128,41): error TS2551: Property 'localPrefix' does not exist on type 'Conf'. Did you mean 'loadPrefix'?
 node_modules/npm/lib/config/core.js(130,35): error TS2339: Property 'get' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(131,15): error TS2339: Property 'get' does not exist on type 'Conf'.
@@ -185,7 +181,7 @@ node_modules/npm/lib/config/core.js(409,29): error TS2769: No overload matches t
       Type 'string | undefined' is not assignable to type 'string'.
         Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/lib/config/defaults.js(20,52): error TS2345: Argument of type 'never[]' is not assignable to parameter of type '[format: any, ...param: any[]]'.
-  Property '0' is missing in type 'never[]' but required in type '[format: any, ...param: any[]]'.
+  Property '0' is optional in type 'never[]' but required in type '[format: any, ...param: any[]]'.
 node_modules/npm/lib/config/defaults.js(240,36): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/gentle-fs.js(16,11): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(17,11): error TS2339: Property 'globalPrefix' does not exist on type 'typeof EventEmitter'.
@@ -196,7 +192,6 @@ node_modules/npm/lib/config/gentle-fs.js(21,11): error TS2339: Property 'bin' do
 node_modules/npm/lib/config/gentle-fs.js(22,11): error TS2339: Property 'globalBin' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(26,17): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(27,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/config/get-credentials-by-uri.js(8,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/lib/config/get-credentials-by-uri.js(26,5): error TS2322: Type 'boolean' is not assignable to type 'undefined'.
 node_modules/npm/lib/config/get-credentials-by-uri.js(50,5): error TS2322: Type 'string' is not assignable to type 'undefined'.
 node_modules/npm/lib/config/get-credentials-by-uri.js(68,5): error TS2322: Type 'string' is not assignable to type 'undefined'.
@@ -252,12 +247,6 @@ node_modules/npm/lib/config/pacote.js(84,31): error TS2339: Property 'config' do
 node_modules/npm/lib/config/pacote.js(89,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/pacote.js(90,38): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/pacote.js(110,60): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/config/set-credentials-by-uri.js(8,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/lib/config/set-credentials-by-uri.js(9,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/lib/config/set-credentials-by-uri.js(20,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/lib/config/set-credentials-by-uri.js(21,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/lib/config/set-credentials-by-uri.js(22,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/lib/config/set-user.js(10,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/lib/config/set-user.js(22,18): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
   Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/dedupe.js(35,32): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
@@ -366,7 +355,6 @@ node_modules/npm/lib/install.js(186,17): error TS2339: Property 'prefix' does no
 node_modules/npm/lib/install.js(190,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(192,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(200,36): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install.js(203,3): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/install.js(224,24): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(226,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(227,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -418,7 +406,6 @@ node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'l
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/npm/lib/install/action/global-install.js(9,37): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/global-install.js(10,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/action/global-install.js(11,17): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/install/action/global-install.js(14,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/global-link.js(7,7): error TS2339: Property 'link' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -448,7 +435,6 @@ node_modules/npm/lib/install/decompose-actions.js(47,30): error TS2339: Property
 node_modules/npm/lib/install/deps.js(253,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/deps.js(309,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/deps.js(310,29): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/deps.js(382,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/lib/install/deps.js(401,28): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/deps.js(402,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/deps.js(402,64): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -473,7 +459,6 @@ node_modules/npm/lib/install/inflate-shrinkwrap.js(30,12): error TS2339: Propert
 node_modules/npm/lib/install/inflate-shrinkwrap.js(30,45): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/inflate-shrinkwrap.js(77,34): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/mutate-into-logical-tree.js(137,86): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/read-shrinkwrap.js(11,46): error TS2339: Property 'lockfileVersion' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/save.js(48,12): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/save.js(48,45): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/save.js(56,24): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -538,13 +523,6 @@ node_modules/npm/lib/ls.js(152,11): error TS2339: Property 'config' does not exi
 node_modules/npm/lib/ls.js(180,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(191,52): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(254,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/ls.js(260,16): error TS2339: Property 'problems' does not exist on type 'string | { name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { required: any; missing: boolean; } | { ...; }'.
-  Property 'problems' does not exist on type 'string'.
-node_modules/npm/lib/ls.js(262,54): error TS2339: Property 'problems' does not exist on type 'string | { name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { required: any; missing: boolean; } | { ...; }'.
-  Property 'problems' does not exist on type 'string'.
-node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; }' cannot be used as an index type.
-node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ required: any; missing: boolean; }' cannot be used as an index type.
-node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ required: any; peerMissing: boolean; }' cannot be used as an index type.
 node_modules/npm/lib/ls.js(357,40): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(362,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(365,15): error TS2339: Property 'color' does not exist on type 'typeof EventEmitter'.
@@ -611,7 +589,7 @@ node_modules/npm/lib/npm.js(429,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/npm.js(439,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(445,34): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/npm.js(460,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/npm\"": typeof EventEmitter.EventEmitter; }' have no overlap.
+node_modules/npm/lib/npm.js(465,7): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/npm\"": typeof EventEmitter; }' have no overlap.
 node_modules/npm/lib/outdated.js(36,16): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(71,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/outdated.js(74,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -751,7 +729,6 @@ node_modules/npm/lib/search/all-package-metadata.js(241,22): error TS2345: Argum
   Value of type '(er: any, made: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/search/format-package-stream.js(130,31): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'typeof EventEmitter'.
@@ -804,7 +781,6 @@ node_modules/npm/lib/uninstall.js(31,21): error TS2339: Property 'config' does n
 node_modules/npm/lib/uninstall.js(32,32): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(33,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(43,31): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/uninstall.js(53,5): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/unpublish.js(17,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(23,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(26,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -818,7 +794,6 @@ node_modules/npm/lib/unpublish.js(97,70): error TS2339: Property 'registry' does
 node_modules/npm/lib/update.js(10,41): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/update.js(17,25): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/update.js(25,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/update.js(69,19): error TS2555: Expected at least 1 arguments, but got 0.
 node_modules/npm/lib/utils/completion/file-completion.js(11,15): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
   Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/utils/completion/installed-deep.js(9,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -883,7 +858,7 @@ node_modules/npm/lib/utils/locker.js(28,20): error TS2339: Property 'config' doe
 node_modules/npm/lib/utils/locker.js(29,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/locker.js(65,15): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/map-to-registry.js(98,45): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch\"": () => ChildProcessWithoutNullStreams | undefined; }' have no overlap.
+node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'Module | undefined' and '{ "\"../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch\"": () => child_process.ChildProcessWithoutNullStreams | undefined; }' have no overlap.
 node_modules/npm/lib/utils/metrics-launch.js(12,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(13,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(14,30): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -931,8 +906,6 @@ node_modules/npm/lib/version.js(296,23): error TS2339: Property 'config' does no
 node_modules/npm/lib/version.js(297,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(306,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/version.js(324,44): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/version.js(331,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/lib/version.js(332,3): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/lib/version.js(336,19): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/view.js(35,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/view.js(36,47): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -976,7 +949,7 @@ node_modules/npm/test/common-tap.js(10,36): error TS2322: Type '(...args: any[])
   Type '(...args: any[]) => void' is not assignable to type '(callback: (...args: any[]) => void, ...args: any[]) => Immediate'.
     Type 'void' is not assignable to type 'Immediate'.
 node_modules/npm/test/common-tap.js(12,28): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[callback: (...args: any[]) => void, ms: number, ...args: any[]]'.
-  Type 'any[]' is missing the following properties from type '[callback: (...args: any[]) => void, ms: number, ...args: any[]]': 0, 1
+  Property '0' is optional in type 'any[]' but required in type '[callback: (...args: any[]) => void, ms: number, ...args: any[]]'.
 node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(181,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(192,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
@@ -1081,7 +1054,6 @@ node_modules/npm/test/network/registry.js(5,20): error TS2307: Cannot find modul
 node_modules/npm/test/network/registry.js(29,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/00-check-mock-dep.js(12,20): error TS2732: Cannot find module 'npm-registry-mock/package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 node_modules/npm/test/tap/00-check-mock-dep.js(13,19): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
-node_modules/npm/test/tap/00-check-mock-dep.js(15,1): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/test/tap/00-verify-bundle-deps.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/00-verify-bundle-deps.js(3,24): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 node_modules/npm/test/tap/00-verify-ls-ok.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
@@ -1229,18 +1201,14 @@ node_modules/npm/test/tap/config-save.js(3,20): error TS2307: Cannot find module
 node_modules/npm/test/tap/correct-mkdir.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/correct-mkdir.js(4,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
 node_modules/npm/test/tap/correct-mkdir.js(14,23): error TS2339: Property 'uid' does not exist on type 'Process'.
-node_modules/npm/test/tap/correct-mkdir.js(24,7): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-node_modules/npm/test/tap/correct-mkdir.js(70,7): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/test/tap/correct-mkdir.js(96,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(97,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
-node_modules/npm/test/tap/correct-mkdir.js(110,7): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/test/tap/correct-mkdir.js(114,16): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(115,16): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(131,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(132,3): error TS2322: Type '999' is not assignable to type 'string | undefined'.
 node_modules/npm/test/tap/correct-mkdir.js(133,10): error TS2790: The operand of a 'delete' operator must be optional.
 node_modules/npm/test/tap/correct-mkdir.js(134,10): error TS2790: The operand of a 'delete' operator must be optional.
-node_modules/npm/test/tap/correct-mkdir.js(145,7): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 node_modules/npm/test/tap/cruft-test.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/debug-logs.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/debug-logs.js(4,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
@@ -1488,6 +1456,10 @@ node_modules/npm/test/tap/no-scan-full-global-dir.js(5,29): error TS2307: Cannot
 node_modules/npm/test/tap/no-scan-full-global-dir.js(28,6): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/test/tap/no-scan-full-global-dir.js(34,6): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/test/tap/no-scan-full-global-dir.js(43,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/test/tap/no-scan-full-global-dir.js(71,8): error TS2339: Property 'loadCurrentTree' does not exist on type 'TestInstaller'.
+node_modules/npm/test/tap/no-scan-full-global-dir.js(72,21): error TS2339: Property 'currentTree' does not exist on type 'TestInstaller'.
+node_modules/npm/test/tap/no-scan-full-global-dir.js(96,10): error TS2339: Property 'loadCurrentTree' does not exist on type 'TestUninstaller'.
+node_modules/npm/test/tap/no-scan-full-global-dir.js(97,23): error TS2339: Property 'currentTree' does not exist on type 'TestUninstaller'.
 node_modules/npm/test/tap/noargs-install-config-save.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/noargs-install-config-save.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/node-modules-path-munge.js(2,17): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
@@ -1770,7 +1742,6 @@ node_modules/npm/test/tap/umask-lifecycle.js(6,20): error TS2307: Cannot find mo
 node_modules/npm/test/tap/umask-lifecycle.js(24,21): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/test/tap/uninstall-in-reverse.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/uninstall-in-reverse.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
-node_modules/npm/test/tap/uninstall-in-reverse.js(28,14): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/test/tap/uninstall-link-clean.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/uninstall-link-clean.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/uninstall-package.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.

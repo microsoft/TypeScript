@@ -26,6 +26,6 @@ namespace ts.codefix {
     });
 
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
-        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", createTrue());
+        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", factory.createTrue());
     }
 }

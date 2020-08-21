@@ -1,0 +1,15 @@
+tests/cases/compiler/staticVisibility2.ts(2,12): error TS7008: Member 'sideLength' implicitly has an 'any' type.
+tests/cases/compiler/staticVisibility2.ts(4,14): error TS2576: Property 'sideLength' is a static member of type 'Square'
+
+
+==== tests/cases/compiler/staticVisibility2.ts (2 errors) ====
+    class Square {
+        static sideLength;
+               ~~~~~~~~~~
+!!! error TS7008: Member 'sideLength' implicitly has an 'any' type.
+        constructor(sideLength: number) {
+            this.sideLength = sideLength;
+                 ~~~~~~~~~~
+!!! error TS2576: Property 'sideLength' is a static member of type 'Square'
+        }
+    }

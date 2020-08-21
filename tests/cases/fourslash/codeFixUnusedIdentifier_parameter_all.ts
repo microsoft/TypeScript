@@ -4,7 +4,7 @@
 // @noUnusedParameters: true
 
 ////function f(a, b, { x, y }) { b; }
-////f(0, 1, 2);
+////f(0, 1, { x: 1, y: 1 });
 ////
 ////class C {
 ////    m(a, b, c) { b; }
@@ -23,10 +23,10 @@
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
-    fixAllDescription: "Delete all unused declarations",
+    fixAllDescription: ts.Diagnostics.Delete_all_unused_declarations.message,
     newFileContent:
-`function f(b) { b; }
-f(1);
+`function f(b, {  }) { b; }
+f(1, { x: 1, y: 1 });
 
 class C {
     m(b) { b; }

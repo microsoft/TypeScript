@@ -596,7 +596,9 @@ namespace vfs {
             if (existingNode) {
                 if (isDirectory(node)) {
                     if (!isDirectory(existingNode)) throw createIOError("ENOTDIR");
-                    if (this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
+                    // if both old and new arguments point to the same directory, just pass. So we could rename /src/a/1 to /src/A/1 in Win.
+                    // if not and the directory pointed by the new path is not empty, throw an error.
+                    if (this.stringComparer(oldpath, newpath) !== 0 && this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
                 }
                 else {
                     if (isDirectory(existingNode)) throw createIOError("EISDIR");

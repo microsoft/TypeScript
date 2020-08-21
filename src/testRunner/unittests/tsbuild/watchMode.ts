@@ -1183,6 +1183,42 @@ export function someFn() { }`),
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "should not trigger recompilation because of program emit",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.core}`, "-verbose"],
+            sys: () => createWatchedSystem([libFile, ...core], { currentDirectory: projectsLocation }),
+            changes: [
+                noopChange,
+                {
+                    caption: "Add new file",
+                    change: sys => sys.writeFile(`${project}/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                noopChange,
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "should not trigger recompilation because of program emit with outDir specified",
+            commandLineArgs: ["-b", "-w", `${project}/${SubProject.core}`, "-verbose"],
+            sys: () => {
+                const [coreConfig, ...rest] = core;
+                const newCoreConfig: File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
+                return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: projectsLocation });
+            },
+            changes: [
+                noopChange,
+                {
+                    caption: "Add new file",
+                    change: sys => sys.writeFile(`${project}/${SubProject.core}/file3.ts`, `export const y = 10;`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                },
+                noopChange
+            ]
+        });
     });
 
     describe("unittests:: tsbuild:: watchMode:: with demo project", () => {

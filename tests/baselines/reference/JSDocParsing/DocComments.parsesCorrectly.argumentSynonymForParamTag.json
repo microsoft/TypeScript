@@ -20,6 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "argument"
             },
+            "comment": "Description",
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 18,
@@ -31,7 +32,7 @@
                     "pos": 19,
                     "end": 25,
                     "modifierFlagsCache": 0,
-                    "transformFlags": 0
+                    "transformFlags": 1
                 }
             },
             "name": {
@@ -43,11 +44,12 @@
                 "escapedText": "name1"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": "Description"
+            "isBracketed": false
         },
         "length": 1,
         "pos": 8,
-        "end": 47
+        "end": 47,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

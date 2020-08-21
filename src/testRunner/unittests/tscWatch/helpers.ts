@@ -267,7 +267,7 @@ namespace ts.tscWatch {
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
-        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, moduleName);
+        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option, moduleName);
     }
 
     export function runQueuedTimeoutCallbacks(sys: WatchedSystem) {
@@ -304,6 +304,12 @@ namespace ts.tscWatch {
     export interface TscWatchCompile extends TscWatchCompileBase {
         sys: () => WatchedSystem;
     }
+
+    export const noopChange: TscWatchCompileChange = {
+        caption: "No change",
+        change: noop,
+        timeouts: sys => sys.checkTimeoutQueueLength(0),
+    };
 
     export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
     function tscWatchCompile(input: TscWatchCompile) {
