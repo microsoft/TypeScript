@@ -1,12 +1,7 @@
-tests/cases/conformance/override/override7.ts(9,5): error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
-tests/cases/conformance/override/override7.ts(11,5): error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
-tests/cases/conformance/override/override7.ts(13,5): error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
-tests/cases/conformance/override/override7.ts(15,12): error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
-tests/cases/conformance/override/override7.ts(16,5): error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
-tests/cases/conformance/override/override7.ts(18,5): error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
+tests/cases/conformance/override/override7.ts(13,14): error TS1030: 'override' modifier already seen.
 
 
-==== tests/cases/conformance/override/override7.ts (6 errors) ====
+==== tests/cases/conformance/override/override7.ts (1 errors) ====
     class B {
         p1: number = 1;
         p2: number = 2;
@@ -16,27 +11,17 @@ tests/cases/conformance/override/override7.ts(18,5): error TS4114: 'Override' mo
         declare p1: number
     
         override declare p2: number
-        ~~~~~~~~
-!!! error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
     
         override static sp: number;
-        ~~~~~~~~
-!!! error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
     
         override override oop: number;
-        ~~~~~~~~
-!!! error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
+                 ~~~~~~~~
+!!! error TS1030: 'override' modifier already seen.
     
         public override pp: number;
-               ~~~~~~~~
-!!! error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
         override public op: number;
-        ~~~~~~~~
-!!! error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
     
         override constructor () {
-        ~~~~~~~~
-!!! error TS4114: 'Override' modifier must be used with 'pedanticOverride' compiler option
             super();
         }
     }

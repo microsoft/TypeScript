@@ -1,7 +1,7 @@
-tests/cases/conformance/override/override4.ts(11,5): error TS4113: Class member must have override modifier because it's override the base class 'B'.
-tests/cases/conformance/override/override4.ts(13,5): error TS4113: Class member must have override modifier because it's override the base class 'B'.
-tests/cases/conformance/override/override4.ts(17,5): error TS4113: Class member must have override modifier because it's override the base class 'B'.
-tests/cases/conformance/override/override4.ts(23,5): error TS4113: Class member must have override modifier because it's override the base class 'B'.
+tests/cases/conformance/override/override4.ts(11,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/override4.ts(13,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/override4.ts(17,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/override4.ts(23,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
 
 
 ==== tests/cases/conformance/override/override4.ts (4 errors) ====
@@ -17,17 +17,17 @@ tests/cases/conformance/override/override4.ts(23,5): error TS4113: Class member 
     class D extends B {
         p1: number = 2;
         ~~
-!!! error TS4113: Class member must have override modifier because it's override the base class 'B'.
+!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
         override p2: number = 3;
         p3: () => void;
         ~~
-!!! error TS4113: Class member must have override modifier because it's override the base class 'B'.
+!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
         override p4: () => void;
         override foo (v: string) {}
     
         fooo (v: string) {}
         ~~~~
-!!! error TS4113: Class member must have override modifier because it's override the base class 'B'.
+!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
     
     }
     
@@ -35,5 +35,5 @@ tests/cases/conformance/override/override4.ts(23,5): error TS4113: Class member 
         override foo: () => void
         fooo: () => void;
         ~~~~
-!!! error TS4113: Class member must have override modifier because it's override the base class 'B'.
+!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
     }

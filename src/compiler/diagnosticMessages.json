@@ -3386,21 +3386,17 @@
         "category": "Error",
         "code": 4110
     },
-    "Class member cannot have override modifier because class '{0}' does not extended another class.": {
+    "This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.": {
         "category": "Error",
         "code": 4111
     },
-    "Class member cannot have override modifier because it's not existed in the base class '{0}'.": {
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4112
     },
-    "Class member must have override modifier because it's override the base class '{0}'.": {
+    "This member must have an 'override' modifier because it overrides a member in the base class '{0}'.": {
         "category": "Error",
         "code": 4113
-    },
-    "'Override' modifier must be used with 'pedanticOverride' compiler option": {
-        "category": "Error",
-        "code": 4114
     },
 
     "The current host does not support the '{0}' option.": {
@@ -4702,7 +4698,7 @@
         "category": "Error",
         "code": 6504
     },
-    "Required override modifier in class element": {
+    "Force overriding members in derived classes to be marked with an 'override' modifier.": {
         "category": "Error",
         "code": 6801
     },

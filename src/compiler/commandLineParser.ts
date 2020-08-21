@@ -612,7 +612,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
-            description: Diagnostics.Required_override_modifier_in_class_element
+            description: Diagnostics.Force_overriding_members_in_derived_classes_to_be_marked_with_an_override_modifier
         },
 
         // Module Resolution

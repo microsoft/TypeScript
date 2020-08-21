@@ -34516,7 +34516,7 @@ namespace ts {
             }
 
             if (compilerOptions.pedanticOverride && !nodeInAmbientContext) {
-                issueMemberWithOverride(node, type, typeWithThis);
+                checkMembersForMissingOverrideModifier(node, type, typeWithThis);
             }
 
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
@@ -34553,7 +34553,7 @@ namespace ts {
             }
         }
 
-        function issueMemberWithOverride(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
+        function checkMembersForMissingOverrideModifier(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             const baseTypes = baseTypeNode && getBaseTypes(type);
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
@@ -34567,16 +34567,16 @@ namespace ts {
                         const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
                         const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
                         if (prop && !baseProp && hasOverride) {
-                            error(member, Diagnostics.Class_member_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0, baseClassName);
+                            error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                         }
                         else if (prop && baseProp && !hasOverride) {
-                            error(member, Diagnostics.Class_member_must_have_override_modifier_because_it_s_override_the_base_class_0, baseClassName);
+                            error(member, Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0, baseClassName);
                         }
                     }
                 }
                 else if (hasOverride) {
                     const className = typeToString(type);
-                    error(member, Diagnostics.Class_member_cannot_have_override_modifier_because_class_0_does_not_extended_another_class, className);
+                    error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class, className);
                 }
             }
         }
@@ -37909,9 +37909,6 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.OverrideKeyword:
-                        if (!compilerOptions.pedanticOverride) {
-                            return grammarErrorOnNode(modifier, Diagnostics.Override_modifier_must_be_used_with_pedanticOverride_compiler_option);
-                        }
                         if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
                         }
