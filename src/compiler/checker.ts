@@ -25118,6 +25118,10 @@ namespace ts {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
             }
             const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
+            if (compilerOptions.pedanticSafeAny && isPropertyAccessExpression(node) && isAnyLike) {
+                error(node.name, Diagnostics.Cannot_access_member_from_any_type);
+            }
+
             let prop: Symbol | undefined;
             if (isPrivateIdentifier(right)) {
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
@@ -25600,10 +25604,14 @@ namespace ts {
             const indexExpression = node.argumentExpression;
             const indexType = checkExpression(indexExpression);
 
+            if (compilerOptions.pedanticSafeAny && (isTypeAny(objectType) || objectType === silentNeverType)) {
+                error(node.argumentExpression, Diagnostics.Cannot_access_member_from_any_type);
+            }
+
             if (objectType === errorType || objectType === silentNeverType) {
                 return objectType;
             }
-
+            
             if (isConstEnumObjectType(objectType) && !isStringLiteralLike(indexExpression)) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;

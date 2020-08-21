@@ -3386,6 +3386,10 @@
         "category": "Error",
         "code": 4110
     },
+    "Cannot access member from 'any' type": {
+        "category": "Error",
+        "code": 4111
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4685,6 +4689,10 @@
     "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
         "category": "Error",
         "code": 6504
+    },
+    "Disallow access member from 'any' type.": {
+        "category": "Error",
+        "code": 6804
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

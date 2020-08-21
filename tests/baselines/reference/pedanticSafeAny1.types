@@ -1,0 +1,44 @@
+=== tests/cases/conformance/pedantic/pedanticSafeAny1.ts ===
+declare const a: any
+>a : any
+
+a.a;
+>a.a : any
+>a : any
+>a : any
+
+a["a"];
+>a["a"] : any
+>a : any
+>"a" : "a"
+
+a.a.a;
+>a.a.a : any
+>a.a : any
+>a : any
+>a : any
+>a : any
+
+a.a = 1;
+>a.a = 1 : 1
+>a.a : any
+>a : any
+>a : any
+>1 : 1
+
+a["a"] = 1;
+>a["a"] = 1 : 1
+>a["a"] : any
+>a : any
+>"a" : "a"
+>1 : 1
+
+a.a.a = 1;
+>a.a.a = 1 : 1
+>a.a.a : any
+>a.a : any
+>a : any
+>a : any
+>a : any
+>1 : 1
+
