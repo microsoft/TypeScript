@@ -1604,6 +1604,8 @@ namespace ts {
                         return emitCallExpression(<CallExpression>node);
                     case SyntaxKind.NewExpression:
                         return emitNewExpression(<NewExpression>node);
+                    case SyntaxKind.BindExpression:
+                        return emitBindExpression(<BindExpression>node);
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
@@ -2364,6 +2366,17 @@ namespace ts {
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
+        }
+
+        function emitBindExpression(node: BindExpression) {
+            if (node.left) {
+                emitExpression(node.left);
+                emitTokenWithComment(SyntaxKind.ColonColonToken, node.left.end, writePunctuation, node);
+            }
+            else {
+                emitTokenWithComment(SyntaxKind.ColonColonToken, node.pos, writePunctuation, node);
+            }
+            emitExpression(node.right);
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
