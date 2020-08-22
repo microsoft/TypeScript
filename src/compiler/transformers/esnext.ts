@@ -25,7 +25,10 @@ namespace ts {
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
                         return transformLogicalAssignment(binaryExpression);
                     }
-                // falls through
+                    return visitEachChild(node, visitor, context);
+                case SyntaxKind.BindExpression:
+                    const bindExpression = <BindExpression>node;
+                    return transformBindExpression(bindExpression);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -86,6 +89,27 @@ namespace ts {
                     )
                 )
             );
+        }
+
+        function transformBindExpression(bindExpression: BindExpression): VisitResult<Node> {
+            const left = bindExpression.left && skipParentheses(visitNode(bindExpression.left, visitor, isLeftHandSideExpression));
+            const right = skipParentheses(visitNode(bindExpression.right, visitor));
+            if (left) {
+                // left::right
+                // => right.bind(left)
+                // but left should be evaluated earlier than right
+                const base = factory.createTempVariable(hoistVariableDeclaration);
+                const bound = factory.createCallExpression(
+                    factory.createPropertyAccessExpression(right, "bind"),
+                    /* typeArguments */ undefined,
+                    [base]
+                );
+                const res = factory.createCommaListExpression([
+                    factory.createAssignment(base, left),
+                    bound
+                ]);
+                return res;
+            }
         }
     }
 }

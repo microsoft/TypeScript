@@ -632,6 +632,11 @@ namespace ts {
                     nodesVisitor((<CallExpression>node).typeArguments, visitor, isTypeNode),
                     nodesVisitor((<CallExpression>node).arguments, visitor, isExpression));
 
+            case SyntaxKind.BindExpression:
+                return factory.updateBindExpression(<BindExpression>node,
+                    nodeVisitor((<BindExpression>node).left, visitor, isExpression),
+                    nodeVisitor((<BindExpression>node).right, visitor, isExpression));
+
             case SyntaxKind.NewExpression:
                 return factory.updateNewExpression(<NewExpression>node,
                     nodeVisitor((<NewExpression>node).expression, visitor, isExpression),

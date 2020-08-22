@@ -2334,6 +2334,7 @@ namespace ts {
             const node = createBaseExpression<BindExpression>(SyntaxKind.BindExpression);
             node.left = left;
             node.right = right;
+            node.transformFlags |= TransformFlags.ContainsESNext;
             return node;
         }
 

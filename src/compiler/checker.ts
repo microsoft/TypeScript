@@ -27784,6 +27784,12 @@ namespace ts {
             return false;
         }
 
+        function checkBindExpression(node: BindExpression, checkMode?: CheckMode): Type {
+            // TODO(uhyo): type check
+            if (node.left) checkExpression(node.left, checkMode);
+            return checkExpression(node.right, checkMode);
+        }
+
         function checkTaggedTemplateExpression(node: TaggedTemplateExpression): Type {
             if (!checkGrammarTaggedTemplateChain(node)) checkGrammarTypeArguments(node, node.typeArguments);
             if (languageVersion < ScriptTarget.ES2015) {
@@ -30357,6 +30363,8 @@ namespace ts {
                     // falls through
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node, checkMode);
+                case SyntaxKind.BindExpression:
+                    return checkBindExpression(<BindExpression>node, checkMode);
                 case SyntaxKind.TaggedTemplateExpression:
                     return checkTaggedTemplateExpression(<TaggedTemplateExpression>node);
                 case SyntaxKind.ParenthesizedExpression:
