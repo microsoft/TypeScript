@@ -4659,6 +4659,21 @@ namespace ts {
                     expression = parseMemberExpressionOrHigher();
                 }
             }
+            else if (token() === SyntaxKind.ColonColonToken) {
+                // BindExpression: `::` MemberExpression
+                nextToken();
+                const right = parseMemberExpressionOrHigher();
+                if (!isMaybeParenthesizedAccessOrSuperPropertyExpression(right)) {
+                    parseErrorAtRange(right, Diagnostics.Only_property_access_expressions_are_allowed_here);
+                }
+                return finishNode(
+                    factory.createBindExpression(
+                        /* left */ undefined,
+                        right
+                    ),
+                    pos
+                );
+            }
             else {
                 expression = token() === SyntaxKind.SuperKeyword ? parseSuperExpression() : parseMemberExpressionOrHigher();
             }
@@ -4667,6 +4682,13 @@ namespace ts {
             // CallExpression, BindExpression or OptionalExpression.  As such, we need to consume the rest
             // of it here to be complete.
             return parseCallExpressionOrBindExpressionRest(pos, expression);
+        }
+
+        function isMaybeParenthesizedAccessOrSuperPropertyExpression (node: Node): boolean {
+            while (isParenthesizedExpression(node)) {
+                node = node.expression;
+            }
+            return isAccessExpression(node) || isSuperProperty(node);
         }
 
         function parseMemberExpressionOrHigher(): MemberExpression {

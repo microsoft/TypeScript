@@ -1181,6 +1181,11 @@
         "code": 1388
     },
 
+    "Only property access expressions are allowed here.": {
+        "category": "Error",
+        "code": 1999
+    },
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
