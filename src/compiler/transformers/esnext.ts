@@ -110,6 +110,73 @@ namespace ts {
                 ]);
                 return res;
             }
+            else {
+                if (isAccessExpression(right) && right.expression.kind === SyntaxKind.SuperKeyword) {
+                    // ::super.bar
+                    // => super.bar.bind(this)
+                    // ::super["bar"]
+                    // => super["bar"].bind(this)
+                    return factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                            right,
+                            "bind"
+                        ),
+                        /* typeArguments */ undefined,
+                        [factory.createThis()]
+                    );
+                }
+                if (isPropertyAccessExpression(right)) {
+                    // ::foo.bar
+                    // => foo.bar.bind(foo)
+                    // but foo should be evaluated only once
+
+                    const base = factory.createTempVariable(hoistVariableDeclaration);
+                    const bound = factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                            factory.createPropertyAccessExpression(
+                                factory.createAssignment(base, right.expression),
+                                right.name
+                            ),
+                            "bind"
+                        ),
+                        /* typeArguments */ undefined,
+                        [base]
+                    );
+                    return bound;
+                }
+                else if (isElementAccessExpression(right)) {
+                    // ::foo["bar"]
+                    // => foo["bar"].bind(foo)
+                    // but foo should be evaluated only once
+
+                    const base = factory.createTempVariable(hoistVariableDeclaration);
+                    const bound = factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                            factory.createElementAccessExpression(
+                                factory.createAssignment(base, right.expression),
+                                right.argumentExpression
+                            ),
+                            "bind"
+                        ),
+                        /* typeArguments */ undefined,
+                        [base]
+                    );
+                    return bound;
+                }
+                else {
+                    // this should not happen, fallback emission
+                    // ::expr
+                    // => expr.bind(void 0)
+                    return factory.createCallExpression(
+                        factory.createPropertyAccessExpression(
+                            right,
+                            "bind"
+                        ),
+                        /* typeArguments */ undefined,
+                        [factory.createVoidZero()]
+                    );
+                }
+            }
         }
     }
 }
