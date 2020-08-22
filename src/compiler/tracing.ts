@@ -127,6 +127,8 @@ namespace ts.tracing {
         const typesPath = legend[legend.length - 1].typesPath!;
         const typesFd = fs.openSync(typesPath, "w");
 
+        const recursionIdentityMap = new Map<object, number>();
+
         // Cleverness: no line break here so that the type ID will match the line number
         fs.writeSync(typesFd, "[");
 
@@ -178,10 +180,23 @@ namespace ts.tracing {
                 };
             }
 
+            // We can't print out an arbitrary object, so just assign each one a unique number.
+            // Don't call it an "id" so people don't treat it as a type id.
+            let recursionToken: number | undefined;
+            const recursionIdentity = type.checker.getRecursionIdentity(type);
+            if (recursionIdentity) {
+                recursionToken = recursionIdentityMap.get(recursionIdentity);
+                if (!recursionToken) {
+                    recursionToken = recursionIdentityMap.size;
+                    recursionIdentityMap.set(recursionIdentity, recursionToken);
+                }
+            }
+
             const descriptor = {
                 id: type.id,
                 intrinsicName: (type as any).intrinsicName,
                 symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
+                recursionId: recursionToken,
                 unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
                 intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
                 aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
