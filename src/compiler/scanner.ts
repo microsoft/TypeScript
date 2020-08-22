@@ -200,6 +200,7 @@ namespace ts {
         "??": SyntaxKind.QuestionQuestionToken,
         "?.": SyntaxKind.QuestionDotToken,
         ":": SyntaxKind.ColonToken,
+        "::": SyntaxKind.ColonColonToken,
         "=": SyntaxKind.EqualsToken,
         "+=": SyntaxKind.PlusEqualsToken,
         "-=": SyntaxKind.MinusEqualsToken,
@@ -1874,6 +1875,9 @@ namespace ts {
                         ({ type: token, value: tokenValue } = scanNumber());
                         return token;
                     case CharacterCodes.colon:
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.colon) {
+                            return pos += 2, token = SyntaxKind.ColonColonToken;
+                        }
                         pos++;
                         return token = SyntaxKind.ColonToken;
                     case CharacterCodes.semicolon:

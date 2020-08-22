@@ -84,6 +84,7 @@ namespace ts {
         BarBarToken,
         QuestionToken,
         ColonToken,
+        ColonColonToken,
         AtToken,
         QuestionQuestionToken,
         /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
@@ -509,6 +510,7 @@ namespace ts {
         | SyntaxKind.QuestionQuestionToken
         | SyntaxKind.QuestionToken
         | SyntaxKind.ColonToken
+        | SyntaxKind.ColonColonToken
         | SyntaxKind.AtToken
         | SyntaxKind.BacktickToken
         | SyntaxKind.EqualsToken
