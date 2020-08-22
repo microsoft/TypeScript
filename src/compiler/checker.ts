@@ -16818,13 +16818,6 @@ namespace ts {
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
             function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                tracing.begin(tracing.Phase.Check, "recursiveTypeRelatedTo", { sourceId: source.id, targetId: target.id });
-                const result = recursiveTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                tracing.end();
-                return result;
-            }
-
-            function recursiveTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
@@ -16909,6 +16902,13 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                tracing.begin(tracing.Phase.Check, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
+                const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
+                tracing.end();
+                return result;
+            }
+
+            function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
