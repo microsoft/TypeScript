@@ -4139,7 +4139,7 @@ namespace ts {
         Signature      = 1 << 0, // Obtaining contextual signature
         NoConstraints  = 1 << 1, // Don't obtain type variable constraints
         Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
-        SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
+        SkipBindingPatternsAndUnusedExpressions = 1 << 3, // Ignore contextual types applied by binding patterns and do not use `void` as the contextual type for unused expressions
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
