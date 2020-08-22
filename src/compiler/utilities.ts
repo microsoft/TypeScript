@@ -3400,9 +3400,13 @@ namespace ts {
         // LeftHandSideExpression:
         //     NewExpression
         //     CallExpression
+        //     BindExpression
         // NewExpression:
         //     MemberExpression
         //     `new` NewExpression
+        // BindExpression:
+        //     LeftHandSideExpression `::` MemberExpression
+        //     `::` MemberExpression
         LeftHandSide,
 
         // CallExpression:

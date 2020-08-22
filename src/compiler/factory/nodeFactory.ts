@@ -166,6 +166,8 @@ namespace ts {
             updateCallChain,
             createNewExpression,
             updateNewExpression,
+            createBindExpression,
+            updateBindExpression,
             createTaggedTemplateExpression,
             updateTaggedTemplateExpression,
             createTypeAssertion,
@@ -2324,6 +2326,22 @@ namespace ts {
                 || node.typeArguments !== typeArguments
                 || node.arguments !== argumentsArray
                 ? update(createNewExpression(expression, typeArguments, argumentsArray), node)
+                : node;
+        }
+
+        // @api
+        function createBindExpression(left: LeftHandSideExpression | undefined, right: MemberExpression): BindExpression {
+            const node = createBaseExpression<BindExpression>(SyntaxKind.BindExpression);
+            node.left = left;
+            node.right = right;
+            return node;
+        }
+
+        // @api
+        function updateBindExpression(node: BindExpression, left: LeftHandSideExpression | undefined, right: MemberExpression): BindExpression {
+            return node.left !== left
+                || node.right !== right
+                ? update(createBindExpression(left, right), node)
                 : node;
         }
 

@@ -243,6 +243,7 @@ namespace ts {
         ElementAccessExpression,
         CallExpression,
         NewExpression,
+        BindExpression,
         TaggedTemplateExpression,
         TypeAssertionExpression,
         ParenthesizedExpression,
@@ -987,6 +988,7 @@ namespace ts {
     export type QuestionToken = PunctuationToken<SyntaxKind.QuestionToken>;
     export type ExclamationToken = PunctuationToken<SyntaxKind.ExclamationToken>;
     export type ColonToken = PunctuationToken<SyntaxKind.ColonToken>;
+    export type ColonColonToken = PunctuationToken<SyntaxKind.ColonColonToken>;
     export type EqualsToken = PunctuationToken<SyntaxKind.EqualsToken>;
     export type AsteriskToken = PunctuationToken<SyntaxKind.AsteriskToken>;
     export type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
@@ -2283,6 +2285,12 @@ namespace ts {
         | ElementAccessChainRoot
         | CallChainRoot
         ;
+
+    export interface BindExpression extends LeftHandSideExpression {
+        readonly kind: SyntaxKind.BindExpression;
+        readonly left?: LeftHandSideExpression;
+        readonly right: MemberExpression;
+    }
 
     /** @internal */
     export interface WellKnownSymbolExpression extends PropertyAccessExpression {
@@ -6778,6 +6786,8 @@ namespace ts {
         updateCallExpression(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallExpression;
         createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallChain;
         updateCallChain(node: CallChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]): CallChain;
+        createBindExpression(left: LeftHandSideExpression | undefined, right: MemberExpression): BindExpression;
+        updateBindExpression(node: BindExpression, left: LeftHandSideExpression | undefined, right: MemberExpression): BindExpression;
         createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
         updateNewExpression(node: NewExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): NewExpression;
         createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;

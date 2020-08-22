@@ -4604,12 +4604,14 @@ namespace ts {
             // LeftHandSideExpression: See 11.2
             //      NewExpression
             //      CallExpression
+            //      BindExpression
             //
             // Our simplification:
             //
             // LeftHandSideExpression: See 11.2
             //      MemberExpression
             //      CallExpression
+            //      BindExpression
             //
             // See comment in parseMemberExpressionOrHigher on how we replaced NewExpression with
             // MemberExpression to make our lives easier.
@@ -4659,9 +4661,9 @@ namespace ts {
             }
 
             // Now, we *may* be complete.  However, we might have consumed the start of a
-            // CallExpression or OptionalExpression.  As such, we need to consume the rest
+            // CallExpression, BindExpression or OptionalExpression.  As such, we need to consume the rest
             // of it here to be complete.
-            return parseCallExpressionRest(pos, expression);
+            return parseCallExpressionOrBindExpressionRest(pos, expression);
         }
 
         function parseMemberExpressionOrHigher(): MemberExpression {
@@ -5114,9 +5116,15 @@ namespace ts {
             return finishNode(tagExpression, pos);
         }
 
-        function parseCallExpressionRest(pos: number, expression: LeftHandSideExpression): LeftHandSideExpression {
+        function parseCallExpressionOrBindExpressionRest(pos: number, expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(pos, expression, /*allowOptionalChain*/ true);
+                // handle bynary BindExpression
+                if (token() === SyntaxKind.ColonColonToken) {
+                    expression = parseBinaryBindExpressionRest(pos, expression);
+                    continue;
+                }
+
                 const questionDotToken = parseOptionalToken(SyntaxKind.QuestionDotToken);
                 // handle 'foo<<T>()'
                 if (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken) {
@@ -5224,6 +5232,13 @@ namespace ts {
                     // Anything else treat as an expression.
                     return false;
             }
+        }
+
+        function parseBinaryBindExpressionRest(pos: number, expression: LeftHandSideExpression): BindExpression {
+            parseExpected(SyntaxKind.ColonColonToken);
+            // TODO: lookahead != new
+            const right = parseMemberExpressionOrHigher();
+            return finishNode(factory.createBindExpression(expression, right), pos);
         }
 
         function parsePrimaryExpression(): PrimaryExpression {
@@ -6455,7 +6470,7 @@ namespace ts {
                 const awaitExpression = parseIdentifier(Diagnostics.Expression_expected);
                 nextToken();
                 const memberExpression = parseMemberExpressionRest(pos, awaitExpression, /*allowOptionalChain*/ true);
-                return parseCallExpressionRest(pos, memberExpression);
+                return parseCallExpressionOrBindExpressionRest(pos, memberExpression);
             }
             return parseLeftHandSideExpressionOrHigher();
         }
