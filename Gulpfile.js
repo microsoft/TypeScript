@@ -413,7 +413,7 @@ const cleanTypesMap = () => del("built/local/typesMap.json");
 cleanTasks.push(cleanTypesMap);
 
 // Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
-// it to be synced to the Azure DevOps repo, so that it can get picked up by the build 
+// it to be synced to the Azure DevOps repo, so that it can get picked up by the build
 // pipeline that generates the localization artifacts that are then fed into the translation process.
 const builtLocalDiagnosticMessagesGeneratedJson = "built/local/diagnosticMessages.generated.json";
 const copyBuiltLocalDiagnosticMessages = () => src(diagnosticMessagesGeneratedJson)
