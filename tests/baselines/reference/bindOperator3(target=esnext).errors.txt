@@ -1,0 +1,22 @@
+tests/cases/conformance/esnext/bindOperator/bindOperator3.ts(9,14): error TS2684: The 'this' context of type '{ func: (this: { foo: string; }) => boolean; }' is not assignable to method's 'this' of type '{ foo: string; }'.
+  Property 'foo' is missing in type '{ func: (this: { foo: string; }) => boolean; }' but required in type '{ foo: string; }'.
+
+
+==== tests/cases/conformance/esnext/bindOperator/bindOperator3.ts (1 errors) ====
+    declare const func: (num: number) => number
+    declare const obj1: { func: (this: { foo: string }) => boolean }
+    declare const obj2: { foo: string; func: (this: { foo: string }) => boolean }
+    
+    const ok1 = ::obj2.func
+    const val1 = ok1()
+    const val2 = (::obj2.func)()
+    
+    const bad1 = ::obj1.func
+                 ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type '{ func: (this: { foo: string; }) => boolean; }' is not assignable to method's 'this' of type '{ foo: string; }'.
+!!! error TS2684:   Property 'foo' is missing in type '{ func: (this: { foo: string; }) => boolean; }' but required in type '{ foo: string; }'.
+!!! related TS2728 tests/cases/conformance/esnext/bindOperator/bindOperator3.ts:2:38: 'foo' is declared here.
+    
+    
+    
+    

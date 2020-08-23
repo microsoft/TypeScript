@@ -1,0 +1,12 @@
+tests/cases/conformance/esnext/bindOperator/bindOperator5.ts(1,13): error TS1999: Only property access expressions are allowed here.
+tests/cases/conformance/esnext/bindOperator/bindOperator5.ts(3,3): error TS2349: This expression is not callable.
+
+
+==== tests/cases/conformance/esnext/bindOperator/bindOperator5.ts (2 errors) ====
+    const v = ::"foo"
+                ~~~~~
+!!! error TS1999: Only property access expressions are allowed here.
+    
+    ::"foo"
+      ~~~~~
+!!! error TS2349: This expression is not callable.

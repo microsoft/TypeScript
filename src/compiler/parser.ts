@@ -4627,6 +4627,7 @@ namespace ts {
             // CallExpression:
             //      MemberExpression Arguments
             //      CallExpression Arguments
+            //      BindExpression Arguments
             //      CallExpression[Expression]
             //      CallExpression.IdentifierName
             //      import (AssignmentExpression)
@@ -4639,7 +4640,7 @@ namespace ts {
             // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
             // or starts the beginning of the first four CallExpression productions.
             const pos = getNodePos();
-            let expression: MemberExpression;
+            let expression: MemberExpression | BindExpression;
             if (token() === SyntaxKind.ImportKeyword) {
                 if (lookAhead(nextTokenIsOpenParenOrLessThan)) {
                     // We don't want to eagerly consume all import keyword as import call expression so we look ahead to find "("
@@ -4668,7 +4669,7 @@ namespace ts {
                 if (!isMaybeParenthesizedAccessOrSuperPropertyExpression(right)) {
                     parseErrorAtRange(right, Diagnostics.Only_property_access_expressions_are_allowed_here);
                 }
-                return finishNode(
+                expression = finishNode(
                     factory.createBindExpression(
                         /* left */ undefined,
                         right

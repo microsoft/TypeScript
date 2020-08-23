@@ -1,0 +1,10 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator5.ts ===
+const v = ::"foo"
+>v : any
+>::"foo"::"foo" : any
+>::"foo" : any
+>"foo" : "foo"
+
+::"foo"
+>"foo" : "foo"
+

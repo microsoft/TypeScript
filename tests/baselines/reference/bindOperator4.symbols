@@ -1,0 +1,8 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator4.ts ===
+const v = ::func;
+>v : Symbol(v, Decl(bindOperator4.ts, 0, 5))
+
+const v2 = ::foo.bar::func;
+>v2 : Symbol(v2, Decl(bindOperator4.ts, 1, 5))
+
+::func

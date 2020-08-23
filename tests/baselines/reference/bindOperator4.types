@@ -1,0 +1,19 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator4.ts ===
+const v = ::func;
+>v : any
+>::func : any
+>func : any
+
+const v2 = ::foo.bar::func;
+>v2 : any
+>::foo.bar::func : any
+>::foo.bar : any
+>foo.bar : any
+>foo : any
+>bar : any
+>func : any
+
+::func
+>::func : any
+>func : any
+

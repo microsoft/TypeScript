@@ -1,0 +1,22 @@
+tests/cases/conformance/esnext/bindOperator/bindOperator4.ts(1,13): error TS1999: Only property access expressions are allowed here.
+tests/cases/conformance/esnext/bindOperator/bindOperator4.ts(1,13): error TS2304: Cannot find name 'func'.
+tests/cases/conformance/esnext/bindOperator/bindOperator4.ts(2,23): error TS2304: Cannot find name 'func'.
+tests/cases/conformance/esnext/bindOperator/bindOperator4.ts(4,3): error TS1999: Only property access expressions are allowed here.
+tests/cases/conformance/esnext/bindOperator/bindOperator4.ts(4,3): error TS2304: Cannot find name 'func'.
+
+
+==== tests/cases/conformance/esnext/bindOperator/bindOperator4.ts (5 errors) ====
+    const v = ::func;
+                ~~~~
+!!! error TS1999: Only property access expressions are allowed here.
+                ~~~~
+!!! error TS2304: Cannot find name 'func'.
+    const v2 = ::foo.bar::func;
+                          ~~~~
+!!! error TS2304: Cannot find name 'func'.
+    
+    ::func
+      ~~~~
+!!! error TS1999: Only property access expressions are allowed here.
+      ~~~~
+!!! error TS2304: Cannot find name 'func'.

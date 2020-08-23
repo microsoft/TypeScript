@@ -1,0 +1,49 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator3.ts ===
+declare const func: (num: number) => number
+>func : (num: number) => number
+>num : number
+
+declare const obj1: { func: (this: { foo: string }) => boolean }
+>obj1 : { func: (this: {    foo: string;}) => boolean; }
+>func : (this: {    foo: string;}) => boolean
+>this : { foo: string; }
+>foo : string
+
+declare const obj2: { foo: string; func: (this: { foo: string }) => boolean }
+>obj2 : { foo: string; func: (this: {    foo: string;}) => boolean; }
+>foo : string
+>func : (this: {    foo: string;}) => boolean
+>this : { foo: string; }
+>foo : string
+
+const ok1 = ::obj2.func
+>ok1 : () => boolean
+>::obj2.func : () => boolean
+>obj2.func : (this: { foo: string; }) => boolean
+>obj2 : { foo: string; func: (this: { foo: string; }) => boolean; }
+>func : (this: { foo: string; }) => boolean
+
+const val1 = ok1()
+>val1 : boolean
+>ok1() : boolean
+>ok1 : () => boolean
+
+const val2 = (::obj2.func)()
+>val2 : boolean
+>(::obj2.func)() : boolean
+>(::obj2.func) : () => boolean
+>::obj2.func : () => boolean
+>obj2.func : (this: { foo: string; }) => boolean
+>obj2 : { foo: string; func: (this: { foo: string; }) => boolean; }
+>func : (this: { foo: string; }) => boolean
+
+const bad1 = ::obj1.func
+>bad1 : any
+>::obj1.func : any
+>obj1.func : (this: { foo: string; }) => boolean
+>obj1 : { func: (this: { foo: string; }) => boolean; }
+>func : (this: { foo: string; }) => boolean
+
+
+
+

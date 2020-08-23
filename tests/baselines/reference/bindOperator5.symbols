@@ -1,0 +1,5 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator5.ts ===
+const v = ::"foo"
+>v : Symbol(v, Decl(bindOperator5.ts, 0, 5))
+
+::"foo"
