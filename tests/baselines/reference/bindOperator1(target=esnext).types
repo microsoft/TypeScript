@@ -1,0 +1,53 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator1.ts ===
+declare const map: <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>map : <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>this : T[]
+>callbackFn : (value: T) => U
+>value : T
+
+declare const arr: number[]
+>arr : number[]
+
+const ok1 = arr::map
+>ok1 : <U>(callbackFn: (value: number) => U) => U[]
+>arr::map : <U>(callbackFn: (value: number) => U) => U[]
+>arr : number[]
+>map : <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+
+const val1 = ok1(x => x * 10)
+>val1 : number[]
+>ok1(x => x * 10) : number[]
+>ok1 : <U>(callbackFn: (value: number) => U) => U[]
+>x => x * 10 : (x: number) => number
+>x : number
+>x * 10 : number
+>x : number
+>10 : 10
+
+const val2 = arr
+>val2 : string[]
+>arr  ::map(x => ""+x)  ::map(x => x.slice(1)) : string[]
+>arr  ::map(x => ""+x)  ::map : <U>(callbackFn: (value: string) => U) => U[]
+>arr  ::map(x => ""+x) : string[]
+>arr  ::map : <U>(callbackFn: (value: number) => U) => U[]
+>arr : number[]
+
+  ::map(x => ""+x)
+>map : <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>x => ""+x : (x: number) => string
+>x : number
+>""+x : string
+>"" : ""
+>x : number
+
+  ::map(x => x.slice(1))
+>map : <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>x => x.slice(1) : (x: string) => string
+>x : string
+>x.slice(1) : string
+>x.slice : (start?: number | undefined, end?: number | undefined) => string
+>x : string
+>slice : (start?: number | undefined, end?: number | undefined) => string
+>1 : 1
+
+

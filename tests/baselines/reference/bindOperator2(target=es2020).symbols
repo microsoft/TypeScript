@@ -1,0 +1,48 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator2.ts ===
+declare const map: <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>map : Symbol(map, Decl(bindOperator2.ts, 0, 13))
+>T : Symbol(T, Decl(bindOperator2.ts, 0, 20))
+>U : Symbol(U, Decl(bindOperator2.ts, 0, 22))
+>this : Symbol(this, Decl(bindOperator2.ts, 0, 26))
+>T : Symbol(T, Decl(bindOperator2.ts, 0, 20))
+>callbackFn : Symbol(callbackFn, Decl(bindOperator2.ts, 0, 36))
+>value : Symbol(value, Decl(bindOperator2.ts, 0, 50))
+>T : Symbol(T, Decl(bindOperator2.ts, 0, 20))
+>U : Symbol(U, Decl(bindOperator2.ts, 0, 22))
+>U : Symbol(U, Decl(bindOperator2.ts, 0, 22))
+
+declare const arr: number[]
+>arr : Symbol(arr, Decl(bindOperator2.ts, 1, 13))
+
+declare const obj: { func: (this: number[]) => number }
+>obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
+>func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+>this : Symbol(this, Decl(bindOperator2.ts, 2, 28))
+
+const ok1 = arr::obj.func
+>ok1 : Symbol(ok1, Decl(bindOperator2.ts, 4, 5))
+>arr : Symbol(arr, Decl(bindOperator2.ts, 1, 13))
+>obj.func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+>obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
+>func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+
+const val1 = ok1()
+>val1 : Symbol(val1, Decl(bindOperator2.ts, 5, 5))
+>ok1 : Symbol(ok1, Decl(bindOperator2.ts, 4, 5))
+
+const bad1 = obj::obj.func
+>bad1 : Symbol(bad1, Decl(bindOperator2.ts, 7, 5))
+>obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
+>obj.func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+>obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
+>func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+
+const bad2 = 0::obj.func
+>bad2 : Symbol(bad2, Decl(bindOperator2.ts, 8, 5))
+>obj.func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+>obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
+>func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
+
+
+
+

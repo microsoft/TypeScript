@@ -1,0 +1,47 @@
+=== tests/cases/conformance/esnext/bindOperator/bindOperator2.ts ===
+declare const map: <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>map : <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+>this : T[]
+>callbackFn : (value: T) => U
+>value : T
+
+declare const arr: number[]
+>arr : number[]
+
+declare const obj: { func: (this: number[]) => number }
+>obj : { func: (this: number[]) => number; }
+>func : (this: number[]) => number
+>this : number[]
+
+const ok1 = arr::obj.func
+>ok1 : () => number
+>arr::obj.func : () => number
+>arr : number[]
+>obj.func : (this: number[]) => number
+>obj : { func: (this: number[]) => number; }
+>func : (this: number[]) => number
+
+const val1 = ok1()
+>val1 : number
+>ok1() : number
+>ok1 : () => number
+
+const bad1 = obj::obj.func
+>bad1 : any
+>obj::obj.func : any
+>obj : { func: (this: number[]) => number; }
+>obj.func : (this: number[]) => number
+>obj : { func: (this: number[]) => number; }
+>func : (this: number[]) => number
+
+const bad2 = 0::obj.func
+>bad2 : any
+>0::obj.func : any
+>0 : 0
+>obj.func : (this: number[]) => number
+>obj : { func: (this: number[]) => number; }
+>func : (this: number[]) => number
+
+
+
+

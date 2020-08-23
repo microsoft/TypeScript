@@ -1,0 +1,24 @@
+tests/cases/conformance/esnext/bindOperator/bindOperator2.ts(8,14): error TS2684: The 'this' context of type '{ func: (this: number[]) => number; }' is not assignable to method's 'this' of type 'number[]'.
+  Type '{ func: (this: number[]) => number; }' is missing the following properties from type 'number[]': length, pop, push, concat, and 28 more.
+tests/cases/conformance/esnext/bindOperator/bindOperator2.ts(9,14): error TS2684: The 'this' context of type 'number' is not assignable to method's 'this' of type 'number[]'.
+
+
+==== tests/cases/conformance/esnext/bindOperator/bindOperator2.ts (2 errors) ====
+    declare const map: <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+    declare const arr: number[]
+    declare const obj: { func: (this: number[]) => number }
+    
+    const ok1 = arr::obj.func
+    const val1 = ok1()
+    
+    const bad1 = obj::obj.func
+                 ~~~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type '{ func: (this: number[]) => number; }' is not assignable to method's 'this' of type 'number[]'.
+!!! error TS2684:   Type '{ func: (this: number[]) => number; }' is missing the following properties from type 'number[]': length, pop, push, concat, and 28 more.
+    const bad2 = 0::obj.func
+                 ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'number' is not assignable to method's 'this' of type 'number[]'.
+    
+    
+    
+    
