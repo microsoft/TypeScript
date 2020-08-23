@@ -8,6 +8,7 @@ const val1 = ok1()
 
 const bad1 = obj::obj.func
 const bad2 = 0::obj.func
+const bad3 = obj::map
 
 
 
@@ -15,8 +16,9 @@ const bad2 = 0::obj.func
 
 //// [bindOperator2.js]
 "use strict";
-var _a, _b, _c;
+var _a, _b, _c, _d;
 const ok1 = (_a = arr, obj.func.bind(_a));
 const val1 = ok1();
 const bad1 = (_b = obj, obj.func.bind(_b));
 const bad2 = (_c = 0, obj.func.bind(_c));
+const bad3 = (_d = obj, map.bind(_d));

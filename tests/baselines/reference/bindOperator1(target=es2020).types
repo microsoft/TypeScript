@@ -5,6 +5,10 @@ declare const map: <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
 >callbackFn : (value: T) => U
 >value : T
 
+declare const func: (num: number) => boolean
+>func : (num: number) => boolean
+>num : number
+
 declare const arr: number[]
 >arr : number[]
 
@@ -50,4 +54,15 @@ const val2 = arr
 >slice : (start?: number | undefined, end?: number | undefined) => string
 >1 : 1
 
+  const ok3 = arr::func
+>ok3 : (num: number) => boolean
+>arr::func : (num: number) => boolean
+>arr : number[]
+>func : (num: number) => boolean
+
+  const val3 = ok3(12)
+>val3 : boolean
+>ok3(12) : boolean
+>ok3 : (num: number) => boolean
+>12 : 12
 

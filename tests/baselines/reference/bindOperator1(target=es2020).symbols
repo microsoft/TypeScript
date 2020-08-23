@@ -11,34 +11,46 @@ declare const map: <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
 >U : Symbol(U, Decl(bindOperator1.ts, 0, 22))
 >U : Symbol(U, Decl(bindOperator1.ts, 0, 22))
 
+declare const func: (num: number) => boolean
+>func : Symbol(func, Decl(bindOperator1.ts, 1, 13))
+>num : Symbol(num, Decl(bindOperator1.ts, 1, 21))
+
 declare const arr: number[]
->arr : Symbol(arr, Decl(bindOperator1.ts, 1, 13))
+>arr : Symbol(arr, Decl(bindOperator1.ts, 2, 13))
 
 const ok1 = arr::map
->ok1 : Symbol(ok1, Decl(bindOperator1.ts, 3, 5))
->arr : Symbol(arr, Decl(bindOperator1.ts, 1, 13))
+>ok1 : Symbol(ok1, Decl(bindOperator1.ts, 4, 5))
+>arr : Symbol(arr, Decl(bindOperator1.ts, 2, 13))
 >map : Symbol(map, Decl(bindOperator1.ts, 0, 13))
 
 const val1 = ok1(x => x * 10)
->val1 : Symbol(val1, Decl(bindOperator1.ts, 4, 5))
->ok1 : Symbol(ok1, Decl(bindOperator1.ts, 3, 5))
->x : Symbol(x, Decl(bindOperator1.ts, 4, 17))
->x : Symbol(x, Decl(bindOperator1.ts, 4, 17))
+>val1 : Symbol(val1, Decl(bindOperator1.ts, 5, 5))
+>ok1 : Symbol(ok1, Decl(bindOperator1.ts, 4, 5))
+>x : Symbol(x, Decl(bindOperator1.ts, 5, 17))
+>x : Symbol(x, Decl(bindOperator1.ts, 5, 17))
 
 const val2 = arr
->val2 : Symbol(val2, Decl(bindOperator1.ts, 6, 5))
->arr : Symbol(arr, Decl(bindOperator1.ts, 1, 13))
+>val2 : Symbol(val2, Decl(bindOperator1.ts, 7, 5))
+>arr : Symbol(arr, Decl(bindOperator1.ts, 2, 13))
 
   ::map(x => ""+x)
 >map : Symbol(map, Decl(bindOperator1.ts, 0, 13))
->x : Symbol(x, Decl(bindOperator1.ts, 7, 8))
->x : Symbol(x, Decl(bindOperator1.ts, 7, 8))
+>x : Symbol(x, Decl(bindOperator1.ts, 8, 8))
+>x : Symbol(x, Decl(bindOperator1.ts, 8, 8))
 
   ::map(x => x.slice(1))
 >map : Symbol(map, Decl(bindOperator1.ts, 0, 13))
->x : Symbol(x, Decl(bindOperator1.ts, 8, 8))
+>x : Symbol(x, Decl(bindOperator1.ts, 9, 8))
 >x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(bindOperator1.ts, 8, 8))
+>x : Symbol(x, Decl(bindOperator1.ts, 9, 8))
 >slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 
+  const ok3 = arr::func
+>ok3 : Symbol(ok3, Decl(bindOperator1.ts, 11, 7))
+>arr : Symbol(arr, Decl(bindOperator1.ts, 2, 13))
+>func : Symbol(func, Decl(bindOperator1.ts, 1, 13))
+
+  const val3 = ok3(12)
+>val3 : Symbol(val3, Decl(bindOperator1.ts, 12, 7))
+>ok3 : Symbol(ok3, Decl(bindOperator1.ts, 11, 7))
 

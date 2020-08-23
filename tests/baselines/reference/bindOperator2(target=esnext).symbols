@@ -43,6 +43,11 @@ const bad2 = 0::obj.func
 >obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
 >func : Symbol(func, Decl(bindOperator2.ts, 2, 20))
 
+const bad3 = obj::map
+>bad3 : Symbol(bad3, Decl(bindOperator2.ts, 9, 5))
+>obj : Symbol(obj, Decl(bindOperator2.ts, 2, 13))
+>map : Symbol(map, Decl(bindOperator2.ts, 0, 13))
+
 
 
 

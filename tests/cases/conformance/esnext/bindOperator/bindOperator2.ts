@@ -10,6 +10,7 @@ const val1 = ok1()
 
 const bad1 = obj::obj.func
 const bad2 = 0::obj.func
+const bad3 = obj::map
 
 
 

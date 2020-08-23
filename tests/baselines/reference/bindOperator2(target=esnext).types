@@ -42,6 +42,12 @@ const bad2 = 0::obj.func
 >obj : { func: (this: number[]) => number; }
 >func : (this: number[]) => number
 
+const bad3 = obj::map
+>bad3 : any
+>obj::map : any
+>obj : { func: (this: number[]) => number; }
+>map : <T, U>(this: T[], callbackFn: (value: T) => U) => U[]
+
 
 
 
