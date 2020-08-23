@@ -27815,8 +27815,9 @@ namespace ts {
 
             // Filter out signatures that do not accept target type as instantiated 'this' type.
             const remainingCallSignatures = flatMap(callSignatures, sig => {
-                const thisType = getThisTypeOfSignature(sig);
-                if (!thisType) return sig;
+                const thisParameter = sig.thisParameter;
+                if (!thisParameter) return sig;
+                const thisType = getTypeOfSymbol(thisParameter);
 
                 const typeParameters = sig.typeParameters;
                 if (!typeParameters) {
@@ -27850,6 +27851,11 @@ namespace ts {
                 for (const tp of freshTypeParameters) {
                     tp.mapper = mapper;
                 }
+
+                const instantiatedThis = instantiateSymbol(thisParameter, mapper);
+                const instantiatedThisType = getTypeOfSymbol(instantiatedThis);
+                if (!isTypeAssignableTo(targetType, instantiatedThisType)) return undefined;
+
 
                 const newSig = createSignature(
                     sig.declaration,
