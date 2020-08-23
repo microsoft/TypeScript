@@ -3762,6 +3762,8 @@ namespace ts {
                 case SyntaxKind.SlashEqualsToken:
                 case SyntaxKind.Identifier:
                     return true;
+                case SyntaxKind.ColonColonToken:
+                    return true;
                 case SyntaxKind.ImportKeyword:
                     return lookAhead(nextTokenIsOpenParenOrLessThanOrDot);
                 default:
