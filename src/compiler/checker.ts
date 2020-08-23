@@ -27785,14 +27785,8 @@ namespace ts {
         }
 
         function checkBindExpression(node: BindExpression, checkMode?: CheckMode): Type {
-            const targetType = node.left && checkExpression(node.left, checkMode);
             const funcType = checkExpression(node.right, checkMode);
             const apparentType = getApparentType(funcType);
-
-            if (!targetType) {
-                // TODO(uhyo): unary bind expression
-                return funcType;
-            }
 
             if (isTypeAny(apparentType)) {
                 return anyType;
@@ -27805,26 +27799,46 @@ namespace ts {
                 return errorType;
             }
 
+            let targetType: Type;
+            if (node.left) {
+                // left::right
+                targetType = node.left && checkExpression(node.left, checkMode);
+            }
+            else if (!node.left) {
+                // TODO(uhyo): unary bind expression
+                const right = skipParentheses(node.right);
+                if (!isAccessExpression(right)) {
+                    // this should be syntax error
+                    return errorType;
+                }
+                targetType = getTypeOfExpression(right.expression);
+            }
+
             // Filter out signatures that do not accept target type as instantiated 'this' type.
             const remainingCallSignatures = flatMap(callSignatures, sig => {
                 const thisType = getThisTypeOfSignature(sig);
-                    if (!thisType) return sig;
-                    if (!sig.typeParameters) {
-                        return isTypeAssignableTo(targetType, thisType) ? sig : undefined;
-                    }
-                    const typeParameters = sig.typeParameters;
+                if (!thisType) return sig;
 
-                    // const isJavaScript = isInJSFile(node);
-                    const inferenceContext = createInferenceContext(
-                        sig.typeParameters,
-                        sig,
-                        /*flags*/ InferenceFlags.NoDefault
-                    );
-                    inferTypes(inferenceContext.inferences, targetType, thisType);
-                    const inferredTypes = getInferredTypes(inferenceContext);
+                const typeParameters = sig.typeParameters;
+                if (!typeParameters) {
+                    const apparentThisType = getApparentType(thisType);
+                    if (!isTypeAssignableTo(targetType, apparentThisType)) return undefined;
+                    const newSig = cloneSignature(sig);
+                    newSig.thisParameter = undefined;
+                    return newSig;
+                }
 
-                    const freshTypeParameters: TypeParameter[] = [];
-                    const newTypeArguments = map(inferredTypes, (ty, i) => {
+                // const isJavaScript = isInJSFile(node);
+                const inferenceContext = createInferenceContext(
+                    typeParameters,
+                    sig,
+                    /*flags*/ InferenceFlags.NoDefault
+                );
+                inferTypes(inferenceContext.inferences, targetType, thisType);
+                const inferredTypes = getInferredTypes(inferenceContext);
+
+                const freshTypeParameters: TypeParameter[] = [];
+                const newTypeArguments = map(inferredTypes, (ty, i) => {
                     if (ty === silentNeverType) {
                         const tp = cloneTypeParameter(typeParameters[i]);
                         freshTypeParameters.push(tp);
@@ -27853,6 +27867,7 @@ namespace ts {
 
                 return newSig;
             });
+
             if (!remainingCallSignatures.length) {
                 // TODO(uhyo): error message
                 error(node.right, Diagnostics.This_expression_is_not_callable);
