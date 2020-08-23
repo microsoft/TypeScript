@@ -27874,7 +27874,6 @@ namespace ts {
             });
 
             if (!remainingCallSignatures.length) {
-                // TODO(uhyo): error message
                 const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
                 const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
                 Debug.assert(!checkTypeAssignableTo(
