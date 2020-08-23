@@ -4684,7 +4684,7 @@ namespace ts {
             return parseCallExpressionOrBindExpressionRest(pos, expression);
         }
 
-        function isMaybeParenthesizedAccessOrSuperPropertyExpression (node: Node): boolean {
+        function isMaybeParenthesizedAccessOrSuperPropertyExpression(node: Node): boolean {
             while (isParenthesizedExpression(node)) {
                 node = node.expression;
             }
