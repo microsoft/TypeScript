@@ -27804,8 +27804,7 @@ namespace ts {
                 // left::right
                 targetType = node.left && checkExpression(node.left, checkMode);
             }
-            else if (!node.left) {
-                // TODO(uhyo): unary bind expression
+            else {
                 const right = skipParentheses(node.right);
                 if (!isAccessExpression(right)) {
                     // this should be syntax error
@@ -27821,8 +27820,8 @@ namespace ts {
 
                 const typeParameters = sig.typeParameters;
                 if (!typeParameters) {
-                    const apparentThisType = getApparentType(thisType);
-                    if (!isTypeAssignableTo(targetType, apparentThisType)) return undefined;
+                    if (!isTypeAssignableTo(targetType, thisType)) return undefined;
+
                     const newSig = cloneSignature(sig);
                     newSig.thisParameter = undefined;
                     return newSig;
@@ -27870,7 +27869,21 @@ namespace ts {
 
             if (!remainingCallSignatures.length) {
                 // TODO(uhyo): error message
-                error(node.right, Diagnostics.This_expression_is_not_callable);
+                const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
+                const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
+                Debug.assert(!checkTypeAssignableTo(
+                    targetType,
+                    getThisTypeOfSignature(callSignatures[0])!,
+                    node,
+                    headMessage,
+                    /* containingMessageChain */ undefined,
+                    errorOutputContainer
+                ), "this check should fail");
+                if (errorOutputContainer.errors) {
+                    for (const diag of errorOutputContainer.errors) {
+                        diagnostics.add(diag);
+                    }
+                }
                 return errorType;
             }
 
