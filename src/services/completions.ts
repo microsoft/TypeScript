@@ -2017,13 +2017,17 @@ namespace ts.Completions {
                     case "static":
                         classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
                         break;
+                    case "override":
+                        classElementModifierFlags = classElementModifierFlags | ModifierFlags.Override;
+                        break;
                 }
             }
 
             // No member list for private methods
             if (!(classElementModifierFlags & ModifierFlags.Private)) {
                 // List of property symbols of base type that are not private and already implemented
-                const baseSymbols = flatMap(getAllSuperTypeNodes(decl), baseTypeNode => {
+                const baseTypeNodes = classElementModifierFlags & ModifierFlags.Override ? singleElementArray(getEffectiveBaseTypeNode(decl)) : getAllSuperTypeNodes(decl);
+                const baseSymbols = flatMap(baseTypeNodes, baseTypeNode => {
                     const type = typeChecker.getTypeAtLocation(baseTypeNode);
                     return classElementModifierFlags & ModifierFlags.Static ?
                         type?.symbol && typeChecker.getPropertiesOfType(typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl)) :
