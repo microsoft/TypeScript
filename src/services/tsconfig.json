@@ -117,6 +117,7 @@
         "refactors/convertParamsToDestructuredObject.ts",
         "refactors/convertStringOrTemplateLiteral.ts",
         "refactors/convertArrowFunctionOrFunctionExpression.ts",
+        "refactors/convertLetToConst.ts",
         "services.ts",
         "breakpoints.ts",
         "transform.ts",
