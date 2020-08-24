@@ -22006,11 +22006,11 @@ namespace ts {
                 }
             }
 
-            // If location is stringLiteral, it might be argument in ElementAccessExpression, like a["Q"].
-            // Deal it just like identifier/PropertyAccessExpression.
+            // If the location is a StringLiteral, it might be the argument to an ElementAccessExpression (e.g. like foo["bar"])
+            // Deal it the same way as we would with an Identifier or PropertyAccessExpression.
             if (location.kind === SyntaxKind.StringLiteral) {
                 const candidateExpression = location.parent;
-                if (isElementAccessExpression(candidateExpression) && !isAssignmentTarget(candidateExpression)) {
+                if (isElementAccessExpression(candidateExpression) && !isAssignmentTarget(candidateExpression) && candidateExpression.argumentExpression === location) {
                     const type = getTypeOfExpression(candidateExpression);
                     if (getExportSymbolOfValueSymbolIfExported(getNodeLinks(candidateExpression).resolvedSymbol) === symbol) {
                         return type;
