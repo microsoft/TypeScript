@@ -28,13 +28,7 @@ Output::
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1390: [0mThe `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-
-[7m1[0m {"compilerOptions":{"outFile":"/a/out.js"}}
-[7m [0m [91m                    ~~~~~~~~~[0m
-
-
-[[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -85,13 +79,7 @@ Output::
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
 
-[96ma/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1390: [0mThe `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-
-[7m1[0m {"compilerOptions":{"outFile":"/a/out.js"}}
-[7m [0m [91m                    ~~~~~~~~~[0m
-
-
-[[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

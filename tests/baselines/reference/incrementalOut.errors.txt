@@ -1,8 +1,0 @@
-error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-
-
-!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-==== tests/cases/compiler/incrementalOut.ts (0 errors) ====
-    const x = 10;
-    
-    

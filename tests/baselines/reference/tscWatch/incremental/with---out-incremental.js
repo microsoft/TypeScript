@@ -24,15 +24,6 @@ const y = 20;
 
 /a/lib/tsc.js -i
 Output::
-[96mtsconfig.json[0m:[93m1[0m:[93m40[0m - [91merror[0m[90m TS1390: [0mThe `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-
-[7m1[0m {"compilerOptions":{"incremental":true,"outFile":"out.js"}}
-[7m [0m [91m                                       ~~~~~~~~~[0m
-
-
-
-Found 1 error.
-
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
@@ -50,7 +41,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/out.js]
 var x = 10;

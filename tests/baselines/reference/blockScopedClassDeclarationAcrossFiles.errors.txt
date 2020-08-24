@@ -1,9 +1,0 @@
-error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-
-
-!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
-==== tests/cases/compiler/c.ts (0 errors) ====
-    let foo: typeof C;
-==== tests/cases/compiler/b.ts (0 errors) ====
-    class C { }
-    

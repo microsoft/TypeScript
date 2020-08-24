@@ -34,10 +34,10 @@ Output::
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
 
-[96ma/b/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1390: [0mThe `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+[96ma/b/project/src/main2.ts[0m:[93m1[0m:[93m114[0m - [91merror[0m[90m TS2694: [0mNamespace 'Common.SomeComponent.DynamicMenu' has no exported member 'z'.
 
-[7m1[0m {"compilerOptions":{"outFile":"../output/common.js","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
-[7m [0m [91m                    ~~~~~~~~~[0m
+[7m1[0m namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
+[7m [0m [91m                                                                                                                 ~[0m
 
 
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
