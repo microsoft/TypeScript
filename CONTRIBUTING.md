@@ -49,7 +49,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## What You'll Need
 
-0. A bug or feature you want to work on!
+0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
 1. [A Github account](https://github.com/join).
 2. A fork of the TypeScript repository on github, plus a local clone of it ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)).
 3. [Node](https://nodejs.org). Current and LTS will both work.
