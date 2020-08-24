@@ -3398,6 +3398,10 @@
         "category": "Error",
         "code": 4113
     },
+    "This parameter must convert into property declaration because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4114
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

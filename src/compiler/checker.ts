@@ -34559,6 +34559,16 @@ namespace ts {
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
 
             for (const member of node.members) {
+                if (isConstructorDeclaration(member)) {
+                    forEach(member.parameters, param => {
+                        if (isParameterPropertyDeclaration(param, member)) {
+                            checkClassMember(param, /*memberIsParameterProperty*/ true);
+                        }
+                    });
+                }
+                checkClassMember(member);
+            }
+            function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
                 if (baseWithThis) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
@@ -34570,7 +34580,10 @@ namespace ts {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                         }
                         else if (prop && baseProp && !hasOverride) {
-                            error(member, Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0, baseClassName);
+                            const diag = memberIsParameterProperty ?
+                                Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0 :
+                                Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
+                            error(member, diag, baseClassName);
                         }
                     }
                 }
