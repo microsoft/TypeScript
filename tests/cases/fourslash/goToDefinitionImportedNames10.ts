@@ -2,10 +2,10 @@
 // @allowjs: true
 
 // @Filename: a.js
-//// class Class {
+//// class /*classDefinition*/Class {
 ////   f;
 //// }
-//// module.exports./*classDefinition*/Class = Class;
+//// module.exports.Class = Class;
 
 // @Filename: b.js
 ////const { Class } = require("./a");

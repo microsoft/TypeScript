@@ -130,6 +130,12 @@ export namespace f {
     import self = f;
     export { self };
 }
+export function i(): void;
+export function ii(): void;
+export function jj(): void;
+export function j(): void;
+declare class Cls {
+}
 /**
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
@@ -146,7 +152,7 @@ export function g(a: {
  * @param {{x: string}} a
  * @param {{y: typeof module.exports.b}} b
  */
-export function h(a: {
+declare function hh(a: {
     x: string;
 }, b: {
     y: {
@@ -154,10 +160,4 @@ export function h(a: {
         cat: string;
     };
 }): void;
-export function i(): void;
-export function ii(): void;
-export function jj(): void;
-export function j(): void;
-declare class Cls {
-}
-export {};
+export { hh as h };

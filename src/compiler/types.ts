@@ -5499,6 +5499,7 @@ namespace ts {
     export const enum AssignmentDeclarationKind {
         None,
         /// exports.name = expr
+        /// module.exports.name = expr
         ExportsProperty,
         /// module.exports = expr
         ModuleExports,
