@@ -23193,7 +23193,7 @@ namespace ts {
                     if (node === right) {
                         return getContextualType(binaryExpression, contextFlags);
                     }
-                    else if (!(contextFlags! & ContextFlags.SkipBindingPatternsAndUnusedExpressions)) {
+                    else if (isAwaitExpression(skipParentheses(node)) && !(contextFlags! & ContextFlags.SkipBindingPatternsAndUnusedExpressions)) {
                         return voidType;
                     }
                     return undefined;
@@ -23610,13 +23610,13 @@ namespace ts {
                     return getContextualJsxElementAttributesType(<JsxOpeningLikeElement>parent, contextFlags);
                 case SyntaxKind.ExpressionStatement:
                 case SyntaxKind.VoidExpression:
-                    if (!(contextFlags! & ContextFlags.SkipBindingPatternsAndUnusedExpressions)) {
+                    if (isAwaitExpression(skipParentheses(node)) && !(contextFlags! & ContextFlags.SkipBindingPatternsAndUnusedExpressions)) {
                         return voidType;
                     }
                     break;
                 case SyntaxKind.ForStatement: {
                     const forStatement = parent as ForStatement;
-                    if (!(contextFlags! & ContextFlags.SkipBindingPatternsAndUnusedExpressions) && (node === forStatement.initializer || node === forStatement.incrementor)) {
+                    if (isAwaitExpression(skipParentheses(node)) && !(contextFlags! & ContextFlags.SkipBindingPatternsAndUnusedExpressions) && (node === forStatement.initializer || node === forStatement.incrementor)) {
                         return voidType;
                     }
                     break;
