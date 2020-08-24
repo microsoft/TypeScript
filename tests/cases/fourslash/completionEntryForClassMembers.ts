@@ -146,7 +146,7 @@ verify.completions(
             "classThatStartedWritingIdentifierAfterPrivateModifier",
             "classThatStartedWritingIdentifierAfterPrivateStaticModifier",
         ],
-        exact: ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(
+        exact: ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(
             name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
             ),
         isNewIdentifierLocation: true,

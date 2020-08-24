@@ -1080,6 +1080,7 @@ namespace FourSlashInterface {
                     case "symbol":
                     case "type":
                     case "unique":
+                    case "override":
                     case "unknown":
                     case "global":
                     case "bigint":
