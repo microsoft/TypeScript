@@ -1142,7 +1142,7 @@ namespace ts {
 
     /* @internal */
     export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword || idToken === SyntaxKind.OverrideKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {
