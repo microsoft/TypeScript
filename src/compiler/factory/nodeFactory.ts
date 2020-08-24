@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createTemplateTypeSpan,
+            updateTemplateTypeSpan,
             createKeywordTypeNode,
             createTypePredicateNode,
             updateTypePredicateNode,
@@ -138,6 +140,8 @@ namespace ts {
             updateMappedTypeNode,
             createLiteralTypeNode,
             updateLiteralTypeNode,
+            createTemplateType,
+            updateTemplateType,
             createObjectBindingPattern,
             updateObjectBindingPattern,
             createArrayBindingPattern,
@@ -1594,6 +1598,23 @@ namespace ts {
                 : node;
         }
 
+        // @api
+        function createTemplateTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            const node = createBaseNode<TemplateTypeSpan>(SyntaxKind.TemplateTypeSpan);
+            node.type = type;
+            node.literal = literal;
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateTemplateTypeSpan(node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            return node.type !== type
+                || node.literal !== literal
+                ? update(createTemplateTypeSpan(type, literal), node)
+                : node;
+        }
+
         //
         // Types
         //
@@ -1882,6 +1903,23 @@ namespace ts {
         function updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration) {
             return node.typeParameter !== typeParameter
                 ? update(createInferTypeNode(typeParameter), node)
+                : node;
+        }
+
+        // @api
+        function createTemplateType(head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]) {
+            const node = createBaseNode<TemplateTypeNode>(SyntaxKind.TemplateType);
+            node.head = head;
+            node.templateSpans = createNodeArray(templateSpans);
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateTemplateType(node: TemplateTypeNode, head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]) {
+            return node.head !== head
+                || node.templateSpans !== templateSpans
+                ? update(createTemplateType(head, templateSpans), node)
                 : node;
         }
 

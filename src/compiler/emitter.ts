@@ -1311,6 +1311,8 @@ namespace ts {
                         return emitConstructSignature(<ConstructSignatureDeclaration>node);
                     case SyntaxKind.IndexSignature:
                         return emitIndexSignature(<IndexSignatureDeclaration>node);
+                    case SyntaxKind.TemplateTypeSpan:
+                        return emitTemplateTypeSpan(<TemplateTypeSpan>node);
 
                     // Types
                     case SyntaxKind.TypePredicate:
@@ -1355,6 +1357,8 @@ namespace ts {
                         return emitMappedType(<MappedTypeNode>node);
                     case SyntaxKind.LiteralType:
                         return emitLiteralType(<LiteralTypeNode>node);
+                    case SyntaxKind.TemplateType:
+                        return emitTemplateType(<TemplateTypeNode>node);
                     case SyntaxKind.ImportType:
                         return emitImportTypeNode(<ImportTypeNode>node);
                     case SyntaxKind.JSDocAllType:
@@ -2004,6 +2008,11 @@ namespace ts {
             writeTrailingSemicolon();
         }
 
+        function emitTemplateTypeSpan(node: TemplateTypeSpan) {
+            emit(node.type);
+            emit(node.literal);
+        }
+
         function emitSemicolonClassElement() {
             writeTrailingSemicolon();
         }
@@ -2220,6 +2229,11 @@ namespace ts {
 
         function emitLiteralType(node: LiteralTypeNode) {
             emitExpression(node.literal);
+        }
+
+        function emitTemplateType(node: TemplateTypeNode) {
+            emit(node.head);
+            emitList(node, node.templateSpans, ListFormat.TemplateExpressionSpans);
         }
 
         function emitImportTypeNode(node: ImportTypeNode) {

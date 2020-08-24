@@ -424,6 +424,10 @@ namespace ts {
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNode, cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
                 return visitNode(cbNode, (<TemplateSpan>node).expression) || visitNode(cbNode, (<TemplateSpan>node).literal);
+            case SyntaxKind.TemplateType:
+                return visitNode(cbNode, (<TemplateTypeNode>node).head) || visitNodes(cbNode, cbNodes, (<TemplateTypeNode>node).templateSpans);
+            case SyntaxKind.TemplateTypeSpan:
+                return visitNode(cbNode, (<TemplateTypeSpan>node).type) || visitNode(cbNode, (<TemplateTypeSpan>node).literal);
             case SyntaxKind.ComputedPropertyName:
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
@@ -2576,6 +2580,40 @@ namespace ts {
             );
         }
 
+        function parseTemplateType(): TemplateTypeNode {
+            const pos = getNodePos();
+            return finishNode(
+                factory.createTemplateType(
+                    parseTemplateHead(/*isTaggedTemplate*/ false),
+                    parseTemplateTypeSpans()
+                ),
+                pos
+            );
+        }
+
+        function parseTemplateTypeSpans() {
+            const pos = getNodePos();
+            const list = [];
+            let node: TemplateTypeSpan;
+            do {
+                node = parseTemplateTypeSpan();
+                list.push(node);
+            }
+            while (node.literal.kind === SyntaxKind.TemplateMiddle);
+            return createNodeArray(list, pos);
+        }
+
+        function parseTemplateTypeSpan(): TemplateTypeSpan {
+            const pos = getNodePos();
+            return finishNode(
+                factory.createTemplateTypeSpan(
+                    parseType(),
+                    parseLiteralOfTemplateSpan(/*isTaggedTemplate*/ false)
+                ),
+                pos
+            );
+        }
+
         function parseLiteralOfTemplateSpan(isTaggedTemplate: boolean) {
             if (token() === SyntaxKind.CloseBraceToken) {
                 reScanTemplateToken(isTaggedTemplate);
@@ -3436,6 +3474,8 @@ namespace ts {
                     return parseImportType();
                 case SyntaxKind.AssertsKeyword:
                     return lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? parseAssertsTypePredicate() : parseTypeReference();
+                case SyntaxKind.TemplateHead:
+                    return parseTemplateType();
                 default:
                     return parseTypeReference();
             }
@@ -3477,6 +3517,8 @@ namespace ts {
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.AssertsKeyword:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
                     return true;
                 case SyntaxKind.FunctionKeyword:
                     return !inStartOfParameter;

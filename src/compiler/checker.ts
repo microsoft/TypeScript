@@ -692,6 +692,7 @@ namespace ts {
         const intersectionTypes = new Map<string, Type>();
         const literalTypes = new Map<string, LiteralType>();
         const indexedAccessTypes = new Map<string, IndexedAccessType>();
+        const templateTypes = new Map<string, TemplateType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
@@ -742,6 +743,7 @@ namespace ts {
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
+        const templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType]);
 
         const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t);
         const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
@@ -4457,6 +4459,17 @@ namespace ts {
                     context.approximateLength += 6;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
                     return factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, indexTypeNode);
+                }
+                if (type.flags & TypeFlags.Template) {
+                    const texts = (<TemplateType>type).texts;
+                    const types = (<TemplateType>type).types;
+                    const templateHead = factory.createTemplateHead(texts[0]);
+                    const templateSpans = factory.createNodeArray(
+                        map(types, (t, i) => factory.createTemplateTypeSpan(
+                            typeToTypeNodeHelper(t, context),
+                            (i < types.length - 1 ? factory.createTemplateMiddle : factory.createTemplateTail)(texts[i + 1]))));
+                    context.approximateLength += 2;
+                    return factory.createTemplateType(templateHead, templateSpans);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
@@ -10748,7 +10761,9 @@ namespace ts {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
                 return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
             }
-            return type.flags & TypeFlags.Index ? keyofConstraintType : undefined;
+            return type.flags & TypeFlags.Index ? keyofConstraintType :
+                type.flags & TypeFlags.Template ? stringType :
+                undefined;
         }
 
         /**
@@ -10837,6 +10852,9 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.Index) {
                     return keyofConstraintType;
+                }
+                if (t.flags & TypeFlags.Template) {
+                    return stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
@@ -11851,6 +11869,11 @@ namespace ts {
                             grandParent.kind === SyntaxKind.RestType ||
                             grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
                             inferences = append(inferences, createArrayType(unknownType));
+                        }
+                        // When an 'infer T' declaration is immediately contained in a string template type, we infer a 'string'
+                        // constraint.
+                        else if (grandParent.kind === SyntaxKind.TemplateTypeSpan) {
+                            inferences = append(inferences, stringType);
                         }
                     }
                 }
@@ -13349,6 +13372,68 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromTemplateTypeNode(node: TemplateTypeNode) {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getTemplateType(
+                    [node.head.text, ...map(node.templateSpans, span => span.literal.text)],
+                    map(node.templateSpans, span => getTypeFromTypeNode(span.type)));
+            }
+            return links.resolvedType;
+        }
+
+        function getTemplateType(texts: readonly string[], types: readonly Type[]): Type {
+            const unionIndex = findIndex(types, t => !!(t.flags & (TypeFlags.Never | TypeFlags.Union)));
+            if (unionIndex >= 0) {
+                return mapType(types[unionIndex], t => getTemplateType(texts, replaceElement(types, unionIndex, t)));
+            }
+            let i = 0;
+            while (i < types.length) {
+                const t = types[i];
+                if (t.flags & TypeFlags.Literal) {
+                    const s = getTemplateStringForType(t) || "";
+                    texts = [...texts.slice(0, i), texts[i] + s + texts[i + 1], ...texts.slice(i + 2)];
+                    types = [...types.slice(0, i), ...types.slice(i + 1)];
+                }
+                else if (t.flags & TypeFlags.Template) {
+                    const ts = (<TemplateType>t).texts;
+                    texts = [...texts.slice(0, i), texts[i] + ts[0], ...ts.slice(1, -1), ts[ts.length - 1] + texts[i + 1], ...texts.slice(i + 2)];
+                    types = [...types.slice(0, i), ...(<TemplateType>t).types, ...types.slice(i + 1)];
+                    i += (<TemplateType>t).types.length;
+                }
+                else if (isGenericIndexType(t)) {
+                    i++;
+                }
+                else {
+                    return stringType;
+                }
+            }
+            if (types.length === 0) {
+                return getLiteralType(texts[0]);
+            }
+            const id = `${getTypeListId(types)}|${map(texts, t => t.length).join(",")}|${texts.join("")}`;
+            let type = templateTypes.get(id);
+            if (!type) {
+                templateTypes.set(id, type = createTemplateType(texts, types));
+            }
+            return type;
+        }
+
+        function getTemplateStringForType(type: Type) {
+            return type.flags & TypeFlags.StringLiteral ? (<StringLiteralType>type).value :
+                type.flags & TypeFlags.NumberLiteral ? "" + (<NumberLiteralType>type).value :
+                type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((<BigIntLiteralType>type).value) :
+                type.flags & TypeFlags.BooleanLiteral ? (<IntrinsicType>type).intrinsicName :
+                undefined;
+        }
+
+        function createTemplateType(texts: readonly string[], types: readonly Type[]) {
+            const type = <TemplateType>createType(TypeFlags.Template);
+            type.texts = texts;
+            type.types = types;
+            return type;
+        }
+
         function createIndexedAccessType(objectType: Type, indexType: Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
@@ -13581,7 +13666,7 @@ namespace ts {
                 }
                 return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsGenericIndexType);
             }
-            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index));
+            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.Template));
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -14079,7 +14164,7 @@ namespace ts {
         }
 
         function isEmptyObjectTypeOrSpreadsIntoEmptyObject(type: Type) {
-            return isEmptyObjectType(type) || !!(type.flags & (TypeFlags.Null | TypeFlags.Undefined | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index));
+            return isEmptyObjectType(type) || !!(type.flags & (TypeFlags.Null | TypeFlags.Undefined | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index | TypeFlags.Template));
         }
 
         function isSinglePropertyAnonymousObjectType(type: Type) {
@@ -14165,7 +14250,7 @@ namespace ts {
                 }
                 return mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly));
             }
-            if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
+            if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index | TypeFlags.Template)) {
                 return left;
             }
 
@@ -14497,6 +14582,8 @@ namespace ts {
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
+                case SyntaxKind.TemplateType:
+                    return getTypeFromTemplateTypeNode(<TemplateTypeNode>node);
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier, qualified name, or property access expression is a type expression
@@ -14957,6 +15044,9 @@ namespace ts {
             }
             if (flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
+            }
+            if (flags & TypeFlags.Template) {
+                return getTemplateType((<TemplateType>type).texts, instantiateTypes((<TemplateType>type).types, mapper));
             }
             if (flags & TypeFlags.IndexedAccess) {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), /*accessNode*/ undefined, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
@@ -19521,6 +19611,9 @@ namespace ts {
                         inferFromTypes(sourceType, target);
                     }
                 }
+                else if (target.flags & TypeFlags.Template) {
+                    inferToTemplateType(source, <TemplateType>target);
+                }
                 else {
                     source = getReducedType(source);
                     if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
@@ -19573,8 +19666,8 @@ namespace ts {
                 // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
                 // the source side and the target side.
                 const saveExpandingFlags = expandingFlags;
-                const sourceIdentity = getRecursionIdentity(source);
-                const targetIdentity = getRecursionIdentity(target);
+                const sourceIdentity = getRecursionIdentity(source) || source;
+                const targetIdentity = getRecursionIdentity(target) || target;
                 if (sourceIdentity && contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
                 if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
                 if (expandingFlags !== ExpandingFlags.Both) {
@@ -19799,6 +19892,37 @@ namespace ts {
                 }
             }
 
+            function inferToTemplateType(source: Type, target: TemplateType) {
+                if (source.flags & (TypeFlags.StringLike | TypeFlags.Index)) {
+                    const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateType(<StringLiteralType>source, target) :
+                        source.flags & TypeFlags.Template && arraysEqual((<TemplateType>source).texts, target.texts) ? (<TemplateType>source).types :
+                        undefined;
+                    const types = target.types;
+                    for (let i = 0; i < types.length; i++) {
+                        inferFromTypes(matches ? matches[i] : source.flags & TypeFlags.StringLiteral ? neverType : stringType, types[i]);
+                    }
+                }
+            }
+
+            function inferLiteralsFromTemplateType(source: StringLiteralType, target: TemplateType): Type[] | undefined {
+                const str = source.value;
+                const texts = target.texts;
+                const startText = texts[0];
+                if (!(str.startsWith(startText))) return undefined;
+                const lastIndex = texts.length - 1;
+                const matches = [];
+                let pos = startText.length;
+                for (let i = 1; i <= lastIndex; i++) {
+                    const delim = texts[i];
+                    if (!delim && i < lastIndex) return undefined;
+                    const delimPos = delim ? str.indexOf(delim, pos) : str.length;
+                    if (delimPos < 0) return undefined;
+                    matches.push(getLiteralType(str.slice(pos, delimPos)));
+                    pos = delimPos + delim.length;
+                }
+                return pos === str.length ? matches : undefined;
+            }
+
             function inferFromObjectTypes(source: Type, target: Type) {
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
                     (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
@@ -19961,7 +20085,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index);
+            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.Template);
         }
 
         function isObjectLiteralType(type: Type) {
@@ -25991,7 +26115,7 @@ namespace ts {
                 else {
                     const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
                     const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
-                    const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
+                    const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.Template);
                     types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
                     flags.push(ElementFlags.Required);
                 }
@@ -29007,7 +29131,7 @@ namespace ts {
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
             if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
-                  isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TypeParameter))) {
+                  isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.Template | TypeFlags.TypeParameter))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
             if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive)) {
@@ -29956,7 +30080,7 @@ namespace ts {
                 }
                 // If the contextual type is a literal of a particular primitive type, we consider this a
                 // literal context for all literals of that primitive type.
-                return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.Template) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                     contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                     contextualType.flags & TypeFlags.BigIntLiteral && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
                     contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
@@ -31190,6 +31314,17 @@ namespace ts {
             }
             checkSourceElement(node.typeParameter);
             registerForUnusedIdentifiersCheck(node);
+        }
+
+        function checkTemplateType(node: TemplateTypeNode) {
+            forEachChild(node, checkSourceElement);
+            for (const span of node.templateSpans) {
+                const type = getTypeFromTypeNode(span.type);
+                checkTypeAssignableTo(type, templateConstraintType, span.type);
+                if (!everyType(type, t => !!(t.flags & TypeFlags.Literal) || isGenericIndexType(t))) {
+                    error(span.type, Diagnostics.Template_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
+                }
+            }
         }
 
         function checkImportType(node: ImportTypeNode) {
@@ -35800,6 +35935,8 @@ namespace ts {
                     return checkConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
+                case SyntaxKind.TemplateType:
+                    return checkTemplateType(<TemplateTypeNode>node);
                 case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.NamedTupleMember:

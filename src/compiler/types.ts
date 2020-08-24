@@ -230,6 +230,8 @@ namespace ts {
         MappedType,
         LiteralType,
         NamedTupleMember,
+        TemplateType,
+        TemplateTypeSpan,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -657,6 +659,8 @@ namespace ts {
         | SyntaxKind.IndexedAccessType
         | SyntaxKind.MappedType
         | SyntaxKind.LiteralType
+        | SyntaxKind.TemplateType
+        | SyntaxKind.TemplateTypeSpan
         | SyntaxKind.ImportType
         | SyntaxKind.ExpressionWithTypeArguments
         | SyntaxKind.JSDocTypeExpression
@@ -1638,6 +1642,19 @@ namespace ts {
 
     export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+
+    export interface TemplateTypeNode extends TypeNode {
+        kind: SyntaxKind.TemplateType,
+        readonly head: TemplateHead;
+        readonly templateSpans: NodeArray<TemplateTypeSpan>;
+    }
+
+    export interface TemplateTypeSpan extends TypeNode {
+        readonly kind: SyntaxKind.TemplateTypeSpan,
+        readonly parent: TemplateTypeNode;
+        readonly type: TypeNode;
+        readonly literal: TemplateMiddle | TemplateTail;
+   }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -4837,6 +4854,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        Template        = 1 << 27,  // String template type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4854,7 +4872,7 @@ namespace ts {
         Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral,
+        StringLike = String | StringLiteral | Template,
         NumberLike = Number | NumberLiteral | Enum,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
@@ -4867,7 +4885,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index,
+        InstantiablePrimitive = Index | Template,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
@@ -4875,7 +4893,7 @@ namespace ts {
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
-        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution,
+        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | Template,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -5314,6 +5332,11 @@ namespace ts {
         mapper?: TypeMapper;
         /* @internal */
         combinedMapper?: TypeMapper;
+    }
+
+    export interface TemplateType extends InstantiableType {
+        texts: readonly string[];  // Always one element longer than types
+        types: readonly Type[];  // Always at least one element
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
@@ -6695,6 +6718,8 @@ namespace ts {
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        createTemplateTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
+        updateTemplateTypeSpan(node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
 
         //
         // Types
@@ -6744,6 +6769,8 @@ namespace ts {
         updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
+        createTemplateType(head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]): TemplateTypeNode;
+        updateTemplateType(node: TemplateTypeNode, head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]): TemplateTypeNode;
 
         //
         // Binding Patterns
