@@ -110,6 +110,7 @@
         "refactors/convertImport.ts",
         "refactors/convertToOptionalChainExpression.ts",
         "refactors/convertOverloadListToSingleSignature.ts",
+        "refactors/convertParameterToPropertyDeclaration.ts",
         "refactors/extractSymbol.ts",
         "refactors/extractType.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
