@@ -9703,12 +9703,14 @@ namespace ts {
 
                 // fill in any as-yet-unresolved late-bound members.
                 const lateSymbols = createSymbolTable() as UnderscoreEscapedMap<TransientSymbol>;
-                for (const decl of symbol.declarations) {
-                    const members = getMembersOfDeclaration(decl);
-                    if (members) {
-                        for (const member of members) {
-                            if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
-                                lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                if (symbol.declarations) {
+                    for (const decl of symbol.declarations) {
+                        const members = getMembersOfDeclaration(decl);
+                        if (members) {
+                            for (const member of members) {
+                                if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
+                                    lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                                }
                             }
                         }
                     }
@@ -27753,7 +27755,6 @@ namespace ts {
                         newSymbol.target = resolveSymbol(symbol);
                         memberTable.set(InternalSymbolName.Default, newSymbol);
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
-                        anonymousSymbol.declarations = symbol.declarations ? symbol.declarations.slice() : [];
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                         anonymousSymbol.type = defaultContainingObject;
                         synthType.syntheticType = isValidSpreadType(type) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*objectFlags*/ 0, /*readonly*/ false) : defaultContainingObject;
