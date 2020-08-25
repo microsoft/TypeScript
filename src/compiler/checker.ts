@@ -9703,14 +9703,12 @@ namespace ts {
 
                 // fill in any as-yet-unresolved late-bound members.
                 const lateSymbols = createSymbolTable() as UnderscoreEscapedMap<TransientSymbol>;
-                if (symbol.declarations) {
-                    for (const decl of symbol.declarations) {
-                        const members = getMembersOfDeclaration(decl);
-                        if (members) {
-                            for (const member of members) {
-                                if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
-                                    lateBindMember(symbol, earlySymbols, lateSymbols, member);
-                                }
+                for (const decl of symbol.declarations || emptyArray) {
+                    const members = getMembersOfDeclaration(decl);
+                    if (members) {
+                        for (const member of members) {
+                            if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
+                                lateBindMember(symbol, earlySymbols, lateSymbols, member);
                             }
                         }
                     }
