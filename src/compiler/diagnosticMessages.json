@@ -5916,6 +5916,14 @@
         "category": "Message",
         "code": 95147
     },
+    "Convert to property declaration and add 'override' modifier": {
+        "category": "Message",
+        "code": 95148
+    },
+    "Convert all to property declaration and add 'override' modifier": {
+        "category": "Message",
+        "code": 95149
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
