@@ -101,7 +101,13 @@ namespace ts.moduleSpecifiers {
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
 
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
-        const importedFileIsInNodeModules = some(modulePaths, ({ path }) => pathContainsNodeModules(path));
+        const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
+
+        // Module specifier priority:
+        //   1. "Bare package specifiers" (e.g. "@foo/bar") resulting from a path through node_modules to a package.json's "types" entry
+        //   2. Specifiers generated using "paths" from tsconfig
+        //   3. Non-relative specfiers resulting from a path through node_modules (e.g. "@foo/bar/path/to/file")
+        //   4. Relative paths
         let nodeModulesSpecifiers: string[] | undefined;
         let pathsSpecifiers: string[] | undefined;
         let relativeSpecifiers: string[] | undefined;
@@ -109,8 +115,8 @@ namespace ts.moduleSpecifiers {
             const specifier = tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions);
             nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
             if (specifier && modulePath.isRedirect) {
-                // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar", not "@foo/bar/path/to/file").
-                // No other specifier will be this good, so stop looking.
+                // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
+                // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
                 return nodeModulesSpecifiers!;
             }
 
@@ -120,6 +126,15 @@ namespace ts.moduleSpecifiers {
                     pathsSpecifiers = append(pathsSpecifiers, local);
                 }
                 else if (!importedFileIsInNodeModules || modulePath.isInNodeModules) {
+                    // Why this extra conditional, not just an `else`? If some path to the file contained
+                    // 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
+                    // that means we had to go through a *sibling's* node_modules, not one we can access directly.
+                    // If some path to the file was in node_modules but another was not, this likely indicates that
+                    // we have a monorepo structure with symlinks. In this case, the non-node_modules path is
+                    // probably the realpath, e.g. "../bar/path/to/file", but a relative path to another package
+                    // in a monorepo is probably not portable. So, the module specifier we actually go with will be
+                    // the relative path through node_modules, so that the declaration emitter can produce a
+                    // portability error. (See declarationEmitReexportedSymlinkReference3)
                     relativeSpecifiers = append(relativeSpecifiers, local);
                 }
             }
