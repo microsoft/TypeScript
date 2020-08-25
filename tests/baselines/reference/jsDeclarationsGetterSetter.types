@@ -42,9 +42,9 @@ export class D {}
 
 Object.defineProperty(D.prototype, "x", {
 >Object.defineProperty(D.prototype, "x", {    get() {        return 12;    }}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >D.prototype : D
 >D : typeof D
 >prototype : D
@@ -64,9 +64,9 @@ export class E {}
 
 Object.defineProperty(E.prototype, "x", {
 >Object.defineProperty(E.prototype, "x", {    /**     * @param {number} _arg     */    set(_arg) {}}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >E.prototype : E
 >E : typeof E
 >prototype : E
@@ -87,9 +87,9 @@ export class F {}
 
 Object.defineProperty(F.prototype, "x", {
 >Object.defineProperty(F.prototype, "x", {    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}}) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >F.prototype : F
 >F : typeof F
 >prototype : F

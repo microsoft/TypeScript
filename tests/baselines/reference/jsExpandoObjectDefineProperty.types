@@ -5,9 +5,9 @@ var chrome = {}
 
 Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 >Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >chrome : typeof chrome
 >'devtools' : "devtools"
 >{ value: {}, enumerable: true } : { value: {}; enumerable: true; }

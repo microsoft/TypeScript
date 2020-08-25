@@ -136,10 +136,10 @@ var aa = obj.x;
 
 // Dotted property access of property that exists on value's apparent type
 var bb = obj.hasOwnProperty;
->bb : (v: string | number | symbol) => boolean
->obj.hasOwnProperty : (v: string | number | symbol) => boolean
+>bb : (v: PropertyKey) => boolean
+>obj.hasOwnProperty : (v: PropertyKey) => boolean
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 
 // Dotted property access of property that doesn't exist on value's apparent type
 var cc = obj.qqq; // error

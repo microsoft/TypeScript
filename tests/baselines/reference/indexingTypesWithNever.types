@@ -270,7 +270,7 @@ type Example<T extends Record<'a', string>> = T['a'];
 >Example : Example<T>
 
 type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
->Res1 : "x" | "y"
+>Res1 : Example<{ a: "x"; } | { a: "y"; }>
 >a : "x"
 >a : "y"
 

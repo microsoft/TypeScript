@@ -406,7 +406,7 @@ function f4() {
 
     const c2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 >c2 : { a: 0 | 1; b: "foo" | "bar"; }
->a : 0 | 1
+>a : Bit
 >b : "foo" | "bar"
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
 >a : 1
@@ -424,7 +424,7 @@ function f4() {
 
     let x2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 >x2 : { a: 0 | 1; b: "foo" | "bar"; }
->a : 0 | 1
+>a : Bit
 >b : "foo" | "bar"
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
 >a : 1
@@ -552,7 +552,7 @@ class C2 {
 >bar : () => 1 | 0
 
         return cond ? 0 : 1;
->cond ? 0 : 1 : 0 | 1
+>cond ? 0 : 1 : Bit
 >cond : boolean
 >0 : 0
 >1 : 1
@@ -756,19 +756,19 @@ function append<T>(a: T[], x: T): T[] {
 }
 
 type Bit = 0 | 1;
->Bit : 0 | 1
+>Bit : Bit
 
 let aa = makeArray<Bit>(0);
->aa : (0 | 1)[]
->makeArray<Bit>(0) : (0 | 1)[]
+>aa : Bit[]
+>makeArray<Bit>(0) : Bit[]
 >makeArray : <T>(x: T) => T[]
 >0 : 0
 
 aa = append(aa, 1);
->aa = append(aa, 1) : (0 | 1)[]
->aa : (0 | 1)[]
->append(aa, 1) : (0 | 1)[]
+>aa = append(aa, 1) : Bit[]
+>aa : Bit[]
+>append(aa, 1) : Bit[]
 >append : <T>(a: T[], x: T) => T[]
->aa : (0 | 1)[]
+>aa : Bit[]
 >1 : 1
 

@@ -189,10 +189,10 @@ type IUnknownChoiceList = {};
 >IUnknownChoiceList : IUnknownChoiceList
 
 var defaultChoices: choices<{}>;
->defaultChoices : { shoes: boolean; food: boolean; }
+>defaultChoices : choices<{}>
 
 var defaultChoicesAndEmpty: choices<{} & {}>;
->defaultChoicesAndEmpty : { shoes: boolean; food: boolean; }
+>defaultChoicesAndEmpty : choices<{}>
 
 var myChoices: choices<IMyChoiceList>;
 >myChoices : choices<IMyChoiceList>
@@ -201,10 +201,10 @@ var myChoicesAndEmpty: choices<IMyChoiceList & {}>;
 >myChoicesAndEmpty : choices<IMyChoiceList>
 
 var unknownChoices: choices<IUnknownChoiceList>;
->unknownChoices : { shoes: boolean; food: boolean; }
+>unknownChoices : choices<{}>
 
 var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
->unknownChoicesAndEmpty : { shoes: boolean; food: boolean; }
+>unknownChoicesAndEmpty : choices<{}>
 
 // Repro from #38672
 

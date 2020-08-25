@@ -110,10 +110,10 @@ type T22 = T20[0 | 1];
 >T22 : T22
 
 type T23 = T20[0 | 1 | 2];
->T23 : string | number | boolean
+>T23 : T23
 
 type T24 = T20[0 | 1 | 2 | 3];
->T24 : string | number | boolean
+>T24 : T23
 
 type T25 = T20[1 | 2 | 3];
 >T25 : T25
@@ -125,7 +125,7 @@ type T27 = T20[3];
 >T27 : boolean
 
 type T28 = T20[number];
->T28 : string | number | boolean
+>T28 : T23
 
 declare const t: T20;
 >t : T20
@@ -158,8 +158,8 @@ let e3 = t[3];  // boolean
 >3 : 3
 
 let ex = t[x];  // number | string | boolean
->ex : string | number | boolean
->t[x] : string | number | boolean
+>ex : T23
+>t[x] : T23
 >t : T20
 >x : number
 

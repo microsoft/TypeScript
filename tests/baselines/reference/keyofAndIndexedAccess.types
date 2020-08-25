@@ -125,7 +125,7 @@ type NAME = "name";
 >NAME : "name"
 
 type WIDTH_OR_HEIGHT = "width" | "height";
->WIDTH_OR_HEIGHT : "width" | "height"
+>WIDTH_OR_HEIGHT : WIDTH_OR_HEIGHT
 
 type Q10 = Shape["name"];  // string
 >Q10 : string
@@ -225,7 +225,7 @@ function f10(shape: Shape) {
 >getProperty(shape, cond ? "width" : "height") : number
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -251,7 +251,7 @@ function f10(shape: Shape) {
 >setProperty(shape, cond ? "width" : "height", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -391,7 +391,7 @@ function f20(component: Component<Shape>) {
 >component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
 >component : Component<Shape>
 >getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -420,7 +420,7 @@ function f20(component: Component<Shape>) {
 >component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
 >component : Component<Shape>
 >setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -507,7 +507,7 @@ function f31<K extends keyof Shape>(key: K) {
 }
 
 function f32<K extends "width" | "height">(key: K) {
->f32 : <K extends "width" | "height">(key: K) => Shape[K]
+>f32 : <K extends WIDTH_OR_HEIGHT>(key: K) => Shape[K]
 >key : K
 
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
@@ -1207,15 +1207,15 @@ type S2 = {
 };
 
 function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
->f90 : <T extends S2, K extends "a" | "b">(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) => void
+>f90 : <T extends S2, K extends KeyTypes>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) => void
 >x1 : string
->x2 : T["a" | "b"]
+>x2 : T[KeyTypes]
 >x3 : S2[K]
 
     x1 = x2;
->x1 = x2 : T["a" | "b"]
+>x1 = x2 : T[KeyTypes]
 >x1 : string
->x2 : T["a" | "b"]
+>x2 : T[KeyTypes]
 
     x1 = x3;
 >x1 = x3 : S2[K]
@@ -1224,12 +1224,12 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 
     x2 = x1;
 >x2 = x1 : string
->x2 : T["a" | "b"]
+>x2 : T[KeyTypes]
 >x1 : string
 
     x2 = x3;
 >x2 = x3 : S2[K]
->x2 : T["a" | "b"]
+>x2 : T[KeyTypes]
 >x3 : S2[K]
 
     x3 = x1;
@@ -1238,9 +1238,9 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x1 : string
 
     x3 = x2;
->x3 = x2 : T["a" | "b"]
+>x3 = x2 : T[KeyTypes]
 >x3 : S2[K]
->x2 : T["a" | "b"]
+>x2 : T[KeyTypes]
 
     x1.length;
 >x1.length : number
@@ -1249,7 +1249,7 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 
     x2.length;
 >x2.length : number
->x2 : T["a" | "b"]
+>x2 : T[KeyTypes]
 >length : number
 
     x3.length;
@@ -1688,13 +1688,13 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 // Repro from #13073
 
 type KeyTypes = "a" | "b"
->KeyTypes : "a" | "b"
+>KeyTypes : KeyTypes
 
 let MyThingy: { [key in KeyTypes]: string[] };
 >MyThingy : { a: string[]; b: string[]; }
 
 function addToMyThingy<S extends KeyTypes>(key: S) {
->addToMyThingy : <S extends "a" | "b">(key: S) => void
+>addToMyThingy : <S extends KeyTypes>(key: S) => void
 >key : S
 
     MyThingy[key].push("a");

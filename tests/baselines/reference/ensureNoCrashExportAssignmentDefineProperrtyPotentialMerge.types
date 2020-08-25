@@ -14,9 +14,9 @@ module.exports = 12;
 
 Object.defineProperty(module, "exports", { value: "oh no" });
 >Object.defineProperty(module, "exports", { value: "oh no" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >module : typeof module
 >"exports" : "exports"
 >{ value: "oh no" } : { value: string; }
@@ -59,9 +59,9 @@ B.NS = require("./namespacey");
 
 Object.defineProperty(B, "NS", { value: "why though", writable: true });
 >Object.defineProperty(B, "NS", { value: "why though", writable: true }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >B : typeof B
 >"NS" : "NS"
 >{ value: "why though", writable: true } : { value: string; writable: true; }

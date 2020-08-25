@@ -32,7 +32,7 @@ type T10 = null & never;
 >null : null
 
 type T11 = { a: string } | never;
->T11 : { a: string; }
+>T11 : T11
 >a : string
 
 type T12 = { a: string } & never;

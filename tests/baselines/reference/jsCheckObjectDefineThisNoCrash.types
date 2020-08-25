@@ -6,9 +6,9 @@ class C {
         // Neither of the following should be recognized as declarations yet
         Object.defineProperty(this, "_prop", { value: {} });
 >Object.defineProperty(this, "_prop", { value: {} }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >this : this
 >"_prop" : "_prop"
 >{ value: {} } : { value: {}; }
@@ -17,9 +17,9 @@ class C {
 
         Object.defineProperty(this._prop, "num", { value: 12 });
 >Object.defineProperty(this._prop, "num", { value: 12 }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >this._prop : any
 >this : this
 >_prop : any

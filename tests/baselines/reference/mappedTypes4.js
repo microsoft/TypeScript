@@ -106,7 +106,7 @@ declare type B = {
 declare type C = {
     c: string;
 };
-declare function f1(x: A | B | C | undefined): Boxified<A> | Boxified<B> | Boxified<C> | undefined;
+declare function f1(x: A | B | C | undefined): Boxified<A | B | C | undefined>;
 declare type T00 = Partial<A | B | C>;
 declare type T01 = Readonly<A | B | C | null | undefined>;
 declare type T02 = Boxified<A | B[] | C | string>;

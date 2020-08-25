@@ -129,7 +129,7 @@ declare let e0: number;
 declare let e1: string;
 declare let e2: boolean;
 declare let e3: boolean;
-declare let ex: string | number | boolean;
+declare let ex: T23;
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
 declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;

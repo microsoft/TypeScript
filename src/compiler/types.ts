@@ -4893,6 +4893,8 @@ namespace ts {
         IncludesWildcard = IndexedAccess,
         /* @internal */
         IncludesEmptyObject = Conditional,
+        /* @internal */
+        SupportsAliases = Union | Intersection | Object | IndexedAccess | Conditional, // This list is likely open to expansion
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -5018,7 +5020,9 @@ namespace ts {
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+        /* @internal */
+        SupportsAliases = Anonymous | Mapped | ReverseMapped | Reference,
     }
 
     /* @internal */
@@ -5409,10 +5413,10 @@ namespace ts {
 
     /* @internal */
     export type TypeMapper =
-        | { kind: TypeMapKind.Simple, source: Type, target: Type }
-        | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
-        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
-        | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
+        | { kind: TypeMapKind.Simple, source: Type, target: Type, aliasCache?: Set<Type> }
+        | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined, aliasCache?: Set<Type> }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type, aliasCache?: Set<Type> }
+        | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper, aliasCache?: Set<Type> };
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type

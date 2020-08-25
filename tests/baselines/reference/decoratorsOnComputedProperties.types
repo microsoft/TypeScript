@@ -2,7 +2,7 @@
 function x(o: object, k: PropertyKey) { }
 >x : (o: object, k: PropertyKey) => void
 >o : object
->k : string | number | symbol
+>k : PropertyKey
 
 let i = 0;
 >i : number
@@ -31,25 +31,25 @@ class A {
 >A : A
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -84,13 +84,13 @@ class A {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -101,12 +101,12 @@ class A {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -118,25 +118,25 @@ void class B {
 >B : typeof B
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -171,13 +171,13 @@ void class B {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -188,12 +188,12 @@ void class B {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -204,25 +204,25 @@ class C {
 >C : C
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -257,13 +257,13 @@ class C {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -274,12 +274,12 @@ class C {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -297,25 +297,25 @@ void class D {
 >D : typeof D
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -350,13 +350,13 @@ void class D {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -367,12 +367,12 @@ void class D {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -389,25 +389,25 @@ class E {
 >E : E
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -442,13 +442,13 @@ class E {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -465,12 +465,12 @@ class E {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -482,25 +482,25 @@ void class F {
 >F : typeof F
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -535,13 +535,13 @@ void class F {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -558,12 +558,12 @@ void class F {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -574,25 +574,25 @@ class G {
 >G : G
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -627,13 +627,13 @@ class G {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -650,7 +650,7 @@ class G {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
@@ -661,7 +661,7 @@ class G {
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -673,25 +673,25 @@ void class H {
 >H : typeof H
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -726,13 +726,13 @@ void class H {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
@@ -749,7 +749,7 @@ void class H {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
@@ -760,7 +760,7 @@ void class H {
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -771,25 +771,25 @@ class I {
 >I : I
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -824,20 +824,20 @@ class I {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     @x ["some" + "method"]() {}
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
@@ -848,7 +848,7 @@ class I {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
@@ -859,7 +859,7 @@ class I {
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null
@@ -871,25 +871,25 @@ void class J {
 >J : typeof J
 
     @x ["property"]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
@@ -924,20 +924,20 @@ void class J {
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     @x ["some" + "method"]() {}
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
@@ -948,7 +948,7 @@ void class J {
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameB] : any
 >fieldNameB : string
 
@@ -959,7 +959,7 @@ void class J {
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: string | number | symbol) => void
+>x : (o: object, k: PropertyKey) => void
 >[fieldNameC] : any
 >fieldNameC : string
 >null : null

@@ -31,10 +31,10 @@ type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // never
 >sym1 : unique symbol
 
 type T10 = string & ('a' | 'b');  // 'a' | 'b'
->T10 : "a" | "b"
+>T10 : T10
 
 type T11 = (string | number) & ('a' | 10);  // 'a' | 10
->T11 : "a" | 10
+>T11 : T11
 
 type N1 = 'a' & 'b';
 >N1 : never
@@ -143,7 +143,7 @@ type K1 = keyof (A & B);  // string | number | symbol
 >K1 : string | number | symbol
 
 type K2 = keyof A | keyof B;  // 'kind' | 'foo'
->K2 : "kind" | "foo"
+>K2 : K2
 
 type Merge1<T, U> = { [P in keyof (T & U)]: P extends keyof T ? T[P] : U[P & keyof U] }
 >Merge1 : Merge1<T, U>
@@ -191,13 +191,13 @@ const x2 = { a: 'foo', b: true };
 >true : true
 
 declare let k: 'a' | 'b';
->k : "a" | "b"
+>k : T10
 
 x1[k] = 'bar' as any;  // Error
 >x1[k] = 'bar' as any : any
 >x1[k] : never
 >x1 : { a: string; b: number; }
->k : "a" | "b"
+>k : T10
 >'bar' as any : any
 >'bar' : "bar"
 
@@ -205,7 +205,7 @@ x2[k] = 'bar' as any;  // Error
 >x2[k] = 'bar' as any : any
 >x2[k] : never
 >x2 : { a: string; b: boolean; }
->k : "a" | "b"
+>k : T10
 >'bar' as any : any
 >'bar' : "bar"
 
