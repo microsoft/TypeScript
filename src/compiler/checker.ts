@@ -10757,13 +10757,11 @@ namespace ts {
         }
 
         function getBaseConstraintOfType(type: Type): Type | undefined {
-            if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection)) {
+            if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.Template)) {
                 const constraint = getResolvedBaseConstraint(<InstantiableType | UnionOrIntersectionType>type);
                 return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
             }
-            return type.flags & TypeFlags.Index ? keyofConstraintType :
-                type.flags & TypeFlags.Template ? stringType :
-                undefined;
+            return type.flags & TypeFlags.Index ? keyofConstraintType : undefined;
         }
 
         /**
@@ -10854,7 +10852,9 @@ namespace ts {
                     return keyofConstraintType;
                 }
                 if (t.flags & TypeFlags.Template) {
-                    return stringType;
+                    const types = (<TemplateType>t).types;
+                    const constraints = mapDefined(types, getBaseConstraint);
+                    return constraints.length === types.length ? getTemplateType((<TemplateType>t).texts, constraints) : stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
@@ -17180,6 +17180,13 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
+                        resetErrorInfo(saveErrorInfo);
+                        return result;
+                    }
+                }
+                else if (source.flags & TypeFlags.Template) {
+                    const constraint = getBaseConstraintOfType(source);
+                    if (constraint && (result = isRelatedTo(constraint, target, reportErrors))) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
