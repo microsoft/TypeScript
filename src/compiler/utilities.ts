@@ -4667,6 +4667,10 @@ namespace ts {
         return ModifierFlags.None;
     }
 
+    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
+        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
+    }
+
     export function isLogicalOperator(token: SyntaxKind): boolean {
         return token === SyntaxKind.BarBarToken
             || token === SyntaxKind.AmpersandAmpersandToken
