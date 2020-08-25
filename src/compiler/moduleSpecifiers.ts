@@ -101,27 +101,33 @@ namespace ts.moduleSpecifiers {
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
 
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
-        let global: string[] | undefined;
+        const importedFileIsInNodeModules = some(modulePaths, ({ path }) => pathContainsNodeModules(path));
+        let nodeModulesSpecifiers: string[] | undefined;
+        let pathsSpecifiers: string[] | undefined;
+        let relativeSpecifiers: string[] | undefined;
         for (const modulePath of modulePaths) {
-            if (!modulePath.isInNodeModules) continue;
             const specifier = tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions);
-            global = append(global, specifier);
+            nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
             if (specifier && modulePath.isRedirect) {
-                // If we got a specifier for a redirect, it was a bare package path (e.g. "@foo/bar", not "@foo/bar/path/to/file").
+                // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar", not "@foo/bar/path/to/file").
                 // No other specifier will be this good, so stop looking.
-                return global!;
+                return nodeModulesSpecifiers!;
+            }
+
+            if (!specifier && !modulePath.isRedirect) {
+                const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, preferences);
+                if (pathIsBareSpecifier(local)) {
+                    pathsSpecifiers = append(pathsSpecifiers, local);
+                }
+                else if (!importedFileIsInNodeModules || modulePath.isInNodeModules) {
+                    relativeSpecifiers = append(relativeSpecifiers, local);
+                }
             }
         }
 
-        const local = mapDefined(modulePaths, ({ path, isRedirect, isInNodeModules }) => (
-            isRedirect || isInNodeModules && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
-                ? undefined
-                : getLocalModuleSpecifier(path, info, compilerOptions, preferences)));
-
-        const localBareSpecifiers = filter(local, pathIsBareSpecifier);
-        return localBareSpecifiers.length ? localBareSpecifiers : global?.length ? global : local.length ? local : mapDefined(modulePaths, ({ path, isRedirect }) => (
-            isRedirect ? undefined : getLocalModuleSpecifier(path, info, compilerOptions, preferences)
-        ));
+        return pathsSpecifiers?.length ? pathsSpecifiers :
+            nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
+            Debug.checkDefined(relativeSpecifiers);
     }
 
     interface Info {
