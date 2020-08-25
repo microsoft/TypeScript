@@ -2412,7 +2412,7 @@ namespace ts {
             if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
                 const name = (getLeftmostPropertyAccessExpression(node.initializer.expression) as CallExpression).arguments[0] as StringLiteral;
                 return isIdentifier(node.initializer.name)
-                    ? getPropertyOfType(resolveExternalModuleTypeByLiteral(name), node.initializer.name.escapedText)
+                    ? resolveSymbol(getPropertyOfType(resolveExternalModuleTypeByLiteral(name), node.initializer.name.escapedText))
                     : undefined;
             }
             if (isVariableDeclaration(node) || node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
