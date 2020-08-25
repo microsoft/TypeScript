@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 const Obj = require("./obj");
->Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
->require("./obj") : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>Obj : typeof Obj
+>require("./obj") : typeof Obj
 >require : any
 >"./obj" : "./obj"
 
@@ -10,12 +10,12 @@ class Container {
 
     constructor() {
         this.usage = new Obj();
->this.usage = new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
+>this.usage = new Obj() : Obj
 >this.usage : any
 >this : this
 >usage : any
->new Obj() : import("tests/cases/conformance/jsdoc/declarations/obj")
->Obj : typeof import("tests/cases/conformance/jsdoc/declarations/obj")
+>new Obj() : Obj
+>Obj : typeof Obj
     }
 }
 

@@ -7,9 +7,9 @@ const C = require("./semver")
 
 var two = C.f(1)
 >two : Symbol(two, Decl(index.js, 2, 3))
->C.f : Symbol(f, Decl(semver.js, 1, 28))
+>C.f : Symbol(C.f, Decl(semver.js, 1, 28))
 >C : Symbol(C, Decl(index.js, 1, 5))
->f : Symbol(f, Decl(semver.js, 1, 28))
+>f : Symbol(C.f, Decl(semver.js, 1, 28))
 
 var c = new C
 >c : Symbol(c, Decl(index.js, 3, 3))

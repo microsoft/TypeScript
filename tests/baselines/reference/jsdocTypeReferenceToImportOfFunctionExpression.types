@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/MC.js ===
 const MW = require("./MW");
->MW : typeof import("tests/cases/conformance/jsdoc/MW")
->require("./MW") : typeof import("tests/cases/conformance/jsdoc/MW")
+>MW : typeof MW
+>require("./MW") : typeof MW
 >require : any
 >"./MW" : "./MW"
 
@@ -22,8 +22,8 @@ module.exports = function MC() {
 >{} : {}
 
     return new MW(x);
->new MW(x) : import("tests/cases/conformance/jsdoc/MW")
->MW : typeof import("tests/cases/conformance/jsdoc/MW")
+>new MW(x) : MW
+>MW : typeof MW
 >x : any
 
 };

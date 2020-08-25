@@ -284,14 +284,26 @@ namespace ts.server {
         return deduplicate(outputs, equateValues);
     }
 
-    function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => readonly T[], areEqual: (a: T, b: T) => boolean) {
-        const outputs: T[] = [];
+    type CombineOutputResult<T> = { project: Project; result: readonly T[]; }[];
+    function combineOutputResultContains<T>(outputs: CombineOutputResult<T>, output: T, areEqual: (a: T, b: T) => boolean) {
+        return outputs.some(({ result }) => contains(result, output, areEqual));
+    }
+    function addToCombineOutputResult<T>(outputs: CombineOutputResult<T>, project: Project, result: readonly T[]) {
+        if (result.length) outputs.push({ project, result });
+    }
+
+    function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => readonly T[], areEqual: (a: T, b: T) => boolean): CombineOutputResult<T> {
+        const outputs: CombineOutputResult<T> = [];
         projectService.loadAncestorProjectTree();
         projectService.forEachEnabledProject(project => {
             const theseOutputs = action(project);
-            outputs.push(...theseOutputs.filter(output => !outputs.some(o => areEqual(o, output))));
+            addToCombineOutputResult(outputs, project, filter(theseOutputs, output => !combineOutputResultContains(outputs, output, areEqual)));
         });
         return outputs;
+    }
+
+    function flattenCombineOutputResult<T>(outputs: CombineOutputResult<T>): readonly T[] {
+        return flatMap(outputs, ({ result }) => result);
     }
 
     function combineProjectOutputWhileOpeningReferencedProjects<T>(
@@ -300,18 +312,15 @@ namespace ts.server {
         action: (project: Project) => readonly T[],
         getLocation: (t: T) => DocumentPosition,
         resultsEqual: (a: T, b: T) => boolean,
-    ): T[] {
-        const outputs: T[] = [];
+    ): CombineOutputResult<T> {
+        const outputs: CombineOutputResult<T> = [];
         combineProjectOutputWorker(
             projects,
             defaultProject,
             /*initialLocation*/ undefined,
             (project, _, tryAddToTodo) => {
-                for (const output of action(project)) {
-                    if (!contains(outputs, output, resultsEqual) && !tryAddToTodo(project, getLocation(output))) {
-                        outputs.push(output);
-                    }
-                }
+                const theseOutputs = action(project);
+                addToCombineOutputResult(outputs, project, filter(theseOutputs, output => !combineOutputResultContains(outputs, output, resultsEqual) && !tryAddToTodo(project, getLocation(output))));
             },
         );
         return outputs;
@@ -326,7 +335,6 @@ namespace ts.server {
         hostPreferences: UserPreferences
     ): readonly RenameLocation[] {
         const outputs: RenameLocation[] = [];
-
         combineProjectOutputWorker(
             projects,
             defaultProject,
@@ -577,7 +585,7 @@ namespace ts.server {
             undefined;
     }
 
-    const invalidSyntaxOnlyCommands: readonly CommandNames[] = [
+    const invalidPartialSemanticModeCommands: readonly CommandNames[] = [
         CommandNames.OpenExternalProject,
         CommandNames.OpenExternalProjects,
         CommandNames.CloseExternalProject,
@@ -613,6 +621,36 @@ namespace ts.server {
         CommandNames.ProvideCallHierarchyOutgoingCalls,
     ];
 
+    const invalidSyntacticModeCommands: readonly CommandNames[] = [
+        ...invalidPartialSemanticModeCommands,
+        CommandNames.Definition,
+        CommandNames.DefinitionFull,
+        CommandNames.DefinitionAndBoundSpan,
+        CommandNames.DefinitionAndBoundSpanFull,
+        CommandNames.TypeDefinition,
+        CommandNames.Implementation,
+        CommandNames.ImplementationFull,
+        CommandNames.References,
+        CommandNames.ReferencesFull,
+        CommandNames.Rename,
+        CommandNames.RenameLocationsFull,
+        CommandNames.RenameInfoFull,
+        CommandNames.Quickinfo,
+        CommandNames.QuickinfoFull,
+        CommandNames.CompletionInfo,
+        CommandNames.Completions,
+        CommandNames.CompletionsFull,
+        CommandNames.CompletionDetails,
+        CommandNames.CompletionDetailsFull,
+        CommandNames.SignatureHelp,
+        CommandNames.SignatureHelpFull,
+        CommandNames.Navto,
+        CommandNames.NavtoFull,
+        CommandNames.Occurrences,
+        CommandNames.DocumentHighlights,
+        CommandNames.DocumentHighlightsFull,
+    ];
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -629,7 +667,9 @@ namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         /** Has no effect if eventHandler is also specified. */
         suppressDiagnosticEvents?: boolean;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
         throttleWaitMilliseconds?: number;
         noGetErrOnBackgroundUpdate?: boolean;
 
@@ -701,18 +741,32 @@ namespace ts.server {
                 allowLocalPluginLoads: opts.allowLocalPluginLoads,
                 typesMapLocation: opts.typesMapLocation,
                 syntaxOnly: opts.syntaxOnly,
+                serverMode: opts.serverMode,
             };
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
 
-            // Make sure to setup handlers to throw error for not allowed commands on syntax server;
-            if (this.projectService.syntaxOnly) {
-                invalidSyntaxOnlyCommands.forEach(commandName =>
-                    this.handlers.set(commandName, request => {
-                        throw new Error(`Request: ${request.command} not allowed on syntaxServer`);
-                    })
-                );
+            // Make sure to setup handlers to throw error for not allowed commands on syntax server
+            switch (this.projectService.serverMode) {
+                case LanguageServiceMode.Semantic:
+                    break;
+                case LanguageServiceMode.PartialSemantic:
+                    invalidPartialSemanticModeCommands.forEach(commandName =>
+                        this.handlers.set(commandName, request => {
+                            throw new Error(`Request: ${request.command} not allowed in LanguageServiceMode.PartialSemantic`);
+                        })
+                    );
+                    break;
+                case LanguageServiceMode.Syntactic:
+                    invalidSyntacticModeCommands.forEach(commandName =>
+                        this.handlers.set(commandName, request => {
+                            throw new Error(`Request: ${request.command} not allowed in LanguageServiceMode.Syntactic`);
+                        })
+                    );
+                    break;
+                default:
+                    Debug.assertNever(this.projectService.serverMode);
             }
         }
 
@@ -1930,38 +1984,42 @@ namespace ts.server {
 
         private getNavigateToItems(args: protocol.NavtoRequestArgs, simplifiedResult: boolean): readonly protocol.NavtoItem[] | readonly NavigateToItem[] {
             const full = this.getFullNavigateToItems(args);
-            return !simplifiedResult ? full : full.map((navItem) => {
-                const { file, project } = this.getFileAndProject({ file: navItem.fileName });
-                const scriptInfo = project.getScriptInfo(file)!;
-                const bakedItem: protocol.NavtoItem = {
-                    name: navItem.name,
-                    kind: navItem.kind,
-                    kindModifiers: navItem.kindModifiers,
-                    isCaseSensitive: navItem.isCaseSensitive,
-                    matchKind: navItem.matchKind,
-                    file: navItem.fileName,
-                    start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
-                    end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
-                };
-                if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
-                    bakedItem.kindModifiers = navItem.kindModifiers;
-                }
-                if (navItem.containerName && (navItem.containerName.length > 0)) {
-                    bakedItem.containerName = navItem.containerName;
-                }
-                if (navItem.containerKind && (navItem.containerKind.length > 0)) {
-                    bakedItem.containerKind = navItem.containerKind;
-                }
-                return bakedItem;
-            });
+            return !simplifiedResult ?
+                flattenCombineOutputResult(full) :
+                flatMap(
+                    full,
+                    ({ project, result }) => result.map(navItem => {
+                        const scriptInfo = project.getScriptInfo(navItem.fileName)!;
+                        const bakedItem: protocol.NavtoItem = {
+                            name: navItem.name,
+                            kind: navItem.kind,
+                            kindModifiers: navItem.kindModifiers,
+                            isCaseSensitive: navItem.isCaseSensitive,
+                            matchKind: navItem.matchKind,
+                            file: navItem.fileName,
+                            start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
+                            end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
+                        };
+                        if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
+                            bakedItem.kindModifiers = navItem.kindModifiers;
+                        }
+                        if (navItem.containerName && (navItem.containerName.length > 0)) {
+                            bakedItem.containerName = navItem.containerName;
+                        }
+                        if (navItem.containerKind && (navItem.containerKind.length > 0)) {
+                            bakedItem.containerKind = navItem.containerKind;
+                        }
+                        return bakedItem;
+                    })
+                );
         }
 
-        private getFullNavigateToItems(args: protocol.NavtoRequestArgs): readonly NavigateToItem[] {
+        private getFullNavigateToItems(args: protocol.NavtoRequestArgs): CombineOutputResult<NavigateToItem> {
             const { currentFileOnly, searchValue, maxResultCount, projectFileName } = args;
             if (currentFileOnly) {
                 Debug.assertDefined(args.file);
                 const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
-                return project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file);
+                return [{ project, result: project.getLanguageService().getNavigateToItems(searchValue, maxResultCount, file) }];
             }
             else if (!args.file && !projectFileName) {
                 return combineProjectOutputFromEveryProject(
@@ -2082,10 +2140,13 @@ namespace ts.server {
             const newPath = toNormalizedPath(args.newFilePath);
             const formatOptions = this.getHostFormatOptions();
             const preferences = this.getHostPreferences();
-            const changes = combineProjectOutputFromEveryProject(
-                this.projectService,
-                project => project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences),
-                (a, b) => a.fileName === b.fileName);
+            const changes = flattenCombineOutputResult(
+                combineProjectOutputFromEveryProject(
+                    this.projectService,
+                    project => project.getLanguageService().getEditsForFileRename(oldPath, newPath, formatOptions, preferences),
+                    (a, b) => a.fileName === b.fileName
+                )
+            );
             return simplifiedResult ? changes.map(c => this.mapTextChangeToCodeEdit(c)) : changes;
         }
 
