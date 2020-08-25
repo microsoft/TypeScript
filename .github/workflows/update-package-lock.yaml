@@ -23,5 +23,6 @@ jobs:
         git config user.name "TypeScript Bot"
         npm install --package-lock-only
         git add -f package-lock.json
-        git commit -m "Update package-lock.json"
-        git push
+        if git commit -m "Update package-lock.json"; then
+          git push
+        fi
