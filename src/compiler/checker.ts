@@ -12700,7 +12700,9 @@ namespace ts {
             // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
             const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
             if (unionIndex >= 0) {
-                return mapType(elementTypes[unionIndex], t => createNormalizedTupleType(target, replaceElement(elementTypes, unionIndex, t)));
+                return checkCrossProductUnion(map(elementTypes, (t, i) => target.elementFlags[i] & ElementFlags.Variadic ? t : unknownType)) ?
+                    mapType(elementTypes[unionIndex], t => createNormalizedTupleType(target, replaceElement(elementTypes, unionIndex, t))) :
+                    errorType;
             }
             // If there are no variadic elements with non-generic types, just create a type reference with the same target type.
             const spreadIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic) && !(t.flags & TypeFlags.InstantiableNonPrimitive) && !isGenericMappedType(t));
@@ -13237,9 +13239,7 @@ namespace ts {
                         // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
                         // the form X & A & Y | X & B & Y and recursively reduce until no union type constituents remain.
                         // If the estimated size of the resulting union type exceeds 100000 constituents, report an error.
-                        const size = reduceLeft(typeSet, (n, t) => n * (t.flags & TypeFlags.Union ? (<UnionType>t).types.length : 1), 1);
-                        if (size >= 100000) {
-                            error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                        if (!checkCrossProductUnion(typeSet)) {
                             return errorType;
                         }
                         const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
@@ -13254,6 +13254,15 @@ namespace ts {
                 intersectionTypes.set(id, result);
             }
             return result;
+        }
+
+        function checkCrossProductUnion(types: readonly Type[]) {
+            const size = reduceLeft(types, (n, t) => n * (t.flags & TypeFlags.Union ? (<UnionType>t).types.length : t.flags & TypeFlags.Never ? 0 : 1), 1);
+            if (size >= 100000) {
+                error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                return false;
+            }
+            return true;
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
@@ -13385,7 +13394,9 @@ namespace ts {
         function getTemplateType(texts: readonly string[], types: readonly Type[]): Type {
             const unionIndex = findIndex(types, t => !!(t.flags & (TypeFlags.Never | TypeFlags.Union)));
             if (unionIndex >= 0) {
-                return mapType(types[unionIndex], t => getTemplateType(texts, replaceElement(types, unionIndex, t)));
+                return checkCrossProductUnion(types) ?
+                    mapType(types[unionIndex], t => getTemplateType(texts, replaceElement(types, unionIndex, t))) :
+                    errorType;
             }
             let i = 0;
             while (i < types.length) {
@@ -31236,6 +31247,7 @@ namespace ts {
                 }
             }
             forEach(node.elements, checkSourceElement);
+            getTypeFromTypeNode(node);
         }
 
         function checkUnionOrIntersectionType(node: UnionOrIntersectionTypeNode) {
@@ -31318,6 +31330,7 @@ namespace ts {
 
         function checkTemplateType(node: TemplateTypeNode) {
             forEachChild(node, checkSourceElement);
+            getTypeFromTypeNode(node);
             for (const span of node.templateSpans) {
                 const type = getTypeFromTypeNode(span.type);
                 checkTypeAssignableTo(type, templateConstraintType, span.type);
