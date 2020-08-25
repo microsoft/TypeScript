@@ -27753,6 +27753,7 @@ namespace ts {
                         newSymbol.target = resolveSymbol(symbol);
                         memberTable.set(InternalSymbolName.Default, newSymbol);
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
+                        anonymousSymbol.declarations = [];
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                         anonymousSymbol.type = defaultContainingObject;
                         synthType.syntheticType = isValidSpreadType(type) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*objectFlags*/ 0, /*readonly*/ false) : defaultContainingObject;
