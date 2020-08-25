@@ -47,7 +47,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
 
         const current = getTokenAtPosition(file, startPosition);
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
-        
+
         let variableDeclaration: VariableDeclaration | undefined;
         let bindingName: BindingName | undefined;
         const variableStatement = findAncestor(current, node => {
