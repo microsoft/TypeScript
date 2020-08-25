@@ -92,6 +92,7 @@
         "codefixes/disableJsDiagnostics.ts",
         "codefixes/helpers.ts",
         "codefixes/generateAccessors.ts",
+        "codefixes/parameterPropertyToDeclaration.ts",
         "codefixes/fixInvalidImportSyntax.ts",
         "codefixes/fixStrictClassInitialization.ts",
         "codefixes/requireInTs.ts",
