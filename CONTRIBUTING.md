@@ -51,18 +51,18 @@ In general, things we find useful when reviewing suggestions are:
 
 0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
 1. [A GitHub account](https://github.com/join).
-2. A fork of the TypeScript repository on github, plus a local clone of it ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)).
-3. [Node](https://nodejs.org). Current or LTS will both work.
+2. A copy of the TypeScript code. See the next steps for instructions.
+3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
 4. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
-5. The gulp command line tool. See the next steps for how to install it.
+5. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
 
 ## Get Started
 
 1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
 2. Open a terminal.
-3. Install the gulp command line tool: `npm install -g gulp-cli`
-4. Clone Typescript with `git clone https://github.com/microsoft/TypeScript.git --depth=1`
-5. `cd TypeScript`
+3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
+4. Install the gulp command line tool: `npm install -g gulp-cli`
+5. Change to the TypeScript folder you made: `cd TypeScript`
 6. Install dependencies: `npm ci`
 7. Make sure everything builds and tests pass: `gulp runtests-parallel`
 8. Open the Typescript folder in your editor.
