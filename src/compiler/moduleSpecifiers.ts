@@ -119,7 +119,9 @@ namespace ts.moduleSpecifiers {
                 : getLocalModuleSpecifier(path, info, compilerOptions, preferences)));
 
         const localBareSpecifiers = filter(local, pathIsBareSpecifier);
-        return localBareSpecifiers.length ? localBareSpecifiers : global?.length ? global : local;
+        return localBareSpecifiers.length ? localBareSpecifiers : global?.length ? global : local.length ? local : mapDefined(modulePaths, ({ path, isRedirect }) => (
+            isRedirect ? undefined : getLocalModuleSpecifier(path, info, compilerOptions, preferences)
+        ));
     }
 
     interface Info {
