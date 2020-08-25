@@ -4778,6 +4778,7 @@ namespace ts {
         ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
         ContainsClassWithPrivateIdentifiers = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
+        AllTypeAliasesAcessibleAreMaterialized          = 0x08000000,  // Indicates that, if the file hasn't been typechecked, it's at least had its imports traversed and checked
     }
 
     /* @internal */

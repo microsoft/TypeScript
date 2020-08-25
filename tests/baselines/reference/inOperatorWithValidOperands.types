@@ -11,7 +11,7 @@ var a2: number;
 >a2 : number
 
 var a3: string | number | symbol;
->a3 : string | number | symbol
+>a3 : PropertyKey
 
 var a4: any;
 >a4 : any
@@ -49,7 +49,7 @@ var ra5 = 0 in x;
 var ra6 = a3 in x;
 >ra6 : boolean
 >a3 in x : boolean
->a3 : string | number | symbol
+>a3 : PropertyKey
 >x : any
 
 var ra7 = a4 in x;

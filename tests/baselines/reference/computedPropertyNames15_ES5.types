@@ -3,7 +3,7 @@ var p1: number | string;
 >p1 : string | number
 
 var p2: number | number[];
->p2 : number | number[]
+>p2 : VibratePattern
 
 var p3: string | boolean;
 >p3 : string | boolean
@@ -17,7 +17,7 @@ class C {
 
     [p2]() { }
 >[p2] : () => void
->p2 : number | number[]
+>p2 : VibratePattern
 
     [p3]() { }
 >[p3] : () => void

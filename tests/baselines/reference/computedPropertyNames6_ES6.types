@@ -3,7 +3,7 @@ var p1: number | string;
 >p1 : string | number
 
 var p2: number | number[];
->p2 : number | number[]
+>p2 : VibratePattern
 
 var p3: string | boolean;
 >p3 : string | boolean
@@ -19,7 +19,7 @@ var v = {
 
     [p2]: 1,
 >[p2] : number
->p2 : number | number[]
+>p2 : VibratePattern
 >1 : 1
 
     [p3]: 2

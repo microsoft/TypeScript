@@ -20,7 +20,7 @@ type Dictionary<T> = { [x: string]: T };
 >x : string
 
 type T00 = keyof K0;  // Error
->T00 : string | number | symbol
+>T00 : PropertyKey
 
 type T01 = keyof Object;
 >T01 : "toString" | "valueOf" | "toLocaleString" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"

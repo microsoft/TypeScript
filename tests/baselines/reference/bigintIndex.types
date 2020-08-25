@@ -32,27 +32,27 @@ num = arr[1n]; // should error
 >1n : 1n
 
 let key: keyof any; // should be type "string | number | symbol"
->key : string | number | symbol
+>key : PropertyKey
 
 key = 123;
 >key = 123 : 123
->key : string | number | symbol
+>key : PropertyKey
 >123 : 123
 
 key = "abc";
 >key = "abc" : "abc"
->key : string | number | symbol
+>key : PropertyKey
 >"abc" : "abc"
 
 key = Symbol();
 >key = Symbol() : symbol
->key : string | number | symbol
+>key : PropertyKey
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 
 key = 123n; // should error
 >key = 123n : 123n
->key : string | number | symbol
+>key : PropertyKey
 >123n : 123n
 
 // Show correct usage of bigint index: explicitly convert to string

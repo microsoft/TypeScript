@@ -335,14 +335,14 @@ const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
 
 declare function execute(script: string | Function): Promise<string>;
 >execute : (script: string | Function) => Promise<string>
->script : string | Function
+>script : TimerHandler
   
 export function executeSomething() {
 >executeSomething : () => Promise<string>
 
     return execute((root: HTMLElement, debug = true) => {
 >execute((root: HTMLElement, debug = true) => {        if (debug) {            root.innerHTML = '';        }    }) : Promise<string>
->execute : (script: string | Function) => Promise<string>
+>execute : (script: TimerHandler) => Promise<string>
 >(root: HTMLElement, debug = true) => {        if (debug) {            root.innerHTML = '';        }    } : (root: HTMLElement, debug?: boolean) => void
 >root : HTMLElement
 >debug : boolean

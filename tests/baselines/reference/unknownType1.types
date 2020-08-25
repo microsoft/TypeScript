@@ -102,7 +102,7 @@ type T38 = T35<unknown>;  // { x: unknown }
 // keyof unknown
 
 type T40 = keyof any;  // string | number | symbol
->T40 : string | number | symbol
+>T40 : PropertyKey
 
 type T41 = keyof unknown;  // never
 >T41 : never

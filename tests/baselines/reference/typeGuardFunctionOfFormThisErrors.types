@@ -93,19 +93,19 @@ function invalidGuard(c: any): this is number {
 }
 
 let c: number | number[];
->c : number | number[]
+>c : VibratePattern
 
 if (invalidGuard(c)) {
 >invalidGuard(c) : boolean
 >invalidGuard : (c: any) => this is number
->c : number | number[]
+>c : VibratePattern
 
     c;
->c : number | number[]
+>c : VibratePattern
 }
 else {
     c;
->c : number | number[]
+>c : VibratePattern
 }
 
 let holder = {invalidGuard};
@@ -118,17 +118,17 @@ if (holder.invalidGuard(c)) {
 >holder.invalidGuard : (c: any) => this is number
 >holder : { invalidGuard: (c: any) => this is number; }
 >invalidGuard : (c: any) => this is number
->c : number | number[]
+>c : VibratePattern
 
     c;
->c : number | number[]
+>c : VibratePattern
 
     holder;
 >holder : { invalidGuard: (c: any) => this is number; } & number
 }
 else {
     c;
->c : number | number[]
+>c : VibratePattern
 
     holder;
 >holder : { invalidGuard: (c: any) => this is number; }

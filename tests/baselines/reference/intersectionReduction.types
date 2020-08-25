@@ -140,7 +140,7 @@ type U5 = A | B & C;  // A
 >U5 : A
 
 type K1 = keyof (A & B);  // string | number | symbol
->K1 : string | number | symbol
+>K1 : PropertyKey
 
 type K2 = keyof A | keyof B;  // 'kind' | 'foo'
 >K2 : K2

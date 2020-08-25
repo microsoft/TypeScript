@@ -24,7 +24,7 @@ function f2<T extends string | number | undefined, U extends string | null | und
 >x : T & U
 
     let y3: string | undefined = x;
->y3 : string | undefined
+>y3 : T1
 >x : T & U
 
     let y4: number | null = x;       // Error

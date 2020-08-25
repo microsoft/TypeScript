@@ -369,7 +369,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       hasField: (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
 >hasField : (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
->fieldName : string | number | symbol
+>fieldName : PropertyKey
 
     } : {}
   
@@ -418,9 +418,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
       hasField: (fieldName: string | number | symbol) => fieldName in soFar
 >hasField : (fieldName: string | number | symbol) => boolean
 >(fieldName: string | number | symbol) => fieldName in soFar : (fieldName: string | number | symbol) => boolean
->fieldName : string | number | symbol
+>fieldName : PropertyKey
 >fieldName in soFar : boolean
->fieldName : string | number | symbol
+>fieldName : PropertyKey
 >soFar : SO_FAR
     }
   );
@@ -474,8 +474,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >soFar : SO_FAR
 
     buildType(soFar)
->buildType(soFar) : { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->buildType : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
+>buildType(soFar) : { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: PropertyKey) => boolean; }
+>buildType : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: PropertyKey) => boolean; }
 >soFar : SO_FAR
 
   ) as BuildPubSubRecordType<SO_FAR>;

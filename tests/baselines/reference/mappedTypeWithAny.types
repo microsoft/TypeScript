@@ -7,7 +7,7 @@ type ItemMap<T> = { [P in keyof T]: Item };
 >ItemMap : ItemMap<T>
 
 declare let x0: keyof any;
->x0 : string | number | symbol
+>x0 : PropertyKey
 
 declare let x1: { [P in any]: Item };
 >x1 : { [x: string]: Item; [x: number]: Item; }

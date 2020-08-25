@@ -1,0 +1,41 @@
+=== tests/cases/compiler/init.ts ===
+export interface A {
+    a: true;
+>a : true
+>true : true
+}
+
+export interface B {
+    b: true;
+>b : true
+>true : true
+}
+
+export function f(thing?: A | B): A | B { return null as any; };
+>f : (thing?: A | B) => A | B
+>thing : import("tests/cases/compiler/utils").Either
+>null as any : any
+>null : null
+
+=== tests/cases/compiler/utils.ts ===
+import {A, B} from "./init";
+>A : any
+>B : any
+
+export type Either = A | B;
+>Either : Either
+
+=== tests/cases/compiler/usage.ts ===
+import {Either} from "./utils";
+>Either : any
+
+import {f} from "./init";
+>f : (thing?: Either) => Either
+
+export function doThing() {
+>doThing : () => Either
+
+    return f();
+>f() : Either
+>f : (thing?: Either) => Either
+}

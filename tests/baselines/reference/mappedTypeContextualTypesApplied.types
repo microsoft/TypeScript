@@ -30,7 +30,7 @@ declare function mapped6<K extends string>(obj: {[P in K]: TakeString}): void;
 >obj : { [P in K]: TakeString; }
 
 declare function mapped7<K extends keyof any>(obj: {[P in K]: TakeString}): void;
->mapped7 : <K extends string | number | symbol>(obj: { [P in K]: TakeString; }) => void
+>mapped7 : <K extends PropertyKey>(obj: { [P in K]: TakeString; }) => void
 >obj : { [P in K]: TakeString; }
 
 declare function mapped8<K extends 'foo'>(obj: {[P in K]: TakeString}): void;
@@ -97,7 +97,7 @@ mapped6({foo: s => 42});
 
 mapped7({foo: s => 42});
 >mapped7({foo: s => 42}) : void
->mapped7 : <K extends string | number | symbol>(obj: { [P in K]: TakeString; }) => void
+>mapped7 : <K extends PropertyKey>(obj: { [P in K]: TakeString; }) => void
 >{foo: s => 42} : { foo: (s: string) => number; }
 >foo : (s: string) => number
 >s => 42 : (s: string) => number

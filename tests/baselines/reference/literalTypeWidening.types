@@ -224,7 +224,7 @@ declare function widening<T>(x: T): T;
 >x : T
 
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
->nonWidening : <T extends string | number | symbol>(x: T) => T
+>nonWidening : <T extends PropertyKey>(x: T) => T
 >x : T
 
 function f6(cond: boolean) {
@@ -255,19 +255,19 @@ function f6(cond: boolean) {
     let y1 = nonWidening('a');
 >y1 : "a"
 >nonWidening('a') : "a"
->nonWidening : <T extends string | number | symbol>(x: T) => T
+>nonWidening : <T extends PropertyKey>(x: T) => T
 >'a' : "a"
 
     let y2 = nonWidening(10);
 >y2 : 10
 >nonWidening(10) : 10
->nonWidening : <T extends string | number | symbol>(x: T) => T
+>nonWidening : <T extends PropertyKey>(x: T) => T
 >10 : 10
 
     let y3 = nonWidening(cond ? 'a' : 10);
 >y3 : "a" | 10
 >nonWidening(cond ? 'a' : 10) : "a" | 10
->nonWidening : <T extends string | number | symbol>(x: T) => T
+>nonWidening : <T extends PropertyKey>(x: T) => T
 >cond ? 'a' : 10 : "a" | 10
 >cond : boolean
 >'a' : "a"

@@ -988,13 +988,19 @@ namespace ts {
                 typeAliases.add(type, alias);
             }
 
-            function typeIsOrTriviallyContainsType(t2: Type): boolean {
+            function typeIsOrTriviallyContainsType(t2: Type, visited: Set<Type> = new Set()): boolean {
                 if (type === t2) return true;
-                if (t2.flags & TypeFlags.UnionOrIntersection) return some((t2 as UnionOrIntersectionType).types, typeIsOrTriviallyContainsType);
-                if (t2.flags & TypeFlags.Index) return typeIsOrTriviallyContainsType((t2 as IndexType).type);
-                if (t2.flags & TypeFlags.IndexedAccess) return typeIsOrTriviallyContainsType((t2 as IndexedAccessType).objectType) || typeIsOrTriviallyContainsType((t2 as IndexedAccessType).indexType);
-                if (getObjectFlags(t2) & ObjectFlags.Reference) return some(getTypeArguments(t2 as TypeReference), typeIsOrTriviallyContainsType);
+                if (visited.has(t2)) return false;
+                visited.add(t2);
+                if (t2.flags & TypeFlags.UnionOrIntersection) return some((t2 as UnionOrIntersectionType).types, recur);
+                if (t2.flags & TypeFlags.Index) return recur((t2 as IndexType).type);
+                if (t2.flags & TypeFlags.IndexedAccess) return recur((t2 as IndexedAccessType).objectType) || recur((t2 as IndexedAccessType).indexType);
+                if (getObjectFlags(t2) & ObjectFlags.Reference) return some(getTypeArguments(t2 as TypeReference), recur);
                 return false;
+
+                function recur(t: Type) {
+                    return typeIsOrTriviallyContainsType(t, visited);
+                }
             }
         }
 
@@ -4451,6 +4457,7 @@ namespace ts {
                 }
 
                 if (!inTypeAlias) {
+                    ensureAliasesDiscovered(context.enclosingDeclaration);
                     const accessibleAlias = find(typeAliases.get(type) || emptyArray, t => t.kind === AliasKind.Reference && !!(context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(t.symbol, context.enclosingDeclaration))) as AliasReference | undefined;
                     if (accessibleAlias && (!context.aliasStack || context.aliasStack.indexOf(accessibleAlias) === -1)) {
                         (context.aliasStack ||= []).push(accessibleAlias);
@@ -7574,6 +7581,30 @@ namespace ts {
                             }
                         }
                     }
+                });
+            }
+        }
+
+        function ensureAliasesDiscovered(node: Node | undefined) {
+            if (!node) return;
+            const links = getNodeLinks(node);
+            if (!(links.flags & NodeCheckFlags.AllTypeAliasesAcessibleAreMaterialized)) {
+                links.flags |= NodeCheckFlags.AllTypeAliasesAcessibleAreMaterialized;
+                forEachSymbolTableInScope(node, table => {
+                    forEachEntry(table, s => {
+                        // So... this is kinda an approximation - technically we'd wanna guarantee
+                        // that the whole program is typechecked (and thus all aliases are available)
+                        // however that's a bit much to do - so we do a kind of first order approximation
+                        // and guarantee that at least all type aliases with local references (and therefore are trivially visible to print) have been materialized.
+                        // This notably means that type aliases who are members of namespaces which have local references
+                        // may not have been materialized. We _could_ traverse all local references looking for those, too... but
+                        // then we get into essentially performing the traversal recursively on every symbol table in scope,
+                        // which, if symbol visibility checking has taught us anything, could be a costly endeavor.
+                        const resolved = resolveSymbol(s);
+                        if (resolved.flags & SymbolFlags.TypeAlias) {
+                            getDeclaredTypeOfTypeAlias(resolved);
+                        }
+                    });
                 });
             }
         }

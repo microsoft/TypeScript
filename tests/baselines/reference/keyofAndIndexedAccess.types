@@ -55,7 +55,7 @@ const enum E { A, B, C }
 >C : E.C
 
 type K00 = keyof any;  // string
->K00 : string | number | symbol
+>K00 : PropertyKey
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
 >K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "valueOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
@@ -77,7 +77,7 @@ type K06 = keyof null;  // never
 >null : null
 
 type K07 = keyof never;  // string | number | symbol
->K07 : string | number | symbol
+>K07 : PropertyKey
 
 type K08 = keyof unknown; // never
 >K08 : never
