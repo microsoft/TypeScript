@@ -103,17 +103,23 @@ namespace ts.moduleSpecifiers {
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         let global: string[] | undefined;
         for (const modulePath of modulePaths) {
+            if (!modulePath.isInNodeModules) continue;
             const specifier = tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions);
             global = append(global, specifier);
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package path (e.g. "@foo/bar", not "@foo/bar/path/to/file").
                 // No other specifier will be this good, so stop looking.
-                break;
+                return global!;
             }
         }
-        return global?.length ? global : mapDefined(modulePaths, ({ path, isRedirect }) => (
-            isRedirect ? undefined : getLocalModuleSpecifier(path, info, compilerOptions, preferences)
-        ));
+
+        const local = mapDefined(modulePaths, ({ path, isRedirect, isInNodeModules }) => (
+            isRedirect || isInNodeModules && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
+                ? undefined
+                : getLocalModuleSpecifier(path, info, compilerOptions, preferences)));
+
+        const localBareSpecifiers = filter(local, pathIsBareSpecifier);
+        return localBareSpecifiers.length ? localBareSpecifiers : global?.length ? global : local;
     }
 
     interface Info {
@@ -227,6 +233,7 @@ namespace ts.moduleSpecifiers {
 
     interface ModulePath {
         path: string;
+        isInNodeModules: boolean;
         isRedirect: boolean;
     }
 
@@ -237,7 +244,7 @@ namespace ts.moduleSpecifiers {
     function getAllModulePaths(importingFileName: string, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
         const cwd = host.getCurrentDirectory();
         const getCanonicalFileName = hostGetCanonicalFileName(host);
-        const allFileNames = new Map<string, { path: string, isRedirect: boolean }>();
+        const allFileNames = new Map<string, { path: string, isRedirect: boolean, isInNodeModules: boolean }>();
         let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
             importingFileName,
@@ -245,9 +252,10 @@ namespace ts.moduleSpecifiers {
             host,
             /*preferSymlinks*/ true,
             (path, isRedirect) => {
+                const isInNodeModules = pathContainsNodeModules(path);
+                allFileNames.set(path, { path: getCanonicalFileName(path), isRedirect, isInNodeModules });
+                importedFileFromNodeModules = importedFileFromNodeModules || isInNodeModules;
                 // dont return value, so we collect everything
-                allFileNames.set(path, { path: getCanonicalFileName(path), isRedirect });
-                importedFileFromNodeModules = importedFileFromNodeModules || pathContainsNodeModules(path);
             }
         );
 
@@ -258,20 +266,17 @@ namespace ts.moduleSpecifiers {
             allFileNames.size !== 0;
         ) {
             const directoryStart = ensureTrailingDirectorySeparator(directory);
-            let pathsInDirectory: SortedArray<ModulePath> | undefined;
-            allFileNames.forEach(({ path, isRedirect }, fileName) => {
+            let pathsInDirectory: ModulePath[] | undefined;
+            allFileNames.forEach(({ path, isRedirect, isInNodeModules }, fileName) => {
                 if (startsWith(path, directoryStart)) {
-                    // If the importedFile is from node modules, use only paths in node_modules folder as option
-                    if (!importedFileFromNodeModules || pathContainsNodeModules(fileName)) {
-                        insertSorted(
-                            pathsInDirectory ||= [] as ModulePath[] as SortedArray<ModulePath>,
-                            { path: fileName, isRedirect },
-                            comparePathsByRedirectAndNumberOfDirectorySeparators);
-                    }
+                    (pathsInDirectory ||= []).push({ path: fileName, isRedirect, isInNodeModules });
                     allFileNames.delete(fileName);
                 }
             });
             if (pathsInDirectory) {
+                if (pathsInDirectory.length > 1) {
+                    pathsInDirectory.sort(comparePathsByRedirectAndNumberOfDirectorySeparators);
+                }
                 sortedPaths.push(...pathsInDirectory);
             }
             const newDirectory = getDirectoryPath(directory);
