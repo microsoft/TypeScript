@@ -19603,7 +19603,7 @@ namespace ts {
                 const sourceIdentity = getRecursionIdentity(source);
                 const targetIdentity = getRecursionIdentity(target);
                 if (sourceIdentity && contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
-                if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+                if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Both;
                 if (expandingFlags !== ExpandingFlags.Both) {
                     if (sourceIdentity) (sourceStack || (sourceStack = [])).push(sourceIdentity);
                     if (targetIdentity) (targetStack || (targetStack = [])).push(targetIdentity);
