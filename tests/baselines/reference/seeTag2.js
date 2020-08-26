@@ -11,8 +11,14 @@ const c = ""
 /** @see c without brace */
 const d = ""
 
-/** @see ?????? */
+/** @see ?????? wowwwwww*/
 const e = ""
+
+/** @see {}*/
+const f = ""
+
+/** @see */
+const g = ""
 
 
 //// [seeTag2.js]
@@ -24,8 +30,12 @@ var b = "";
 var c = "";
 /** @see c without brace */
 var d = "";
-/** @see ?????? */
+/** @see ?????? wowwwwww*/
 var e = "";
+/** @see {}*/
+var f = "";
+/** @see */
+var g = "";
 
 
 //// [seeTag2.d.ts]
@@ -37,5 +47,9 @@ declare const b = "";
 declare const c = "";
 /** @see c without brace */
 declare const d = "";
-/** @see ?????? */
+/** @see ?????? wowwwwww*/
 declare const e = "";
+/** @see {}*/
+declare const f = "";
+/** @see */
+declare const g = "";

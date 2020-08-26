@@ -36374,7 +36374,7 @@ namespace ts {
                 node = node.parent as PropertyAccessExpression;
             }
 
-            return node.parent.kind === SyntaxKind.JSDocNameExpression;
+            return node.parent.kind === SyntaxKind.JSDocNameReference;
         }
 
         function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T | undefined): T | undefined {

@@ -15,7 +15,15 @@ const c = ""
 const d = ""
 >d : Symbol(d, Decl(seeTag2.ts, 10, 5))
 
-/** @see ?????? */
+/** @see ?????? wowwwwww*/
 const e = ""
 >e : Symbol(e, Decl(seeTag2.ts, 13, 5))
+
+/** @see {}*/
+const f = ""
+>f : Symbol(f, Decl(seeTag2.ts, 16, 5))
+
+/** @see */
+const g = ""
+>g : Symbol(g, Decl(seeTag2.ts, 19, 5))
 

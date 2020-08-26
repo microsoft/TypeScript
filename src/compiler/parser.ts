@@ -480,8 +480,8 @@ namespace ts {
             case SyntaxKind.JSDocSeeTag:
                 return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
                     visitNode(cbNode, (node as JSDocSeeTag).name);
-            case SyntaxKind.JSDocNameExpression:
-                return visitNode(cbNode, (node as JSDocNameExpression).name);
+            case SyntaxKind.JSDocNameReference:
+                return visitNode(cbNode, (node as JSDocNameReference).name);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -7152,15 +7152,15 @@ namespace ts {
                 return finishNode(result, pos);
             }
 
-            export function parseJSDocNameExpression(mayOmitBraces?: boolean): JSDocNameExpression {
+            export function parseJSDocNameReference(): JSDocNameReference {
                 const pos = getNodePos();
-                const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
-                const entityName = doInsideOfContext(NodeFlags.JSDoc, () => parseEntityName(/* allowReservedWords*/ false));
-                if (!mayOmitBraces || hasBrace) {
+                const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
+                const entityName = parseEntityName(/* allowReservedWords*/ false);
+                if (hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }
 
-                const result = factory.createJSDocNameExpression(entityName);
+                const result = factory.createJSDocNameReference(entityName);
                 fixupParentReferences(result);
                 return finishNode(result, pos);
             }
@@ -7581,17 +7581,6 @@ namespace ts {
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
-                function tryParseJSDocNameExpression(): JSDocNameExpression | undefined {
-                    return isJSDocNameExpression() ? parseJSDocNameExpression() : undefined;
-                }
-
-                function isJSDocNameExpression(): boolean {
-                    return lookAhead(() => {
-                        parseOptional(SyntaxKind.OpenBraceToken);
-                        return isIdentifier();
-                    });
-                }
-
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
@@ -7691,7 +7680,7 @@ namespace ts {
                 }
 
                 function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
-                    const nameExpression = tryParseJSDocNameExpression();
+                    const nameExpression = parseJSDocNameReference();
                     const end = getNodePos();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start, end);
