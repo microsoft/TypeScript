@@ -739,7 +739,6 @@ namespace ts {
 
         performance.mark("beforeProgram");
 
-
         const host = createProgramOptions.host || createCompilerHost(options);
         const configParsingHost = parseConfigHostFromCompilerHostLike(host);
 
