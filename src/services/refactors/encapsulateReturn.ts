@@ -76,7 +76,7 @@ namespace ts.refactor.encapsulateReturn {
             }
         }
 
-        const funcName = func.name || getNameOfDeclaration(func);
+        const funcName = func.name || getNameOfDeclarationWorker(func, /*includeArrowFunction*/ true);
         const callExpressions: CallExpression[] = [];
         if (findReference && funcName) {
             Debug.assertIsDefined(cancellationToken);

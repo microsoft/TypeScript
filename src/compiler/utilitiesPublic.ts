@@ -589,9 +589,14 @@ namespace ts {
     }
 
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+        return getNameOfDeclarationWorker(declaration);
+    }
+
+    /*@internal*/
+    export function getNameOfDeclarationWorker(declaration: Declaration | Expression, includeArrowFunction?: boolean): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
-            (isFunctionExpression(declaration) || isClassExpression(declaration) || isArrowFunction(declaration) ? getAssignedName(declaration) : undefined);
+            (isFunctionExpression(declaration) || isClassExpression(declaration) || (includeArrowFunction && isArrowFunction(declaration)) ? getAssignedName(declaration) : undefined);
     }
 
     /*@internal*/
