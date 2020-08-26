@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.generateGetAccessorAndSetAccessor {
+namespace ts.refactor.convertLetToConst {
     const actionName = "Convert 'let' to 'const'";
     registerRefactor(actionName, {
         getEditsForAction(context) {
