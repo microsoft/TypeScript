@@ -1307,8 +1307,8 @@ namespace ts {
     const _entries = Object.entries ? Object.entries : <T>(obj: MapLike<T>) => {
         const keys = getOwnKeys(obj);
         const result: [string, T][] = Array(keys.length);
-        for (const key of keys) {
-            result.push([key, obj[key]]);
+        for (let i = 0; i < keys.length; i++) {
+            result[i] = [keys[i], obj[keys[i]]];
         }
         return result;
     };
