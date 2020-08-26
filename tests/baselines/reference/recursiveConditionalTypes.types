@@ -190,7 +190,7 @@ unbox(b1);  // string
 >b1 : Box<Box<Box<Box<Box<Box<string>>>>>>
 
 unbox(b2);  // string
->unbox(b2) : string
+>unbox(b2) : T6
 >unbox : <T>(box: RecBox<T>) => T
 >b2 : T6
 
@@ -200,7 +200,7 @@ unbox(b3);  // InfBox<string>
 >b3 : InfBox<string>
 
 unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
->unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}}) : number
+>unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}}) : { value: { value: { value: { value: { value: number; }; }; }; }; } | { value: { value: { value: { value: { value: { value: number; }; }; }; }; }; }
 >unbox : <T>(box: RecBox<T>) => T
 >{ value: { value: { value: { value: { value: { value: 5 }}}}}} : { value: { value: { value: { value: { value: { value: number; }; }; }; }; }; }
 >value : { value: { value: { value: { value: { value: number; }; }; }; }; }
@@ -222,7 +222,7 @@ unbox(b4);  // { value: { value: typeof b4 }}
 >b4 : { value: { value: { value: any; }; }; }
 
 unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
->unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
+>unbox({ value: { value: { get value() { return this; } }}}) : { value: { readonly value: { readonly value: any; }; }; }
 >unbox : <T>(box: RecBox<T>) => T
 >{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
 >value : { value: { readonly value: { readonly value: any; }; }; }
@@ -230,7 +230,7 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >value : { readonly value: { readonly value: any; }; }
 >{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
 >value : { readonly value: any; }
->this : { readonly value: any; } | { readonly value: { readonly value: any; }; } | Box<RecBox<{ readonly value: { readonly value: any; }; }>>
+>this : { readonly value: any; } | { readonly value: { readonly value: any; }; } | { value: { readonly value: { readonly value: any; }; }; } | Box<RecBox<{ value: { readonly value: { readonly value: any; }; }; }>>
 
 // Inference from nested instantiations of same generic types
 

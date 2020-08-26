@@ -18,7 +18,7 @@ type t1 = Box<string | Box<number | boolean>>
 >t1 : t1
 
 type t2 = InferRecursive<t1>
->t2 : string | number | boolean
+>t2 : "never!"
 
 type t3 = InferRecursive<Box<string | Box<number | boolean>>> // write t1 explicitly
 >t3 : string | number | boolean
