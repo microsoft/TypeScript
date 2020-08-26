@@ -403,7 +403,7 @@ declare namespace ts {
         UnparsedSource = 296,
         InputFiles = 297,
         JSDocTypeExpression = 298,
-        JSDocNameExpression = 299,
+        JSDocNameReference = 299,
         JSDocAllType = 300,
         JSDocUnknownType = 301,
         JSDocNullableType = 302,
@@ -1684,8 +1684,8 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocTypeExpression;
         readonly type: TypeNode;
     }
-    export interface JSDocNameExpression extends Node {
-        readonly kind: SyntaxKind.JSDocNameExpression;
+    export interface JSDocNameReference extends Node {
+        readonly kind: SyntaxKind.JSDocNameReference;
         readonly name: EntityName;
     }
     export interface JSDocType extends TypeNode {
@@ -1788,7 +1788,7 @@ declare namespace ts {
     }
     export interface JSDocSeeTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocSeeTag;
-        readonly name?: JSDocNameExpression;
+        readonly name?: JSDocNameReference;
     }
     export interface JSDocReturnTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocReturnTag;
@@ -3409,8 +3409,8 @@ declare namespace ts {
         updateJSDocNamepathType(node: JSDocNamepathType, type: TypeNode): JSDocNamepathType;
         createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
-        createJSDocNameExpression(name: EntityName): JSDocNameExpression;
-        updateJSDocNameExpression(node: JSDocNameExpression, name: EntityName): JSDocNameExpression;
+        createJSDocNameReference(name: EntityName): JSDocNameReference;
+        updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
@@ -3425,8 +3425,8 @@ declare namespace ts {
         updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag;
         createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
-        createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameExpression | undefined, comment?: string): JSDocSeeTag;
-        updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameExpression | undefined, comment?: string): JSDocSeeTag;
+        createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
+        updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
         createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
@@ -4436,6 +4436,7 @@ declare namespace ts {
     function isBundle(node: Node): node is Bundle;
     function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
+    function isJSDocNameReference(node: Node): node is JSDocNameReference;
     function isJSDocAllType(node: Node): node is JSDocAllType;
     function isJSDocUnknownType(node: Node): node is JSDocUnknownType;
     function isJSDocNullableType(node: Node): node is JSDocNullableType;
