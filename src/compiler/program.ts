@@ -717,7 +717,7 @@ namespace ts {
         let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        if (options.checkJs) {
+        if (options.checkJs && options.allowJs === undefined) {
             options.allowJs = true;
         }
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
