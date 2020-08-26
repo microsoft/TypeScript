@@ -18287,12 +18287,12 @@ namespace ts {
         // identity is some object that is common to instantiations of the type with the same origin.
         function getRecursionIdentity(type: Type): object | undefined {
             if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
-                if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node) {
-                    // Deferred type references are tracked through their associated AST node. This gives us finer
-                    // granularity than using their associated target because each manifest type reference has a
-                    // unique AST node.
-                    return (type as TypeReference).node;
-                }
+                // if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node) {
+                //     // Deferred type references are tracked through their associated AST node. This gives us finer
+                //     // granularity than using their associated target because each manifest type reference has a
+                //     // unique AST node.
+                //     return (type as TypeReference).node;
+                // }
                 if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
                     // We track all object types that have an associated symbol (representing the origin of the type), but
                     // exclude the static side of classes from this check since it shares its symbol with the instance side.
