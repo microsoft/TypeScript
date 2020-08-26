@@ -955,7 +955,6 @@ namespace ts {
                 // Or we could not handle the condition here, rather than like createCommentDirectivesMap.
                 // Put here, we could reduce couple
                 // Put there, we could reduce `magic`
-                const result = commentDirectives;
                 let isIgnoreStart = false;
                 if (commentDirectives) {
                     // It is obvious the code time could be improved, but I leave it here for reading and understanding.
@@ -982,33 +981,30 @@ namespace ts {
                     let curRegionEnd = end;
                     for (let i = cleanInput.length - 1; i >= 0; i--) {
                         if (cleanInput[i].type === CommentDirectiveType.IgnoreEnd) {
-                            curRegionEnd = cleanInput[i].range.end;
+                            curRegionEnd = cleanInput[i].range.pos - 1;
                         }
                         if (cleanInput[i].type === CommentDirectiveType.IgnoreStart) {
                             const added = [];
                             let tmpPos = cleanInput[i].range.pos;
-                            let tmpEnd = cleanInput[i].range.end;
                             let tmpLineStart = tmpPos;
-
-                            added.push({
-                                range: { pos: tmpLineStart, end: tmpEnd },
-                                type:CommentDirectiveType.Ignore,
-                            });
-
+                            let lastOne;
                             while (tmpPos < curRegionEnd) {
                                 if (isLineBreak(text.charCodeAt(tmpPos))) {
-                                    tmpEnd = tmpPos;
-                                    text.slice(tmpLineStart,tmpEnd);
-                                    added.push({
-                                        range: { pos: tmpLineStart, end: tmpEnd },
-                                        type:CommentDirectiveType.Ignore,
-                                    });
-                                    tmpLineStart = tmpPos;
+                                    if (tmpLineStart !== tmpPos && lastOne) {
+                                        added.push(lastOne);
+                                    }
+                                    lastOne = {
+                                        range: { pos: tmpLineStart, end: tmpPos },
+                                        type: CommentDirectiveType.Ignore,
+                                    };
+                                    tmpLineStart = tmpPos + 1;
                                 }
                                 tmpPos++;
                             }
+                            cleanInput.splice(i, curRegionEnd === end ? 1 : 2, ...added);
                         }
                     }
+                    return cleanInput;
                 }
                 return commentDirectives;
             },
@@ -1143,7 +1139,7 @@ namespace ts {
                 checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
                 return {
                     type: SyntaxKind.NumericLiteral,
-                    value: "" + +result // if value is not an integer, it can be safely coerced to a number
+                    value: "" + result // if value is not an integer, it can be safely coerced to a number
                 };
             }
             else {
