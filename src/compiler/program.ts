@@ -717,6 +717,9 @@ namespace ts {
         let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
+        if (options.checkJs) {
+            options.allowJs = true;
+        }
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
         // This works as imported modules are discovered recursively in a depth first manner, specifically:
         // - For each root file, findSourceFile is called.
@@ -735,6 +738,7 @@ namespace ts {
         const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
         performance.mark("beforeProgram");
+
 
         const host = createProgramOptions.host || createCompilerHost(options);
         const configParsingHost = parseConfigHostFromCompilerHostLike(host);
@@ -3158,10 +3162,6 @@ namespace ts {
 
             if (options.useDefineForClassFields && languageVersion === ScriptTarget.ES3) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_target_is_ES3, "useDefineForClassFields");
-            }
-
-            if (options.checkJs && !options.allowJs) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
             if (options.emitDeclarationOnly) {
