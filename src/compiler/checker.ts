@@ -19600,16 +19600,16 @@ namespace ts {
                 // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
                 // the source side and the target side.
                 const saveExpandingFlags = expandingFlags;
-                const sourceIdentity = getRecursionIdentity(source) || source;
-                const targetIdentity = getRecursionIdentity(target) || target;
-                if (contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
-                if (contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+                const sourceIdentity = getRecursionIdentity(source);
+                const targetIdentity = getRecursionIdentity(target);
+                if (sourceIdentity && contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
+                if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
                 if (expandingFlags !== ExpandingFlags.Both) {
-                    (sourceStack || (sourceStack = [])).push(sourceIdentity);
-                    (targetStack || (targetStack = [])).push(targetIdentity);
+                    if (sourceIdentity) (sourceStack || (sourceStack = [])).push(sourceIdentity);
+                    if (targetIdentity) (targetStack || (targetStack = [])).push(targetIdentity);
                     action(source, target);
-                    targetStack.pop();
-                    sourceStack.pop();
+                    if (targetIdentity) targetStack.pop();
+                    if (sourceIdentity) sourceStack.pop();
                 }
                 else {
                     inferencePriority = InferencePriority.Circularity;
