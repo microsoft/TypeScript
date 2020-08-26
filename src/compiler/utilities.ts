@@ -562,10 +562,16 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean) {
+    export const enum GetLiteralTextFlags {
+        NeverAsciiEscape = 1 << 0,
+        JsxAttributeEscape = 1 << 1,
+        TerminateUnterminatedLiterals = 1 << 2,
+    }
+
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags = 0) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(
+        if (!nodeIsSynthesized(node) && node.parent && !(flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) && !(
             (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
             isBigIntLiteral(node)
         )) {
@@ -576,8 +582,8 @@ namespace ts {
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral: {
-                const escapeText = jsxAttributeEscape ? escapeJsxAttributeString :
-                    neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
+                    flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
                 if ((<StringLiteral>node).singleQuote) {
                     return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
@@ -592,7 +598,7 @@ namespace ts {
             case SyntaxKind.TemplateTail: {
                 // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
                 // had to include a backslash: `not \${a} substitution`.
-                const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
 
                 const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
@@ -610,7 +616,11 @@ namespace ts {
             }
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
+                return node.text;
             case SyntaxKind.RegularExpressionLiteral:
+                if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) {
+                    return node.text + (node.text.charCodeAt(node.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
+                }
                 return node.text;
         }
 
