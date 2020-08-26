@@ -1,0 +1,22 @@
+tests/cases/conformance/directives/ts-ignore-enable.ts(11,5): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/directives/ts-ignore-enable.ts (1 errors) ====
+    // @ts-ignore-enable with additional commenting
+    var invalidCommentedFancy: number = 'nope';
+    
+    // @ts-expect-error this line would be overwritten by @ts-ignore-enable
+    var validCommentedFancy: string = 'nope';
+    
+    var invalidCommentedPlain: number = 'nope';
+    
+    // @ts-ignore-disable
+    
+    var invalidPlain: number = 'nope';
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
+    var validCommentedPlain: string = 'nope';
+    
+    var validPlain: string = 'nope';
+    

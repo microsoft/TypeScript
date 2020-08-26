@@ -1139,7 +1139,7 @@ namespace ts {
                 checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
                 return {
                     type: SyntaxKind.NumericLiteral,
-                    value: "" + result // if value is not an integer, it can be safely coerced to a number
+                    value: "" + +result // if value is not an integer, it can be safely coerced to a number
                 };
             }
             else {
