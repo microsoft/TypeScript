@@ -591,7 +591,7 @@ namespace ts {
     export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
-            (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+            (isFunctionExpression(declaration) || isClassExpression(declaration) || isArrowFunction(declaration) ? getAssignedName(declaration) : undefined);
     }
 
     /*@internal*/

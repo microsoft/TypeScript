@@ -11,7 +11,7 @@ namespace ts.refactor.encapsulateReturn {
 
             return [{
                 name: refactorName,
-                description: actionNameWrapReturnIntoObject,
+                description: refactorName,
                 actions: [{
                     name: actionNameWrapReturnIntoObject,
                     description: actionNameWrapReturnIntoObject
@@ -37,49 +37,48 @@ namespace ts.refactor.encapsulateReturn {
 
     interface Info {
         func: FunctionDeclaration | ArrowFunction | MethodDeclaration | FunctionExpression;
-        funcName: DeclarationName;
         returnStatements: (ReturnStatement | Expression)[]
         callExpressions: CallExpression[]
-        shouldConvertReturnType: boolean
     }
 
     function getInfo(context: RefactorContext, findReference?: boolean, cancellationToken?: CancellationToken): Info | undefined {
-        const { file, startPosition, program } = context
+        const { file, startPosition, program } = context;
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
 
         if (!func || (!isFunctionDeclaration(func) && !isArrowFunction(func) && !isMethodDeclaration(func) && !isFunctionExpression(func)) || !func.body) {
             return undefined;
         }
-        const funcName = getNameOfDeclaration(func);
-        if (!funcName) {
-            return;
-        }
 
-        const returnStatements: (ReturnStatement | Expression)[] = [];
+        const returnStmtOrExpr: (ReturnStatement | Expression)[] = [];
         if (isBlock(func.body)) {
             forEachReturnStatement(func.body, stmt => {
-                returnStatements.push(stmt)
-            })
+                returnStmtOrExpr.push(stmt);
+            });
         }
         else {
-            returnStatements.push(func.body);
+            returnStmtOrExpr.push(skipParentheses(func.body));
         }
-        if (!returnStatements.length) {
+        if (!returnStmtOrExpr || every(returnStmtOrExpr, ret => isReturnStatement(ret) && !ret.expression)) {
             return undefined;
         }
 
-        let shouldConvertReturnType = true
         if (func.type) {
+            if (isTypePredicateNode(func.type)) {
+                return undefined;
+            }
+
             const checker = program.getTypeChecker();
-            const type = checker.getTypeAtLocation(func.type);
-            if (type === checker.getVoidType() || type === checker.getNeverType()) {
-                shouldConvertReturnType = false
+            const signature = checker.getSignatureFromDeclaration(func);
+            const returnType = signature && checker.getReturnTypeOfSignature(signature);
+            if (returnType === checker.getVoidType() || returnType === checker.getNeverType()) {
+                return undefined;
             }
         }
 
+        const funcName = func.name || getNameOfDeclaration(func);
         const callExpressions: CallExpression[] = [];
-        if (findReference) {
+        if (findReference && funcName) {
             Debug.assertIsDefined(cancellationToken);
 
             const references = FindAllReferences.getReferenceEntriesForNode(-1, funcName, program, program.getSourceFiles(), cancellationToken);
@@ -92,21 +91,22 @@ namespace ts.refactor.encapsulateReturn {
                 if (isCallExpression(parent)) {
                     callExpressions.push(parent);
                 }
+                else if (isAccessExpression(parent) && parent.expression !== reference.node && isCallExpression(parent.parent)) {
+                    callExpressions.push(parent.parent);
+                }
             });
         }
 
         return {
             func,
-            funcName,
-            returnStatements,
-            callExpressions,
-            shouldConvertReturnType
+            returnStatements: returnStmtOrExpr,
+            callExpressions
         };
     }
 
     function doChange(changeTracker: textChanges.ChangeTracker, info: Info, file: SourceFile) {
         forEach(info.returnStatements, returnStmtOrExpr => {
-            const returnExpression = isReturnStatement(returnStmtOrExpr) ? 
+            const returnExpression = isReturnStatement(returnStmtOrExpr) ?
                 returnStmtOrExpr.expression ?? factory.createIdentifier("undefined") :
                 returnStmtOrExpr;
 
@@ -122,7 +122,7 @@ namespace ts.refactor.encapsulateReturn {
                     changeTracker.replaceNode(file, returnStmtOrExpr, factory.createReturnStatement(newReturnObject));
                 }
                 else {
-                    changeTracker.replaceNode(file, returnStmtOrExpr.expression, newReturnObject)
+                    changeTracker.replaceNode(file, returnStmtOrExpr.expression, newReturnObject);
                 }
             }
             else {
@@ -141,7 +141,7 @@ namespace ts.refactor.encapsulateReturn {
             changeTracker.replaceNode(file, call, newCall);
         });
 
-        if (info.func.type && info.shouldConvertReturnType) {
+        if (info.func.type) {
             const newType = factory.createTypeLiteralNode([
                 factory.createPropertySignature(
                     /*modifiers*/ undefined,
