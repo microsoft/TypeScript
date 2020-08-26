@@ -717,9 +717,6 @@ namespace ts {
         let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
-        if (options.checkJs && options.allowJs === undefined) {
-            options.allowJs = true;
-        }
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
         // This works as imported modules are discovered recursively in a depth first manner, specifically:
         // - For each root file, findSourceFile is called.
@@ -2849,7 +2846,7 @@ namespace ts {
                         && !options.noResolve
                         && i < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !options.allowJs)
+                        && !(isJsFile && !getAllowJSCompilerOption(options))
                         && (isInJSFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
@@ -3163,7 +3160,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_target_is_ES3, "useDefineForClassFields");
             }
 
-            if (options.checkJs && !options.allowJs) {
+            if (options.checkJs && !getAllowJSCompilerOption(options)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
@@ -3777,7 +3774,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
         function needResolveJsonModule() {
             return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;

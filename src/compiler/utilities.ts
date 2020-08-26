@@ -5922,6 +5922,10 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+    }
+
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
@@ -6375,7 +6379,7 @@ namespace ts {
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[] {
-        const needJsExtensions = options && options.allowJs;
+        const needJsExtensions = options && getAllowJSCompilerOption(options);
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
             return needJsExtensions ? allSupportedExtensions : supportedTSExtensions;
