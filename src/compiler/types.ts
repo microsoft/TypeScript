@@ -3482,6 +3482,10 @@ namespace ts {
     export const enum CommentDirectiveType {
         ExpectError,
         Ignore,
+
+        // this pair would be replaced by CommentDirectiveType.Ignore when anything would be returned from scanner.
+        IgnoreStart,
+        IgnoreEnd
     }
 
     /*@internal*/

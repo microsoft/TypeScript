@@ -280,7 +280,7 @@ namespace ts {
     /**
      * Test for whether a single line comment's text contains a directive.
      */
-    const commentDirectiveRegExSingleLine = /^\s*\/\/\/?\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExSingleLine = /^\s*\/\/\/?\s*@(ts-expect-error|ts-ignore(?=($|[^-]))|ts-ignore-enable|ts-ignore-disable)/;
 
     /**
      * Test for whether a multi-line comment's last line contains a directive.
@@ -951,7 +951,67 @@ namespace ts {
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
-            getCommentDirectives: () => commentDirectives,
+            getCommentDirectives: () => {
+                // Or we could not handle the condition here, rather than like createCommentDirectivesMap.
+                // Put here, we could reduce couple
+                // Put there, we could reduce `magic`
+                const result = commentDirectives;
+                let isIgnoreStart = false;
+                if (commentDirectives) {
+                    // It is obvious the code time could be improved, but I leave it here for reading and understanding.
+
+                    const removedIndex = new Set();
+                    commentDirectives.forEach((d, index) => {
+                        switch (d.type) {
+                            case CommentDirectiveType.IgnoreStart:
+                                if (isIgnoreStart) removedIndex.add(index);
+                                else isIgnoreStart = true;
+                                break;
+                            case CommentDirectiveType.IgnoreEnd:
+                                if (!isIgnoreStart) removedIndex.add(index);
+                                else isIgnoreStart = false;
+                                break;
+                            default:
+                                // this line make expect-error not work.
+                                if (isIgnoreStart) removedIndex.add(index);
+                                break;
+                        }
+                    });
+                    const cleanInput = commentDirectives.filter((_, i) => !removedIndex.has(i));
+
+                    let curRegionEnd = end;
+                    for (let i = cleanInput.length - 1; i >= 0; i--) {
+                        if (cleanInput[i].type === CommentDirectiveType.IgnoreEnd) {
+                            curRegionEnd = cleanInput[i].range.end;
+                        }
+                        if (cleanInput[i].type === CommentDirectiveType.IgnoreStart) {
+                            const added = [];
+                            let tmpPos = cleanInput[i].range.pos;
+                            let tmpEnd = cleanInput[i].range.end;
+                            let tmpLineStart = tmpPos;
+
+                            added.push({
+                                range: { pos: tmpLineStart, end: tmpEnd },
+                                type:CommentDirectiveType.Ignore,
+                            });
+
+                            while (tmpPos < curRegionEnd) {
+                                if (isLineBreak(text.charCodeAt(tmpPos))) {
+                                    tmpEnd = tmpPos;
+                                    text.slice(tmpLineStart,tmpEnd);
+                                    added.push({
+                                        range: { pos: tmpLineStart, end: tmpEnd },
+                                        type:CommentDirectiveType.Ignore,
+                                    });
+                                    tmpLineStart = tmpPos;
+                                }
+                                tmpPos++;
+                            }
+                        }
+                    }
+                }
+                return commentDirectives;
+            },
             getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
             getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
@@ -2180,6 +2240,12 @@ namespace ts {
 
                 case "ts-ignore":
                     return CommentDirectiveType.Ignore;
+
+                case "ts-ignore-enable":
+                    return CommentDirectiveType.IgnoreStart;
+
+                case "ts-ignore-disable":
+                    return CommentDirectiveType.IgnoreEnd;
             }
 
             return undefined;
