@@ -4523,8 +4523,9 @@ namespace ts {
                         appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
                     }
                     const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
+                    const nameTypeNode = type.declaration.nameType ? typeToTypeNodeHelper(getNameTypeFromMappedType(type)!, context) : undefined;
                     const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
-                    const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode);
                     context.approximateLength += 10;
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
@@ -10360,6 +10361,7 @@ namespace ts {
             // and T as the template type.
             const typeParameter = getTypeParameterFromMappedType(type);
             const constraintType = getConstraintTypeFromMappedType(type);
+            const nameType = getNameTypeFromMappedType(<MappedType>type.target || type);
             const templateType = getTemplateTypeFromMappedType(<MappedType>type.target || type);
             const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
             const templateModifiers = getMappedTypeModifiers(type);
@@ -10382,10 +10384,12 @@ namespace ts {
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
             function addMemberForKeyType(t: Type) {
-                // Create a mapper from T to the current iteration type constituent. Then, if the
-                // mapped type is itself an instantiated type, combine the iteration mapper with the
-                // instantiation mapper.
-                const templateMapper = appendTypeMapping(type.mapper, typeParameter, t);
+                const mapper = appendTypeMapping(type.mapper, typeParameter, t);
+                const propNameType = nameType ? instantiateType(nameType, mapper) : t;
+                forEachType(propNameType, t => addMemberForKeyTypeWorker(t, mapper));
+            }
+
+            function addMemberForKeyTypeWorker(t: Type, mapper: TypeMapper) {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (isTypeUsableAsPropertyName(t)) {
@@ -10413,12 +10417,12 @@ namespace ts {
                             prop.declarations = modifiersProp.declarations;
                         }
                         prop.nameType = t;
-                        prop.mapper = templateMapper;
+                        prop.mapper = mapper;
                         members.set(propName, prop);
                     }
                 }
                 else if (t.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum)) {
-                    const propType = instantiateType(templateType, templateMapper);
+                    const propType = instantiateType(templateType, mapper);
                     if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
                         stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
                     }
@@ -10462,6 +10466,12 @@ namespace ts {
         function getConstraintTypeFromMappedType(type: MappedType) {
             return type.constraintType ||
                 (type.constraintType = getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)) || errorType);
+        }
+
+        function getNameTypeFromMappedType(type: MappedType) {
+            return type.declaration.nameType ?
+                type.nameType || (type.nameType = instantiateType(getTypeFromTypeNode(type.declaration.nameType), type.mapper)) :
+                undefined;
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
@@ -10933,7 +10943,7 @@ namespace ts {
 
         function getResolvedApparentTypeOfMappedType(type: MappedType) {
             const typeVariable = getHomomorphicTypeVariable(type);
-            if (typeVariable) {
+            if (typeVariable && !type.declaration.nameType) {
                 const constraint = getConstraintOfTypeParameter(typeVariable);
                 if (constraint && (isArrayType(constraint) || isTupleType(constraint))) {
                     return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
@@ -14892,13 +14902,18 @@ namespace ts {
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(getReducedType(mappedTypeVariable), t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
-                            if (isGenericTupleType(t)) {
-                                return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
+                            if (!type.declaration.nameType) {
+                                if (isArrayType(t)) {
+                                    return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                                }
+                                if (isGenericTupleType(t)) {
+                                    return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
+                                }
+                                if (isTupleType(t)) {
+                                    return instantiateMappedTupleType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                                }
                             }
-                            const replacementMapper = prependTypeMapping(typeVariable, t, mapper);
-                            return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
-                                isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
-                                instantiateAnonymousType(type, replacementMapper);
+                            return instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
                         }
                         return t;
                     });
@@ -17045,7 +17060,8 @@ namespace ts {
 
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
-                    if (getObjectFlags(source) & ObjectFlags.Mapped && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
+                    if (getObjectFlags(source) & ObjectFlags.Mapped && !(<MappedType>source).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
+
                         if (!(getMappedTypeModifiers(<MappedType>source) & MappedTypeModifiers.IncludeOptional)) {
                             const templateType = getTemplateTypeFromMappedType(<MappedType>source);
                             const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(<MappedType>source));
@@ -17102,7 +17118,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (isGenericMappedType(target)) {
+                else if (isGenericMappedType(target) && !target.declaration.nameType) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
@@ -17404,7 +17420,9 @@ namespace ts {
                     const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), makeFunctionTypeMapper(getCombinedMappedTypeOptionality(source) < 0 ? reportUnmeasurableMarkers : reportUnreliableMarkers));
                     if (result = isRelatedTo(targetConstraint, sourceConstraint, reportErrors)) {
                         const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
-                        return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
+                        if (instantiateType(getNameTypeFromMappedType(source), mapper) === instantiateType(getNameTypeFromMappedType(target), mapper)) {
+                            return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
+                        }
                     }
                 }
                 return Ternary.False;
@@ -19953,8 +19971,11 @@ namespace ts {
                     // from S to T and from X to Y.
                     inferFromTypes(getConstraintTypeFromMappedType(source), getConstraintTypeFromMappedType(target));
                     inferFromTypes(getTemplateTypeFromMappedType(source), getTemplateTypeFromMappedType(target));
+                    const sourceNameType = getNameTypeFromMappedType(source);
+                    const targetNameType = getNameTypeFromMappedType(target);
+                    if (sourceNameType && targetNameType) inferFromTypes(sourceNameType, targetNameType);
                 }
-                if (getObjectFlags(target) & ObjectFlags.Mapped) {
+                if (getObjectFlags(target) & ObjectFlags.Mapped && !(<MappedType>target).declaration.nameType) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
                     if (inferToMappedType(source, <MappedType>target, constraintType)) {
                         return;

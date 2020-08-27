@@ -2000,10 +2000,11 @@ namespace ts {
         }
 
         // @api
-        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             const node = createBaseNode<MappedTypeNode>(SyntaxKind.MappedType);
             node.readonlyToken = readonlyToken;
             node.typeParameter = typeParameter;
+            node.nameType = nameType;
             node.questionToken = questionToken;
             node.type = type;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -2011,12 +2012,13 @@ namespace ts {
         }
 
         // @api
-        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
+                || node.nameType !== nameType
                 || node.questionToken !== questionToken
                 || node.type !== type
-                ? update(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
+                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), node)
                 : node;
         }
 

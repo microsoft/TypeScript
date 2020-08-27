@@ -2205,6 +2205,12 @@ namespace ts {
             writePunctuation("[");
 
             pipelineEmit(EmitHint.MappedTypeParameter, node.typeParameter);
+            if (node.nameType) {
+                writeSpace();
+                writeKeyword("as");
+                writeSpace();
+                emit(node.nameType);
+            }
 
             writePunctuation("]");
             if (node.questionToken) {

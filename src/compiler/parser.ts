@@ -206,6 +206,7 @@ namespace ts {
             case SyntaxKind.MappedType:
                 return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).nameType) ||
                     visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
@@ -3282,6 +3283,7 @@ namespace ts {
             }
             parseExpected(SyntaxKind.OpenBracketToken);
             const typeParameter = parseMappedTypeParameter();
+            const nameType = parseOptional(SyntaxKind.AsKeyword) ? parseType() : undefined
             parseExpected(SyntaxKind.CloseBracketToken);
             let questionToken: QuestionToken | PlusToken | MinusToken | undefined;
             if (token() === SyntaxKind.QuestionToken || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
@@ -3293,7 +3295,7 @@ namespace ts {
             const type = parseTypeAnnotation();
             parseSemicolon();
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), pos);
+            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), pos);
         }
 
         function parseTupleElementType() {
