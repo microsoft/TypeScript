@@ -3283,7 +3283,7 @@ namespace ts {
             }
             parseExpected(SyntaxKind.OpenBracketToken);
             const typeParameter = parseMappedTypeParameter();
-            const nameType = parseOptional(SyntaxKind.AsKeyword) ? parseType() : undefined
+            const nameType = parseOptional(SyntaxKind.AsKeyword) ? parseType() : undefined;
             parseExpected(SyntaxKind.CloseBracketToken);
             let questionToken: QuestionToken | PlusToken | MinusToken | undefined;
             if (token() === SyntaxKind.QuestionToken || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
