@@ -1180,6 +1180,10 @@
         "category": "Error",
         "code": 1388
     },
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
