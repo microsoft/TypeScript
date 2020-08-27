@@ -31,6 +31,15 @@
 ////takesCb((x, y) => { x; });
 ////takesCb((x, y) => { y; });
 ////
+////function fn1(x: number, y: string): void {}
+////takesCb(fn1);
+////
+////function fn2(x: number, y: string): void { x; }
+////takesCb(fn2);
+////
+////function fn3(x: number, y: string): void { y; }
+////takesCb(fn3);
+////
 ////x => {
 ////    const y = 0;
 ////};
@@ -75,6 +84,15 @@ declare function takesCb(cb: (x: number, y: string) => void): void;
 takesCb(() => {});
 takesCb((x) => { x; });
 takesCb((x, y) => { y; });
+
+function fn1(): void {}
+takesCb(fn1);
+
+function fn2(x: number): void { x; }
+takesCb(fn2);
+
+function fn3(x: number, y: string): void { y; }
+takesCb(fn3);
 
 () => {
 };
