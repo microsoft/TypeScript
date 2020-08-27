@@ -11838,6 +11838,9 @@
       <Item ItemId=";Types_of_construct_signatures_are_incompatible_2419" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[구문 시그니처 형식이 호환되지 않습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12861,6 +12864,9 @@
       <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0_2690" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) 형식만 참조하는데 여기에서 값으로 사용되고 있습니다. '{0}에서 {1}'을(를) 사용하려고 하셨습니까?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
