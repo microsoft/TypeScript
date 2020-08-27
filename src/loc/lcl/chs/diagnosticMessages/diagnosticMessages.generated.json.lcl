@@ -6727,7 +6727,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Looking up in 'node_modules' folder, initial location '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[正在在 "node_modules" 文件夹中查找，初始位置“{0}”。]]></Val>
+            <Val><![CDATA[正在 "node_modules" 文件夹中查找，初始位置为“{0}”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Looking up in 'node_modules' folder, initial location '{0}']]></Val>
@@ -6850,7 +6850,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模块 "{0}" 只能使用 "{1}" 标志进行默认导入]]></Val>
+            <Val><![CDATA[模块 "{0}" 只能在使用 "{1}" 标志时进行默认导入]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11062,7 +11062,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模块是使用 "export =" 声明的，在使用 "{0}" 标志时只能与默认导入一起使用。]]></Val>
+            <Val><![CDATA[此模块是使用 "export =" 声明的，只能在使用 "{0}" 标志时进行默认导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
