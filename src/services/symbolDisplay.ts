@@ -71,8 +71,6 @@ namespace ts.SymbolDisplay {
                     if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                         return ScriptElementKind.memberVariableElement;
                     }
-                    // May be a Function if this was from `typeof N` with `namespace N { function f();. }`.
-                    Debug.assert(!!(rootSymbolFlags & (SymbolFlags.Method | SymbolFlags.Function)));
                 });
                 if (!unionPropertyKind) {
                     // If this was union of all methods,
