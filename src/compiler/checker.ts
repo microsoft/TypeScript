@@ -23072,7 +23072,7 @@ namespace ts {
                     const functionFlags = getFunctionFlags(func);
                     if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
                         const use = functionFlags & FunctionFlags.Async ? IterationUse.AsyncGeneratorReturnType : IterationUse.GeneratorReturnType;
-                        const iterationTypes = getIterationTypesOfIterable(contextualReturnType, use, /*errorNode*/ undefined);
+                        const iterationTypes = getIterationTypesOfIterable(contextualReturnType, use, /*errorNode*/ undefined, /* shouldIgnoreNonIterableUnionConstituent */ true);
                         if (!iterationTypes) {
                             return undefined;
                         }
@@ -28354,7 +28354,9 @@ namespace ts {
                     const iterationTypes = getIterationTypesOfIterable(
                         yieldExpressionType,
                         isAsync ? IterationUse.AsyncYieldStar : IterationUse.YieldStar,
-                        yieldExpression.expression);
+                        yieldExpression.expression,
+                        /* shouldIgnoreNonIterableUnionConstituent */ true
+                        );
                     nextType = iterationTypes && iterationTypes.nextType;
                 }
                 else {
@@ -33360,7 +33362,7 @@ namespace ts {
             // downlevelIteration is requested.
             if (uplevelIteration || downlevelIteration || allowAsyncIterables) {
                 // We only report errors for an invalid iterable type in ES2015 or higher.
-                const iterationTypes = getIterationTypesOfIterable(inputType, use, uplevelIteration ? errorNode : undefined);
+                const iterationTypes = getIterationTypesOfIterable(inputType, use, uplevelIteration ? errorNode : undefined, /* shouldIgnoreNonIterableUnionConstituent */ false);
                 if (checkAssignability) {
                     if (iterationTypes) {
                         const diagnostic =
@@ -33466,7 +33468,7 @@ namespace ts {
                 return undefined;
             }
 
-            const iterationTypes = getIterationTypesOfIterable(inputType, use, errorNode);
+            const iterationTypes = getIterationTypesOfIterable(inputType, use, errorNode, /* shouldIgnoreNonIterableUnionConstituent */ true);
             return iterationTypes && iterationTypes[getIterationTypesKeyFromIterationTypeKind(typeKind)];
         }
 
@@ -33553,7 +33555,7 @@ namespace ts {
          * For a **for-await-of** statement or a `yield*` in an async generator we will look for
          * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
          */
-        function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined) {
+        function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode: Node | undefined, shouldIgnoreNonIterableUnionConstituent: boolean) {
             if (isTypeAny(type)) {
                 return anyIterationTypes;
             }
@@ -33581,8 +33583,10 @@ namespace ts {
                         reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                         errorNode = undefined;
                     }
-                    allIterationTypes = undefined;
-                    break;
+                    if (!shouldIgnoreNonIterableUnionConstituent) {
+                        allIterationTypes = undefined;
+                        break;
+                    }
                 }
                 else {
                     allIterationTypes = append(allIterationTypes, iterationTypes);
@@ -34011,7 +34015,7 @@ namespace ts {
 
             const use = isAsyncGenerator ? IterationUse.AsyncGeneratorReturnType : IterationUse.GeneratorReturnType;
             const resolver = isAsyncGenerator ? asyncIterationTypesResolver : syncIterationTypesResolver;
-            return getIterationTypesOfIterable(type, use, /*errorNode*/ undefined) ||
+            return getIterationTypesOfIterable(type, use, /*errorNode*/ undefined, /* shouldIgnoreNonIterableUnionConstituent */ true) ||
                 getIterationTypesOfIterator(type, resolver, /*errorNode*/ undefined);
         }
 
