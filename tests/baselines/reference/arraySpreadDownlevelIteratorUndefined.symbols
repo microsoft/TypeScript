@@ -1,0 +1,7 @@
+=== tests/cases/compiler/arraySpreadDownlevelIteratorUndefined.ts ===
+declare const arr: number[] | undefined;
+>arr : Symbol(arr, Decl(arraySpreadDownlevelIteratorUndefined.ts, 0, 13))
+
+[...arr];
+>arr : Symbol(arr, Decl(arraySpreadDownlevelIteratorUndefined.ts, 0, 13))
+

@@ -33581,6 +33581,8 @@ namespace ts {
                         reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                         errorNode = undefined;
                     }
+                    allIterationTypes = undefined;
+                    break;
                 }
                 else {
                     allIterationTypes = append(allIterationTypes, iterationTypes);
