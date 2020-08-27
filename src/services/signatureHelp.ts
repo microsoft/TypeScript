@@ -86,11 +86,14 @@ namespace ts.SignatureHelp {
                 if (onlyUseSyntacticOwners && !containsPrecedingToken(startingToken, sourceFile, isIdentifier(called) ? called.parent : called)) {
                     return undefined;
                 }
-                const candidates = getPossibleGenericSignatures(called, argumentCount, checker);
+                const symbol = checker.getSymbolAtLocation(called);
+                if (!symbol) {
+                    return undefined;
+                }
+                const candidates = getPossibleGenericSignaturesOfType(checker.getTypeOfSymbolAtLocation(symbol, called), called, argumentCount);
                 if (candidates.length !== 0) return { kind: CandidateOrTypeKind.Candidate, candidates, resolvedSignature: first(candidates) };
 
-                const symbol = checker.getSymbolAtLocation(called);
-                return symbol && { kind: CandidateOrTypeKind.Type, symbol };
+                return { kind: CandidateOrTypeKind.Type, symbol };
             }
             case InvocationKind.Contextual:
                 return { kind: CandidateOrTypeKind.Candidate, candidates: [invocation.signature], resolvedSignature: invocation.signature };

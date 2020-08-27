@@ -1390,11 +1390,11 @@ namespace ts {
     }
 
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): readonly Signature[] {
-        let type = checker.getTypeAtLocation(called);
-        if (isOptionalChain(called.parent)) {
-            type = removeOptionality(type, isOptionalChainRoot(called.parent), /*isOptionalChain*/ true);
-        }
+        const type = checker.getTypeAtLocation(called);
+        return getPossibleGenericSignaturesOfType(type, called, typeArgumentCount);
+    }
 
+    export function getPossibleGenericSignaturesOfType(type: Type, called: Expression, typeArgumentCount: number): readonly Signature[] {
         const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
         return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
     }
