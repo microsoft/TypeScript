@@ -31325,6 +31325,7 @@ namespace ts {
 
         function checkMappedType(node: MappedTypeNode) {
             checkSourceElement(node.typeParameter);
+            checkSourceElement(node.nameType);
             checkSourceElement(node.type);
 
             if (!node.type) {
@@ -31334,6 +31335,10 @@ namespace ts {
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             checkTypeAssignableTo(constraintType, keyofConstraintType, getEffectiveConstraintOfTypeParameter(node.typeParameter));
+            const nameType = getNameTypeFromMappedType(type);
+            if (nameType) {
+                checkTypeAssignableTo(nameType, keyofConstraintType, node.nameType);
+            }
         }
 
         function checkThisType(node: ThisTypeNode) {
