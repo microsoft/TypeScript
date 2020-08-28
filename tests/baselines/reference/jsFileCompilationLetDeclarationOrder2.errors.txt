@@ -1,8 +1,6 @@
-error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 tests/cases/compiler/a.ts(2,1): error TS2448: Block-scoped variable 'a' used before its declaration.
 
 
-!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== tests/cases/compiler/a.ts (1 errors) ====
     let b = 30;
     a = 10;
