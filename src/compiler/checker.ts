@@ -28295,14 +28295,16 @@ namespace ts {
                 returnType = getUnionType(types, UnionReduction.Subtype);
             }
 
+            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (returnType || yieldType || nextType) {
-                if (yieldType) reportErrorsFromWidening(func, yieldType, WideningKind.GeneratorYield);
-                if (returnType) reportErrorsFromWidening(func, returnType, WideningKind.FunctionReturn);
-                if (nextType) reportErrorsFromWidening(func, nextType, WideningKind.GeneratorNext);
+                if (!contextualSignature) {
+                    if (yieldType) reportErrorsFromWidening(func, yieldType, WideningKind.GeneratorYield);
+                    if (returnType) reportErrorsFromWidening(func, returnType, WideningKind.FunctionReturn);
+                    if (nextType) reportErrorsFromWidening(func, nextType, WideningKind.GeneratorNext);
+                }
                 if (returnType && isUnitType(returnType) ||
                     yieldType && isUnitType(yieldType) ||
                     nextType && isUnitType(nextType)) {
-                    const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
                     const contextualType = !contextualSignature ? undefined :
                         contextualSignature === getSignatureFromDeclaration(func) ? isGenerator ? undefined : returnType :
                         instantiateContextualType(getReturnTypeOfSignature(contextualSignature), func);
@@ -28316,9 +28318,11 @@ namespace ts {
                     }
                 }
 
-                if (yieldType) yieldType = getWidenedType(yieldType);
-                if (returnType) returnType = getWidenedType(returnType);
-                if (nextType) nextType = getWidenedType(nextType);
+                if (!contextualSignature) {
+                    if (yieldType) yieldType = getWidenedType(yieldType);
+                    if (returnType) returnType = getWidenedType(returnType);
+                    if (nextType) nextType = getWidenedType(nextType);
+                }
             }
 
             if (isGenerator) {
