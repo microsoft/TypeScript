@@ -1,8 +1,6 @@
-error TS1391: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 
-!!! error TS1391: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 !!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== tests/cases/compiler/ref/a.ts (0 errors) ====
     // This should be an error
@@ -12,3 +10,4 @@ error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 ==== tests/cases/compiler/b.ts (0 errors) ====
     import {A} from "./ref/a";
     export class B extends A { }
+    
