@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/declarationEmit/bundledNodeDTSFailsWithFlag.ts] ////
+//// [tests/cases/conformance/declarationEmit/bundledNodeDTSPassesWithFlag.ts] ////
 
 //// [index.ts]
 export * from "./nested";

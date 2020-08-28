@@ -326,7 +326,7 @@ export class someClass2 { }`),
                     const coreTsConfig: File = {
                         path: core[0].path,
                         content: JSON.stringify({
-                            compilerOptions: { composite: true, declaration: true, outFile: "index.js", bundledPackageName: "core"  }
+                            compilerOptions: { composite: true, declaration: true, outFile: "index.js", bundledPackageName: "core" }
                         })
                     };
                     const logicTsConfig: File = {
