@@ -413,6 +413,25 @@ namespace ts {
         export function enableDebugInfo() {
             if (isDebugInfoEnabled) return;
 
+            // avoid recomputing
+            let weakTypeTextMap: WeakMap<Type, string> | undefined;
+            let weakNodeTextMap: WeakMap<Node, string> | undefined;
+
+            function getWeakTypeTextMap() {
+                if (weakTypeTextMap === undefined) {
+                    if (typeof WeakMap === "function") weakTypeTextMap = new WeakMap();
+                }
+                return weakTypeTextMap;
+            }
+
+            function getWeakNodeTextMap() {
+                if (weakNodeTextMap === undefined) {
+                    if (typeof WeakMap === "function") weakNodeTextMap = new WeakMap();
+                }
+                return weakNodeTextMap;
+            }
+
+
             // Add additional properties in debug mode to assist with debugging.
             Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
                 __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
@@ -421,7 +440,18 @@ namespace ts {
             Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
                 __debugFlags: { get(this: Type) { return formatTypeFlags(this.flags); } },
                 __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
-                __debugTypeToString: { value(this: Type) { return this.checker.typeToString(this); } },
+                __debugTypeToString: {
+                    value(this: Type) {
+                        // avoid recomputing
+                        const map = getWeakTypeTextMap();
+                        let text = map?.get(this);
+                        if (text === undefined) {
+                            text = this.checker.typeToString(this);
+                            map?.set(this, text);
+                        }
+                        return text;
+                    }
+                },
             });
 
             const nodeConstructors = [
@@ -443,9 +473,16 @@ namespace ts {
                         __debugGetText: {
                             value(this: Node, includeTrivia?: boolean) {
                                 if (nodeIsSynthesized(this)) return "";
-                                const parseNode = getParseTreeNode(this);
-                                const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode!, includeTrivia) : "";
+                                // avoid recomputing
+                                const map = getWeakNodeTextMap();
+                                let text = map?.get(this);
+                                if (text === undefined) {
+                                    const parseNode = getParseTreeNode(this);
+                                    const sourceFile = parseNode && getSourceFileOfNode(parseNode);
+                                    text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode!, includeTrivia) : "";
+                                    map?.set(this, text);
+                                }
+                                return text;
                             }
                         }
                     });

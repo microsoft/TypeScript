@@ -6727,7 +6727,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Looking up in 'node_modules' folder, initial location '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[正在在 "node_modules" 文件夹中查找，初始位置“{0}”。]]></Val>
+            <Val><![CDATA[正在 "node_modules" 文件夹中查找，初始位置为“{0}”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Looking up in 'node_modules' folder, initial location '{0}']]></Val>
@@ -6850,7 +6850,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模块 "{0}" 只能使用 "{1}" 标志进行默认导入]]></Val>
+            <Val><![CDATA[模块 "{0}" 只能在使用 "{1}" 标志时进行默认导入]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11062,7 +11062,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模块是使用 "export =" 声明的，在使用 "{0}" 标志时只能与默认导入一起使用。]]></Val>
+            <Val><![CDATA[此模块是使用 "export =" 声明的，只能在使用 "{0}" 标志时进行默认导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11831,6 +11831,15 @@
           <Val><![CDATA[Types have separate declarations of a private property '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[类型具有私有属性“{0}”的单独声明。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Types_of_construct_signatures_are_incompatible_2419" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[构造签名的类型不兼容。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12848,6 +12857,15 @@
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[“{0}”仅表示类型，但在此处却作为值使用。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0_2690" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”仅引用一个类型，但在此处用作一个值。你是否想要使用“{0} 中的 {1}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
