@@ -1,5 +1,6 @@
 // @module: commonjs
 // @declaration: true
+// @moduleResolution: node
 // @emitDeclarationOnly: true
 // @outFile: ./dist/out.d.ts
 

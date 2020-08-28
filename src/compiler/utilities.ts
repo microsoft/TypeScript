@@ -4035,9 +4035,10 @@ namespace ts {
         if (referencePath) {
             return ensurePathIsNonModuleName(extensionless);
         }
-        const rootPkgName = host.getCompilerOptions().bundledPackageName || "";
+        const options = host.getCompilerOptions();
+        const rootPkgName = options.bundledPackageName || "";
         const newPath = combinePaths(rootPkgName, extensionless);
-        if (endsWith(newPath, "/index")) {
+        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
             return newPath.slice(0, newPath.length - "/index".length);
         }
         return newPath;

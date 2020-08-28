@@ -95,7 +95,7 @@ emittedFile:bundle.d.ts
 sourceFile:tests/cases/compiler/index.ts
 -------------------------------------------------------------------
 >>>}
->>>declare module "example" {
+>>>declare module "example/index" {
 >>>    import { Foo } from "example/a";
 1 >^^^^
 2 >    ^^^^^^^

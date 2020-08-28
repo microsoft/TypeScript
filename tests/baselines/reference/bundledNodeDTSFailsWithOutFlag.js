@@ -40,11 +40,11 @@ declare module "nested/base" {
 declare module "nested/derived" {
     export function g(): import("nested").B;
 }
-declare module "nested" {
+declare module "nested/index" {
     export * from "nested/base";
     export * from "nested/derived";
     export * from "nested/shared";
 }
 declare module "index" {
-    export * from "nested";
+    export * from "nested/index";
 }

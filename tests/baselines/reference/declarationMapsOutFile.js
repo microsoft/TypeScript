@@ -37,7 +37,7 @@ define("example/a", ["require", "exports"], function (require, exports) {
     }());
     exports.Foo = Foo;
 });
-define("example", ["require", "exports", "example/a"], function (require, exports, a_1) {
+define("example/index", ["require", "exports", "example/a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
     exports.Foo = exports.c = exports.x = void 0;
@@ -60,7 +60,7 @@ declare module "example/a" {
         static make(): Foo;
     }
 }
-declare module "example" {
+declare module "example/index" {
     import { Foo } from "example/a";
     const c: Foo;
     export let x: {
