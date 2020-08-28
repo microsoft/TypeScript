@@ -1,0 +1,235 @@
+=== tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts ===
+export type SomeObj1 = { a: number, b: number };
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 24))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 35))
+
+declare function valueOrGetter<T>(x: T, f: () => T): T;
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>T : Symbol(T, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 31))
+>x : Symbol(x, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 34))
+>T : Symbol(T, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 31))
+>f : Symbol(f, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 39))
+>T : Symbol(T, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 31))
+>T : Symbol(T, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 31))
+
+namespace arrows {
+>arrows : Symbol(arrows, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 2, 55))
+
+    declare function consumeObj1(f: () => SomeObj1): void;
+>consumeObj1 : Symbol(consumeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 4, 18))
+>f : Symbol(f, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 5, 33))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+
+    consumeObj1(() => ({
+>consumeObj1 : Symbol(consumeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 4, 18))
+
+        a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 6, 24))
+
+        b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 7, 15))
+
+        c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 8, 15))
+
+    }));
+    
+    function obj1FactoryFactory(): () => SomeObj1 {
+>obj1FactoryFactory : Symbol(obj1FactoryFactory, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 10, 8))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+
+        return () => ({
+            a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 13, 23))
+
+            b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 14, 19))
+
+            c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 15, 19))
+
+        });
+    }
+
+    valueOrGetter({ a: 100, b: 200 }, () => ({
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 20, 19))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 20, 27))
+
+        a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 20, 46))
+
+        b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 21, 15))
+
+        c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 22, 15))
+
+    }));
+
+    valueOrGetter<SomeObj1>({ a: 100, b: 200, c: 300 }, () => ({
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 26, 29))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 26, 37))
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 26, 45))
+
+        a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 26, 64))
+
+        b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 27, 15))
+
+    }));
+
+    valueOrGetter<SomeObj1>({ a: 100, b: 200 }, () => ({
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 31, 29))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 31, 37))
+
+        a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 31, 56))
+
+        b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 32, 15))
+
+        c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 33, 15))
+
+    }));
+
+    valueOrGetter({ a: 100, b: 200, c: 300 }, () => ({
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 37, 19))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 37, 27))
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 37, 35))
+
+        a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 37, 54))
+
+        b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 38, 15))
+
+    }));
+}
+
+namespace funcExprs {
+>funcExprs : Symbol(funcExprs, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 41, 1))
+
+    declare function consumeObj1(f: () => SomeObj1): void;
+>consumeObj1 : Symbol(consumeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 43, 21))
+>f : Symbol(f, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 44, 33))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+
+    consumeObj1(function() {
+>consumeObj1 : Symbol(consumeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 43, 21))
+
+        return {
+            a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 46, 16))
+
+            b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 47, 19))
+
+            c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 48, 19))
+
+        };
+    });
+    
+    function obj1FactoryFactory(): () => SomeObj1 {
+>obj1FactoryFactory : Symbol(obj1FactoryFactory, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 51, 7))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+
+        return function() {
+            return {
+                a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 55, 20))
+
+                b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 56, 23))
+
+                c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 57, 23))
+            }
+        };
+    }
+
+    valueOrGetter({ a: 100, b: 200 }, function() {
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 63, 19))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 63, 27))
+
+        return {
+            a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 64, 16))
+
+            b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 65, 19))
+
+            c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 66, 19))
+
+        };
+    });
+
+    valueOrGetter<SomeObj1>({ a: 100, b: 200, c: 300 }, function() {
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 71, 29))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 71, 37))
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 71, 45))
+
+        return {
+            a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 72, 16))
+
+            b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 73, 19))
+
+            c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 74, 19))
+
+        };
+    });
+
+    valueOrGetter<SomeObj1>({ a: 100, b: 200 }, function() {
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>SomeObj1 : Symbol(SomeObj1, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 79, 29))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 79, 37))
+
+        return {
+            a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 80, 16))
+
+            b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 81, 19))
+
+            c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 82, 19))
+
+        };
+    });
+
+    valueOrGetter({ a: 100, b: 200, c: 300 }, function() {
+>valueOrGetter : Symbol(valueOrGetter, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 0, 48))
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 87, 19))
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 87, 27))
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 87, 35))
+
+        return {
+            a: 100,
+>a : Symbol(a, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 88, 16))
+
+            b: 200,
+>b : Symbol(b, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 89, 19))
+
+            c: 300,
+>c : Symbol(c, Decl(excessPropertyErrorForFunctionExpressionReturns.ts, 90, 19))
+
+        };
+    });
+}
