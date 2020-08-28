@@ -1217,6 +1217,10 @@ namespace ts {
         }
 
         const children = n.getChildren(sourceFile);
+        if (children.length === 0) {
+            return n;
+        }
+
         const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
@@ -1914,7 +1918,10 @@ namespace ts {
             for (const newImport of sortedNewImports) {
                 const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
                 if (insertionIndex === 0) {
-                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false);
+                    // If the first import is top-of-file, insert after the leading comment which is likely the header.
+                    const options = existingImportStatements[0] === sourceFile.statements[0] ?
+                    { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude } : {};
+                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, options);
                 }
                 else {
                     const prevImport = existingImportStatements[insertionIndex - 1];
@@ -2736,9 +2743,7 @@ namespace ts {
 
         type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
-        const stringContent = host.readFile(fileName);
-        if (!stringContent) return undefined;
-
+        const stringContent = host.readFile(fileName) || "";
         const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
         if (content) {

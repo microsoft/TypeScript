@@ -3687,8 +3687,6 @@ namespace ts {
         /* @internal */
         getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
-        getSkippedTrippleSlashReferences(): Set<Path> | undefined;
-        /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
         /**
@@ -3939,7 +3937,8 @@ namespace ts {
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
-        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
          * Otherwise returns its input.
@@ -5292,8 +5291,6 @@ namespace ts {
         node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
@@ -5377,6 +5374,8 @@ namespace ts {
         resolvedTypePredicate?: TypePredicate;
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
+        /* @internal */
+        resolvedMinArgumentCount?: number;  // Number of non-optional parameters (excluding trailing `void`)
         /* @internal */
         target?: Signature;                 // Instantiation target
         /* @internal */
@@ -5883,13 +5882,14 @@ namespace ts {
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
-        includeSpecs?: readonly string[];
+        includeSpecs: readonly string[] | undefined;
         /**
          * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
          */
-        excludeSpecs?: readonly string[];
-        validatedIncludeSpecs?: readonly string[];
-        validatedExcludeSpecs?: readonly string[];
+        excludeSpecs: readonly string[] | undefined;
+        validatedFilesSpec: readonly string[] | undefined;
+        validatedIncludeSpecs: readonly string[] | undefined;
+        validatedExcludeSpecs: readonly string[] | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
@@ -6233,7 +6233,6 @@ namespace ts {
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
-        /* @internal */ includeTripleslashReferencesFrom?(containingFile: string): boolean;
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
@@ -8060,7 +8059,7 @@ namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
     }
 

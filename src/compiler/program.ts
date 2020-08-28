@@ -807,8 +807,6 @@ namespace ts {
         let mapFromFileToProjectReferenceRedirects: ESMap<Path, Path> | undefined;
         let mapFromToProjectReferenceRedirectSource: ESMap<Path, SourceOfProjectReferenceRedirect> | undefined;
 
-        let skippedTrippleSlashReferences: Set<Path> | undefined;
-
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
         const { onProgramCreateComplete, fileExists, directoryExists } = updateHostForUseSourceOfProjectReferenceRedirect({
@@ -931,7 +929,6 @@ namespace ts {
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
             getRefFileMap: () => refFileMap,
-            getSkippedTrippleSlashReferences: () => skippedTrippleSlashReferences,
             getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -1275,7 +1272,6 @@ namespace ts {
             const oldSourceFiles = oldProgram.getSourceFiles();
             const enum SeenPackageName { Exists, Modified }
             const seenPackageNames = new Map<string, SeenPackageName>();
-            const oldSkippedTrippleSlashReferences = oldProgram.getSkippedTrippleSlashReferences();
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
@@ -1345,11 +1341,6 @@ namespace ts {
                     // check tripleslash references
                     if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                         // tripleslash references has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                    }
-
-                    if (oldSkippedTrippleSlashReferences?.has(oldSourceFile.path) && includeTripleslashReferencesFrom(newSourceFile)) {
-                        // tripleslash reference resolution is now allowed
                         oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
@@ -1440,7 +1431,6 @@ namespace ts {
 
             missingFilePaths = oldProgram.getMissingFilePaths();
             refFileMap = oldProgram.getRefFileMap();
-            skippedTrippleSlashReferences = oldSkippedTrippleSlashReferences;
 
             // update fileName -> file mapping
             Debug.assert(newSourceFiles.length === oldProgram.getSourceFiles().length);
@@ -1757,13 +1747,13 @@ namespace ts {
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
-                return getMergedBindAndCheckDiagnostics(sourceFile, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
 
-        function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+        function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
             const flatDiagnostics = flatten(allDiagnostics);
-            if (!sourceFile.commentDirectives?.length) {
+            if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
                 return flatDiagnostics;
             }
 
@@ -1864,7 +1854,7 @@ namespace ts {
                     switch (node.kind) {
                         case SyntaxKind.ImportClause:
                             if ((node as ImportClause).isTypeOnly) {
-                                diagnostics.push(createDiagnosticForNode(node.parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                                diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
                                 return "skip";
                             }
                             break;
@@ -2660,15 +2650,7 @@ namespace ts {
             return projectReferenceRedirects.get(projectReferencePath) || undefined;
         }
 
-        function includeTripleslashReferencesFrom(file: SourceFile) {
-            return !host.includeTripleslashReferencesFrom || host.includeTripleslashReferencesFrom(file.originalFileName);
-        }
-
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
-            if (!includeTripleslashReferencesFrom(file)) {
-                (skippedTrippleSlashReferences ||= new Set()).add(file.path);
-                return;
-            }
             forEach(file.referencedFiles, (ref, index) => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
                 processSourceFile(
@@ -3128,7 +3110,8 @@ namespace ts {
                 const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
-                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.All_files_must_be_modules_when_the_isolatedModules_flag_is_provided));
+                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length,
+                        Diagnostics._0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_import_export_or_an_empty_export_statement_to_make_it_a_module, getBaseFileName(firstNonExternalModuleSourceFile.fileName)));
                 }
             }
             else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {

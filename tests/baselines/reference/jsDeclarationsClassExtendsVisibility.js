@@ -56,12 +56,12 @@ declare class Bar {
 }
 //// [cls.d.ts]
 export = Foo;
-declare const Foo_base: typeof import("./bar");
-declare class Foo extends Foo_base {
+declare class Foo extends Bar {
 }
 declare namespace Foo {
     export { Strings };
 }
+import Bar = require("./bar");
 declare namespace Strings {
     const a: string;
     const b: string;

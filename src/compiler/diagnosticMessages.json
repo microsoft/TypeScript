@@ -659,7 +659,7 @@
         "category": "Error",
         "code": 1207
     },
-    "All files must be modules when the '--isolatedModules' flag is provided.": {
+    "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
         "category": "Error",
         "code": 1208
     },
@@ -1180,15 +1180,18 @@
         "category": "Error",
         "code": 1388
     },
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
+    },
     "Provides a root package name when using outFile with declarations.": {
         "category": "Message",
-        "code": 1389
+        "code": 1390
     },
     "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
         "category": "Error",
-        "code": 1390
+        "code": 1391
     },
-
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1693,6 +1696,10 @@
     "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2418
+    },
+    "Types of construct signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2615,6 +2622,10 @@
         "category": "Error",
         "code": 2689
     },
+    "'{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?": {
+        "category": "Error",
+        "code": 2690
+    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
@@ -3020,6 +3031,11 @@
         "category": "Error",
         "code": 2791
     },
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+        "category": "Error",
+        "code": 2792
+    },
+
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
