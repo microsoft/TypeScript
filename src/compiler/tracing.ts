@@ -112,6 +112,18 @@ namespace ts.tracing {
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
 
+    export function instant(phase: Phase, name: string, args: object) {
+        if (!traceFd) {
+            return;
+        }
+        Debug.assert(fs);
+
+        performance.mark("beginTracing");
+        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","s":"g","args":{ "ts": ${JSON.stringify(args)} }},\n`);
+        performance.mark("endTracing");
+        performance.measure("Tracing", "beginTracing", "endTracing");
+    }
+
     function indexFromOne(lc: LineAndCharacter): LineAndCharacter {
         return {
             line: lc.line + 1,
