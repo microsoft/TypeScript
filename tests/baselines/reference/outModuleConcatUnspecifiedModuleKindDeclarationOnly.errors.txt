@@ -1,9 +1,10 @@
-error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
 
 
-!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+!!! error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
 ==== tests/cases/compiler/a.ts (0 errors) ====
     export class A { } // module
     
 ==== tests/cases/compiler/b.ts (0 errors) ====
     var x = 0; // global
+    
