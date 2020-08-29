@@ -486,7 +486,7 @@ declare function bar<T>(f: () => T[]): T[];
 
 let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
 >x : Foo[]
->bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : { state: State.A; }[]
+>bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : ({ state: State.A; } | { state: State.B; })[]
 >bar : <T>(f: () => T[]) => T[]
 >() => !!true ? [{ state: State.A }] : [{ state: State.B }] : () => { state: State.A; }[] | { state: State.B; }[]
 >!!true ? [{ state: State.A }] : [{ state: State.B }] : { state: State.A; }[] | { state: State.B; }[]

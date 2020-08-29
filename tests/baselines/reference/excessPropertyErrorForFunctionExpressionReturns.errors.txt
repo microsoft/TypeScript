@@ -1,16 +1,25 @@
-tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(21,19): error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; b: number; c: number; }'.
-  Property 'c' is missing in type '{ a: number; b: number; }' but required in type '{ a: number; b: number; c: number; }'.
+tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(10,9): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(17,13): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(27,47): error TS2345: Argument of type '{ a: number; b: number; c: number; }' is not assignable to parameter of type 'SomeObj1'.
   Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
-tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(38,37): error TS2345: Argument of type '{ a: number; b: number; c: number; }' is not assignable to parameter of type '{ a: number; b: number; }'.
-  Object literal may only specify known properties, and 'c' does not exist in type '{ a: number; b: number; }'.
-tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(64,19): error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; b: number; c: number; }'.
-  Property 'c' is missing in type '{ a: number; b: number; }' but required in type '{ a: number; b: number; c: number; }'.
+tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(35,9): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(50,13): error TS2345: Argument of type '() => { a: number; b: number; c: number; }' is not assignable to parameter of type '() => SomeObj1'.
+  Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+    Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(59,17): error TS2322: Type '() => { a: number; b: number; c: number; }' is not assignable to type '() => SomeObj1'.
+  Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+    Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): error TS2345: Argument of type '{ a: number; b: number; c: number; }' is not assignable to parameter of type 'SomeObj1'.
   Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(84,13): error TS2345: Argument of type '() => { a: number; b: number; c: number; }' is not assignable to parameter of type '() => SomeObj1'.
+  Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+    Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
 
 
-==== tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts (5 errors) ====
+==== tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts (8 errors) ====
     export type SomeObj1 = { a: number, b: number };
     
     declare function valueOrGetter<T>(x: T, f: () => T): T;
@@ -21,6 +30,10 @@ tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): 
             a: 100,
             b: 200,
             c: 300,
+            ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+!!! related TS6502 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts:6:37: The expected type comes from the return type of this signature.
         }));
         
         function obj1FactoryFactory(): () => SomeObj1 {
@@ -28,14 +41,14 @@ tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): 
                 a: 100,
                 b: 200,
                 c: 300,
+                ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+!!! related TS6502 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts:13:36: The expected type comes from the return type of this signature.
             });
         }
     
         valueOrGetter({ a: 100, b: 200 }, () => ({
-                      ~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; b: number; c: number; }'.
-!!! error TS2345:   Property 'c' is missing in type '{ a: number; b: number; }' but required in type '{ a: number; b: number; c: number; }'.
-!!! related TS2728 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts:24:9: 'c' is declared here.
             a: 100,
             b: 200,
             c: 300,
@@ -53,12 +66,13 @@ tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): 
             a: 100,
             b: 200,
             c: 300,
+            ~~~~~~
+!!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
+!!! related TS6502 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts:3:44: The expected type comes from the return type of this signature.
         }));
     
         valueOrGetter({ a: 100, b: 200, c: 300 }, () => ({
-                                        ~~~~~~
-!!! error TS2345: Argument of type '{ a: number; b: number; c: number; }' is not assignable to parameter of type '{ a: number; b: number; }'.
-!!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: number; b: number; }'.
             a: 100,
             b: 200,
         }));
@@ -71,6 +85,10 @@ tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): 
                 a: 100,
                 b: 200,
                 c: 300,
+                ~~~~~~
+!!! error TS2345: Argument of type '() => { a: number; b: number; c: number; }' is not assignable to parameter of type '() => SomeObj1'.
+!!! error TS2345:   Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+!!! error TS2345:     Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
             };
         });
         
@@ -80,15 +98,15 @@ tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): 
                     a: 100,
                     b: 200,
                     c: 300,
+                    ~~~~~~
+!!! error TS2322: Type '() => { a: number; b: number; c: number; }' is not assignable to type '() => SomeObj1'.
+!!! error TS2322:   Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+!!! error TS2322:     Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
                 }
             };
         }
     
         valueOrGetter({ a: 100, b: 200 }, function() {
-                      ~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; b: number; c: number; }'.
-!!! error TS2345:   Property 'c' is missing in type '{ a: number; b: number; }' but required in type '{ a: number; b: number; c: number; }'.
-!!! related TS2728 tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts:68:13: 'c' is declared here.
             return {
                 a: 100,
                 b: 200,
@@ -112,6 +130,10 @@ tests/cases/compiler/excessPropertyErrorForFunctionExpressionReturns.ts(72,47): 
                 a: 100,
                 b: 200,
                 c: 300,
+                ~~~~~~
+!!! error TS2345: Argument of type '() => { a: number; b: number; c: number; }' is not assignable to parameter of type '() => SomeObj1'.
+!!! error TS2345:   Type '{ a: number; b: number; c: number; }' is not assignable to type 'SomeObj1'.
+!!! error TS2345:     Object literal may only specify known properties, and 'c' does not exist in type 'SomeObj1'.
             };
         });
     

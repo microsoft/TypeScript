@@ -146,7 +146,7 @@ someGenerics3(() => ''); // Error
 someGenerics3<Window>(() => undefined);
 >someGenerics3<Window>(() => undefined) : void
 >someGenerics3 : <T extends Window>(producer: () => T) => void
->() => undefined : () => any
+>() => undefined : () => undefined
 >undefined : undefined
 
 someGenerics3<number>(() => 3); // Error
@@ -166,7 +166,7 @@ someGenerics4(4, () => null); // Valid
 >someGenerics4(4, () => null) : void
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
 >4 : 4
->() => null : () => any
+>() => null : () => null
 >null : null
 
 someGenerics4<string, number>('', () => 3);
@@ -201,7 +201,7 @@ someGenerics5(4, () => null); // Valid
 >someGenerics5(4, () => null) : void
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
 >4 : 4
->() => null : () => any
+>() => null : () => null
 >null : null
 
 someGenerics5<number, string>('', () => 3);

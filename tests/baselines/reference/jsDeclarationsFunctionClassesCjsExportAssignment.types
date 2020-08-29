@@ -120,7 +120,7 @@ Context.prototype = {
 >construct : (input: Input, handle?: HookHandler | undefined) => State
 >input : Input
 >handle : (arg: Context) => void
->() => void 0 : () => any
+>() => void 0 : () => undefined
 >void 0 : undefined
 >0 : 0
 

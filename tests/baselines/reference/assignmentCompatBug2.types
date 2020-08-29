@@ -93,9 +93,9 @@ b3 = {
 }; // error
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
+>b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => null; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => any; }
+>{    f: (n) => { return 0; },    g: (s) => { return 0; },    m: 0,    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; m: number; n: number; k: (a: any) => null; }
 
     f: (n) => { return 0; },
 >f : (n: number) => number
@@ -118,17 +118,17 @@ b3 = {
 >0 : 0
 
     k: (a) =>{ return null; },
->k : (a: any) => any
->(a) =>{ return null; } : (a: any) => any
+>k : (a: any) => null
+>(a) =>{ return null; } : (a: any) => null
 >a : any
 >null : null
 
 }; // ok
 
 b3 = {
->b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
+>b3 = {    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => null; }
 >b3 : { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }
->{    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }
+>{    f: (n) => { return 0; },    g: (s) => { return 0; },    n: 0,    k: (a) =>{ return null; },} : { f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => null; }
 
     f: (n) => { return 0; },
 >f : (n: number) => number
@@ -147,8 +147,8 @@ b3 = {
 >0 : 0
 
     k: (a) =>{ return null; },
->k : (a: any) => any
->(a) =>{ return null; } : (a: any) => any
+>k : (a: any) => null
+>(a) =>{ return null; } : (a: any) => null
 >a : any
 >null : null
 

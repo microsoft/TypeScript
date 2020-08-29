@@ -18,7 +18,7 @@ foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, sh
 >x.length : number
 >x : string
 >length : number
->p => undefined : (p: number) => any
+>p => undefined : (p: number) => undefined
 >p : number
 >undefined : undefined
 

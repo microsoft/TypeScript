@@ -8,7 +8,7 @@ function f(...x: number[]) {
 >x.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
 >x : number[]
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->(n, i) => void ('item ' + i + ' = ' + n) : (n: number, i: number) => any
+>(n, i) => void ('item ' + i + ' = ' + n) : (n: number, i: number) => undefined
 >n : number
 >i : number
 >void ('item ' + i + ' = ' + n) : undefined

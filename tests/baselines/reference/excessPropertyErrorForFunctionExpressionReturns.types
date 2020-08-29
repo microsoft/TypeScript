@@ -61,7 +61,7 @@ namespace arrows {
     }
 
     valueOrGetter({ a: 100, b: 200 }, () => ({
->valueOrGetter({ a: 100, b: 200 }, () => ({        a: 100,        b: 200,        c: 300,    })) : { a: number; b: number; c: number; }
+>valueOrGetter({ a: 100, b: 200 }, () => ({        a: 100,        b: 200,        c: 300,    })) : { a: number; b: number; c?: undefined; } | { a: number; b: number; c: number; }
 >valueOrGetter : <T>(x: T, f: () => T) => T
 >{ a: 100, b: 200 } : { a: number; b: number; }
 >a : number
@@ -137,7 +137,7 @@ namespace arrows {
     }));
 
     valueOrGetter({ a: 100, b: 200, c: 300 }, () => ({
->valueOrGetter({ a: 100, b: 200, c: 300 }, () => ({        a: 100,        b: 200,    })) : { a: number; b: number; }
+>valueOrGetter({ a: 100, b: 200, c: 300 }, () => ({        a: 100,        b: 200,    })) : { a: number; b: number; c: number; } | { a: number; b: number; c?: undefined; }
 >valueOrGetter : <T>(x: T, f: () => T) => T
 >{ a: 100, b: 200, c: 300 } : { a: number; b: number; c: number; }
 >a : number
@@ -216,7 +216,7 @@ namespace funcExprs {
     }
 
     valueOrGetter({ a: 100, b: 200 }, function() {
->valueOrGetter({ a: 100, b: 200 }, function() {        return {            a: 100,            b: 200,            c: 300,        };    }) : { a: number; b: number; }
+>valueOrGetter({ a: 100, b: 200 }, function() {        return {            a: 100,            b: 200,            c: 300,        };    }) : { a: number; b: number; c?: undefined; } | { a: number; b: number; c: number; }
 >valueOrGetter : <T>(x: T, f: () => T) => T
 >{ a: 100, b: 200 } : { a: number; b: number; }
 >a : number

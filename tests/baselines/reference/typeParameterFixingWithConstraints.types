@@ -25,10 +25,10 @@ foo.foo({ bar: null }, bar => null, bar => null);
 >{ bar: null } : { bar: null; }
 >bar : null
 >null : null
->bar => null : (bar: { bar: any; }) => any
+>bar => null : (bar: { bar: any; }) => null
 >bar : { bar: any; }
 >null : null
->bar => null : (bar: { bar: any; }) => any
+>bar => null : (bar: { bar: any; }) => null
 >bar : { bar: any; }
 >null : null
 

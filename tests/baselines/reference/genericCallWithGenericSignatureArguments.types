@@ -30,10 +30,10 @@ var r1b = foo((x) => 1, (x) => ''); // {} => {}
 >'' : ""
 
 var r2 = foo((x: Object) => null, (x: string) => ''); // Object => Object
->r2 : (x: any) => any
->foo((x: Object) => null, (x: string) => '') : (x: any) => any
+>r2 : (x: Object) => Object
+>foo((x: Object) => null, (x: string) => '') : (x: Object) => Object
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->(x: Object) => null : (x: Object) => any
+>(x: Object) => null : (x: Object) => null
 >x : Object
 >null : null
 >(x: string) => '' : (x: string) => string
@@ -41,13 +41,13 @@ var r2 = foo((x: Object) => null, (x: string) => ''); // Object => Object
 >'' : ""
 
 var r3 = foo((x: number) => 1, (x: Object) => null); // number => number
->r3 : (x: any) => any
->foo((x: number) => 1, (x: Object) => null) : (x: any) => any
+>r3 : (x: Object) => Object
+>foo((x: number) => 1, (x: Object) => null) : (x: Object) => Object
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >(x: number) => 1 : (x: number) => number
 >x : number
 >1 : 1
->(x: Object) => null : (x: Object) => any
+>(x: Object) => null : (x: Object) => null
 >x : Object
 >null : null
 

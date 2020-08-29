@@ -33,19 +33,19 @@ module ClassTypeParam {
 >() => {            this.a = () => null; // ok, same T of required params            this.a = (x?: T) => null; // ok, same T of required params            this.a = (x: T) => null; // error, too many required params            this.a2 = () => null; // ok, same T of required params            this.a2 = (x?: T) => null; // ok, same T of required params            this.a2 = (x: T) => null; // ok, same number of params            this.a3 = () => null; // ok, fewer required params            this.a3 = (x?: T) => null; // ok, fewer required params            this.a3 = (x: T) => null; // ok, same T of required params            this.a3 = (x: T, y: T) => null;  // error, too many required params            this.a4 = () => null; // ok, fewer required params            this.a4 = (x?: T, y?: T) => null; // ok, fewer required params            this.a4 = (x: T) => null; // ok, same T of required params            this.a4 = (x: T, y: T) => null;  // ok, same number of params            this.a5 = () => null; // ok, fewer required params            this.a5 = (x?: T, y?: T) => null; // ok, fewer required params            this.a5 = (x: T) => null; // ok, all present params match            this.a5 = (x: T, y: T) => null;  // ok, same number of params        } : () => void
 
             this.a = () => null; // ok, same T of required params
->this.a = () => null : () => any
+>this.a = () => null : () => null
 >this.a : () => T
 >this : this
 >a : () => T
->() => null : () => any
+>() => null : () => null
 >null : null
 
             this.a = (x?: T) => null; // ok, same T of required params
->this.a = (x?: T) => null : (x?: T) => any
+>this.a = (x?: T) => null : (x?: T) => null
 >this.a : () => T
 >this : this
 >a : () => T
->(x?: T) => null : (x?: T) => any
+>(x?: T) => null : (x?: T) => null
 >x : T
 >null : null
 
@@ -59,54 +59,54 @@ module ClassTypeParam {
 >null : null
 
             this.a2 = () => null; // ok, same T of required params
->this.a2 = () => null : () => any
+>this.a2 = () => null : () => null
 >this.a2 : (x?: T) => T
 >this : this
 >a2 : (x?: T) => T
->() => null : () => any
+>() => null : () => null
 >null : null
 
             this.a2 = (x?: T) => null; // ok, same T of required params
->this.a2 = (x?: T) => null : (x?: T) => any
+>this.a2 = (x?: T) => null : (x?: T) => null
 >this.a2 : (x?: T) => T
 >this : this
 >a2 : (x?: T) => T
->(x?: T) => null : (x?: T) => any
+>(x?: T) => null : (x?: T) => null
 >x : T
 >null : null
 
             this.a2 = (x: T) => null; // ok, same number of params
->this.a2 = (x: T) => null : (x: T) => any
+>this.a2 = (x: T) => null : (x: T) => null
 >this.a2 : (x?: T) => T
 >this : this
 >a2 : (x?: T) => T
->(x: T) => null : (x: T) => any
+>(x: T) => null : (x: T) => null
 >x : T
 >null : null
 
             this.a3 = () => null; // ok, fewer required params
->this.a3 = () => null : () => any
+>this.a3 = () => null : () => null
 >this.a3 : (x: T) => T
 >this : this
 >a3 : (x: T) => T
->() => null : () => any
+>() => null : () => null
 >null : null
 
             this.a3 = (x?: T) => null; // ok, fewer required params
->this.a3 = (x?: T) => null : (x?: T) => any
+>this.a3 = (x?: T) => null : (x?: T) => null
 >this.a3 : (x: T) => T
 >this : this
 >a3 : (x: T) => T
->(x?: T) => null : (x?: T) => any
+>(x?: T) => null : (x?: T) => null
 >x : T
 >null : null
 
             this.a3 = (x: T) => null; // ok, same T of required params
->this.a3 = (x: T) => null : (x: T) => any
+>this.a3 = (x: T) => null : (x: T) => null
 >this.a3 : (x: T) => T
 >this : this
 >a3 : (x: T) => T
->(x: T) => null : (x: T) => any
+>(x: T) => null : (x: T) => null
 >x : T
 >null : null
 
@@ -121,76 +121,76 @@ module ClassTypeParam {
 >null : null
 
             this.a4 = () => null; // ok, fewer required params
->this.a4 = () => null : () => any
+>this.a4 = () => null : () => null
 >this.a4 : (x: T, y?: T) => T
 >this : this
 >a4 : (x: T, y?: T) => T
->() => null : () => any
+>() => null : () => null
 >null : null
 
             this.a4 = (x?: T, y?: T) => null; // ok, fewer required params
->this.a4 = (x?: T, y?: T) => null : (x?: T, y?: T) => any
+>this.a4 = (x?: T, y?: T) => null : (x?: T, y?: T) => null
 >this.a4 : (x: T, y?: T) => T
 >this : this
 >a4 : (x: T, y?: T) => T
->(x?: T, y?: T) => null : (x?: T, y?: T) => any
+>(x?: T, y?: T) => null : (x?: T, y?: T) => null
 >x : T
 >y : T
 >null : null
 
             this.a4 = (x: T) => null; // ok, same T of required params
->this.a4 = (x: T) => null : (x: T) => any
+>this.a4 = (x: T) => null : (x: T) => null
 >this.a4 : (x: T, y?: T) => T
 >this : this
 >a4 : (x: T, y?: T) => T
->(x: T) => null : (x: T) => any
+>(x: T) => null : (x: T) => null
 >x : T
 >null : null
 
             this.a4 = (x: T, y: T) => null;  // ok, same number of params
->this.a4 = (x: T, y: T) => null : (x: T, y: T) => any
+>this.a4 = (x: T, y: T) => null : (x: T, y: T) => null
 >this.a4 : (x: T, y?: T) => T
 >this : this
 >a4 : (x: T, y?: T) => T
->(x: T, y: T) => null : (x: T, y: T) => any
+>(x: T, y: T) => null : (x: T, y: T) => null
 >x : T
 >y : T
 >null : null
 
 
             this.a5 = () => null; // ok, fewer required params
->this.a5 = () => null : () => any
+>this.a5 = () => null : () => null
 >this.a5 : (x?: T, y?: T) => T
 >this : this
 >a5 : (x?: T, y?: T) => T
->() => null : () => any
+>() => null : () => null
 >null : null
 
             this.a5 = (x?: T, y?: T) => null; // ok, fewer required params
->this.a5 = (x?: T, y?: T) => null : (x?: T, y?: T) => any
+>this.a5 = (x?: T, y?: T) => null : (x?: T, y?: T) => null
 >this.a5 : (x?: T, y?: T) => T
 >this : this
 >a5 : (x?: T, y?: T) => T
->(x?: T, y?: T) => null : (x?: T, y?: T) => any
+>(x?: T, y?: T) => null : (x?: T, y?: T) => null
 >x : T
 >y : T
 >null : null
 
             this.a5 = (x: T) => null; // ok, all present params match
->this.a5 = (x: T) => null : (x: T) => any
+>this.a5 = (x: T) => null : (x: T) => null
 >this.a5 : (x?: T, y?: T) => T
 >this : this
 >a5 : (x?: T, y?: T) => T
->(x: T) => null : (x: T) => any
+>(x: T) => null : (x: T) => null
 >x : T
 >null : null
 
             this.a5 = (x: T, y: T) => null;  // ok, same number of params
->this.a5 = (x: T, y: T) => null : (x: T, y: T) => any
+>this.a5 = (x: T, y: T) => null : (x: T, y: T) => null
 >this.a5 : (x?: T, y?: T) => T
 >this : this
 >a5 : (x?: T, y?: T) => T
->(x: T, y: T) => null : (x: T, y: T) => any
+>(x: T, y: T) => null : (x: T, y: T) => null
 >x : T
 >y : T
 >null : null
@@ -521,19 +521,19 @@ module GenericSignaturesValid {
 >() => {            this.a = <T>() => null; // ok, same T of required params            this.a = <T>(x?: T) => null; // ok, same T of required params            this.a = <T>(x: T) => null; // error, too many required params            this.a2 = <T>() => null; // ok, same T of required params            this.a2 = <T>(x?: T) => null; // ok, same T of required params            this.a2 = <T>(x: T) => null; // ok, same number of params            this.a3 = <T>() => null; // ok, fewer required params            this.a3 = <T>(x?: T) => null; // ok, fewer required params            this.a3 = <T>(x: T) => null; // ok, same T of required params            this.a3 = <T>(x: T, y: T) => null;  // error, too many required params            this.a4 = <T>() => null; // ok, fewer required params            this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params            this.a4 = <T>(x: T) => null; // ok, same T of required params            this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params            this.a5 = <T>() => null; // ok, fewer required params            this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params            this.a5 = <T>(x: T) => null; // ok, all present params match            this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params        } : () => void
 
             this.a = <T>() => null; // ok, same T of required params
->this.a = <T>() => null : <T>() => any
+>this.a = <T>() => null : <T>() => null
 >this.a : <T>() => T
 >this : this
 >a : <T>() => T
-><T>() => null : <T>() => any
+><T>() => null : <T>() => null
 >null : null
 
             this.a = <T>(x?: T) => null; // ok, same T of required params
->this.a = <T>(x?: T) => null : <T>(x?: T) => any
+>this.a = <T>(x?: T) => null : <T>(x?: T) => null
 >this.a : <T>() => T
 >this : this
 >a : <T>() => T
-><T>(x?: T) => null : <T>(x?: T) => any
+><T>(x?: T) => null : <T>(x?: T) => null
 >x : T
 >null : null
 
@@ -547,54 +547,54 @@ module GenericSignaturesValid {
 >null : null
 
             this.a2 = <T>() => null; // ok, same T of required params
->this.a2 = <T>() => null : <T>() => any
+>this.a2 = <T>() => null : <T>() => null
 >this.a2 : <T>(x?: T) => T
 >this : this
 >a2 : <T>(x?: T) => T
-><T>() => null : <T>() => any
+><T>() => null : <T>() => null
 >null : null
 
             this.a2 = <T>(x?: T) => null; // ok, same T of required params
->this.a2 = <T>(x?: T) => null : <T>(x?: T) => any
+>this.a2 = <T>(x?: T) => null : <T>(x?: T) => null
 >this.a2 : <T>(x?: T) => T
 >this : this
 >a2 : <T>(x?: T) => T
-><T>(x?: T) => null : <T>(x?: T) => any
+><T>(x?: T) => null : <T>(x?: T) => null
 >x : T
 >null : null
 
             this.a2 = <T>(x: T) => null; // ok, same number of params
->this.a2 = <T>(x: T) => null : <T>(x: T) => any
+>this.a2 = <T>(x: T) => null : <T>(x: T) => null
 >this.a2 : <T>(x?: T) => T
 >this : this
 >a2 : <T>(x?: T) => T
-><T>(x: T) => null : <T>(x: T) => any
+><T>(x: T) => null : <T>(x: T) => null
 >x : T
 >null : null
 
             this.a3 = <T>() => null; // ok, fewer required params
->this.a3 = <T>() => null : <T>() => any
+>this.a3 = <T>() => null : <T>() => null
 >this.a3 : <T>(x: T) => T
 >this : this
 >a3 : <T>(x: T) => T
-><T>() => null : <T>() => any
+><T>() => null : <T>() => null
 >null : null
 
             this.a3 = <T>(x?: T) => null; // ok, fewer required params
->this.a3 = <T>(x?: T) => null : <T>(x?: T) => any
+>this.a3 = <T>(x?: T) => null : <T>(x?: T) => null
 >this.a3 : <T>(x: T) => T
 >this : this
 >a3 : <T>(x: T) => T
-><T>(x?: T) => null : <T>(x?: T) => any
+><T>(x?: T) => null : <T>(x?: T) => null
 >x : T
 >null : null
 
             this.a3 = <T>(x: T) => null; // ok, same T of required params
->this.a3 = <T>(x: T) => null : <T>(x: T) => any
+>this.a3 = <T>(x: T) => null : <T>(x: T) => null
 >this.a3 : <T>(x: T) => T
 >this : this
 >a3 : <T>(x: T) => T
-><T>(x: T) => null : <T>(x: T) => any
+><T>(x: T) => null : <T>(x: T) => null
 >x : T
 >null : null
 
@@ -609,76 +609,76 @@ module GenericSignaturesValid {
 >null : null
 
             this.a4 = <T>() => null; // ok, fewer required params
->this.a4 = <T>() => null : <T>() => any
+>this.a4 = <T>() => null : <T>() => null
 >this.a4 : <T>(x: T, y?: T) => T
 >this : this
 >a4 : <T>(x: T, y?: T) => T
-><T>() => null : <T>() => any
+><T>() => null : <T>() => null
 >null : null
 
             this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params
->this.a4 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+>this.a4 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => null
 >this.a4 : <T>(x: T, y?: T) => T
 >this : this
 >a4 : <T>(x: T, y?: T) => T
-><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => null
 >x : T
 >y : T
 >null : null
 
             this.a4 = <T>(x: T) => null; // ok, same T of required params
->this.a4 = <T>(x: T) => null : <T>(x: T) => any
+>this.a4 = <T>(x: T) => null : <T>(x: T) => null
 >this.a4 : <T>(x: T, y?: T) => T
 >this : this
 >a4 : <T>(x: T, y?: T) => T
-><T>(x: T) => null : <T>(x: T) => any
+><T>(x: T) => null : <T>(x: T) => null
 >x : T
 >null : null
 
             this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params
->this.a4 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>this.a4 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => null
 >this.a4 : <T>(x: T, y?: T) => T
 >this : this
 >a4 : <T>(x: T, y?: T) => T
-><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+><T>(x: T, y: T) => null : <T>(x: T, y: T) => null
 >x : T
 >y : T
 >null : null
 
 
             this.a5 = <T>() => null; // ok, fewer required params
->this.a5 = <T>() => null : <T>() => any
+>this.a5 = <T>() => null : <T>() => null
 >this.a5 : <T>(x?: T, y?: T) => T
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
-><T>() => null : <T>() => any
+><T>() => null : <T>() => null
 >null : null
 
             this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params
->this.a5 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+>this.a5 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => null
 >this.a5 : <T>(x?: T, y?: T) => T
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
-><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => null
 >x : T
 >y : T
 >null : null
 
             this.a5 = <T>(x: T) => null; // ok, all present params match
->this.a5 = <T>(x: T) => null : <T>(x: T) => any
+>this.a5 = <T>(x: T) => null : <T>(x: T) => null
 >this.a5 : <T>(x?: T, y?: T) => T
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
-><T>(x: T) => null : <T>(x: T) => any
+><T>(x: T) => null : <T>(x: T) => null
 >x : T
 >null : null
 
             this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params
->this.a5 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>this.a5 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => null
 >this.a5 : <T>(x?: T, y?: T) => T
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
-><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+><T>(x: T, y: T) => null : <T>(x: T, y: T) => null
 >x : T
 >y : T
 >null : null

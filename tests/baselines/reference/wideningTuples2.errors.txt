@@ -1,0 +1,11 @@
+tests/cases/conformance/types/tuple/wideningTuples2.ts(2,9): error TS7005: Variable 'intermediate' implicitly has an '[any]' type.
+
+
+==== tests/cases/conformance/types/tuple/wideningTuples2.ts (1 errors) ====
+    var foo: () => [any] = function bar() {
+        let intermediate = bar();
+            ~~~~~~~~~~~~
+!!! error TS7005: Variable 'intermediate' implicitly has an '[any]' type.
+        intermediate = [""];
+        return [undefined];
+    };

@@ -17,11 +17,11 @@ interface Transform3D {
 
 var style: IBookStyle = {
 >style : IBookStyle
->{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { ry: any; }[]; }
+>{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { ry: null; }[]; }
 
     initialLeftPageTransforms: (width: number) => {
->initialLeftPageTransforms : (width: number) => { ry: any; }[]
->(width: number) => {        return [            {'ry': null }        ];    } : (width: number) => { ry: any; }[]
+>initialLeftPageTransforms : (width: number) => { ry: null; }[]
+>(width: number) => {        return [            {'ry': null }        ];    } : (width: number) => { ry: null; }[]
 >width : number
 
         return [

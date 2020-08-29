@@ -3,8 +3,8 @@ var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find
 >r : <T>(x: T) => T
 >< <T>(x: T) => T > ((x) => { return null; }) : <T>(x: T) => T
 >x : T
->((x) => { return null; }) : <T>(x: T) => any
->(x) => { return null; } : <T>(x: T) => any
+>((x) => { return null; }) : <T>(x: T) => null
+>(x) => { return null; } : <T>(x: T) => null
 >x : T
 >null : null
 
@@ -12,8 +12,8 @@ var s = < <T>(x: T) => T > ((x: any) => { return null; }); // no error
 >s : <T>(x: T) => T
 >< <T>(x: T) => T > ((x: any) => { return null; }) : <T>(x: T) => T
 >x : T
->((x: any) => { return null; }) : (x: any) => any
->(x: any) => { return null; } : (x: any) => any
+>((x: any) => { return null; }) : (x: any) => null
+>(x: any) => { return null; } : (x: any) => null
 >x : any
 >null : null
 

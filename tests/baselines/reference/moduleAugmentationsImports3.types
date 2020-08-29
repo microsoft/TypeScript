@@ -80,13 +80,13 @@ import {Cls} from "C";
 >Cls : typeof Cls
 
 A.prototype.getCls = function () { return undefined; }
->A.prototype.getCls = function () { return undefined; } : () => any
+>A.prototype.getCls = function () { return undefined; } : () => undefined
 >A.prototype.getCls : () => Cls
 >A.prototype : A
 >A : typeof A
 >prototype : A
 >getCls : () => Cls
->function () { return undefined; } : () => any
+>function () { return undefined; } : () => undefined
 >undefined : undefined
 
 declare module "./a" {

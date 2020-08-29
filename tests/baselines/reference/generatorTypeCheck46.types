@@ -33,7 +33,7 @@ foo("", function* () {
         }
     }
 }, p => undefined); // T is fixed, should be string
->p => undefined : (p: number) => any
+>p => undefined : (p: number) => undefined
 >p : number
 >undefined : undefined
 

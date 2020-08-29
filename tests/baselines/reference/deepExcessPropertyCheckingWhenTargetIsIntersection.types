@@ -9,7 +9,7 @@ interface StatelessComponent<P = {}> {
  
 const TestComponent: StatelessComponent<TestProps> = (props) => {
 >TestComponent : StatelessComponent<TestProps>
->(props) => {  return null;} : (props: TestProps & { children?: number; }) => any
+>(props) => {  return null;} : (props: TestProps & { children?: number; }) => null
 >props : TestProps & { children?: number; }
 
   return null;
@@ -48,7 +48,7 @@ const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (p
 >TestComponent2 : StatelessComponent<TestProps | { props2: {    x: number;}; }>
 >props2 : { x: number; }
 >x : number
->(props) => {  return null;} : (props: (TestProps & { children?: number; }) | ({ props2: {    x: number;}; } & { children?: number; })) => any
+>(props) => {  return null;} : (props: (TestProps & { children?: number; }) | ({ props2: {    x: number;}; } & { children?: number; })) => null
 >props : (TestProps & { children?: number; }) | ({ props2: { x: number; }; } & { children?: number; })
 
   return null;

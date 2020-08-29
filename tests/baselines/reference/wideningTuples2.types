@@ -1,13 +1,13 @@
 === tests/cases/conformance/types/tuple/wideningTuples2.ts ===
 var foo: () => [any] = function bar() {
 >foo : () => [any]
->function bar() {    let intermediate = bar();    intermediate = [""];    return [undefined];} : () => [any]
->bar : () => [any]
+>function bar() {    let intermediate = bar();    intermediate = [""];    return [undefined];} : () => [undefined]
+>bar : () => [undefined]
 
     let intermediate = bar();
 >intermediate : [any]
->bar() : [any]
->bar : () => [any]
+>bar() : [undefined]
+>bar : () => [undefined]
 
     intermediate = [""];
 >intermediate = [""] : [string]

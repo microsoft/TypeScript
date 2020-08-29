@@ -20,8 +20,8 @@ foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }
 >p1.length : number
 >p1 : string
 >length : number
->{ method(p2) { return undefined } } : { method(p2: number): any; }
->method : (p2: number) => any
+>{ method(p2) { return undefined } } : { method(p2: number): undefined; }
+>method : (p2: number) => undefined
 >p2 : number
 >undefined : undefined
 

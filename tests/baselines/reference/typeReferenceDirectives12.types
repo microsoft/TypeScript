@@ -42,13 +42,13 @@ import {Cls} from "./main";
 >Cls : typeof Cls
 
 Cls.prototype.foo = function() { return undefined; }
->Cls.prototype.foo = function() { return undefined; } : () => any
+>Cls.prototype.foo = function() { return undefined; } : () => undefined
 >Cls.prototype.foo : () => Lib
 >Cls.prototype : Cls
 >Cls : typeof Cls
 >prototype : Cls
 >foo : () => Lib
->function() { return undefined; } : () => any
+>function() { return undefined; } : () => undefined
 >undefined : undefined
 
 declare module "./main" {
