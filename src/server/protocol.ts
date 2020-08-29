@@ -511,6 +511,7 @@ namespace ts.server.protocol {
         endLocation: Location;
         category: string;
         code: number;
+        source?: string;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         reportsDeprecated?: {};
