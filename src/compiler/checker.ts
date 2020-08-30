@@ -4462,10 +4462,12 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Template) {
                     const texts = (<TemplateType>type).texts;
+                    const casings = (<TemplateType>type).casings;
                     const types = (<TemplateType>type).types;
                     const templateHead = factory.createTemplateHead(texts[0]);
                     const templateSpans = factory.createNodeArray(
                         map(types, (t, i) => factory.createTemplateTypeSpan(
+                            casings[i],
                             typeToTypeNodeHelper(t, context),
                             (i < types.length - 1 ? factory.createTemplateMiddle : factory.createTemplateTail)(texts[i + 1]))));
                     context.approximateLength += 2;
@@ -10864,7 +10866,7 @@ namespace ts {
                 if (t.flags & TypeFlags.Template) {
                     const types = (<TemplateType>t).types;
                     const constraints = mapDefined(types, getBaseConstraint);
-                    return constraints.length === types.length ? getTemplateType((<TemplateType>t).texts, constraints) : stringType;
+                    return constraints.length === types.length ? getTemplateType((<TemplateType>t).texts, (<TemplateType>t).casings, constraints) : stringType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
@@ -13396,31 +13398,27 @@ namespace ts {
             if (!links.resolvedType) {
                 links.resolvedType = getTemplateType(
                     [node.head.text, ...map(node.templateSpans, span => span.literal.text)],
+                    map(node.templateSpans, span => span.casing),
                     map(node.templateSpans, span => getTypeFromTypeNode(span.type)));
             }
             return links.resolvedType;
         }
 
-        function getTemplateType(texts: readonly string[], types: readonly Type[]): Type {
+        function getTemplateType(texts: readonly string[], casings: readonly TemplateCasing[], types: readonly Type[]): Type {
             const unionIndex = findIndex(types, t => !!(t.flags & (TypeFlags.Never | TypeFlags.Union)));
             if (unionIndex >= 0) {
                 return checkCrossProductUnion(types) ?
-                    mapType(types[unionIndex], t => getTemplateType(texts, replaceElement(types, unionIndex, t))) :
+                    mapType(types[unionIndex], t => getTemplateType(texts, casings, replaceElement(types, unionIndex, t))) :
                     errorType;
             }
             let i = 0;
             while (i < types.length) {
                 const t = types[i];
                 if (t.flags & TypeFlags.Literal) {
-                    const s = getTemplateStringForType(t) || "";
+                    const s = applyTemplateCasing(getTemplateStringForType(t) || "", casings[i]);
                     texts = [...texts.slice(0, i), texts[i] + s + texts[i + 1], ...texts.slice(i + 2)];
+                    casings = [...casings.slice(0, i), ...casings.slice(i + 1)];
                     types = [...types.slice(0, i), ...types.slice(i + 1)];
-                }
-                else if (t.flags & TypeFlags.Template) {
-                    const ts = (<TemplateType>t).texts;
-                    texts = [...texts.slice(0, i), texts[i] + ts[0], ...ts.slice(1, -1), ts[ts.length - 1] + texts[i + 1], ...texts.slice(i + 2)];
-                    types = [...types.slice(0, i), ...(<TemplateType>t).types, ...types.slice(i + 1)];
-                    i += (<TemplateType>t).types.length;
                 }
                 else if (isGenericIndexType(t)) {
                     i++;
@@ -13432,10 +13430,10 @@ namespace ts {
             if (types.length === 0) {
                 return getLiteralType(texts[0]);
             }
-            const id = `${getTypeListId(types)}|${map(texts, t => t.length).join(",")}|${texts.join("")}`;
+            const id = `${getTypeListId(types)}|${casings.join(",")}|${map(texts, t => t.length).join(",")}|${texts.join("")}`;
             let type = templateTypes.get(id);
             if (!type) {
-                templateTypes.set(id, type = createTemplateType(texts, types));
+                templateTypes.set(id, type = createTemplateType(texts, casings, types));
             }
             return type;
         }
@@ -13448,9 +13446,20 @@ namespace ts {
                 undefined;
         }
 
-        function createTemplateType(texts: readonly string[], types: readonly Type[]) {
+        function applyTemplateCasing(str: string, casing: TemplateCasing) {
+            switch (casing) {
+                case TemplateCasing.Uppercase: return str.toUpperCase();
+                case TemplateCasing.Lowercase: return str.toLowerCase();
+                case TemplateCasing.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
+                case TemplateCasing.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
+            }
+            return str;
+        }
+
+        function createTemplateType(texts: readonly string[], casings: readonly TemplateCasing[], types: readonly Type[]) {
             const type = <TemplateType>createType(TypeFlags.Template);
             type.texts = texts;
+            type.casings = casings;
             type.types = types;
             return type;
         }
@@ -15072,7 +15081,7 @@ namespace ts {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
             }
             if (flags & TypeFlags.Template) {
-                return getTemplateType((<TemplateType>type).texts, instantiateTypes((<TemplateType>type).types, mapper));
+                return getTemplateType((<TemplateType>type).texts, (<TemplateType>type).casings, instantiateTypes((<TemplateType>type).types, mapper));
             }
             if (flags & TypeFlags.IndexedAccess) {
                 return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), /*accessNode*/ undefined, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
@@ -19931,7 +19940,7 @@ namespace ts {
             function inferToTemplateType(source: Type, target: TemplateType) {
                 if (source.flags & (TypeFlags.StringLike | TypeFlags.Index)) {
                     const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateType(<StringLiteralType>source, target) :
-                        source.flags & TypeFlags.Template && arraysEqual((<TemplateType>source).texts, target.texts) ? (<TemplateType>source).types :
+                        source.flags & TypeFlags.Template && arraysEqual((<TemplateType>source).texts, target.texts) && arraysEqual((<TemplateType>source).casings, target.casings)? (<TemplateType>source).types :
                         undefined;
                     const types = target.types;
                     for (let i = 0; i < types.length; i++) {

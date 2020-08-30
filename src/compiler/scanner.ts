@@ -151,6 +151,10 @@ namespace ts {
         yield: SyntaxKind.YieldKeyword,
         async: SyntaxKind.AsyncKeyword,
         await: SyntaxKind.AwaitKeyword,
+        uppercase: SyntaxKind.UppercaseKeyword,
+        lowercase: SyntaxKind.LowercaseKeyword,
+        capitalize: SyntaxKind.CapitalizeKeyword,
+        uncapitalize: SyntaxKind.UncapitalizeKeyword,
         of: SyntaxKind.OfKeyword,
     };
 

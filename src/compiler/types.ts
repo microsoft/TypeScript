@@ -186,6 +186,10 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
+        UppercaseKeyword,
+        LowercaseKeyword,
+        CapitalizeKeyword,
+        UncapitalizeKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -538,6 +542,7 @@ namespace ts {
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
+        | SyntaxKind.CapitalizeKeyword
         | SyntaxKind.CaseKeyword
         | SyntaxKind.CatchKeyword
         | SyntaxKind.ClassKeyword
@@ -570,6 +575,7 @@ namespace ts {
         | SyntaxKind.IsKeyword
         | SyntaxKind.KeyOfKeyword
         | SyntaxKind.LetKeyword
+        | SyntaxKind.LowercaseKeyword
         | SyntaxKind.ModuleKeyword
         | SyntaxKind.NamespaceKeyword
         | SyntaxKind.NeverKeyword
@@ -597,9 +603,11 @@ namespace ts {
         | SyntaxKind.TryKeyword
         | SyntaxKind.TypeKeyword
         | SyntaxKind.TypeOfKeyword
+        | SyntaxKind.UncapitalizeKeyword
         | SyntaxKind.UndefinedKeyword
         | SyntaxKind.UniqueKeyword
         | SyntaxKind.UnknownKeyword
+        | SyntaxKind.UppercaseKeyword
         | SyntaxKind.VarKeyword
         | SyntaxKind.VoidKeyword
         | SyntaxKind.WhileKeyword
@@ -1653,9 +1661,18 @@ namespace ts {
     export interface TemplateTypeSpan extends TypeNode {
         readonly kind: SyntaxKind.TemplateTypeSpan,
         readonly parent: TemplateTypeNode;
+        readonly casing: TemplateCasing;
         readonly type: TypeNode;
         readonly literal: TemplateMiddle | TemplateTail;
-   }
+    }
+
+    export const enum TemplateCasing {
+        None,
+        Uppercase,
+        Lowercase,
+        Capitalize,
+        Uncapitalize,
+    }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -5337,7 +5354,8 @@ namespace ts {
     }
 
     export interface TemplateType extends InstantiableType {
-        texts: readonly string[];  // Always one element longer than types
+        texts: readonly string[];  // Always one element longer than casings/types
+        casings: readonly TemplateCasing[];  // Always at least one element
         types: readonly Type[];  // Always at least one element
     }
 
@@ -6720,8 +6738,8 @@ namespace ts {
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        createTemplateTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
-        updateTemplateTypeSpan(node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
+        createTemplateTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
+        updateTemplateTypeSpan(casing: TemplateCasing, node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
 
         //
         // Types

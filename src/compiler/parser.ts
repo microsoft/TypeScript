@@ -2608,11 +2608,20 @@ namespace ts {
             const pos = getNodePos();
             return finishNode(
                 factory.createTemplateTypeSpan(
+                    parseTemplateCasing(),
                     parseType(),
                     parseLiteralOfTemplateSpan(/*isTaggedTemplate*/ false)
                 ),
                 pos
             );
+        }
+
+        function parseTemplateCasing(): TemplateCasing {
+            return parseOptional(SyntaxKind.UppercaseKeyword) ? TemplateCasing.Uppercase :
+                parseOptional(SyntaxKind.LowercaseKeyword) ? TemplateCasing.Lowercase :
+                parseOptional(SyntaxKind.CapitalizeKeyword) ? TemplateCasing.Capitalize :
+                parseOptional(SyntaxKind.UncapitalizeKeyword) ? TemplateCasing.Uncapitalize :
+                TemplateCasing.None;
         }
 
         function parseLiteralOfTemplateSpan(isTaggedTemplate: boolean) {
