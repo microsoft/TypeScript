@@ -176,7 +176,7 @@ See below for examples.
 
 ### Tests for multiple files
 
-When you need to multiple files in a single test, use the `filename` tag:
+When you need to test multiple files in a single test, use the `filename` tag:
 
 ```ts
 // @filename: file1.ts
