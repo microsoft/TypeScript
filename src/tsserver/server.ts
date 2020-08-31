@@ -17,6 +17,8 @@ namespace ts.server {
 
     //#endregion
 
+    //#region Logging
+
     class NoopLogger implements server.Logger { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
         close(): void { /* noop */ }
         hasLevel(_level: LogLevel): boolean { return false; }
@@ -226,6 +228,10 @@ namespace ts.server {
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
 
+    //#endregion
+
+    //#region File watching
+
     // average async stat takes about 30 microseconds
     // set chunk size to do 30 files in < 1 millisecond
     function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
@@ -347,11 +353,15 @@ namespace ts.server {
         return undefined;
     }
 
+    //#endregion
+
     function isUNCPath(s: string): boolean {
         return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
     }
 
     const logger = createLogger();
+
+    //#region Sys
 
     function createNodeSys(): ServerHost {
         class NodeWriter {
@@ -505,6 +515,8 @@ namespace ts.server {
 
     const sys = runtime === Runtime.Node ? createNodeSys() : createWebSys();
     ts.sys = sys;
+
+    //#endregion
 
     let cancellationToken: ServerCancellationToken = nullCancellationToken;
     if (runtime === Runtime.Node) {
