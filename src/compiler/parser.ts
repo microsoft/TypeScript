@@ -2824,6 +2824,11 @@ namespace ts {
             const name = parseIdentifier();
             let constraint: TypeNode | undefined;
             let expression: Expression | undefined;
+            let tParams: NodeArray<TypeParameterDeclaration> | undefined;
+            if (token() === SyntaxKind.LessThanToken) {
+                tParams = parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            }
+
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 // It's not uncommon for people to write improper constraints to a generic.  If the
                 // user writes a constraint that is an expression and not an actual type, then parse
@@ -2845,7 +2850,7 @@ namespace ts {
             }
 
             const defaultType = parseOptional(SyntaxKind.EqualsToken) ? parseType() : undefined;
-            const node = factory.createTypeParameterDeclaration(name, constraint, defaultType);
+            const node = factory.createTypeParameterDeclaration(name, constraint, defaultType, tParams);
             node.expression = expression;
             return finishNode(node, pos);
         }

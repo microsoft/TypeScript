@@ -1074,7 +1074,7 @@ namespace ts {
         //
 
         // @api
-        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
+        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode, tParams?: NodeArray<TypeParameterDeclaration>) {
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
                 /*decorators*/ undefined,
@@ -1084,6 +1084,7 @@ namespace ts {
             node.constraint = constraint;
             node.default = defaultType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
+            node.tParams = tParams;
             return node;
         }
 

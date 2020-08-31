@@ -1191,6 +1191,9 @@ namespace ts {
 
         // For error recovery purposes.
         expression?: Expression;
+
+        // If this is not empty, it is a type constructor.
+        tParams?: NodeArray<TypeParameterDeclaration>;
     }
 
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
@@ -6665,7 +6668,7 @@ namespace ts {
         // Signature elements
         //
 
-        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode, tParams?: NodeArray<TypeParameterDeclaration>): TypeParameterDeclaration;
         updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
         createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
         updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
