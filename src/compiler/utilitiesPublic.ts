@@ -403,6 +403,18 @@ namespace ts {
         return !nodeTest || nodeTest(node) ? node : undefined;
     }
 
+    export function getClosestNode<T extends Node>(node: Node, match: (node: Node) => node is T): T;
+    export function getClosestNode<T extends Node>(node: Node, match: (node: Node | undefined) => node is T): T | undefined;
+    export function getClosestNode<T extends Node>(node: Node, match: (node: Node | undefined) => node is T): T | undefined {
+        while (node) {
+            if (match(node)) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
+
     /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
