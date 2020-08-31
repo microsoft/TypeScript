@@ -556,21 +556,12 @@ namespace ts.server {
 
     function startNodeServer(options: LaunchOptions) {
 
-        interface NodeSocket {
-            write(data: string, encoding: string): boolean;
-        }
-
-        interface NodeChildProcess {
-            send(message: any, sendHandle?: any): void;
-            on(message: "message" | "exit", f: (m: any) => void): void;
-            kill(): void;
-            pid: number;
-        }
-
         interface QueuedOperation {
             operationId: string;
             operation: () => void;
         }
+
+        type ResponseType = TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse;
 
         class NodeTypingsInstaller implements ITypingsInstaller {
 
@@ -616,7 +607,7 @@ namespace ts.server {
                 return combinePaths(normalizeSlashes(homePath), cacheFolder);
             }
 
-            private installer!: NodeChildProcess;
+            private installer!: import("child_process").ChildProcess;
             private projectService!: ProjectService;
             private activeRequestCount = 0;
             private requestQueue: QueuedOperation[] = [];
@@ -711,7 +702,7 @@ namespace ts.server {
                 }
 
                 this.installer = require("child_process").fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
-                this.installer.on("message", m => this.handleMessage(m));
+                this.installer.on("message", m => this.handleMessage(m as ResponseType));
 
                 this.event({ pid: this.installer.pid }, "typingsInstallerPid");
 
@@ -757,7 +748,7 @@ namespace ts.server {
                 }
             }
 
-            private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+            private handleMessage(response: ResponseType) {
                 if (this.logger.hasLevel(LogLevel.verbose)) {
                     this.logger.info(`Received response:${stringifyIndented(response)}`);
                 }
@@ -869,7 +860,7 @@ namespace ts.server {
 
         class IOSession extends Session {
             private eventPort: number | undefined;
-            private eventSocket: NodeSocket | undefined;
+            private eventSocket: import("net").Socket | undefined;
             private socketEventQueue: { body: any, eventName: string }[] | undefined;
             private constructed: boolean | undefined;
             private readonly rl: import("readline").Interface;
