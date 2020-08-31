@@ -1123,7 +1123,7 @@ namespace ts.server {
         }
     }
 
-    function start(args: string[]) {
+    function start(args: readonly string[]) {
         const serverMode = parseServerMode();
         const syntaxOnly = hasArgument("--syntaxOnly") || runtime !== Runtime.Node;
 
@@ -1155,19 +1155,29 @@ namespace ts.server {
         }
     }
 
-    if (runtime === Runtime.Node) {
-        start(process.argv);
-    }
-    else {
-        // Get args from first message
-        const listener = (e: any) => {
-            removeEventListener("message", listener);
+    switch (runtime) {
+        case Runtime.Node:
+            {
+                start(process.argv);
+                break;
+            }
+        case Runtime.Web:
+            {
+                // Get args from first message
+                const listener = (e: any) => {
+                    removeEventListener("message", listener);
 
-            const args = e.data;
-            sys.args = args;
-            start(args);
-        };
+                    const args = e.data;
+                    sys.args = args;
+                    start(args);
+                };
 
-        addEventListener("message", listener);
+                addEventListener("message", listener);
+                break;
+            }
+        default:
+            {
+                throw new Error("Unknown runtime");
+            }
     }
 }
