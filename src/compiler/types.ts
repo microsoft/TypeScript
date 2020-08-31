@@ -7652,6 +7652,7 @@ namespace ts {
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
         /*@internal*/ preserveSourceNewlines?: boolean;
+        /*@internal*/ terminateUnterminatedLiterals?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
