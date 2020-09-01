@@ -5381,6 +5381,8 @@ namespace ts {
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
+        resolvedMinArgumentCount?: number;  // Number of non-optional parameters (excluding trailing `void`)
+        /* @internal */
         target?: Signature;                 // Instantiation target
         /* @internal */
         mapper?: TypeMapper;                // Instantiation mapper
@@ -7657,6 +7659,7 @@ namespace ts {
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
         /*@internal*/ preserveSourceNewlines?: boolean;
+        /*@internal*/ terminateUnterminatedLiterals?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 

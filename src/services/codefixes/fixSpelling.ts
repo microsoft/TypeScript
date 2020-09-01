@@ -6,7 +6,7 @@ namespace ts.codefix {
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
-        Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_2.code,
+        Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2.code,
         // for JSX class components
         Diagnostics.No_overload_matches_this_call.code,
         // for JSX FC
@@ -52,6 +52,12 @@ namespace ts.codefix {
                 containingType = checker.getNonNullableType(containingType);
             }
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
+        }
+        else if (isQualifiedName(parent) && parent.right === node) {
+            const symbol = checker.getSymbolAtLocation(parent.left);
+            if (symbol && symbol.flags & SymbolFlags.Module) {
+                suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(parent.right, symbol);
+            }
         }
         else if (isImportSpecifier(parent) && parent.name === node) {
             Debug.assertNode(node, isIdentifier, "Expected an identifier for spelling (import)");

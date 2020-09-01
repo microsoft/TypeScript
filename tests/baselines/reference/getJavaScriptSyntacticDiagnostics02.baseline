@@ -1,7 +1,7 @@
 Syntactic Diagnostics for file '/tests/cases/fourslash/server/getJavaScriptSyntacticDiagnostics02.ts':
 /tests/cases/fourslash/server/b.js(2,8): error TS8010: Type annotations can only be used in TypeScript files.
 /tests/cases/fourslash/server/b.js(3,17): error TS8010: Type annotations can only be used in TypeScript files.
-/tests/cases/fourslash/server/b.js(4,5): error TS1134: Variable declaration expected.
+/tests/cases/fourslash/server/b.js(4,5): error TS1389: 'var' is not allowed as a variable declaration name.
 /tests/cases/fourslash/server/b.js(4,9): error TS1134: Variable declaration expected.
 /tests/cases/fourslash/server/b.js(4,11): error TS1134: Variable declaration expected.
 
@@ -16,7 +16,7 @@ Syntactic Diagnostics for file '/tests/cases/fourslash/server/getJavaScriptSynta
 !!! error TS8010: Type annotations can only be used in TypeScript files.
     var var = "c";
         ~~~
-!!! error TS1134: Variable declaration expected.
+!!! error TS1389: 'var' is not allowed as a variable declaration name.
             ~
 !!! error TS1134: Variable declaration expected.
               ~~~
