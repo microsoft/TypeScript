@@ -73,6 +73,11 @@ namespace ts.codefix {
                     const name = isComputedPropertyName(token.parent) ? token.parent : token;
                     result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
                 }
+                const deletionKeepBody = textChanges.ChangeTracker.with(context, t =>
+                    tryDeleteDeclarationKeepBody(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
+                if (deletionKeepBody.length) {
+                    result.push(createDeleteFix(deletionKeepBody, [Diagnostics.Remove_unused_declaration_but_keep_body_for_Colon_0, token.getText(sourceFile)]));
+                }
             }
 
             const prefix = textChanges.ChangeTracker.with(context, t => tryPrefixDeclaration(t, errorCode, sourceFile, token));
@@ -197,6 +202,23 @@ namespace ts.codefix {
             }
         }
         return false;
+    }
+
+    function tryDeleteDeclarationKeepBody(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, _checker: TypeChecker, _sourceFiles: readonly SourceFile[], _isFixAll: boolean) {
+        const { parent } = token;
+        if (isParameter(parent)) {
+            return;
+        }
+        let foundEquals = -1;
+        for (let i = 0; i < parent.getChildCount(sourceFile); i++) {
+            if (parent.getChildAt(i).kind === SyntaxKind.EqualsToken) {
+                foundEquals = i;
+                break;
+            }
+        }
+        if (foundEquals !== -1) {
+            changes.replaceNode(sourceFile, parent.parent, parent.getChildAt(foundEquals + 1));
+        }
     }
 
     function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean) {

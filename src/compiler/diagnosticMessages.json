@@ -5327,6 +5327,10 @@
         "category": "Message",
         "code": 90053
     },
+    "Remove unused declaration but keep body for: '{0}'": {
+        "category": "Message",
+        "code": 90054
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
