@@ -19,7 +19,6 @@ and limitations under the License.
 
 
 declare namespace Intl {
-
     /**
      * [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers) definition.
      *
