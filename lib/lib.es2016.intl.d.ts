@@ -36,5 +36,5 @@ declare namespace Intl {
      * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales
      * @param locale A list of string values for which to get the canonical locale names.
      */
-    function getCanonicalLocales (locale?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[]): UnicodeBCP47LocaleIdentifier[];
+    function getCanonicalLocales(locale?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[]): UnicodeBCP47LocaleIdentifier[];
 }
