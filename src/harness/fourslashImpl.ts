@@ -830,6 +830,13 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
             }
 
+            if (ts.hasProperty(options, "optionalReplacementSpan")) {
+                assert.deepEqual(
+                    actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
+                    options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
+                    "Expected 'optionalReplacementSpan' properties to match");
+            }
+
             const nameToEntries = new ts.Map<string, ts.CompletionEntry[]>();
             for (const entry of actualCompletions.entries) {
                 const entries = nameToEntries.get(entry.name);

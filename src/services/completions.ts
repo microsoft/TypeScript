@@ -209,6 +209,11 @@ namespace ts.Completions {
         return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
     }
 
+    function getOptionalReplacementSpan(location: Node | undefined) {
+        // StringLiteralLike locations are handled separately in stringCompletions.ts
+        return location?.kind === SyntaxKind.Identifier ? createTextSpanFromNode(location) : undefined;
+    }
+
     function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, preferences: UserPreferences): CompletionInfo | undefined {
         const {
             symbols,
@@ -241,7 +246,7 @@ namespace ts.Completions {
                 kindModifiers: undefined,
                 sortText: SortText.LocationPriority,
             };
-            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, entries: [entry] };
+            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
         }
 
         const entries: CompletionEntry[] = [];
@@ -305,7 +310,13 @@ namespace ts.Completions {
             entries.push(createCompletionEntryForLiteral(literal, preferences));
         }
 
-        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion: isMemberCompletionKind(completionKind), isNewIdentifierLocation, entries };
+        return {
+            isGlobalCompletion: isInSnippetScope,
+            isMemberCompletion: isMemberCompletionKind(completionKind),
+            isNewIdentifierLocation,
+            optionalReplacementSpan: getOptionalReplacementSpan(location),
+            entries
+        };
     }
 
     function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
