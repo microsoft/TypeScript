@@ -16882,6 +16882,17 @@ namespace ts {
                         return originalHandler!(onlyUnreliable);
                     };
                 }
+
+                if (expandingFlags === ExpandingFlags.Both) {
+                    tracing.instant(tracing.Phase.Check, "recursiveTypeRelatedTo_DepthLimit", {
+                        sourceId: source.id,
+                        sourceIdStack: sourceStack.map(t => t.id),
+                        targetId: target.id,
+                        targetIdStack: targetStack.map(t => t.id),
+                        depth,
+                    });
+                }
+
                 const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, intersectionState) : Ternary.Maybe;
                 if (outofbandVarianceMarkerHandler) {
                     outofbandVarianceMarkerHandler = originalHandler;
@@ -18287,7 +18298,6 @@ namespace ts {
                         if (getRecursionIdentity(stack[i]) === identity) {
                             count++;
                             if (count >= 5) {
-                                tracing.instant(tracing.Phase.Check, "isDeeplyNestedType_DepthLimit", { typeId: type.id, typeIdStack: stack.map(t => t.id), depth, count });
                                 return true;
                             }
                         }
