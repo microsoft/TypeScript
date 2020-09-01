@@ -2416,7 +2416,7 @@ namespace ts {
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
             if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
-                const name = (getLeftmostPropertyAccessExpression(node.initializer.expression) as CallExpression).arguments[0] as StringLiteral;
+                const name = (getLeftmostAccessExpression(node.initializer.expression) as CallExpression).arguments[0] as StringLiteral;
                 return isIdentifier(node.initializer.name)
                     ? resolveSymbol(getPropertyOfType(resolveExternalModuleTypeByLiteral(name), node.initializer.name.escapedText))
                     : undefined;
