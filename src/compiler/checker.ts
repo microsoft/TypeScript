@@ -9714,7 +9714,7 @@ namespace ts {
 
                 // fill in any as-yet-unresolved late-bound members.
                 const lateSymbols = createSymbolTable() as UnderscoreEscapedMap<TransientSymbol>;
-                for (const decl of symbol.declarations) {
+                for (const decl of symbol.declarations || emptyArray) {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
                         for (const member of members) {
