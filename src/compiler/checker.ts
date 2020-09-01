@@ -9384,7 +9384,21 @@ namespace ts {
 
         function getDeclaredTypeOfTypeParameter(symbol: Symbol): TypeParameter {
             const links = getSymbolLinks(symbol);
-            return links.declaredType || (links.declaredType = createTypeParameter(symbol));
+            if (!links.declaredType) {
+                const tmp = createTypeParameter(symbol);
+
+                const index = 0;// or it should be symbol.declarations.length-1 ?
+                const declration = symbol.declarations[index];
+                // this means it is typeConstructor.
+                if (isTypeParameterDeclaration(declration) && declration.tParamDeclarations && declration.tParamDeclarations.length > 0) {
+                    tmp.flags |= TypeFlags.TypeConstructor;
+                    // This line is important, which combines Node and Type.
+                    // for now Node.paras is not used but its length.
+                    tmp.tParams = declration.tParamDeclarations.length;
+                }
+                links.declaredType = tmp;
+            }
+            return links.declaredType;
         }
 
         function getDeclaredTypeOfAlias(symbol: Symbol): Type {
@@ -12140,7 +12154,13 @@ namespace ts {
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
-                return checkNoTypeArguments(node, symbol) ? getRegularTypeOfLiteralType(res) : errorType;
+                if (isTypeConstructorTypeParameter(res)) {
+                    return getRegularTypeOfLiteralType(res);
+                }
+                if (checkNoTypeArguments(node, symbol)) {
+                    return getRegularTypeOfLiteralType(res);
+                }
+                return errorType;
             }
             if (symbol.flags & SymbolFlags.Value && isJSDocTypeReference(node)) {
                 const jsdocType = getTypeFromJSDocValueReference(node, symbol);
@@ -13617,6 +13637,10 @@ namespace ts {
 
         function isThisTypeParameter(type: Type): boolean {
             return !!(type.flags & TypeFlags.TypeParameter && (<TypeParameter>type).isThisType);
+        }
+
+        function isTypeConstructorTypeParameter(type: Type): boolean {
+            return !!(type.flags & TypeFlags.TypeParameter && !!(<TypeParameter>type).tParams);
         }
 
         function getSimplifiedType(type: Type, writing: boolean): Type {

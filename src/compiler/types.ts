@@ -1082,7 +1082,7 @@ namespace ts {
         /*@internal*/ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
-        /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
+        /*@internal*/ typeArguments?: NodeArray<TypeNode>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
@@ -1193,7 +1193,7 @@ namespace ts {
         expression?: Expression;
 
         // If this is not empty, it is a type constructor.
-        tParams?: NodeArray<TypeParameterDeclaration>;
+        tParamDeclarations?: NodeArray<TypeParameterDeclaration>;
     }
 
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
@@ -4832,6 +4832,7 @@ namespace ts {
         Null            = 1 << 16,
         Never           = 1 << 17,  // Never type
         TypeParameter   = 1 << 18,  // Type parameter
+        TypeConstructor = 1<< 27,   // Type Constructor, this is an additional flag of TypeParameter.
         Object          = 1 << 19,  // Object type
         Union           = 1 << 20,  // Union (T | U)
         Intersection    = 1 << 21,  // Intersection (T & U)
@@ -5269,6 +5270,10 @@ namespace ts {
         isThisType?: boolean;
         /* @internal */
         resolvedDefaultType?: Type;
+
+        // would it be used? or we just need the number of parameters?
+        /* @internal */
+        tParams?: number; // Or it should be TypeParameter[]? In parser I parse the node use a BNF in scala paper.
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

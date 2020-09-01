@@ -1,5 +1,9 @@
 How to add HKT
 
+This implement is a toy, it is not parsed as BNF. I only promise the type constructor could check for the correct parameter numbers.
+
+
+
 getTypeFromTypeNode
     - what is TypeNode, like ` Set<number>` in `var q: Set<number>`
     1. function getTypeFromTypeReference(node: TypeReferenceType): Type
