@@ -4050,8 +4050,7 @@ declare namespace ts {
     function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function getOriginalNode(node: Node | undefined): Node | undefined;
     function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node | undefined) => node is T): T | undefined;
-    function getClosestNode<T extends Node>(node: Node, match: (node: Node) => node is T): T;
-    function getClosestNode<T extends Node>(node: Node, match: (node: Node | undefined) => node is T): T | undefined;
+    function getClosestNode<T extends Node>(node: Node, match: (node: Node) => node is T): T | undefined;
     /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
