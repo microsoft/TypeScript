@@ -5,6 +5,10 @@ This implement is a toy, it is not parsed as BNF. I only promise the type constr
 1. AST: add possiable parameters to TypeParameter when parsing
 2. convert AST to proper Type
 
+- add more check for arguments
+    - allow generic as typeArguments // seems this is done already
+    - check typeArguments and typeParameter whether match, especially paramters
+    - 
 
 getTypeFromTypeNode
     - what is TypeNode, like ` Set<number>` in `var q: Set<number>`
@@ -46,3 +50,7 @@ function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbo
 //
 function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference
     - this function would try get cached value(key is calculated through typeArguments' ids) from `target.instantiations`, if not create and cache a `TypeReference` type, set its property `resolvedTypeArguments` as `typeArguments` and property `target` as `target`(from function parameters).
+
+## Need final decision from Core Team
+1. TypeArguments need a flag or boolean to mark itself. For a generic type could be valid typeargument for now, we should not check whether it has typearguments for now.
+So, where to add the flag, which type should have this flag.

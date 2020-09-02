@@ -12048,25 +12048,28 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 const isJs = isInJSFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
-                if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
-                    const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
-                    const diag = minTypeArgumentCount === typeParameters.length ?
-                        missingAugmentsTag ?
-                            Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag :
-                            Diagnostics.Generic_type_0_requires_1_type_argument_s :
-                        missingAugmentsTag ?
-                            Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag :
-                            Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
+                if (isTypeReferenceNode(node) && node.isTypeArguments) { }
+                else {
+                    if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
+                        const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
+                        const diag = minTypeArgumentCount === typeParameters.length ?
+                            missingAugmentsTag ?
+                                Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag :
+                                Diagnostics.Generic_type_0_requires_1_type_argument_s :
+                            missingAugmentsTag ?
+                                Diagnostics.Expected_0_1_type_arguments_provide_these_with_an_extends_tag :
+                                Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments;
 
-                    const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
-                    error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
-                    if (!isJs) {
-                        // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
-                        return errorType;
+                        const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                        error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
+                        if (!isJs) {
+                            // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                            return errorType;
+                        }
                     }
                 }
-                if (node.kind === SyntaxKind.TypeReference && isDeferredTypeReferenceNode(<TypeReferenceNode>node, length(node.typeArguments) !== typeParameters.length)) {
-                    return createDeferredTypeReference(<GenericType>type, <TypeReferenceNode>node, /*mapper*/ undefined);
+                if (isTypeReferenceNode(node) && isDeferredTypeReferenceNode(node, length(node.typeArguments) !== typeParameters.length)) {
+                    return createDeferredTypeReference(<GenericType>type, node, /*mapper*/ undefined);
                 }
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
@@ -12141,6 +12144,7 @@ namespace ts {
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
+            Debug.assert(isTypeReferenceNode(node));
             if (symbol === unknownSymbol) {
                 return errorType;
             }
@@ -12338,6 +12342,11 @@ namespace ts {
         }
 
         function typeArgumentsFromTypeReferenceNode(node: NodeWithTypeArguments): Type[] | undefined {
+            forEach(node.typeArguments, (t) => {
+                if (isTypeReferenceNode(t)) {
+                    t.isTypeArguments = true;
+                }
+            });
             return map(node.typeArguments, getTypeFromTypeNode);
         }
 

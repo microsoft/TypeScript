@@ -1523,6 +1523,8 @@ namespace ts {
     export interface TypeReferenceNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.TypeReference;
         readonly typeName: EntityName;
+        //@internal
+        isTypeArguments: boolean;
     }
 
     export interface TypePredicateNode extends TypeNode {
