@@ -66,6 +66,15 @@ function generic3<T extends string>(arg: T): boolean {
     return strMap[arg];
 }
 
+// Element access into known properties is ok
+declare const obj1: { x: string, y: number, [key: string]: string | number };
+obj1["x"];
+const y = "y";
+obj1[y];
+let yy = "y";
+obj1[yy];
+let z = "z";
+obj1[z];
 
 // Distributivity cases
 declare const strMapUnion: { [s: string]: boolean } | { [s: string]: number };

@@ -56,7 +56,6 @@ declare let target_string_arr: string[];
 
 {
     let x: number, y: number, z: number | undefined;
-    // TODO: This doesn't work yet
     ({ x, y, z } = numMapPoint); // Should OK
 
     let q: number;

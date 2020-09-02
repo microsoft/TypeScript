@@ -145,18 +145,17 @@ declare let target_string_arr: string[];
 >y : Symbol(y, Decl(pedanticIndexSignatureDestructuring.ts, 54, 18))
 >z : Symbol(z, Decl(pedanticIndexSignatureDestructuring.ts, 54, 29))
 
-    // TODO: This doesn't work yet
     ({ x, y, z } = numMapPoint); // Should OK
->x : Symbol(x, Decl(pedanticIndexSignatureDestructuring.ts, 56, 6))
->y : Symbol(y, Decl(pedanticIndexSignatureDestructuring.ts, 56, 9))
->z : Symbol(z, Decl(pedanticIndexSignatureDestructuring.ts, 56, 12))
+>x : Symbol(x, Decl(pedanticIndexSignatureDestructuring.ts, 55, 6))
+>y : Symbol(y, Decl(pedanticIndexSignatureDestructuring.ts, 55, 9))
+>z : Symbol(z, Decl(pedanticIndexSignatureDestructuring.ts, 55, 12))
 >numMapPoint : Symbol(numMapPoint, Decl(pedanticIndexSignatureDestructuring.ts, 28, 13))
 
     let q: number;
->q : Symbol(q, Decl(pedanticIndexSignatureDestructuring.ts, 58, 7))
+>q : Symbol(q, Decl(pedanticIndexSignatureDestructuring.ts, 57, 7))
 
     ({ q } = numMapPoint); // Should error
->q : Symbol(q, Decl(pedanticIndexSignatureDestructuring.ts, 59, 6))
+>q : Symbol(q, Decl(pedanticIndexSignatureDestructuring.ts, 58, 6))
 >numMapPoint : Symbol(numMapPoint, Decl(pedanticIndexSignatureDestructuring.ts, 28, 13))
 }
 

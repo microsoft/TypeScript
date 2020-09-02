@@ -80,8 +80,8 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 >s : string
 {
     const { x, y, z } = numMapPoint;
->x : number | undefined
->y : number | undefined
+>x : number
+>y : number
 >z : number | undefined
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 
@@ -106,7 +106,7 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
 
 {
     const { x, ...q } = numMapPoint;
->x : number | undefined
+>x : number
 >q : { [s: string]: number; y: number; }
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 
@@ -172,7 +172,6 @@ declare let target_string_arr: string[];
 >y : number
 >z : number | undefined
 
-    // TODO: This doesn't work yet
     ({ x, y, z } = numMapPoint); // Should OK
 >({ x, y, z } = numMapPoint) : { x: number; y: number; } & { [s: string]: number; }
 >{ x, y, z } = numMapPoint : { x: number; y: number; } & { [s: string]: number; }

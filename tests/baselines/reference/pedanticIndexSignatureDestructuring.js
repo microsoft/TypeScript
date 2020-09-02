@@ -54,7 +54,6 @@ declare let target_string_arr: string[];
 
 {
     let x: number, y: number, z: number | undefined;
-    // TODO: This doesn't work yet
     ({ x, y, z } = numMapPoint); // Should OK
 
     let q: number;
@@ -107,7 +106,6 @@ target_string_undef = strArray[0]; // Should OK
 target_string_arr = strArray.slice(3); // Should OK
 {
     var x = void 0, y = void 0, z = void 0;
-    // TODO: This doesn't work yet
     (x = numMapPoint.x, y = numMapPoint.y, z = numMapPoint.z); // Should OK
     var q = void 0;
     (q = numMapPoint.q); // Should error

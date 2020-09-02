@@ -7,15 +7,11 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(34,5): e
 tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(41,5): error TS2532: Object is possibly 'undefined'.
 tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(50,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(57,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-  Type 'undefined' is not assignable to type 'number'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(57,11): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-  Type 'undefined' is not assignable to type 'number'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(60,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts (11 errors) ====
+==== tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts (9 errors) ====
     declare const strArray: string[];
     declare const strStrTuple: [string, string];
     
@@ -88,14 +84,7 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(60,8): e
     
     {
         let x: number, y: number, z: number | undefined;
-        // TODO: This doesn't work yet
         ({ x, y, z } = numMapPoint); // Should OK
-           ~
-!!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
-              ~
-!!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
     
         let q: number;
         ({ q } = numMapPoint); // Should error
