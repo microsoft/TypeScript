@@ -225,16 +225,47 @@ function generic3<T extends string>(arg: T): boolean {
 >arg : Symbol(arg, Decl(pedanticIndexSignatures.ts, 60, 36))
 }
 
+// Element access into known properties is ok
+declare const obj1: { x: string, y: number, [key: string]: string | number };
+>obj1 : Symbol(obj1, Decl(pedanticIndexSignatures.ts, 66, 13))
+>x : Symbol(x, Decl(pedanticIndexSignatures.ts, 66, 21))
+>y : Symbol(y, Decl(pedanticIndexSignatures.ts, 66, 32))
+>key : Symbol(key, Decl(pedanticIndexSignatures.ts, 66, 45))
+
+obj1["x"];
+>obj1 : Symbol(obj1, Decl(pedanticIndexSignatures.ts, 66, 13))
+>"x" : Symbol(x, Decl(pedanticIndexSignatures.ts, 66, 21))
+
+const y = "y";
+>y : Symbol(y, Decl(pedanticIndexSignatures.ts, 68, 5))
+
+obj1[y];
+>obj1 : Symbol(obj1, Decl(pedanticIndexSignatures.ts, 66, 13))
+>y : Symbol(y, Decl(pedanticIndexSignatures.ts, 68, 5))
+
+let yy = "y";
+>yy : Symbol(yy, Decl(pedanticIndexSignatures.ts, 70, 3))
+
+obj1[yy];
+>obj1 : Symbol(obj1, Decl(pedanticIndexSignatures.ts, 66, 13))
+>yy : Symbol(yy, Decl(pedanticIndexSignatures.ts, 70, 3))
+
+let z = "z";
+>z : Symbol(z, Decl(pedanticIndexSignatures.ts, 72, 3))
+
+obj1[z];
+>obj1 : Symbol(obj1, Decl(pedanticIndexSignatures.ts, 66, 13))
+>z : Symbol(z, Decl(pedanticIndexSignatures.ts, 72, 3))
 
 // Distributivity cases
 declare const strMapUnion: { [s: string]: boolean } | { [s: string]: number };
->strMapUnion : Symbol(strMapUnion, Decl(pedanticIndexSignatures.ts, 67, 13))
->s : Symbol(s, Decl(pedanticIndexSignatures.ts, 67, 30))
->s : Symbol(s, Decl(pedanticIndexSignatures.ts, 67, 57))
+>strMapUnion : Symbol(strMapUnion, Decl(pedanticIndexSignatures.ts, 76, 13))
+>s : Symbol(s, Decl(pedanticIndexSignatures.ts, 76, 30))
+>s : Symbol(s, Decl(pedanticIndexSignatures.ts, 76, 57))
 
 // Should error
 const f1: boolean | number = strMapUnion["foo"];
->f1 : Symbol(f1, Decl(pedanticIndexSignatures.ts, 69, 5))
->strMapUnion : Symbol(strMapUnion, Decl(pedanticIndexSignatures.ts, 67, 13))
+>f1 : Symbol(f1, Decl(pedanticIndexSignatures.ts, 78, 5))
+>strMapUnion : Symbol(strMapUnion, Decl(pedanticIndexSignatures.ts, 76, 13))
 
 
