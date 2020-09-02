@@ -2408,6 +2408,7 @@ namespace ts.server {
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
                 file: item.file,
+                containerName: item.containerName,
                 span: toProtocolTextSpan(item.span, scriptInfo),
                 selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
             };

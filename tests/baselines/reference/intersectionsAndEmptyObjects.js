@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts] ////
+
 //// [intersectionsAndEmptyObjects.ts]
 // Empty object type literals are removed from intersections types
 // that contain other object types
@@ -81,10 +83,37 @@ var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 type Foo1 = { x: string } & { [x: number]: Foo1 };
 type Foo2 = { x: string } & { [K in number]: Foo2 };
 
+// Repro from #40239
+
+declare function mock<M>(_: Promise<M>): {} & M;
+mock(import('./ex'))
+
+//// [ex.d.ts]
+export {}
+
 
 //// [intersectionsAndEmptyObjects.js]
 // Empty object type literals are removed from intersections types
 // that contain other object types
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 let x01;
 let x02;
 let x03;
@@ -121,3 +150,4 @@ var myChoices;
 var myChoicesAndEmpty;
 var unknownChoices;
 var unknownChoicesAndEmpty;
+mock(Promise.resolve().then(() => __importStar(require('./ex'))));
