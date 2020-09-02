@@ -16760,6 +16760,12 @@ namespace ts {
                     }
                     result &= related;
                 }
+                if (result && source.flags & TypeFlags.Union && some(sourceTypes, t => t === markerSubType) && (target === markerSuperType || (target.flags & TypeFlags.Union && some((target as UnionType).types, t => t === markerSuperType)))) {
+                    // If we're checking if `(U extends T) | A | B` is assignable to `T | A | B`, we return true, but we want
+                    // to mark the result as `Unreliable`, since `T | A`, `T | B` and `T | A | B` and the like are all
+                    // assignable to the target, even if they're not assignable to `T`
+                    outofbandVarianceMarkerHandler?.(/*onlyUnreliable*/ true);
+                }
                 return result;
             }
 

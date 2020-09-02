@@ -1,0 +1,94 @@
+=== tests/cases/compiler/inlinedAliasOfSignatureSameAsSignature.ts ===
+export type Example<TData>
+>Example : Symbol(Example, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 0, 0))
+>TData : Symbol(TData, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 0, 20))
+
+    = (data: TData | null | undefined) => string | null;
+>data : Symbol(data, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 1, 7))
+>TData : Symbol(TData, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 0, 20))
+
+function foo<T>() {
+>foo : Symbol(foo, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 1, 56))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 3, 13))
+
+    let x: Example<T> = undefined!;
+>x : Symbol(x, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 4, 7))
+>Example : Symbol(Example, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 0, 0))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 3, 13))
+>undefined : Symbol(undefined)
+
+    let y: Example<T | null | undefined> = undefined!;
+>y : Symbol(y, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 5, 7))
+>Example : Symbol(Example, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 0, 0))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 3, 13))
+>undefined : Symbol(undefined)
+
+    y = x;
+>y : Symbol(y, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 5, 7))
+>x : Symbol(x, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 4, 7))
+
+    let x1: (data: T | null | undefined) => string | null = undefined!;
+>x1 : Symbol(x1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 9, 7))
+>data : Symbol(data, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 9, 13))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 3, 13))
+>undefined : Symbol(undefined)
+
+    let y1: (data: (T | null | undefined) | null | undefined) => string | null = undefined!;
+>y1 : Symbol(y1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 10, 7))
+>data : Symbol(data, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 10, 13))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 3, 13))
+>undefined : Symbol(undefined)
+
+    y1 = x1
+>y1 : Symbol(y1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 10, 7))
+>x1 : Symbol(x1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 9, 7))
+}
+
+export interface Example2<TData> {
+>Example2 : Symbol(Example2, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 13, 1))
+>TData : Symbol(TData, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 15, 26))
+
+    item: (data: TData | null | undefined) => string | null;
+>item : Symbol(Example2.item, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 15, 34))
+>data : Symbol(data, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 16, 11))
+>TData : Symbol(TData, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 15, 26))
+}
+
+function bar<T>() {
+>bar : Symbol(bar, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 17, 1))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 19, 13))
+
+    let x: Example2<T> = undefined!;
+>x : Symbol(x, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 20, 7))
+>Example2 : Symbol(Example2, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 13, 1))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 19, 13))
+>undefined : Symbol(undefined)
+
+    let y: Example2<T | null | undefined> = undefined!;
+>y : Symbol(y, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 21, 7))
+>Example2 : Symbol(Example2, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 13, 1))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 19, 13))
+>undefined : Symbol(undefined)
+
+    y = x;
+>y : Symbol(y, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 21, 7))
+>x : Symbol(x, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 20, 7))
+
+    let x1: { item: (data: T | null | undefined) => string | null } = undefined!;
+>x1 : Symbol(x1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 25, 7))
+>item : Symbol(item, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 25, 13))
+>data : Symbol(data, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 25, 21))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 19, 13))
+>undefined : Symbol(undefined)
+
+    let y1: { item: (data: (T | null | undefined) | null | undefined) => string | null } = undefined!;
+>y1 : Symbol(y1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 26, 7))
+>item : Symbol(item, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 26, 13))
+>data : Symbol(data, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 26, 21))
+>T : Symbol(T, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 19, 13))
+>undefined : Symbol(undefined)
+
+    y1 = x1
+>y1 : Symbol(y1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 26, 7))
+>x1 : Symbol(x1, Decl(inlinedAliasOfSignatureSameAsSignature.ts, 25, 7))
+}
