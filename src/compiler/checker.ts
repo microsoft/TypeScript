@@ -13301,7 +13301,7 @@ namespace ts {
         }
 
         function getIndexTypeForMappedType(type: MappedType, noIndexSignatures: boolean | undefined) {
-            const constraint = filterType(getConstraintTypeFromMappedType(<MappedType>type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String)));
+            const constraint = filterType(getConstraintTypeFromMappedType(type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String)));
             return type.declaration.nameType ?
                 instantiateType(getTypeFromTypeNode(type.declaration.nameType), appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), constraint)) :
                 constraint;
