@@ -176,7 +176,7 @@ See below for examples.
 
 ### Tests for multiple files
 
-When you need to multiple files in a single test, use the `filename` tag:
+When you need to mimic having multiple files in a single test to test features such as "import", use the `filename` tag:
 
 ```ts
 // @filename: file1.ts

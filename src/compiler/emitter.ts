@@ -4563,7 +4563,11 @@ namespace ts {
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
+            const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
+                | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
+                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0);
+
+            return getLiteralText(node, currentSourceFile!, flags);
         }
 
         /**

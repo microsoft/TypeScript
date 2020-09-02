@@ -1180,6 +1180,10 @@
         "category": "Error",
         "code": 1388
     },
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2748,7 +2752,7 @@
         "category": "Error",
         "code": 2723
     },
-    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+    "'{0}' has no exported member named '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2724
     },
@@ -3024,7 +3028,6 @@
         "category": "Error",
         "code": 2792
     },
-
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
