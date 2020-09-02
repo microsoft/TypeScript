@@ -92,7 +92,7 @@ namespace ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /* @internal */ getNamedDeclarations(): Map<readonly Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -116,7 +116,7 @@ namespace ts {
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -196,10 +196,10 @@ namespace ts {
     export interface PackageJsonInfo {
         fileName: string;
         parseable: boolean;
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
-        optionalDependencies?: Map<string>;
+        dependencies?: ESMap<string, string>;
+        devDependencies?: ESMap<string, string>;
+        peerDependencies?: ESMap<string, string>;
+        optionalDependencies?: ESMap<string, string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
@@ -211,14 +211,20 @@ namespace ts {
 
     /* @internal */
     export const enum PackageJsonAutoImportPreference {
-        None,
-        ExcludeDevDependencies,
-        All
+        Off,
+        On,
+        Auto,
     }
 
     export interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
+    }
+
+    export enum LanguageServiceMode {
+        Semantic,
+        PartialSemantic,
+        Syntactic,
     }
 
     //
@@ -271,7 +277,7 @@ namespace ts {
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
+        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
 
         /*
          * Required for full import and type reference completions.
@@ -505,6 +511,11 @@ namespace ts {
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
+
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
 
         dispose(): void;
     }

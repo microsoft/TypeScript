@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsdoc/def.js ===
+/** @enum {number} */
+const MyEnum = {
+>MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
+
+  a: 1,
+>a : Symbol(a, Decl(def.js, 1, 16))
+
+  b: 2
+>b : Symbol(b, Decl(def.js, 2, 7))
+
+};
+export default MyEnum;
+>MyEnum : Symbol(MyEnum, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
+
+=== tests/cases/conformance/jsdoc/use.js ===
+import MyEnum from "./def";
+>MyEnum : Symbol(MyEnum, Decl(use.js, 0, 6))
+
+/** @type {MyEnum} */
+const v = MyEnum.b;
+>v : Symbol(v, Decl(use.js, 3, 5))
+>MyEnum.b : Symbol(b, Decl(def.js, 2, 7))
+>MyEnum : Symbol(MyEnum, Decl(use.js, 0, 6))
+>b : Symbol(b, Decl(def.js, 2, 7))
+

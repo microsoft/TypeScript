@@ -25,12 +25,12 @@ namespace ts.projectSystem {
             const fileNames = files.map(file => file.path);
             // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
             const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
-            const expectedWatchedDirectories = createMap<number>();
+            const expectedWatchedDirectories = new Map<string, number>();
             const mapOfDirectories = tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
                 expectedWatchedDirectories :
                 tscWatchDirectory === Tsc_WatchDirectory.WatchFile ?
                     expectedWatchedFiles :
-                    createMap();
+                    new Map();
             // For failed resolution lookup and tsconfig files => cached so only watched only once
             mapOfDirectories.set(projectFolder, 1);
             // Through above recursive watches
@@ -39,7 +39,7 @@ namespace ts.projectSystem {
             mapOfDirectories.set(`${projectFolder}/${nodeModulesAtTypes}`, 1);
             const expectedCompletions = ["file1"];
             const completionPosition = index.content.lastIndexOf('"');
-            const environmentVariables = createMap<string>();
+            const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
             const host = createServerHost(files, { environmentVariables });
             const projectService = createProjectService(host);
@@ -161,7 +161,7 @@ namespace ts.projectSystem {
         const expectedWatchedFiles = arrayToMap(fileNames.slice(1), identity, () => 1);
         const expectedWatchedDirectories = arrayToMap([projectFolder, projectSrcFolder, `${projectFolder}/${nodeModules}`, `${projectFolder}/${nodeModulesAtTypes}`], identity, () => 1);
 
-        const environmentVariables = createMap<string>();
+        const environmentVariables = new Map<string, string>();
         environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
         const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
         const projectService = createProjectService(host);

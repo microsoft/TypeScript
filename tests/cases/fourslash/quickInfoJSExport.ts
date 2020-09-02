@@ -15,8 +15,7 @@
 //// export { test/**/String };
 
 verify.quickInfoAt("",
-`type testString = string
-(alias) type testString = any
+`(alias) type testString = string
 (alias) const testString: {
     one: string;
     two: string;

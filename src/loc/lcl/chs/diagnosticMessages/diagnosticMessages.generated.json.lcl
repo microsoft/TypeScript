@@ -1479,15 +1479,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";All_files_must_be_modules_when_the_isolatedModules_flag_is_provided_1208" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[All files must be modules when the '--isolatedModules' flag is provided.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[提供 "--isolatedModules" 标志时，所有文件都必须是模块。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
@@ -2166,6 +2157,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Arguments_for_the_rest_parameter_0_were_not_provided_6236" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[未提供 rest 形参“{0}”的实参。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Array_element_destructuring_pattern_expected_1181" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Array element destructuring pattern expected.]]></Val>
@@ -2394,9 +2394,21 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Can only convert logical AND access chains]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[仅可转换逻辑 AND 访问链]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_property_with_modifier_95137" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert property with modifier]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只能转换带修饰符的属性]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2578,7 +2590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到“{0}”的 LIB 定义。]]></Val>
+            <Val><![CDATA[找不到“{0}”的库定义。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2587,7 +2599,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到“{0}”的 LIB 定义。你是指“{1}”?]]></Val>
+            <Val><![CDATA[找不到“{0}”的库定义。你是指“{1}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2597,6 +2609,15 @@
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[找不到模块 "{0}"。请考虑使用 "--resolveJsonModule" 导入带 ".json" 扩展的模块]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_th_2792" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到模块“{0}”。你的意思是要将 "moduleResolution" 选项设置为 "node"，还是要将别名添加到 "paths" 选项中?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3366,6 +3387,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_a_union_type_1386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在联合类型中使用时，构造函数类型标记必须用括号括起来。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1388" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在相交类型中使用时，构造函数类型标记必须用括号括起来。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Constructors_for_derived_classes_must_contain_a_super_call_2377" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Constructors for derived classes must contain a 'super' call.]]></Val>
@@ -3672,6 +3711,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_optional_chain_expression_95139" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to optional chain expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[转换为可选链表达式]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_to_template_string_95096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert to template string]]></Val>
@@ -3726,21 +3774,48 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_find_convertible_access_expression_95140" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find convertible access expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到可转换的访问表达式]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_find_export_statement_95129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not find export statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到 export 语句]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Could_not_find_import_clause_95131" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not find import clause]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到 import 子句]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Could_not_find_matching_access_expressions_95141" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find matching access expressions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到匹配的访问表达式]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Could_not_find_namespace_import_or_named_imports_95132" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not find namespace import or named imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到命名空间导入或已命名的导入]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4056,6 +4131,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_1312" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[你的意思是使用 ":" 吗? 当包含对象文字属于解构模式时，"=" 只能跟在属性名称的后面。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Did_you_mean_to_use_new_with_this_expression_6213" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use 'new' with this expression?]]></Val>
@@ -4092,6 +4176,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Disable checking for this file.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Disable_loading_referenced_projects_6235" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Disable loading referenced projects.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[禁止加载引用的项目。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4427,6 +4520,15 @@
           <Val><![CDATA[Each member of the union type '{0}' has signatures, but none of those signatures are compatible with each other.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[联合类型 "{0}" 的每个成员都有签名，但这些签名都不能互相兼容。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other_2622" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Element at index {0} is variadic in one type but not in the other.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[索引 {0} 处的元素在其中一个类型中是可变元素，在另一个类型中却不是。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5450,6 +5552,24 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[函数重载不能为静态。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_a_union_type_1385" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在联合类型中使用时，函数类型标记必须用括号括起来。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1387" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在相交类型中使用时，函数类型标记必须用括号括起来。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6607,7 +6727,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Looking up in 'node_modules' folder, initial location '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[正在在 "node_modules" 文件夹中查找，初始位置“{0}”。]]></Val>
+            <Val><![CDATA[正在 "node_modules" 文件夹中查找，初始位置为“{0}”。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Looking up in 'node_modules' folder, initial location '{0}']]></Val>
@@ -6730,7 +6850,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模块 "{0}" 只能使用 "{1}" 标志进行默认导入]]></Val>
+            <Val><![CDATA[模块 "{0}" 只能在使用 "{1}" 标志时进行默认导入]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6803,15 +6923,6 @@
           <Val><![CDATA[Module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[模块“{0}”没有导出的成员“{1}”。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[模块“{0}”没有导出的成员“{1}”。你是否指的是“{2}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8853,15 +8964,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove destructuring]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[删除解构]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
@@ -8921,6 +9023,24 @@
           <Val><![CDATA[Remove unused declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[为 "{0}" 删除未使用的声明]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_declarations_for_Colon_0_90041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[为“{0}”删除未使用的声明]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_destructuring_declaration_90039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused destructuring declaration]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[删除未使用的解构声明]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9594,6 +9714,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Source_has_0_element_s_but_target_allows_only_1_2619" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Source has {0} element(s) but target allows only {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[源具有 {0} 个元素，但目标仅允许 {1} 个。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Source_has_0_element_s_but_target_requires_1_2618" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Source has {0} element(s) but target requires {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[源具有 {0} 个元素，但目标需要 {1} 个。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature_2382" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specialized overload signature is not assignable to any non-specialized signature.]]></Val>
@@ -9966,6 +10104,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Switch_each_misused_0_to_1_95138" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[将每个误用的“{0}”切换到“{1}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object_2470" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['Symbol' reference does not refer to the global Symbol constructor object.]]></Val>
@@ -10007,6 +10154,24 @@
           <Val><![CDATA[Tagged template expressions are not permitted in an optional chain.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[可选链中不允许使用带有标记的模板表达式。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Target_allows_only_0_element_s_but_source_may_have_more_2621" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Target allows only {0} element(s) but source may have more.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[目标仅允许 {0} 个元素，但源中的元素可能更多。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Target_requires_0_element_s_but_source_may_have_fewer_2620" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[目标仅允许 {0} 个元素，但源中的元素可能不够。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10888,7 +11053,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模块是使用 "export =" 声明的，在使用 "{0}" 标志时只能与默认导入一起使用。]]></Val>
+            <Val><![CDATA[此模块是使用 "export =" 声明的，只能在使用 "{0}" 标志时进行默认导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11661,6 +11826,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_of_construct_signatures_are_incompatible_2419" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[构造签名的类型不兼容。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_of_parameters_0_and_1_are_incompatible_2328" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types of parameters '{0}' and '{1}' are incompatible.]]></Val>
@@ -12309,6 +12483,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_imp_1208" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[无法在 "--isolatedModules" 下编译“{0}”，因为它被视为全局脚本文件。请添加导入、导出或空的 "export {}" 语句来使它成为模块。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_cannot_be_used_as_a_JSX_component_2786" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' cannot be used as a JSX component.]]></Val>
@@ -12368,6 +12551,15 @@
           <Val><![CDATA['{0}' expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[应为“{0}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_has_no_exported_member_named_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' has no exported member named '{1}'. Did you mean '{2}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”没有导出的成员“{1}”。你是否指的是“{2}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12476,6 +12668,15 @@
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[“{0}”不是关键字“{1}”的有效元属性。是否是指“{2}”?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_not_allowed_as_a_variable_declaration_name_1389" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not allowed as a variable declaration name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”不得用作变量声明名称。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12669,6 +12870,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0_2690" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”仅引用一个类型，但在此处用作一个值。你是否想要使用“{0} 中的 {1}”?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
@@ -12830,15 +13040,6 @@
           <Val><![CDATA['#!' can only be used at the start of a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["#!" 只能用在文件的开头。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["=" 只可在重构赋值内部的对象文字属性中使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13007,6 +13208,15 @@
           <Val><![CDATA['extends' clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[导出的类“{0}”的 "extends" 子句具有或正在使用专用名称“{1}”。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";extends_clause_of_exported_class_has_or_is_using_private_name_0_4021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['extends' clause of exported class has or is using private name '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[导出的类的 "extends" 子句具有或正在使用专用名称“{0}”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

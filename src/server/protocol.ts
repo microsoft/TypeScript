@@ -136,7 +136,18 @@ namespace ts.server.protocol {
         SelectionRange = "selectionRange",
         /* @internal */
         SelectionRangeFull = "selectionRange-full",
-
+        ToggleLineComment = "toggleLineComment",
+        /* @internal */
+        ToggleLineCommentFull = "toggleLineComment-full",
+        ToggleMultilineComment = "toggleMultilineComment",
+        /* @internal */
+        ToggleMultilineCommentFull = "toggleMultilineComment-full",
+        CommentSelection = "commentSelection",
+        /* @internal */
+        CommentSelectionFull = "commentSelection-full",
+        UncommentSelection = "uncommentSelection",
+        /* @internal */
+        UncommentSelectionFull = "uncommentSelection-full",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
@@ -1542,6 +1553,26 @@ namespace ts.server.protocol {
     export interface SelectionRange {
         textSpan: TextSpan;
         parent?: SelectionRange;
+    }
+
+    export interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: FileRangeRequestArgs;
+    }
+
+    export interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: FileRangeRequestArgs;
+    }
+
+    export interface CommentSelectionRequest extends FileRequest {
+        command: CommandTypes.CommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+
+    export interface UncommentSelectionRequest extends FileRequest {
+        command: CommandTypes.UncommentSelection;
+        arguments: FileRangeRequestArgs;
     }
 
     /**
@@ -3189,7 +3220,7 @@ namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
     }
 
     export interface CompilerOptions {

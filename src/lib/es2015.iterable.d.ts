@@ -154,7 +154,7 @@ interface Set<T> {
      */
     entries(): IterableIterator<[T, T]>;
     /**
-     * Despite its name, returns an iterable of the values in the set,
+     * Despite its name, returns an iterable of the values in the set.
      */
     keys(): IterableIterator<T>;
 
@@ -174,7 +174,7 @@ interface ReadonlySet<T> {
     entries(): IterableIterator<[T, T]>;
 
     /**
-     * Despite its name, returns an iterable of the values in the set,
+     * Despite its name, returns an iterable of the values in the set.
      */
     keys(): IterableIterator<T>;
 

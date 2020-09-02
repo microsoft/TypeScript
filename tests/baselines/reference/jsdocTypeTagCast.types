@@ -85,9 +85,9 @@ function SomeFakeClass() {
     /** @type {string|number} */
     this.p = "bar";
 >this.p = "bar" : "bar"
->this.p : any
->this : any
->p : any
+>this.p : string | number
+>this : this
+>p : string | number
 >"bar" : "bar"
 }
 

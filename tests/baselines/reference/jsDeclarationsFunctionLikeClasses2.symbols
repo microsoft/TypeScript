@@ -10,6 +10,8 @@ export function Vec(len) {
      * @type {number[]}
      */
     this.storage = new Array(len);
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >len : Symbol(len, Decl(source.js, 3, 20))
@@ -111,6 +113,7 @@ export function Point2D(x, y) {
 >y : Symbol(y, Decl(source.js, 37, 26))
 
     if (!(this instanceof Point2D)) {
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 >Point2D : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 
         return new Point2D(x, y);
@@ -122,12 +125,17 @@ export function Point2D(x, y) {
 >Vec.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 
     this.x = x;
+>this.x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 >x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
 >x : Symbol(x, Decl(source.js, 37, 24))
 
     this.y = y;
+>this.y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 >y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
 >y : Symbol(y, Decl(source.js, 37, 26))
 }

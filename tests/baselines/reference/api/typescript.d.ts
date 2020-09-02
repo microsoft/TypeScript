@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.0";
+    const versionMajorMinor = "4.1";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -31,21 +31,49 @@ declare namespace ts {
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-    /** ES6 Map interface, only read methods included. */
-    interface ReadonlyMap<T> {
-        get(key: string): T | undefined;
-        has(key: string): boolean;
-        forEach(action: (value: T, key: string) => void): void;
+    /** Common read methods for ES6 Map/Set. */
+    interface ReadonlyCollection<K> {
         readonly size: number;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
+        has(key: K): boolean;
+        keys(): Iterator<K>;
+    }
+    /** Common write methods for ES6 Map/Set. */
+    interface Collection<K> extends ReadonlyCollection<K> {
+        delete(key: K): boolean;
+        clear(): void;
+    }
+    /** ES6 Map interface, only read methods included. */
+    interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
+        get(key: K): V | undefined;
+        values(): Iterator<V>;
+        entries(): Iterator<[K, V]>;
+        forEach(action: (value: V, key: K) => void): void;
+    }
+    /**
+     * ES6 Map interface, only read methods included.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
     }
     /** ES6 Map interface. */
-    interface Map<T> extends ReadonlyMap<T> {
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
+    interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
+        set(key: K, value: V): this;
+    }
+    /**
+     * ES6 Map interface.
+     */
+    interface Map<T> extends ESMap<string, T> {
+    }
+    /** ES6 Set interface, only read methods included. */
+    interface ReadonlySet<T> extends ReadonlyCollection<T> {
+        has(value: T): boolean;
+        values(): Iterator<T>;
+        entries(): Iterator<[T, T]>;
+        forEach(action: (value: T, key: T) => void): void;
+    }
+    /** ES6 Set interface. */
+    interface Set<T> extends ReadonlySet<T>, Collection<T> {
+        add(value: T): this;
+        delete(value: T): boolean;
     }
     /** ES6 Iterator type. */
     interface Iterator<T> {
@@ -1741,11 +1769,11 @@ declare namespace ts {
     export interface JSDocEnumTag extends JSDocTag, Declaration {
         readonly kind: SyntaxKind.JSDocEnumTag;
         readonly parent: JSDoc;
-        readonly typeExpression?: JSDocTypeExpression;
+        readonly typeExpression: JSDocTypeExpression;
     }
     export interface JSDocThisTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThisTag;
-        readonly typeExpression?: JSDocTypeExpression;
+        readonly typeExpression: JSDocTypeExpression;
     }
     export interface JSDocTemplateTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTemplateTag;
@@ -2131,7 +2159,7 @@ declare namespace ts {
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
-        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
          * Otherwise returns its input.
@@ -2202,6 +2230,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        NoUndefinedOptionalParameterType = 1073741824,
         AllowThisInObjectLiteral = 32768,
         AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
@@ -2313,7 +2342,6 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
-        Deprecated = 268435456,
         Enum = 384,
         Variable = 3,
         Value = 111551,
@@ -2387,20 +2415,10 @@ declare namespace ts {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
     /** ReadonlyMap where keys are `__String`s. */
-    export interface ReadonlyUnderscoreEscapedMap<T> {
-        get(key: __String): T | undefined;
-        has(key: __String): boolean;
-        forEach(action: (value: T, key: __String) => void): void;
-        readonly size: number;
-        keys(): Iterator<__String>;
-        values(): Iterator<T>;
-        entries(): Iterator<[__String, T]>;
+    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyESMap<__String, T> {
     }
     /** Map where keys are `__String`s. */
-    export interface UnderscoreEscapedMap<T> extends ReadonlyUnderscoreEscapedMap<T> {
-        set(key: __String, value: T): this;
-        delete(key: __String): boolean;
-        clear(): void;
+    export interface UnderscoreEscapedMap<T> extends ESMap<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
     }
     /** SymbolTable based on ES6 Map interface. */
     export type SymbolTable = UnderscoreEscapedMap<Symbol>;
@@ -2451,7 +2469,6 @@ declare namespace ts {
         Instantiable = 63176704,
         StructuredOrInstantiable = 66846720,
         Narrowable = 133970943,
-        NotUnionOrUnit = 67637251,
     }
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     export interface Type {
@@ -2588,8 +2605,6 @@ declare namespace ts {
         node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
@@ -2628,16 +2643,17 @@ declare namespace ts {
     }
     export enum InferencePriority {
         NakedTypeVariable = 1,
-        HomomorphicMappedType = 2,
-        PartialHomomorphicMappedType = 4,
-        MappedTypeConstraint = 8,
-        ContravariantConditional = 16,
-        ReturnType = 32,
-        LiteralKeyof = 64,
-        NoConstraints = 128,
-        AlwaysStrict = 256,
-        MaxValue = 512,
-        PriorityImpliesCombination = 104,
+        SpeculativeTuple = 2,
+        HomomorphicMappedType = 4,
+        PartialHomomorphicMappedType = 8,
+        MappedTypeConstraint = 16,
+        ContravariantConditional = 32,
+        ReturnType = 64,
+        LiteralKeyof = 128,
+        NoConstraints = 256,
+        AlwaysStrict = 512,
+        MaxValue = 1024,
+        PriorityImpliesCombination = 208,
         Circularity = -1
     }
     /** @deprecated Use FileExtensionInfo instead. */
@@ -2745,6 +2761,7 @@ declare namespace ts {
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
+        disableReferencedProjectLoad?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -3400,9 +3417,9 @@ declare namespace ts {
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
-        createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
+        createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
         updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocThisTag;
-        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
+        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocEnumTag;
         updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocEnumTag;
         createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag;
@@ -3801,7 +3818,7 @@ declare namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
@@ -3886,6 +3903,7 @@ declare namespace ts {
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -4288,6 +4306,7 @@ declare namespace ts {
     function isTypeLiteralNode(node: Node): node is TypeLiteralNode;
     function isArrayTypeNode(node: Node): node is ArrayTypeNode;
     function isTupleTypeNode(node: Node): node is TupleTypeNode;
+    function isNamedTupleMember(node: Node): node is NamedTupleMember;
     function isOptionalTypeNode(node: Node): node is OptionalTypeNode;
     function isRestTypeNode(node: Node): node is RestTypeNode;
     function isUnionTypeNode(node: Node): node is UnionTypeNode;
@@ -5296,6 +5315,11 @@ declare namespace ts {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
     }
+    enum LanguageServiceMode {
+        Semantic = 0,
+        PartialSemantic = 1,
+        Syntactic = 2
+    }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
@@ -5471,6 +5495,10 @@ declare namespace ts {
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
         getProgram(): Program | undefined;
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
@@ -6303,7 +6331,7 @@ declare namespace ts {
     function getSupportedCodeFixes(): string[];
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
-    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnly?: boolean): LanguageService;
+    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
     /**
      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
      * node package.
@@ -6789,7 +6817,7 @@ declare namespace ts {
     /** @deprecated Use `factory.createJSDocReturnTag` or the factory supplied by your transformation context instead. */
     const createJSDocReturnTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined) => JSDocReturnTag;
     /** @deprecated Use `factory.createJSDocThisTag` or the factory supplied by your transformation context instead. */
-    const createJSDocThisTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined) => JSDocThisTag;
+    const createJSDocThisTag: (tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | undefined) => JSDocThisTag;
     /** @deprecated Use `factory.createJSDocComment` or the factory supplied by your transformation context instead. */
     const createJSDocComment: (comment?: string | undefined, tags?: readonly JSDocTag[] | undefined) => JSDoc;
     /** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. */
@@ -6801,7 +6829,7 @@ declare namespace ts {
         readonly expression: Identifier | PropertyAccessEntityNameExpression;
     }, comment?: string | undefined) => JSDocAugmentsTag;
     /** @deprecated Use `factory.createJSDocEnumTag` or the factory supplied by your transformation context instead. */
-    const createJSDocEnumTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined) => JSDocEnumTag;
+    const createJSDocEnumTag: (tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | undefined) => JSDocEnumTag;
     /** @deprecated Use `factory.createJSDocTemplateTag` or the factory supplied by your transformation context instead. */
     const createJSDocTemplateTag: (tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | undefined) => JSDocTemplateTag;
     /** @deprecated Use `factory.createJSDocTypedefTag` or the factory supplied by your transformation context instead. */
@@ -7075,6 +7103,16 @@ declare namespace ts {
     const getMutableClone: <T extends Node>(node: T) => T;
     /** @deprecated Use `isTypeAssertionExpression` instead. */
     const isTypeAssertion: (node: Node) => node is TypeAssertion;
+    /**
+     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+    /**
+     * @deprecated Use `ts.ESMap<K, V>` instead.
+     */
+    interface Map<T> extends ESMap<string, T> {
+    }
 }
 
 export = ts;

@@ -19,6 +19,26 @@ node_modules/graceful-fs/graceful-fs.js(272,68): error TS2345: Argument of type 
 node_modules/graceful-fs/graceful-fs.js(295,70): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, ...any[]]'.
 node_modules/graceful-fs/graceful-fs.js(344,9): error TS2554: Expected 0 arguments, but got 3.
 node_modules/graceful-fs/graceful-fs.js(351,11): error TS2554: Expected 0 arguments, but got 3.
+node_modules/graceful-fs/legacy-streams.js(14,17): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Stream'.
+  Type 'ReadStream' is missing the following properties from type 'Stream': pipe, addListener, on, once, and 12 more.
+node_modules/graceful-fs/legacy-streams.js(36,14): error TS2339: Property 'encoding' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(36,29): error TS2339: Property 'setEncoding' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(36,46): error TS2339: Property 'encoding' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(38,14): error TS2339: Property 'start' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(39,36): error TS2339: Property 'start' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(48,16): error TS2339: Property 'start' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(52,23): error TS2339: Property 'start' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(57,14): error TS2339: Property '_read' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(64,14): error TS2339: Property 'emit' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(70,12): error TS2339: Property 'emit' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(71,12): error TS2339: Property '_read' does not exist on type 'ReadStream'.
+node_modules/graceful-fs/legacy-streams.js(78,17): error TS2345: Argument of type 'this' is not assignable to parameter of type 'Stream'.
+  Type 'WriteStream' is missing the following properties from type 'Stream': pipe, addListener, on, once, and 12 more.
+node_modules/graceful-fs/legacy-streams.js(98,14): error TS2339: Property 'start' does not exist on type 'WriteStream'.
+node_modules/graceful-fs/legacy-streams.js(99,36): error TS2339: Property 'start' does not exist on type 'WriteStream'.
+node_modules/graceful-fs/legacy-streams.js(102,16): error TS2339: Property 'start' does not exist on type 'WriteStream'.
+node_modules/graceful-fs/legacy-streams.js(106,23): error TS2339: Property 'start' does not exist on type 'WriteStream'.
+node_modules/graceful-fs/legacy-streams.js(115,12): error TS2339: Property 'flush' does not exist on type 'WriteStream'.
 
 
 

@@ -490,7 +490,7 @@ namespace ts {
      */
     export function getLocalNameForExternalImport(factory: NodeFactory, node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier | undefined {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
-        if (namespaceDeclaration && !isDefaultImport(node)) {
+        if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
             const name = namespaceDeclaration.name;
             return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }

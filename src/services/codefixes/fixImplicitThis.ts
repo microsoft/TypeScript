@@ -52,10 +52,5 @@ namespace ts.codefix {
                 return [Diagnostics.Convert_function_declaration_0_to_arrow_function, name!.text];
             }
         }
-        // No outer 'this', add a @class tag if in a JS constructor function
-        else if (isSourceFileJS(sourceFile) && isPropertyAccessExpression(token.parent) && isAssignmentExpression(token.parent.parent)) {
-            addJSDocTags(changes, sourceFile, fn, [factory.createJSDocClassTag(/*tagName*/ undefined)]);
-            return Diagnostics.Add_class_tag;
-        }
     }
 }
