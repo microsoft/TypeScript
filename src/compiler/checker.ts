@@ -38001,10 +38001,10 @@ namespace ts {
                         if (flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
                         }
-                        else if(flags & ModifierFlags.Ambient) {
+                        else if (flags & ModifierFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "override", "declare");
                         }
-                        else if(flags & ModifierFlags.Static) {
+                        else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         flags |= ModifierFlags.Override;
