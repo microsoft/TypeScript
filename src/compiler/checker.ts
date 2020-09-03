@@ -14996,6 +14996,16 @@ namespace ts {
 
         function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
             const flags = type.flags;
+            if(flags & TypeFlags.TypeConstructor){
+                // this is a demo implement, and not well considered.
+                const concentrateGenericType  = getMappedType(type, mapper);
+                // or maybe we could get the symbol, then get value declration. But it seems target is a quick way.
+                const tmp = (<any>concentrateGenericType).target;  // this should be an obejct TypeFlag.
+                Debug.assert(!!tmp,"unhandled condition for typeconstructor.");
+                const resolvedTypeArguments = (<TypeReference>tmp).resolvedTypeArguments;
+                const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
+                return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference(tmp, newTypeArguments) : concentrateGenericType;
+            }
             if (flags & TypeFlags.TypeParameter) {
                 return getMappedType(type, mapper);
             }
