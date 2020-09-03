@@ -67,7 +67,7 @@ export class Foo {
 }
 //// [bar.d.ts]
 export = ns;
-import ns = require("./bar");
+import ns = require("./cls");
 //// [bin.d.ts]
 export {};
 //// [globalNs.d.ts]

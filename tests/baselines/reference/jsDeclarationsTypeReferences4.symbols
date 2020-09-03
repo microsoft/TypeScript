@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/// <reference types="node" />
+export const Something = 2; // to show conflict that can occur
+>Something : Symbol(Something, Decl(index.js, 1, 12))
+
+// @ts-ignore
+export namespace A {
+>A : Symbol(A, Decl(index.js, 1, 27))
+
+    // @ts-ignore
+    export namespace B {
+>B : Symbol(B, Decl(index.js, 3, 20))
+
+        const Something = require("fs").Something;
+>Something : Symbol(Something, Decl(index.js, 6, 13))
+>require("fs").Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+>require : Symbol(require)
+>"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+>Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+
+        const thing = new Something();
+>thing : Symbol(thing, Decl(index.js, 7, 13))
+>Something : Symbol(Something, Decl(index.js, 6, 13))
+
+        // @ts-ignore
+        export { thing };
+>thing : Symbol(thing, Decl(index.js, 9, 16))
+    }
+}
+
+=== tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+
+    export class Something {}
+>Something : Symbol(Something, Decl(index.d.ts, 0, 21))
+}

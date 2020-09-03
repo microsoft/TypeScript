@@ -541,7 +541,7 @@ namespace ts {
         }
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
+            const hasExportModifier = !!(getCombinedModifierFlags(node) & ModifierFlags.Export) || jsdocTreatAsExported(node);
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
@@ -567,7 +567,7 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
+                if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     if (!container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
@@ -581,6 +581,21 @@ namespace ts {
                     return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
+        }
+
+        function jsdocTreatAsExported(node: Node) {
+            if (!isJSDocTypeAlias(node)) return false;
+            // jsdoc typedef handling is a bit of a doozy, but to summarize, treat the typedef as exported if:
+            // 1. It has an explicit name (since by default typedefs are always directly exported, either at the top level or in a container), or
+            if (!isJSDocEnumTag(node) && !!node.fullName) return true;
+            // 2. The thing a nameless typedef pulls its name from is implicitly a direct export (either by assignment or actual export flag).
+            const declName = getNameOfDeclaration(node);
+            if (!declName) return false;
+            if (isPropertyAccessEntityNameExpression(declName.parent) && isTopLevelNamespaceAssignment(declName.parent)) return true;
+            if (isDeclaration(declName.parent) && getCombinedModifierFlags(declName.parent) & ModifierFlags.Export) return true;
+            // This could potentially be simplified by having `delayedBindJSDocTypedefTag` pass in an override for `hasExportModifier`, since it should
+            // already have calculated and branched on most of this.
+            return false;
         }
 
         // All container nodes are kept on a linked list in declaration order. This list is used by
@@ -837,7 +852,8 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
-                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression);
+                isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression) ||
+                isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }
 
         function containsNarrowableReference(expr: Expression): boolean {
@@ -2461,7 +2477,7 @@ namespace ts {
                     if (isInJSFile(expr) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsAccessExpression(expr) &&
-                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        !lookupSymbolForName(blockScopeContainer, "module" as __String)) {
                         declareSymbol(file.locals!, /*parent*/ undefined, expr.expression,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
@@ -2485,6 +2501,14 @@ namespace ts {
                             bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
                             break;
                         case AssignmentDeclarationKind.Property:
+                            const expression = ((node as BinaryExpression).left as AccessExpression).expression;
+                            if (isInJSFile(node) && isIdentifier(expression)) {
+                                const symbol = lookupSymbolForName(blockScopeContainer, expression.escapedText);
+                                if (isThisInitializedDeclaration(symbol?.valueDeclaration)) {
+                                    bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
+                                    break;
+                                }
+                            }
                             bindSpecialPropertyAssignment(node as BindablePropertyAssignmentExpression);
                             break;
                         case AssignmentDeclarationKind.None:
@@ -2950,6 +2974,10 @@ namespace ts {
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
+            const rootExpr = getLeftmostAccessExpression(node.left);
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+                return;
+            }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             setParent(node.left, node);
             setParent(node.right, node);
@@ -3103,7 +3131,7 @@ namespace ts {
 
         function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: Node = container): Symbol | undefined {
             if (isIdentifier(node)) {
-                return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
+                return lookupSymbolForName(lookupContainer, node.escapedText);
             }
             else {
                 const symbol = lookupSymbolForPropertyAccess(node.expression);
@@ -3185,7 +3213,10 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isBlockOrCatchScoped(node)) {
+                if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && !getJSDocTypeTag(node)) {
+                    declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                }
+                else if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
@@ -3403,7 +3434,7 @@ namespace ts {
                 return true;
             }
             else if (isIdentifier(node)) {
-                const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
+                const symbol = lookupSymbolForName(sourceFile, node.escapedText);
                 if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
                     q.push(init);
@@ -3417,7 +3448,7 @@ namespace ts {
         return false;
     }
 
-    function lookupSymbolForNameWorker(container: Node, name: __String): Symbol | undefined {
+    function lookupSymbolForName(container: Node, name: __String): Symbol | undefined {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;

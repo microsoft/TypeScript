@@ -1038,7 +1038,20 @@ namespace ts.Completions {
                         }
                         break;
 
+                    case SyntaxKind.JsxExpression:
+                        // For `<div foo={true} [||] ></div>`, `parent` will be `{true}` and `previousToken` will be `}`
+                        if (previousToken.kind === SyntaxKind.CloseBraceToken && currentToken.kind === SyntaxKind.GreaterThanToken) {
+                            isJsxIdentifierExpected = true;
+                        }
+                        break;
+
                     case SyntaxKind.JsxAttribute:
+                        // For `<div className="x" [||] ></div>`, `parent` will be JsxAttribute and `previousToken` will be its initializer
+                        if ((parent as JsxAttribute).initializer === previousToken &&
+                            previousToken.end < position) {
+                            isJsxIdentifierExpected = true;
+                            break;
+                        }
                         switch (previousToken.kind) {
                             case SyntaxKind.EqualsToken:
                                 isJsxInitializer = true;
@@ -2012,7 +2025,9 @@ namespace ts.Completions {
                 // List of property symbols of base type that are not private and already implemented
                 const baseSymbols = flatMap(getAllSuperTypeNodes(decl), baseTypeNode => {
                     const type = typeChecker.getTypeAtLocation(baseTypeNode);
-                    return type && typeChecker.getPropertiesOfType(classElementModifierFlags & ModifierFlags.Static ? typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl) : type);
+                    return classElementModifierFlags & ModifierFlags.Static ?
+                        type?.symbol && typeChecker.getPropertiesOfType(typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl)) :
+                        type && typeChecker.getPropertiesOfType(type);
                 });
                 symbols = filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags);
             }

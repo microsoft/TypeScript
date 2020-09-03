@@ -13,7 +13,7 @@
 //// declare function b(): void
 //// declare const tb: b;
 //// [|b|]
-//// [|b()|];
+//// [|b|]();
 
 //// interface c { }
 //// /** @deprecated */
@@ -21,7 +21,7 @@
 //// declare function c(a: number): void
 //// declare const tc: c;
 //// c;
-//// [|c()|];
+//// [|c|]();
 //// c(1);
 
 //// /** @deprecated */
@@ -38,8 +38,8 @@
 //// /** @deprecated */
 //// declare function e(a: number): void
 //// [|e|];
-//// [|e()|];
-//// [|e(1)|];
+//// [|e|]();
+//// [|e|](1);
 
 //// /** @deprecated */
 //// interface f { a: number }

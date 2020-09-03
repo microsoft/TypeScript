@@ -177,6 +177,10 @@ namespace ts {
         return node.kind === SyntaxKind.TupleType;
     }
 
+    export function isNamedTupleMember(node: Node): node is NamedTupleMember {
+        return node.kind === SyntaxKind.NamedTupleMember;
+    }
+
     export function isOptionalTypeNode(node: Node): node is OptionalTypeNode {
         return node.kind === SyntaxKind.OptionalType;
     }

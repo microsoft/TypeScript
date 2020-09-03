@@ -22,9 +22,12 @@ namespace ts.Rename {
                     return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.string, "", node, sourceFile);
                 }
             }
-            return;
-        };
-
+            else if (isLabelName(node)) {
+                const name = getTextOfNode(node);
+                return getRenameInfoSuccess(name, name, ScriptElementKind.label, ScriptElementKindModifier.none, node, sourceFile);
+            }
+            return undefined;
+        }
         // Only allow a symbol to be renamed if it actually has at least one declaration.
         const { declarations } = symbol;
         if (!declarations || declarations.length === 0) return;
