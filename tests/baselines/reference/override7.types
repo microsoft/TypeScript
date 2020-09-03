@@ -9,6 +9,14 @@ class B {
     p2: number = 2;
 >p2 : number
 >2 : 2
+
+    p3: number = 3;
+>p3 : number
+>3 : 3
+
+    p4: number = 4;
+>p4 : number
+>4 : 4
 }
 
 class D extends B{
@@ -18,8 +26,14 @@ class D extends B{
     declare p1: number
 >p1 : number
 
-    override declare p2: number
+    override declare p2: number;
 >p2 : number
+
+    readonly override p3: number;
+>p3 : number
+
+    override readonly p4: number;
+>p4 : number
 
     override static sp: number;
 >sp : number
@@ -37,6 +51,52 @@ class D extends B{
         super();
 >super() : void
 >super : typeof B
+    }
+}
+
+
+abstract class AB {
+>AB : AB
+
+    abstract f (): void;
+>f : () => void
+
+    abstract b (): void;
+>b : () => void
+}
+
+abstract class AD extends AB {
+>AD : AD
+>AB : AB
+
+    override abstract f(): void;
+>f : () => void
+
+    abstract override b(): void;
+>b : () => void
+}
+
+abstract class AND {
+>AND : AND
+
+    override abstract f(): void;
+>f : () => void
+
+    abstract override b(): void;
+>b : () => void
+}
+
+class ADD extends AD {
+>ADD : ADD
+>AD : AD
+
+    override f(): void {
+>f : () => void
+
+    }
+    override b(): void {
+>b : () => void
+
     }
 }
 

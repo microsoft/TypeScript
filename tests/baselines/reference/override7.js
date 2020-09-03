@@ -2,12 +2,18 @@
 class B {
     p1: number = 1;
     p2: number = 2;
+    p3: number = 3;
+    p4: number = 4;
 }
 
 class D extends B{
     declare p1: number
 
-    override declare p2: number
+    override declare p2: number;
+
+    readonly override p3: number;
+
+    override readonly p4: number;
 
     override static sp: number;
 
@@ -18,6 +24,31 @@ class D extends B{
 
     override constructor () {
         super();
+    }
+}
+
+
+abstract class AB {
+    abstract f (): void;
+    abstract b (): void;
+}
+
+abstract class AD extends AB {
+    override abstract f(): void;
+    abstract override b(): void;
+}
+
+abstract class AND {
+    override abstract f(): void;
+    abstract override b(): void;
+}
+
+class ADD extends AD {
+    override f(): void {
+
+    }
+    override b(): void {
+
     }
 }
 
@@ -40,6 +71,8 @@ var B = /** @class */ (function () {
     function B() {
         this.p1 = 1;
         this.p2 = 2;
+        this.p3 = 3;
+        this.p4 = 4;
     }
     return B;
 }());
@@ -50,19 +83,67 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(B));
+var AB = /** @class */ (function () {
+    function AB() {
+    }
+    return AB;
+}());
+var AD = /** @class */ (function (_super) {
+    __extends(AD, _super);
+    function AD() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return AD;
+}(AB));
+var AND = /** @class */ (function () {
+    function AND() {
+    }
+    return AND;
+}());
+var ADD = /** @class */ (function (_super) {
+    __extends(ADD, _super);
+    function ADD() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ADD.prototype.f = function () {
+    };
+    ADD.prototype.b = function () {
+    };
+    return ADD;
+}(AD));
 
 
 //// [override7.d.ts]
 declare class B {
     p1: number;
     p2: number;
+    p3: number;
+    p4: number;
 }
 declare class D extends B {
     p1: number;
     override p2: number;
+    readonly override p3: number;
+    override readonly p4: number;
     override static sp: number;
     override override oop: number;
     override pp: number;
     override op: number;
     override constructor();
+}
+declare abstract class AB {
+    abstract f(): void;
+    abstract b(): void;
+}
+declare abstract class AD extends AB {
+    override abstract f(): void;
+    abstract override b(): void;
+}
+declare abstract class AND {
+    override abstract f(): void;
+    abstract override b(): void;
+}
+declare class ADD extends AD {
+    override f(): void;
+    override b(): void;
 }
