@@ -19957,22 +19957,24 @@ namespace ts {
             }
 
             function inferLiteralsFromTemplateType(source: StringLiteralType, target: TemplateType): Type[] | undefined {
-                const str = source.value;
+                const value = source.value;
                 const texts = target.texts;
-                const startText = texts[0];
-                if (!(str.startsWith(startText))) return undefined;
                 const lastIndex = texts.length - 1;
+                const startText = texts[0];
+                const endText = texts[lastIndex];
+                if (!(value.startsWith(startText) && value.endsWith(endText))) return undefined;
                 const matches = [];
-                let pos = startText.length;
-                for (let i = 1; i <= lastIndex; i++) {
+                const str = value.slice(startText.length, value.length - endText.length);
+                let pos = 0;
+                for (let i = 1; i < lastIndex; i++) {
                     const delim = texts[i];
-                    if (!delim && i < lastIndex) return undefined;
-                    const delimPos = delim ? str.indexOf(delim, pos) : str.length;
+                    const delimPos = delim.length > 0 ? str.indexOf(delim, pos) : pos < str.length ? pos + 1 : -1;
                     if (delimPos < 0) return undefined;
                     matches.push(getLiteralType(str.slice(pos, delimPos)));
                     pos = delimPos + delim.length;
                 }
-                return pos === str.length ? matches : undefined;
+                matches.push(getLiteralType(str.slice(pos)));
+                return matches;
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
