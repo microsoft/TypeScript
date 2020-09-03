@@ -15,7 +15,7 @@ namespace ts.Rename {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) {
             if (isStringLiteralLike(node)) {
-                const type = getContextualTypeOrAtAncestorTypeNode(node, typeChecker);
+                const type = getContextualTypeOrAncestorTypeNodeType(node, typeChecker);
                 if (type && ((type.flags & TypeFlags.StringLiteral) || (
                     (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
                 ))) {

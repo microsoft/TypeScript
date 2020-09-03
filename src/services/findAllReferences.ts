@@ -1890,12 +1890,12 @@ namespace ts.FindAllReferences {
         }
 
         function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
-            const type = getContextualTypeOrAtAncestorTypeNode(node, checker);
+            const type = getContextualTypeOrAncestorTypeNodeType(node, checker);
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
                     if (type && isStringLiteral(ref) && ref.text === node.text) {
-                        const refType = getContextualTypeOrAtAncestorTypeNode(ref, checker);
+                        const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
                         if (type !== checker.getStringType() && type === refType) {
                             return nodeEntry(ref, EntryKind.StringLiteral);
                         }
