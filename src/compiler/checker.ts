@@ -12158,6 +12158,12 @@ namespace ts {
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
+                /*
+                    interface Itertable<T, Container<X>> {
+                        filter(p: (x: T) => boolean): Container<T>;
+                                                      ^     this should not report as error.
+                    }
+                */
                 if (isTypeConstructorTypeParameter(res)) {
                     return getRegularTypeOfLiteralType(res);
                 }
@@ -14617,7 +14623,7 @@ namespace ts {
                 case TypeMapKind.Array:
                     const sources = mapper.sources;
                     const targets = mapper.targets;
-                    for (let i = 0; i < sources.length; i++) {
+                    for (let i = 0; i < sources.length; i++) { // we should check whether the generic and typeconstructor has the same parameters. Or here is too late, we should check when mapper is created.
                         if (type === sources[i]) {
                             return targets ? targets[i] : anyType;
                         }
