@@ -33354,8 +33354,8 @@ namespace ts {
                     // want to say that number is not an array type. But if the input was just
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
-                    const disallowsStrings = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent;
-                    const [defaultDiagnostic, maybeMissingAwait] = getIterationDiagnosticDetails(!disallowsStrings, downlevelIteration);
+                    const allowsStrings = !!(use & IterationUse.AllowsStringInputFlag) && !hasStringConstituent;
+                    const [defaultDiagnostic, maybeMissingAwait] = getIterationDiagnosticDetails(allowsStrings, downlevelIteration);
                     errorAndMaybeSuggestAwait(
                         errorNode,
                         maybeMissingAwait && !!getAwaitedTypeOfPromise(arrayType),
@@ -33377,7 +33377,7 @@ namespace ts {
 
             return arrayElementType;
 
-            function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration?: boolean): [DiagnosticMessage, boolean] {
+            function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration: boolean | undefined): [DiagnosticMessage, boolean] {
                 if (downlevelIteration) {
                     return allowsStrings
                         ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
