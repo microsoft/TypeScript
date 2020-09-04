@@ -47,6 +47,27 @@ In general, things we find useful when reviewing suggestions are:
 
 # Instructions for Contributing Code
 
+## What You'll Need
+
+0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
+1. [A GitHub account](https://github.com/join).
+2. A copy of the TypeScript code. See the next steps for instructions.
+3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
+4. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
+5. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
+
+## Get Started
+
+1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
+2. Open a terminal.
+3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
+4. Install the gulp command line tool: `npm install -g gulp-cli`
+5. Change to the TypeScript folder you made: `cd TypeScript`
+6. Install dependencies: `npm ci`
+7. Make sure everything builds and tests pass: `gulp runtests-parallel`
+8. Open the Typescript folder in your editor.
+9. Follow the directions below to add and debug a test.
+
 ## Tips
 
 ### Faster clones
@@ -65,8 +86,6 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 
 Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
-Design changes will not be accepted at this time. If you have a design change proposal, please log a suggestion issue.
-
 ## Legal
 
 You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
@@ -76,16 +95,11 @@ You will need to complete a Contributor License Agreement (CLA). Briefly, this a
 Your pull request should:
 
 * Include a description of what your change intends to do
-* Be a child commit of a reasonably recent commit in the **master** branch
-    * Requests need not be a single commit, but should be a linear sequence of commits (i.e. no merge commits in your PR)
-* It is desirable, but not necessary, for the tests to pass at each commit
-* Have clear commit messages
-    * e.g. "Minor refactor in goToTypeDefinition", "Fix iterated type in for-await-of", "Add test for preserveWatchOutput on command line"
+* Be based on reasonably recent commit in the **master** branch
 * Include adequate tests
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
-    * All changed code must have 100% code coverage
 * Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
@@ -149,37 +163,35 @@ You can also use the [provided VS Code launch configuration](./.vscode/launch.te
 
 ## Adding a Test
 
-To add a new test case, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
+To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the your bug is now fixed, or your new feature now works.
 
 These files support metadata tags in the format  `// @metaDataName: value`.
 The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
 `fileName` tags delimit sections of a file to be used as separate compilation units.
-They are useful for tests relating to modules.
+They are useful for testing modules.
 See below for examples.
 
-**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder.
-**Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
+**Note** that if you have a test corresponding to a specific area of spec compliance, you can put it in the appropriate subfolder of `tests\cases\conformance`.
+**Note** that test filenames must be distinct from all other test names, so you may have to work a bit to find a unique name if it's something common.
 
 ### Tests for multiple files
 
-When one needs to test for scenarios which require multiple files, it is useful to use the `fileName` metadata tag as such:
+When you need to multiple files in a single test, use the `filename` tag:
 
-```TypeScript
-// @fileName: file1.ts
+```ts
+// @filename: file1.ts
 export function f() {
 }
 
-// @fileName: file2.ts
+// @filename: file2.ts
 import { f as g } from "file1";
 
 var x = g();
 ```
 
-One can also write a project test, but it is slightly more involved.
-
 ## Managing the Baselines
 
-Compiler testcases generate baselines that track the emitted `.js`, the errors produced by the compiler, and the type of each expression in the file. Additionally, some testcases opt in to baselining the source map output.
+Compiler tests generate baselines: one file each for the emitted `.js`, the errors produced by the compiler, the type of each expression, and symbol for each identifier. Additionally, some tests generate baselines for the source map output.
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
@@ -193,7 +205,8 @@ After verifying that the changes in the baselines are correct, run
 gulp baseline-accept
 ```
 
-to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
+This will change the files in `tests\baselines\reference`, which should be included as part of your commit.
+Be sure to validate the changes carefully -- apparently unrelated changes to baselines can be clues about something you didn't think of.
 
 ## Localization
 

@@ -2,7 +2,7 @@
 const x = require("./lateBoundAssignmentDeclarationSupport2.js");
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >require : Symbol(require)
->"./lateBoundAssignmentDeclarationSupport2.js" : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2", Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
+>"./lateBoundAssignmentDeclarationSupport2.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport2.js, 0, 0))
 
 const y = x["my-fake-sym"];
 >y : Symbol(y, Decl(usage.js, 1, 5))
@@ -11,9 +11,9 @@ const y = x["my-fake-sym"];
 const z = x[x.S];
 >z : Symbol(z, Decl(usage.js, 2, 5))
 >x : Symbol(x, Decl(usage.js, 0, 5))
->x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
+>x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 >x : Symbol(x, Decl(usage.js, 0, 5))
->S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
+>S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport2.js, 5, 28))
 
 === tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport2.js ===
 // currently unsupported

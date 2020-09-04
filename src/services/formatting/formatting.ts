@@ -720,6 +720,9 @@ namespace ts.formatting {
                     // proceed any parent tokens that are located prior to child.getStart()
                     const tokenInfo = formattingScanner.readTokenInfo(node);
                     if (tokenInfo.token.end > childStartPos) {
+                        if (tokenInfo.token.pos > childStartPos) {
+                            formattingScanner.skipToStartOf(child);
+                        }
                         // stop when formatting scanner advances past the beginning of the child
                         break;
                     }
@@ -731,13 +734,15 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                // JSX text shouldn't affect indenting
-                if (isToken(child) && child.kind !== SyntaxKind.JsxText) {
+                if (isToken(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     const tokenInfo = formattingScanner.readTokenInfo(child);
-                    Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
-                    return inheritedIndentation;
+                    // JSX text shouldn't affect indenting
+                    if (child.kind !== SyntaxKind.JsxText) {
+                        Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
+                        consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
+                        return inheritedIndentation;
+                    }
                 }
 
                 const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;

@@ -843,6 +843,7 @@ namespace ts {
     // Class fields helpers
     export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldGet",
+        importName: "__classPrivateFieldGet",
         scoped: false,
         text: `
             var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
@@ -855,6 +856,7 @@ namespace ts {
 
     export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldSet",
+        importName: "__classPrivateFieldSet",
         scoped: false,
         text: `
             var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {

@@ -21,6 +21,7 @@ module.exports = {
 >thing : Symbol(thing, Decl(index.js, 6, 18))
 
 };
+
 === tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
