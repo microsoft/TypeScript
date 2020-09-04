@@ -2131,7 +2131,7 @@ namespace ts.server {
                     this.openFileWatchTriggered.clear();
                     const reason = Debug.checkDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
-                    this.projectService.reloadConfiguredProject(this, reason, isInitialLoad);
+                    this.projectService.reloadConfiguredProject(this, reason, isInitialLoad, /*clearSemanticCache*/ false);
                     result = true;
                     break;
                 default:

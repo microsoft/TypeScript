@@ -2196,9 +2196,10 @@ namespace ts.server {
          * Read the config file of the project again by clearing the cache and update the project graph
          */
         /* @internal */
-        reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean) {
+        reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean, clearSemanticCache: boolean) {
             // At this point, there is no reason to not have configFile in the host
             const host = project.getCachedDirectoryStructureHost();
+            if (clearSemanticCache) this.clearSemanticCache(project);
 
             // Clear the cache since we are reloading the project from disk
             host.clearCache();
@@ -2210,6 +2211,13 @@ namespace ts.server {
             project.updateGraph();
 
             this.sendConfigFileDiagEvent(project, configFileName);
+        }
+
+        /* @internal */
+        private clearSemanticCache(project: Project) {
+            project.resolutionCache.clear();
+            project.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+            project.markAsDirty();
         }
 
         private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
@@ -2789,7 +2797,12 @@ namespace ts.server {
             // as there is no need to load contents of the files from the disk
 
             // Reload Projects
-            this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*delayReload*/ false, returnTrue, "User requested reload projects");
+            this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
+            this.externalProjects.forEach(project => {
+                this.clearSemanticCache(project);
+                project.updateGraph();
+            });
+            this.inferredProjects.forEach(project => this.clearSemanticCache(project));
             this.ensureProjectForOpenFiles();
         }
 
@@ -2797,6 +2810,7 @@ namespace ts.server {
             // Get open files to reload projects for
             this.reloadConfiguredProjectForFiles(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
+                /*clearSemanticCache*/ false,
                 /*delayReload*/ true,
                 ignoreIfNotRootOfInferredProject ?
                     isRootOfInferredProject => isRootOfInferredProject : // Reload open files if they are root of inferred project
@@ -2813,12 +2827,12 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = new Map<string, true>();
             const reloadChildProject = (child: ConfiguredProject) => {
                 if (!updatedProjects.has(child.canonicalConfigFilePath)) {
                     updatedProjects.set(child.canonicalConfigFilePath, true);
-                    this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false);
+                    this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false, clearSemanticCache);
                 }
             };
             // try to reload config file for all open files
@@ -2844,11 +2858,12 @@ namespace ts.server {
                         if (delayReload) {
                             project.pendingReload = ConfigFileProgramReloadLevel.Full;
                             project.pendingReloadReason = reason;
+                            if (clearSemanticCache) this.clearSemanticCache(project);
                             this.delayUpdateProjectGraph(project);
                         }
                         else {
                             // reload from the disk
-                            this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false);
+                            this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false, clearSemanticCache);
                             // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
                             if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
