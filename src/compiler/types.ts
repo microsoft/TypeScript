@@ -4991,6 +4991,7 @@ namespace ts {
         FreshLiteral     = 1 << 15, // Fresh object literal
         ArrayLiteral     = 1 << 16, // Originates in an array literal
         ObjectRestType   = 1 << 17, // Originates in object rest declaration
+
         /* @internal */
         PrimitiveUnion   = 1 << 18, // Union of only primitive types
         /* @internal */
@@ -5017,6 +5018,9 @@ namespace ts {
         IsNeverIntersectionComputed = 1 << 28, // IsNeverLike flag has been computed
         /* @internal */
         IsNeverIntersection = 1 << 29, // Intersection reduces to never
+        /* @internal */
+        WidenedByNarrow = 1 << 30,   // in keyword could widen type, this mark it as the widen part.
+
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,

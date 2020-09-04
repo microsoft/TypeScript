@@ -695,7 +695,7 @@ namespace ts {
 
         const tupleTypes = new Map<string, GenericType>();
         const unionTypes = new Map<string, UnionType>();
-        const intersectionTypes = new Map<string, Type>();
+        const intersectionTypes = new Map<string, IntersectionType>();
         const literalTypes = new Map<string, LiteralType>();
         const indexedAccessTypes = new Map<string, IndexedAccessType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
@@ -3746,6 +3746,11 @@ namespace ts {
 
         function createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
             return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous, symbol),
+                members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+        }
+
+        function createWidenType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
+            return setStructuredTypeMembers(createObjectType(ObjectFlags.Anonymous | ObjectFlags.WidenedByNarrow, symbol),
                 members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
@@ -13025,6 +13030,33 @@ namespace ts {
             return type;
         }
 
+        // This function assumes the constituent type list is sorted and deduplicated.
+        function getIntersectionTypeFromSortedList(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+            if (types.length === 0) {
+                return neverType;
+            }
+            if (types.length === 1) {
+                return types[0];
+            }
+            const id = getTypeListId(types);
+            let type = intersectionTypes.get(id);
+            if (!type) {
+                type = <IntersectionType>createType(TypeFlags.Intersection);
+                intersectionTypes.set(id, type);
+                type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+                type.types = types;
+                /*
+                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
+                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
+                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
+                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
+                */
+                type.aliasSymbol = aliasSymbol;
+                type.aliasTypeArguments = aliasTypeArguments;
+            }
+            return type;
+        }
+
         function getTypeFromUnionTypeNode(node: UnionTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -13226,7 +13258,7 @@ namespace ts {
                 return typeSet[0];
             }
             const id = getTypeListId(typeSet);
-            let result = intersectionTypes.get(id);
+            let result: Type | undefined = intersectionTypes.get(id);
             if (!result) {
                 if (includes & TypeFlags.Union) {
                     if (intersectUnionsOfPrimitiveTypes(typeSet)) {
@@ -13259,7 +13291,7 @@ namespace ts {
                 else {
                     result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
-                intersectionTypes.set(id, result);
+                intersectionTypes.set(id, <IntersectionType>result);
             }
             return result;
         }
@@ -18932,9 +18964,9 @@ namespace ts {
 
         function getWidenedTypeWithContext(type: Type, context: WideningContext | undefined): Type {
             if (getObjectFlags(type) & ObjectFlags.RequiresWidening) {
-                if (context === undefined && type.widened) {
-                    return type.widened;
-                }
+                // if (context === undefined && type.widened) {
+                //     return type.widened;
+                // }
                 let result: Type | undefined;
                 if (type.flags & (TypeFlags.Any | TypeFlags.Nullable)) {
                     result = anyType;
@@ -18956,9 +18988,9 @@ namespace ts {
                 else if (isArrayType(type) || isTupleType(type)) {
                     result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
                 }
-                if (result && context === undefined) {
-                    type.widened = result;
-                }
+                // if (result && context === undefined) {
+                //     type.widened = result;
+                // }
                 return result || type;
             }
             return type;
@@ -21559,8 +21591,9 @@ namespace ts {
                 const propName = newSymbol.escapedName;
                 const members = createSymbolTable();
                 members.set(propName, newSymbol);
-                const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                const newObjType = createWidenType(undefined, members, emptyArray, emptyArray, undefined, undefined);
 
+                // if `type` is never, just return the new anonymous object type.
                 if (type.flags & TypeFlags.Never) {
                     return newObjType;
                 }
@@ -21569,30 +21602,39 @@ namespace ts {
                 // else add a new anonymous object type which contains the type and widden the origional type with it.
                 if (isIntersectionType(type)) {
                     // try to get the first Anonymous Object type to add new type to it.
-                    const firstAnonymousObjectType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous);
-                    if (firstAnonymousObjectType && isObjectType(firstAnonymousObjectType)) {
+                    const widenedType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.WidenedByNarrow);
+                    if (widenedType && isObjectType(widenedType)) {
+                        const typeWithOutWiden = filterIntersectionType(type, t => t !== widenedType);
+
                         const members = createSymbolTable();
                         members.set(propName, newSymbol);
-                        if (firstAnonymousObjectType.members) {
-                            mergeSymbolTable(members, firstAnonymousObjectType.members);
+                        if (widenedType.members) {
+                            mergeSymbolTable(members, widenedType.members);
                         }
-                        firstAnonymousObjectType.members = members;
-                        firstAnonymousObjectType.properties = getNamedMembers(members);
-                    }
-                    else {
-                        return createIntersectionType([type, newObjType]);
+                        newObjType.members = members;
+                        newObjType.properties = getNamedMembers(members);
+                        return createIntersectionType([typeWithOutWiden, newObjType]);
                     }
                 }
-                else {
-                    // if `type` is never, just return the new anonymous object type.
-                    return createIntersectionType([type, newObjType]);
+                return createIntersectionType([type, newObjType]);
+
+                // this function is almost like `filterType`, expect that the `type` is Intersection rather than Union.
+                // maybe we should advanced `filterType`, but I do not know whether it would be too far.
+                function filterIntersectionType(type: Type, f: (t: Type) => boolean): Type {
+                    if (type.flags & TypeFlags.Intersection) {
+                        const types = (<IntersectionType>type).types;
+                        const filtered = filter(types, f);
+
+                        return filtered === types ? type : getIntersectionTypeFromSortedList(filtered, (<IntersectionType>type).objectFlags);
+                    }
+                    return type.flags & TypeFlags.Never || f(type) ? type : neverType;
                 }
-                return type;
 
                 // I would be very glad to create a helper file like `nodeTests.ts` if feedback positive review.
                 function isIntersectionType(type: Type): type is IntersectionType {
                     return !!(type.flags & TypeFlags.Intersection);
                 }
+
                 function isObjectType(type: Type): type is ObjectType {
                     return !!(type.flags & TypeFlags.Object);
                 }
@@ -21603,9 +21645,9 @@ namespace ts {
                 const addSymbol = createSymbol(SymbolFlags.Property, propName);
                 addSymbol.type = unknownType;
 
-                if (type.flags & (TypeFlags.Union | TypeFlags.Object)
+                if ((type.flags & (TypeFlags.Union | TypeFlags.Object)
                     || isThisTypeParameter(type)
-                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol) && isSomeDirectSubtypeContainsPropName(type, propName)) {
+                    || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) && isSomeDirectSubtypeContainsPropName(type, propName)) {
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
                 // only widden property when the type does not contain string-index/propName in any of the constituents.
