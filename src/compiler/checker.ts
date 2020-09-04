@@ -1926,9 +1926,9 @@ namespace ts {
                             lastLocation === (location as BindingElement).initializer ||
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation))) {
                             if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
-                                    associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
-                                }
+                                associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
                             }
+                        }
                         break;
                 }
                 if (isSelfReferenceLocation(location)) {
@@ -6258,7 +6258,7 @@ namespace ts {
                                 // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
                                 const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined
                                     : isConstVariable(symbol) ? NodeFlags.Const
-                                    : NodeFlags.Let;
+                                        : NodeFlags.Let;
                                 const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
                                 let textRange: Node | undefined = symbol.declarations && find(symbol.declarations, d => isVariableDeclaration(d));
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
@@ -6280,47 +6280,47 @@ namespace ts {
                                     context.tracker.trackSymbol!(type.symbol, context.enclosingDeclaration, SymbolFlags.Value);
                                 }
                                 else {
-                                const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
-                                    factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
-                                ], flags)), textRange);
-                                addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
-                                if (name !== localName && !isPrivate) {
-                                    // We rename the variable declaration we generate for Property symbols since they may have a name which
-                                    // conflicts with a local declaration. For example, given input:
-                                    // ```
-                                    // function g() {}
-                                    // module.exports.g = g
-                                    // ```
-                                    // In such a situation, we have a local variable named `g`, and a separate exported variable named `g`.
-                                    // Naively, we would emit
-                                    // ```
-                                    // function g() {}
-                                    // export const g: typeof g;
-                                    // ```
-                                    // That's obviously incorrect - the `g` in the type annotation needs to refer to the local `g`, but
-                                    // the export declaration shadows it.
-                                    // To work around that, we instead write
-                                    // ```
-                                    // function g() {}
-                                    // const g_1: typeof g;
-                                    // export { g_1 as g };
-                                    // ```
-                                    // To create an export named `g` that does _not_ shadow the local `g`
-                                    addResult(
-                                        factory.createExportDeclaration(
+                                    const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                                        factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
+                                    ], flags)), textRange);
+                                    addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
+                                    if (name !== localName && !isPrivate) {
+                                        // We rename the variable declaration we generate for Property symbols since they may have a name which
+                                        // conflicts with a local declaration. For example, given input:
+                                        // ```
+                                        // function g() {}
+                                        // module.exports.g = g
+                                        // ```
+                                        // In such a situation, we have a local variable named `g`, and a separate exported variable named `g`.
+                                        // Naively, we would emit
+                                        // ```
+                                        // function g() {}
+                                        // export const g: typeof g;
+                                        // ```
+                                        // That's obviously incorrect - the `g` in the type annotation needs to refer to the local `g`, but
+                                        // the export declaration shadows it.
+                                        // To work around that, we instead write
+                                        // ```
+                                        // function g() {}
+                                        // const g_1: typeof g;
+                                        // export { g_1 as g };
+                                        // ```
+                                        // To create an export named `g` that does _not_ shadow the local `g`
+                                        addResult(
+                                            factory.createExportDeclaration(
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
                                             /*isTypeOnly*/ false,
-                                            factory.createNamedExports([factory.createExportSpecifier(name, localName)])
-                                        ),
-                                        ModifierFlags.None
-                                    );
-                                    needsExportDeclaration = false;
-                                    needsPostExportDefault = false;
+                                                factory.createNamedExports([factory.createExportSpecifier(name, localName)])
+                                            ),
+                                            ModifierFlags.None
+                                        );
+                                        needsExportDeclaration = false;
+                                        needsPostExportDefault = false;
+                                    }
                                 }
                             }
                         }
-                    }
                     }
                     if (symbol.flags & SymbolFlags.Enum) {
                         serializeEnum(symbol, symbolName, modifierFlags);
@@ -17851,7 +17851,7 @@ namespace ts {
                         reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, constructSignatureToString(sourceSignature), constructSignatureToString(targetSignature));
                         reportError(Diagnostics.Types_of_construct_signatures_are_incompatible);
                         return result;
-                }
+                    }
                 }
                 else {
                     outer: for (const t of targetSignatures) {
@@ -18318,17 +18318,17 @@ namespace ts {
             if (depth >= 5) {
                 const identity = getRecursionIdentity(type);
                 if (identity) {
-                        let count = 0;
-                        for (let i = 0; i < depth; i++) {
+                    let count = 0;
+                    for (let i = 0; i < depth; i++) {
                         if (getRecursionIdentity(stack[i]) === identity) {
-                                count++;
-                                if (count >= 5) return true;
-                            }
+                            count++;
+                            if (count >= 5) return true;
                         }
                     }
                 }
+            }
             return false;
-                        }
+        }
 
         // Types with constituents that could circularly reference the type have a recursion identity. The recursion
         // identity is some object that is common to instantiations of the type with the same origin.
@@ -18339,7 +18339,7 @@ namespace ts {
                     // granularity than using their associated target because each manifest type reference has a
                     // unique AST node.
                     return (type as TypeReference).node;
-                    }
+                }
                 if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
                     // We track all object types that have an associated symbol (representing the origin of the type), but
                     // exclude the static side of classes from this check since it shares its symbol with the instance side.
@@ -18348,15 +18348,15 @@ namespace ts {
                 if (isTupleType(type)) {
                     // Tuple types are tracked through their target type
                     return type.target;
+                }
             }
-                    }
             if (type.flags & TypeFlags.IndexedAccess) {
                 // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
                 do {
                     type = (type as IndexedAccessType).objectType;
                 } while (type.flags & TypeFlags.IndexedAccess);
                 return type;
-                }
+            }
             if (type.flags & TypeFlags.Conditional) {
                 // The root object represents the origin of the conditional type
                 return (type as ConditionalType).root;
@@ -18964,9 +18964,9 @@ namespace ts {
 
         function getWidenedTypeWithContext(type: Type, context: WideningContext | undefined): Type {
             if (getObjectFlags(type) & ObjectFlags.RequiresWidening) {
-                // if (context === undefined && type.widened) {
-                //     return type.widened;
-                // }
+                if (context === undefined && type.widened) {
+                    return type.widened;
+                }
                 let result: Type | undefined;
                 if (type.flags & (TypeFlags.Any | TypeFlags.Nullable)) {
                     result = anyType;
@@ -18988,9 +18988,9 @@ namespace ts {
                 else if (isArrayType(type) || isTupleType(type)) {
                     result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
                 }
-                // if (result && context === undefined) {
-                //     type.widened = result;
-                // }
+                if (result && context === undefined) {
+                    type.widened = result;
+                }
                 return result || type;
             }
             return type;
@@ -19654,7 +19654,7 @@ namespace ts {
                 if (expandingFlags !== ExpandingFlags.Both) {
                     if (sourceIdentity) (sourceStack || (sourceStack = [])).push(sourceIdentity);
                     if (targetIdentity) (targetStack || (targetStack = [])).push(targetIdentity);
-                action(source, target);
+                    action(source, target);
                     if (targetIdentity) targetStack.pop();
                     if (sourceIdentity) sourceStack.pop();
                 }
@@ -19863,7 +19863,7 @@ namespace ts {
                     inferFromTypes((<ConditionalType>source).extendsType, target.extendsType);
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(target));
-                        }
+                }
                 else {
                     const savePriority = priority;
                     priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
@@ -23156,9 +23156,9 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                     if (hasSyntacticModifier(declaration, ModifierFlags.Static)) {
                         return getContextualTypeForStaticPropertyDeclaration(declaration);
-            }
+                    }
                 // By default, do nothing and return undefined - only the above cases have context implied by a parent
-        }
+            }
         }
 
         function getContextualTypeForBindingElement(declaration: BindingElement): Type | undefined {
@@ -23172,12 +23172,12 @@ namespace ts {
                 if (index < 0) return undefined;
                 return getContextualTypeForElementExpression(parentType, index);
             }
-                const nameType = getLiteralTypeFromPropertyName(name);
-                if (isTypeUsableAsPropertyName(nameType)) {
-                    const text = getPropertyNameFromType(nameType);
-                    return getTypeOfPropertyOfType(parentType, text);
-                }
+            const nameType = getLiteralTypeFromPropertyName(name);
+            if (isTypeUsableAsPropertyName(nameType)) {
+                const text = getPropertyNameFromType(nameType);
+                return getTypeOfPropertyOfType(parentType, text);
             }
+        }
 
         function getContextualTypeForStaticPropertyDeclaration(declaration: PropertyDeclaration): Type | undefined {
             const parentType = isExpression(declaration.parent) && getContextualType(declaration.parent);
@@ -23212,13 +23212,13 @@ namespace ts {
             if (func) {
                 let contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
-                const functionFlags = getFunctionFlags(func);
+                    const functionFlags = getFunctionFlags(func);
                     if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
                         const use = functionFlags & FunctionFlags.Async ? IterationUse.AsyncGeneratorReturnType : IterationUse.GeneratorReturnType;
                         const iterationTypes = getIterationTypesOfIterable(contextualReturnType, use, /*errorNode*/ undefined);
                         if (!iterationTypes) {
-                    return undefined;
-                }
+                            return undefined;
+                        }
                         contextualReturnType = iterationTypes.returnType;
                         // falls through to unwrap Promise for AsyncGenerators
                     }
@@ -23425,25 +23425,25 @@ namespace ts {
 
         function getContextualTypeForThisPropertyAssignment(binaryExpression: BinaryExpression, kind: AssignmentDeclarationKind): Type | undefined {
             if (!binaryExpression.symbol) return getTypeOfExpression(binaryExpression.left);
-                    if (binaryExpression.symbol.valueDeclaration) {
-                        const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
-                        if (annotated) {
-                            const type = getTypeFromTypeNode(annotated);
-                            if (type) {
-                                return type;
-                            }
-                        }
+            if (binaryExpression.symbol.valueDeclaration) {
+                const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
+                if (annotated) {
+                    const type = getTypeFromTypeNode(annotated);
+                    if (type) {
+                        return type;
                     }
+                }
+            }
             if (kind === AssignmentDeclarationKind.ModuleExports) return undefined;
-                    const thisAccess = cast(binaryExpression.left, isAccessExpression);
-                    if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
+            const thisAccess = cast(binaryExpression.left, isAccessExpression);
+            if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
                 return undefined;
-                    }
-                    const thisType = checkThisExpression(thisAccess.expression);
-                    const nameStr = getElementOrPropertyAccessName(thisAccess);
+            }
+            const thisType = checkThisExpression(thisAccess.expression);
+            const nameStr = getElementOrPropertyAccessName(thisAccess);
             return nameStr !== undefined && getTypeOfPropertyOfContextualType(thisType, nameStr) || undefined;
 
-            }
+        }
 
         function isCircularMappedProperty(symbol: Symbol) {
             return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(<MappedSymbol>symbol).type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
@@ -28176,22 +28176,22 @@ namespace ts {
             const voidIsNonOptional = flags! & MinArgumentCountFlags.VoidIsNonOptional;
             if (voidIsNonOptional || signature.resolvedMinArgumentCount === undefined) {
                 let minArgumentCount: number | undefined;
-            if (signatureHasRestParameter(signature)) {
-                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                if (isTupleType(restType)) {
-                    const firstOptionalIndex = findIndex(restType.target.elementFlags, f => !(f & ElementFlags.Required));
-                    const requiredCount = firstOptionalIndex < 0 ? restType.target.fixedLength : firstOptionalIndex;
-                    if (requiredCount > 0) {
+                if (signatureHasRestParameter(signature)) {
+                    const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                    if (isTupleType(restType)) {
+                        const firstOptionalIndex = findIndex(restType.target.elementFlags, f => !(f & ElementFlags.Required));
+                        const requiredCount = firstOptionalIndex < 0 ? restType.target.fixedLength : firstOptionalIndex;
+                        if (requiredCount > 0) {
                             minArgumentCount = signature.parameters.length - 1 + requiredCount;
+                        }
                     }
                 }
-            }
                 if (minArgumentCount === undefined) {
-            if (!strongArityForUntypedJS && signature.flags & SignatureFlags.IsUntypedSignatureInJSFile) {
-                return 0;
-            }
+                    if (!strongArityForUntypedJS && signature.flags & SignatureFlags.IsUntypedSignatureInJSFile) {
+                        return 0;
+                    }
                     minArgumentCount = signature.minArgumentCount;
-        }
+                }
                 if (voidIsNonOptional) {
                     return minArgumentCount;
                 }
@@ -32473,10 +32473,10 @@ namespace ts {
                 }
 
                 if (symbol.parent) {
-                        // run check on export symbol to check that modifiers agree across all exported declarations
-                        checkFunctionOrConstructorSymbol(symbol);
-                    }
+                    // run check on export symbol to check that modifiers agree across all exported declarations
+                    checkFunctionOrConstructorSymbol(symbol);
                 }
+            }
 
             const body = node.kind === SyntaxKind.MethodSignature ? undefined : node.body;
             checkSourceElement(body);
