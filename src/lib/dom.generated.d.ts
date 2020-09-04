@@ -8923,6 +8923,10 @@ declare var HTMLUnknownElement: {
 /** Provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement. */
 interface HTMLVideoElement extends HTMLMediaElement {
     /**
+     * Gets or sets the playsinline of the video element. for example, On iPhone, video elements will now be allowed to play inline, and will not automatically enter fullscreen mode when playback begins.
+     */
+    playsInline: boolean;
+    /**
      * Gets or sets the height of the video element.
      */
     height: number;
