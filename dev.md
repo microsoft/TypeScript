@@ -5,11 +5,6 @@ This implement is a toy, it is not parsed as BNF. I only promise the type constr
 1. AST: add possiable parameters to TypeParameter when parsing
 2. convert AST to proper Type
 
-- add more check for arguments
-    - allow generic as typeArguments // seems this is done already
-    - check typeArguments and typeParameter whether match, especially paramters
-    - 
-
 getTypeFromTypeNode
     - what is TypeNode, like ` Set<number>` in `var q: Set<number>`
     1. function getTypeFromTypeReference(node: TypeReferenceType): Type
@@ -51,6 +46,38 @@ function getTypeFromClassOrInterfaceReference(node: NodeWithTypeArguments, symbo
 function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference
     - this function would try get cached value(key is calculated through typeArguments' ids) from `target.instantiations`, if not create and cache a `TypeReference` type, set its property `resolvedTypeArguments` as `typeArguments` and property `target` as `target`(from function parameters).
 
+// most important function, before this step, the mapper has been set but not used. and the symbol has a flag mark it as initilized.
+function getTypeOfSymbol(symbol: Symbol): Type
+function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper)
+
 ## Need final decision from Core Team
 1. TypeArguments need a flag or boolean to mark itself. For a generic type could be valid typeargument for now, we should not check whether it has typearguments for now.
 So, where to add the flag, which type should have this flag.
+
+## Need improvement
+1. high light the same symbol for TypeConstructor in the interface.
+2. the TypeConstructor in the TypeParameter declration need quickinfo.
+3. add more check for arguments
+    - allow generic as typeArguments // seems this is done already
+    - check typeArguments and typeParameter whether match, especially paramters
+
+## Key Point
+1. distinguish whether the typereference is a typeconstructor or not.
+
+
+
+
+
+
+
+
+
+
+
+``` ts
+var w: Itertable<number, Set>;
+```
+call getTypeFromTypeReference on `TypeReference(node) Set`
+    in the call
+    1. get the symbol of `Set`
+    2. call getTypeReferenceType(node, symbol) to get the returned .
