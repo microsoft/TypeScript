@@ -1,4 +1,4 @@
-tests/cases/conformance/jsdoc/declarations/file2.js(12,31): error TS2694: Namespace 'myTypes' has no exported member 'typeC'.
+tests/cases/conformance/jsdoc/declarations/file2.js(12,31): error TS2694: Namespace '"tests/cases/conformance/jsdoc/declarations/file".myTypes' has no exported member 'typeC'.
 
 
 ==== tests/cases/conformance/jsdoc/declarations/file2.js (1 errors) ====
@@ -15,7 +15,7 @@ tests/cases/conformance/jsdoc/declarations/file2.js(12,31): error TS2694: Namesp
     
     /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
                                   ~~~~~
-!!! error TS2694: Namespace 'myTypes' has no exported member 'typeC'.
+!!! error TS2694: Namespace '"tests/cases/conformance/jsdoc/declarations/file".myTypes' has no exported member 'typeC'.
     
     /**
      * @function testFn
