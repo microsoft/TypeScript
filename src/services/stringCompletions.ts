@@ -108,12 +108,19 @@ namespace ts.Completions.StringCompletions {
     }
     type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: readonly PathCompletion[] } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
-        const { parent } = node;
+        const parent = walkUpParentheses(node.parent);
         switch (parent.kind) {
-            case SyntaxKind.LiteralType:
-                switch (parent.parent.kind) {
-                    case SyntaxKind.TypeReference:
-                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(parent as LiteralTypeNode)), isNewIdentifier: false };
+            case SyntaxKind.LiteralType: {
+                const grandParent = walkUpParentheses(parent.parent);
+                switch (grandParent.kind) {
+                    case SyntaxKind.TypeReference: {
+                        const typeReference = grandParent as TypeReferenceNode;
+                        const typeArgument = findAncestor(parent, n => n.parent === typeReference) as LiteralTypeNode;
+                        if (typeArgument) {
+                            return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                        }
+                        return undefined;
+                    }
                     case SyntaxKind.IndexedAccessType:
                         // Get all apparent property names
                         // i.e. interface Foo {
@@ -121,19 +128,21 @@ namespace ts.Completions.StringCompletions {
                         //          bar: string;
                         //      }
                         //      let x: Foo["/*completion position*/"]
-                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((parent.parent as IndexedAccessTypeNode).objectType));
+                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((grandParent as IndexedAccessTypeNode).objectType));
                     case SyntaxKind.ImportType:
                         return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     case SyntaxKind.UnionType: {
-                        if (!isTypeReferenceNode(parent.parent.parent)) return undefined;
-                        const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(parent.parent as UnionTypeNode, parent as LiteralTypeNode);
-                        const types = getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(parent.parent as UnionTypeNode)).filter(t => !contains(alreadyUsedTypes, t.value));
+                        if (!isTypeReferenceNode(grandParent.parent)) {
+                            return undefined;
+                        }
+                        const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
+                        const types = getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(grandParent as UnionTypeNode)).filter(t => !contains(alreadyUsedTypes, t.value));
                         return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
                     }
                     default:
                         return undefined;
                 }
-
+            }
             case SyntaxKind.PropertyAssignment:
                 if (isObjectLiteralExpression(parent.parent) && (<PropertyAssignment>parent).name === node) {
                     // Get quoted name of properties of the object literal expression
@@ -154,7 +163,7 @@ namespace ts.Completions.StringCompletions {
 
             case SyntaxKind.ElementAccessExpression: {
                 const { expression, argumentExpression } = parent as ElementAccessExpression;
-                if (node === argumentExpression) {
+                if (node === skipParentheses(argumentExpression)) {
                     // Get all names of properties on the expression
                     // i.e. interface A {
                     //      'prop1': string
@@ -196,6 +205,17 @@ namespace ts.Completions.StringCompletions {
             // Get completion for string literal from string literal type
             // i.e. var x: "hi" | "hello" = "/*completion position*/"
             return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker)), isNewIdentifier: false };
+        }
+    }
+
+    function walkUpParentheses(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.ParenthesizedType:
+                return walkUpParenthesizedTypes(node);
+            case SyntaxKind.ParenthesizedExpression:
+                return walkUpParenthesizedExpressions(node);
+            default:
+                return node;
         }
     }
 
