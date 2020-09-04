@@ -12,10 +12,12 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: Node, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: StringLiteralLike, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
+
+        const optionalReplacementSpan = createTextSpanFromStringLiteralLikeContent(contextToken);
         switch (completion.kind) {
             case StringLiteralCompletionKind.Paths:
                 return convertPathCompletions(completion.paths);
@@ -33,7 +35,7 @@ namespace ts.Completions.StringCompletions {
                     CompletionKind.String,
                     preferences
                 ); // Target will not be used, so arbitrary
-                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
             }
             case StringLiteralCompletionKind.Types: {
                 const entries = completion.types.map(type => ({
@@ -43,7 +45,7 @@ namespace ts.Completions.StringCompletions {
                     sortText: "0",
                     replacementSpan: getReplacementSpanForContextToken(contextToken)
                 }));
-                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
             }
             default:
                 return Debug.assertNever(completion);
