@@ -830,6 +830,13 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
             }
 
+            if (ts.hasProperty(options, "optionalReplacementSpan")) {
+                assert.deepEqual(
+                    actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
+                    options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
+                    "Expected 'optionalReplacementSpan' properties to match");
+            }
+
             const nameToEntries = new ts.Map<string, ts.CompletionEntry[]>();
             for (const entry of actualCompletions.entries) {
                 const entries = nameToEntries.get(entry.name);
@@ -2867,9 +2874,14 @@ namespace FourSlash {
                 const change = ts.first(codeFix.changes);
                 ts.Debug.assert(change.fileName === fileName);
                 this.applyEdits(change.fileName, change.textChanges);
-                const text = range ? this.rangeText(range) : this.getFileContent(this.activeFile.fileName);
+                const text = range ? this.rangeText(range) : this.getFileContent(fileName);
                 actualTextArray.push(text);
-                scriptInfo.updateContent(originalContent);
+
+                // Undo changes to perform next fix
+                const span = change.textChanges[0].span;
+                 const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
+                 const insertedText = change.textChanges[0].newText;
+                 this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
             }
             if (expectedTextArray.length !== actualTextArray.length) {
                 this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}`);

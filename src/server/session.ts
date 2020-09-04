@@ -1783,6 +1783,7 @@ namespace ts.server {
 
             const res: protocol.CompletionInfo = {
                 ...completions,
+                optionalReplacementSpan: completions.optionalReplacementSpan && toProtocolTextSpan(completions.optionalReplacementSpan, scriptInfo),
                 entries,
             };
             return res;
