@@ -11,6 +11,7 @@ namespace ts.server {
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
     export const OpenFileInfoTelemetryEvent = "openFileInfo";
+    const ensureProjectForOpenFileSchedule = "*ensureProjectForOpenFiles*";
 
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
@@ -878,7 +879,7 @@ namespace ts.server {
         /*@internal*/
         delayEnsureProjectForOpenFiles() {
             this.pendingEnsureProjectForOpenFiles = true;
-            this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 2500, () => {
+            this.throttledOperations.schedule(ensureProjectForOpenFileSchedule, /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {
                     this.delayEnsureProjectForOpenFiles();
                 }
@@ -2795,6 +2796,21 @@ namespace ts.server {
             // but then we need to make sure we arent calling this function
             // (and would separate out below reloading of projects to be called when immediate reload is needed)
             // as there is no need to load contents of the files from the disk
+
+            // Reload script infos
+            this.filenameToScriptInfo.forEach(info => {
+                if (this.openFiles.has(info.path)) return; // Skip open files
+                if (!info.fileWatcher) return; // not watched file
+                // Handle as if file is changed or deleted
+                this.onSourceFileChanged(info, this.host.fileExists(info.fileName) ? FileWatcherEventKind.Changed : FileWatcherEventKind.Deleted);
+            });
+            // Cancel all project updates since we will be updating them now
+            this.pendingProjectUpdates.forEach((_project, projectName) => {
+                this.throttledOperations.cancel(projectName);
+                this.pendingProjectUpdates.delete(projectName);
+            });
+            this.throttledOperations.cancel(ensureProjectForOpenFileSchedule);
+            this.pendingEnsureProjectForOpenFiles = false;
 
             // Reload Projects
             this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
