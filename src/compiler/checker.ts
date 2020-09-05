@@ -13418,29 +13418,35 @@ namespace ts {
                     mapType(types[unionIndex], t => getTemplateType(texts, casings, replaceElement(types, unionIndex, t))) :
                     errorType;
             }
-            let i = 0;
-            while (i < types.length) {
+            let newTypes = [];
+            let newCasings = [];
+            let newTexts = [];
+            let text = texts[0];
+            for (let i = 0; i < types.length; i++) {
                 const t = types[i];
                 if (t.flags & TypeFlags.Literal) {
                     const s = applyTemplateCasing(getTemplateStringForType(t) || "", casings[i]);
-                    texts = [...texts.slice(0, i), texts[i] + s + texts[i + 1], ...texts.slice(i + 2)];
-                    casings = [...casings.slice(0, i), ...casings.slice(i + 1)];
-                    types = [...types.slice(0, i), ...types.slice(i + 1)];
+                    text += s;
+                    text += texts[i + 1];
                 }
                 else if (isGenericIndexType(t)) {
-                    i++;
+                    newTypes.push(t);
+                    newCasings.push(casings[i]);
+                    newTexts.push(text);
+                    text = texts[i + 1];
                 }
                 else {
                     return stringType;
                 }
             }
-            if (types.length === 0) {
-                return getLiteralType(texts[0]);
+            if (newTypes.length === 0) {
+                return getLiteralType(text);
             }
-            const id = `${getTypeListId(types)}|${casings.join(",")}|${map(texts, t => t.length).join(",")}|${texts.join("")}`;
+            newTexts.push(text);
+            const id = `${getTypeListId(newTypes)}|${newCasings.join(",")}|${map(newTexts, t => t.length).join(",")}|${newTexts.join("")}`;
             let type = templateTypes.get(id);
             if (!type) {
-                templateTypes.set(id, type = createTemplateType(texts, casings, types));
+                templateTypes.set(id, type = createTemplateType(newTexts, newCasings, newTypes));
             }
             return type;
         }
