@@ -9,10 +9,10 @@ const MW = require("./MW");
 
 /** @class */
 module.exports = function MC() {
->module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : { (): import("tests/cases/conformance/jsdoc/MW"); new (): MC; }
->module.exports : { (): import("tests/cases/conformance/jsdoc/MW"); new (): MC; }
->module : { "\"tests/cases/conformance/jsdoc/MC\"": { (): import("tests/cases/conformance/jsdoc/MW"); new (): MC; }; }
->exports : { (): import("tests/cases/conformance/jsdoc/MW"); new (): MC; }
+>module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : { (): MW; new (): MC; }
+>module.exports : { (): MW; new (): MC; }
+>module : { "\"tests/cases/conformance/jsdoc/MC\"": { (): MW; new (): MC; }; }
+>exports : { (): MW; new (): MC; }
 >function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
 >MC : typeof MC
 
