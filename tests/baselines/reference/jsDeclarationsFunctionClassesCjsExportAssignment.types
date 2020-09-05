@@ -129,9 +129,9 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports = Context : typeof Context
->module.exports : typeof Context
->module : { "\"tests/cases/conformance/jsdoc/declarations/context\"": typeof Context; }
->exports : typeof Context
+>module.exports = Context : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }
+>module.exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/context\"": { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }; }
+>exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }
 >Context : typeof Context
 
