@@ -623,7 +623,7 @@ namespace FourSlash {
             ts.forEachKey(this.inputFiles, fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)
                     || Harness.getConfigNameFromFileName(fileName)
-                    || !this.getProgram().getCompilerOptions().allowJs && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))) return;
+                    || !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))) return;
                 const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
@@ -828,6 +828,13 @@ namespace FourSlash {
 
             if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
                 this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            }
+
+            if (ts.hasProperty(options, "optionalReplacementSpan")) {
+                assert.deepEqual(
+                    actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
+                    options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
+                    "Expected 'optionalReplacementSpan' properties to match");
             }
 
             const nameToEntries = new ts.Map<string, ts.CompletionEntry[]>();
@@ -2867,9 +2874,14 @@ namespace FourSlash {
                 const change = ts.first(codeFix.changes);
                 ts.Debug.assert(change.fileName === fileName);
                 this.applyEdits(change.fileName, change.textChanges);
-                const text = range ? this.rangeText(range) : this.getFileContent(this.activeFile.fileName);
+                const text = range ? this.rangeText(range) : this.getFileContent(fileName);
                 actualTextArray.push(text);
-                scriptInfo.updateContent(originalContent);
+
+                // Undo changes to perform next fix
+                const span = change.textChanges[0].span;
+                 const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
+                 const insertedText = change.textChanges[0].newText;
+                 this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
             }
             if (expectedTextArray.length !== actualTextArray.length) {
                 this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}`);

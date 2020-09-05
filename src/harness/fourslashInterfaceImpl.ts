@@ -1529,6 +1529,7 @@ namespace FourSlashInterface {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
         readonly isNewIdentifierLocation?: boolean; // Always tested
         readonly isGlobalCompletion?: boolean; // Only tested if set
+        readonly optionalReplacementSpan?: FourSlash.Range; // Only tested if set
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;

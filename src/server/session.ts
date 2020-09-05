@@ -1783,6 +1783,7 @@ namespace ts.server {
 
             const res: protocol.CompletionInfo = {
                 ...completions,
+                optionalReplacementSpan: completions.optionalReplacementSpan && toProtocolTextSpan(completions.optionalReplacementSpan, scriptInfo),
                 entries,
             };
             return res;
@@ -2408,6 +2409,7 @@ namespace ts.server {
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
                 file: item.file,
+                containerName: item.containerName,
                 span: toProtocolTextSpan(item.span, scriptInfo),
                 selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
             };

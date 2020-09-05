@@ -862,6 +862,8 @@ namespace ts {
         let sourceMapGenerator: SourceMapGenerator | undefined;
         let sourceMapSource: SourceMapSource;
         let sourceMapSourceIndex = -1;
+        let mostRecentlyAddedSourceMapSource: SourceMapSource;
+        let mostRecentlyAddedSourceMapSourceIndex = -1;
 
         // Comments
         let containerPos = -1;
@@ -4544,7 +4546,11 @@ namespace ts {
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
+            const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
+                | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
+                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0);
+
+            return getLiteralText(node, currentSourceFile!, flags);
         }
 
         /**
@@ -5337,9 +5343,10 @@ namespace ts {
         function emitSourcePos(source: SourceMapSource, pos: number) {
             if (source !== sourceMapSource) {
                 const savedSourceMapSource = sourceMapSource;
+                const savedSourceMapSourceIndex = sourceMapSourceIndex;
                 setSourceMapSource(source);
                 emitPos(pos);
-                setSourceMapSource(savedSourceMapSource);
+                resetSourceMapSource(savedSourceMapSource, savedSourceMapSourceIndex);
             }
             else {
                 emitPos(pos);
@@ -5386,6 +5393,13 @@ namespace ts {
 
             sourceMapSource = source;
 
+            if (source === mostRecentlyAddedSourceMapSource) {
+                // Fast path for when the new source map is the most recently added, in which case
+                // we use its captured index without going through the source map generator.
+                sourceMapSourceIndex = mostRecentlyAddedSourceMapSourceIndex;
+                return;
+            }
+
             if (isJsonSourceMapSource(source)) {
                 return;
             }
@@ -5394,6 +5408,14 @@ namespace ts {
             if (printerOptions.inlineSources) {
                 sourceMapGenerator!.setSourceContent(sourceMapSourceIndex, source.text);
             }
+
+            mostRecentlyAddedSourceMapSource = source;
+            mostRecentlyAddedSourceMapSourceIndex = sourceMapSourceIndex;
+        }
+
+        function resetSourceMapSource(source: SourceMapSource, sourceIndex: number) {
+            sourceMapSource = source;
+            sourceMapSourceIndex = sourceIndex;
         }
 
         function isJsonSourceMapSource(sourceFile: SourceMapSource) {

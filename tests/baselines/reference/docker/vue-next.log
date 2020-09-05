@@ -1,7 +1,7 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-rc.5 build /vue-next
+> @X.X.X-rc.6 build /vue-next
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
 Analysis will use the bundled TypeScript version 3.9.7
@@ -34,12 +34,12 @@ Warning: dist/packages/compiler-core/src/options.d.ts:36:25 - (tsdoc-escape-righ
 Warning: dist/packages/compiler-core/src/options.d.ts:36:26 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
 Warning: dist/packages/compiler-core/src/options.d.ts:36:19 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
 Warning: dist/packages/compiler-core/src/options.d.ts:36:20 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
-Warning: dist/packages/compiler-core/src/options.d.ts:55:39 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
-Warning: dist/packages/compiler-core/src/options.d.ts:55:21 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
-Warning: dist/packages/compiler-core/src/options.d.ts:76:42 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
-Warning: dist/packages/compiler-core/src/options.d.ts:76:43 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
-Warning: dist/packages/compiler-core/src/options.d.ts:76:35 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
-Warning: dist/packages/compiler-core/src/options.d.ts:76:36 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:59:39 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:59:21 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:80:42 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:80:43 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:80:35 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:80:36 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
 /vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.esm-bundler.js...
 created packages/compiler-dom/dist/compiler-dom.esm-bundler.js in ?s
 /vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.esm-browser.js...
@@ -62,17 +62,17 @@ created packages/compiler-dom/dist/compiler-dom.global.prod.js in ?s
 [!] (plugin rpt2) Error: /vue-next/packages/compiler-sfc/src/parse.ts(179,14): semantic error TS2790: The operand of a 'delete' operator must be optional.
 packages/compiler-sfc/src/parse.ts
 Error: /vue-next/packages/compiler-sfc/src/parse.ts(179,14): semantic error TS2790: The operand of a 'delete' operator must be optional.
-    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:5174:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:17452:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18071:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17625:38)
+    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:5195:30)
+    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:17740:12)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18359:24)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17913:38)
     at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
     at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
     at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
-    at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
+    at Function.forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9368:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:411b203,NODE_ENV:production,TARGET:compiler-sfc,TYPES:true
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:255a2bd,NODE_ENV:production,TARGET:compiler-sfc,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
     at processTicksAndRejections (internal/process/task_queues.js:93:5)

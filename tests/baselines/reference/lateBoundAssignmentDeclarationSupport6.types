@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport6.js");
->x : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
->require("./lateBoundAssignmentDeclarationSupport6.js") : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport6.js") : typeof x
 >require : any
 >"./lateBoundAssignmentDeclarationSupport6.js" : "./lateBoundAssignmentDeclarationSupport6.js"
 
@@ -9,7 +9,7 @@ const inst =  new x.F();
 >inst : F
 >new x.F() : F
 >x.F : typeof F
->x : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
+>x : typeof x
 >F : typeof F
 
 const y = inst["my-fake-sym"];
@@ -23,7 +23,7 @@ const z = inst[x.S];
 >inst[x.S] : any
 >inst : F
 >x.S : unique symbol
->x : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6")
+>x : typeof x
 >S : unique symbol
 
 === tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport6.js ===

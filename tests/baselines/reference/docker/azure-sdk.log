@@ -2,22 +2,13 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 14.7.0 (pre-LTS)
+Node.js version is 14.8.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 XX of XX: [@azure/abort-controller] completed successfully in ? seconds
 XX of XX: [@azure/logger] completed successfully in ? seconds
 XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
 XX of XX: [@azure/core-paging] completed successfully in ? seconds
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! @azure/monitor-opentelemetry-exporter@X.X.X-preview.5 build:node: `tsc -p .`
-npm ERR! Exit status 1
-npm ERR! 
-npm ERR! Failed at the @azure/monitor-opentelemetry-exporter@X.X.X-preview.5 build:node script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 SUCCESS (4)
 ================================
 @azure/abort-controller (? seconds)
@@ -25,7 +16,7 @@ SUCCESS (4)
 @azure/core-asynciterator-polyfill (? seconds)
 @azure/core-paging (? seconds)
 ================================
-BLOCKED (36)
+BLOCKED (38)
 ================================
 @azure/core-auth
 @azure/core-http
@@ -52,6 +43,8 @@ BLOCKED (36)
 @azure/keyvault-certificates
 @azure/keyvault-common
 @azure/keyvault-keys
+@azure/monitor-opentelemetry-exporter
+@azure/schema-registry
 @azure/search-documents
 @azure/service-bus
 @azure/storage-blob-changefeed
@@ -64,7 +57,7 @@ BLOCKED (36)
 @azure/test-utils-perfstress
 testhub
 ================================
-FAILURE (2)
+FAILURE (1)
 ================================
 @azure/eslint-plugin-azure-sdk (? seconds)
 >>> @azure/eslint-plugin-azure-sdk
@@ -82,16 +75,6 @@ tsc -p tsconfig.build.json && prettier --write dist/**/*.{js,json,md}
 3 export declare type TSNode = ts.Node & (ts.Modifier | ts.Identifier | ts.QualifiedName | ts.ComputedPropertyName | ts.Decorator | ts.TypeParameterDeclaration | ts.CallSignatureDeclaration | ts.ConstructSignatureDeclaration | ts.VariableDeclaration | ts.VariableDeclarationList | ts.ParameterDeclaration | ts.BindingElement | ts.PropertySignature | ts.PropertyDeclaration | ts.PropertyAssignment | ts.ShorthandPropertyAssignment | ts.SpreadAssignment | ts.ObjectBindingPattern | ts.ArrayBindingPattern | ts.FunctionDeclaration | ts.MethodSignature | ts.MethodDeclaration | ts.ConstructorDeclaration | ts.SemicolonClassElement | ts.GetAccessorDeclaration | ts.SetAccessorDeclaration | ts.IndexSignatureDeclaration | ts.KeywordTypeNode | ts.ImportTypeNode | ts.ThisTypeNode | ts.ConstructorTypeNode | ts.FunctionTypeNode | ts.TypeReferenceNode | ts.TypePredicateNode | ts.TypeQueryNode | ts.TypeLiteralNode | ts.ArrayTypeNode | ts.TupleTypeNode | ts.OptionalTypeNode | ts.RestTypeNode | ts.UnionTypeNode | ts.IntersectionTypeNode | ts.ConditionalTypeNode | ts.InferTypeNode | ts.ParenthesizedTypeNode | ts.TypeOperatorNode | ts.IndexedAccessTypeNode | ts.MappedTypeNode | ts.LiteralTypeNode | ts.StringLiteral | ts.OmittedExpression | ts.PartiallyEmittedExpression | ts.PrefixUnaryExpression | ts.PostfixUnaryExpression | ts.NullLiteral | ts.BooleanLiteral | ts.ThisExpression | ts.SuperExpression | ts.ImportExpression | ts.DeleteExpression | ts.TypeOfExpression | ts.VoidExpression | ts.AwaitExpression | ts.YieldExpression | ts.SyntheticExpression | ts.BinaryExpression | ts.ConditionalExpression | ts.FunctionExpression | ts.ArrowFunction | ts.RegularExpressionLiteral | ts.NoSubstitutionTemplateLiteral | ts.NumericLiteral | ts.BigIntLiteral | ts.TemplateHead | ts.TemplateMiddle | ts.TemplateTail | ts.TemplateExpression | ts.TemplateSpan | ts.ParenthesizedExpression | ts.ArrayLiteralExpression | ts.SpreadElement | ts.ObjectLiteralExpression | ts.PropertyAccessExpression | ts.ElementAccessExpression | ts.CallExpression | ts.ExpressionWithTypeArguments | ts.NewExpression | ts.TaggedTemplateExpression | ts.AsExpression | ts.TypeAssertion | ts.NonNullExpression | ts.MetaProperty | ts.JsxElement | ts.JsxOpeningElement | ts.JsxSelfClosingElement | ts.JsxFragment | ts.JsxOpeningFragment | ts.JsxClosingFragment | ts.JsxAttribute | ts.JsxSpreadAttribute | ts.JsxClosingElement | ts.JsxExpression | ts.JsxText | ts.NotEmittedStatement | ts.CommaListExpression | ts.EmptyStatement | ts.DebuggerStatement | ts.MissingDeclaration | ts.Block | ts.VariableStatement | ts.ExpressionStatement | ts.IfStatement | ts.DoStatement | ts.WhileStatement | ts.ForStatement | ts.ForInStatement | ts.ForOfStatement | ts.BreakStatement | ts.ContinueStatement | ts.ReturnStatement | ts.WithStatement | ts.SwitchStatement | ts.CaseBlock | ts.CaseClause | ts.DefaultClause | ts.LabeledStatement | ts.ThrowStatement | ts.TryStatement | ts.CatchClause | ts.ClassDeclaration | ts.ClassExpression | ts.InterfaceDeclaration | ts.HeritageClause | ts.TypeAliasDeclaration | ts.EnumMember | ts.EnumDeclaration | ts.ModuleDeclaration | ts.ModuleBlock | ts.ImportEqualsDeclaration | ts.ExternalModuleReference | ts.ImportDeclaration | ts.ImportClause | ts.NamespaceImport | ts.NamespaceExportDeclaration | ts.ExportDeclaration | ts.NamedImports | ts.NamedExports | ts.ImportSpecifier | ts.ExportSpecifier | ts.ExportAssignment | ts.CommentRange | ts.SourceFile | ts.Bundle | ts.InputFiles | ts.UnparsedSource | ts.JsonMinusNumericLiteral | ts.JSDoc | ts.JSDocTypeExpression | ts.JSDocUnknownTag | ts.JSDocAugmentsTag | ts.JSDocClassTag | ts.JSDocEnumTag | ts.JSDocThisTag | ts.JSDocTemplateTag | ts.JSDocReturnTag | ts.JSDocTypeTag | ts.JSDocTypedefTag | ts.JSDocCallbackTag | ts.JSDocSignature | ts.JSDocPropertyTag | ts.JSDocParameterTag | ts.JSDocTypeLiteral | ts.JSDocFunctionType | ts.JSDocAllType | ts.JSDocUnknownType | ts.JSDocNullableType | ts.JSDocNonNullableType | ts.JSDocOptionalType | ts.JSDocVariadicType | ts.JSDocAuthorTag);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ~~~~~~~~~~~~~~
 Found 4 errors.
-@azure/monitor-opentelemetry-exporter (? seconds)
-npm ERR! code ELIFECYCLE
-npm ERR! errno 1
-npm ERR! @azure/monitor-opentelemetry-exporter@X.X.X-preview.5 build:node: `tsc -p .`
-npm ERR! Exit status 1
-npm ERR!
-npm ERR! Failed at the @azure/monitor-opentelemetry-exporter@X.X.X-preview.5 build:node script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
-npm ERR! A complete log of this run can be found in:
-npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log
 ================================
 Error: Project(s) failed
 rush rebuild - Errors! (? seconds)
@@ -124,6 +107,8 @@ XX of XX: [@azure/storage-internal-avro] blocked by [@azure/eslint-plugin-azure-
 XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/keyvault-admin] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/schema-registry] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/search-documents] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-file-share] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/tables] blocked by [@azure/eslint-plugin-azure-sdk]!
@@ -137,6 +122,4 @@ XX of XX: [@azure/cosmos] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/dev-tool] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/event-processor-host] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [testhub] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/monitor-opentelemetry-exporter] failed!
 [@azure/eslint-plugin-azure-sdk] Returned error code: 2
-[@azure/monitor-opentelemetry-exporter] Returned error code: 1

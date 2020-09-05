@@ -99,7 +99,19 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+                const chunkSize = 50;
+                for (let i=0; i<currentModuleInfo.exportedNames!.length; i += chunkSize) {
+                    append(
+                        statements,
+                        factory.createExpressionStatement(
+                            reduceLeft(
+                                currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
+                                (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                                factory.createVoidZero() as Expression
+                            )
+                        )
+                    );
+                }
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -1043,6 +1055,7 @@ namespace ts {
             else if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export * as ns from "mod";
+                // export * as default from "mod";
                 statements.push(
                     setOriginalNode(
                         setTextRange(
@@ -1051,7 +1064,8 @@ namespace ts {
                                     factory.cloneNode(node.exportClause.name),
                                     getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
                                         createRequireCall(node) :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
+                                        isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                            factory.createIdentifier(idText(node.exportClause.name)))
                                 )
                             ),
                             node

@@ -30,8 +30,7 @@ jobs:
       run: |
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
-    - run:  npm install
-    - run:  npm update
+    - run:  npm ci
 
     # Re: https://github.com/actions/setup-node/pull/125
     - name: Register Problem Matcher for TSC
@@ -45,4 +44,4 @@ jobs:
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
-    
+
