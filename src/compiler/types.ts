@@ -1615,7 +1615,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         readonly kind: SyntaxKind.TypeOperator;
-        readonly operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
+        readonly operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.ThrowKeyword;
         readonly type: TypeNode;
     }
 
@@ -4885,6 +4885,7 @@ namespace ts {
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
         TemplateLiteral = 1 << 27,  // Template literal type
+        ThrowType       = 1 << 28,  // throw T
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -5018,6 +5019,10 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
+    }
+
+    export interface ThrowType extends Type {
+        value: Type;
     }
 
     export const enum ObjectFlags {
@@ -6801,7 +6806,7 @@ namespace ts {
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
         createThisTypeNode(): ThisTypeNode;
-        createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode;
+        createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.ThrowKeyword, type: TypeNode): TypeOperatorNode;
         updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
         createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
         updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;

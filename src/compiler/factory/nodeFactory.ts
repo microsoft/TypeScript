@@ -1975,7 +1975,7 @@ namespace ts {
         }
 
         // @api
-        function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
+        function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.ThrowKeyword, type: TypeNode): TypeOperatorNode {
             const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
             node.operator = operator;
             node.type = parenthesizerRules().parenthesizeMemberOfElementType(type);

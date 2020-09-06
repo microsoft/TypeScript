@@ -4524,6 +4524,9 @@ namespace ts {
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).baseType, context);
                 }
+                if (type.flags & TypeFlags.ThrowType) {
+                    return typeToTypeNodeHelper(errorType, context);
+                }
 
                 return Debug.fail("Should be unreachable.");
 
@@ -13434,6 +13437,9 @@ namespace ts {
                     case SyntaxKind.ReadonlyKeyword:
                         links.resolvedType = getTypeFromTypeNode(node.type);
                         break;
+                    case SyntaxKind.ThrowKeyword:
+                        links.resolvedType = createThrowType(getTypeFromTypeNode(node.type));
+                        break;
                     default:
                         throw Debug.assertNever(node.operator);
                 }
@@ -14504,6 +14510,12 @@ namespace ts {
             return type;
         }
 
+        function createThrowType(containingType: Type) {
+            const type = <ThrowType>createType(TypeFlags.ThrowType);
+            type.value = containingType;
+            return type;
+        }
+
         function getESSymbolLikeTypeForNode(node: Node) {
             if (isValidESSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
@@ -15155,6 +15167,15 @@ namespace ts {
                     }
                     return sub;
                 }
+            }
+            if (flags & TypeFlags.ThrowType) {
+                const innerType = instantiateType((<ThrowType>type).value, mapper);
+                let errorMessage = "Unknown";
+                if (innerType.flags & TypeFlags.StringLiteral) {
+                    errorMessage = (<StringLiteralType>innerType).value;
+                }
+                error(currentNode, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, errorMessage);
+                return errorType;
             }
             return type;
         }
@@ -19366,6 +19387,9 @@ namespace ts {
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
+            if (type.flags & TypeFlags.ThrowType) {
+                return couldContainTypeVariables((<ThrowType>type).value);
+            }
             if (objectFlags & ObjectFlags.CouldContainTypeVariablesComputed) {
                 return !!(objectFlags & ObjectFlags.CouldContainTypeVariables);
             }
