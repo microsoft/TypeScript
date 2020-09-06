@@ -16,9 +16,9 @@ async function a(): Bluebird<void> {
         await Bluebird.resolve(); // -- remove this and it compiles
 >await Bluebird.resolve() : void
 >Bluebird.resolve() : Promise<void>
->Bluebird.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Bluebird.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Bluebird : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 
       } catch (error) { }
 >error : any

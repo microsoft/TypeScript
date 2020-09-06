@@ -1478,15 +1478,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";All_files_must_be_modules_when_the_isolatedModules_flag_is_provided_1208" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[All files must be modules when the '--isolatedModules' flag is provided.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Если задан флаг "--isolatedModules", все файлы должны быть модулями.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
@@ -2165,6 +2156,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Arguments_for_the_rest_parameter_0_were_not_provided_6236" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не указаны аргументы для параметра REST "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Array_element_destructuring_pattern_expected_1181" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Array element destructuring pattern expected.]]></Val>
@@ -2393,6 +2393,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Can only convert logical AND access chains]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Можно преобразовывать только цепочки доступа с логическим И.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_property_with_modifier_95137" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert property with modifier]]></Val>
@@ -2599,6 +2608,15 @@
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Не удается найти модуль "{0}". Рекомендуется использовать "--resolveJsonModule" для импорта модуля с расширением ".json".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_th_2792" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не найден модуль "{0}". Хотели ли вы задать значение "node" для параметра "moduleResolution" или добавить псевдонимы в параметр "paths"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3368,6 +3386,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_a_union_type_1386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[При использовании в типе объединения нотация типа конструктора должна быть заключена в круглые скобки.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1388" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[При использовании в типе пересечения нотация типа конструктора должна быть заключена в круглые скобки.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Constructors_for_derived_classes_must_contain_a_super_call_2377" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Constructors for derived classes must contain a 'super' call.]]></Val>
@@ -3674,6 +3710,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_optional_chain_expression_95139" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to optional chain expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать в необязательное выражение цепочки]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_to_template_string_95096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert to template string]]></Val>
@@ -3728,6 +3773,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_find_convertible_access_expression_95140" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find convertible access expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удалось найти преобразуемое выражение доступа.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_find_export_statement_95129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not find export statement]]></Val>
@@ -3742,6 +3796,15 @@
           <Val><![CDATA[Could not find import clause]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Не удалось найти предложение импорта.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Could_not_find_matching_access_expressions_95141" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find matching access expressions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удалось найти соответствующие выражения доступа.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4067,6 +4130,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_1312" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Вы хотели использовать ":"? Знак равенства "=" после имени свойства может указываться только в том случае, если внутренний объектный литерал является частью шаблона деструктурирования.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Did_you_mean_to_use_new_with_this_expression_6213" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use 'new' with this expression?]]></Val>
@@ -4103,6 +4175,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Disable checking for this file.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Disable_loading_referenced_projects_6235" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Disable loading referenced projects.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Отключите загрузку проектов, на которые имеются ссылки.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5470,6 +5551,24 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Перегрузка функции не должна быть статической.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_a_union_type_1385" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[При использовании в типе объединения нотация типа функции должна быть заключена в круглые скобки.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1387" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[При использовании в типе пересечения нотация типа функции должна быть заключена в круглые скобки.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8873,15 +8972,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove destructuring]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Удалить деструктурирование]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
@@ -8941,6 +9031,24 @@
           <Val><![CDATA[Remove unused declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Удаление неиспользуемого объявления для: "{0}"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_declarations_for_Colon_0_90041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Удалите неиспользуемые объявления для: "{0}"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_destructuring_declaration_90039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused destructuring declaration]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Удалите неиспользуемое объявление деструктурирования]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10000,6 +10108,15 @@
           <Val><![CDATA[Suppress noImplicitAny errors for indexing objects lacking index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Подавлять ошибки noImplicitAny для объектов индексирования, у которых отсутствуют сигнатуры индекса.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Switch_each_misused_0_to_1_95138" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Измените все неверно используемые "{0}" на "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11717,6 +11834,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_of_construct_signatures_are_incompatible_2419" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Типы сигнатур конструкций несовместимы.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_of_parameters_0_and_1_are_incompatible_2328" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types of parameters '{0}' and '{1}' are incompatible.]]></Val>
@@ -12365,6 +12491,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_imp_1208" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" не может быть скомпилирован с параметром "--isolatedModules", так как он считается глобальным файлом сценария. Добавьте оператор для импорта, экспорта или пустой оператор "export {}", чтобы сделать его модулем.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_cannot_be_used_as_a_JSX_component_2786" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' cannot be used as a JSX component.]]></Val>
@@ -12725,6 +12860,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0_2690" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" относится только к типу, но используется здесь как значение. Вы хотели использовать "{1} в {0}"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
@@ -12886,15 +13030,6 @@
           <Val><![CDATA['#!' can only be used at the start of a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["#!" можно использовать только в начале файла.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["=" можно использовать только в свойстве объектного литерала в назначении деструктурирования.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13063,6 +13198,15 @@
           <Val><![CDATA['extends' clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Предложение extends экспортированного класса "{0}" имеет или использует закрытое имя "{1}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";extends_clause_of_exported_class_has_or_is_using_private_name_0_4021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['extends' clause of exported class has or is using private name '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Предложение extends экспортированного класса имеет или использует закрытое имя "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

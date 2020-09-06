@@ -33,8 +33,8 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
-    const trackedEs5ClassesStack: (Map<string, boolean> | undefined)[] = [];
-    let trackedEs5Classes: Map<string, boolean> | undefined;
+    const trackedEs5ClassesStack: (ESMap<string, boolean> | undefined)[] = [];
+    let trackedEs5Classes: ESMap<string, boolean> | undefined;
 
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     let emptyChildItemArray: NavigationBarItem[] = [];
@@ -128,7 +128,7 @@ namespace ts.NavigationBar {
 
     function addTrackedEs5Class(name: string) {
         if (!trackedEs5Classes) {
-            trackedEs5Classes = createMap();
+            trackedEs5Classes = new Map();
         }
         trackedEs5Classes.set(name, true);
     }
@@ -443,7 +443,7 @@ namespace ts.NavigationBar {
 
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
-        const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
+        const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, (child, index) => {
             const declName = child.name || getNameOfDeclaration(<Declaration>child.node);
             const name = declName && nodeText(declName);

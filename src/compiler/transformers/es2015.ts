@@ -72,15 +72,15 @@ namespace ts {
          * set of labels that occurred inside the converted loop
          * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
          */
-        labels?: Map<string, boolean>;
+        labels?: ESMap<string, boolean>;
         /*
          * collection of labeled jumps that transfer control outside the converted loop.
          * maps store association 'label -> labelMarker' where
          * - label - value of label as it appear in code
          * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
          */
-        labeledNonLocalBreaks?: Map<string, string>;
-        labeledNonLocalContinues?: Map<string, string>;
+        labeledNonLocalBreaks?: ESMap<string, string>;
+        labeledNonLocalContinues?: ESMap<string, string>;
 
         /*
          * set of non-labeled jumps that transfer control outside the converted loop
@@ -814,18 +814,19 @@ namespace ts {
          */
         function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): Block {
             const statements: Statement[] = [];
+            const name = factory.getInternalName(node);
+            const constructorLikeName = isIdentifierANonContextualKeyword(name) ? factory.getGeneratedNameForNode(name) : name;
             startLexicalEnvironment();
             addExtendsHelperIfNeeded(statements, node, extendsClauseElement);
-            addConstructor(statements, node, extendsClauseElement);
+            addConstructor(statements, node, constructorLikeName, extendsClauseElement);
             addClassMembers(statements, node);
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
-            const localName = factory.getInternalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
-            const outer = factory.createPartiallyEmittedExpression(localName);
+            const outer = factory.createPartiallyEmittedExpression(constructorLikeName);
             setTextRangeEnd(outer, closingBraceLocation.end);
             setEmitFlags(outer, EmitFlags.NoComments);
 
@@ -868,7 +869,7 @@ namespace ts {
          * @param node The ClassExpression or ClassDeclaration node.
          * @param extendsClauseElement The expression for the class `extends` clause.
          */
-        function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
+        function addConstructor(statements: Statement[], node: ClassExpression | ClassDeclaration, name: Identifier, extendsClauseElement: ExpressionWithTypeArguments | undefined): void {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.ConstructorExcludes, HierarchyFacts.ConstructorIncludes);
@@ -878,7 +879,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
-                factory.getInternalName(node),
+                name,
                 /*typeParameters*/ undefined,
                 transformConstructorParameters(constructor, hasSynthesizedSuper),
                 /*type*/ undefined,
@@ -2242,7 +2243,7 @@ namespace ts {
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {
             if (convertedLoopState && !convertedLoopState.labels) {
-                convertedLoopState.labels = createMap<boolean>();
+                convertedLoopState.labels = new Map<string, boolean>();
             }
             const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
             return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
@@ -3279,19 +3280,19 @@ namespace ts {
         function setLabeledJump(state: ConvertedLoopState, isBreak: boolean, labelText: string, labelMarker: string): void {
             if (isBreak) {
                 if (!state.labeledNonLocalBreaks) {
-                    state.labeledNonLocalBreaks = createMap<string>();
+                    state.labeledNonLocalBreaks = new Map<string, string>();
                 }
                 state.labeledNonLocalBreaks.set(labelText, labelMarker);
             }
             else {
                 if (!state.labeledNonLocalContinues) {
-                    state.labeledNonLocalContinues = createMap<string>();
+                    state.labeledNonLocalContinues = new Map<string, string>();
                 }
                 state.labeledNonLocalContinues.set(labelText, labelMarker);
             }
         }
 
-        function processLabeledJumps(table: Map<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
+        function processLabeledJumps(table: ESMap<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
             if (!table) {
                 return;
             }

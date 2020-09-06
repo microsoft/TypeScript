@@ -315,7 +315,7 @@ namespace ts {
         }
     }
 
-    const entities = createMapFromTemplate<number>({
+    const entities = new Map(getEntries({
         quot: 0x0022,
         amp: 0x0026,
         apos: 0x0027,
@@ -569,5 +569,5 @@ namespace ts {
         clubs: 0x2663,
         hearts: 0x2665,
         diams: 0x2666
-    });
+    }));
 }

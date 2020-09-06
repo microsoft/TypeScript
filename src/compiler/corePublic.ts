@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
-    export const versionMajorMinor = "4.0";
+    export const versionMajorMinor = "4.1";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 
@@ -36,22 +36,34 @@ namespace ts {
     }
 
     /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+    export interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
         get(key: K): V | undefined;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
 
+    /**
+     * ES6 Map interface, only read methods included.
+     */
+    export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+
     /** ES6 Map interface. */
-    export interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
+    export interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
+    }
+
+    /**
+     * ES6 Map interface.
+     */
+    export interface Map<T> extends ESMap<string, T> {
     }
 
     /* @internal */
     export interface MapConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyMap<K, V>): Map<K, V>;
+        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyESMap<K, V>): ESMap<K, V>;
     }
 
     /** ES6 Set interface, only read methods included. */

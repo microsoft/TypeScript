@@ -7,16 +7,16 @@ var mini = require('./minimatch')
 
 mini.M.defaults()
 >mini.M.defaults : Symbol(M.defaults, Decl(minimatch.js, 8, 1))
->mini.M : Symbol(minimatch.M, Decl(minimatch.js, 1, 26))
+>mini.M : Symbol(mini.M, Decl(minimatch.js, 1, 26))
 >mini : Symbol(mini, Decl(use.js, 1, 3))
->M : Symbol(minimatch.M, Decl(minimatch.js, 1, 26))
+>M : Symbol(mini.M, Decl(minimatch.js, 1, 26))
 >defaults : Symbol(M.defaults, Decl(minimatch.js, 8, 1))
 
 var m = new mini.M()
 >m : Symbol(m, Decl(use.js, 3, 3))
->mini.M : Symbol(minimatch.M, Decl(minimatch.js, 1, 26))
+>mini.M : Symbol(mini.M, Decl(minimatch.js, 1, 26))
 >mini : Symbol(mini, Decl(use.js, 1, 3))
->M : Symbol(minimatch.M, Decl(minimatch.js, 1, 26))
+>M : Symbol(mini.M, Decl(minimatch.js, 1, 26))
 
 m.m()
 >m.m : Symbol(M.m, Decl(minimatch.js, 11, 1))
@@ -24,9 +24,9 @@ m.m()
 >m : Symbol(M.m, Decl(minimatch.js, 11, 1))
 
 mini.filter()
->mini.filter : Symbol(minimatch.filter, Decl(minimatch.js, 2, 15))
+>mini.filter : Symbol(mini.filter, Decl(minimatch.js, 2, 15))
 >mini : Symbol(mini, Decl(use.js, 1, 3))
->filter : Symbol(minimatch.filter, Decl(minimatch.js, 2, 15))
+>filter : Symbol(mini.filter, Decl(minimatch.js, 2, 15))
 
 === tests/cases/conformance/salsa/types.d.ts ===
 declare var require: any;

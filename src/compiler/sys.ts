@@ -538,7 +538,7 @@ namespace ts {
             };
         }
 
-        type InvokeMap = Map<Path, string[] | true>;
+        type InvokeMap = ESMap<Path, string[] | true>;
         function invokeCallbacks(dirPath: Path, fileName: string): void;
         function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
         function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {
@@ -1662,6 +1662,11 @@ namespace ts {
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
+                // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
+                // the CPU time performance.
+                const originalStackTraceLimit = Error.stackTraceLimit;
+                Error.stackTraceLimit = 0;
+
                 try {
                     const stat = _fs.statSync(path);
                     switch (entryKind) {
@@ -1672,6 +1677,9 @@ namespace ts {
                 }
                 catch (e) {
                     return false;
+                }
+                finally {
+                    Error.stackTraceLimit = originalStackTraceLimit;
                 }
             }
 

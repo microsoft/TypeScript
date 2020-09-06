@@ -1479,15 +1479,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";All_files_must_be_modules_when_the_isolatedModules_flag_is_provided_1208" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[All files must be modules when the '--isolatedModules' flag is provided.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--isolatedModules' 플래그가 제공된 경우 모든 파일이 모듈이어야 합니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
@@ -2166,6 +2157,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Arguments_for_the_rest_parameter_0_were_not_provided_6236" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[REST 매개 변수 '{0}'에 대한 인수가 제공되지 않았습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Array_element_destructuring_pattern_expected_1181" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Array element destructuring pattern expected.]]></Val>
@@ -2394,6 +2394,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Can only convert logical AND access chains]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[논리적 AND 액세스 체인만 변환할 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_property_with_modifier_95137" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert property with modifier]]></Val>
@@ -2581,7 +2590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}'에 대한 lib 정의를 찾을 수 없습니다.]]></Val>
+            <Val><![CDATA['{0}'에 대한 라이브러리 정의를 찾을 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2590,7 +2599,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}'에 대한 lib 정의를 찾을 수 없습니다. '{1}'이(가) 아닌지 확인하세요.]]></Val>
+            <Val><![CDATA['{0}'에 대한 라이브러리 정의를 찾을 수 없습니다. '{1}'이(가) 아닌지 확인하세요.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2600,6 +2609,15 @@
           <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 모듈을 찾을 수 없습니다. '--resolveJsonModule'을 사용하여 '. json' 확장명이 포함된 모듈을 가져오는 것이 좋습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_th_2792" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 모듈을 찾을 수 없습니다. 'moduleResolution' 옵션을 'node'로 설정하거나 'paths' 옵션에 별칭을 추가하려고 하셨습니까?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3369,6 +3387,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_a_union_type_1386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[공용 구조체 형식에 사용되는 경우 생성자 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1388" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교집합 형식에 사용되는 경우 생성자 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Constructors_for_derived_classes_must_contain_a_super_call_2377" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Constructors for derived classes must contain a 'super' call.]]></Val>
@@ -3675,6 +3711,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_optional_chain_expression_95139" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to optional chain expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[선택적 체인 식으로 변환합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_to_template_string_95096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert to template string]]></Val>
@@ -3729,6 +3774,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_find_convertible_access_expression_95140" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find convertible access expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[변환 가능한 액세스 식을 찾을 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_find_export_statement_95129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not find export statement]]></Val>
@@ -3743,6 +3797,15 @@
           <Val><![CDATA[Could not find import clause]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[import 절을 찾을 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Could_not_find_matching_access_expressions_95141" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find matching access expressions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[일치하는 액세스 식을 찾을 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4068,6 +4131,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_1312" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[':'을 사용하려고 하셨습니까? '='은 포함하는 개체 리터럴이 구조 파괴 패턴에 속하는 경우에만 속성 이름 뒤에 올 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Did_you_mean_to_use_new_with_this_expression_6213" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use 'new' with this expression?]]></Val>
@@ -4104,6 +4176,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Disable checking for this file.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Disable_loading_referenced_projects_6235" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Disable loading referenced projects.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[참조된 프로젝트 로드를 사용하지 않습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5471,6 +5552,24 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[함수 오버로드는 정적이 아니어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_a_union_type_1385" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[공용 구조체 형식에 사용되는 경우 함수 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1387" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교집합 형식에 사용되는 경우 함수 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8874,15 +8973,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove destructuring]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[구조 파괴 제거]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
@@ -8942,6 +9032,24 @@
           <Val><![CDATA[Remove unused declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}'의 사용되지 않는 선언 제거]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_declarations_for_Colon_0_90041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'의 사용되지 않는 선언 제거]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_destructuring_declaration_90039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused destructuring declaration]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용되지 않는 구조 파괴 선언 제거]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10001,6 +10109,15 @@
           <Val><![CDATA[Suppress noImplicitAny errors for indexing objects lacking index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[인덱스 시그니처가 없는 개체 인덱싱에 대한 noImplicitAny 오류를 표시하지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Switch_each_misused_0_to_1_95138" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[잘못 사용된 각 '{0}'을(를) '{1}'(으)로 전환]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11718,6 +11835,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_of_construct_signatures_are_incompatible_2419" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[구문 시그니처 형식이 호환되지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_of_parameters_0_and_1_are_incompatible_2328" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types of parameters '{0}' and '{1}' are incompatible.]]></Val>
@@ -12366,6 +12492,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_imp_1208" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['--isolatedModules'에서는 '{0}'을(를) 컴파일할 수 없는데 전역 스크립트 파일로 간주되기 때문입니다. 모듈로 만들려면 가져오기, 내보내기 또는 빈 'export {}' 문을 추가하세요.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_cannot_be_used_as_a_JSX_component_2786" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' cannot be used as a JSX component.]]></Val>
@@ -12726,6 +12861,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0_2690" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) 형식만 참조하는데 여기에서 값으로 사용되고 있습니다. '{0}에서 {1}'을(를) 사용하려고 하셨습니까?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_2585" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
@@ -12887,15 +13031,6 @@
           <Val><![CDATA['#!' can only be used at the start of a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['#!'는 파일의 시작 부분에서만 사용할 수 있습니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['='는 구조 파괴 할당 내의 개체 리터럴 속성에서만 사용할 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13064,6 +13199,15 @@
           <Val><![CDATA['extends' clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[내보낸 클래스 '{0}'의 Extends 절이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";extends_clause_of_exported_class_has_or_is_using_private_name_0_4021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['extends' clause of exported class has or is using private name '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[내보낸 클래스의 'extends' 절이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

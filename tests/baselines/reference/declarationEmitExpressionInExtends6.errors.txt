@@ -1,0 +1,15 @@
+/b.ts(2,30): error TS4021: 'extends' clause of exported class has or is using private name 'Foo'.
+
+
+==== /b.ts (1 errors) ====
+    const { Foo } = require("./a");
+    export default class extends Foo {}
+                                 ~~~
+!!! error TS4021: 'extends' clause of exported class has or is using private name 'Foo'.
+    
+==== /node_modules/@types/node/index.d.ts (0 errors) ====
+    declare const require: any;
+    
+==== /a.js (0 errors) ====
+    export class Foo {}
+    

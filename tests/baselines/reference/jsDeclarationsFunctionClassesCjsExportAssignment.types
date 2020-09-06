@@ -9,7 +9,7 @@ function Timer(timeout) {
     this.timeout = timeout;
 >this.timeout = timeout : number
 >this.timeout : any
->this : any
+>this : this
 >timeout : any
 >timeout : number
 }
@@ -34,7 +34,7 @@ function Hook(handle) {
     this.handle = handle;
 >this.handle = handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 >this.handle : any
->this : any
+>this : this
 >handle : any
 >handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 }
@@ -129,9 +129,9 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports = Context : typeof Context
->module.exports : typeof Context
->module : { "\"tests/cases/conformance/jsdoc/declarations/context\"": typeof Context; }
->exports : typeof Context
+>module.exports = Context : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }
+>module.exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/context\"": { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }; }
+>exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: (arg: Context) => void): State; }; }
 >Context : typeof Context
 

@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts {
-    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I) => Iterator<
-        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
         I extends ReadonlySet<infer T> ? T :
         I extends readonly (infer T)[] ? T :
         I extends undefined ? undefined :
@@ -20,17 +20,17 @@ namespace ts {
     export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
     export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
 
-    export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
-        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+    export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
+        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
         I extends ReadonlySet<infer T> ? T :
         I extends readonly (infer T)[] ? T :
         I extends undefined ? undefined :
         never>;
-    export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
-    export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
+    export function getIterator<K, V>(iterable: ReadonlyESMap<K, V>): Iterator<[K, V]>;
+    export function getIterator<K, V>(iterable: ReadonlyESMap<K, V> | undefined): Iterator<[K, V]> | undefined;
     export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
     export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
-    export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+    export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
         if (iterable) {
             if (isArray(iterable)) return arrayIterator(iterable);
             if (iterable instanceof Map) return iterable.entries();
@@ -40,17 +40,25 @@ namespace ts {
     }
 
     export const emptyArray: never[] = [] as never[];
+    export const emptyMap: ReadonlyESMap<never, never> = new Map<never, never>();
+    export const emptySet: ReadonlySet<never> = new Set<never>();
 
-    /** Create a new map. */
-    export function createMap<K, V>(): Map<K, V>;
-    export function createMap<T>(): Map<string, T>;
-    export function createMap<K, V>(): Map<K, V> {
+    /**
+     * Create a new map.
+     * @deprecated Use `new Map()` instead.
+     */
+    export function createMap<K, V>(): ESMap<K, V>;
+    export function createMap<T>(): ESMap<string, T>;
+    export function createMap<K, V>(): ESMap<K, V> {
         return new Map<K, V>();
     }
 
-    /** Create a new map from a template object is provided, the map will copy entries from it. */
-    export function createMapFromTemplate<T>(template: MapLike<T>): Map<string, T> {
-        const map: Map<string, T> = new Map<string, T>();
+    /**
+     * Create a new map from a template object is provided, the map will copy entries from it.
+     * @deprecated Use `new Map(getEntries(template))` instead.
+     */
+    export function createMapFromTemplate<T>(template: MapLike<T>): ESMap<string, T> {
+        const map: ESMap<string, T> = new Map<string, T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
@@ -160,7 +168,7 @@ namespace ts {
         };
     }
 
-    export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
+    export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): ESMap<K, V> {
         Debug.assert(keys.length === values.length);
         const map = new Map<K, V>();
         for (let i = 0; i < keys.length; ++i) {
@@ -554,9 +562,9 @@ namespace ts {
         };
     }
 
-    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
-    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
-    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): ESMap<K2, V2>;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ESMap<K2, V2> | undefined;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ESMap<K2, V2> | undefined {
         if (!map) {
             return undefined;
         }
@@ -588,6 +596,15 @@ namespace ts {
             });
             return result;
         }
+    }
+
+    export function getOrUpdate<K, V>(map: ESMap<K, V>, key: K, callback: () => V) {
+        if (map.has(key)) {
+            return map.get(key)!;
+        }
+        const value = callback();
+        map.set(key, value);
+        return value;
     }
 
     export function tryAddToSet<T>(set: Set<T>, value: T) {
@@ -660,9 +677,9 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2>;
-    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
-    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2>;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2> | undefined;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2> | undefined {
         if (!map) {
             return undefined;
         }
@@ -817,6 +834,18 @@ namespace ts {
     export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
     export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
+    }
+
+    export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
+        if (array.length < 2) return true;
+        let prevElement = array[0];
+        for (const element of array.slice(1)) {
+            if (comparer(prevElement, element) === Comparison.GreaterThan) {
+                return false;
+            }
+            prevElement = element;
+        }
+        return true;
     }
 
     export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
@@ -1275,6 +1304,19 @@ namespace ts {
         return values;
     }
 
+    const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
+        const keys = getOwnKeys(obj);
+        const result: [string, T][] = Array(keys.length);
+        for (let i = 0; i < keys.length; i++) {
+            result[i] = [keys[i], obj[keys[i]]];
+        }
+        return result;
+    });
+
+    export function getEntries<T>(obj: MapLike<T>): [string, T][] {
+        return obj ? _entries(obj) : [];
+    }
+
     export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
         const result = new Array(count);
         for (let i = 0; i < count; i++) {
@@ -1342,11 +1384,11 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
-    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
-    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
-    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
+    export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): ESMap<K, V>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): ESMap<K, V2>;
+    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): ESMap<string, T>;
+    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): ESMap<string, U>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): ESMap<K, V1 | V2> {
         const result = new Map<K, V1 | V2>();
         for (const value of array) {
             const key = makeKey(value);
@@ -1375,9 +1417,11 @@ namespace ts {
         return result;
     }
 
+    export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K): readonly (readonly T[])[];
+    export function group<T, K, R>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => R): R[];
     export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
     export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+    export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
         return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
@@ -1425,7 +1469,7 @@ namespace ts {
         return fn ? fn.bind(obj) : undefined;
     }
 
-    export interface MultiMap<K, V> extends Map<K, V[]> {
+    export interface MultiMap<K, V> extends ESMap<K, V[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
          * Creates the array if it does not already exist.
@@ -1596,7 +1640,7 @@ namespace ts {
 
     /** A version of `memoize` that supports a single primitive argument */
     export function memoizeOne<A extends string | number | boolean | undefined, T>(callback: (arg: A) => T): (arg: A) => T {
-        const map = createMap<T>();
+        const map = new Map<string, T>();
         return (arg: A) => {
             const key = `${typeof arg}:${arg}`;
             let value = map.get(key);

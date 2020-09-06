@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    const visitedNestedConvertibleFunctions = createMap<true>();
+    const visitedNestedConvertibleFunctions = new Map<string, true>();
 
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);

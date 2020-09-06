@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.0";
+    const versionMajorMinor = "4.1";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -43,15 +43,25 @@ declare namespace ts {
         clear(): void;
     }
     /** ES6 Map interface, only read methods included. */
-    interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+    interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
         get(key: K): V | undefined;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
+    /**
+     * ES6 Map interface, only read methods included.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
     /** ES6 Map interface. */
-    interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
+    interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
+    }
+    /**
+     * ES6 Map interface.
+     */
+    interface Map<T> extends ESMap<string, T> {
     }
     /** ES6 Set interface, only read methods included. */
     interface ReadonlySet<T> extends ReadonlyCollection<T> {
@@ -1759,11 +1769,11 @@ declare namespace ts {
     export interface JSDocEnumTag extends JSDocTag, Declaration {
         readonly kind: SyntaxKind.JSDocEnumTag;
         readonly parent: JSDoc;
-        readonly typeExpression?: JSDocTypeExpression;
+        readonly typeExpression: JSDocTypeExpression;
     }
     export interface JSDocThisTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThisTag;
-        readonly typeExpression?: JSDocTypeExpression;
+        readonly typeExpression: JSDocTypeExpression;
     }
     export interface JSDocTemplateTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTemplateTag;
@@ -2149,7 +2159,7 @@ declare namespace ts {
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
-        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
          * Otherwise returns its input.
@@ -2220,6 +2230,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        NoUndefinedOptionalParameterType = 1073741824,
         AllowThisInObjectLiteral = 32768,
         AllowQualifedNameInPlaceOfIdentifier = 65536,
         AllowAnonymousIdentifier = 131072,
@@ -2331,7 +2342,6 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
-        Deprecated = 268435456,
         Enum = 384,
         Variable = 3,
         Value = 111551,
@@ -2405,10 +2415,10 @@ declare namespace ts {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
     /** ReadonlyMap where keys are `__String`s. */
-    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
+    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyESMap<__String, T> {
     }
     /** Map where keys are `__String`s. */
-    export interface UnderscoreEscapedMap<T> extends Map<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
+    export interface UnderscoreEscapedMap<T> extends ESMap<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
     }
     /** SymbolTable based on ES6 Map interface. */
     export type SymbolTable = UnderscoreEscapedMap<Symbol>;
@@ -2595,12 +2605,10 @@ declare namespace ts {
         node: ConditionalTypeNode;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
-        instantiations?: Map<string, Type>;
+        instantiations?: Map<Type>;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
     }
@@ -2635,16 +2643,17 @@ declare namespace ts {
     }
     export enum InferencePriority {
         NakedTypeVariable = 1,
-        HomomorphicMappedType = 2,
-        PartialHomomorphicMappedType = 4,
-        MappedTypeConstraint = 8,
-        ContravariantConditional = 16,
-        ReturnType = 32,
-        LiteralKeyof = 64,
-        NoConstraints = 128,
-        AlwaysStrict = 256,
-        MaxValue = 512,
-        PriorityImpliesCombination = 104,
+        SpeculativeTuple = 2,
+        HomomorphicMappedType = 4,
+        PartialHomomorphicMappedType = 8,
+        MappedTypeConstraint = 16,
+        ContravariantConditional = 32,
+        ReturnType = 64,
+        LiteralKeyof = 128,
+        NoConstraints = 256,
+        AlwaysStrict = 512,
+        MaxValue = 1024,
+        PriorityImpliesCombination = 208,
         Circularity = -1
     }
     /** @deprecated Use FileExtensionInfo instead. */
@@ -2752,6 +2761,7 @@ declare namespace ts {
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
+        disableReferencedProjectLoad?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -3405,9 +3415,9 @@ declare namespace ts {
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
-        createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
+        createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
         updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocThisTag;
-        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
+        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocEnumTag;
         updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocEnumTag;
         createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag;
@@ -3806,7 +3816,7 @@ declare namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
@@ -3891,6 +3901,7 @@ declare namespace ts {
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -4293,6 +4304,7 @@ declare namespace ts {
     function isTypeLiteralNode(node: Node): node is TypeLiteralNode;
     function isArrayTypeNode(node: Node): node is ArrayTypeNode;
     function isTupleTypeNode(node: Node): node is TupleTypeNode;
+    function isNamedTupleMember(node: Node): node is NamedTupleMember;
     function isOptionalTypeNode(node: Node): node is OptionalTypeNode;
     function isRestTypeNode(node: Node): node is RestTypeNode;
     function isUnionTypeNode(node: Node): node is UnionTypeNode;
@@ -4492,7 +4504,7 @@ declare namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -4526,7 +4538,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param jsonNode The contents of the config file to parse
@@ -4534,7 +4546,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     export interface ParsedTsconfig {
         raw: any;
         options?: CompilerOptions;
@@ -4581,7 +4593,7 @@ declare namespace ts {
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
     interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
-        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<string, ResolvedModuleWithFailedLookupLocations>;
+        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
     }
     /**
      * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
@@ -5301,6 +5313,11 @@ declare namespace ts {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
     }
+    enum LanguageServiceMode {
+        Semantic = 0,
+        PartialSemantic = 1,
+        Syntactic = 2
+    }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
@@ -5476,6 +5493,10 @@ declare namespace ts {
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
         getProgram(): Program | undefined;
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
@@ -5944,6 +5965,12 @@ declare namespace ts {
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
+         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        optionalReplacementSpan?: TextSpan;
+        /**
          * true when the current location also allows for a new identifier
          */
         isNewIdentifierLocation: boolean;
@@ -6308,7 +6335,7 @@ declare namespace ts {
     function getSupportedCodeFixes(): string[];
     function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile;
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange | undefined, aggressiveChecks?: boolean): SourceFile;
-    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnly?: boolean): LanguageService;
+    function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry, syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode): LanguageService;
     /**
      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
      * node package.
@@ -6471,6 +6498,10 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        ToggleLineComment = "toggleLineComment",
+        ToggleMultilineComment = "toggleMultilineComment",
+        CommentSelection = "commentSelection",
+        UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
@@ -7503,6 +7534,22 @@ declare namespace ts.server.protocol {
         textSpan: TextSpan;
         parent?: SelectionRange;
     }
+    interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface CommentSelectionRequest extends FileRequest {
+        command: CommandTypes.CommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+    interface UncommentSelectionRequest extends FileRequest {
+        command: CommandTypes.UncommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
     /**
      *  Information found in an "open" request.
      */
@@ -8061,6 +8108,12 @@ declare namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        readonly optionalReplacementSpan?: TextSpan;
         readonly entries: readonly CompletionEntry[];
     }
     interface CompletionDetailsResponse extends Response {
@@ -8860,7 +8913,7 @@ declare namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
-        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -9200,8 +9253,8 @@ declare namespace ts.server {
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
-        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void;
-        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): void;
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void;
         private enableProxy;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
@@ -9233,6 +9286,9 @@ declare namespace ts.server {
         getScriptFileNames(): string[];
         getLanguageService(): never;
         markAutoImportProviderAsDirty(): never;
+        getModuleResolutionHostForAutoImportProvider(): never;
+        getProjectReferences(): readonly ProjectReference[] | undefined;
+        useSourceOfProjectReferenceRedirect(): boolean;
         getTypeAcquisition(): TypeAcquisition;
     }
     /**
@@ -9443,7 +9499,9 @@ declare namespace ts.server {
         pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;
@@ -9469,11 +9527,11 @@ declare namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects: Map<string, ConfiguredProject>;
+        readonly configuredProjects: Map<ConfiguredProject>;
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles: Map<Path, NormalizedPath | undefined>;
+        readonly openFiles: Map<NormalizedPath | undefined>;
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
@@ -9515,7 +9573,9 @@ declare namespace ts.server {
         readonly allowLocalPluginLoads: boolean;
         private currentPluginConfigOverrides;
         readonly typesMapLocation: string | undefined;
-        readonly syntaxOnly?: boolean;
+        /** @deprecated use serverMode instead */
+        readonly syntaxOnly: boolean;
+        readonly serverMode: LanguageServiceMode;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         private performanceEventHandler?;
@@ -9733,7 +9793,9 @@ declare namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         /** Has no effect if eventHandler is also specified. */
         suppressDiagnosticEvents?: boolean;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
         throttleWaitMilliseconds?: number;
         noGetErrOnBackgroundUpdate?: boolean;
         globalPlugins?: readonly string[];
@@ -9859,6 +9921,7 @@ declare namespace ts.server {
         private getSupportedCodeFixes;
         private isLocation;
         private extractPositionOrRange;
+        private getRange;
         private getApplicableRefactors;
         private getEditsForRefactor;
         private organizeImports;
@@ -9876,6 +9939,10 @@ declare namespace ts.server {
         private getDiagnosticsForProject;
         private configurePlugin;
         private getSmartSelectionRange;
+        private toggleLineComment;
+        private toggleMultilineComment;
+        private commentSelection;
+        private uncommentSelection;
         private mapSelectionRange;
         private getScriptInfoFromProjectService;
         private toProtocolCallHierarchyItem;
@@ -10374,7 +10441,7 @@ declare namespace ts {
     /** @deprecated Use `factory.createJSDocReturnTag` or the factory supplied by your transformation context instead. */
     const createJSDocReturnTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined) => JSDocReturnTag;
     /** @deprecated Use `factory.createJSDocThisTag` or the factory supplied by your transformation context instead. */
-    const createJSDocThisTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined) => JSDocThisTag;
+    const createJSDocThisTag: (tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | undefined) => JSDocThisTag;
     /** @deprecated Use `factory.createJSDocComment` or the factory supplied by your transformation context instead. */
     const createJSDocComment: (comment?: string | undefined, tags?: readonly JSDocTag[] | undefined) => JSDoc;
     /** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. */
@@ -10386,7 +10453,7 @@ declare namespace ts {
         readonly expression: Identifier | PropertyAccessEntityNameExpression;
     }, comment?: string | undefined) => JSDocAugmentsTag;
     /** @deprecated Use `factory.createJSDocEnumTag` or the factory supplied by your transformation context instead. */
-    const createJSDocEnumTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression | undefined, comment?: string | undefined) => JSDocEnumTag;
+    const createJSDocEnumTag: (tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | undefined) => JSDocEnumTag;
     /** @deprecated Use `factory.createJSDocTemplateTag` or the factory supplied by your transformation context instead. */
     const createJSDocTemplateTag: (tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | undefined) => JSDocTemplateTag;
     /** @deprecated Use `factory.createJSDocTypedefTag` or the factory supplied by your transformation context instead. */
@@ -10660,6 +10727,16 @@ declare namespace ts {
     const getMutableClone: <T extends Node>(node: T) => T;
     /** @deprecated Use `isTypeAssertionExpression` instead. */
     const isTypeAssertion: (node: Node) => node is TypeAssertion;
+    /**
+     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+    /**
+     * @deprecated Use `ts.ESMap<K, V>` instead.
+     */
+    interface Map<T> extends ESMap<string, T> {
+    }
 }
 
 export = ts;
