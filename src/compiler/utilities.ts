@@ -2728,6 +2728,20 @@ namespace ts {
         return walkUp(node, SyntaxKind.ParenthesizedExpression);
     }
 
+    /**
+     * Walks up parenthesized types.
+     * It returns both the outermost parenthesized type and its parent.
+     * If given node is not a parenthesiezd type, undefined is return as the former.
+     */
+    export function walkUpParenthesizedTypesAndGetParentAndChild(node: Node): [ParenthesizedTypeNode | undefined, Node] {
+        let child: ParenthesizedTypeNode | undefined;
+        while (node && node.kind === SyntaxKind.ParenthesizedType) {
+            child = <ParenthesizedTypeNode>node;
+            node = node.parent;
+        }
+        return [child, node];
+    }
+
     export function skipParentheses(node: Expression): Expression;
     export function skipParentheses(node: Node): Node;
     export function skipParentheses(node: Node): Node {
