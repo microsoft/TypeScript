@@ -13420,9 +13420,9 @@ namespace ts {
                     mapType(types[unionIndex], t => getTemplateType(texts, casings, replaceElement(types, unionIndex, t))) :
                     errorType;
             }
-            let newTypes = [];
-            let newCasings = [];
-            let newTexts = [];
+            const newTypes = [];
+            const newCasings = [];
+            const newTexts = [];
             let text = texts[0];
             for (let i = 0; i < types.length; i++) {
                 const t = types[i];
