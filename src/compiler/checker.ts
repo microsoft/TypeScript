@@ -1053,6 +1053,17 @@ namespace ts {
             return diagnostic;
         }
 
+        function errorByThrowType(location: Node | undefined, value: Type) {
+            let message = "Unknown";
+            if (value.flags & TypeFlags.ThrowType) {
+                value = (<ThrowType>value).value;
+            }
+            if (value.flags & TypeFlags.StringLiteral) {
+                message = (<StringLiteralType>value).value;
+            }
+            error(location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, message);
+        }
+
         function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
                 diagnostics.add(diagnostic);
@@ -4494,7 +4505,7 @@ namespace ts {
                     return typeToTypeNodeHelper((<SubstitutionType>type).baseType, context);
                 }
                 if (type.flags & TypeFlags.ThrowType) {
-                    return typeToTypeNodeHelper(errorType, context);
+                    return typeToTypeNodeHelper(neverType, context);
                 }
 
                 return Debug.fail("Should be unreachable.");
@@ -15126,12 +15137,7 @@ namespace ts {
                 }
             }
             if (flags & TypeFlags.ThrowType) {
-                const innerType = instantiateType((<ThrowType>type).value, mapper);
-                let errorMessage = "Unknown";
-                if (innerType.flags & TypeFlags.StringLiteral) {
-                    errorMessage = (<StringLiteralType>innerType).value;
-                }
-                error(currentNode, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, errorMessage);
+                errorByThrowType(currentNode, instantiateType((<ThrowType>type).value, mapper));
                 return errorType;
             }
             return type;
@@ -27798,6 +27804,9 @@ namespace ts {
             }
 
             const returnType = getReturnTypeOfSignature(signature);
+            if (returnType.flags & TypeFlags.ThrowType) {
+                errorByThrowType(node, returnType);
+            }
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
