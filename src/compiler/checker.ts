@@ -10386,12 +10386,11 @@ namespace ts {
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
             function addMemberForKeyType(keyType: Type) {
-                const mapper = appendTypeMapping(type.mapper, typeParameter, keyType);
-                const propNameType = nameType ? instantiateType(nameType, mapper) : keyType;
-                forEachType(propNameType, t => addMemberForKeyTypeWorker(keyType, t, mapper));
+                const propNameType = nameType ? instantiateType(nameType, appendTypeMapping(type.mapper, typeParameter, keyType)) : keyType;
+                forEachType(propNameType, t => addMemberForKeyTypeWorker(keyType, t));
             }
 
-            function addMemberForKeyTypeWorker(keyType: Type, propNameType: Type, mapper: TypeMapper) {
+            function addMemberForKeyTypeWorker(keyType: Type, propNameType: Type) {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (isTypeUsableAsPropertyName(propNameType)) {
@@ -10402,8 +10401,7 @@ namespace ts {
                     const existingProp = members.get(propName) as MappedSymbol | undefined;
                     if (existingProp) {
                         existingProp.nameType = getUnionType([existingProp.nameType!, propNameType]);
-                        const existingKeyType = instantiateType(typeParameter, existingProp.mapper);
-                        existingProp.mapper = appendTypeMapping(type.mapper, typeParameter, getUnionType([existingKeyType, keyType]));
+                        existingProp.keyType = getUnionType([existingProp.keyType, keyType]);
                     }
                     else {
                         const modifiersProp = getPropertyOfType(modifiersType, propName);
@@ -10415,17 +10413,17 @@ namespace ts {
                         const prop = <MappedSymbol>createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
                             CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
                         prop.mappedType = type;
+                        prop.nameType = propNameType;
+                        prop.keyType = keyType;
                         if (modifiersProp) {
                             prop.syntheticOrigin = modifiersProp;
                             prop.declarations = modifiersProp.declarations;
                         }
-                        prop.nameType = propNameType;
-                        prop.mapper = mapper;
                         members.set(propName, prop);
                     }
                 }
                 else if (propNameType.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum)) {
-                    const propType = instantiateType(templateType, mapper);
+                    const propType = instantiateType(templateType, appendTypeMapping(type.mapper, typeParameter, keyType));
                     if (propNameType.flags & (TypeFlags.Any | TypeFlags.String)) {
                         stringIndexInfo = createIndexInfo(stringIndexInfo ? getUnionType([stringIndexInfo.type, propType]) : propType,
                             !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
@@ -10440,12 +10438,14 @@ namespace ts {
 
         function getTypeOfMappedSymbol(symbol: MappedSymbol) {
             if (!symbol.type) {
+                const mappedType = symbol.mappedType;
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    symbol.mappedType.containsError = true;
+                    mappedType.containsError = true;
                     return errorType;
                 }
-                const templateType = getTemplateTypeFromMappedType(<MappedType>symbol.mappedType.target || symbol.mappedType);
-                const propType = instantiateType(templateType, symbol.mapper);
+                const templateType = getTemplateTypeFromMappedType(<MappedType>mappedType.target || mappedType);
+                const mapper = appendTypeMapping(mappedType.mapper, getTypeParameterFromMappedType(mappedType), symbol.keyType);
+                const propType = instantiateType(templateType, mapper);
                 // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
                 // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
                 // mode, if the underlying property is optional we remove 'undefined' from the type.
@@ -10453,11 +10453,10 @@ namespace ts {
                     symbol.checkFlags & CheckFlags.StripOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                     propType;
                 if (!popTypeResolution()) {
-                    error(currentNode, Diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, symbolToString(symbol), typeToString(symbol.mappedType));
+                    error(currentNode, Diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, symbolToString(symbol), typeToString(mappedType));
                     type = errorType;
                 }
                 symbol.type = type;
-                symbol.mapper = undefined!;
             }
             return symbol.type;
         }

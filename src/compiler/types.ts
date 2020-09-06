@@ -4730,7 +4730,7 @@ namespace ts {
     /* @internal */
     export interface MappedSymbol extends TransientSymbol {
         mappedType: MappedType;
-        mapper: TypeMapper;
+        keyType: Type;
     }
 
     /* @internal */
