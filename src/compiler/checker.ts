@@ -13482,12 +13482,15 @@ namespace ts {
             let text = texts[0];
             for (let i = 0; i < types.length; i++) {
                 const t = types[i];
-                if (t.flags & TypeFlags.Literal) {
-                    const s = applyTemplateCasing(getTemplateStringForType(t) || "", casings[i]);
+                const casingType = casings[i];
+                const isGeneric = isGenericIndexType(t);
+                const resolvable = (t.flags & TypeFlags.Literal) || (!isGeneric && casingType === TemplateCasing.TypeOf);
+                if (resolvable) {
+                    const s = applyTemplateCasing(getTemplateStringForType(t, casingType) || "", casingType);
                     text += s;
                     text += texts[i + 1];
                 }
-                else if (isGenericIndexType(t)) {
+                else if (isGeneric) {
                     newTypes.push(t);
                     newCasings.push(casings[i]);
                     newTexts.push(text);
@@ -13509,7 +13512,10 @@ namespace ts {
             return type;
         }
 
-        function getTemplateStringForType(type: Type) {
+        function getTemplateStringForType(type: Type, casing: TemplateCasing) {
+            if (casing === TemplateCasing.TypeOf) {
+                return getTypeNameForErrorDisplay(type);
+            }
             return type.flags & TypeFlags.StringLiteral ? (<StringLiteralType>type).value :
                 type.flags & TypeFlags.NumberLiteral ? "" + (<NumberLiteralType>type).value :
                 type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((<BigIntLiteralType>type).value) :
@@ -31518,7 +31524,9 @@ namespace ts {
             getTypeFromTypeNode(node);
             for (const span of node.templateSpans) {
                 const type = getTypeFromTypeNode(span.type);
-                checkTypeAssignableTo(type, templateConstraintType, span.type);
+                if (span.casing !== TemplateCasing.TypeOf) {
+                    checkTypeAssignableTo(type, templateConstraintType, span.type);
+                }
                 if (!everyType(type, t => !!(t.flags & TypeFlags.Literal) || isGenericIndexType(t))) {
                     error(span.type, Diagnostics.Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
                 }

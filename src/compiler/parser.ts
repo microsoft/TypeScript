@@ -2629,6 +2629,7 @@ namespace ts {
                 parseOptional(SyntaxKind.LowercaseKeyword) ? TemplateCasing.Lowercase :
                 parseOptional(SyntaxKind.CapitalizeKeyword) ? TemplateCasing.Capitalize :
                 parseOptional(SyntaxKind.UncapitalizeKeyword) ? TemplateCasing.Uncapitalize :
+                parseOptional(SyntaxKind.TypeOfKeyword) ? TemplateCasing.TypeOf :
                 TemplateCasing.None;
         }
 

@@ -1674,6 +1674,7 @@ namespace ts {
         Lowercase,
         Capitalize,
         Uncapitalize,
+        TypeOf,
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.

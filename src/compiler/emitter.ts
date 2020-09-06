@@ -2019,6 +2019,7 @@ namespace ts {
                 node.casing === TemplateCasing.Lowercase ? "lowercase" :
                 node.casing === TemplateCasing.Capitalize ? "capitalize" :
                 node.casing === TemplateCasing.Uncapitalize ? "uncapitalize" :
+                node.casing === TemplateCasing.TypeOf ? "typeof" :
                 undefined;
             if (keyword) {
                 writeKeyword(keyword);
