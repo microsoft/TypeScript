@@ -10385,24 +10385,25 @@ namespace ts {
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
-            function addMemberForKeyType(t: Type) {
-                const mapper = appendTypeMapping(type.mapper, typeParameter, t);
-                const propNameType = nameType ? instantiateType(nameType, mapper) : t;
-                forEachType(propNameType, t => addMemberForKeyTypeWorker(t, mapper));
+            function addMemberForKeyType(keyType: Type) {
+                const mapper = appendTypeMapping(type.mapper, typeParameter, keyType);
+                const propNameType = nameType ? instantiateType(nameType, mapper) : keyType;
+                forEachType(propNameType, t => addMemberForKeyTypeWorker(keyType, t, mapper));
             }
 
-            function addMemberForKeyTypeWorker(t: Type, mapper: TypeMapper) {
+            function addMemberForKeyTypeWorker(keyType: Type, propNameType: Type, mapper: TypeMapper) {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
-                if (isTypeUsableAsPropertyName(t)) {
-                    const propName = getPropertyNameFromType(t);
+                if (isTypeUsableAsPropertyName(propNameType)) {
+                    const propName = getPropertyNameFromType(propNameType);
                     // String enum members from separate enums with identical values
                     // are distinct types with the same property name. Make the resulting
                     // property symbol's name type be the union of those enum member types.
                     const existingProp = members.get(propName) as MappedSymbol | undefined;
                     if (existingProp) {
-                        existingProp.nameType = getUnionType([existingProp.nameType!, t]);
-                        existingProp.mapper = appendTypeMapping(type.mapper, typeParameter, existingProp.nameType);
+                        existingProp.nameType = getUnionType([existingProp.nameType!, propNameType]);
+                        const existingKeyType = instantiateType(typeParameter, existingProp.mapper);
+                        existingProp.mapper = appendTypeMapping(type.mapper, typeParameter, getUnionType([existingKeyType, keyType]));
                     }
                     else {
                         const modifiersProp = getPropertyOfType(modifiersType, propName);
@@ -10418,15 +10419,16 @@ namespace ts {
                             prop.syntheticOrigin = modifiersProp;
                             prop.declarations = modifiersProp.declarations;
                         }
-                        prop.nameType = t;
+                        prop.nameType = propNameType;
                         prop.mapper = mapper;
                         members.set(propName, prop);
                     }
                 }
-                else if (t.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum)) {
+                else if (propNameType.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum)) {
                     const propType = instantiateType(templateType, mapper);
-                    if (t.flags & (TypeFlags.Any | TypeFlags.String)) {
-                        stringIndexInfo = createIndexInfo(propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                    if (propNameType.flags & (TypeFlags.Any | TypeFlags.String)) {
+                        stringIndexInfo = createIndexInfo(stringIndexInfo ? getUnionType([stringIndexInfo.type, propType]) : propType,
+                            !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
                     }
                     else {
                         numberIndexInfo = createIndexInfo(numberIndexInfo ? getUnionType([numberIndexInfo.type, propType]) : propType,
