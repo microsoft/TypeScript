@@ -10326,9 +10326,6 @@ namespace ts {
         // bound includes those keys that are known to always be present, for example because
         // because of constraints on type parameters (e.g. 'keyof T' for a constrained T).
         function getLowerBoundOfKeyType(type: Type): Type {
-            if (type.flags & (TypeFlags.Any | TypeFlags.Primitive)) {
-                return type;
-            }
             if (type.flags & TypeFlags.Index) {
                 const t = getApparentType((<IndexType>type).type);
                 return isGenericTupleType(t) ? getKnownKeysOfTupleType(t) : getIndexType(t);
@@ -10349,7 +10346,7 @@ namespace ts {
             if (type.flags & TypeFlags.Intersection) {
                 return getIntersectionType(sameMap((<UnionType>type).types, getLowerBoundOfKeyType));
             }
-            return neverType;
+            return type;
         }
 
         /** Resolve the members of a mapped type { [P in K]: T } */
@@ -31358,11 +31355,13 @@ namespace ts {
             }
 
             const type = <MappedType>getTypeFromMappedTypeNode(node);
-            const constraintType = getConstraintTypeFromMappedType(type);
-            checkTypeAssignableTo(constraintType, keyofConstraintType, getEffectiveConstraintOfTypeParameter(node.typeParameter));
             const nameType = getNameTypeFromMappedType(type);
             if (nameType) {
                 checkTypeAssignableTo(nameType, keyofConstraintType, node.nameType);
+            }
+            else {
+                const constraintType = getConstraintTypeFromMappedType(type);
+                checkTypeAssignableTo(constraintType, keyofConstraintType, getEffectiveConstraintOfTypeParameter(node.typeParameter));
             }
         }
 
