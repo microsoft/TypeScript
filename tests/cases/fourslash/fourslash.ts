@@ -761,13 +761,14 @@ declare var classification: typeof FourSlashInterface.classification;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
-        LocationPriority = "0",
-        OptionalMember = "1",
-        MemberDeclaredBySpreadAssignment = "2",
-        SuggestedClassMembers = "3",
-        GlobalsOrKeywords = "4",
-        AutoImportSuggestions = "5",
-        JavascriptIdentifiers = "6"
+        LocalDeclarationPriority = "0",
+        LocationPriority = "1",
+        OptionalMember = "2",
+        MemberDeclaredBySpreadAssignment = "3",
+        SuggestedClassMembers = "4",
+        GlobalsOrKeywords = "5",
+        AutoImportSuggestions = "6",
+        JavascriptIdentifiers = "7"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"
