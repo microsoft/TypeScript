@@ -1168,15 +1168,15 @@ declare namespace ts {
     export type LiteralToken = NumericLiteral | BigIntLiteral | StringLiteral | JsxText | RegularExpressionLiteral | NoSubstitutionTemplateLiteral;
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        readonly parent: TemplateExpression;
+        readonly parent: TemplateExpression | TemplateTypeNode;
     }
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateTypeSpan;
     }
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateTypeSpan;
     }
     export type PseudoLiteralToken = TemplateHead | TemplateMiddle | TemplateTail;
     export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | PseudoLiteralToken;
@@ -2476,7 +2476,7 @@ declare namespace ts {
         Conditional = 16777216,
         Substitution = 33554432,
         NonPrimitive = 67108864,
-        Template = 134217728,
+        TemplateLiteral = 134217728,
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
@@ -2646,7 +2646,7 @@ declare namespace ts {
         resolvedTrueType: Type;
         resolvedFalseType: Type;
     }
-    export interface TemplateType extends InstantiableType {
+    export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];
         casings: readonly TemplateCasing[];
         types: readonly Type[];
