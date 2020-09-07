@@ -6939,15 +6939,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El módulo "{0}" no tiene ningún miembro exportado "{1}". ¿Pretendía utilizar "{2}"?]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead_2614" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?]]></Val>
@@ -12576,6 +12567,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_has_no_exported_member_named_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' has no exported member named '{1}'. Did you mean '{2}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" no tiene ningún miembro exportado con el nombre "{1}". ¿Pretendía usar "{2}"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage_7050" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.]]></Val>
@@ -12680,6 +12680,15 @@
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["{0}" no es una propiedad Meta válida para la palabra clave "{1}". ¿Pretendía usar "{2}"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_not_allowed_as_a_variable_declaration_name_1389" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not allowed as a variable declaration name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[No se permite "{0}" como nombre de declaración de variable.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
