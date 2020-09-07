@@ -2141,21 +2141,21 @@ namespace ts {
 
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        readonly parent: TemplateExpression;
+        readonly parent: TemplateExpression | TemplateTypeNode;
         /* @internal */
         templateFlags?: TokenFlags;
     }
 
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateTypeSpan;
         /* @internal */
         templateFlags?: TokenFlags;
     }
 
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateTypeSpan;
         /* @internal */
         templateFlags?: TokenFlags;
     }
@@ -4872,7 +4872,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
-        Template        = 1 << 27,  // String template type
+        TemplateLiteral = 1 << 27,  // Template literal type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4890,7 +4890,7 @@ namespace ts {
         Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | Template,
+        StringLike = String | StringLiteral | TemplateLiteral,
         NumberLike = Number | NumberLiteral | Enum,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
@@ -4903,7 +4903,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index | Template,
+        InstantiablePrimitive = Index | TemplateLiteral,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
@@ -4911,7 +4911,7 @@ namespace ts {
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
-        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | Template,
+        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | TemplateLiteral,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -5353,7 +5353,7 @@ namespace ts {
         combinedMapper?: TypeMapper;
     }
 
-    export interface TemplateType extends InstantiableType {
+    export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];  // Always one element longer than casings/types
         casings: readonly TemplateCasing[];  // Always at least one element
         types: readonly Type[];  // Always at least one element
