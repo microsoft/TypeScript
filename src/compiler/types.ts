@@ -5276,6 +5276,8 @@ namespace ts {
         // would it be used? or we just need the number of parameters?
         /* @internal */
         tParams?: number; // Or it should be TypeParameter[]? In parser I parse the node use a BNF in scala paper.
+        /* @internal */
+        resolvedTypeConstructorParam?: Type[];
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

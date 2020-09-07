@@ -1,36 +1,36 @@
-interface Itertable<T, Container<X>> {
-    filter(p: (x: T) => boolean): Container<T>;
-}
-var w: Itertable<number, Set>;
-w.filter;
+// interface Itertable<T, U, Container<X>> {
+//     foo1(): Container<T>;
+//     foo2(): Container<U>;
+//     map1<A, B>(f: (a: A) => B): (something: A) => B;
+// }
 
+// function fff(foo: Itertable<number, string, Set>) {
+//     var q = foo.foo1();
+//     var w = foo.foo2();
+//     foo.map1
+// }
 
-interface Gener<T> {
-    aaafff(): Set<T>;
-    qqqSSS(): T;
-}
+// interface CommonGeric<T> {
+//     func(): Set<T>;
+// }
 
-var q: Gener<number>;
-q.aaafff;
-q.qqqSSS;
+// var q: CommonGeric<number>;
+// var w = q.func();
 
+interface Monad<T<X>> {
+    map1<A, B>(f: (a: A) => B): (something: A) => B;
 
+    map<A, B>(f: (a: A) => B): (something: T<A>) => T<B>;
 
-
-interface Type{
-
-}
-
-interface TypeConstructor extends Type{
-    parameters: Type[]
-}
-
-interface TypeArgument extends Type{
-
+    lift<A>(a: A): T<A>;
+    // join<A>(tta: T<T<A>>): T<A>;
 }
 
-function createInstanceTypeWithTypeConstructor(tc: TypeConstructor, tas: TypeArgument[]) {
-    if(tc.parameters.length !== tas.length){
-        throw new Error(`too much or too little parameter for hkt {tc}`);
-    }
+type sn = (tmp: string) => number
+
+function MONAD(m: Monad<Set>,f:sn) {
+    // var w = m.map1(f);
+    var w2 = m.map(f);
+    // var q = m.lift(1);
 }
+ 

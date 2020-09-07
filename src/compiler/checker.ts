@@ -12165,6 +12165,10 @@ namespace ts {
                     }
                 */
                 if (isTypeConstructorTypeParameter(res)) {
+                    if(node.typeArguments?.length !== res.tParams){
+                        //check whether type arguments match type parameters.
+                    }
+                    res.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
                     return getRegularTypeOfLiteralType(res);
                 }
                 if (checkNoTypeArguments(node, symbol)) {
@@ -13654,7 +13658,7 @@ namespace ts {
             return !!(type.flags & TypeFlags.TypeParameter && (<TypeParameter>type).isThisType);
         }
 
-        function isTypeConstructorTypeParameter(type: Type): boolean {
+        function isTypeConstructorTypeParameter(type: Type): type is TypeParameter {
             return !!(type.flags & TypeFlags.TypeParameter && !!(<TypeParameter>type).tParams);
         }
 
@@ -14787,7 +14791,7 @@ namespace ts {
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
                 const combinedMapper = combineTypeMappers(type.mapper, mapper);
-                const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
+                const typeArguments = map(typeParameters, t => instantiateTypeWorker(t, combinedMapper));   //maybe this is instantiateType? Or another function? I just want to handle typeConstructor situation.
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
                 if (!result) {
@@ -15006,11 +15010,9 @@ namespace ts {
                 // this is a demo implement, and not well considered.
                 const concentrateGenericType  = getMappedType(type, mapper);
                 // or maybe we could get the symbol, then get value declration. But it seems target is a quick way.
-                const tmp = (<any>concentrateGenericType).target;  // this should be an obejct TypeFlag.
-                Debug.assert(!!tmp,"unhandled condition for typeconstructor.");
-                const resolvedTypeArguments = (<TypeReference>tmp).resolvedTypeArguments;
+                const resolvedTypeArguments = (<TypeParameter>type).resolvedTypeConstructorParam;
                 const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference(tmp, newTypeArguments) : concentrateGenericType;
+                return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments) : concentrateGenericType;
             }
             if (flags & TypeFlags.TypeParameter) {
                 return getMappedType(type, mapper);
