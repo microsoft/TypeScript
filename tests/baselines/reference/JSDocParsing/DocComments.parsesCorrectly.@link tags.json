@@ -5,6 +5,7 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
+    "comment": "{@link first link}\nInside {@link link text} thing",
     "tags": {
         "0": {
             "kind": "JSDocTag",
@@ -24,7 +25,8 @@
         },
         "length": 1,
         "pos": 63,
-        "end": 68
-    },
-    "comment": "{@link first link}\nInside {@link link text} thing"
+        "end": 68,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
 }

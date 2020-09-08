@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -41,6 +41,57 @@ export { C } from "./c";
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
+
+
+/a/lib/tsc.js -w
+Output::
+>> Screen clear
+[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+
+
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
+Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+WatchedFiles::
+/users/username/projects/project/tsconfig.json:
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
+/users/username/projects/project/a.ts:
+  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
+/users/username/projects/project/b.ts:
+  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
+/users/username/projects/project/c.ts:
+  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
+/users/username/projects/project/index.ts:
+  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/users/username/projects/project/node_modules/@types:
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project:
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/c.d.ts]
 import { A } from "./a";
@@ -152,12 +203,24 @@ export { C } from "./c";
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/a.ts]
+import { B } from "./b";
+export interface A {
+    b: B;
+    foo: any;
+}
+
+
+
 Output::
 >> Screen clear
-[[90m12:00:27 AM[0m] Starting compilation in watch mode...
+[[90m12:00:42 AM[0m] Starting compilation in watch mode...
 
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:58 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -171,7 +234,6 @@ Program files::
 /users/username/projects/project/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 /users/username/projects/project/c.ts
 /users/username/projects/project/b.ts
 /users/username/projects/project/a.ts
@@ -200,16 +262,6 @@ FsWatchesRecursive::
   {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change::
-
-//// [/users/username/projects/project/a.ts]
-import { B } from "./b";
-export interface A {
-    b: B;
-    foo: any;
-}
-
 
 //// [/users/username/projects/project/c.d.ts] file written with same contents
 //// [/users/username/projects/project/b.d.ts] file written with same contents
@@ -304,51 +356,3 @@ export interface A {
   "version": "FakeTSVersion"
 }
 
-
-Output::
->> Screen clear
-[[90m12:00:42 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:00:58 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/a.ts:
-  {"fileName":"/users/username/projects/project/a.ts","pollingInterval":250}
-/users/username/projects/project/b.ts:
-  {"fileName":"/users/username/projects/project/b.ts","pollingInterval":250}
-/users/username/projects/project/c.ts:
-  {"fileName":"/users/username/projects/project/c.ts","pollingInterval":250}
-/users/username/projects/project/index.ts:
-  {"fileName":"/users/username/projects/project/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined

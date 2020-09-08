@@ -1,13 +1,29 @@
 Exit Code: 1
 Standard output:
-@uifabric/tslint-rules: yarn run vX.X.X
-@uifabric/tslint-rules: $ just-scripts build
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/tslint-rules/tsconfig.json
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/tslint-rules/tsconfig.json"
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/tslint-rules/tsconfig.json
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/tslint-rules/tsconfig.json"
-@uifabric/tslint-rules: Done in ?s.
+@fluentui/web-components: yarn run vX.X.X
+@fluentui/web-components: $ tsc -p ./tsconfig.json && rollup -c && npm run doc
+@fluentui/web-components: ┌─────────────────────────────────────────┐
+@fluentui/web-components: │                                         │
+@fluentui/web-components: │   Destination: dist/web-components.js   │
+@fluentui/web-components: │   Bundle Size:  504.97 KB               │
+@fluentui/web-components: │   Gzipped Size:  52.01 KB               │
+@fluentui/web-components: │   Brotli size: 77.25 KB                 │
+@fluentui/web-components: │                                         │
+@fluentui/web-components: └─────────────────────────────────────────┘
+@fluentui/web-components: ┌─────────────────────────────────────────────┐
+@fluentui/web-components: │                                             │
+@fluentui/web-components: │   Destination: dist/web-components.min.js   │
+@fluentui/web-components: │   Bundle Size:  205.52 KB                   │
+@fluentui/web-components: │   Gzipped Size:  47.86 KB                   │
+@fluentui/web-components: │   Brotli size: 40.53 KB                     │
+@fluentui/web-components: │                                             │
+@fluentui/web-components: └─────────────────────────────────────────────┘
+@fluentui/web-components: > @fluentui/web-components@X.X.X doc /office-ui-fabric-react/packages/web-components
+@fluentui/web-components: > api-extractor run --local
+@fluentui/web-components: api-extractor 7.7.1  - https://api-extractor.com/
+@fluentui/web-components: Using configuration from /office-ui-fabric-react/packages/web-components/api-extractor.json
+@fluentui/web-components: API Extractor completed successfully
+@fluentui/web-components: Done in ?s.
 @fluentui/ability-attributes: yarn run vX.X.X
 @fluentui/ability-attributes: $ npm run schema && gulp bundle:package:no-umd
 @fluentui/ability-attributes: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
@@ -19,53 +35,23 @@ Standard output:
 
 Standard error:
 info cli using local version of lerna
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
-@uifabric/tslint-rules: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@uifabric/tslint-rules: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/web-components: src/index-rollup.ts → dist/web-components.js, dist/web-components.min.js...
+@fluentui/web-components: created dist/web-components.js, dist/web-components.min.js in ?s
+@fluentui/web-components: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
-@fluentui/ability-attributes: internal/modules/cjs/loader.js:491
-@fluentui/ability-attributes:   throw new ERR_PACKAGE_PATH_NOT_EXPORTED(basePath, mappingKey);
-@fluentui/ability-attributes:   ^
-@fluentui/ability-attributes: Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main resolved in /office-ui-fabric-react/node_modules/@babel/helper-compilation-targets/package.json
-@fluentui/ability-attributes:     at applyExports (internal/modules/cjs/loader.js:491:9)
-@fluentui/ability-attributes:     at resolveExports (internal/modules/cjs/loader.js:507:23)
-@fluentui/ability-attributes:     at Function.Module._findPath (internal/modules/cjs/loader.js:635:31)
-@fluentui/ability-attributes:     at Function.Module._resolveFilename (internal/modules/cjs/loader.js:1007:27)
-@fluentui/ability-attributes:     at Function.Module._load (internal/modules/cjs/loader.js:890:27)
-@fluentui/ability-attributes:     at Module.require (internal/modules/cjs/loader.js:1080:19)
-@fluentui/ability-attributes:     at require (internal/modules/cjs/helpers.js:72:18)
-@fluentui/ability-attributes:     at Object.<anonymous> (/office-ui-fabric-react/node_modules/@babel/preset-env/lib/debug.js:8:33)
-@fluentui/ability-attributes:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
-@fluentui/ability-attributes:     at Module._compile (/office-ui-fabric-react/node_modules/pirates/lib/index.js:99:24) {
-@fluentui/ability-attributes:   code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
-@fluentui/ability-attributes: }
+@fluentui/ability-attributes: /office-ui-fabric-react/node_modules/electron/index.js:14
+@fluentui/ability-attributes:     throw new Error('Electron failed to install correctly, please delete node_modules/electron and try installing again')
+@fluentui/ability-attributes:     ^
+@fluentui/ability-attributes: Error: Electron failed to install correctly, please delete node_modules/electron and try installing again
+@fluentui/ability-attributes:     at getElectronPath (/office-ui-fabric-react/node_modules/electron/index.js:14:11)
+@fluentui/ability-attributes:     at Object.<anonymous> (/office-ui-fabric-react/node_modules/electron/index.js:18:18)
+@fluentui/ability-attributes:     at Module._compile (internal/modules/cjs/loader.js:1251:30)
+@fluentui/ability-attributes:     at Module._compile (/office-ui-fabric-react/node_modules/pirates/lib/index.js:99:24)
+@fluentui/ability-attributes:     at Module._extensions..js (internal/modules/cjs/loader.js:1272:10)
+@fluentui/ability-attributes:     at Object.newLoader [as .js] (/office-ui-fabric-react/node_modules/pirates/lib/index.js:104:7)
+@fluentui/ability-attributes:     at Module.load (internal/modules/cjs/loader.js:1100:32)
+@fluentui/ability-attributes:     at Function.Module._load (internal/modules/cjs/loader.js:962:14)
+@fluentui/ability-attributes:     at Module.require (internal/modules/cjs/loader.js:1140:19)
+@fluentui/ability-attributes:     at require (internal/modules/cjs/helpers.js:75:18)
 @fluentui/ability-attributes: error Command failed with exit code 1.
 lerna ERR! yarn run build exited 1 in '@fluentui/ability-attributes'

@@ -619,7 +619,7 @@
         "category": "Error",
         "code": 1195
     },
-    "Catch clause variable cannot have a type annotation.": {
+    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
         "category": "Error",
         "code": 1196
     },
@@ -659,7 +659,7 @@
         "category": "Error",
         "code": 1207
     },
-    "All files must be modules when the '--isolatedModules' flag is provided.": {
+    "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
         "category": "Error",
         "code": 1208
     },
@@ -867,6 +867,11 @@
         "category": "Error",
         "code": 1261
     },
+    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
+        "category": "Error",
+        "code": 1262
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -875,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
     },
@@ -931,7 +936,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments": {
+    "Dynamic import cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -1003,7 +1008,7 @@
         "category": "Error",
         "code": 1344
     },
-    "An expression of type 'void' cannot be tested for truthiness": {
+    "An expression of type 'void' cannot be tested for truthiness.": {
         "category": "Error",
         "code": 1345
     },
@@ -1158,6 +1163,26 @@
     "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
         "category": "Error",
         "code": 1384
+    },
+    "Function type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1385
+    },
+    "Constructor type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1386
+    },
+    "Function type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1387
+    },
+    "Constructor type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1388
+    },
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1664,6 +1689,10 @@
     "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2418
+    },
+    "Types of construct signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2249,7 +2278,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'": {
+    "Property '{0}' is a static member of type '{1}'.": {
         "category": "Error",
         "code": 2576
     },
@@ -2409,6 +2438,26 @@
         "category": "Error",
         "code": 2617
     },
+    "Source has {0} element(s) but target requires {1}.": {
+        "category": "Error",
+        "code": 2618
+    },
+    "Source has {0} element(s) but target allows only {1}.": {
+        "category": "Error",
+        "code": 2619
+    },
+    "Target requires {0} element(s) but source may have fewer.": {
+        "category": "Error",
+        "code": 2620
+    },
+    "Target allows only {0} element(s) but source may have more.": {
+        "category": "Error",
+        "code": 2621
+    },
+    "Element at index {0} is variadic in one type but not in the other.": {
+        "category": "Error",
+        "code": 2622
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -2566,6 +2615,10 @@
         "category": "Error",
         "code": 2689
     },
+    "'{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?": {
+        "category": "Error",
+        "code": 2690
+    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
@@ -2699,7 +2752,7 @@
         "category": "Error",
         "code": 2723
     },
-    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+    "'{0}' has no exported member named '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2724
     },
@@ -2731,7 +2784,7 @@
         "category": "Error",
         "code": 2731
     },
-    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.": {
         "category": "Error",
         "code": 2732
     },
@@ -2971,6 +3024,10 @@
         "category": "Error",
         "code": 2791
     },
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+        "category": "Error",
+        "code": 2792
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3015,6 +3072,10 @@
     "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
+    },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
     },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
@@ -3532,6 +3593,10 @@
     "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
         "category": "Error",
         "code": 5087
+    },
+    "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 5088
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4300,7 +4365,7 @@
         "category": "Message",
         "code": 6204
     },
-    "All type parameters are unused": {
+    "All type parameters are unused.": {
         "category": "Error",
         "code": 6205
     },
@@ -4420,6 +4485,14 @@
         "category": "Error",
         "code": 6234
     },
+    "Disable loading referenced projects.": {
+        "category": "Message",
+        "code": 6235
+    },
+    "Arguments for the rest parameter '{0}' were not provided.": {
+        "category": "Error",
+        "code": 6236
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4453,6 +4526,10 @@
     "Output file '{0}' from project '{1}' does not exist": {
         "category": "Error",
         "code": 6309
+    },
+    "Referenced project '{0}' may not disable emit.": {
+        "category": "Error",
+        "code": 6310
     },
     "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
         "category": "Message",
@@ -4593,6 +4670,11 @@
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
         "code": 6384
+    },
+    "'{0}' is deprecated": {
+        "category": "Suggestion",
+        "code": 6385,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -5023,11 +5105,11 @@
         "category": "Error",
         "code": 17015
     },
-    "JSX fragment is not supported when using --jsxFactory": {
+    "The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.": {
         "category": "Error",
         "code": 17016
     },
-    "JSX fragment is not supported when using an inline JSX factory pragma": {
+    "An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.": {
         "category": "Error",
         "code": 17017
     },
@@ -5116,10 +5198,6 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
-    },
-    "Remove destructuring": {
-        "category": "Message",
-        "code": 90009
     },
     "Remove variable statement": {
         "category": "Message",
@@ -5236,6 +5314,14 @@
     "Declare private method '{0}'": {
         "category": "Message",
         "code": 90038
+    },
+    "Remove unused destructuring declaration": {
+        "category": "Message",
+        "code": 90039
+    },
+    "Remove unused declarations for: '{0}'": {
+        "category": "Message",
+        "code": 90041
     },
     "Declare a private field named '{0}'.": {
         "category": "Message",
@@ -5709,6 +5795,98 @@
         "category": "Message",
         "code": 95119
     },
+    "Wrap in JSX fragment": {
+        "category": "Message",
+        "code": 95120
+    },
+    "Wrap all unparented JSX in JSX fragment": {
+        "category": "Message",
+        "code": 95121
+    },
+    "Convert arrow function or function expression": {
+        "category": "Message",
+        "code": 95122
+    },
+    "Convert to anonymous function": {
+        "category": "Message",
+        "code": 95123
+    },
+    "Convert to named function": {
+        "category": "Message",
+        "code": 95124
+    },
+    "Convert to arrow function": {
+        "category": "Message",
+        "code": 95125
+    },
+    "Remove parentheses": {
+        "category": "Message",
+        "code": 95126
+    },
+    "Could not find a containing arrow function": {
+        "category": "Message",
+        "code": 95127
+    },
+    "Containing function is not an arrow function": {
+        "category": "Message",
+        "code": 95128
+    },
+    "Could not find export statement": {
+        "category": "Message",
+        "code": 95129
+    },
+    "This file already has a default export": {
+        "category": "Message",
+        "code": 95130
+    },
+    "Could not find import clause": {
+        "category": "Message",
+        "code": 95131
+    },
+    "Could not find namespace import or named imports": {
+        "category": "Message",
+        "code": 95132
+    },
+    "Selection is not a valid type node": {
+        "category": "Message",
+        "code": 95133
+    },
+    "No type could be extracted from this type node": {
+        "category": "Message",
+        "code": 95134
+    },
+    "Could not find property for which to generate accessor": {
+        "category": "Message",
+        "code": 95135
+    },
+    "Name is not valid": {
+        "category": "Message",
+        "code": 95136
+    },
+    "Can only convert property with modifier": {
+        "category": "Message",
+        "code": 95137
+    },
+    "Switch each misused '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95138
+    },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95139
+    },
+    "Could not find convertible access expression": {
+        "category": "Message",
+        "code": 95140
+    },
+    "Could not find matching access expressions": {
+        "category": "Message",
+        "code": 95141
+    },
+    "Can only convert logical AND access chains": {
+        "category": "Message",
+        "code": 95142
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5722,7 +5900,7 @@
         "category": "Error",
         "code": 18007
     },
-    "Private identifiers cannot be used as parameters": {
+    "Private identifiers cannot be used as parameters.": {
         "category": "Error",
         "code": 18009
     },
@@ -5762,7 +5940,7 @@
         "category": "Error",
         "code": 18018
     },
-    "'{0}' modifier cannot be used with a private identifier": {
+    "'{0}' modifier cannot be used with a private identifier.": {
         "category": "Error",
         "code": 18019
     },
@@ -5809,5 +5987,13 @@
     "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
         "category": "Error",
         "code": 18033
+    },
+    "Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.": {
+        "category": "Message",
+        "code": 18034
+    },
+    "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 18035
     }
 }

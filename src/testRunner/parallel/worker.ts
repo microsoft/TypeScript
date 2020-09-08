@@ -41,7 +41,7 @@ namespace Harness.Parallel.Worker {
             return class extends (base as typeof Mocha.Runnable) {
                 resetTimeout() {
                     this.clearTimeout();
-                    if (this.enableTimeouts()) {
+                    if (this.timeout() > 0) {
                         sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
                         this.timer = true;
                     }
@@ -146,13 +146,13 @@ namespace Harness.Parallel.Worker {
 
         function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
             if (!unitTestSuiteMap && unitTestSuite.suites.length) {
-                unitTestSuiteMap = ts.createMap<Mocha.Suite>();
+                unitTestSuiteMap = new ts.Map<string, Mocha.Suite>();
                 for (const suite of unitTestSuite.suites) {
                     unitTestSuiteMap.set(suite.title, suite);
                 }
             }
             if (!unitTestTestMap && unitTestSuite.tests.length) {
-                unitTestTestMap = ts.createMap<Mocha.Test>();
+                unitTestTestMap = new ts.Map<string, Mocha.Test>();
                 for (const test of unitTestSuite.tests) {
                     unitTestTestMap.set(test.title, test);
                 }
@@ -297,13 +297,13 @@ namespace Harness.Parallel.Worker {
         }
 
         // A cache of test harness Runner instances.
-        const runners = ts.createMap<RunnerBase>();
+        const runners = new ts.Map<string, RunnerBase>();
 
         // The root suite for all unit tests.
         let unitTestSuite: Suite;
-        let unitTestSuiteMap: ts.Map<Mocha.Suite>;
+        let unitTestSuiteMap: ts.ESMap<string, Mocha.Suite>;
         // (Unit) Tests directly within the root suite
-        let unitTestTestMap: ts.Map<Mocha.Test>;
+        let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
 
         if (runUnitTests) {
             unitTestSuite = new Suite("", new Mocha.Context());

@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
+Input::
 //// [/user/username/projects/myproject/logger.ts]
 export class logger { }
 
@@ -21,26 +21,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/logger.js]
-"use strict";
-exports.__esModule = true;
-exports.logger = void 0;
-var logger = /** @class */ (function () {
-    function logger() {
-    }
-    return logger;
-}());
-exports.logger = logger;
 
-
-//// [/user/username/projects/myproject/another.js]
-"use strict";
-exports.__esModule = true;
-var logger_1 = require("./logger");
-new logger_1.logger();
-
-
-
+/a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -82,8 +64,29 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/logger.js]
+"use strict";
+exports.__esModule = true;
+exports.logger = void 0;
+var logger = /** @class */ (function () {
+    function logger() {
+    }
+    return logger;
+}());
+exports.logger = logger;
+
+
+//// [/user/username/projects/myproject/another.js]
+"use strict";
+exports.__esModule = true;
+var logger_1 = require("./logger");
+new logger_1.logger();
+
+
+
 Change:: Change name of file from logger to Logger
 
+Input::
 //// [/user/username/projects/myproject/Logger.ts] file was renamed from file /user/username/projects/myproject/logger.ts
 
 Output::
@@ -129,3 +132,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

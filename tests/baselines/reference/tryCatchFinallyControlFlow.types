@@ -589,3 +589,191 @@ function t1() {
 >x : "x" | null
 }
 
+// Repro from #39043
+
+type State = { tag: "one" } | { tag: "two" } | { tag: "three" };
+>State : State
+>tag : "one"
+>tag : "two"
+>tag : "three"
+
+function notallowed(arg: number) {
+>notallowed : (arg: number) => void
+>arg : number
+
+    let state: State = { tag: "one" };
+>state : State
+>{ tag: "one" } : { tag: "one"; }
+>tag : "one"
+>"one" : "one"
+
+    try {
+        state = { tag: "two" };
+>state = { tag: "two" } : { tag: "two"; }
+>state : State
+>{ tag: "two" } : { tag: "two"; }
+>tag : "two"
+>"two" : "two"
+
+        try {
+            state = { tag: "three" };
+>state = { tag: "three" } : { tag: "three"; }
+>state : State
+>{ tag: "three" } : { tag: "three"; }
+>tag : "three"
+>"three" : "three"
+        }
+        finally { }
+    }
+    catch (err) {
+>err : any
+
+        state.tag;
+>state.tag : "one" | "two" | "three"
+>state : State
+>tag : "one" | "two" | "three"
+
+        if (state.tag !== "one" && state.tag !== "two") {
+>state.tag !== "one" && state.tag !== "two" : boolean
+>state.tag !== "one" : boolean
+>state.tag : "one" | "two" | "three"
+>state : State
+>tag : "one" | "two" | "three"
+>"one" : "one"
+>state.tag !== "two" : boolean
+>state.tag : "two" | "three"
+>state : { tag: "two"; } | { tag: "three"; }
+>tag : "two" | "three"
+>"two" : "two"
+
+            console.log(state.tag);
+>console.log(state.tag) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>state.tag : "three"
+>state : { tag: "three"; }
+>tag : "three"
+        }
+    }
+}
+
+function f20() {
+>f20 : () => void
+
+    let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>1 : 1
+
+        try {
+            x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>2 : 2
+
+            try {
+                x = 3;
+>x = 3 : 3
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>3 : 3
+            }
+            finally {
+                if (!!true) x = 4;
+>!!true : true
+>!true : false
+>true : true
+>x = 4 : 4
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>4 : 4
+            }
+            x;  // 3 | 4
+>x : 3 | 4
+        }
+        finally {
+            if (!!true) x = 5;
+>!!true : true
+>!true : false
+>true : true
+>x = 5 : 5
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>5 : 5
+        }
+        x;  // 3 | 4 | 5
+>x : 3 | 4 | 5
+    }
+    finally {
+        if (!!true) x = 6;
+>!!true : true
+>!true : false
+>true : true
+>x = 6 : 6
+>x : 0 | 1 | 2 | 3 | 4 | 5 | 6
+>6 : 6
+    }
+    x;  // 3 | 4 | 5 | 6
+>x : 3 | 4 | 5 | 6
+}
+
+function f21() {
+>f21 : () => void
+
+    let x: 0 | 1 | 2 | 3 | 4 | 5 = 0;
+>x : 0 | 1 | 2 | 3 | 4 | 5
+>0 : 0
+
+    try {
+        x = 1;
+>x = 1 : 1
+>x : 0 | 1 | 2 | 3 | 4 | 5
+>1 : 1
+
+        try {
+            x = 2;
+>x = 2 : 2
+>x : 0 | 1 | 2 | 3 | 4 | 5
+>2 : 2
+
+            try {
+                x = 3;
+>x = 3 : 3
+>x : 0 | 1 | 2 | 3 | 4 | 5
+>3 : 3
+            }
+            finally {
+                if (!!true) x = 4;
+>!!true : true
+>!true : false
+>true : true
+>x = 4 : 4
+>x : 0 | 1 | 2 | 3 | 4 | 5
+>4 : 4
+            }
+            x;  // 3 | 4
+>x : 3 | 4
+        }
+        finally {
+            if (!!true) x = 5;
+>!!true : true
+>!true : false
+>true : true
+>x = 5 : 5
+>x : 0 | 1 | 2 | 3 | 4 | 5
+>5 : 5
+        }
+        x;  // 3 | 4 | 5
+>x : 3 | 4 | 5
+    }
+    catch (e) {
+>e : any
+
+        x;  // 0 | 1 | 2 | 3 | 4 | 5
+>x : 0 | 1 | 2 | 3 | 4 | 5
+    }
+}
+

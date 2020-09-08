@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /user/username/projects/myproject/a.ts
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export {}
 declare global {
@@ -24,12 +24,8 @@ interface Document {
     readonly fullscreen: boolean;
 }
 
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js -w /user/username/projects/myproject/a.ts
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
@@ -75,8 +71,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Remove document declaration from file
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export {}
 declare global {
@@ -84,7 +87,6 @@ var x: string;
 var y: number;
 }
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -119,8 +121,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js] file written with same contents
+
 Change:: Rever the file to contain document declaration
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export {}
 declare global {
@@ -130,7 +135,6 @@ interface Document {
 var y: number;
 }
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -176,3 +180,5 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/a.js] file written with same contents

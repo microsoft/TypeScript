@@ -379,7 +379,8 @@ namespace ts.SymbolDisplay {
                 }
             }
         }
-        if (symbolFlags & SymbolFlags.Alias) {
+        // don't use symbolFlags since getAliasedSymbol requires the flag on the symbol itself
+        if (symbol.flags & SymbolFlags.Alias) {
             prefixNextMeaning();
             if (!hasAddedSymbolInfo) {
                 const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);

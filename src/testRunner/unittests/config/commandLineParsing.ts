@@ -493,7 +493,7 @@ namespace ts {
             }
 
             interface VerifyNullNonIncludedOption {
-                type: () => "string" | "number" | Map<number | string>;
+                type: () => "string" | "number" | ESMap<string, number | string>;
                 nonNullValue?: string;
             }
             function verifyNullNonIncludedOption({ type, nonNullValue }: VerifyNullNonIncludedOption) {
@@ -571,10 +571,10 @@ namespace ts {
 
             describe("option of type Map<number | string>", () => {
                 verifyNullNonIncludedOption({
-                    type: () => createMapFromTemplate({
+                    type: () => new Map(getEntries({
                         node: ModuleResolutionKind.NodeJs,
                         classic: ModuleResolutionKind.Classic,
-                    }),
+                    })),
                     nonNullValue: "node"
                 });
             });

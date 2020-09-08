@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a.ts]
 class C { get prop() { return 1; } }
 class D extends C { prop = 1; }
@@ -19,19 +19,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a.js]
-class C {
-    get prop() { return 1; }
-}
-class D extends C {
-    constructor() {
-        super(...arguments);
-        this.prop = 1;
-    }
-}
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
@@ -73,11 +62,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Enable useDefineForClassFields
-
-//// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
-
 //// [/a.js]
 class C {
     get prop() { return 1; }
@@ -85,15 +69,17 @@ class C {
 class D extends C {
     constructor() {
         super(...arguments);
-        Object.defineProperty(this, "prop", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: 1
-        });
+        this.prop = 1;
     }
 }
 
+
+
+Change:: Enable useDefineForClassFields
+
+Input::
+//// [/tsconfig.json]
+{"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
 
 
 Output::
@@ -136,3 +122,21 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a.js]
+class C {
+    get prop() { return 1; }
+}
+class D extends C {
+    constructor() {
+        super(...arguments);
+        Object.defineProperty(this, "prop", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 1
+        });
+    }
+}
+
+

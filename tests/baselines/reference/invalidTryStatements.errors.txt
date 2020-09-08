@@ -1,25 +1,44 @@
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(8,23): error TS1196: Catch clause variable cannot have a type annotation.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(9,23): error TS1196: Catch clause variable cannot have a type annotation.
-tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,23): error TS1196: Catch clause variable cannot have a type annotation.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(2,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(6,12): error TS1005: 'finally' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(10,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(11,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(15,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(17,5): error TS1005: 'try' expected.
+tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts(19,20): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (3 errors) ====
+==== tests/cases/conformance/statements/tryStatements/invalidTryStatements.ts (7 errors) ====
     function fn() {
-        try {
-        } catch (x) {
-            var x: string; // ensure x is 'Any'
-        }
+        catch(x) { } // error missing try
+        ~~~~~
+!!! error TS1005: 'try' expected.
     
-        // no type annotation allowed
-        try { } catch (z: any) { }
-                          ~~~
-!!! error TS1196: Catch clause variable cannot have a type annotation.
-        try { } catch (a: number) { }
-                          ~~~~~~
-!!! error TS1196: Catch clause variable cannot have a type annotation.
-        try { } catch (y: string) { }
-                          ~~~~~~
-!!! error TS1196: Catch clause variable cannot have a type annotation.
+        finally { } // potential error; can be absorbed by the 'catch'
+    
+        try { }; // error missing finally
+               ~
+!!! error TS1005: 'finally' expected.
     }
     
+    function fn2() {
+        finally { } // error missing try
+        ~~~~~~~
+!!! error TS1005: 'try' expected.
+        catch (x) { } // error missing try
+        ~~~~~
+!!! error TS1005: 'try' expected.
+        
+        try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
     
+        finally { } // error missing try
+        ~~~~~~~
+!!! error TS1005: 'try' expected.
+        
+        catch (x) { } // error missing try
+        ~~~~~
+!!! error TS1005: 'try' expected.
+    
+        try { } catch () { } // error missing catch binding
+                       ~
+!!! error TS1003: Identifier expected.
+    }

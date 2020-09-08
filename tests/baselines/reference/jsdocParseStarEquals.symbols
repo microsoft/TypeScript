@@ -12,3 +12,10 @@ function f(...args) {
 var x;
 >x : Symbol(x, Decl(a.js, 7, 3))
 
+
+/** @param {function():*=} f */
+function cbf(f) {
+>cbf : Symbol(cbf, Decl(a.js, 7, 6))
+>f : Symbol(f, Decl(a.js, 11, 13))
+}
+
