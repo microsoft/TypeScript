@@ -796,7 +796,8 @@ namespace ts {
                 }
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            return tryLoadModuleUsingPaths(extensions, moduleName, baseUrl ?? Debug.checkDefined(pathsBasePath), paths, loader, /*onlyRecordFailures*/ false, state);
+            const baseDirectory = baseUrl ?? Debug.checkDefined(pathsBasePath || state.host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
