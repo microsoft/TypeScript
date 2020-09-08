@@ -3890,8 +3890,11 @@ declare module Intl {
     interface NumberFormatOptions {
         localeMatcher?: string;
         style?: string;
+        compactDisplay?: string;
         currency?: string;
         currencyDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
         useGrouping?: boolean;
         minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
@@ -3899,14 +3902,18 @@ declare module Intl {
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
         notation?: string;
+        signDisplay?: string;
     }
 
     interface ResolvedNumberFormatOptions {
         locale: string;
         numberingSystem: string;
         style: string;
+        compactDisplay?: string;
         currency?: string;
         currencyDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
@@ -3914,6 +3921,7 @@ declare module Intl {
         maximumSignificantDigits?: number;
         useGrouping: boolean;
         notation?: string;
+        signDisplay?: string;
     }
 
     interface NumberFormat {

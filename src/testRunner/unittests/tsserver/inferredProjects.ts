@@ -86,7 +86,7 @@ namespace ts.projectSystem {
             const proj = projectService.inferredProjects[0];
             assert.isDefined(proj);
 
-            assert.isTrue(proj.languageServiceEnabled);
+            assert.isFalse(proj.languageServiceEnabled);
         });
 
         it("project settings for inferred projects", () => {
@@ -365,8 +365,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             const originalSet = projectService.configuredProjects.set;
             const originalDelete = projectService.configuredProjects.delete;
-            const configuredCreated = createMap<true>();
-            const configuredRemoved = createMap<true>();
+            const configuredCreated = new Map<string, true>();
+            const configuredRemoved = new Map<string, true>();
             projectService.configuredProjects.set = (key, value) => {
                 assert.isFalse(configuredCreated.has(key));
                 configuredCreated.set(key, true);

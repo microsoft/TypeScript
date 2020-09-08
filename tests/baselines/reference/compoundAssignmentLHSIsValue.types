@@ -432,14 +432,14 @@ foo() += value;
 
 ([]) *= value;
 >([]) *= value : number
->([]) : undefined[]
->[] : undefined[]
+>([]) : []
+>[] : []
 >value : any
 
 ([]) += value;
 >([]) += value : any
->([]) : undefined[]
->[] : undefined[]
+>([]) : []
+>[] : []
 >value : any
 
 (function baz1() { }) *= value;

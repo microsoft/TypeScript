@@ -177,6 +177,10 @@ namespace ts {
         return node.kind === SyntaxKind.TupleType;
     }
 
+    export function isNamedTupleMember(node: Node): node is NamedTupleMember {
+        return node.kind === SyntaxKind.NamedTupleMember;
+    }
+
     export function isOptionalTypeNode(node: Node): node is OptionalTypeNode {
         return node.kind === SyntaxKind.OptionalType;
     }
@@ -769,6 +773,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocReadonlyTag;
     }
 
+    export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
+        return node.kind === SyntaxKind.JSDocDeprecatedTag;
+
+    }
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
         return node.kind === SyntaxKind.JSDocEnumTag;
     }

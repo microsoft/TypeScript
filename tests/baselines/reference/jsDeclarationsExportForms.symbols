@@ -46,7 +46,7 @@ export { ns as classContainer };
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs.js, 0, 5))
 >require : Symbol(require)
->"./cls" : Symbol("tests/cases/conformance/jsdoc/declarations/cls", Decl(cls.js, 0, 0))
+>"./cls" : Symbol(ns, Decl(cls.js, 0, 0))
 
 module.exports = { ns };
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/cjs", Decl(cjs.js, 0, 0))
@@ -58,7 +58,7 @@ module.exports = { ns };
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs2.js, 0, 5))
 >require : Symbol(require)
->"./cls" : Symbol("tests/cases/conformance/jsdoc/declarations/cls", Decl(cls.js, 0, 0))
+>"./cls" : Symbol(ns, Decl(cls.js, 0, 0))
 
 module.exports = ns;
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/cjs2", Decl(cjs2.js, 0, 0))
@@ -70,7 +70,7 @@ module.exports = ns;
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs3.js, 0, 5))
 >require : Symbol(require)
->"./cls" : Symbol("tests/cases/conformance/jsdoc/declarations/cls", Decl(cls.js, 0, 0))
+>"./cls" : Symbol(ns, Decl(cls.js, 0, 0))
 
 module.exports.ns = ns;
 >module.exports.ns : Symbol(ns, Decl(cjs3.js, 0, 28))
@@ -84,7 +84,7 @@ module.exports.ns = ns;
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs4.js, 0, 5))
 >require : Symbol(require)
->"./cls" : Symbol("tests/cases/conformance/jsdoc/declarations/cls", Decl(cls.js, 0, 0))
+>"./cls" : Symbol(ns, Decl(cls.js, 0, 0))
 
 module.exports.names = ns;
 >module.exports.names : Symbol(names, Decl(cjs4.js, 0, 28))

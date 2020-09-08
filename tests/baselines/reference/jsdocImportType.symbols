@@ -6,9 +6,9 @@ var c;
 >c : Symbol(c, Decl(use.js, 3, 3))
 
 c.chunk;
->c.chunk : Symbol(Chunk.chunk, Decl(mod1.js, 2, 19))
+>c.chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
 >c : Symbol(c, Decl(use.js, 3, 3))
->chunk : Symbol(Chunk.chunk, Decl(mod1.js, 2, 19))
+>chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
 
 const D = require("./mod1");
 >D : Symbol(D, Decl(use.js, 6, 5))
@@ -20,9 +20,9 @@ var d;
 >d : Symbol(d, Decl(use.js, 8, 3))
 
 d.chunk;
->d.chunk : Symbol(Chunk.chunk, Decl(mod1.js, 2, 19))
+>d.chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
 >d : Symbol(d, Decl(use.js, 8, 3))
->chunk : Symbol(Chunk.chunk, Decl(mod1.js, 2, 19))
+>chunk : Symbol(D.chunk, Decl(mod1.js, 2, 19))
 
 === tests/cases/conformance/jsdoc/types.d.ts ===
 declare function require(name: string): any;

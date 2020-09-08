@@ -30,4 +30,11 @@ function fn(x: boolean) {
     try { } catch (x) { var x: string; }
     try { } catch (x) { var x: boolean; }
 
+    try { } catch ({ x }) { } // should be OK
+    try { } catch ({ x }: any) { x.foo; } // should be OK
+    try { } catch ({ x }: any1) { x.foo;} // should be OK
+    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+    try { } catch ({ x }: object) { } // error in the type
+    try { } catch ({ x }: Error) { } // error in the type
 }

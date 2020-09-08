@@ -6,7 +6,7 @@ var SomeClass = function () {
     this.otherProp = 0;
 >this.otherProp = 0 : 0
 >this.otherProp : any
->this : any
+>this : this
 >otherProp : any
 >0 : 0
 

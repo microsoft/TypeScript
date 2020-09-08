@@ -44,7 +44,6 @@ with any additional questions or comments.
 
 *  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 *  [Programming handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html)
-*  [Language specification](https://github.com/microsoft/TypeScript/blob/master/doc/spec.md)
 *  [Homepage](https://www.typescriptlang.org/)
 
 ## Building
@@ -67,7 +66,7 @@ Install [Gulp](https://gulpjs.com/) tools and dev dependencies:
 
 ```bash
 npm install -g gulp
-npm install
+npm ci
 ```
 
 Use one of the following to build and test:

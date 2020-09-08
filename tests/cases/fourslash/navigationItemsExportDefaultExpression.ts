@@ -1,8 +1,24 @@
 /// <reference path="fourslash.ts"/>
 
-//// const abc = 12;
 //// export default function () {}
+//// export default function () {
+////     return class Foo {
+////     }
+//// }
+////
 //// export default () => ""
+//// export default () => {
+////     return class Foo {
+////     }
+//// }
+////
+//// export default function f1() {}
+//// export default function f2() {
+////     return class Foo {
+////     }
+//// }
+////
+//// const abc = 12;
 //// export default abc;
 //// export default class AB {}
 //// export default {
@@ -25,7 +41,29 @@ verify.navigationTree({
     {
       "text": "default",
       "kind": "function",
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "Foo",
+          "kind": "class"
+        }
+      ]
+    },
+    {
+      "text": "default",
+      "kind": "function",
       "kindModifiers": "export"
+    },
+    {
+      "text": "default",
+      "kind": "function",
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "Foo",
+          "kind": "class"
+        }
+      ]
     },
     {
       "text": "default",
@@ -65,6 +103,22 @@ verify.navigationTree({
       "text": "default",
       "kind": "const",
       "kindModifiers": "export"
+    },
+    {
+      "text": "f1",
+      "kind": "function",
+      "kindModifiers": "export"
+    },
+    {
+      "text": "f2",
+      "kind": "function",
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "Foo",
+          "kind": "class"
+        }
+      ]
     }
   ]
 });

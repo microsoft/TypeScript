@@ -15,9 +15,9 @@ const isString = (x: unknown): x is string => typeof x === 'string';
 
 if (foo.every(isString)) {
 >foo.every(isString) : boolean
->foo.every : { <S extends string | number>(callbackfn: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+>foo.every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
 >foo : (string | number)[]
->every : { <S extends string | number>(callbackfn: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
+>every : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
 >isString : (x: unknown) => x is string
 
   foo[0].slice(0);

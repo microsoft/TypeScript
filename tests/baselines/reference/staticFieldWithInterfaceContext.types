@@ -1,0 +1,162 @@
+=== tests/cases/compiler/staticFieldWithInterfaceContext.ts ===
+interface I {
+    x: { a: "a" };
+>x : { a: "a"; }
+>a : "a"
+}
+let c: I = class {
+>c : I
+>class {    // should typecheck the same as the last line    static x = { a: "a" };} : typeof c
+
+    // should typecheck the same as the last line
+    static x = { a: "a" };
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+};
+c.x = { a: "a" };
+>c.x = { a: "a" } : { a: "a"; }
+>c.x : { a: "a"; }
+>c : I
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+const ex = "x";
+>ex : "x"
+>"x" : "x"
+
+let c2: I = class { static [ex] = { a: "a" }; };
+>c2 : I
+>class { static [ex] = { a: "a" }; } : typeof c2
+>[ex] : { a: "a"; }
+>ex : "x"
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+c[ex] = { a: "a" };
+>c[ex] = { a: "a" } : { a: "a"; }
+>c[ex] : { a: "a"; }
+>c : I
+>ex : "x"
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+function f(c: I = class { static x = { a: "a" } }) { }
+>f : (c?: I) => void
+>c : I
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let { c: c3 }: { c: I } = { c: class { static x = { a: "a" } } };
+>c : any
+>c3 : I
+>c : I
+>{ c: class { static x = { a: "a" } } } : { c: typeof c; }
+>c : typeof c
+>class { static x = { a: "a" } } : typeof c
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let { c: c4 = class { static x = { a: "a" } }}: { c?: I } = { };
+>c : any
+>c4 : I
+>class { static x = { a: "a" } } : typeof c4
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>c : I
+>{ } : {}
+
+let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static x = { a: "a" } } };
+>c : any
+>c5 : I
+>class { static x = { a: "a" } } : typeof c5
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>c : I
+>{ c: class { static x = { a: "a" } } } : { c: typeof c; }
+>c : typeof c
+>class { static x = { a: "a" } } : typeof c
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let [ c6 ]: [I] = [class { static x = { a: "a" } }];
+>c6 : I
+>[class { static x = { a: "a" } }] : [typeof (Anonymous class)]
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let [ c7 ]: I[] = [class { static x = { a: "a" } }];
+>c7 : I
+>[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
+>c8 : I
+>class { static x = { a: "a" } } : typeof c8
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[] : []
+
+let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
+>c9 : I
+>class { static x = { a: "a" } } : typeof c9
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[] : undefined[]
+
+let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
+>c10 : I
+>class { static x = { a: "a" } } : typeof c10
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[class { static x = { a: "a" } }] : [typeof (Anonymous class)]
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+
+let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a" } }];
+>c11 : I
+>class { static x = { a: "a" } } : typeof c11
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+>[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
+>class { static x = { a: "a" } } : typeof (Anonymous class)
+>x : { a: "a"; }
+>{ a: "a" } : { a: "a"; }
+>a : "a"
+>"a" : "a"
+

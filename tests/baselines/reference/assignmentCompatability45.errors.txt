@@ -1,0 +1,18 @@
+tests/cases/compiler/assignmentCompatability45.ts(7,7): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+  Types of construct signatures are incompatible.
+    Type 'new (x: number) => B' is not assignable to type 'abstract new () => A'.
+
+
+==== tests/cases/compiler/assignmentCompatability45.ts (1 errors) ====
+    abstract class A {}
+    class B extends A {
+        constructor(x: number) {
+            super();
+        }
+    }
+    const b: typeof A = B;
+          ~
+!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2322:   Types of construct signatures are incompatible.
+!!! error TS2322:     Type 'new (x: number) => B' is not assignable to type 'abstract new () => A'.
+    

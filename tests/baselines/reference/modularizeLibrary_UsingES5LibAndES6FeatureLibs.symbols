@@ -13,7 +13,7 @@ var p = new Proxy(t, {});
 
 Reflect.ownKeys({});
 >Reflect.ownKeys : Symbol(Reflect.ownKeys, Decl(lib.es2015.reflect.d.ts, --, --))
->Reflect : Symbol(Reflect, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
 >ownKeys : Symbol(Reflect.ownKeys, Decl(lib.es2015.reflect.d.ts, --, --))
 
 function* idGen() {

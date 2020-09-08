@@ -12,10 +12,14 @@ function Multimap(ik, iv) {
 
     /** @type {{ [s: string]: V }} */
     this._map = {};
+>this._map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
+>this : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
 >_map : Symbol(Multimap._map, Decl(propertiesOfGenericConstructorFunctions.js, 6, 27))
 
     // without type annotation
     this._map2 = { [ik]: iv };
+>this._map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
+>this : Symbol(Multimap, Decl(propertiesOfGenericConstructorFunctions.js, 0, 0))
 >_map2 : Symbol(Multimap._map2, Decl(propertiesOfGenericConstructorFunctions.js, 8, 19))
 >[ik] : Symbol([ik], Decl(propertiesOfGenericConstructorFunctions.js, 10, 18))
 >ik : Symbol(ik, Decl(propertiesOfGenericConstructorFunctions.js, 6, 18))

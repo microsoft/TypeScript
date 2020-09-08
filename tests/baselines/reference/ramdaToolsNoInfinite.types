@@ -54,7 +54,7 @@ declare namespace Tools {
         T['length'];
 
     type Prepend<E, T extends any[]> =
->Prepend : Prepend<E, T>
+>Prepend : [head: E, ...args: T]
 
         ((head: E, ...args: T) => any) extends ((...args: infer U) => any)
 >head : E
@@ -68,7 +68,7 @@ declare namespace Tools {
 >Drop : Drop<N, T, I>
 
         0: Drop<N, Tail<T>, Prepend<any, I>>;
->0 : Drop<N, Tail<T>, Prepend<any, I>>
+>0 : Drop<N, Tail<T>, [head: any, ...args: I]>
 
         1: T;
 >1 : T
@@ -88,7 +88,7 @@ declare namespace Tools {
         Length<I>;
 
     type Next<I extends any[]> =
->Next : Prepend<any, I>
+>Next : [head: any, ...args: I]
 
         Prepend<any, I>;
 
@@ -101,7 +101,7 @@ declare namespace Tools {
 >Iterator : Iterator<Index, From, I>
 
         0: Iterator<Index, Next<From>, Next<I>>;
->0 : Iterator<Index, Prepend<any, From>, Prepend<any, I>>
+>0 : Iterator<Index, [head: any, ...args: From], [head: any, ...args: I]>
 
         1: From;
 >1 : From
@@ -116,7 +116,7 @@ declare namespace Tools {
 >Reverse : Reverse<T, R, I>
 
         0: Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
->0 : Reverse<T, Prepend<T[Length<I>], R>, Prepend<any, I>>
+>0 : Reverse<T, [head: T[Length<I>], ...args: R], [head: any, ...args: I]>
 
         1: R;
 >1 : R
@@ -163,7 +163,7 @@ declare namespace Curry {
 
     interface GapsOfWorker<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> {
         0: GapsOf<T1, T2, GapOf<T1, T2, TN, I> extends infer G ? Tools.Cast<G, any[]> : never, Tools.Next<I>>;
->0 : GapsOf<T1, T2, GapOf<T1, T2, TN, I> extends infer G ? Tools.Cast<G, any[]> : never, Tools.Prepend<any, I>>
+>0 : GapsOf<T1, T2, GapOf<T1, T2, TN, I> extends infer G ? Tools.Cast<G, any[]> : never, [head: any, ...args: I]>
 >Tools : any
 >Tools : any
 

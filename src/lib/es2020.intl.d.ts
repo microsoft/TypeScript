@@ -263,10 +263,18 @@ declare namespace Intl {
     };
 
     interface NumberFormatOptions {
+        compactDisplay?: string;
         notation?: string;
+        signDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
     }
 
     interface ResolvedNumberFormatOptions {
+        compactDisplay?: string;
         notation?: string;
+        signDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
     }
 }

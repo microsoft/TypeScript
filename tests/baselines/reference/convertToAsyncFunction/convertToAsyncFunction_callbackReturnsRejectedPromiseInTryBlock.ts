@@ -12,8 +12,7 @@ async function f() {
     try {
         const x = await Promise.resolve(1);
         return await Promise.reject(x);
-    }
-    catch (err) {
+    } catch (err) {
         return console.log(err);
     }
 }

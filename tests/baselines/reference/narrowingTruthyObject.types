@@ -31,7 +31,7 @@ function foo(x: unknown, b: boolean) {
 >toString : () => string
     }
     if (x && typeof x === 'object') {
->x && typeof x === 'object' : boolean
+>x && typeof x === 'object' : unknown
 >x : unknown
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -45,7 +45,7 @@ function foo(x: unknown, b: boolean) {
 >toString : () => string
     }
     if (b && x && typeof x === 'object') {
->b && x && typeof x === 'object' : boolean
+>b && x && typeof x === 'object' : unknown
 >b && x : unknown
 >b : boolean
 >x : unknown
@@ -61,8 +61,8 @@ function foo(x: unknown, b: boolean) {
 >toString : () => string
     }
     if (x && b && typeof x === 'object') {
->x && b && typeof x === 'object' : boolean
->x && b : boolean
+>x && b && typeof x === 'object' : unknown
+>x && b : unknown
 >x : unknown
 >b : boolean
 >typeof x === 'object' : boolean
@@ -77,9 +77,9 @@ function foo(x: unknown, b: boolean) {
 >toString : () => string
     }
     if (x && b && b && typeof x === 'object') {
->x && b && b && typeof x === 'object' : boolean
->x && b && b : boolean
->x && b : boolean
+>x && b && b && typeof x === 'object' : unknown
+>x && b && b : unknown
+>x && b : unknown
 >x : unknown
 >b : boolean
 >b : true
@@ -95,9 +95,9 @@ function foo(x: unknown, b: boolean) {
 >toString : () => string
     }
     if (b && b && x && b && b && typeof x === 'object') {
->b && b && x && b && b && typeof x === 'object' : boolean
->b && b && x && b && b : true
->b && b && x && b : true
+>b && b && x && b && b && typeof x === 'object' : unknown
+>b && b && x && b && b : unknown
+>b && b && x && b : unknown
 >b && b && x : unknown
 >b && b : boolean
 >b : boolean
@@ -125,8 +125,8 @@ function f1(x: unknown): any {
 >x : unknown
 
     return x && typeof x === 'object' && x.hasOwnProperty('x');
->x && typeof x === 'object' && x.hasOwnProperty('x') : boolean
->x && typeof x === 'object' : boolean
+>x && typeof x === 'object' && x.hasOwnProperty('x') : unknown
+>x && typeof x === 'object' : unknown
 >x : unknown
 >typeof x === 'object' : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"

@@ -490,7 +490,7 @@ namespace ts {
      */
     export function getLocalNameForExternalImport(factory: NodeFactory, node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile): Identifier | undefined {
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
-        if (namespaceDeclaration && !isDefaultImport(node)) {
+        if (namespaceDeclaration && !isDefaultImport(node) && !isExportNamespaceAsDefaultDeclaration(node)) {
             const name = namespaceDeclaration.name;
             return isGeneratedIdentifier(name) ? name : factory.createIdentifier(getSourceTextOfNodeFromSourceFile(sourceFile, name) || idText(name));
         }
@@ -813,6 +813,11 @@ namespace ts {
             || kind === SyntaxKind.ImportDeclaration
             || kind === SyntaxKind.ExportAssignment
             || kind === SyntaxKind.ExportDeclaration;
+    }
+
+    /* @internal */
+    export function isExportModifier(node: Modifier): node is ExportKeyword {
+        return node.kind === SyntaxKind.ExportKeyword;
     }
 
     /* @internal */
