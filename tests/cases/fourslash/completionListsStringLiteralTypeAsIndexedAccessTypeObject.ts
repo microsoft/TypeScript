@@ -18,24 +18,18 @@ verify.completions({
   isNewIdentifierLocation: true,
 });
 
-const [
-  { fileName },
-  _,
-  __,
-  ___,
-  fifthCaseMarker,
-  sixthCaseMarker,
-] = test.markers();
-
 // regression tests
+const test5 = test.marker("case_5");
+const test6 = test.marker("case_6");
+
 verify.completions({
   marker: "case_5",
   includes: {
     name: "bar",
     replacementSpan: {
-      fileName,
-      pos: fifthCaseMarker.position - 1,
-      end: fifthCaseMarker.position,
+      fileName: test5.fileName,
+      pos: test5.position - 1,
+      end: test5.position,
     },
   },
 });
@@ -45,9 +39,9 @@ verify.completions({
   includes: {
     name: "qux",
     replacementSpan: {
-      fileName,
-      pos: sixthCaseMarker.position - 2,
-      end: sixthCaseMarker.position,
+      fileName: test6.fileName,
+      pos: test6.position - 2,
+      end: test6.position,
     },
   },
 });
