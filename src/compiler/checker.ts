@@ -14791,7 +14791,7 @@ namespace ts {
                 // mapper to the type parameters to produce the effective list of type arguments, and compute the
                 // instantiation cache key from the type IDs of the type arguments.
                 const combinedMapper = combineTypeMappers(type.mapper, mapper);
-                const typeArguments = map(typeParameters, t => instantiateTypeWorker(t, combinedMapper));   //maybe this is instantiateType? Or another function? I just want to handle typeConstructor situation.
+                const typeArguments = map(typeParameters, t => instantiateTypeOfTypeParameter(t, combinedMapper));   //maybe this is instantiateType?Or instantiateTypeWorker? I just want to handle typeConstructor situation.
                 const id = getTypeListId(typeArguments);
                 let result = links.instantiations!.get(id);
                 if (!result) {
@@ -14808,7 +14808,7 @@ namespace ts {
 
         function maybeTypeParameterReference(node: Node) {
             return !(node.kind === SyntaxKind.QualifiedName ||
-                node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName ||
+                // node.parent.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>node.parent).typeArguments && node === (<TypeReferenceNode>node.parent).typeName || // delete this line or add more constract.
                 node.parent.kind === SyntaxKind.ImportType && (node.parent as ImportTypeNode).typeArguments && node === (node.parent as ImportTypeNode).qualifier);
         }
 
@@ -15004,18 +15004,29 @@ namespace ts {
             return result;
         }
 
-        function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
+        // this function is mainly for the change in function `getObjectTypeInstantiation`, another choice is written in the comment of that changed line.
+        function instantiateTypeOfTypeParameter(type: Type, mapper: TypeMapper): Type {
             const flags = type.flags;
-            if(flags & TypeFlags.TypeConstructor){
+            if (flags & TypeFlags.TypeConstructor) {
                 // this is a demo implement, and not well considered.
-                const concentrateGenericType  = getMappedType(type, mapper);
-                // or maybe we could get the symbol, then get value declration. But it seems target is a quick way.
+                const concentrateGenericType = getMappedType(type, mapper);
+                if(concentrateGenericType === type){
+                    debugger;//on which condition this would happen?
+                    return type;
+                }
                 const resolvedTypeArguments = (<TypeParameter>type).resolvedTypeConstructorParam;
                 const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments) : concentrateGenericType;
+                return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
             }
-            if (flags & TypeFlags.TypeParameter) {
+            else {
                 return getMappedType(type, mapper);
+            }
+        }
+
+        function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
+            const flags = type.flags;
+            if (flags & TypeFlags.TypeParameter) {
+                return instantiateTypeOfTypeParameter(type, mapper);
             }
             if (flags & TypeFlags.Object) {
                 const objectFlags = (<ObjectType>type).objectFlags;
