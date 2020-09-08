@@ -131,7 +131,7 @@ namespace ts.Completions.StringCompletions {
                         //      }
                         //      let x: Foo["/*completion position*/"]
                         const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
-                        if (!isParenthesizedTypeNode(indexType) && parent !== indexType) {
+                        if (!rangeContainsPosition(indexType, position)) {
                             return undefined;
                         }
                         return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
