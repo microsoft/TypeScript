@@ -591,7 +591,7 @@ task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",
 };
 
-const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification.docx"), path.resolve("doc/spec.md")]);
+const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]);
 task("generate-spec", series(buildScripts, generateSpec));
 task("generate-spec").description = "Generates a Markdown version of the Language Specification";
 
