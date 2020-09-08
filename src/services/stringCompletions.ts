@@ -130,10 +130,11 @@ namespace ts.Completions.StringCompletions {
                         //          bar: string;
                         //      }
                         //      let x: Foo["/*completion position*/"]
-                        if (parent !== (grandParent as IndexedAccessTypeNode).indexType) {
+                        const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
+                        if (!isParenthesizedTypeNode(indexType) && parent !== indexType) {
                             return undefined;
                         }
-                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((grandParent as IndexedAccessTypeNode).objectType));
+                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
                     case SyntaxKind.ImportType:
                         return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     case SyntaxKind.UnionType: {
