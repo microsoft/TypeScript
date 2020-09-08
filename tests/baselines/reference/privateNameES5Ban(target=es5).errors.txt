@@ -1,6 +1,6 @@
 tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(3,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
 tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(4,5): error TS18022: A method cannot be named with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(5,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(5,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(6,12): error TS18022: A method cannot be named with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(7,9): error TS18023: An accessor cannot be named with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(8,9): error TS18023: An accessor cannot be named with a private identifier.
@@ -19,7 +19,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(10,16)
 !!! error TS18022: A method cannot be named with a private identifier.
         static #sField = "hello world";
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         static #sMethod() {}
                ~~~~~~~~
 !!! error TS18022: A method cannot be named with a private identifier.

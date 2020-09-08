@@ -3,10 +3,10 @@
  * @param {number} p
  */
 module.exports = function (p) {
->module.exports = function (p) {    this.t = 12 + p;} : typeof exports
->module.exports : typeof exports
->module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": typeof exports; }
->exports : typeof exports
+>module.exports = function (p) {    this.t = 12 + p;} : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
 >function (p) {    this.t = 12 + p;} : typeof exports
 >p : number
 
@@ -22,9 +22,9 @@ module.exports = function (p) {
 module.exports.Sub = function() {
 >module.exports.Sub = function() {    this.instance = new module.exports(10);} : typeof Sub
 >module.exports.Sub : typeof Sub
->module.exports : typeof exports
->module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": typeof exports; }
->exports : typeof exports
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
 >Sub : typeof Sub
 >function() {    this.instance = new module.exports(10);} : typeof Sub
 
@@ -34,18 +34,18 @@ module.exports.Sub = function() {
 >this : this
 >instance : any
 >new module.exports(10) : exports
->module.exports : typeof exports
->module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": typeof exports; }
->exports : typeof exports
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
 >10 : 10
 }
 module.exports.Sub.prototype = { }
 >module.exports.Sub.prototype = { } : {}
 >module.exports.Sub.prototype : {}
 >module.exports.Sub : typeof Sub
->module.exports : typeof exports
->module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": typeof exports; }
->exports : typeof exports
+>module.exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": { (p: number): void; new (p: number): exports; Sub: typeof Sub; }; }
+>exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
 >Sub : typeof Sub
 >prototype : {}
 >{ } : {}

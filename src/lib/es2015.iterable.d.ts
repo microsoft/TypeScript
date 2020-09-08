@@ -222,10 +222,6 @@ interface PromiseConstructor {
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
 }
 
-declare namespace Reflect {
-    function enumerate(target: object): IterableIterator<any>;
-}
-
 interface String {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<string>;

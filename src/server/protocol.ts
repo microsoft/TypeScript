@@ -2256,6 +2256,12 @@ namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        readonly optionalReplacementSpan?: TextSpan;
         readonly entries: readonly CompletionEntry[];
     }
 

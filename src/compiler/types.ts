@@ -5017,11 +5017,17 @@ namespace ts {
         IsNeverIntersectionComputed = 1 << 28, // IsNeverLike flag has been computed
         /* @internal */
         IsNeverIntersection = 1 << 29, // Intersection reduces to never
+        /* @internal */
+        IsClassInstanceClone = 1 << 30, // Type is a clone of a class instance type
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+
+        // Object flags that uniquely identify the kind of ObjectType
+        /* @internal */
+        ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
     }
 
     /* @internal */
