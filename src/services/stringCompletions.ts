@@ -131,7 +131,10 @@ namespace ts.Completions.StringCompletions {
                         //      }
                         //      let x: Foo["/*completion position*/"]
                         const { objectType } = grandParent as IndexedAccessTypeNode;
-                        const isNodeAnObjectTypeStringLiteral = node.text === (objectType as any).literal?.text;
+                        let isNodeAnObjectTypeStringLiteral;
+                        if((objectType as any).literal){
+                            isNodeAnObjectTypeStringLiteral = node.text === (objectType as any).literal.text;
+                        }
                         if(!isNodeAnObjectTypeStringLiteral){
                             return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
                         }
