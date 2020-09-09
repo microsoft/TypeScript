@@ -1,6 +1,6 @@
 /* @internal */
-namespace ts.refactor.encapsulateReturn {
-    const refactorName = "Encapsulate return value";
+namespace ts.refactor.wrapReturnValue {
+    const refactorName = "Wrap return value";
     const actionNameWrapReturnIntoObject = "Wrap return value into object";
 
     const defaultPropertyName = "value";

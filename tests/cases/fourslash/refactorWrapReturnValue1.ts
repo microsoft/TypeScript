@@ -1,20 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-//// function /*a*/foo/*b*/<T> (): T {
-////     return {} as any as T;
+//// function /*a*/foo/*b*/ () {
+////     return 42;
 //// }
 //// foo();
 
 goTo.select("a", "b");
 edit.applyRefactor({
-    refactorName: "Encapsulate return value",
+    refactorName: "Wrap return value",
     actionName: "Wrap return value into object",
     actionDescription: "Wrap return value into object",
-    newContent: `function foo<T> (): {
-    /*RENAME*/value: T;
-} {
-    return { value: ({} as any as T) };
+    newContent: `function foo () {
+    return { /*RENAME*/value: 42 };
 }
 foo().value;`,
 });
-

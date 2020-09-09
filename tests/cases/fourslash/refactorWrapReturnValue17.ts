@@ -6,4 +6,4 @@
 //// foo();
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Encapsulate return value");
+verify.not.refactorAvailable("Wrap return value");

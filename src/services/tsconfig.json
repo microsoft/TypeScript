@@ -111,7 +111,7 @@
         "refactors/convertOverloadListToSingleSignature.ts",
         "refactors/extractSymbol.ts",
         "refactors/extractType.ts",
-        "refactors/encapsulateReturn.ts",
+        "refactors/wrapReturnValue.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/moveToNewFile.ts",
         "refactors/addOrRemoveBracesToArrowFunction.ts",
