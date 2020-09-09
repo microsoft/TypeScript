@@ -2792,6 +2792,7 @@ declare namespace ts {
         noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
+        noPropertyAccessOnAny?: boolean;
         noImplicitUseStrict?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
@@ -2800,7 +2801,6 @@ declare namespace ts {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
-        pedanticSafeAny?: boolean;
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;
         project?: string;

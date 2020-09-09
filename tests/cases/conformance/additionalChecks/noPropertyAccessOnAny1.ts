@@ -1,4 +1,4 @@
-// @pedanticSafeAny: true
+// @noPropertyAccessOnAny: true
 
 declare const a: any
 

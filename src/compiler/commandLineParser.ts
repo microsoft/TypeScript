@@ -607,7 +607,7 @@ namespace ts {
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
         {
-            name: "pedanticSafeAny",
+            name: "noPropertyAccessOnAny",
             type: "boolean",
             affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,

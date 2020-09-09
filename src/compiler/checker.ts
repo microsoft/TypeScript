@@ -25118,7 +25118,7 @@ namespace ts {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
             }
             const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
-            if (compilerOptions.pedanticSafeAny && isPropertyAccessExpression(node) && isAnyLike) {
+            if (compilerOptions.noPropertyAccessOnAny && isPropertyAccessExpression(node) && isAnyLike) {
                 error(node.name, Diagnostics.Cannot_access_member_from_any_type);
             }
 
@@ -25604,7 +25604,7 @@ namespace ts {
             const indexExpression = node.argumentExpression;
             const indexType = checkExpression(indexExpression);
 
-            if (compilerOptions.pedanticSafeAny && (isTypeAny(objectType) || objectType === silentNeverType)) {
+            if (compilerOptions.noPropertyAccessOnAny && (isTypeAny(objectType) || objectType === silentNeverType)) {
                 error(node.argumentExpression, Diagnostics.Cannot_access_member_from_any_type);
             }
 

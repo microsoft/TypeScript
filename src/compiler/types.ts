@@ -5706,6 +5706,7 @@ namespace ts {
         noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
+        noPropertyAccessOnAny?: boolean;
         noImplicitUseStrict?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
@@ -5714,7 +5715,6 @@ namespace ts {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
-        pedanticSafeAny?: boolean;
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;

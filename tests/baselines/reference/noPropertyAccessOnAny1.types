@@ -1,4 +1,4 @@
-=== tests/cases/conformance/pedantic/pedanticSafeAny1.ts ===
+=== tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts ===
 declare const a: any
 >a : any
 

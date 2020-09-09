@@ -1,0 +1,22 @@
+=== tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts ===
+declare const a: any
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
+a.a;
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
+a["a"];
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
+a.a.a;
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
+a.a = 1;
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
+a["a"] = 1;
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
+a.a.a = 1;
+>a : Symbol(a, Decl(noPropertyAccessOnAny1.ts, 0, 13))
+
