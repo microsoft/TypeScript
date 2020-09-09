@@ -10,7 +10,8 @@ function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass:
 >baseClass : TBaseClass
 >args : any
 
-    abstract class MixinClass extends baseClass implements Mixin {
+    // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+    class MixinClass extends baseClass implements Mixin {
 >MixinClass : MixinClass
 >baseClass : TBaseClass
 

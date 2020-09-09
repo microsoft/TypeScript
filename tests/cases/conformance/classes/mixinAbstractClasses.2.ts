@@ -6,7 +6,8 @@ interface Mixin {
 }
 
 function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
-    abstract class MixinClass extends baseClass implements Mixin {
+    // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+    class MixinClass extends baseClass implements Mixin {
         mixinMethod() {
         }
     }

@@ -3028,6 +3028,10 @@
         "category": "Error",
         "code": 2792
     },
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+        "category": "Error",
+        "code": 2793
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
