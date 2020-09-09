@@ -1,8 +1,8 @@
 tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(2,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(3,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(4,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(6,5): error TS18019: 'declare' modifier cannot be used with a private identifier
-tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(10,5): error TS18019: 'abstract' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(6,5): error TS18019: 'declare' modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts(10,5): error TS18019: 'abstract' modifier cannot be used with a private identifier.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts (5 errors) ====
@@ -19,12 +19,12 @@ tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleMod
         readonly #qux = 3;       // OK
         declare #what: number;   // Error
         ~~~~~~~
-!!! error TS18019: 'declare' modifier cannot be used with a private identifier
+!!! error TS18019: 'declare' modifier cannot be used with a private identifier.
     }
     
     abstract class B {
         abstract #quux = 3;      // Error
         ~~~~~~~~
-!!! error TS18019: 'abstract' modifier cannot be used with a private identifier
+!!! error TS18019: 'abstract' modifier cannot be used with a private identifier.
     }
     

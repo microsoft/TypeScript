@@ -80,6 +80,10 @@ namespace ts.projectSystem {
                     isGlobalCompletion: false,
                     isMemberCompletion: true,
                     isNewIdentifierLocation: false,
+                    optionalReplacementSpan: {
+                        start: { line: 1, offset: aTs.content.indexOf("prop;") + 1 },
+                        end: { line: 1, offset: aTs.content.indexOf("prop;") + 1 + "prop".length }
+                    },
                     entries: expectedCompletionEntries
                 });
             });
