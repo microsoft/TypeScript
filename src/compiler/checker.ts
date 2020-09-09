@@ -15026,14 +15026,7 @@ namespace ts {
             }
             else if (flags & TypeFlags.TypeConstructor) {
                 // this is a demo implement, and not well considered.
-                const concentrateGenericType = getMappedType(type, mapper);
-                if(concentrateGenericType === type){
-                    debugger;//on which condition this would happen?
-                    return type;
-                }
-                const resolvedTypeArguments = (type).resolvedTypeConstructorParam;
-                const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
+                return getMappedType(type, mapper);
             }
             else {
                 return getMappedType(type, mapper);
