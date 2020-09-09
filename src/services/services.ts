@@ -1797,7 +1797,8 @@ namespace ts {
             return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): (ClassifiedSpan| ClassifiedSpan2020)[] {
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
@@ -1829,7 +1830,7 @@ namespace ts {
             }
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
+        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
             return ts.getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
         }

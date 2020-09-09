@@ -380,14 +380,12 @@ namespace ts {
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** @deprecated Use getEncodedSyntacticClassifications instead. */
-        getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat.TwentyTwenty): ClassifiedSpan2020[];
-        getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat.Original): ClassifiedSpan[];
-        getSyntacticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
 
         /** @deprecated Use getEncodedSemanticClassifications instead. */
-        getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat.TwentyTwenty): ClassifiedSpan2020[];
-        getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat.Original): ClassifiedSpan[];
-        getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
 
         /** Encoded as triples of [start, length, ClassificationType]. */
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
