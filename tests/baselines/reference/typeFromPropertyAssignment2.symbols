@@ -3,6 +3,8 @@ function Outer() {
 >Outer : Symbol(Outer, Decl(a.js, 0, 0), Decl(a.js, 2, 1))
 
     this.y = 2
+>this.y : Symbol(Outer.y, Decl(a.js, 0, 18))
+>this : Symbol(Outer, Decl(a.js, 0, 0), Decl(a.js, 2, 1))
 >y : Symbol(Outer.y, Decl(a.js, 0, 18))
 }
 Outer.Inner = class I {

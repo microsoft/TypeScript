@@ -77,3 +77,50 @@ describe("unittests:: Public APIs:: isPropertyName", () => {
         assert.isTrue(ts.isPropertyName(prop), "PrivateIdentifier must be a valid property name.");
     });
 });
+
+describe("unittests:: Public APIs:: getTypeAtLocation", () => {
+    it("works on PropertyAccessExpression in implements clause", () => {
+        const content = `namespace Test {
+            export interface Test {}
+        }
+        class Foo implements Test.Test {}`;
+
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const classDeclaration = file.statements.find(ts.isClassDeclaration)!;
+        const propertyAccess = classDeclaration.heritageClauses![0].types[0].expression as ts.PropertyAccessExpression;
+        const type = checker.getTypeAtLocation(propertyAccess);
+        assert.ok(!(type.flags & ts.TypeFlags.Any));
+        assert.equal(type, checker.getTypeAtLocation(propertyAccess.name));
+    });
+
+    it("works on SourceFile", () => {
+        const content = `const foo = 1;`;
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const type = checker.getTypeAtLocation(file);
+        assert.equal(type.flags, ts.TypeFlags.Any);
+    });
+});

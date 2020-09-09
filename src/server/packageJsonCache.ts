@@ -11,8 +11,8 @@ namespace ts.server {
     }
 
     export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
-        const packageJsons = createMap<PackageJsonInfo>();
-        const directoriesWithoutPackageJson = createMap<true>();
+        const packageJsons = new Map<string, PackageJsonInfo>();
+        const directoriesWithoutPackageJson = new Map<string, true>();
         return {
             addOrUpdate,
             forEach: packageJsons.forEach.bind(packageJsons),
@@ -42,11 +42,9 @@ namespace ts.server {
         };
 
         function addOrUpdate(fileName: Path) {
-            const packageJsonInfo = createPackageJsonInfo(fileName, host.host);
-            if (packageJsonInfo !== undefined) {
-                packageJsons.set(fileName, packageJsonInfo);
-                directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
-            }
+            const packageJsonInfo = Debug.checkDefined(createPackageJsonInfo(fileName, host.host));
+            packageJsons.set(fileName, packageJsonInfo);
+            directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
         }
 
         function directoryHasPackageJson(directory: Path) {

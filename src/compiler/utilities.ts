@@ -1,8 +1,6 @@
 /* @internal */
 namespace ts {
-    export const resolvingEmptyArray: never[] = [] as never[];
-    export const emptyMap = createMap<never, never>() as ReadonlyESMap<never, never> & ReadonlyPragmaMap;
-    export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
+    export const resolvingEmptyArray: never[] = [];
 
     export const externalHelpersModuleNameText = "tslib";
 
@@ -22,17 +20,23 @@ namespace ts {
         return undefined;
     }
 
-    /** Create a new escaped identifier map. */
+    /**
+     * Create a new escaped identifier map.
+     * @deprecated Use `new Map<__String, T>()` instead.
+     */
     export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<string, T>() as UnderscoreEscapedMap<T>;
+        return new Map<__String, T>();
     }
 
-    export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
+    /**
+     * @deprecated Use `!!map?.size` instead
+     */
+    export function hasEntries(map: ReadonlyCollection<any> | undefined): map is ReadonlyCollection<any> {
         return !!map && !!map.size;
     }
 
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
-        const result = createMap<Symbol>() as SymbolTable;
+        const result = new Map<__String, Symbol>();
         if (symbols) {
             for (const symbol of symbols) {
                 result.set(symbol.escapedName, symbol);
@@ -163,27 +167,6 @@ namespace ts {
         });
     }
 
-    /**
-     * Creates a set from the elements of an array.
-     *
-     * @param array the array of input elements.
-     */
-    export function arrayToSet(array: readonly string[]): ESMap<string, true>;
-    export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => string | undefined): ESMap<string, true>;
-    export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
-    export function arrayToSet(array: readonly any[], makeKey?: (value: any) => string | __String | undefined): ESMap<string, true> | UnderscoreEscapedMap<true> {
-        return arrayToMap<any, true>(array, makeKey || (s => s), returnTrue);
-    }
-
-    export function cloneMap(map: SymbolTable): SymbolTable;
-    export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
-    export function cloneMap<K, V>(map: ReadonlyESMap<K, V>): ESMap<K, V>;
-    export function cloneMap<K, V>(map: ReadonlyESMap<K, V>): ESMap<K, V> {
-        const clone = createMap<K, V>();
-        copyEntries(map, clone);
-        return clone;
-    }
-
     export function usingSingleLineStringWriter(action: (writer: EmitTextWriter) => void): string {
         const oldString = stringWriter.getText();
         try {
@@ -206,7 +189,7 @@ namespace ts {
 
     export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
+            sourceFile.resolvedModules = new Map<string, ResolvedModuleFull>();
         }
 
         sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
@@ -214,7 +197,7 @@ namespace ts {
 
     export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective | undefined>();
+            sourceFile.resolvedTypeReferenceDirectiveNames = new Map<string, ResolvedTypeReferenceDirective | undefined>();
         }
 
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
@@ -473,7 +456,7 @@ namespace ts {
             ]))
         );
 
-        const usedLines = createMap<boolean>();
+        const usedLines = new Map<string, boolean>();
 
         return { getUnusedExpectations, markUsed };
 
@@ -500,7 +483,8 @@ namespace ts {
             return node.pos;
         }
 
-        if (isJSDocNode(node)) {
+        if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
+            // JsxText cannot actually contain comments, even though the scanner will think it sees comments
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
@@ -533,6 +517,10 @@ namespace ts {
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
         return !!findAncestor(node, isJSDocTypeExpression);
+    }
+
+    export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
+        return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
@@ -574,10 +562,17 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean) {
+    export const enum GetLiteralTextFlags {
+        None = 0,
+        NeverAsciiEscape = 1 << 0,
+        JsxAttributeEscape = 1 << 1,
+        TerminateUnterminatedLiterals = 1 << 2,
+    }
+
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(
+        if (!nodeIsSynthesized(node) && node.parent && !(flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) && !(
             (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
             isBigIntLiteral(node)
         )) {
@@ -588,8 +583,8 @@ namespace ts {
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral: {
-                const escapeText = jsxAttributeEscape ? escapeJsxAttributeString :
-                    neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
+                    flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
                 if ((<StringLiteral>node).singleQuote) {
                     return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
@@ -604,7 +599,7 @@ namespace ts {
             case SyntaxKind.TemplateTail: {
                 // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
                 // had to include a backslash: `not \${a} substitution`.
-                const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
 
                 const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
@@ -622,7 +617,11 @@ namespace ts {
             }
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
+                return node.text;
             case SyntaxKind.RegularExpressionLiteral:
+                if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) {
+                    return node.text + (node.text.charCodeAt(node.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
+                }
                 return node.text;
         }
 
@@ -1630,6 +1629,10 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
     }
 
+    export function isThisInitializedDeclaration(node: Node | undefined): boolean {
+        return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
+    }
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
@@ -1864,6 +1867,11 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
+    export function getExternalModuleRequireArgument(node: Node) {
+        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
+            && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+    }
+
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
@@ -1931,11 +1939,14 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
+        node = getRootDeclaration(node);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
-    export function isRequireVariableDeclarationStatement(node: Node, requireStringLiteralLikeArgument = true): node is VariableStatement {
-        return isVariableStatement(node) && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
+    export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
+        return isVariableStatement(node)
+            && node.declarationList.declarations.length > 0
+            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -2467,7 +2478,7 @@ namespace ts {
         }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
+    export function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
         return isVariableStatement(node) ? firstOrUndefined(node.declarationList.declarations) : undefined;
     }
 
@@ -3590,7 +3601,7 @@ namespace ts {
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
         const filesWithDiagnostics = [] as string[] as SortedArray<string>;
-        const fileDiagnostics = createMap<SortedArray<DiagnosticWithLocation>>();
+        const fileDiagnostics = new Map<string, SortedArray<DiagnosticWithLocation>>();
         let hasReadNonFileDiagnostics = false;
 
         return {
@@ -3688,7 +3699,7 @@ namespace ts {
     const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     // Template strings should be preserved as much as possible
     const backtickQuoteEscapedCharsRegExp = /[\\`]/g;
-    const escapedCharsMap = createMapFromTemplate({
+    const escapedCharsMap = new Map(getEntries({
         "\t": "\\t",
         "\v": "\\v",
         "\f": "\\f",
@@ -3702,7 +3713,7 @@ namespace ts {
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
-    });
+    }));
 
     function encodeUtf16EscapeSequence(charCode: number): string {
         const hexCharCode = charCode.toString(16).toUpperCase();
@@ -3752,10 +3763,10 @@ namespace ts {
     // the map below must be updated.
     const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
     const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
-    const jsxEscapedCharsMap = createMapFromTemplate({
+    const jsxEscapedCharsMap = new Map(getEntries({
         "\"": "&quot;",
         "\'": "&apos;"
-    });
+    }));
 
     function encodeJsxCharacterEntity(charCode: number): string {
         const hexCharCode = charCode.toString(16).toUpperCase();
@@ -4755,7 +4766,7 @@ namespace ts {
         if (isPropertyAccessExpression(expr)) {
             const baseStr = tryGetPropertyAccessOrIdentifierToString(expr.expression);
             if (baseStr !== undefined) {
-                return baseStr + "." + expr.name;
+                return baseStr + "." + entityNameToString(expr.name);
             }
         }
         else if (isIdentifier(expr)) {
@@ -4784,7 +4795,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
+        if (!isExportDefaultSymbol(symbol)) return undefined;
+        for (const decl of symbol.declarations) {
+            if (decl.localSymbol) return decl.localSymbol;
+        }
+        return undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
@@ -5448,6 +5463,13 @@ namespace ts {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
 
+    export function getLeftmostAccessExpression(expr: Expression): Expression {
+        while (isAccessExpression(expr)) {
+            expr = expr.expression;
+        }
+        return expr;
+    }
+
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
@@ -5911,6 +5933,10 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+    }
+
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
@@ -5941,28 +5967,57 @@ namespace ts {
         return true;
     }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyESMap<string, string> {
-        const result = createMap<string>();
+    export interface SymlinkedDirectory {
+        real: string;
+        realPath: Path;
+    }
+
+    export interface SymlinkCache {
+        getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+        getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
+        setSymlinkedDirectory(path: Path, directory: SymlinkedDirectory | false): void;
+        setSymlinkedFile(path: Path, real: string): void;
+    }
+
+    export function createSymlinkCache(): SymlinkCache {
+        let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedFiles: ESMap<Path, string> | undefined;
+        return {
+            getSymlinkedFiles: () => symlinkedFiles,
+            getSymlinkedDirectories: () => symlinkedDirectories,
+            setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
+            setSymlinkedDirectory: (path, directory) => (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory),
+        };
+    }
+
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
+        const cache = createSymlinkCache();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
         for (const [resolvedPath, originalPath] of symlinks) {
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
-            result.set(commonOriginal, commonResolved);
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
+            if (commonResolved && commonOriginal) {
+                cache.setSymlinkedDirectory(
+                    toPath(commonOriginal, cwd, getCanonicalFileName),
+                    { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
+            }
         }
-        return result;
+        return cache;
     }
 
-    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
+    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
         const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
         const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        let isDirectory = false;
         while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
             getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])) {
             aParts.pop();
             bParts.pop();
+            isDirectory = true;
         }
-        return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
+        return isDirectory ? [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)] : undefined;
     }
 
     // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
@@ -6200,7 +6255,7 @@ namespace ts {
         // Associate an array of results with each include regex. This keeps results in order of the "include" order.
         // If there are no "includes", then just put everything in results[0].
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
-        const visited = createMap<true>();
+        const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
@@ -6335,7 +6390,7 @@ namespace ts {
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[] {
-        const needJsExtensions = options && options.allowJs;
+        const needJsExtensions = options && getAllowJSCompilerOption(options);
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
             return needJsExtensions ? allSupportedExtensions : supportedTSExtensions;
@@ -6564,67 +6619,17 @@ namespace ts {
         return { min, max };
     }
 
-    export interface ReadonlyNodeSet<TNode extends Node> {
-        has(node: TNode): boolean;
-        forEach(cb: (node: TNode) => void): void;
-        some(pred: (node: TNode) => boolean): boolean;
-    }
+    /** @deprecated Use `ReadonlySet<TNode>` instead. */
+    export type ReadonlyNodeSet<TNode extends Node> = ReadonlySet<TNode>;
 
-    export class NodeSet<TNode extends Node> implements ReadonlyNodeSet<TNode> {
-        private map = createMap<TNode>();
+    /** @deprecated Use `Set<TNode>` instead. */
+    export type NodeSet<TNode extends Node> = Set<TNode>;
 
-        add(node: TNode): void {
-            this.map.set(String(getNodeId(node)), node);
-        }
-        tryAdd(node: TNode): boolean {
-            if (this.has(node)) return false;
-            this.add(node);
-            return true;
-        }
-        has(node: TNode): boolean {
-            return this.map.has(String(getNodeId(node)));
-        }
-        forEach(cb: (node: TNode) => void): void {
-            this.map.forEach(cb);
-        }
-        some(pred: (node: TNode) => boolean): boolean {
-            return forEachEntry(this.map, pred) || false;
-        }
-    }
+    /** @deprecated Use `ReadonlyMap<TNode, TValue>` instead. */
+    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyESMap<TNode, TValue>;
 
-    export interface ReadonlyNodeMap<TNode extends Node, TValue> {
-        get(node: TNode): TValue | undefined;
-        has(node: TNode): boolean;
-    }
-
-    export class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
-        private map = createMap<{ node: TNode, value: TValue }>();
-
-        get(node: TNode): TValue | undefined {
-            const res = this.map.get(String(getNodeId(node)));
-            return res && res.value;
-        }
-
-        getOrUpdate(node: TNode, setValue: () => TValue): TValue {
-            const res = this.get(node);
-            if (res) return res;
-            const value = setValue();
-            this.set(node, value);
-            return value;
-        }
-
-        set(node: TNode, value: TValue): void {
-            this.map.set(String(getNodeId(node)), { node, value });
-        }
-
-        has(node: TNode): boolean {
-            return this.map.has(String(getNodeId(node)));
-        }
-
-        forEach(cb: (value: TValue, node: TNode) => void): void {
-            this.map.forEach(({ node, value }) => cb(value, node));
-        }
-    }
+    /** @deprecated Use `Map<TNode, TValue>` instead. */
+    export type NodeMap<TNode extends Node, TValue> = ESMap<TNode, TValue>;
 
     export function rangeOfNode(node: Node): TextRange {
         return { pos: getTokenPosOfNode(node), end: node.end };
@@ -6650,18 +6655,6 @@ namespace ts {
     export function isJsonEqual(a: unknown, b: unknown): boolean {
         // eslint-disable-next-line no-null/no-null
         return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
-    }
-
-    export function getOrUpdate<T>(map: ESMap<string, T>, key: string, getDefault: () => T): T {
-        const got = map.get(key);
-        if (got === undefined) {
-            const value = getDefault();
-            map.set(key, value);
-            return value;
-        }
-        else {
-            return got;
-        }
     }
 
     /**

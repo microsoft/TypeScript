@@ -25,9 +25,9 @@ verify.codeFixAll({
   fixId: "fixMissingImport",
   fixAllDescription: "Add all missing imports",
   newFileContent:
-`const foo = require("./foo");
+`const { default: Blah } = require("./blah");
+const foo = require("./foo");
 const { util1, util2 } = require("./utils");
-const { default: Blah } = require("./blah");
 
 foo();
 util1();

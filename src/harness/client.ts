@@ -35,7 +35,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence = 0;
-        private lineMaps: ESMap<string, number[]> = createMap<number[]>();
+        private lineMaps = new Map<string, number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
 
@@ -757,6 +757,7 @@ namespace ts.server {
                 name: item.name,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
+                containerName: item.containerName,
                 span: this.decodeSpan(item.span, item.file),
                 selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
             };
@@ -778,7 +779,7 @@ namespace ts.server {
 
         provideCallHierarchyIncomingCalls(fileName: string, position: number) {
             const args = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.ProvideCallHierarchyIncomingCalls, args);
             const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
             return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
         }
@@ -792,7 +793,7 @@ namespace ts.server {
 
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             const args = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.ProvideCallHierarchyOutgoingCalls, args);
             const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
             return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
         }
@@ -822,6 +823,22 @@ namespace ts.server {
         }
 
         clearSourceMapperCache(): never {
+            return notImplemented();
+        }
+
+        toggleLineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        toggleMultilineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        commentSelection(): TextChange[] {
+            return notImplemented();
+        }
+
+        uncommentSelection(): TextChange[] {
             return notImplemented();
         }
 

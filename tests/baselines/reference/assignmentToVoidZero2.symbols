@@ -28,9 +28,12 @@ function C() {
 >C : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
 
     this.p = 1
+>this.p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
+>this : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
 >p : Symbol(C.p, Decl(assignmentToVoidZero2.js, 7, 14))
 
     this.q = void 0
+>this : Symbol(C, Decl(assignmentToVoidZero2.js, 5, 9))
 }
 var c = new C()
 >c : Symbol(c, Decl(assignmentToVoidZero2.js, 11, 3))

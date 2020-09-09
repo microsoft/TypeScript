@@ -31,6 +31,7 @@ namespace ts {
         createImportStarHelper(expression: Expression): Expression;
         createImportStarCallbackHelper(): Expression;
         createImportDefaultHelper(expression: Expression): Expression;
+        createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
@@ -69,6 +70,7 @@ namespace ts {
             createImportStarHelper,
             createImportStarCallbackHelper,
             createImportDefaultHelper,
+            createExportStarHelper,
             // Class Fields Helpers
             createClassPrivateFieldGetHelper,
             createClassPrivateFieldSetHelper,
@@ -366,6 +368,16 @@ namespace ts {
             );
         }
 
+        function createExportStarHelper(moduleExpression: Expression, exportsExpression: Expression = factory.createIdentifier("exports")) {
+            context.requestEmitHelper(exportStarHelper);
+            context.requestEmitHelper(createBindingHelper);
+            return factory.createCallExpression(
+                getUnscopedHelperName("__exportStar"),
+                /*typeArguments*/ undefined,
+                [moduleExpression, exportsExpression]
+            );
+        }
+
         // Class Fields Helpers
 
         function createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier) {
@@ -568,7 +580,7 @@ namespace ts {
                 var extendStatics = function (d, b) {
                     extendStatics = Object.setPrototypeOf ||
                         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-                        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+                        function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
                     return extendStatics(d, b);
                 };
 
@@ -798,7 +810,7 @@ namespace ts {
             var __importStar = (this && this.__importStar) || function (mod) {
                 if (mod && mod.__esModule) return mod;
                 var result = {};
-                if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+                if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
                 __setModuleDefault(result, mod);
                 return result;
             };`
@@ -815,9 +827,23 @@ namespace ts {
             };`
     };
 
+    // emit output for the __export helper function
+    export const exportStarHelper: UnscopedEmitHelper = {
+        name: "typescript:export-star",
+        importName: "__exportStar",
+        scoped: false,
+        dependencies: [createBindingHelper],
+        priority: 2,
+        text: `
+            var __exportStar = (this && this.__exportStar) || function(m, exports) {
+                for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+            };`
+    };
+
     // Class fields helpers
     export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldGet",
+        importName: "__classPrivateFieldGet",
         scoped: false,
         text: `
             var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
@@ -830,6 +856,7 @@ namespace ts {
 
     export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldSet",
+        importName: "__classPrivateFieldSet",
         scoped: false,
         text: `
             var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
@@ -864,6 +891,7 @@ namespace ts {
             generatorHelper,
             importStarHelper,
             importDefaultHelper,
+            exportStarHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
             createBindingHelper,

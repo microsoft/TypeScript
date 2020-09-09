@@ -509,6 +509,7 @@ namespace ts {
                 if (elements.transformFlags === undefined) {
                     aggregateChildrenFlags(elements as MutableNodeArray<T>);
                 }
+                Debug.attachNodeArrayDebugInfo(elements);
                 return elements;
             }
 
@@ -520,6 +521,7 @@ namespace ts {
             setTextRangePosEnd(array, -1, -1);
             array.hasTrailingComma = !!hasTrailingComma;
             aggregateChildrenFlags(array);
+            Debug.attachNodeArrayDebugInfo(array);
             return array;
         }
 
@@ -5654,7 +5656,7 @@ namespace ts {
                     left.splice(0, 0, ...declarations.slice(0, rightStandardPrologueEnd));
                 }
                 else {
-                    const leftPrologues = createMap<boolean>();
+                    const leftPrologues = new Map<string, boolean>();
                     for (let i = 0; i < leftStandardPrologueEnd; i++) {
                         const leftPrologue = statements[i] as PrologueDirective;
                         leftPrologues.set(leftPrologue.expression.text, true);
@@ -6159,7 +6161,7 @@ namespace ts {
     ): InputFiles {
         const node = parseNodeFactory.createInputFiles();
         if (!isString(javascriptTextOrReadFileText)) {
-            const cache = createMap<string | false>();
+            const cache = new Map<string, string | false>();
             const textGetter = (path: string | undefined) => {
                 if (path === undefined) return undefined;
                 let value = cache.get(path);

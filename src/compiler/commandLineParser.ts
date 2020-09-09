@@ -83,33 +83,33 @@ namespace ts {
     export const optionsForWatch: CommandLineOption[] = [
         {
             name: "watchFile",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 fixedpollinginterval: WatchFileKind.FixedPollingInterval,
                 prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
                 dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
                 usefsevents: WatchFileKind.UseFsEvents,
                 usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
-            }),
+            })),
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
         },
         {
             name: "watchDirectory",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 usefsevents: WatchDirectoryKind.UseFsEvents,
                 fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
                 dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
-            }),
+            })),
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
         },
         {
             name: "fallbackPolling",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 fixedinterval: PollingWatchKind.FixedInterval,
                 priorityinterval: PollingWatchKind.PriorityInterval,
                 dynamicpriority: PollingWatchKind.DynamicPriority,
-            }),
+            })),
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
         },
@@ -286,7 +286,7 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 es3: ScriptTarget.ES3,
                 es5: ScriptTarget.ES5,
                 es6: ScriptTarget.ES2015,
@@ -297,7 +297,7 @@ namespace ts {
                 es2019: ScriptTarget.ES2019,
                 es2020: ScriptTarget.ES2020,
                 esnext: ScriptTarget.ESNext,
-            }),
+            })),
             affectsSourceFile: true,
             affectsModuleResolution: true,
             affectsEmit: true,
@@ -309,7 +309,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 none: ModuleKind.None,
                 commonjs: ModuleKind.CommonJS,
                 amd: ModuleKind.AMD,
@@ -319,7 +319,7 @@ namespace ts {
                 es2015: ModuleKind.ES2015,
                 es2020: ModuleKind.ES2020,
                 esnext: ModuleKind.ESNext
-            }),
+            })),
             affectsModuleResolution: true,
             affectsEmit: true,
             paramType: Diagnostics.KIND,
@@ -356,11 +356,11 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 "preserve": JsxEmit.Preserve,
                 "react-native": JsxEmit.ReactNative,
                 "react": JsxEmit.React
-            }),
+            })),
             affectsSourceFile: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -476,11 +476,11 @@ namespace ts {
         },
         {
             name: "importsNotUsedAsValues",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
                 error: ImportsNotUsedAsValues.Error
-            }),
+            })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
@@ -610,10 +610,10 @@ namespace ts {
         // Module Resolution
         {
             name: "moduleResolution",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
-            }),
+            })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
@@ -818,10 +818,10 @@ namespace ts {
         },
         {
             name: "newLine",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 crlf: NewLineKind.CarriageReturnLineFeed,
                 lf: NewLineKind.LineFeed
-            }),
+            })),
             affectsEmit: true,
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,
@@ -881,6 +881,13 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_solution_searching_for_this_project
+        },
+        {
+            name: "disableReferencedProjectLoad",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_loading_referenced_projects
         },
         {
             name: "noImplicitUseStrict",
@@ -1096,8 +1103,8 @@ namespace ts {
 
     /*@internal*/
     export function createOptionNameMap(optionDeclarations: readonly CommandLineOption[]): OptionsNameMap {
-        const optionsNameMap = createMap<CommandLineOption>();
-        const shortOptionNames = createMap<string>();
+        const optionsNameMap = new Map<string, CommandLineOption>();
+        const shortOptionNames = new Map<string, string>();
         forEach(optionDeclarations, option => {
             optionsNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
@@ -2032,7 +2039,7 @@ namespace ts {
         { optionsNameMap }: OptionsNameMap,
         pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
     ): ESMap<string, CompilerOptionsValue> {
-        const result = createMap<CompilerOptionsValue>();
+        const result = new Map<string, CompilerOptionsValue>();
         const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
 
         for (const name in options) {
@@ -2301,53 +2308,48 @@ namespace ts {
         };
 
         function getFileNames(): ExpandResult {
-            let filesSpecs: readonly string[] | undefined;
-            if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
-                if (isArray(raw.files)) {
-                    filesSpecs = <readonly string[]>raw.files;
-                    const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
-                    const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
-                    const hasExtends = hasProperty(raw, "extends");
-                    if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
-                        if (sourceFile) {
-                            const fileName = configFileName || "tsconfig.json";
-                            const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
-                            const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
-                            const error = nodeValue
-                                ? createDiagnosticForNodeInSourceFile(sourceFile, nodeValue, diagnosticMessage, fileName)
-                                : createCompilerDiagnostic(diagnosticMessage, fileName);
-                            errors.push(error);
-                        }
-                        else {
-                            createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
-                        }
+            const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
+            if (isArray(referencesOfRaw)) {
+                for (const ref of referencesOfRaw) {
+                    if (typeof ref.path !== "string") {
+                        createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
+                    }
+                    else {
+                        (projectReferences || (projectReferences = [])).push({
+                            path: getNormalizedAbsolutePath(ref.path, basePath),
+                            originalPath: ref.path,
+                            prepend: ref.prepend,
+                            circular: ref.circular
+                        });
                     }
                 }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array");
+            }
+
+            const filesSpecs = toPropValue(getSpecsFromRaw("files"));
+            if (filesSpecs) {
+                const hasZeroOrNoReferences = referencesOfRaw === "no-prop" || isArray(referencesOfRaw) && referencesOfRaw.length === 0;
+                const hasExtends = hasProperty(raw, "extends");
+                if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
+                    if (sourceFile) {
+                        const fileName = configFileName || "tsconfig.json";
+                        const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
+                        const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
+                        const error = nodeValue
+                            ? createDiagnosticForNodeInSourceFile(sourceFile, nodeValue, diagnosticMessage, fileName)
+                            : createCompilerDiagnostic(diagnosticMessage, fileName);
+                        errors.push(error);
+                    }
+                    else {
+                        createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
+                    }
                 }
             }
 
-            let includeSpecs: readonly string[] | undefined;
-            if (hasProperty(raw, "include") && !isNullOrUndefined(raw.include)) {
-                if (isArray(raw.include)) {
-                    includeSpecs = <readonly string[]>raw.include;
-                }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "include", "Array");
-                }
-            }
+            let includeSpecs = toPropValue(getSpecsFromRaw("include"));
 
-            let excludeSpecs: readonly string[] | undefined;
-            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw.exclude)) {
-                if (isArray(raw.exclude)) {
-                    excludeSpecs = <readonly string[]>raw.exclude;
-                }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
-                }
-            }
-            else if (raw.compilerOptions) {
+            const excludeOfRaw = getSpecsFromRaw("exclude");
+            let excludeSpecs = toPropValue(excludeOfRaw);
+            if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
                 const outDir = raw.compilerOptions.outDir;
                 const declarationDir = raw.compilerOptions.declarationDir;
 
@@ -2365,28 +2367,33 @@ namespace ts {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
-            if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
-                if (isArray(raw.references)) {
-                    for (const ref of raw.references) {
-                        if (typeof ref.path !== "string") {
-                            createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
-                        }
-                        else {
-                            (projectReferences || (projectReferences = [])).push({
-                                path: getNormalizedAbsolutePath(ref.path, basePath),
-                                originalPath: ref.path,
-                                prepend: ref.prepend,
-                                circular: ref.circular
-                            });
-                        }
+            return result;
+        }
+
+        type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
+        function toPropValue<T>(specResult: PropOfRaw<T>) {
+            return isArray(specResult) ? specResult : undefined;
+        }
+
+        function getSpecsFromRaw(prop: "files" | "include" | "exclude"): PropOfRaw<string> {
+            return getPropFromRaw(prop, isString, "string");
+        }
+
+        function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
+            if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
+                if (isArray(raw[prop])) {
+                    const result = raw[prop];
+                    if (!sourceFile && !every(result, validateElement)) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                     }
+                    return result;
                 }
                 else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "references", "Array");
+                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, "Array");
+                    return "not-array";
                 }
             }
-
-            return result;
+            return "no-prop";
         }
 
         function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
@@ -2934,7 +2941,15 @@ namespace ts {
         // new entries in these paths.
         const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
 
-        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
+        const spec: ConfigFileSpecs = {
+            filesSpecs,
+            includeSpecs,
+            excludeSpecs,
+            validatedFilesSpec: filter(filesSpecs, isString),
+            validatedIncludeSpecs,
+            validatedExcludeSpecs,
+            wildcardDirectories
+        };
         return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
     }
 
@@ -2962,18 +2977,18 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap = createMap<string>();
+        const literalFileMap = new Map<string, string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap = createMap<string>();
+        const wildcardFileMap = new Map<string, string>();
 
         // Wildcard paths of json files (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard of *.json kind
-        const wildCardJsonFileMap = createMap<string>();
-        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
+        const wildCardJsonFileMap = new Map<string, string>();
+        const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -2982,8 +2997,8 @@ namespace ts {
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
-        if (filesSpecs) {
-            for (const fileName of filesSpecs) {
+        if (validatedFilesSpec) {
+            for (const fileName of validatedFilesSpec) {
                 const file = getNormalizedAbsolutePath(fileName, basePath);
                 literalFileMap.set(keyMapper(file), file);
             }
@@ -3049,14 +3064,14 @@ namespace ts {
         useCaseSensitiveFileNames: boolean,
         currentDirectory: string
     ): boolean {
-        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs } = spec;
+        const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs } = spec;
         if (!length(validatedIncludeSpecs) || !length(validatedExcludeSpecs)) return false;
 
         basePath = normalizePath(basePath);
 
         const keyMapper = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        if (filesSpecs) {
-            for (const fileName of filesSpecs) {
+        if (validatedFilesSpec) {
+            for (const fileName of validatedFilesSpec) {
                 if (keyMapper(getNormalizedAbsolutePath(fileName, basePath)) === pathToCheck) return false;
             }
         }
@@ -3070,6 +3085,7 @@ namespace ts {
 
     function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
         return specs.filter(spec => {
+            if (!isString(spec)) return false;
             const diag = specToDiagnostic(spec, allowTrailingRecursion);
             if (diag !== undefined) {
                 errors.push(createDiagnostic(diag, spec));

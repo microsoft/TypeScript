@@ -7,11 +7,12 @@ tests/cases/compiler/interfaceDeclaration1.ts(22,11): error TS2310: Type 'I5' re
 tests/cases/compiler/interfaceDeclaration1.ts(35,7): error TS2420: Class 'C1' incorrectly implements interface 'I3'.
   Property 'prototype' is missing in type 'C1' but required in type 'I3'.
 tests/cases/compiler/interfaceDeclaration1.ts(41,11): error TS2310: Type 'i8' recursively references itself as a base type.
+tests/cases/compiler/interfaceDeclaration1.ts(42,11): error TS2310: Type 'i9' recursively references itself as a base type.
 tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i12' cannot simultaneously extend types 'i10' and 'i11'.
   Named property 'foo' of types 'i10' and 'i11' are not identical.
 
 
-==== tests/cases/compiler/interfaceDeclaration1.ts (9 errors) ====
+==== tests/cases/compiler/interfaceDeclaration1.ts (10 errors) ====
     interface I1 {
         item:number;
         ~~~~
@@ -73,6 +74,8 @@ tests/cases/compiler/interfaceDeclaration1.ts(52,11): error TS2320: Interface 'i
               ~~
 !!! error TS2310: Type 'i8' recursively references itself as a base type.
     interface i9 extends i8 { }
+              ~~
+!!! error TS2310: Type 'i9' recursively references itself as a base type.
     
     interface i10 {
     	foo():number;

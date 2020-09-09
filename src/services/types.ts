@@ -211,14 +211,20 @@ namespace ts {
 
     /* @internal */
     export const enum PackageJsonAutoImportPreference {
-        None,
-        ExcludeDevDependencies,
-        All
+        Off,
+        On,
+        Auto,
     }
 
     export interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
+    }
+
+    export enum LanguageServiceMode {
+        Semantic,
+        PartialSemantic,
+        Syntactic,
     }
 
     //
@@ -271,7 +277,7 @@ namespace ts {
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
+        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
 
         /*
          * Required for full import and type reference completions.
@@ -522,6 +528,11 @@ namespace ts {
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
+
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
 
         dispose(): void;
     }
@@ -1098,6 +1109,12 @@ namespace ts {
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        optionalReplacementSpan?: TextSpan;
 
         /**
          * true when the current location also allows for a new identifier

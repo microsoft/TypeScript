@@ -61,7 +61,7 @@ namespace ts.codefix {
             return;
         }
 
-        const synthNamesMap: ESMap<string, SynthIdentifier> = createMap();
+        const synthNamesMap = new Map<string, SynthIdentifier>();
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
@@ -149,7 +149,7 @@ namespace ts.codefix {
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: ESMap<string, SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
-        const identsToRenameMap = createMap<Identifier>(); // key is the symbol id
+        const identsToRenameMap = new Map<string, Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
             if (!isIdentifier(node)) {
@@ -171,7 +171,7 @@ namespace ts.codefix {
                 // will eventually become
                 //   const response = await fetch('...')
                 // so we push an entry for 'response'.
-                if (lastCallSignature && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
+                if (lastCallSignature && !isParameter(node.parent) && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                     const firstParameter = firstOrUndefined(lastCallSignature.parameters);
                     const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);

@@ -206,6 +206,9 @@ namespace ts {
             const hasCalledUpdateShapeSignature = new Set<Path>();
             const useOldState = canReuseOldState(referencedMap, oldState);
 
+            // Ensure source files have parent pointers set
+            newProgram.getTypeChecker();
+
             // Create the reference map, and set the file infos
             for (const sourceFile of newProgram.getSourceFiles()) {
                 const version = Debug.checkDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");

@@ -40,15 +40,23 @@ namespace ts {
     }
 
     export const emptyArray: never[] = [] as never[];
+    export const emptyMap: ReadonlyESMap<never, never> = new Map<never, never>();
+    export const emptySet: ReadonlySet<never> = new Set<never>();
 
-    /** Create a new map. */
+    /**
+     * Create a new map.
+     * @deprecated Use `new Map()` instead.
+     */
     export function createMap<K, V>(): ESMap<K, V>;
     export function createMap<T>(): ESMap<string, T>;
     export function createMap<K, V>(): ESMap<K, V> {
         return new Map<K, V>();
     }
 
-    /** Create a new map from a template object is provided, the map will copy entries from it. */
+    /**
+     * Create a new map from a template object is provided, the map will copy entries from it.
+     * @deprecated Use `new Map(getEntries(template))` instead.
+     */
     export function createMapFromTemplate<T>(template: MapLike<T>): ESMap<string, T> {
         const map: ESMap<string, T> = new Map<string, T>();
 
@@ -590,6 +598,15 @@ namespace ts {
         }
     }
 
+    export function getOrUpdate<K, V>(map: ESMap<K, V>, key: K, callback: () => V) {
+        if (map.has(key)) {
+            return map.get(key)!;
+        }
+        const value = callback();
+        map.set(key, value);
+        return value;
+    }
+
     export function tryAddToSet<T>(set: Set<T>, value: T) {
         if (!set.has(value)) {
             set.add(value);
@@ -817,6 +834,18 @@ namespace ts {
     export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
     export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
+    }
+
+    export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
+        if (array.length < 2) return true;
+        let prevElement = array[0];
+        for (const element of array.slice(1)) {
+            if (comparer(prevElement, element) === Comparison.GreaterThan) {
+                return false;
+            }
+            prevElement = element;
+        }
+        return true;
     }
 
     export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
@@ -1275,6 +1304,19 @@ namespace ts {
         return values;
     }
 
+    const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
+        const keys = getOwnKeys(obj);
+        const result: [string, T][] = Array(keys.length);
+        for (let i = 0; i < keys.length; i++) {
+            result[i] = [keys[i], obj[keys[i]]];
+        }
+        return result;
+    });
+
+    export function getEntries<T>(obj: MapLike<T>): [string, T][] {
+        return obj ? _entries(obj) : [];
+    }
+
     export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
         const result = new Array(count);
         for (let i = 0; i < count; i++) {
@@ -1375,9 +1417,11 @@ namespace ts {
         return result;
     }
 
+    export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K): readonly (readonly T[])[];
+    export function group<T, K, R>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => R): R[];
     export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
     export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+    export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
         return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
@@ -1596,7 +1640,7 @@ namespace ts {
 
     /** A version of `memoize` that supports a single primitive argument */
     export function memoizeOne<A extends string | number | boolean | undefined, T>(callback: (arg: A) => T): (arg: A) => T {
-        const map = createMap<T>();
+        const map = new Map<string, T>();
         return (arg: A) => {
             const key = `${typeof arg}:${arg}`;
             let value = map.get(key);

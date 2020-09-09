@@ -394,7 +394,7 @@ namespace ts {
             case SyntaxKind.MethodSignature:
                 return ScriptElementKind.memberFunctionElement;
             case SyntaxKind.PropertyAssignment:
-                const {initializer} = node as PropertyAssignment;
+                const { initializer } = node as PropertyAssignment;
                 return isFunctionLike(initializer) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -557,7 +557,7 @@ namespace ts {
                 if (!(<NewExpression>n).arguments) {
                     return true;
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.ParenthesizedExpression:
@@ -877,14 +877,14 @@ namespace ts {
         // specially by `getSymbolAtLocation`.
         if (isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? contains(parent.modifiers, node) :
             node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) || isClassExpression(node) :
-            node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
-            node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
-            node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
-            node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
-            node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
-            node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent) :
-            node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
-            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)) {
+                node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
+                    node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
+                        node.kind === SyntaxKind.EnumKeyword ? isEnumDeclaration(parent) :
+                            node.kind === SyntaxKind.TypeKeyword ? isTypeAliasDeclaration(parent) :
+                                node.kind === SyntaxKind.NamespaceKeyword || node.kind === SyntaxKind.ModuleKeyword ? isModuleDeclaration(parent) :
+                                    node.kind === SyntaxKind.ImportKeyword ? isImportEqualsDeclaration(parent) :
+                                        node.kind === SyntaxKind.GetKeyword ? isGetAccessorDeclaration(parent) :
+                                            node.kind === SyntaxKind.SetKeyword && isSetAccessorDeclaration(parent)) {
             const location = getAdjustedLocationForDeclaration(parent, forRename);
             if (location) {
                 return location;
@@ -1217,6 +1217,10 @@ namespace ts {
         }
 
         const children = n.getChildren(sourceFile);
+        if (children.length === 0) {
+            return n;
+        }
+
         const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
@@ -1320,6 +1324,35 @@ namespace ts {
         return false;
     }
 
+    export function isInsideJsxElement(sourceFile: SourceFile, position: number): boolean {
+        function isInsideJsxElementTraversal(node: Node): boolean {
+            while (node) {
+                if (node.kind >= SyntaxKind.JsxSelfClosingElement && node.kind <= SyntaxKind.JsxExpression
+                    || node.kind === SyntaxKind.JsxText
+                    || node.kind === SyntaxKind.LessThanToken
+                    || node.kind === SyntaxKind.GreaterThanToken
+                    || node.kind === SyntaxKind.Identifier
+                    || node.kind === SyntaxKind.CloseBraceToken
+                    || node.kind === SyntaxKind.OpenBraceToken
+                    || node.kind === SyntaxKind.SlashToken) {
+                    node = node.parent;
+                }
+                else if (node.kind === SyntaxKind.JsxElement) {
+                    if (position > node.getStart(sourceFile)) return true;
+
+                    node = node.parent;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        return isInsideJsxElementTraversal(getTokenAtPosition(sourceFile, position));
+    }
+
     export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
         const tokenKind = token.kind;
         let remainingMatchingTokens = 0;
@@ -1346,7 +1379,7 @@ namespace ts {
     export function removeOptionality(type: Type, isOptionalExpression: boolean, isOptionalChain: boolean) {
         return isOptionalExpression ? type.getNonNullableType() :
             isOptionalChain ? type.getNonOptionalType() :
-            type;
+                type;
     }
 
     export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
@@ -1439,7 +1472,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.EqualsGreaterThanToken:
-                    // falls through
+                // falls through
 
                 case SyntaxKind.Identifier:
                 case SyntaxKind.StringLiteral:
@@ -1447,7 +1480,7 @@ namespace ts {
                 case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    // falls through
+                // falls through
 
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.ExtendsKeyword:
@@ -1731,7 +1764,7 @@ namespace ts {
             getCurrentDirectory: () => host.getCurrentDirectory(),
             readFile: maybeBind(host, host.readFile),
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
-            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || (() => program.getProbableSymlinks()),
+            getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             getSourceFiles: () => program.getSourceFiles(),
             redirectTargetsMap: program.redirectTargetsMap,
@@ -1828,7 +1861,7 @@ namespace ts {
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
     export function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-        const seen = createMap<true>();
+        const seen = new Map<string, true>();
         return recur(symbol);
 
         function recur(symbol: Symbol): T | undefined {
@@ -1872,23 +1905,37 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: Statement | readonly Statement[], blankLineBetween: boolean): void {
+    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
         const decl = isArray(imports) ? imports[0] : imports;
-        const importKindPredicate = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
-        const lastImportDeclaration = findLast(sourceFile.statements, statement => importKindPredicate(statement));
-        if (lastImportDeclaration) {
-            if (isArray(imports)) {
-                changes.insertNodesAfter(sourceFile, lastImportDeclaration, imports);
-            }
-            else {
-                changes.insertNodeAfter(sourceFile, lastImportDeclaration, imports);
-            }
+        const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
+        const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
+        const sortedNewImports = isArray(imports) ? stableSort(imports, OrganizeImports.compareImportsOrRequireStatements) : [imports];
+        if (!existingImportStatements.length) {
+            changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
         }
-        else if (isArray(imports)) {
-            changes.insertNodesAtTopOfFile(sourceFile, imports, blankLineBetween);
+        else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+            for (const newImport of sortedNewImports) {
+                const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
+                if (insertionIndex === 0) {
+                    // If the first import is top-of-file, insert after the leading comment which is likely the header.
+                    const options = existingImportStatements[0] === sourceFile.statements[0] ?
+                    { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude } : {};
+                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, options);
+                }
+                else {
+                    const prevImport = existingImportStatements[insertionIndex - 1];
+                    changes.insertNodeAfter(sourceFile, prevImport, newImport);
+                }
+            }
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, imports, blankLineBetween);
+            const lastExistingImport = lastOrUndefined(existingImportStatements);
+            if (lastExistingImport) {
+                changes.insertNodesAfter(sourceFile, lastExistingImport, sortedNewImports);
+            }
+            else {
+                changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+            }
         }
     }
 
@@ -1921,6 +1968,16 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    export function isTextWhiteSpaceLike(text: string, startPos: number, endPos: number): boolean {
+        for (let i = startPos; i < endPos; i++) {
+            if (!isWhiteSpaceLike(text.charCodeAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // #endregion
@@ -2231,8 +2288,8 @@ namespace ts {
             // This only happens for leaf nodes - internal nodes always see their children change.
             const clone =
                 isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
-                isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
-                factory.cloneNode(node);
+                    isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+                        factory.cloneNode(node);
             return setTextRange(clone, node);
         }
 
@@ -2685,9 +2742,7 @@ namespace ts {
 
         type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
-        const stringContent = host.readFile(fileName);
-        if (!stringContent) return undefined;
-
+        const stringContent = host.readFile(fileName) || "";
         const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
         if (content) {
@@ -2696,7 +2751,7 @@ namespace ts {
                 if (!dependencies) {
                     continue;
                 }
-                const dependencyMap = createMap<string>();
+                const dependencyMap = new Map<string, string>();
                 for (const packageName in dependencies) {
                     dependencyMap.set(packageName, dependencies[packageName]);
                 }
@@ -2817,9 +2872,21 @@ namespace ts {
         if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
+                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
         }
         return symbol.name;
+    }
+
+    function getSymbolParentOrFail(symbol: Symbol) {
+        return Debug.checkDefined(
+            symbol.parent,
+            `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
+            `Declarations: ${symbol.declarations?.map(d => {
+                const kind = Debug.formatSyntaxKind(d.kind);
+                const inJS = isInJSFile(d);
+                const { expression } = d as any;
+                return (inJS ? "[JS]" : "") + kind + (expression ? ` (expression: ${Debug.formatSyntaxKind(expression.kind)})` : "");
+            }).join(", ")}.`);
     }
 
     /**
