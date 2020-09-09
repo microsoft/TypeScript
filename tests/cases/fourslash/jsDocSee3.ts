@@ -4,9 +4,9 @@
 ////     /**
 ////      * @see {/*use1*/[|a|]}
 ////      */
-////     function bar (a: string) {
+////     function bar ([|/*def2*/a|]: string) {
 ////     }
 //// }
 
 goTo.marker("use1");
-verify.goToDefinitionIs(["def1"]);
+verify.goToDefinitionIs(["def2"]);
