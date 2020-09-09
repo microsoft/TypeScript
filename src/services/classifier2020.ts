@@ -68,7 +68,7 @@ namespace ts.classifier.v2020 {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    if (cancellationToken.isCancellationRequested()) return;
+                    cancellationToken.throwIfCancellationRequested();
             }
 
             if (!node || !textSpanIntersectsWith(span, node.pos, node.getFullWidth()) || node.getFullWidth() === 0) {
