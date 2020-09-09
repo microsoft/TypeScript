@@ -34,12 +34,8 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n) || n.kind === SyntaxKind.EndOfFileToken) {
+            if (isDeclaration(n) || isVariableStatement(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
-            }
-
-            if (isFunctionExpressionAssignedToVariable(n)) {
-                addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
             }
 
             if (isFunctionLike(n) && isBinaryExpression(n.parent) && isPropertyAccessExpression(n.parent.left)) {
@@ -69,14 +65,6 @@ namespace ts.OutliningElementsCollector {
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
-        }
-
-        function isFunctionExpressionAssignedToVariable(n: Node) {
-            if (!isFunctionExpression(n) && !isArrowFunction(n)) {
-                return false;
-            }
-            const ancestor = findAncestor(n, isVariableStatement);
-            return !!ancestor && getSingleInitializerOfVariableStatementOrPropertyDeclaration(ancestor) === n;
         }
     }
 

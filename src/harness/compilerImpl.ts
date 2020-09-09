@@ -256,13 +256,13 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const preProgram = ts.createProgram(rootFiles || [], { ...compilerOptions, traceResolution: false }, host);
-        const preErrors = ts.getPreEmitDiagnostics(preProgram);
+        const preProgram = ts.length(rootFiles) < 100 ? ts.createProgram(rootFiles || [], { ...compilerOptions, traceResolution: false }, host) : undefined;
+        const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
         const program = ts.createProgram(rootFiles || [], compilerOptions, host);
         const emitResult = program.emit();
         const postErrors = ts.getPreEmitDiagnostics(program);
-        const errors = (preErrors.length !== postErrors.length) ? [...postErrors,
+        const errors = preErrors && (preErrors.length !== postErrors.length) ? [...postErrors,
             ts.addRelatedInfo(
                 ts.createCompilerDiagnostic({
                     category: ts.DiagnosticCategory.Error,

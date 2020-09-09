@@ -700,7 +700,7 @@ namespace ts.codefix {
             }
             else if (existingSpecifiers?.length) {
                 for (const spec of newSpecifiers) {
-                    changes.insertNodeAtEndOfList(sourceFile, existingSpecifiers, spec);
+                    changes.insertNodeInListAfter(sourceFile, last(existingSpecifiers), spec, existingSpecifiers);
                 }
             }
             else {
