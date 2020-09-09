@@ -380,10 +380,13 @@ namespace ts {
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** @deprecated Use getEncodedSyntacticClassifications instead. */
-        getSyntacticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
 
         /** @deprecated Use getEncodedSemanticClassifications instead. */
-        getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+
         /** Encoded as triples of [start, length, ClassificationType]. */
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
 
@@ -603,7 +606,12 @@ namespace ts {
 
     export interface ClassifiedSpan {
         textSpan: TextSpan;
-        classificationType: ClassificationTypeNames | number;
+        classificationType: ClassificationTypeNames;
+    }
+
+    export interface ClassifiedSpan2020 {
+        textSpan: TextSpan;
+        classificationType: number;
     }
 
     /**
