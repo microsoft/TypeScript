@@ -21604,7 +21604,7 @@ namespace ts {
                 const propName = newSymbol.escapedName;
                 const members = createSymbolTable();
                 members.set(propName, newSymbol);
-                const newObjType = createWidenType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                const newObjType = createWidenType(/* symbol */ undefined, members, emptyArray, emptyArray, /* stringIndexInfo */ undefined, /* numberIndexInfo */ undefined);
 
                 // if `type` is never, just return the new anonymous object type.
                 if (type.flags & TypeFlags.Never) {
