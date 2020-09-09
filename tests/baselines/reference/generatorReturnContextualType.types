@@ -27,9 +27,9 @@ async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
 
   return Promise.resolve({ x: 'x' });
 >Promise.resolve({ x: 'x' }) : Promise<{ x: "x"; }>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >{ x: 'x' } : { x: "x"; }
 >x : "x"
 >'x' : "x"
@@ -47,9 +47,9 @@ async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
 
   return Promise.resolve(ret); // Error
 >Promise.resolve(ret) : Promise<{ x: string; }>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >ret : { x: string; }
 }
 
