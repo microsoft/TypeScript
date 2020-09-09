@@ -1,8 +1,8 @@
 /* @internal */
 namespace ts.codefix {
-    const fixId = "fixPedanticPropertyLookup";
+    const fixId = "fixNoPropertyAccessFromIndexSignature";
     const errorCodes = [
-        Diagnostics.Access_property_0_by_index_signature_is_disallowed.code
+        Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0.code
     ];
 
     registerCodeFix({
@@ -12,7 +12,7 @@ namespace ts.codefix {
             const { sourceFile, span } = context;
             const property = getPropertyAccessExpression(sourceFile, span.start);
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property));
-            return [createCodeFixAction(fixId, changes, [Diagnostics.Use_element_access_for_0, property.name.text], fixId, Diagnostics.Use_element_access_for_all_property_access)];
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Use_element_access_for_0, property.name.text], fixId, Diagnostics.Use_element_access_for_all_undeclared_properties)];
         },
         getAllCodeActions: context =>
             codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, getPropertyAccessExpression(diag.file, diag.start)))

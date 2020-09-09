@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// @pedanticPropertyLookup: true
+// @noPropertyAccessFromIndexSignature: true
 //// interface A {
 ////     foo: string
 //// }
@@ -30,8 +30,8 @@
 
 
 verify.codeFixAll({
-    fixId: 'fixPedanticPropertyLookup',
-    fixAllDescription: ts.Diagnostics.Use_element_access_for_all_property_access.message,
+    fixId: 'fixNoPropertyAccessFromIndexSignature',
+    fixAllDescription: ts.Diagnostics.Use_element_access_for_all_undeclared_properties.message,
     newFileContent:
 `interface A {
     foo: string

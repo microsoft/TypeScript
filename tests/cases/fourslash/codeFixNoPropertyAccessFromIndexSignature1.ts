@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-// @pedanticPropertyLookup: true
+// @noPropertyAccessFromIndexSignature: true
 //// interface B {
 ////     [k: string]: string
 //// }

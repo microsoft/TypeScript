@@ -1,4 +1,4 @@
-// @pedanticPropertyLookup: true
+// @noPropertyAccessFromIndexSignature: true
 
 interface A {
     foo: string

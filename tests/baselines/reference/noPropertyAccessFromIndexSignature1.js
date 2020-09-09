@@ -1,4 +1,4 @@
-//// [propertyLookup1.ts]
+//// [noPropertyAccessFromIndexSignature1.ts]
 interface A {
     foo: string
 }
@@ -42,7 +42,7 @@ d?.bar;
 d?.["bar"];
 
 
-//// [propertyLookup1.js]
+//// [noPropertyAccessFromIndexSignature1.js]
 // access property
 a.foo;
 a["foo"];

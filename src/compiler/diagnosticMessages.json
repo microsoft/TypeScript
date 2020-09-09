@@ -3397,7 +3397,7 @@
         "category": "Error",
         "code": 4110
     },
-    "Access property '{0}' by index signature is disallowed.": {
+    "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
         "category": "Error",
         "code": 4111
     },
@@ -4701,7 +4701,7 @@
         "category": "Error",
         "code": 6504
     },
-    "Force access member from index signature with element access expression.": {
+    "Require undeclared properties from index signatures to use element accesses.": {
         "category": "Error",
         "code": 6803
     },
@@ -5907,7 +5907,7 @@
         "category": "Message",
         "code": 95143
     },
-    "Use element access for all property access": {
+    "Use element access for all undeclared properties.": {
         "category": "Message",
         "code": 95144
     },

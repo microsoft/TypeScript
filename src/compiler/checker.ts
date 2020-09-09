@@ -25229,8 +25229,8 @@ namespace ts {
                 }
                 propType = indexInfo.type;
 
-                if (compilerOptions.pedanticPropertyLookup && isPropertyAccessExpression(node)) {
-                    error(node, Diagnostics.Access_property_0_by_index_signature_is_disallowed, unescapeLeadingUnderscores(right.escapedText));
+                if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
+                    error(node, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
                 }
             }
             else {

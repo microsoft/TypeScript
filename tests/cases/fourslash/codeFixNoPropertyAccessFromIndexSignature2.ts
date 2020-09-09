@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-// @pedanticPropertyLookup: true
+// @noPropertyAccessFromIndexSignature: true
 //// interface C {
 ////     foo: string
 ////     [k: string]: string
 //// }
-//// declare const c: C | undefined;
-//// c?.foo;
-//// c?.bar;
+//// declare const c: C;
+//// c.foo;
+//// c.bar;
 
 verify.codeFix({
     description: [ts.Diagnostics.Use_element_access_for_0.message, 'bar'],
@@ -17,7 +17,7 @@ verify.codeFix({
     foo: string
     [k: string]: string
 }
-declare const c: C | undefined;
-c?.foo;
-c?.["bar"];`,
+declare const c: C;
+c.foo;
+c["bar"];`,
 });

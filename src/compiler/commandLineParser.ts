@@ -607,13 +607,13 @@ namespace ts {
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
         {
-            name: "pedanticPropertyLookup",
+            name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
             affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
-            description: Diagnostics.Force_access_member_from_index_signature_with_element_access_expression
+            description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses
         },
 
         // Module Resolution
