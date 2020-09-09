@@ -513,6 +513,7 @@ namespace ts {
                 if (elements.transformFlags === undefined) {
                     aggregateChildrenFlags(elements as MutableNodeArray<T>);
                 }
+                Debug.attachNodeArrayDebugInfo(elements);
                 return elements;
             }
 
@@ -524,6 +525,7 @@ namespace ts {
             setTextRangePosEnd(array, -1, -1);
             array.hasTrailingComma = !!hasTrailingComma;
             aggregateChildrenFlags(array);
+            Debug.attachNodeArrayDebugInfo(array);
             return array;
         }
 
