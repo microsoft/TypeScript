@@ -12,8 +12,9 @@ function f(k) {
 }
 
 // @filename: mod1.js
-class K {
+var NS = {}
+NS.K =class {
     values() {
     }
 }
-exports.K = K;
+exports.K = NS.K;

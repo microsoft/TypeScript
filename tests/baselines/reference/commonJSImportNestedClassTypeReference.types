@@ -18,17 +18,27 @@ function f(k) {
 }
 
 === tests/cases/conformance/salsa/mod1.js ===
-class K {
->K : K
+var NS = {}
+>NS : typeof NS
+>{} : {}
+
+NS.K =class {
+>NS.K =class {    values() {    }} : typeof K
+>NS.K : typeof K
+>NS : typeof NS
+>K : typeof K
+>class {    values() {    }} : typeof K
 
     values() {
 >values : () => void
     }
 }
-exports.K = K;
->exports.K = K : typeof K
+exports.K = NS.K;
+>exports.K = NS.K : typeof K
 >exports.K : typeof K
 >exports : typeof import("tests/cases/conformance/salsa/mod1")
 >K : typeof K
+>NS.K : typeof K
+>NS : typeof NS
 >K : typeof K
 

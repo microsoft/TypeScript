@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/salsa/commonJSImportClassTypeReference.ts] ////
+//// [tests/cases/conformance/salsa/commonJSImportNestedClassTypeReference.ts] ////
 
 //// [main.js]
 const { K } = require("./mod1");
@@ -8,23 +8,25 @@ function f(k) {
 }
 
 //// [mod1.js]
-class K {
+var NS = {}
+NS.K =class {
     values() {
     }
 }
-exports.K = K;
+exports.K = NS.K;
 
 
 //// [mod1.js]
 "use strict";
-var K = /** @class */ (function () {
+var NS = {};
+NS.K = /** @class */ (function () {
     function K() {
     }
     K.prototype.values = function () {
     };
     return K;
 }());
-exports.K = K;
+exports.K = NS.K;
 //// [main.js]
 "use strict";
 var K = require("./mod1").K;
@@ -35,8 +37,10 @@ function f(k) {
 
 
 //// [mod1.d.ts]
-export class K {
-    values(): void;
-}
+export var K: {
+    new (): {
+        values(): void;
+    };
+};
 //// [main.d.ts]
 export {};

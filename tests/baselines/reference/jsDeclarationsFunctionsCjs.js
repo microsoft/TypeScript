@@ -131,8 +131,6 @@ export namespace f {
     export { self };
 }
 export function i(): void;
-export function ii(): void;
-export function jj(): void;
 export function j(): void;
 declare class Cls {
 }
@@ -160,4 +158,4 @@ declare function hh(a: {
         cat: string;
     };
 }): void;
-export { hh as h };
+export { hh as h, i as ii, j as jj };

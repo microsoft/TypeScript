@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/salsa/commonJSImportClassTypeReference.ts] ////
+//// [tests/cases/conformance/salsa/commonJSImportClassExpression.ts] ////
 
 //// [main.js]
 const { K } = require("./mod1");
@@ -8,23 +8,21 @@ function f(k) {
 }
 
 //// [mod1.js]
-class K {
+exports.K = class K {
     values() {
     }
-}
-exports.K = K;
+};
 
 
 //// [mod1.js]
 "use strict";
-var K = /** @class */ (function () {
+exports.K = /** @class */ (function () {
     function K() {
     }
     K.prototype.values = function () {
     };
     return K;
 }());
-exports.K = K;
 //// [main.js]
 "use strict";
 var K = require("./mod1").K;

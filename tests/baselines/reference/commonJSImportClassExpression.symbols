@@ -10,22 +10,20 @@ function f(k) {
 >k : Symbol(k, Decl(main.js, 2, 11))
 
     k.values()
->k.values : Symbol(K.values, Decl(mod1.js, 0, 9))
+>k.values : Symbol(K.values, Decl(mod1.js, 0, 21))
 >k : Symbol(k, Decl(main.js, 2, 11))
->values : Symbol(K.values, Decl(mod1.js, 0, 9))
+>values : Symbol(K.values, Decl(mod1.js, 0, 21))
 }
 
 === tests/cases/conformance/salsa/mod1.js ===
-class K {
+exports.K = class K {
+>exports.K : Symbol(K, Decl(mod1.js, 0, 0))
+>exports : Symbol(K, Decl(mod1.js, 0, 0))
 >K : Symbol(K, Decl(mod1.js, 0, 0))
+>K : Symbol(K, Decl(mod1.js, 0, 11))
 
     values() {
->values : Symbol(K.values, Decl(mod1.js, 0, 9))
+>values : Symbol(K.values, Decl(mod1.js, 0, 21))
     }
-}
-exports.K = K;
->exports.K : Symbol(K, Decl(mod1.js, 3, 1))
->exports : Symbol(K, Decl(mod1.js, 3, 1))
->K : Symbol(K, Decl(mod1.js, 3, 1))
->K : Symbol(K, Decl(mod1.js, 0, 0))
+};
 
