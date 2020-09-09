@@ -33,4 +33,3 @@ function MONAD(m: Monad<Set>,f:sn) {
     var w2 = m.map(f);
     // var q = m.lift(1);
 }
- 

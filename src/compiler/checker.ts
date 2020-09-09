@@ -12168,8 +12168,13 @@ namespace ts {
                     if(node.typeArguments?.length !== res.tParams){
                         //check whether type arguments match type parameters.
                     }
-                    res.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
-                    return getRegularTypeOfLiteralType(res);
+                    // res.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
+                    // return res;
+                    const tmp = createTypeParameter(symbol);
+                    tmp.flags |= TypeFlags.TypeConstructorWrapper;
+                    tmp.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
+                    tmp.origionalTypeParameter = res;
+                    return tmp;
                 }
                 if (checkNoTypeArguments(node, symbol)) {
                     return getRegularTypeOfLiteralType(res);
@@ -15005,16 +15010,28 @@ namespace ts {
         }
 
         // this function is mainly for the change in function `getObjectTypeInstantiation`, another choice is written in the comment of that changed line.
-        function instantiateTypeOfTypeParameter(type: Type, mapper: TypeMapper): Type {
+        function instantiateTypeOfTypeParameter(type: TypeParameter, mapper: TypeMapper): Type {
             const flags = type.flags;
-            if (flags & TypeFlags.TypeConstructor) {
+            if (flags & TypeFlags.TypeConstructorWrapper) {
+                debugger;
+                const origionalTypeConstructorParameter = type.origionalTypeParameter!;
+                const resolvedTypeConstructorParam = type.resolvedTypeConstructorParam;
+                const concentrateGenericType = getMappedType(origionalTypeConstructorParameter, mapper);
+                if (concentrateGenericType === origionalTypeConstructorParameter) {
+                    debugger;//on which condition this would happen?
+                    return origionalTypeConstructorParameter;
+                }
+                const newTypeArguments = instantiateTypes(resolvedTypeConstructorParam, mapper);
+                return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
+            }
+            else if (flags & TypeFlags.TypeConstructor) {
                 // this is a demo implement, and not well considered.
                 const concentrateGenericType = getMappedType(type, mapper);
                 if(concentrateGenericType === type){
                     debugger;//on which condition this would happen?
                     return type;
                 }
-                const resolvedTypeArguments = (<TypeParameter>type).resolvedTypeConstructorParam;
+                const resolvedTypeArguments = (type).resolvedTypeConstructorParam;
                 const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
                 return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
             }

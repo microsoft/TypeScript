@@ -4835,6 +4835,7 @@ namespace ts {
         Never           = 1 << 17,  // Never type
         TypeParameter   = 1 << 18,  // Type parameter
         TypeConstructor = 1<< 27,   // Type Constructor, this is an additional flag of TypeParameter.
+        TypeConstructorWrapper = 1<< 28,   // Type Constructor, this is an additional flag of TypeParameter.
         Object          = 1 << 19,  // Object type
         Union           = 1 << 20,  // Union (T | U)
         Intersection    = 1 << 21,  // Intersection (T & U)
@@ -5278,6 +5279,8 @@ namespace ts {
         tParams?: number; // Or it should be TypeParameter[]? In parser I parse the node use a BNF in scala paper.
         /* @internal */
         resolvedTypeConstructorParam?: Type[];
+        /* @internal */
+        origionalTypeParameter?: TypeParameter;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

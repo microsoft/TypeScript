@@ -18,9 +18,6 @@ TypeArguments means the concentrate type like number, boolean
 TypeParameters means the abstract Generic Symbol like T, U
 
 
-instantiateType  <--------  seems this do the final map work.
-
-
 Q: How does Generic works for now?
 A:
 1. get TypeReferenceType(it is a node in fact) of one variable node
@@ -30,8 +27,6 @@ A:
 5. add cache to the type of the generic symbol.
 
 1. get the type of the symbol.
-
-
 Here are some important function signature:
 
 // craete resolvedTypeArguments
@@ -54,29 +49,29 @@ function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference,
 1. TypeArguments need a flag or boolean to mark itself. For a generic type could be valid typeargument for now, we should not check whether it has typearguments for now.
 So, where to add the flag, which type should have this flag.
 
+2. nested typeconstructor map. This does not exist in only generic world, but now we could have `Container<Container<T>>`. If we store typearguments into the type of the symbol of typeconstructor `Container`, it would be a infinite loop.
+I create a tmp type which have flag "TypeConstructorWrapper" for the node, rather than the symbol.
+
 ## Need improvement
+
 1. high light the same symbol for TypeConstructor in the interface.
-2. the TypeConstructor in the TypeParameter declration need quickinfo.
-3. add more check for arguments
+2. add more check for arguments
     - allow generic as typeArguments // seems this is done already
     - check typeArguments and typeParameter whether match, especially paramters
+3. the TypeConstructor in the TypeParameter declration need quickinfo.
+4. the methods in interface need quick info.
+?auto infer typeArgument
 
 ## Key Point
+
 1. distinguish whether the typereference is a typeconstructor or not.
-
-
-
-
-
-
-
-
-
+2. nested typeconstructor.
 
 
 ``` ts
 var w: Itertable<number, Set>;
 ```
+
 call getTypeFromTypeReference on `TypeReference(node) Set`
     in the call
     1. get the symbol of `Set`
