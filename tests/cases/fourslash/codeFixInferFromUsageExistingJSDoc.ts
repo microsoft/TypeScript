@@ -73,7 +73,7 @@ var o = {
      * 2
      * 3
      * @returns {number} First one
-     * @see also
+     * @see {also}
      * @return Second one
      * @extends {C<number>} nothing really
      * @class
