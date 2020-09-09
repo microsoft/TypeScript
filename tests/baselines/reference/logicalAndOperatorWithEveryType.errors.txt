@@ -1,13 +1,13 @@
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
 ==== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorWithEveryType.ts (10 errors) ====
@@ -31,7 +31,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var ra4 = a4 && a1;
     var ra5 = a5 && a1;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var ra6 = a6 && a1;
     var ra7 = a7 && a1;
     var ra8 = a8 && a1;
@@ -44,7 +44,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rb4 = a4 && a2;
     var rb5 = a5 && a2;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rb6 = a6 && a2;
     var rb7 = a7 && a2;
     var rb8 = a8 && a2;
@@ -57,7 +57,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rc4 = a4 && a3;
     var rc5 = a5 && a3;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rc6 = a6 && a3;
     var rc7 = a7 && a3;
     var rc8 = a8 && a3;
@@ -70,7 +70,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rd4 = a4 && a4;
     var rd5 = a5 && a4;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rd6 = a6 && a4;
     var rd7 = a7 && a4;
     var rd8 = a8 && a4;
@@ -83,7 +83,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var re4 = a4 && a5;
     var re5 = a5 && a5;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var re6 = a6 && a5;
     var re7 = a7 && a5;
     var re8 = a8 && a5;
@@ -96,7 +96,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rf4 = a4 && a6;
     var rf5 = a5 && a6;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rf6 = a6 && a6;
     var rf7 = a7 && a6;
     var rf8 = a8 && a6;
@@ -109,7 +109,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rg4 = a4 && a7;
     var rg5 = a5 && a7;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rg6 = a6 && a7;
     var rg7 = a7 && a7;
     var rg8 = a8 && a7;
@@ -122,7 +122,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rh4 = a4 && a8;
     var rh5 = a5 && a8;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rh6 = a6 && a8;
     var rh7 = a7 && a8;
     var rh8 = a8 && a8;
@@ -135,7 +135,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var ri4 = a4 && null;
     var ri5 = a5 && null;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var ri6 = a6 && null;
     var ri7 = a7 && null;
     var ri8 = a8 && null;
@@ -148,7 +148,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     var rj4 = a4 && undefined;
     var rj5 = a5 && undefined;
               ~~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     var rj6 = a6 && undefined;
     var rj7 = a7 && undefined;
     var rj8 = a8 && undefined;

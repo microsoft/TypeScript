@@ -5019,13 +5019,19 @@ namespace ts {
         /* @internal */
         IsNeverIntersection = 1 << 29, // Intersection reduces to never
         /* @internal */
-        WidenedByNarrow = 1 << 30,   // in keyword could widen type, this mark it as the widen part.
+        IsClassInstanceClone = 1 << 30, // Type is a clone of a class instance type
 
+        /* @internal */
+        WidenedByNarrow = 1 << 31,   // in keyword could widen type, this mark it as the widen part.
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType
+        PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+
+        // Object flags that uniquely identify the kind of ObjectType
+        /* @internal */
+        ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
     }
 
     /* @internal */
@@ -7656,6 +7662,7 @@ namespace ts {
         /*@internal*/ recordInternalSection?: boolean;
         /*@internal*/ stripInternal?: boolean;
         /*@internal*/ preserveSourceNewlines?: boolean;
+        /*@internal*/ terminateUnterminatedLiterals?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
     }
 
