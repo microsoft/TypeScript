@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/salsa/commonJSImportClassExpression.ts] ////
+//// [tests/cases/conformance/salsa/commonJSImportExportedClassExpression.ts] ////
 
 //// [main.js]
 const { K } = require("./mod1");
