@@ -1312,6 +1312,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
             "async",
             "await",
         ].map(keywordEntry);
@@ -1452,6 +1453,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
             "async",
             "await",
         ].map(keywordEntry);
