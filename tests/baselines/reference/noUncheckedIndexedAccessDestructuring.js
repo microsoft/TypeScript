@@ -1,4 +1,4 @@
-//// [pedanticIndexSignatureDestructuring.ts]
+//// [noUncheckedIndexedAccessDestructuring.ts]
 declare const strArray: string[];
 declare const strStrTuple: [string, string];
 
@@ -61,7 +61,7 @@ declare let target_string_arr: string[];
 }
 
 
-//// [pedanticIndexSignatureDestructuring.js]
+//// [noUncheckedIndexedAccessDestructuring.js]
 "use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};

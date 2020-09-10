@@ -1,17 +1,8 @@
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(8,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(12,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(16,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(23,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(26,1): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(34,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(41,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(50,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-  Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(12,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(16,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts (9 errors) ====
+==== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts (2 errors) ====
     declare const strArray: string[];
     declare const strStrTuple: [string, string];
     
@@ -20,8 +11,6 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): e
     // Destructuring from a simple array -> include undefined
     const [s1] = strArray;
     s1.toString(); // Should error, s1 possibly undefined
-    ~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     // Destructuring a rest element -> do not include undefined
     const [...s2] = strArray;
@@ -41,13 +30,9 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): e
     
     const { t1 } = strMap;
     t1.toString(); // Should error, t1 possibly undefined
-    ~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     const { ...t2 } = strMap;
     t2.z.toString(); // Should error
-    ~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     
     // Test intersections with declared properties
     declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
@@ -56,8 +41,6 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): e
         x.toFixed(); // Should OK
         y.toFixed(); // Should OK
         z.toFixed(); // Should error
-        ~
-!!! error TS2532: Object is possibly 'undefined'.
     }
     
     {
@@ -65,8 +48,6 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): e
         x.toFixed(); // Should OK
         q.y.toFixed(); // Should OK
         q.z.toFixed(); // Should error
-        ~~~
-!!! error TS2532: Object is possibly 'undefined'.
     }
     
     
@@ -76,9 +57,6 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): e
     
     // Assignment forms
     [target_string] = strArray; // Should error
-     ~~~~~~~~~~~~~
-!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
     [target_string_undef] = strArray;  // Should OK
     [,,, ...target_string_arr] = strArray; // Should OK
     
@@ -88,8 +66,5 @@ tests/cases/conformance/pedantic/pedanticIndexSignatureDestructuring.ts(59,8): e
     
         let q: number;
         ({ q } = numMapPoint); // Should error
-           ~
-!!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
     }
     

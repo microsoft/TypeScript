@@ -13494,7 +13494,7 @@ namespace ts {
                         return undefined;
                     }
                     const shouldIncludeUndefined =
-                        compilerOptions.pedanticIndexSignatures &&
+                        compilerOptions.noUncheckedIndexSignatures &&
                         (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
@@ -13767,7 +13767,7 @@ namespace ts {
             }
 
             const shouldIncludeUndefined =
-                compilerOptions.pedanticIndexSignatures &&
+                compilerOptions.noUncheckedIndexSignatures &&
                 (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
 
             // If the object type has a string index signature and no other members we know that the result will
@@ -20480,20 +20480,20 @@ namespace ts {
             if (!isTypeUsableAsPropertyName(nameType)) return errorType;
             const text = getPropertyNameFromType(nameType);
             return getConstraintForLocation(getTypeOfPropertyOfType(type, text), name) ||
-                isNumericLiteralName(text) && includeUndefinedInPedanticIndexSignature(getIndexTypeOfType(type, IndexKind.Number)) ||
-                includeUndefinedInPedanticIndexSignature(getIndexTypeOfType(type, IndexKind.String)) ||
+                isNumericLiteralName(text) && includeUndefinedInIndexSignature(getIndexTypeOfType(type, IndexKind.Number)) ||
+                includeUndefinedInIndexSignature(getIndexTypeOfType(type, IndexKind.String)) ||
                 errorType;
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
             return everyType(type, isTupleLikeType) && getTupleElementType(type, index) ||
-                includeUndefinedInPedanticIndexSignature(checkIteratedTypeOrElementType(IterationUse.Destructuring, type, undefinedType, /*errorNode*/ undefined)) ||
+                includeUndefinedInIndexSignature(checkIteratedTypeOrElementType(IterationUse.Destructuring, type, undefinedType, /*errorNode*/ undefined)) ||
                 errorType;
         }
 
-        function includeUndefinedInPedanticIndexSignature(type: Type | undefined): Type | undefined {
+        function includeUndefinedInIndexSignature(type: Type | undefined): Type | undefined {
             if (!type) return type;
-            return compilerOptions.pedanticIndexSignatures ?
+            return compilerOptions.noUncheckedIndexSignatures ?
                 getUnionType([type, undefinedType]) :
                 type;
         }
@@ -25240,7 +25240,7 @@ namespace ts {
                     error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
                 }
 
-                propType = (compilerOptions.pedanticIndexSignatures && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                propType = (compilerOptions.noUncheckedIndexSignatures && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
             }
             else {
                 if (prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
@@ -29181,7 +29181,7 @@ namespace ts {
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
             const possiblyOutOfBoundsType = checkIteratedTypeOrElementType(IterationUse.Destructuring | IterationUse.PossiblyOutOfBounds, sourceType, undefinedType, node) || errorType;
-            let inBoundsType: Type | undefined = compilerOptions.pedanticIndexSignatures ? undefined: possiblyOutOfBoundsType;
+            let inBoundsType: Type | undefined = compilerOptions.noUncheckedIndexSignatures ? undefined: possiblyOutOfBoundsType;
             for (let i = 0; i < elements.length; i++) {
                 let type = possiblyOutOfBoundsType;
                 if (node.elements[i].kind === SyntaxKind.SpreadElement) {
@@ -33414,7 +33414,7 @@ namespace ts {
 
             const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
             const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
-            const possibleOutOfBounds = compilerOptions.pedanticIndexSignatures && !!(use & IterationUse.PossiblyOutOfBounds);
+            const possibleOutOfBounds = compilerOptions.noUncheckedIndexSignatures && !!(use & IterationUse.PossiblyOutOfBounds);
 
             // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
             // or higher, when inside of an async generator or for-await-if, or when
@@ -33436,7 +33436,7 @@ namespace ts {
                     }
                 }
                 if (iterationTypes || uplevelIteration) {
-                    return possibleOutOfBounds ? includeUndefinedInPedanticIndexSignature(iterationTypes && iterationTypes.yieldType) : (iterationTypes && iterationTypes.yieldType);
+                    return possibleOutOfBounds ? includeUndefinedInIndexSignature(iterationTypes && iterationTypes.yieldType) : (iterationTypes && iterationTypes.yieldType);
                 }
             }
 
@@ -33473,7 +33473,7 @@ namespace ts {
                     // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                     // arrayOrStringType was a string.
                     if (arrayType.flags & TypeFlags.Never) {
-                        return possibleOutOfBounds ? includeUndefinedInPedanticIndexSignature(stringType) : stringType;
+                        return possibleOutOfBounds ? includeUndefinedInIndexSignature(stringType) : stringType;
                     }
                 }
             }
@@ -33503,20 +33503,20 @@ namespace ts {
                         defaultDiagnostic,
                         typeToString(arrayType));
                 }
-                return hasStringConstituent ? possibleOutOfBounds ? includeUndefinedInPedanticIndexSignature(stringType) : stringType : undefined;
+                return hasStringConstituent ? possibleOutOfBounds ? includeUndefinedInIndexSignature(stringType) : stringType : undefined;
             }
 
             const arrayElementType = getIndexTypeOfType(arrayType, IndexKind.Number);
             if (hasStringConstituent && arrayElementType) {
                 // This is just an optimization for the case where arrayOrStringType is string | string[]
-                if (arrayElementType.flags & TypeFlags.StringLike && !compilerOptions.pedanticIndexSignatures) {
+                if (arrayElementType.flags & TypeFlags.StringLike && !compilerOptions.noUncheckedIndexSignatures) {
                     return stringType;
                 }
 
                 return getUnionType(possibleOutOfBounds ? [arrayElementType, stringType, undefinedType] : [arrayElementType, stringType], UnionReduction.Subtype);
             }
 
-            return (use & IterationUse.PossiblyOutOfBounds) ? includeUndefinedInPedanticIndexSignature(arrayElementType) : arrayElementType;
+            return (use & IterationUse.PossiblyOutOfBounds) ? includeUndefinedInIndexSignature(arrayElementType) : arrayElementType;
         }
 
         /**

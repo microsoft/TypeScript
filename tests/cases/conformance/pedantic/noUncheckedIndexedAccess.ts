@@ -1,5 +1,5 @@
 // @strict: true
-// @pedanticIndexSignatures: true
+// @noUncheckedIndexedAccess: true
 
 type CheckBooleanOnly<T extends boolean> = any;
 // Validate CheckBooleanOnly works - should error

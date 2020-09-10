@@ -1,4 +1,4 @@
-//// [pedanticIndexSignatures.ts]
+//// [noUncheckedIndexedAccess.ts]
 type CheckBooleanOnly<T extends boolean> = any;
 // Validate CheckBooleanOnly works - should error
 type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
@@ -81,7 +81,7 @@ const f1: boolean | number = strMapUnion["foo"];
 
 
 
-//// [pedanticIndexSignatures.js]
+//// [noUncheckedIndexedAccess.js]
 "use strict";
 var NumericEnum1;
 (function (NumericEnum1) {

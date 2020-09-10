@@ -1,5 +1,5 @@
 // @strict: true
-// @pedanticIndexSignatures: true
+// @noUncheckedIndexedAccess: true
 
 declare const strArray: string[];
 declare const strStrTuple: [string, string];

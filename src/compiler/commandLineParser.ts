@@ -607,7 +607,7 @@ namespace ts {
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
         {
-            name: "pedanticIndexSignatures",
+            name: "noUncheckedIndexedAccess",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
