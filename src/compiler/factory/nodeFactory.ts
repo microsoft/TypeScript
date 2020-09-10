@@ -94,8 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
-            createTemplateTypeSpan,
-            updateTemplateTypeSpan,
+            createTemplateLiteralTypeSpan,
+            updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
             createTypePredicateNode,
             updateTypePredicateNode,
@@ -140,8 +140,8 @@ namespace ts {
             updateMappedTypeNode,
             createLiteralTypeNode,
             updateLiteralTypeNode,
-            createTemplateType,
-            updateTemplateType,
+            createTemplateLiteralType,
+            updateTemplateLiteralType,
             createObjectBindingPattern,
             updateObjectBindingPattern,
             createArrayBindingPattern,
@@ -1601,8 +1601,8 @@ namespace ts {
         }
 
         // @api
-        function createTemplateTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
-            const node = createBaseNode<TemplateTypeSpan>(SyntaxKind.TemplateTypeSpan);
+        function createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            const node = createBaseNode<TemplateLiteralTypeSpan>(SyntaxKind.TemplateLiteralTypeSpan);
             node.casing = casing;
             node.type = type;
             node.literal = literal;
@@ -1611,11 +1611,11 @@ namespace ts {
         }
 
         // @api
-        function updateTemplateTypeSpan(casing: TemplateCasing, node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+        function updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
             return node.casing !== casing
                 || node.type !== type
                 || node.literal !== literal
-                ? update(createTemplateTypeSpan(casing, type, literal), node)
+                ? update(createTemplateLiteralTypeSpan(casing, type, literal), node)
                 : node;
         }
 
@@ -1911,8 +1911,8 @@ namespace ts {
         }
 
         // @api
-        function createTemplateType(head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]) {
-            const node = createBaseNode<TemplateTypeNode>(SyntaxKind.TemplateType);
+        function createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
+            const node = createBaseNode<TemplateLiteralTypeNode>(SyntaxKind.TemplateLiteralType);
             node.head = head;
             node.templateSpans = createNodeArray(templateSpans);
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1920,10 +1920,10 @@ namespace ts {
         }
 
         // @api
-        function updateTemplateType(node: TemplateTypeNode, head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]) {
+        function updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
             return node.head !== head
                 || node.templateSpans !== templateSpans
-                ? update(createTemplateType(head, templateSpans), node)
+                ? update(createTemplateLiteralType(head, templateSpans), node)
                 : node;
         }
 

@@ -234,8 +234,8 @@ namespace ts {
         MappedType,
         LiteralType,
         NamedTupleMember,
-        TemplateType,
-        TemplateTypeSpan,
+        TemplateLiteralType,
+        TemplateLiteralTypeSpan,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -667,8 +667,8 @@ namespace ts {
         | SyntaxKind.IndexedAccessType
         | SyntaxKind.MappedType
         | SyntaxKind.LiteralType
-        | SyntaxKind.TemplateType
-        | SyntaxKind.TemplateTypeSpan
+        | SyntaxKind.TemplateLiteralType
+        | SyntaxKind.TemplateLiteralTypeSpan
         | SyntaxKind.ImportType
         | SyntaxKind.ExpressionWithTypeArguments
         | SyntaxKind.JSDocTypeExpression
@@ -1652,15 +1652,15 @@ namespace ts {
     export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
 
-    export interface TemplateTypeNode extends TypeNode {
-        kind: SyntaxKind.TemplateType,
+    export interface TemplateLiteralTypeNode extends TypeNode {
+        kind: SyntaxKind.TemplateLiteralType,
         readonly head: TemplateHead;
-        readonly templateSpans: NodeArray<TemplateTypeSpan>;
+        readonly templateSpans: NodeArray<TemplateLiteralTypeSpan>;
     }
 
-    export interface TemplateTypeSpan extends TypeNode {
-        readonly kind: SyntaxKind.TemplateTypeSpan,
-        readonly parent: TemplateTypeNode;
+    export interface TemplateLiteralTypeSpan extends TypeNode {
+        readonly kind: SyntaxKind.TemplateLiteralTypeSpan,
+        readonly parent: TemplateLiteralTypeNode;
         readonly casing: TemplateCasing;
         readonly type: TypeNode;
         readonly literal: TemplateMiddle | TemplateTail;
@@ -2141,21 +2141,21 @@ namespace ts {
 
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        readonly parent: TemplateExpression | TemplateTypeNode;
+        readonly parent: TemplateExpression | TemplateLiteralTypeNode;
         /* @internal */
         templateFlags?: TokenFlags;
     }
 
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        readonly parent: TemplateSpan | TemplateTypeSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
         /* @internal */
         templateFlags?: TokenFlags;
     }
 
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        readonly parent: TemplateSpan | TemplateTypeSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
         /* @internal */
         templateFlags?: TokenFlags;
     }
@@ -6746,8 +6746,8 @@ namespace ts {
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        createTemplateTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
-        updateTemplateTypeSpan(casing: TemplateCasing, node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
+        createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
 
         //
         // Types
@@ -6797,8 +6797,8 @@ namespace ts {
         updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
-        createTemplateType(head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]): TemplateTypeNode;
-        updateTemplateType(node: TemplateTypeNode, head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]): TemplateTypeNode;
+        createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
+        updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
 
         //
         // Binding Patterns

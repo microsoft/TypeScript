@@ -1313,8 +1313,8 @@ namespace ts {
                         return emitConstructSignature(<ConstructSignatureDeclaration>node);
                     case SyntaxKind.IndexSignature:
                         return emitIndexSignature(<IndexSignatureDeclaration>node);
-                    case SyntaxKind.TemplateTypeSpan:
-                        return emitTemplateTypeSpan(<TemplateTypeSpan>node);
+                    case SyntaxKind.TemplateLiteralTypeSpan:
+                        return emitTemplateTypeSpan(<TemplateLiteralTypeSpan>node);
 
                     // Types
                     case SyntaxKind.TypePredicate:
@@ -1359,8 +1359,8 @@ namespace ts {
                         return emitMappedType(<MappedTypeNode>node);
                     case SyntaxKind.LiteralType:
                         return emitLiteralType(<LiteralTypeNode>node);
-                    case SyntaxKind.TemplateType:
-                        return emitTemplateType(<TemplateTypeNode>node);
+                    case SyntaxKind.TemplateLiteralType:
+                        return emitTemplateType(<TemplateLiteralTypeNode>node);
                     case SyntaxKind.ImportType:
                         return emitImportTypeNode(<ImportTypeNode>node);
                     case SyntaxKind.JSDocAllType:
@@ -2010,7 +2010,7 @@ namespace ts {
             writeTrailingSemicolon();
         }
 
-        function emitTemplateTypeSpan(node: TemplateTypeSpan) {
+        function emitTemplateTypeSpan(node: TemplateLiteralTypeSpan) {
             const keyword = node.casing === TemplateCasing.Uppercase ? "uppercase" :
                 node.casing === TemplateCasing.Lowercase ? "lowercase" :
                 node.casing === TemplateCasing.Capitalize ? "capitalize" :
@@ -2248,7 +2248,7 @@ namespace ts {
             emitExpression(node.literal);
         }
 
-        function emitTemplateType(node: TemplateTypeNode) {
+        function emitTemplateType(node: TemplateLiteralTypeNode) {
             emit(node.head);
             emitList(node, node.templateSpans, ListFormat.TemplateExpressionSpans);
         }

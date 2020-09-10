@@ -4497,12 +4497,12 @@ namespace ts {
                     const types = (<TemplateLiteralType>type).types;
                     const templateHead = factory.createTemplateHead(texts[0]);
                     const templateSpans = factory.createNodeArray(
-                        map(types, (t, i) => factory.createTemplateTypeSpan(
+                        map(types, (t, i) => factory.createTemplateLiteralTypeSpan(
                             casings[i],
                             typeToTypeNodeHelper(t, context),
                             (i < types.length - 1 ? factory.createTemplateMiddle : factory.createTemplateTail)(texts[i + 1]))));
                     context.approximateLength += 2;
-                    return factory.createTemplateType(templateHead, templateSpans);
+                    return factory.createTemplateLiteralType(templateHead, templateSpans);
                 }
                 if (type.flags & TypeFlags.IndexedAccess) {
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
@@ -11925,7 +11925,7 @@ namespace ts {
                         }
                         // When an 'infer T' declaration is immediately contained in a string template type, we infer a 'string'
                         // constraint.
-                        else if (grandParent.kind === SyntaxKind.TemplateTypeSpan) {
+                        else if (grandParent.kind === SyntaxKind.TemplateLiteralTypeSpan) {
                             inferences = append(inferences, stringType);
                         }
                     }
@@ -13441,7 +13441,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromTemplateTypeNode(node: TemplateTypeNode) {
+        function getTypeFromTemplateTypeNode(node: TemplateLiteralTypeNode) {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 links.resolvedType = getTemplateLiteralType(
@@ -14666,8 +14666,8 @@ namespace ts {
                     return getTypeFromConditionalTypeNode(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
-                case SyntaxKind.TemplateType:
-                    return getTypeFromTemplateTypeNode(<TemplateTypeNode>node);
+                case SyntaxKind.TemplateLiteralType:
+                    return getTypeFromTemplateTypeNode(<TemplateLiteralTypeNode>node);
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
                 // This function assumes that an identifier, qualified name, or property access expression is a type expression
@@ -31475,14 +31475,14 @@ namespace ts {
             registerForUnusedIdentifiersCheck(node);
         }
 
-        function checkTemplateType(node: TemplateTypeNode) {
+        function checkTemplateType(node: TemplateLiteralTypeNode) {
             forEachChild(node, checkSourceElement);
             getTypeFromTypeNode(node);
             for (const span of node.templateSpans) {
                 const type = getTypeFromTypeNode(span.type);
                 checkTypeAssignableTo(type, templateConstraintType, span.type);
                 if (!everyType(type, t => !!(t.flags & TypeFlags.Literal) || isGenericIndexType(t))) {
-                    error(span.type, Diagnostics.Template_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
+                    error(span.type, Diagnostics.Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
                 }
             }
         }
@@ -36095,8 +36095,8 @@ namespace ts {
                     return checkConditionalType(<ConditionalTypeNode>node);
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
-                case SyntaxKind.TemplateType:
-                    return checkTemplateType(<TemplateTypeNode>node);
+                case SyntaxKind.TemplateLiteralType:
+                    return checkTemplateType(<TemplateLiteralTypeNode>node);
                 case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.NamedTupleMember:

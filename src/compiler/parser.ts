@@ -425,10 +425,10 @@ namespace ts {
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNode, cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
                 return visitNode(cbNode, (<TemplateSpan>node).expression) || visitNode(cbNode, (<TemplateSpan>node).literal);
-            case SyntaxKind.TemplateType:
-                return visitNode(cbNode, (<TemplateTypeNode>node).head) || visitNodes(cbNode, cbNodes, (<TemplateTypeNode>node).templateSpans);
-            case SyntaxKind.TemplateTypeSpan:
-                return visitNode(cbNode, (<TemplateTypeSpan>node).type) || visitNode(cbNode, (<TemplateTypeSpan>node).literal);
+            case SyntaxKind.TemplateLiteralType:
+                return visitNode(cbNode, (<TemplateLiteralTypeNode>node).head) || visitNodes(cbNode, cbNodes, (<TemplateLiteralTypeNode>node).templateSpans);
+            case SyntaxKind.TemplateLiteralTypeSpan:
+                return visitNode(cbNode, (<TemplateLiteralTypeSpan>node).type) || visitNode(cbNode, (<TemplateLiteralTypeSpan>node).literal);
             case SyntaxKind.ComputedPropertyName:
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
@@ -2584,10 +2584,10 @@ namespace ts {
             );
         }
 
-        function parseTemplateType(): TemplateTypeNode {
+        function parseTemplateType(): TemplateLiteralTypeNode {
             const pos = getNodePos();
             return finishNode(
-                factory.createTemplateType(
+                factory.createTemplateLiteralType(
                     parseTemplateHead(/*isTaggedTemplate*/ false),
                     parseTemplateTypeSpans()
                 ),
@@ -2598,7 +2598,7 @@ namespace ts {
         function parseTemplateTypeSpans() {
             const pos = getNodePos();
             const list = [];
-            let node: TemplateTypeSpan;
+            let node: TemplateLiteralTypeSpan;
             do {
                 node = parseTemplateTypeSpan();
                 list.push(node);
@@ -2607,10 +2607,10 @@ namespace ts {
             return createNodeArray(list, pos);
         }
 
-        function parseTemplateTypeSpan(): TemplateTypeSpan {
+        function parseTemplateTypeSpan(): TemplateLiteralTypeSpan {
             const pos = getNodePos();
             return finishNode(
-                factory.createTemplateTypeSpan(
+                factory.createTemplateLiteralTypeSpan(
                     parseTemplateCasing(),
                     parseType(),
                     parseLiteralOfTemplateSpan(/*isTaggedTemplate*/ false)
