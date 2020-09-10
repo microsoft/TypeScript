@@ -477,6 +477,11 @@ namespace ts {
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
+            case SyntaxKind.JSDocSeeTag:
+                return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocSeeTag).name);
+            case SyntaxKind.JSDocNameReference:
+                return visitNode(cbNode, (node as JSDocNameReference).name);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -7150,6 +7155,19 @@ namespace ts {
                 return finishNode(result, pos);
             }
 
+            export function parseJSDocNameReference(): JSDocNameReference {
+                const pos = getNodePos();
+                const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
+                const entityName = parseEntityName(/* allowReservedWords*/ false);
+                if (hasBrace) {
+                    parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
+                }
+
+                const result = factory.createJSDocNameReference(entityName);
+                fixupParentReferences(result);
+                return finishNode(result, pos);
+            }
+
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
@@ -7431,6 +7449,9 @@ namespace ts {
                         case "callback":
                             tag = parseCallbackTag(start, tagName, margin, indentText);
                             break;
+                        case "see":
+                            tag = parseSeeTag(start, tagName, margin, indentText);
+                            break;
                         default:
                             tag = parseUnknownTag(start, tagName, margin, indentText);
                             break;
@@ -7659,6 +7680,13 @@ namespace ts {
                     const end = getNodePos();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
                     return finishNode(factory.createJSDocTypeTag(tagName, typeExpression, comments), start, end);
+                }
+
+                function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
+                    const nameExpression = parseJSDocNameReference();
+                    const end = getNodePos();
+                    const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
+                    return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start, end);
                 }
 
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {

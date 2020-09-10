@@ -337,6 +337,10 @@ namespace ts {
             updateJSDocAugmentsTag,
             createJSDocImplementsTag,
             updateJSDocImplementsTag,
+            createJSDocSeeTag,
+            updateJSDocSeeTag,
+            createJSDocNameReference,
+            updateJSDocNameReference,
             // lazily load factory members for JSDoc tags with similar structure
             get createJSDocTypeTag() { return getJSDocTypeLikeTagCreateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
             get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
@@ -4257,6 +4261,36 @@ namespace ts {
             const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
             node.class = className;
             return node;
+        }
+
+        // @api
+        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+            const node = createBaseJSDocTag<JSDocSeeTag>(SyntaxKind.JSDocSeeTag, tagName ?? createIdentifier("see"), comment);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+            return node.tagName !== tagName
+                || node.name !== name
+                || node.comment !== comment
+                ? update(createJSDocSeeTag(tagName, name, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocNameReference(name: EntityName): JSDocNameReference {
+            const node = createBaseNode<JSDocNameReference>(SyntaxKind.JSDocNameReference);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference {
+            return node.name !== name
+                ? update(createJSDocNameReference(name), node)
+                : node;
         }
 
         // @api

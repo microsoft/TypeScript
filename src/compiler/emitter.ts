@@ -1548,6 +1548,10 @@ namespace ts {
                     case SyntaxKind.JSDocClassTag:
                     case SyntaxKind.JSDocTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
+                    case SyntaxKind.JSDocSeeTag:
+                        return emitJSDocSeeTag(node as JSDocSeeTag);
+                    case SyntaxKind.JSDocNameReference:
+                        return emitJSDocNameReference(node as JSDocNameReference);
 
                     case SyntaxKind.JSDocComment:
                         return emitJSDoc(node as JSDoc);
@@ -3501,6 +3505,19 @@ namespace ts {
             emitJSDocTagName(tag.tagName);
             emitJSDocTypeExpression(tag.typeExpression);
             emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocSeeTag(tag: JSDocSeeTag) {
+            emitJSDocTagName(tag.tagName);
+            emit(tag.name);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocNameReference(node: JSDocNameReference) {
+            writeSpace();
+            writePunctuation("{");
+            emit(node.name);
+            writePunctuation("}");
         }
 
         function emitJSDocHeritageTag(tag: JSDocImplementsTag | JSDocAugmentsTag) {
