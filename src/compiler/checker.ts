@@ -26039,7 +26039,7 @@ namespace ts {
             // If the above conditions are met then:
             // - Determine the name in function `callbackFunc` given to the parameter `innerCallbackParam`
             // - Find all references to that name in the body of the function `callbackFunc`
-            // - If `innerCallbackParam` is called directly, collect inferences for the type of the argument passed to the parameter (`innerCallbackValueType`) each call to `innerCallbackParam`
+            // - If `innerCallbackParam` is called directly, collect inferences for the type of the argument passed to the parameter (`innerCallbackValueType`)
             // - If `innerCallbackParam` is passed as the argument to another function, we can attempt to use the contextual type of that parameter for inference.
             if (isNewExpression(node) && argCount === 1) {
                 const callbackType = getTypeAtPosition(signature, 0); // executor: ...
