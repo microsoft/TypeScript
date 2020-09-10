@@ -565,6 +565,7 @@ namespace ts {
                 return factory.updateMappedTypeNode((<MappedTypeNode>node),
                     nodeVisitor((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
+                    nodeVisitor((<MappedTypeNode>node).nameType, visitor, isTypeNode),
                     nodeVisitor((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).type, visitor, isTypeNode));
 

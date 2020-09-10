@@ -1,0 +1,68 @@
+=== tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts ===
+// Mapped type 'as N' clauses
+
+type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+>Getters : Getters<T>
+
+type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
+>TG1 : Getters<{ foo: string; bar: number; baz: {    z: boolean;}; }>
+>foo : string
+>bar : number
+>baz : { z: boolean; }
+>z : boolean
+
+// Mapped type with 'as N' clause has no constraint on 'in T' clause
+
+type PropDef<K extends keyof any, T> = { name: K, type: T };
+>PropDef : PropDef<K, T>
+>name : K
+>type : T
+
+type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: P['type'] };
+>TypeFromDefs : TypeFromDefs<T>
+
+type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
+>TP1 : TypeFromDefs<{ name: 'a'; type: string; } | { name: 'b'; type: number; } | { name: 'a'; type: boolean; }>
+>name : "a"
+>type : string
+>name : "b"
+>type : number
+>name : "a"
+>type : boolean
+
+// No array or tuple type mapping when 'as N' clause present
+
+type TA1 = Getters<string[]>;
+>TA1 : Getters<string[]>
+
+type TA2 = Getters<[number, boolean]>;
+>TA2 : Getters<[number, boolean]>
+
+// Filtering using 'as N' clause
+
+type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
+>Methods : Methods<T>
+
+type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | number }>;
+>TM1 : Methods<{ foo(): number; bar(x: string): boolean; baz: string | number; }>
+>foo : () => number
+>bar : (x: string) => boolean
+>x : string
+>baz : string | number
+
+// Mapping to multiple names using 'as N' clause
+
+type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
+>DoubleProp : DoubleProp<T>
+
+type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
+>TD1 : DoubleProp<{ a: string; b: number; }>
+>a : string
+>b : number
+
+type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
+>TD2 : "a1" | "b1" | "a2" | "b2"
+
+type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
+>TD3 : `${keyof U & string}1` | `${keyof U & string}2`
+
