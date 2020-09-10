@@ -300,8 +300,8 @@ declare namespace ts {
         MappedType = 193,
         LiteralType = 194,
         NamedTupleMember = 195,
-        TemplateType = 196,
-        TemplateTypeSpan = 197,
+        TemplateLiteralType = 196,
+        TemplateLiteralTypeSpan = 197,
         ImportType = 198,
         ObjectBindingPattern = 199,
         ArrayBindingPattern = 200,
@@ -961,14 +961,14 @@ declare namespace ts {
     }
     export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
-    export interface TemplateTypeNode extends TypeNode {
-        kind: SyntaxKind.TemplateType;
+    export interface TemplateLiteralTypeNode extends TypeNode {
+        kind: SyntaxKind.TemplateLiteralType;
         readonly head: TemplateHead;
-        readonly templateSpans: NodeArray<TemplateTypeSpan>;
+        readonly templateSpans: NodeArray<TemplateLiteralTypeSpan>;
     }
-    export interface TemplateTypeSpan extends TypeNode {
-        readonly kind: SyntaxKind.TemplateTypeSpan;
-        readonly parent: TemplateTypeNode;
+    export interface TemplateLiteralTypeSpan extends TypeNode {
+        readonly kind: SyntaxKind.TemplateLiteralTypeSpan;
+        readonly parent: TemplateLiteralTypeNode;
         readonly casing: TemplateCasing;
         readonly type: TypeNode;
         readonly literal: TemplateMiddle | TemplateTail;
@@ -1168,15 +1168,15 @@ declare namespace ts {
     export type LiteralToken = NumericLiteral | BigIntLiteral | StringLiteral | JsxText | RegularExpressionLiteral | NoSubstitutionTemplateLiteral;
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        readonly parent: TemplateExpression | TemplateTypeNode;
+        readonly parent: TemplateExpression | TemplateLiteralTypeNode;
     }
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        readonly parent: TemplateSpan | TemplateTypeSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
     }
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        readonly parent: TemplateSpan | TemplateTypeSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
     }
     export type PseudoLiteralToken = TemplateHead | TemplateMiddle | TemplateTail;
     export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | PseudoLiteralToken;
@@ -3208,8 +3208,8 @@ declare namespace ts {
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        createTemplateTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
-        updateTemplateTypeSpan(casing: TemplateCasing, node: TemplateTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateTypeSpan;
+        createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         createKeywordTypeNode<TKind extends KeywordTypeSyntaxKind>(kind: TKind): KeywordTypeNode<TKind>;
         createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
         updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
@@ -3254,8 +3254,8 @@ declare namespace ts {
         updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
-        createTemplateType(head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]): TemplateTypeNode;
-        updateTemplateType(node: TemplateTypeNode, head: TemplateHead, templateSpans: readonly TemplateTypeSpan[]): TemplateTypeNode;
+        createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
+        updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
         createObjectBindingPattern(elements: readonly BindingElement[]): ObjectBindingPattern;
         updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]): ObjectBindingPattern;
         createArrayBindingPattern(elements: readonly ArrayBindingElement[]): ArrayBindingPattern;
