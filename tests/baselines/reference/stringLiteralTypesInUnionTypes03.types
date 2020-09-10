@@ -1,17 +1,17 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts ===
 type T = number | "foo" | "bar";
->T : number | "foo" | "bar"
+>T : T
 
 var x: "foo" | "bar" | number;
->x : number | "foo" | "bar"
+>x : T
 
 var y: T = undefined;
->y : number | "foo" | "bar"
+>y : T
 >undefined : undefined
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : number | "foo" | "bar"
+>x : T
 >"foo" : "foo"
 
     let a = x;
@@ -24,10 +24,10 @@ else if (x !== "bar") {
 >"bar" : "bar"
 
     let b = x || y;
->b : number | "foo" | "bar"
->x || y : number | "foo" | "bar"
+>b : T
+>x || y : T
 >x : number
->y : number | "foo" | "bar"
+>y : T
 }
 else {
     let c = x;
@@ -35,25 +35,25 @@ else {
 >x : "bar"
 
     let d = y;
->d : number | "foo" | "bar"
->y : number | "foo" | "bar"
+>d : T
+>y : T
 
     let e: (typeof x) | (typeof y) = c || d;
->e : number | "foo" | "bar"
+>e : T
 >x : "bar"
->y : number | "foo" | "bar"
->c || d : number | "foo" | "bar"
+>y : T
+>c || d : T
 >c : "bar"
->d : number | "foo" | "bar"
+>d : T
 }
 
 x = y;
->x = y : number | "foo" | "bar"
->x : number | "foo" | "bar"
->y : number | "foo" | "bar"
+>x = y : T
+>x : T
+>y : T
 
 y = x;
->y = x : number | "foo" | "bar"
->y : number | "foo" | "bar"
->x : number | "foo" | "bar"
+>y = x : T
+>y : T
+>x : T
 
