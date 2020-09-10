@@ -359,9 +359,9 @@ namespace ts {
             }
         }
 
-        getJsDocTags(): JSDocTagInfo[] {
+        getJsDocTags(checker: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations);
+                this.tags = JsDoc.getJsDocTagsFromDeclarations(checker, this.declarations);
             }
 
             return this.tags;
@@ -550,7 +550,7 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations([this.declaration]) : [];
+                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations(this.checker, [this.declaration]) : [];
             }
 
             return this.jsDocTags;

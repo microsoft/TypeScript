@@ -1009,6 +1009,20 @@ namespace ts {
     export interface JSDocTagInfo {
         name: string;
         text?: string;
+        links?: JSDocLink[]; // fill this by calling getSymbolOfNameOrPropertyAccessExpression/getSymbolAtLocation for @see tags
+        // (probably will need a dedicated thing for finding @link tags)
+    }
+
+    export interface JSDocLink {
+        pos: number;
+        end: number;
+        link: { // TODO: FileSpanWithContext is in services, but maybe a counterpart exists over here?
+            start: { line: number, offset: number },
+            end: { line: number, offset: number },
+            file: string,
+            contextStart?: { line: number, offset: number },
+            contextEnd?: { line: number, offset: number }
+        };
     }
 
     export interface QuickInfo {

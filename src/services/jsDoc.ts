@@ -112,15 +112,32 @@ namespace ts.JsDoc {
         }
     }
 
-    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
+    export function getJsDocTagsFromDeclarations(checker: TypeChecker, declarations?: Declaration[]): JSDocTagInfo[] {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentText(tag) });
+                tags.push({ name: tag.tagName.text, text: getCommentText(tag), links: getLinks(tag, checker) });
             }
         });
         return tags;
+    }
+
+    function getLinks(tag: JSDocTag, checker: TypeChecker): JSDocLink[] | undefined {
+        if (tag.kind !== SyntaxKind.JSDocSeeTag) return; // TODO: Change this to look for links
+        const see = tag as JSDocSeeTag;
+        if (!see.name) return
+        const symbol = checker.getSymbolAtLocation(see.name)
+        if (!symbol) return
+        return [{
+            pos: symbol.valueDeclaration.pos,
+            end: symbol.valueDeclaration.end,
+            link: { // TODO: FileSpanWithContext is in services, but maybe a counterpart exists over here?
+                start: { line: symbol.valueDeclaration.pos, offset: 0 }, // huuff, not sure at all how to produce a line/offset pair
+                end: { line: symbol.valueDeclaration.end, offset: 0 },
+                file: getSourceFileOfNode(symbol.valueDeclaration).fileName,
+            }
+        }]
     }
 
     function getCommentText(tag: JSDocTag): string | undefined {
