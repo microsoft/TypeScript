@@ -26,7 +26,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(41,11): error TS2322: Type
     '{ name: string; prop: boolean; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(43,43): error TS2322: Type '{ name: string; prop: true; }' is not assignable to type 'T | { prop: boolean; }'.
   Object literal may only specify known properties, and 'name' does not exist in type '{ prop: boolean; }'.
-tests/cases/compiler/objectLiteralExcessProperties.ts(45,76): error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type '{ name: string; } | (T & { prop: boolean; })'.
+tests/cases/compiler/objectLiteralExcessProperties.ts(45,76): error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type '(T & { prop: boolean; }) | { name: string; }'.
   Object literal may only specify known properties, and 'prop' does not exist in type '{ name: string; }'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type '{ z: string; }' is not assignable to type 'object & { x: string; }'.
   Object literal may only specify known properties, and 'z' does not exist in type 'object & { x: string; }'.
@@ -122,7 +122,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type
         // Excess property checks only on non-generic parts of unions
         const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
                                                                                ~~~~~~~~~~
-!!! error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type '{ name: string; } | (T & { prop: boolean; })'.
+!!! error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type '(T & { prop: boolean; }) | { name: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'prop' does not exist in type '{ name: string; }'.
         // No excess property checks when union includes 'object' type
         const obj5: object | { x: string } = { z: 'abc' }

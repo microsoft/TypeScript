@@ -259,188 +259,196 @@ declare namespace ts {
         FromKeyword = 152,
         GlobalKeyword = 153,
         BigIntKeyword = 154,
-        OfKeyword = 155,
-        QualifiedName = 156,
-        ComputedPropertyName = 157,
-        TypeParameter = 158,
-        Parameter = 159,
-        Decorator = 160,
-        PropertySignature = 161,
-        PropertyDeclaration = 162,
-        MethodSignature = 163,
-        MethodDeclaration = 164,
-        Constructor = 165,
-        GetAccessor = 166,
-        SetAccessor = 167,
-        CallSignature = 168,
-        ConstructSignature = 169,
-        IndexSignature = 170,
-        TypePredicate = 171,
-        TypeReference = 172,
-        FunctionType = 173,
-        ConstructorType = 174,
-        TypeQuery = 175,
-        TypeLiteral = 176,
-        ArrayType = 177,
-        TupleType = 178,
-        OptionalType = 179,
-        RestType = 180,
-        UnionType = 181,
-        IntersectionType = 182,
-        ConditionalType = 183,
-        InferType = 184,
-        ParenthesizedType = 185,
-        ThisType = 186,
-        TypeOperator = 187,
-        IndexedAccessType = 188,
-        MappedType = 189,
-        LiteralType = 190,
-        NamedTupleMember = 191,
-        ImportType = 192,
-        ObjectBindingPattern = 193,
-        ArrayBindingPattern = 194,
-        BindingElement = 195,
-        ArrayLiteralExpression = 196,
-        ObjectLiteralExpression = 197,
-        PropertyAccessExpression = 198,
-        ElementAccessExpression = 199,
-        CallExpression = 200,
-        NewExpression = 201,
-        TaggedTemplateExpression = 202,
-        TypeAssertionExpression = 203,
-        ParenthesizedExpression = 204,
-        FunctionExpression = 205,
-        ArrowFunction = 206,
-        DeleteExpression = 207,
-        TypeOfExpression = 208,
-        VoidExpression = 209,
-        AwaitExpression = 210,
-        PrefixUnaryExpression = 211,
-        PostfixUnaryExpression = 212,
-        BinaryExpression = 213,
-        ConditionalExpression = 214,
-        TemplateExpression = 215,
-        YieldExpression = 216,
-        SpreadElement = 217,
-        ClassExpression = 218,
-        OmittedExpression = 219,
-        ExpressionWithTypeArguments = 220,
-        AsExpression = 221,
-        NonNullExpression = 222,
-        MetaProperty = 223,
-        SyntheticExpression = 224,
-        TemplateSpan = 225,
-        SemicolonClassElement = 226,
-        Block = 227,
-        EmptyStatement = 228,
-        VariableStatement = 229,
-        ExpressionStatement = 230,
-        IfStatement = 231,
-        DoStatement = 232,
-        WhileStatement = 233,
-        ForStatement = 234,
-        ForInStatement = 235,
-        ForOfStatement = 236,
-        ContinueStatement = 237,
-        BreakStatement = 238,
-        ReturnStatement = 239,
-        WithStatement = 240,
-        SwitchStatement = 241,
-        LabeledStatement = 242,
-        ThrowStatement = 243,
-        TryStatement = 244,
-        DebuggerStatement = 245,
-        VariableDeclaration = 246,
-        VariableDeclarationList = 247,
-        FunctionDeclaration = 248,
-        ClassDeclaration = 249,
-        InterfaceDeclaration = 250,
-        TypeAliasDeclaration = 251,
-        EnumDeclaration = 252,
-        ModuleDeclaration = 253,
-        ModuleBlock = 254,
-        CaseBlock = 255,
-        NamespaceExportDeclaration = 256,
-        ImportEqualsDeclaration = 257,
-        ImportDeclaration = 258,
-        ImportClause = 259,
-        NamespaceImport = 260,
-        NamedImports = 261,
-        ImportSpecifier = 262,
-        ExportAssignment = 263,
-        ExportDeclaration = 264,
-        NamedExports = 265,
-        NamespaceExport = 266,
-        ExportSpecifier = 267,
-        MissingDeclaration = 268,
-        ExternalModuleReference = 269,
-        JsxElement = 270,
-        JsxSelfClosingElement = 271,
-        JsxOpeningElement = 272,
-        JsxClosingElement = 273,
-        JsxFragment = 274,
-        JsxOpeningFragment = 275,
-        JsxClosingFragment = 276,
-        JsxAttribute = 277,
-        JsxAttributes = 278,
-        JsxSpreadAttribute = 279,
-        JsxExpression = 280,
-        CaseClause = 281,
-        DefaultClause = 282,
-        HeritageClause = 283,
-        CatchClause = 284,
-        PropertyAssignment = 285,
-        ShorthandPropertyAssignment = 286,
-        SpreadAssignment = 287,
-        EnumMember = 288,
-        UnparsedPrologue = 289,
-        UnparsedPrepend = 290,
-        UnparsedText = 291,
-        UnparsedInternalText = 292,
-        UnparsedSyntheticReference = 293,
-        SourceFile = 294,
-        Bundle = 295,
-        UnparsedSource = 296,
-        InputFiles = 297,
-        JSDocTypeExpression = 298,
-        JSDocAllType = 299,
-        JSDocUnknownType = 300,
-        JSDocNullableType = 301,
-        JSDocNonNullableType = 302,
-        JSDocOptionalType = 303,
-        JSDocFunctionType = 304,
-        JSDocVariadicType = 305,
-        JSDocNamepathType = 306,
-        JSDocComment = 307,
-        JSDocTypeLiteral = 308,
-        JSDocSignature = 309,
-        JSDocTag = 310,
-        JSDocAugmentsTag = 311,
-        JSDocImplementsTag = 312,
-        JSDocAuthorTag = 313,
-        JSDocDeprecatedTag = 314,
-        JSDocClassTag = 315,
-        JSDocPublicTag = 316,
-        JSDocPrivateTag = 317,
-        JSDocProtectedTag = 318,
-        JSDocReadonlyTag = 319,
-        JSDocCallbackTag = 320,
-        JSDocEnumTag = 321,
-        JSDocParameterTag = 322,
-        JSDocReturnTag = 323,
-        JSDocThisTag = 324,
-        JSDocTypeTag = 325,
-        JSDocTemplateTag = 326,
-        JSDocTypedefTag = 327,
-        JSDocPropertyTag = 328,
-        SyntaxList = 329,
-        NotEmittedStatement = 330,
-        PartiallyEmittedExpression = 331,
-        CommaListExpression = 332,
-        MergeDeclarationMarker = 333,
-        EndOfDeclarationMarker = 334,
-        SyntheticReferenceExpression = 335,
-        Count = 336,
+        UppercaseKeyword = 155,
+        LowercaseKeyword = 156,
+        CapitalizeKeyword = 157,
+        UncapitalizeKeyword = 158,
+        OfKeyword = 159,
+        QualifiedName = 160,
+        ComputedPropertyName = 161,
+        TypeParameter = 162,
+        Parameter = 163,
+        Decorator = 164,
+        PropertySignature = 165,
+        PropertyDeclaration = 166,
+        MethodSignature = 167,
+        MethodDeclaration = 168,
+        Constructor = 169,
+        GetAccessor = 170,
+        SetAccessor = 171,
+        CallSignature = 172,
+        ConstructSignature = 173,
+        IndexSignature = 174,
+        TypePredicate = 175,
+        TypeReference = 176,
+        FunctionType = 177,
+        ConstructorType = 178,
+        TypeQuery = 179,
+        TypeLiteral = 180,
+        ArrayType = 181,
+        TupleType = 182,
+        OptionalType = 183,
+        RestType = 184,
+        UnionType = 185,
+        IntersectionType = 186,
+        ConditionalType = 187,
+        InferType = 188,
+        ParenthesizedType = 189,
+        ThisType = 190,
+        TypeOperator = 191,
+        IndexedAccessType = 192,
+        MappedType = 193,
+        LiteralType = 194,
+        NamedTupleMember = 195,
+        TemplateLiteralType = 196,
+        TemplateLiteralTypeSpan = 197,
+        ImportType = 198,
+        ObjectBindingPattern = 199,
+        ArrayBindingPattern = 200,
+        BindingElement = 201,
+        ArrayLiteralExpression = 202,
+        ObjectLiteralExpression = 203,
+        PropertyAccessExpression = 204,
+        ElementAccessExpression = 205,
+        CallExpression = 206,
+        NewExpression = 207,
+        TaggedTemplateExpression = 208,
+        TypeAssertionExpression = 209,
+        ParenthesizedExpression = 210,
+        FunctionExpression = 211,
+        ArrowFunction = 212,
+        DeleteExpression = 213,
+        TypeOfExpression = 214,
+        VoidExpression = 215,
+        AwaitExpression = 216,
+        PrefixUnaryExpression = 217,
+        PostfixUnaryExpression = 218,
+        BinaryExpression = 219,
+        ConditionalExpression = 220,
+        TemplateExpression = 221,
+        YieldExpression = 222,
+        SpreadElement = 223,
+        ClassExpression = 224,
+        OmittedExpression = 225,
+        ExpressionWithTypeArguments = 226,
+        AsExpression = 227,
+        NonNullExpression = 228,
+        MetaProperty = 229,
+        SyntheticExpression = 230,
+        TemplateSpan = 231,
+        SemicolonClassElement = 232,
+        Block = 233,
+        EmptyStatement = 234,
+        VariableStatement = 235,
+        ExpressionStatement = 236,
+        IfStatement = 237,
+        DoStatement = 238,
+        WhileStatement = 239,
+        ForStatement = 240,
+        ForInStatement = 241,
+        ForOfStatement = 242,
+        ContinueStatement = 243,
+        BreakStatement = 244,
+        ReturnStatement = 245,
+        WithStatement = 246,
+        SwitchStatement = 247,
+        LabeledStatement = 248,
+        ThrowStatement = 249,
+        TryStatement = 250,
+        DebuggerStatement = 251,
+        VariableDeclaration = 252,
+        VariableDeclarationList = 253,
+        FunctionDeclaration = 254,
+        ClassDeclaration = 255,
+        InterfaceDeclaration = 256,
+        TypeAliasDeclaration = 257,
+        EnumDeclaration = 258,
+        ModuleDeclaration = 259,
+        ModuleBlock = 260,
+        CaseBlock = 261,
+        NamespaceExportDeclaration = 262,
+        ImportEqualsDeclaration = 263,
+        ImportDeclaration = 264,
+        ImportClause = 265,
+        NamespaceImport = 266,
+        NamedImports = 267,
+        ImportSpecifier = 268,
+        ExportAssignment = 269,
+        ExportDeclaration = 270,
+        NamedExports = 271,
+        NamespaceExport = 272,
+        ExportSpecifier = 273,
+        MissingDeclaration = 274,
+        ExternalModuleReference = 275,
+        JsxElement = 276,
+        JsxSelfClosingElement = 277,
+        JsxOpeningElement = 278,
+        JsxClosingElement = 279,
+        JsxFragment = 280,
+        JsxOpeningFragment = 281,
+        JsxClosingFragment = 282,
+        JsxAttribute = 283,
+        JsxAttributes = 284,
+        JsxSpreadAttribute = 285,
+        JsxExpression = 286,
+        CaseClause = 287,
+        DefaultClause = 288,
+        HeritageClause = 289,
+        CatchClause = 290,
+        PropertyAssignment = 291,
+        ShorthandPropertyAssignment = 292,
+        SpreadAssignment = 293,
+        EnumMember = 294,
+        UnparsedPrologue = 295,
+        UnparsedPrepend = 296,
+        UnparsedText = 297,
+        UnparsedInternalText = 298,
+        UnparsedSyntheticReference = 299,
+        SourceFile = 300,
+        Bundle = 301,
+        UnparsedSource = 302,
+        InputFiles = 303,
+        JSDocTypeExpression = 304,
+        JSDocNameReference = 305,
+        JSDocAllType = 306,
+        JSDocUnknownType = 307,
+        JSDocNullableType = 308,
+        JSDocNonNullableType = 309,
+        JSDocOptionalType = 310,
+        JSDocFunctionType = 311,
+        JSDocVariadicType = 312,
+        JSDocNamepathType = 313,
+        JSDocComment = 314,
+        JSDocTypeLiteral = 315,
+        JSDocSignature = 316,
+        JSDocTag = 317,
+        JSDocAugmentsTag = 318,
+        JSDocImplementsTag = 319,
+        JSDocAuthorTag = 320,
+        JSDocDeprecatedTag = 321,
+        JSDocClassTag = 322,
+        JSDocPublicTag = 323,
+        JSDocPrivateTag = 324,
+        JSDocProtectedTag = 325,
+        JSDocReadonlyTag = 326,
+        JSDocCallbackTag = 327,
+        JSDocEnumTag = 328,
+        JSDocParameterTag = 329,
+        JSDocReturnTag = 330,
+        JSDocThisTag = 331,
+        JSDocTypeTag = 332,
+        JSDocTemplateTag = 333,
+        JSDocTypedefTag = 334,
+        JSDocSeeTag = 335,
+        JSDocPropertyTag = 336,
+        SyntaxList = 337,
+        NotEmittedStatement = 338,
+        PartiallyEmittedExpression = 339,
+        CommaListExpression = 340,
+        MergeDeclarationMarker = 341,
+        EndOfDeclarationMarker = 342,
+        SyntheticReferenceExpression = 343,
+        Count = 344,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -448,15 +456,15 @@ declare namespace ts {
         FirstReservedWord = 80,
         LastReservedWord = 115,
         FirstKeyword = 80,
-        LastKeyword = 155,
+        LastKeyword = 159,
         FirstFutureReservedWord = 116,
         LastFutureReservedWord = 124,
-        FirstTypeNode = 171,
-        LastTypeNode = 192,
+        FirstTypeNode = 175,
+        LastTypeNode = 198,
         FirstPunctuation = 18,
         LastPunctuation = 77,
         FirstToken = 0,
-        LastToken = 155,
+        LastToken = 159,
         FirstTriviaToken = 2,
         LastTriviaToken = 7,
         FirstLiteralToken = 8,
@@ -465,19 +473,19 @@ declare namespace ts {
         LastTemplateToken = 17,
         FirstBinaryOperator = 29,
         LastBinaryOperator = 77,
-        FirstStatement = 229,
-        LastStatement = 245,
-        FirstNode = 156,
-        FirstJSDocNode = 298,
-        LastJSDocNode = 328,
-        FirstJSDocTagNode = 310,
-        LastJSDocTagNode = 328,
+        FirstStatement = 235,
+        LastStatement = 251,
+        FirstNode = 160,
+        FirstJSDocNode = 304,
+        LastJSDocNode = 336,
+        FirstJSDocTagNode = 317,
+        LastJSDocTagNode = 336,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
     export type PseudoLiteralSyntaxKind = SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail;
     export type PunctuationSyntaxKind = SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken;
-    export type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword;
+    export type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CapitalizeKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.LowercaseKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UncapitalizeKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.UppercaseKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword;
     export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.StaticKeyword;
     export type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
     export type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
@@ -942,6 +950,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.MappedType;
         readonly readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
+        readonly nameType?: TypeNode;
         readonly questionToken?: QuestionToken | PlusToken | MinusToken;
         readonly type?: TypeNode;
     }
@@ -954,6 +963,25 @@ declare namespace ts {
     }
     export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+    export interface TemplateLiteralTypeNode extends TypeNode {
+        kind: SyntaxKind.TemplateLiteralType;
+        readonly head: TemplateHead;
+        readonly templateSpans: NodeArray<TemplateLiteralTypeSpan>;
+    }
+    export interface TemplateLiteralTypeSpan extends TypeNode {
+        readonly kind: SyntaxKind.TemplateLiteralTypeSpan;
+        readonly parent: TemplateLiteralTypeNode;
+        readonly casing: TemplateCasing;
+        readonly type: TypeNode;
+        readonly literal: TemplateMiddle | TemplateTail;
+    }
+    export enum TemplateCasing {
+        None = 0,
+        Uppercase = 1,
+        Lowercase = 2,
+        Capitalize = 3,
+        Uncapitalize = 4
+    }
     export interface Expression extends Node {
         _expressionBrand: any;
     }
@@ -1142,15 +1170,15 @@ declare namespace ts {
     export type LiteralToken = NumericLiteral | BigIntLiteral | StringLiteral | JsxText | RegularExpressionLiteral | NoSubstitutionTemplateLiteral;
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        readonly parent: TemplateExpression;
+        readonly parent: TemplateExpression | TemplateLiteralTypeNode;
     }
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
     }
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
     }
     export type PseudoLiteralToken = TemplateHead | TemplateMiddle | TemplateTail;
     export type TemplateLiteralToken = NoSubstitutionTemplateLiteral | PseudoLiteralToken;
@@ -1682,6 +1710,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocTypeExpression;
         readonly type: TypeNode;
     }
+    export interface JSDocNameReference extends Node {
+        readonly kind: SyntaxKind.JSDocNameReference;
+        readonly name: EntityName;
+    }
     export interface JSDocType extends TypeNode {
         _jsDocTypeBrand: any;
     }
@@ -1779,6 +1811,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocTemplateTag;
         readonly constraint: JSDocTypeExpression | undefined;
         readonly typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+    export interface JSDocSeeTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocSeeTag;
+        readonly name?: JSDocNameReference;
     }
     export interface JSDocReturnTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocReturnTag;
@@ -2450,11 +2486,12 @@ declare namespace ts {
         Conditional = 16777216,
         Substitution = 33554432,
         NonPrimitive = 67108864,
+        TemplateLiteral = 134217728,
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
         PossiblyFalsy = 117724,
-        StringLike = 132,
+        StringLike = 134217860,
         NumberLike = 296,
         BigIntLike = 2112,
         BooleanLike = 528,
@@ -2465,10 +2502,10 @@ declare namespace ts {
         StructuredType = 3670016,
         TypeVariable = 8650752,
         InstantiableNonPrimitive = 58982400,
-        InstantiablePrimitive = 4194304,
-        Instantiable = 63176704,
-        StructuredOrInstantiable = 66846720,
-        Narrowable = 133970943,
+        InstantiablePrimitive = 138412032,
+        Instantiable = 197394432,
+        StructuredOrInstantiable = 201064448,
+        Narrowable = 268188671,
     }
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     export interface Type {
@@ -2618,6 +2655,11 @@ declare namespace ts {
         extendsType: Type;
         resolvedTrueType: Type;
         resolvedFalseType: Type;
+    }
+    export interface TemplateLiteralType extends InstantiableType {
+        texts: readonly string[];
+        casings: readonly TemplateCasing[];
+        types: readonly Type[];
     }
     export interface SubstitutionType extends InstantiableType {
         baseType: Type;
@@ -3176,6 +3218,8 @@ declare namespace ts {
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         createKeywordTypeNode<TKind extends KeywordTypeSyntaxKind>(kind: TKind): KeywordTypeNode<TKind>;
         createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
         updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
@@ -3216,10 +3260,12 @@ declare namespace ts {
         updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
         createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
         updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
+        createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
+        updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
         createObjectBindingPattern(elements: readonly BindingElement[]): ObjectBindingPattern;
         updateObjectBindingPattern(node: ObjectBindingPattern, elements: readonly BindingElement[]): ObjectBindingPattern;
         createArrayBindingPattern(elements: readonly ArrayBindingElement[]): ArrayBindingPattern;
@@ -3399,6 +3445,8 @@ declare namespace ts {
         updateJSDocNamepathType(node: JSDocNamepathType, type: TypeNode): JSDocNamepathType;
         createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
+        createJSDocNameReference(name: EntityName): JSDocNameReference;
+        updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
@@ -3413,6 +3461,8 @@ declare namespace ts {
         updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag;
         createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
+        createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
+        updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
         createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
@@ -4422,6 +4472,7 @@ declare namespace ts {
     function isBundle(node: Node): node is Bundle;
     function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
+    function isJSDocNameReference(node: Node): node is JSDocNameReference;
     function isJSDocAllType(node: Node): node is JSDocAllType;
     function isJSDocUnknownType(node: Node): node is JSDocUnknownType;
     function isJSDocNullableType(node: Node): node is JSDocNullableType;
@@ -10133,9 +10184,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateIndexedAccessTypeNode` or the factory supplied by your transformation context instead. */
     const updateIndexedAccessTypeNode: (node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) => IndexedAccessTypeNode;
     /** @deprecated Use `factory.createMappedTypeNode` or the factory supplied by your transformation context instead. */
-    const createMappedTypeNode: (readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined) => MappedTypeNode;
+    const createMappedTypeNode: (readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined) => MappedTypeNode;
     /** @deprecated Use `factory.updateMappedTypeNode` or the factory supplied by your transformation context instead. */
-    const updateMappedTypeNode: (node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined) => MappedTypeNode;
+    const updateMappedTypeNode: (node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined) => MappedTypeNode;
     /** @deprecated Use `factory.createLiteralTypeNode` or the factory supplied by your transformation context instead. */
     const createLiteralTypeNode: (literal: LiteralExpression | TrueLiteral | FalseLiteral | PrefixUnaryExpression | NullLiteral) => LiteralTypeNode;
     /** @deprecated Use `factory.updateLiteralTypeNode` or the factory supplied by your transformation context instead. */
