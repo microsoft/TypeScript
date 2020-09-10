@@ -4,9 +4,10 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(38,1): error TS2322
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(39,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(40,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(41,1): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(85,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (5 errors) ====
+==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (6 errors) ====
     type CheckBooleanOnly<T extends boolean> = any;
     // Validate CheckBooleanOnly works - should error
     type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
@@ -98,4 +99,11 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(41,1): error TS2322
     // Should error
     const f1: boolean | number = strMapUnion["foo"];
     
+    // Symbol index signatures
+    declare const s: unique symbol;
+    declare const symbolMap: { [s]: string };
+    const e15: string = symbolMap[s]; // Should OK
+    symbolMap[s] = undefined; // Should error
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     

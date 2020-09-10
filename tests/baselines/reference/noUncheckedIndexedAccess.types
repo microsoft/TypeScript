@@ -329,4 +329,25 @@ const f1: boolean | number = strMapUnion["foo"];
 >strMapUnion : { [s: string]: boolean; } | { [s: string]: number; }
 >"foo" : "foo"
 
+// Symbol index signatures
+declare const s: unique symbol;
+>s : unique symbol
+
+declare const symbolMap: { [s]: string };
+>symbolMap : { [s]: string; }
+>[s] : string
+>s : unique symbol
+
+const e15: string = symbolMap[s]; // Should OK
+>e15 : string
+>symbolMap[s] : string
+>symbolMap : { [s]: string; }
+>s : unique symbol
+
+symbolMap[s] = undefined; // Should error
+>symbolMap[s] = undefined : undefined
+>symbolMap[s] : string
+>symbolMap : { [s]: string; }
+>s : unique symbol
+>undefined : undefined
 

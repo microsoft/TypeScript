@@ -81,3 +81,8 @@ declare const strMapUnion: { [s: string]: boolean } | { [s: string]: number };
 // Should error
 const f1: boolean | number = strMapUnion["foo"];
 
+// Symbol index signatures
+declare const s: unique symbol;
+declare const symbolMap: { [s]: string };
+const e15: string = symbolMap[s]; // Should OK
+symbolMap[s] = undefined; // Should error

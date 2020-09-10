@@ -268,4 +268,22 @@ const f1: boolean | number = strMapUnion["foo"];
 >f1 : Symbol(f1, Decl(noUncheckedIndexedAccess.ts, 78, 5))
 >strMapUnion : Symbol(strMapUnion, Decl(noUncheckedIndexedAccess.ts, 76, 13))
 
+// Symbol index signatures
+declare const s: unique symbol;
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+
+declare const symbolMap: { [s]: string };
+>symbolMap : Symbol(symbolMap, Decl(noUncheckedIndexedAccess.ts, 82, 13))
+>[s] : Symbol([s], Decl(noUncheckedIndexedAccess.ts, 82, 26))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+
+const e15: string = symbolMap[s]; // Should OK
+>e15 : Symbol(e15, Decl(noUncheckedIndexedAccess.ts, 83, 5))
+>symbolMap : Symbol(symbolMap, Decl(noUncheckedIndexedAccess.ts, 82, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+
+symbolMap[s] = undefined; // Should error
+>symbolMap : Symbol(symbolMap, Decl(noUncheckedIndexedAccess.ts, 82, 13))
+>s : Symbol(s, Decl(noUncheckedIndexedAccess.ts, 81, 13))
+>undefined : Symbol(undefined)
 
