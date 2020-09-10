@@ -1059,14 +1059,9 @@ namespace ts {
             return diagnostic;
         }
 
-        function errorByThrowType(location: Node | undefined, value: Type) {
-            let message = "Unknown";
-            if (value.flags & TypeFlags.ThrowType) {
-                value = (<ThrowType>value).value;
-            }
-            if (value.flags & TypeFlags.StringLiteral) {
-                message = (<StringLiteralType>value).value;
-            }
+        function errorByThrowType(location: Node | undefined, type: Type) {
+            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            const message = getTypeNameForErrorDisplay(type);
             error(location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, message);
         }
 
@@ -15118,6 +15113,7 @@ namespace ts {
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
             if (!(type && mapper && couldContainTypeVariables(type))) {
+                if (type && (type.flags & TypeFlags.ThrowType)) errorByThrowType(currentNode, type);
                 return type;
             }
             if (instantiationDepth === 50 || instantiationCount >= 5000000) {
@@ -15186,8 +15182,8 @@ namespace ts {
                 }
             }
             if (flags & TypeFlags.ThrowType) {
-                errorByThrowType(currentNode, instantiateType((<ThrowType>type).value, mapper));
-                return errorType;
+                const errorMessage = instantiateType((<ThrowType>type).value, mapper);
+                return createThrowType(errorMessage);
             }
             return type;
         }
