@@ -11,6 +11,7 @@ function f(k) {
 var NS = {}
 NS.K =class {
     values() {
+        return new NS.K()
     }
 }
 exports.K = NS.K;
@@ -23,6 +24,7 @@ NS.K = /** @class */ (function () {
     function K() {
     }
     K.prototype.values = function () {
+        return new NS.K();
     };
     return K;
 }());
@@ -39,7 +41,7 @@ function f(k) {
 //// [mod1.d.ts]
 export var K: {
     new (): {
-        values(): void;
+        values(): any;
     };
 };
 //// [main.d.ts]

@@ -14,6 +14,7 @@ function f(k) {
 // @filename: mod1.js
 class K {
     values() {
+        return new K()
     }
 }
 exports.K = K;

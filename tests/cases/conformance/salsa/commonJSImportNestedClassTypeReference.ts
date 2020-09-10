@@ -15,6 +15,7 @@ function f(k) {
 var NS = {}
 NS.K =class {
     values() {
+        return new NS.K()
     }
 }
 exports.K = NS.K;

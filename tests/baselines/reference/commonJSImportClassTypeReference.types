@@ -11,10 +11,10 @@ function f(k) {
 >k : K
 
     k.values()
->k.values() : void
->k.values : () => void
+>k.values() : K
+>k.values : () => K
 >k : K
->values : () => void
+>values : () => K
 }
 
 === tests/cases/conformance/salsa/mod1.js ===
@@ -22,7 +22,11 @@ class K {
 >K : K
 
     values() {
->values : () => void
+>values : () => K
+
+        return new K()
+>new K() : K
+>K : typeof K
     }
 }
 exports.K = K;

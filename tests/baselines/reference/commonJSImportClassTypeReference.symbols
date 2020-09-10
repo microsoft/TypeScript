@@ -21,11 +21,14 @@ class K {
 
     values() {
 >values : Symbol(K.values, Decl(mod1.js, 0, 9))
+
+        return new K()
+>K : Symbol(K, Decl(mod1.js, 0, 0))
     }
 }
 exports.K = K;
->exports.K : Symbol(K, Decl(mod1.js, 3, 1))
->exports : Symbol(K, Decl(mod1.js, 3, 1))
->K : Symbol(K, Decl(mod1.js, 3, 1))
+>exports.K : Symbol(K, Decl(mod1.js, 4, 1))
+>exports : Symbol(K, Decl(mod1.js, 4, 1))
+>K : Symbol(K, Decl(mod1.js, 4, 1))
 >K : Symbol(K, Decl(mod1.js, 0, 0))
 

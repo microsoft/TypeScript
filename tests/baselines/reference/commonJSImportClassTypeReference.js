@@ -10,6 +10,7 @@ function f(k) {
 //// [mod1.js]
 class K {
     values() {
+        return new K()
     }
 }
 exports.K = K;
@@ -21,6 +22,7 @@ var K = /** @class */ (function () {
     function K() {
     }
     K.prototype.values = function () {
+        return new K();
     };
     return K;
 }());
@@ -36,7 +38,7 @@ function f(k) {
 
 //// [mod1.d.ts]
 export class K {
-    values(): void;
+    values(): K;
 }
 //// [main.d.ts]
 export {};

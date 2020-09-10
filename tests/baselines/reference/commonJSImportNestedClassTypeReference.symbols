@@ -26,12 +26,17 @@ NS.K =class {
 
     values() {
 >values : Symbol(K.values, Decl(mod1.js, 1, 13))
+
+        return new NS.K()
+>NS.K : Symbol(K, Decl(mod1.js, 0, 11))
+>NS : Symbol(NS, Decl(mod1.js, 0, 3), Decl(mod1.js, 0, 11))
+>K : Symbol(K, Decl(mod1.js, 0, 11))
     }
 }
 exports.K = NS.K;
->exports.K : Symbol(K, Decl(mod1.js, 4, 1))
->exports : Symbol(K, Decl(mod1.js, 4, 1))
->K : Symbol(K, Decl(mod1.js, 4, 1))
+>exports.K : Symbol(K, Decl(mod1.js, 5, 1))
+>exports : Symbol(K, Decl(mod1.js, 5, 1))
+>K : Symbol(K, Decl(mod1.js, 5, 1))
 >NS.K : Symbol(K, Decl(mod1.js, 0, 11))
 >NS : Symbol(NS, Decl(mod1.js, 0, 3), Decl(mod1.js, 0, 11))
 >K : Symbol(K, Decl(mod1.js, 0, 11))

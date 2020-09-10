@@ -11,10 +11,10 @@ function f(k) {
 >k : K
 
     k.values()
->k.values() : void
->k.values : () => void
+>k.values() : K
+>k.values : () => K
 >k : K
->values : () => void
+>values : () => K
 }
 
 === tests/cases/conformance/salsa/mod1.js ===
@@ -23,14 +23,20 @@ var NS = {}
 >{} : {}
 
 NS.K =class {
->NS.K =class {    values() {    }} : typeof K
+>NS.K =class {    values() {        return new NS.K()    }} : typeof K
 >NS.K : typeof K
 >NS : typeof NS
 >K : typeof K
->class {    values() {    }} : typeof K
+>class {    values() {        return new NS.K()    }} : typeof K
 
     values() {
->values : () => void
+>values : () => K
+
+        return new NS.K()
+>new NS.K() : K
+>NS.K : typeof K
+>NS : typeof NS
+>K : typeof K
     }
 }
 exports.K = NS.K;
