@@ -4896,6 +4896,10 @@
         "category": "Error",
         "code": 7055
     },
+    "The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.": {
+        "category": "Error",
+        "code": 7056
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
