@@ -198,6 +198,15 @@ namespace ts {
             description: Diagnostics.Generates_a_CPU_profile
         },
         {
+            name: "generateTrace",
+            type: "string",
+            isFilePath: true,
+            isCommandLineOnly: true,
+            paramType: Diagnostics.DIRECTORY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Generates_an_event_trace_and_a_list_of_types
+        },
+        {
             name: "incremental",
             shortName: "i",
             type: "boolean",

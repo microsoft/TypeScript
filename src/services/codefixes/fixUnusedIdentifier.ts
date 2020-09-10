@@ -224,12 +224,10 @@ namespace ts.codefix {
     }
 
     function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll = false): void {
-        if (mayDeleteParameter(p, checker, isFixAll)) {
-            if (p.modifiers && p.modifiers.length > 0
-                    && (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
-                p.modifiers.forEach(modifier => {
-                    changes.deleteModifier(sourceFile, modifier);
-                });
+        if (mayDeleteParameter(checker, sourceFile, p, isFixAll)) {
+            if (p.modifiers && p.modifiers.length > 0 &&
+                (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
+                p.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
             }
             else {
                 changes.delete(sourceFile, p);
@@ -238,29 +236,26 @@ namespace ts.codefix {
         }
     }
 
-    function mayDeleteParameter(p: ParameterDeclaration, checker: TypeChecker, isFixAll: boolean): boolean {
-        const { parent } = p;
+    function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, isFixAll: boolean): boolean {
+        const { parent } = parameter;
         switch (parent.kind) {
             case SyntaxKind.MethodDeclaration:
                 // Don't remove a parameter if this overrides something.
                 const symbol = checker.getSymbolAtLocation(parent.name)!;
                 if (isMemberSymbolInBaseType(symbol, checker)) return false;
                 // falls through
-
             case SyntaxKind.Constructor:
-            case SyntaxKind.FunctionDeclaration:
                 return true;
-
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction: {
-                // Can't remove a non-last parameter in a callback. Can remove a parameter in code-fix-all if future parameters are also unused.
-                const { parameters } = parent;
-                const index = parameters.indexOf(p);
-                Debug.assert(index !== -1, "The parameter should already be in the list");
-                return isFixAll
-                    ? parameters.slice(index + 1).every(p => p.name.kind === SyntaxKind.Identifier && !p.symbol.isReferenced)
-                    : index === parameters.length - 1;
+            case SyntaxKind.FunctionDeclaration: {
+                if (parent.name && isCallbackLike(checker, sourceFile, parent.name)) {
+                    return isLastParameter(parent, parameter, isFixAll);
+                }
+                return true;
             }
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                // Can't remove a non-last parameter in a callback. Can remove a parameter in code-fix-all if future parameters are also unused.
+                return isLastParameter(parent, parameter, isFixAll);
 
             case SyntaxKind.SetAccessor:
                 // Setter must have a parameter
@@ -278,5 +273,19 @@ namespace ts.codefix {
                 changes.delete(sourceFile, call.arguments[index]);
             }
         });
+    }
+
+    function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Identifier): boolean {
+        return !!FindAllReferences.Core.eachSymbolReferenceInFile(name, checker, sourceFile, reference =>
+            isIdentifier(reference) && isCallExpression(reference.parent) && reference.parent.arguments.indexOf(reference) >= 0);
+    }
+
+    function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, isFixAll: boolean): boolean {
+        const parameters = func.parameters;
+        const index = parameters.indexOf(parameter);
+        Debug.assert(index !== -1, "The parameter should already be in the list");
+        return isFixAll ?
+            parameters.slice(index + 1).every(p => isIdentifier(p.name) && !p.symbol.isReferenced) :
+            index === parameters.length - 1;
     }
 }

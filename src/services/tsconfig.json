@@ -61,6 +61,7 @@
         "codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "codefixes/convertToTypeOnlyExport.ts",
         "codefixes/convertToTypeOnlyImport.ts",
+        "codefixes/convertLiteralTypeToMappedType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
         "codefixes/fixImplicitThis.ts",
