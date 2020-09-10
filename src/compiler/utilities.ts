@@ -6903,4 +6903,77 @@ namespace ts {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
         }
     }
+
+    export function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile) {
+        const positions: number[] = [];
+
+        /// TODO: Cache symbol existence for files to save text search
+        // Also, need to make this work for unicode escapes.
+
+        // Be resilient in the face of a symbol with no name or zero length name
+        if (!symbolName || !symbolName.length) {
+            return positions as readonly number[] as SortedReadonlyArray<number>;
+        }
+
+        const text = sourceFile.text;
+        const sourceLength = text.length;
+        const symbolNameLength = symbolName.length;
+
+        let position = text.indexOf(symbolName, container.pos);
+        while (position >= 0) {
+            // If we are past the end, stop looking
+            if (position > container.end) break;
+
+            // We found a match.  Make sure it's not part of a larger word (i.e. the char
+            // before and after it have to be a non-identifier char).
+            const endPosition = position + symbolNameLength;
+
+            if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
+                (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))) {
+                // Found a real match.  Keep searching.
+                positions.push(position);
+            }
+            position = text.indexOf(symbolName, position + symbolNameLength + 1);
+        }
+
+        return positions as readonly number[] as SortedReadonlyArray<number>;
+    }
+
+    export function findNodesAtPositions(container: Node, positions: SortedReadonlyArray<number>, sourceFile = getSourceFileOfNode(container)) {
+        let i = 0;
+        const results: Node[] = [];
+        visit(container);
+        return results;
+        function visit(node: Node) {
+            const startPos = skipTrivia(sourceFile.text, node.pos);
+            while (i < positions.length) {
+                const pos = positions[i];
+                const startOffset = i;
+                if (pos >= node.pos && pos < node.end) {
+                    if (pos < startPos) {
+                        // The position exists in the node's trivia, so we should skip it and
+                        // move on to the next position
+                        i++;
+                    }
+                    else {
+                        const length = results.length;
+                        forEachChild(node, visit);
+                        if (length === results.length) {
+                            // no children were added, so add this node
+                            results.push(node);
+                            // advance to the next position
+                            i++;
+                        }
+                    }
+                }
+                else {
+                    // If we've advanced past the end of our parent we should break out of
+                    // the containing `forEachChild`. Otherwise, the position is not contained
+                    // within this node so we should skip to the next node
+                    return !!node.parent && pos > node.parent.end;
+                }
+                Debug.assert(i !== startOffset, "Position did not advance");
+            }
+        }
+    }
 }

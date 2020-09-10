@@ -19458,7 +19458,7 @@ namespace ts {
                     source = getUnionType(sources);
                 }
                 else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types,
-                    t => !!getInferenceInfoForType(t) || (isGenericMappedType(t) && !!getInferenceInfoForType(getHomomorphicTypeVariable(t) || neverType)))) {
+                    t => !!getInferenceInfoForType(inferences, t) || (isGenericMappedType(t) && !!getInferenceInfoForType(inferences, getHomomorphicTypeVariable(t) || neverType)))) {
                     // We reduce intersection types only when they contain naked type parameters. For example, when
                     // inferring from 'string[] & { extra: any }' to 'string[] & T' we want to remove string[] and
                     // infer { extra: any } for T. But when inferring to 'string[] & Iterable<T>' we want to keep the
@@ -19490,7 +19490,7 @@ namespace ts {
                         (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
                         return;
                     }
-                    const inference = getInferenceInfoForType(target);
+                    const inference = getInferenceInfoForType(inferences, target);
                     if (inference) {
                         if (!inference.isFixed) {
                             if (inference.priority === undefined || priority < inference.priority) {
@@ -19687,21 +19687,10 @@ namespace ts {
                 }
             }
 
-            function getInferenceInfoForType(type: Type) {
-                if (type.flags & TypeFlags.TypeVariable) {
-                    for (const inference of inferences) {
-                        if (type === inference.typeParameter) {
-                            return inference;
-                        }
-                    }
-                }
-                return undefined;
-            }
-
             function getSingleTypeVariableFromIntersectionTypes(types: Type[]) {
                 let typeVariable: Type | undefined;
                 for (const type of types) {
-                    const t = type.flags & TypeFlags.Intersection && find((<IntersectionType>type).types, t => !!getInferenceInfoForType(t));
+                    const t = type.flags & TypeFlags.Intersection && find((<IntersectionType>type).types, t => !!getInferenceInfoForType(inferences, t));
                     if (!t || typeVariable && t !== typeVariable) {
                         return undefined;
                     }
@@ -19722,7 +19711,7 @@ namespace ts {
                     // equal priority (i.e. of equal quality) to what we would infer for a naked type
                     // parameter.
                     for (const t of targets) {
-                        if (getInferenceInfoForType(t)) {
+                        if (getInferenceInfoForType(inferences, t)) {
                             nakedTypeVariable = t;
                             typeVariableCount++;
                         }
@@ -19764,7 +19753,7 @@ namespace ts {
                     // make from nested naked type variables and given slightly higher priority by virtue
                     // of being first in the candidates array.
                     for (const t of targets) {
-                        if (getInferenceInfoForType(t)) {
+                        if (getInferenceInfoForType(inferences, t)) {
                             typeVariableCount++;
                         }
                         else {
@@ -19778,7 +19767,7 @@ namespace ts {
                 // we only infer to single naked type variables.
                 if (targetFlags & TypeFlags.Intersection ? typeVariableCount === 1 : typeVariableCount > 0) {
                     for (const t of targets) {
-                        if (getInferenceInfoForType(t)) {
+                        if (getInferenceInfoForType(inferences, t)) {
                             inferWithPriority(source, t, InferencePriority.NakedTypeVariable);
                         }
                     }
@@ -19798,7 +19787,7 @@ namespace ts {
                     // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
                     // type and then make a secondary inference from that type to T. We make a secondary inference
                     // such that direct inferences to T get priority over inferences to Partial<T>, for example.
-                    const inference = getInferenceInfoForType((<IndexType>constraintType).type);
+                    const inference = getInferenceInfoForType(inferences, (<IndexType>constraintType).type);
                     if (inference && !inference.isFixed && !isFromInferenceBlockedSource(source)) {
                         const inferredType = inferTypeForHomomorphicMappedType(source, target, <IndexType>constraintType);
                         if (inferredType) {
@@ -19909,7 +19898,7 @@ namespace ts {
                                 const middleLength = targetArity - startLength - endLength;
                                 if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
                                     // Middle of target is [...T, ...U] and source is tuple type
-                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
+                                    const targetInfo = getInferenceInfoForType(inferences, elementTypes[startLength]);
                                     if (targetInfo && targetInfo.impliedArity !== undefined) {
                                         // Infer slices from source based on implied arity of T.
                                         inferFromTypes(sliceTupleType(source, startLength, sourceEndLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
@@ -20002,6 +19991,22 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function getInferenceInfoForType(inferences: InferenceInfo[], type: Type) {
+            if (type.flags & TypeFlags.TypeVariable) {
+                for (const inference of inferences) {
+                    if (type === inference.typeParameter) {
+                        return inference;
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function hasHigherPriorityInference(inferences: InferenceInfo[], type: Type, priority: InferencePriority) {
+            const inference = getInferenceInfoForType(inferences, type);
+            return !!inference && (inference.isFixed || inference.priority !== undefined && inference.priority < priority);
         }
 
         function isTypeOrBaseIdenticalTo(s: Type, t: Type) {
@@ -20661,7 +20666,7 @@ namespace ts {
         }
 
         function isTypeSubsetOf(source: Type, target: Type) {
-            return source === target || target.flags & TypeFlags.Union && isTypeSubsetOfUnion(source, <UnionType>target);
+            return source === target || !!(target.flags & TypeFlags.Union) && isTypeSubsetOfUnion(source, <UnionType>target);
         }
 
         function isTypeSubsetOfUnion(source: Type, target: UnionType) {
@@ -26018,6 +26023,75 @@ namespace ts {
             if (restType) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, context, checkMode);
                 inferTypes(context.inferences, spreadType, restType);
+            }
+
+            // Attempt to solve for `T` in `new Promise<T>(resolve => resolve(t))` (also known as the "revealing constructor" pattern).
+            // To avoid too much complexity, we use a very restrictive heuristic:
+            // - Restrict to NewExpression to reduce overhead.
+            // - `signature` has a single parameter (`callbackType`)
+            // - `callbackType` has a single call signature (`callbackSignature`) (i.e., `executor: (resolve: (value: T | PromiseLike<T>) => void) => void`)
+            // - `callbackSignature` has at least one parameter (`innerCallbackType`)
+            // - `innerCallbackType` has a single call signature (`innerCallbackSignature`) (i.e., `resolve: (value: T | PromiseLike<T>) => void`)
+            // - `innerCallbackSignature` has a single parameter (`innerCallbackValueType`)
+            // - `innerCallbackValueType` contains type variable for which we are gathering inferences (i.e. `value: T | PromiseLike<T>`)
+            // - The function (`callbackFunc`) passed as the argument to the parameter `callbackType` must be inline (i.e., an arrow function or function expression)
+            // - `callbackFunc` must have one parameter (`innerCallbackParam`) that is untyped (and thus would be contextually typed by `innerCallbackType`)
+            // If the above conditions are met then:
+            // - Determine the name in function `callbackFunc` given to the parameter `innerCallbackParam`
+            // - Find all references to that name in the body of the function `callbackFunc`
+            // - If `innerCallbackParam` is called directly, collect inferences for the type of the argument passed to the parameter (`innerCallbackValueType`) each call to `innerCallbackParam`
+            // - If `innerCallbackParam` is passed as the argument to another function, we can attempt to use the contextual type of that parameter for inference.
+            if (isNewExpression(node) && argCount === 1) {
+                const callbackType = getTypeAtPosition(signature, 0); // executor: ...
+                const callbackSignature = getSingleCallSignature(callbackType); // (resolve: (...) => ...) => ...
+                const callbackFunc = skipParentheses(args[0]);
+                if (callbackSignature && isFunctionExpressionOrArrowFunction(callbackFunc)) {
+                    const sourceFile = getSourceFileOfNode(callbackFunc);
+                    for (let callbackParamIndex = 0; callbackParamIndex < callbackFunc.parameters.length; callbackParamIndex++) {
+                        const innerCallbackType = tryGetTypeAtPosition(callbackSignature, callbackParamIndex); // resolve: ...
+                        const innerCallbackSignature = innerCallbackType && getSingleCallSignature(innerCallbackType); // (value: T | PromiseLike<T>) => ...
+                        const innerCallbackParam = callbackFunc.parameters[callbackParamIndex];
+                        if (innerCallbackSignature && getParameterCount(innerCallbackSignature) === 1 && isIdentifier(innerCallbackParam.name) && !getEffectiveTypeAnnotationNode(innerCallbackParam)) {
+                            const innerCallbackValueType = getTypeAtPosition(innerCallbackSignature, 0); // value: ...
+                            // Don't do the work if we already have a higher-priority inference.
+                            if (some(signature.typeParameters, typeParam => isTypeSubsetOf(typeParam, innerCallbackValueType) && !hasHigherPriorityInference(context.inferences, typeParam, InferencePriority.RevealingConstructor))) {
+                                const innerCallbackSymbol = getSymbolOfNode(innerCallbackParam);
+                                const positions = getPossibleSymbolReferencePositions(sourceFile, idText(innerCallbackParam.name), callbackFunc);
+                                if (positions.length) {
+                                    const candidateReferences = findNodesAtPositions(callbackFunc, positions, sourceFile);
+                                    if (candidateReferences.length) {
+                                        // The callback will not have a type associated with it, so we temporarily assign it `anyFunctionType` so that
+                                        // we do not trigger implicit `any` errors and so that we do not create inferences from it.
+                                        const links = getSymbolLinks(innerCallbackSymbol);
+                                        const savedType = links.type;
+                                        links.type = anyFunctionType;
+                                        // collect types for inferences to ppB
+                                        for (const candidateReference of candidateReferences) {
+                                            if (!isIdentifier(candidateReference) || candidateReference === innerCallbackParam.name) continue;
+                                            const candidateReferenceSymbol = resolveName(candidateReference, candidateReference.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
+                                            if (candidateReferenceSymbol !== innerCallbackSymbol) continue;
+                                            if (isCallExpression(candidateReference.parent) && candidateReference === candidateReference.parent.expression) {
+                                                const argType =
+                                                    candidateReference.parent.arguments.length >= 1 ? checkExpression(candidateReference.parent.arguments[0]) :
+                                                    voidType;
+                                                inferTypes(context.inferences, argType, innerCallbackValueType, InferencePriority.RevealingConstructor);
+                                            }
+                                            else if (isCallOrNewExpression(candidateReference.parent) && contains(candidateReference.parent.arguments, candidateReference)) {
+                                                const callbackType = getContextualType(candidateReference);
+                                                const callbackSignature = callbackType && getSingleCallSignature(callbackType);
+                                                const callbackParamType = callbackSignature && tryGetTypeAtPosition(callbackSignature, 0);
+                                                if (callbackParamType) {
+                                                    inferTypes(context.inferences, callbackParamType, innerCallbackValueType, InferencePriority.RevealingConstructor);
+                                                }
+                                            }
+                                        }
+                                        links.type = savedType;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             return getInferredTypes(context);

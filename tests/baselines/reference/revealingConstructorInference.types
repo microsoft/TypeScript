@@ -1,0 +1,147 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/revealingConstructorInference.ts ===
+// uncalled
+const p0 = new Promise(resolve => {});
+>p0 : Promise<unknown>
+>new Promise(resolve => {}) : Promise<unknown>
+>Promise : PromiseConstructor
+>resolve => {} : (resolve: (value: unknown) => void) => void
+>resolve : (value: unknown) => void
+
+// called with no argument
+const p1 = new Promise(resolve => resolve());
+>p1 : Promise<void>
+>new Promise(resolve => resolve()) : Promise<void>
+>Promise : PromiseConstructor
+>resolve => resolve() : (resolve: (value: void | PromiseLike<void>) => void) => void
+>resolve : (value: void | PromiseLike<void>) => void
+>resolve() : void
+>resolve : (value: void | PromiseLike<void>) => void
+
+// called with argument
+const p2 = new Promise(resolve => resolve(1));
+>p2 : Promise<number>
+>new Promise(resolve => resolve(1)) : Promise<number>
+>Promise : PromiseConstructor
+>resolve => resolve(1) : (resolve: (value: number | PromiseLike<number>) => void) => void
+>resolve : (value: number | PromiseLike<number>) => void
+>resolve(1) : void
+>resolve : (value: number | PromiseLike<number>) => void
+>1 : 1
+
+// called with promise-like argument
+const p3 = new Promise(resolve => resolve(Promise.resolve(1)));
+>p3 : Promise<number>
+>new Promise(resolve => resolve(Promise.resolve(1))) : Promise<number>
+>Promise : PromiseConstructor
+>resolve => resolve(Promise.resolve(1)) : (resolve: (value: number | PromiseLike<number>) => void) => any
+>resolve : (value: number | PromiseLike<number>) => void
+>resolve(Promise.resolve(1)) : void
+>resolve : (value: number | PromiseLike<number>) => void
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>1 : 1
+
+// called with multiple arguments
+const p4 = new Promise(resolve => {
+>p4 : Promise<string | number>
+>new Promise(resolve => {    resolve(1);    resolve("a");}) : Promise<string | number>
+>Promise : PromiseConstructor
+>resolve => {    resolve(1);    resolve("a");} : (resolve: (value: string | number | PromiseLike<string | number>) => void) => void
+>resolve : (value: string | number | PromiseLike<string | number>) => void
+
+    resolve(1);
+>resolve(1) : void
+>resolve : (value: string | number | PromiseLike<string | number>) => void
+>1 : 1
+
+    resolve("a");
+>resolve("a") : void
+>resolve : (value: string | number | PromiseLike<string | number>) => void
+>"a" : "a"
+
+});
+
+// called with multiple arguments (mix of non-promise and PromiseLike)
+const p5 = new Promise(resolve => {
+>p5 : Promise<string | number>
+>new Promise(resolve => {    resolve(1);    resolve(Promise.resolve("a"));}) : Promise<string | number>
+>Promise : PromiseConstructor
+>resolve => {    resolve(1);    resolve(Promise.resolve("a"));} : (resolve: (value: string | number | PromiseLike<string | number>) => void) => void
+>resolve : (value: string | number | PromiseLike<string | number>) => void
+
+    resolve(1);
+>resolve(1) : void
+>resolve : (value: string | number | PromiseLike<string | number>) => void
+>1 : 1
+
+    resolve(Promise.resolve("a"));
+>resolve(Promise.resolve("a")) : void
+>resolve : (value: string | number | PromiseLike<string | number>) => void
+>Promise.resolve("a") : Promise<string>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>"a" : "a"
+
+});
+
+// called with argument in nested callback
+declare function soon(f: () => void): void;
+>soon : (f: () => void) => void
+>f : () => void
+
+const p6 = new Promise(resolve => {
+>p6 : Promise<number>
+>new Promise(resolve => {    soon(() => resolve(1));}) : Promise<number>
+>Promise : PromiseConstructor
+>resolve => {    soon(() => resolve(1));} : (resolve: (value: number | PromiseLike<number>) => void) => void
+>resolve : (value: number | PromiseLike<number>) => void
+
+    soon(() => resolve(1));
+>soon(() => resolve(1)) : void
+>soon : (f: () => void) => void
+>() => resolve(1) : () => void
+>resolve(1) : void
+>resolve : (value: number | PromiseLike<number>) => void
+>1 : 1
+
+});
+
+// callback passed to another function
+declare function resolveWith<T>(f: (value: T) => void, value: T): void;
+>resolveWith : <T>(f: (value: T) => void, value: T) => void
+>f : (value: T) => void
+>value : T
+>value : T
+
+const p7 = new Promise(resolve => resolveWith(resolve, 1));
+>p7 : Promise<number>
+>new Promise(resolve => resolveWith(resolve, 1)) : Promise<number>
+>Promise : PromiseConstructor
+>resolve => resolveWith(resolve, 1) : (resolve: (value: number | PromiseLike<number>) => void) => void
+>resolve : (value: number | PromiseLike<number>) => void
+>resolveWith(resolve, 1) : void
+>resolveWith : <T>(f: (value: T) => void, value: T) => void
+>resolve : (value: number | PromiseLike<number>) => void
+>1 : 1
+
+// lower priority inference
+const enum E { zero = 0 }
+>E : E
+>zero : E.zero
+>0 : 0
+
+const p8: Promise<number> = new Promise(resolve => resolve(E.zero));
+>p8 : Promise<number>
+>new Promise(resolve => resolve(E.zero)) : Promise<number>
+>Promise : PromiseConstructor
+>resolve => resolve(E.zero) : (resolve: (value: number | PromiseLike<number>) => void) => void
+>resolve : (value: number | PromiseLike<number>) => void
+>resolve(E.zero) : void
+>resolve : (value: number | PromiseLike<number>) => void
+>E.zero : E
+>E : typeof E
+>zero : E
+

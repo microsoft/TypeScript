@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/revealingConstructorInference.ts ===
+// uncalled
+const p0 = new Promise(resolve => {});
+>p0 : Symbol(p0, Decl(revealingConstructorInference.ts, 1, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 1, 23))
+
+// called with no argument
+const p1 = new Promise(resolve => resolve());
+>p1 : Symbol(p1, Decl(revealingConstructorInference.ts, 4, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 4, 23))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 4, 23))
+
+// called with argument
+const p2 = new Promise(resolve => resolve(1));
+>p2 : Symbol(p2, Decl(revealingConstructorInference.ts, 7, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 7, 23))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 7, 23))
+
+// called with promise-like argument
+const p3 = new Promise(resolve => resolve(Promise.resolve(1)));
+>p3 : Symbol(p3, Decl(revealingConstructorInference.ts, 10, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 10, 23))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 10, 23))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+// called with multiple arguments
+const p4 = new Promise(resolve => {
+>p4 : Symbol(p4, Decl(revealingConstructorInference.ts, 13, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 13, 23))
+
+    resolve(1);
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 13, 23))
+
+    resolve("a");
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 13, 23))
+
+});
+
+// called with multiple arguments (mix of non-promise and PromiseLike)
+const p5 = new Promise(resolve => {
+>p5 : Symbol(p5, Decl(revealingConstructorInference.ts, 19, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 19, 23))
+
+    resolve(1);
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 19, 23))
+
+    resolve(Promise.resolve("a"));
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 19, 23))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+});
+
+// called with argument in nested callback
+declare function soon(f: () => void): void;
+>soon : Symbol(soon, Decl(revealingConstructorInference.ts, 22, 3))
+>f : Symbol(f, Decl(revealingConstructorInference.ts, 25, 22))
+
+const p6 = new Promise(resolve => {
+>p6 : Symbol(p6, Decl(revealingConstructorInference.ts, 26, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 26, 23))
+
+    soon(() => resolve(1));
+>soon : Symbol(soon, Decl(revealingConstructorInference.ts, 22, 3))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 26, 23))
+
+});
+
+// callback passed to another function
+declare function resolveWith<T>(f: (value: T) => void, value: T): void;
+>resolveWith : Symbol(resolveWith, Decl(revealingConstructorInference.ts, 28, 3))
+>T : Symbol(T, Decl(revealingConstructorInference.ts, 31, 29))
+>f : Symbol(f, Decl(revealingConstructorInference.ts, 31, 32))
+>value : Symbol(value, Decl(revealingConstructorInference.ts, 31, 36))
+>T : Symbol(T, Decl(revealingConstructorInference.ts, 31, 29))
+>value : Symbol(value, Decl(revealingConstructorInference.ts, 31, 54))
+>T : Symbol(T, Decl(revealingConstructorInference.ts, 31, 29))
+
+const p7 = new Promise(resolve => resolveWith(resolve, 1));
+>p7 : Symbol(p7, Decl(revealingConstructorInference.ts, 32, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 32, 23))
+>resolveWith : Symbol(resolveWith, Decl(revealingConstructorInference.ts, 28, 3))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 32, 23))
+
+// lower priority inference
+const enum E { zero = 0 }
+>E : Symbol(E, Decl(revealingConstructorInference.ts, 32, 59))
+>zero : Symbol(E.zero, Decl(revealingConstructorInference.ts, 35, 14))
+
+const p8: Promise<number> = new Promise(resolve => resolve(E.zero));
+>p8 : Symbol(p8, Decl(revealingConstructorInference.ts, 36, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 36, 40))
+>resolve : Symbol(resolve, Decl(revealingConstructorInference.ts, 36, 40))
+>E.zero : Symbol(E.zero, Decl(revealingConstructorInference.ts, 35, 14))
+>E : Symbol(E, Decl(revealingConstructorInference.ts, 32, 59))
+>zero : Symbol(E.zero, Decl(revealingConstructorInference.ts, 35, 14))
+

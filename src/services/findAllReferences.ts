@@ -1261,41 +1261,6 @@ namespace ts.FindAllReferences {
             return getPossibleSymbolReferencePositions(sourceFile, symbolName, container).map(pos => getTouchingPropertyName(sourceFile, pos));
         }
 
-        function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly number[] {
-            const positions: number[] = [];
-
-            /// TODO: Cache symbol existence for files to save text search
-            // Also, need to make this work for unicode escapes.
-
-            // Be resilient in the face of a symbol with no name or zero length name
-            if (!symbolName || !symbolName.length) {
-                return positions;
-            }
-
-            const text = sourceFile.text;
-            const sourceLength = text.length;
-            const symbolNameLength = symbolName.length;
-
-            let position = text.indexOf(symbolName, container.pos);
-            while (position >= 0) {
-                // If we are past the end, stop looking
-                if (position > container.end) break;
-
-                // We found a match.  Make sure it's not part of a larger word (i.e. the char
-                // before and after it have to be a non-identifier char).
-                const endPosition = position + symbolNameLength;
-
-                if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
-                    (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))) {
-                    // Found a real match.  Keep searching.
-                    positions.push(position);
-                }
-                position = text.indexOf(symbolName, position + symbolNameLength + 1);
-            }
-
-            return positions;
-        }
-
         function getLabelReferencesInNode(container: Node, targetLabel: Identifier): SymbolAndEntries[] {
             const sourceFile = container.getSourceFile();
             const labelName = targetLabel.text;

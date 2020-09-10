@@ -2651,9 +2651,10 @@ declare namespace ts {
         ReturnType = 64,
         LiteralKeyof = 128,
         NoConstraints = 256,
-        AlwaysStrict = 512,
-        MaxValue = 1024,
-        PriorityImpliesCombination = 208,
+        RevealingConstructor = 512,
+        AlwaysStrict = 1024,
+        MaxValue = 2048,
+        PriorityImpliesCombination = 720,
         Circularity = -1
     }
     /** @deprecated Use FileExtensionInfo instead. */
