@@ -3,10 +3,6 @@ namespace ts.codefix {
     interface ParameterPropertyToPropertyInfo {
         parameter: ParameterPropertyDeclaration
         ctor: ConstructorDeclaration
-        container: ClassLikeDeclaration
-    }
-    export function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
-        return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
     }
 
     export function getConvertParameterPropertyToPropertyInfo(file: SourceFile, start: number, end?: number) {
@@ -43,19 +39,15 @@ namespace ts.codefix {
         }
 
         Debug.assert(isParameterPropertyDeclaration(parameter, parameter.parent));
-
-        const ctor = parameter.parent;
-        const container = ctor.parent;
-
         return {
             parameter,
-            ctor,
-            container
+            ctor: parameter.parent
         };
     }
 
     export function getConvertParameterPropertyToPropertyChanges(changeTracker: textChanges.ChangeTracker, file: SourceFile, info: ParameterPropertyToPropertyInfo, extraModifierFlags: ModifierFlags = ModifierFlags.None) {
-        const { parameter, ctor, container } = info;
+        const { parameter, ctor } = info;
+        const container = ctor.parent;
 
         const newParameter = factory.createParameterDeclaration(
             parameter.decorators,

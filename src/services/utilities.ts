@@ -533,6 +533,14 @@ namespace ts {
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
+    export function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
+        return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
+    }
+
+    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
+        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
+    }
+
     function isCompletedNode(n: Node | undefined, sourceFile: SourceFile): boolean {
         if (n === undefined || nodeIsMissing(n)) {
             return false;

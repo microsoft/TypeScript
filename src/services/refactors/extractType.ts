@@ -125,10 +125,6 @@ namespace ts.refactor {
         return undefined;
     }
 
-    function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
-        return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
-    }
-
     function collectTypeParameters(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): TypeParameterDeclaration[] | undefined {
         const result: TypeParameterDeclaration[] = [];
         return visitor(selection) ? undefined : result;
