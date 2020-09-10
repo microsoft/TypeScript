@@ -6354,7 +6354,8 @@ namespace ts {
                     if ((symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) && (!isConstMergedWithNS || isTypeOnlyNamespace(symbol))) || isConstMergedWithNSPrintableAsSignatureMerge) {
                         serializeModule(symbol, symbolName, modifierFlags);
                     }
-                    if (symbol.flags & SymbolFlags.Interface) {
+                    // The class meaning serialization should handle serializing all interface members
+                    if (symbol.flags & SymbolFlags.Interface && !(symbol.flags & SymbolFlags.Class)) {
                         serializeInterface(symbol, symbolName, modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.Alias) {
@@ -7040,7 +7041,7 @@ namespace ts {
                         }
                         // This is an else/if as accessors and properties can't merge in TS, but might in JS
                         // If this happens, we assume the accessor takes priority, as it imposes more constraints
-                        else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable)) {
+                        else if (p.flags & (SymbolFlags.Property | SymbolFlags.Variable | SymbolFlags.Accessor)) {
                             return setTextRange(createProperty(
                                 /*decorators*/ undefined,
                                 factory.createModifiersFromModifierFlags((isReadonlySymbol(p) ? ModifierFlags.Readonly : 0) | flag),
