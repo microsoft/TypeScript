@@ -5339,6 +5339,10 @@
         "category": "Message",
         "code": 95002
     },
+    "Convert '{0}' to '{1} in {0}'": {
+        "category": "Message",
+        "code": 95003
+    },
     "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
@@ -5406,6 +5410,10 @@
     "Add definite assignment assertion to property '{0}'": {
         "category": "Message",
         "code": 95020
+    },
+    "Convert all type literals to mapped type": {
+        "category": "Message",
+        "code": 95021
     },
     "Add all missing members": {
         "category": "Message",

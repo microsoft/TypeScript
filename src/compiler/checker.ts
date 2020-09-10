@@ -22169,15 +22169,11 @@ namespace ts {
                         return assignableType;
                     }
                 }
-                // If the candidate type is a subtype of the target type, narrow to the candidate type.
-                // Otherwise, if the target type is assignable to the candidate type, keep the target type.
-                // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
-                // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
-                // two types.
-                return isTypeSubtypeOf(candidate, type) ? candidate :
-                    isTypeAssignableTo(type, candidate) ? type :
-                    isTypeAssignableTo(candidate, type) ? candidate :
-                    getIntersectionType([type, candidate]);
+
+                // If the candidate type is a subtype of the target type, narrow to the candidate type,
+                // if the target type is a subtype of the candidate type, narrow to the target type,
+                // otherwise, narrow to an intersection of the two types.
+                return isTypeSubtypeOf(candidate, type) ? candidate : isTypeSubtypeOf(type, candidate) ? type : getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -24465,7 +24461,6 @@ namespace ts {
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
             checkJsxOpeningLikeElementOrOpeningFragment(node);
-            resolveUntypedCall(node); // ensure type arguments and parameters are typechecked, even if there is an arity error
         }
 
         function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined): Type {
@@ -27654,6 +27649,10 @@ namespace ts {
                 const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
                 const fakeSignature = createSignatureForJSXIntrinsic(node, result);
                 checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
+                if (length(node.typeArguments)) {
+                    forEach(node.typeArguments, checkSourceElement);
+                    diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), node.typeArguments!, Diagnostics.Expected_0_type_arguments_but_got_1, 0, length(node.typeArguments)));
+                }
                 return fakeSignature;
             }
             const exprTypes = checkExpression(node.tagName);
@@ -31357,6 +31356,7 @@ namespace ts {
         function checkTupleType(node: TupleTypeNode) {
             const elementTypes = node.elements;
             let seenOptionalElement = false;
+            let seenRestElement = false;
             const hasNamedElement = some(elementTypes, isNamedTupleMember);
             for (let i = 0; i < elementTypes.length; i++) {
                 const e = elementTypes[i];
@@ -31366,22 +31366,27 @@ namespace ts {
                 }
                 const flags = getTupleElementFlags(e);
                 if (flags & ElementFlags.Variadic) {
-                    if (!isArrayLikeType(getTypeFromTypeNode((<RestTypeNode | NamedTupleMember>e).type))) {
+                    const type = getTypeFromTypeNode((<RestTypeNode | NamedTupleMember>e).type);
+                    if (!isArrayLikeType(type)) {
                         error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
                         break;
                     }
+                    if (isArrayType(type) || isTupleType(type) && type.target.combinedFlags & ElementFlags.Rest) {
+                        seenRestElement = true;
+                    }
                 }
                 else if (flags & ElementFlags.Rest) {
-                    if (i !== elementTypes.length - 1) {
-                        grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
-                        break;
-                    }
+                    seenRestElement = true;
                 }
                 else if (flags & ElementFlags.Optional) {
                     seenOptionalElement = true;
                 }
                 else if (seenOptionalElement) {
                     grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
+                    break;
+                }
+                if (seenRestElement && i !== elementTypes.length - 1) {
+                    grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
                     break;
                 }
             }
@@ -34438,12 +34443,15 @@ namespace ts {
             if (catchClause) {
                 // Grammar checking
                 if (catchClause.variableDeclaration) {
-                    if (catchClause.variableDeclaration.type && getTypeOfNode(catchClause.variableDeclaration) === errorType) {
-                        grammarErrorOnFirstToken(catchClause.variableDeclaration.type,
-                                                 Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
+                    const declaration = catchClause.variableDeclaration;
+                    if (declaration.type) {
+                        const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false);
+                        if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
+                            grammarErrorOnFirstToken(declaration.type, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
+                        }
                     }
-                    else if (catchClause.variableDeclaration.initializer) {
-                        grammarErrorOnFirstToken(catchClause.variableDeclaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
+                    else if (declaration.initializer) {
+                        grammarErrorOnFirstToken(declaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
                     }
                     else {
                         const blockLocals = catchClause.block.locals;
@@ -36625,6 +36633,17 @@ namespace ts {
             return node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
+        function isJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): boolean {
+            while (node.parent.kind === SyntaxKind.QualifiedName) {
+                node = node.parent as QualifiedName;
+            }
+            while (node.parent.kind === SyntaxKind.PropertyAccessExpression) {
+                node = node.parent as PropertyAccessExpression;
+            }
+
+            return node.parent.kind === SyntaxKind.JSDocNameReference;
+        }
+
         function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T | undefined): T | undefined {
             let result: T | undefined;
 
@@ -36808,6 +36827,10 @@ namespace ts {
             else if (isTypeReferenceIdentifier(<EntityName>name)) {
                 const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+            }
+            else if (isJSDocEntryNameReference(name)) {
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
             }
 
             if (name.parent.kind === SyntaxKind.TypePredicate) {

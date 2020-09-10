@@ -409,44 +409,46 @@ declare namespace ts {
         UnparsedSource = 302,
         InputFiles = 303,
         JSDocTypeExpression = 304,
-        JSDocAllType = 305,
-        JSDocUnknownType = 306,
-        JSDocNullableType = 307,
-        JSDocNonNullableType = 308,
-        JSDocOptionalType = 309,
-        JSDocFunctionType = 310,
-        JSDocVariadicType = 311,
-        JSDocNamepathType = 312,
-        JSDocComment = 313,
-        JSDocTypeLiteral = 314,
-        JSDocSignature = 315,
-        JSDocTag = 316,
-        JSDocAugmentsTag = 317,
-        JSDocImplementsTag = 318,
-        JSDocAuthorTag = 319,
-        JSDocDeprecatedTag = 320,
-        JSDocClassTag = 321,
-        JSDocPublicTag = 322,
-        JSDocPrivateTag = 323,
-        JSDocProtectedTag = 324,
-        JSDocReadonlyTag = 325,
-        JSDocCallbackTag = 326,
-        JSDocEnumTag = 327,
-        JSDocParameterTag = 328,
-        JSDocReturnTag = 329,
-        JSDocThisTag = 330,
-        JSDocTypeTag = 331,
-        JSDocTemplateTag = 332,
-        JSDocTypedefTag = 333,
-        JSDocPropertyTag = 334,
-        SyntaxList = 335,
-        NotEmittedStatement = 336,
-        PartiallyEmittedExpression = 337,
-        CommaListExpression = 338,
-        MergeDeclarationMarker = 339,
-        EndOfDeclarationMarker = 340,
-        SyntheticReferenceExpression = 341,
-        Count = 342,
+        JSDocNameReference = 305,
+        JSDocAllType = 306,
+        JSDocUnknownType = 307,
+        JSDocNullableType = 308,
+        JSDocNonNullableType = 309,
+        JSDocOptionalType = 310,
+        JSDocFunctionType = 311,
+        JSDocVariadicType = 312,
+        JSDocNamepathType = 313,
+        JSDocComment = 314,
+        JSDocTypeLiteral = 315,
+        JSDocSignature = 316,
+        JSDocTag = 317,
+        JSDocAugmentsTag = 318,
+        JSDocImplementsTag = 319,
+        JSDocAuthorTag = 320,
+        JSDocDeprecatedTag = 321,
+        JSDocClassTag = 322,
+        JSDocPublicTag = 323,
+        JSDocPrivateTag = 324,
+        JSDocProtectedTag = 325,
+        JSDocReadonlyTag = 326,
+        JSDocCallbackTag = 327,
+        JSDocEnumTag = 328,
+        JSDocParameterTag = 329,
+        JSDocReturnTag = 330,
+        JSDocThisTag = 331,
+        JSDocTypeTag = 332,
+        JSDocTemplateTag = 333,
+        JSDocTypedefTag = 334,
+        JSDocSeeTag = 335,
+        JSDocPropertyTag = 336,
+        SyntaxList = 337,
+        NotEmittedStatement = 338,
+        PartiallyEmittedExpression = 339,
+        CommaListExpression = 340,
+        MergeDeclarationMarker = 341,
+        EndOfDeclarationMarker = 342,
+        SyntheticReferenceExpression = 343,
+        Count = 344,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -475,9 +477,9 @@ declare namespace ts {
         LastStatement = 251,
         FirstNode = 160,
         FirstJSDocNode = 304,
-        LastJSDocNode = 334,
-        FirstJSDocTagNode = 316,
-        LastJSDocTagNode = 334,
+        LastJSDocNode = 336,
+        FirstJSDocTagNode = 317,
+        LastJSDocTagNode = 336,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1708,6 +1710,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocTypeExpression;
         readonly type: TypeNode;
     }
+    export interface JSDocNameReference extends Node {
+        readonly kind: SyntaxKind.JSDocNameReference;
+        readonly name: EntityName;
+    }
     export interface JSDocType extends TypeNode {
         _jsDocTypeBrand: any;
     }
@@ -1805,6 +1811,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocTemplateTag;
         readonly constraint: JSDocTypeExpression | undefined;
         readonly typeParameters: NodeArray<TypeParameterDeclaration>;
+    }
+    export interface JSDocSeeTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocSeeTag;
+        readonly name?: JSDocNameReference;
     }
     export interface JSDocReturnTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocReturnTag;
@@ -3435,6 +3445,8 @@ declare namespace ts {
         updateJSDocNamepathType(node: JSDocNamepathType, type: TypeNode): JSDocNamepathType;
         createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
+        createJSDocNameReference(name: EntityName): JSDocNameReference;
+        updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
@@ -3449,6 +3461,8 @@ declare namespace ts {
         updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag;
         createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag;
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
+        createJSDocSeeTag(tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
+        updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, nameExpression: JSDocNameReference | undefined, comment?: string): JSDocSeeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
         createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
@@ -4458,6 +4472,7 @@ declare namespace ts {
     function isBundle(node: Node): node is Bundle;
     function isUnparsedSource(node: Node): node is UnparsedSource;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
+    function isJSDocNameReference(node: Node): node is JSDocNameReference;
     function isJSDocAllType(node: Node): node is JSDocAllType;
     function isJSDocUnknownType(node: Node): node is JSDocUnknownType;
     function isJSDocNullableType(node: Node): node is JSDocNullableType;
