@@ -1327,3 +1327,27 @@ callApi(getOrgUser);
 >callApi : Symbol(callApi, Decl(variadicTuples1.ts, 380, 100))
 >getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 378, 71))
 
+// Repro from #40235
+
+type Numbers = number[];
+>Numbers : Symbol(Numbers, Decl(variadicTuples1.ts, 387, 20))
+
+type Unbounded = [...Numbers, boolean];
+>Unbounded : Symbol(Unbounded, Decl(variadicTuples1.ts, 391, 24))
+>Numbers : Symbol(Numbers, Decl(variadicTuples1.ts, 387, 20))
+
+const data: Unbounded = [false, false];
+>data : Symbol(data, Decl(variadicTuples1.ts, 393, 5))
+>Unbounded : Symbol(Unbounded, Decl(variadicTuples1.ts, 391, 24))
+
+type U1 = [string, ...Numbers, boolean];
+>U1 : Symbol(U1, Decl(variadicTuples1.ts, 393, 39))
+>Numbers : Symbol(Numbers, Decl(variadicTuples1.ts, 387, 20))
+
+type U2 = [...[string, ...Numbers], boolean];
+>U2 : Symbol(U2, Decl(variadicTuples1.ts, 395, 40))
+>Numbers : Symbol(Numbers, Decl(variadicTuples1.ts, 387, 20))
+
+type U3 = [...[string, number], boolean];
+>U3 : Symbol(U3, Decl(variadicTuples1.ts, 396, 45))
+
