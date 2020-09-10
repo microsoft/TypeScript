@@ -21076,6 +21076,12 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
+                if (getCheckFlags(symbol) & CheckFlags.Mapped) {
+                    const origin = (<MappedSymbol>symbol).syntheticOrigin;
+                    if (origin && getExplicitTypeOfSymbol(origin)) {
+                        return getTypeOfSymbol(symbol);
+                    }
+                }
                 const declaration = symbol.valueDeclaration;
                 if (declaration) {
                     if (isDeclarationWithExplicitTypeAnnotation(declaration)) {
