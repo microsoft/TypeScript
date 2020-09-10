@@ -3028,6 +3028,10 @@
         "category": "Error",
         "code": 2792
     },
+    "Template literal type argument '{0}' is not literal type or a generic type.": {
+        "category": "Error",
+        "code": 2793
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

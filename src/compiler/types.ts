@@ -186,6 +186,10 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
+        UppercaseKeyword,
+        LowercaseKeyword,
+        CapitalizeKeyword,
+        UncapitalizeKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -230,6 +234,8 @@ namespace ts {
         MappedType,
         LiteralType,
         NamedTupleMember,
+        TemplateLiteralType,
+        TemplateLiteralTypeSpan,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -538,6 +544,7 @@ namespace ts {
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
+        | SyntaxKind.CapitalizeKeyword
         | SyntaxKind.CaseKeyword
         | SyntaxKind.CatchKeyword
         | SyntaxKind.ClassKeyword
@@ -570,6 +577,7 @@ namespace ts {
         | SyntaxKind.IsKeyword
         | SyntaxKind.KeyOfKeyword
         | SyntaxKind.LetKeyword
+        | SyntaxKind.LowercaseKeyword
         | SyntaxKind.ModuleKeyword
         | SyntaxKind.NamespaceKeyword
         | SyntaxKind.NeverKeyword
@@ -597,9 +605,11 @@ namespace ts {
         | SyntaxKind.TryKeyword
         | SyntaxKind.TypeKeyword
         | SyntaxKind.TypeOfKeyword
+        | SyntaxKind.UncapitalizeKeyword
         | SyntaxKind.UndefinedKeyword
         | SyntaxKind.UniqueKeyword
         | SyntaxKind.UnknownKeyword
+        | SyntaxKind.UppercaseKeyword
         | SyntaxKind.VarKeyword
         | SyntaxKind.VoidKeyword
         | SyntaxKind.WhileKeyword
@@ -659,6 +669,8 @@ namespace ts {
         | SyntaxKind.IndexedAccessType
         | SyntaxKind.MappedType
         | SyntaxKind.LiteralType
+        | SyntaxKind.TemplateLiteralType
+        | SyntaxKind.TemplateLiteralTypeSpan
         | SyntaxKind.ImportType
         | SyntaxKind.ExpressionWithTypeArguments
         | SyntaxKind.JSDocTypeExpression
@@ -1622,6 +1634,7 @@ namespace ts {
         readonly kind: SyntaxKind.MappedType;
         readonly readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
+        readonly nameType?: TypeNode;
         readonly questionToken?: QuestionToken | PlusToken | MinusToken;
         readonly type?: TypeNode;
     }
@@ -1640,6 +1653,28 @@ namespace ts {
 
     export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
+
+    export interface TemplateLiteralTypeNode extends TypeNode {
+        kind: SyntaxKind.TemplateLiteralType,
+        readonly head: TemplateHead;
+        readonly templateSpans: NodeArray<TemplateLiteralTypeSpan>;
+    }
+
+    export interface TemplateLiteralTypeSpan extends TypeNode {
+        readonly kind: SyntaxKind.TemplateLiteralTypeSpan,
+        readonly parent: TemplateLiteralTypeNode;
+        readonly casing: TemplateCasing;
+        readonly type: TypeNode;
+        readonly literal: TemplateMiddle | TemplateTail;
+    }
+
+    export const enum TemplateCasing {
+        None,
+        Uppercase,
+        Lowercase,
+        Capitalize,
+        Uncapitalize,
+    }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
     // Consider 'Expression'.  Without the brand, 'Expression' is actually no different
@@ -2108,21 +2143,21 @@ namespace ts {
 
     export interface TemplateHead extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateHead;
-        readonly parent: TemplateExpression;
+        readonly parent: TemplateExpression | TemplateLiteralTypeNode;
         /* @internal */
         templateFlags?: TokenFlags;
     }
 
     export interface TemplateMiddle extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateMiddle;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
         /* @internal */
         templateFlags?: TokenFlags;
     }
 
     export interface TemplateTail extends TemplateLiteralLikeNode {
         readonly kind: SyntaxKind.TemplateTail;
-        readonly parent: TemplateSpan;
+        readonly parent: TemplateSpan | TemplateLiteralTypeSpan;
         /* @internal */
         templateFlags?: TokenFlags;
     }
@@ -4707,7 +4742,7 @@ namespace ts {
     /* @internal */
     export interface MappedSymbol extends TransientSymbol {
         mappedType: MappedType;
-        mapper: TypeMapper;
+        keyType: Type;
     }
 
     /* @internal */
@@ -4849,6 +4884,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        TemplateLiteral = 1 << 27,  // Template literal type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4866,7 +4902,7 @@ namespace ts {
         Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral,
+        StringLike = String | StringLiteral | TemplateLiteral,
         NumberLike = Number | NumberLiteral | Enum,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
@@ -4879,7 +4915,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index,
+        InstantiablePrimitive = Index | TemplateLiteral,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
@@ -4887,7 +4923,7 @@ namespace ts {
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
-        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution,
+        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | TemplateLiteral,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -5194,6 +5230,7 @@ namespace ts {
         declaration: MappedTypeNode;
         typeParameter?: TypeParameter;
         constraintType?: Type;
+        nameType?: Type;
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
@@ -5332,6 +5369,12 @@ namespace ts {
         mapper?: TypeMapper;
         /* @internal */
         combinedMapper?: TypeMapper;
+    }
+
+    export interface TemplateLiteralType extends InstantiableType {
+        texts: readonly string[];  // Always one element longer than casings/types
+        casings: readonly TemplateCasing[];  // Always at least one element
+        types: readonly Type[];  // Always at least one element
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
@@ -6715,6 +6758,8 @@ namespace ts {
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
 
         //
         // Types
@@ -6760,10 +6805,12 @@ namespace ts {
         updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
         createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
         updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+        updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
         createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
         updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
+        createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
+        updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]): TemplateLiteralTypeNode;
 
         //
         // Binding Patterns
