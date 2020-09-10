@@ -1061,7 +1061,12 @@ namespace ts {
 
         function errorByThrowType(location: Node | undefined, type: Type) {
             if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
-            const message = getTypeNameForErrorDisplay(type);
+            let message = "";
+            if (type.flags & TypeFlags.StringLiteral) {
+                message = (<StringLiteralType>type).value;
+            } else {
+                message = getTypeNameForErrorDisplay(type)
+            };
             error(location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, message);
         }
 
@@ -22485,6 +22490,7 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
+            if (type.flags & TypeFlags.ThrowType) errorByThrowType(node, type);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
