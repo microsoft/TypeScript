@@ -3609,6 +3609,10 @@
         "category": "Error",
         "code": 5088
     },
+    "Option '{0}' cannot be specified when option 'jsx' is '{1}'.": {
+        "category": "Error",
+        "code": 5089
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4507,6 +4511,10 @@
     "Generates an event trace and a list of types.": {
         "category": "Message",
         "code": 6237
+    },
+    "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
+        "category": "Error",
+        "code": 6238
     },
 
     "Projects to reference": {

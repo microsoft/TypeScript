@@ -24535,7 +24535,7 @@ namespace ts {
             // by default, jsx:'react' will use jsxFactory = React.createElement and jsxFragmentFactory = React.Fragment
             // if jsxFactory compiler option is provided, ensure jsxFragmentFactory compiler option or @jsxFrag pragma is provided too
             const nodeSourceFile = getSourceFileOfNode(node);
-            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || nodeSourceFile.pragmas.has("jsx"))
+            if (getJSXTransformEnabled(compilerOptions) && (compilerOptions.jsxFactory || nodeSourceFile.pragmas.has("jsx"))
                 && !compilerOptions.jsxFragmentFactory && !nodeSourceFile.pragmas.has("jsxfrag")) {
                 error(node, compilerOptions.jsxFactory
                     ? Diagnostics.The_jsxFragmentFactory_compiler_option_must_be_provided_to_use_JSX_fragments_with_the_jsxFactory_compiler_option
@@ -37330,6 +37330,9 @@ namespace ts {
         // When resolved as an expression identifier, if the given node references an import, return the declaration of
         // that import. Otherwise, return undefined.
         function getReferencedImportDeclaration(nodeIn: Identifier): Declaration | undefined {
+            if (nodeIn.generatedImportReference) {
+                return nodeIn.generatedImportReference;
+            }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
                 const symbol = getReferencedValueSymbol(node);

@@ -618,7 +618,8 @@ declare namespace ts {
         None = 0,
         ReservedInNestedScopes = 8,
         Optimistic = 16,
-        FileLevel = 32
+        FileLevel = 32,
+        AllowNameSubstitution = 64
     }
     export interface Identifier extends PrimaryExpression, Declaration {
         readonly kind: SyntaxKind.Identifier;
@@ -2850,6 +2851,7 @@ declare namespace ts {
         reactNamespace?: string;
         jsxFactory?: string;
         jsxFragmentFactory?: string;
+        jsxImportSource?: string;
         composite?: boolean;
         incremental?: boolean;
         tsBuildInfoFile?: string;
@@ -2910,7 +2912,9 @@ declare namespace ts {
         None = 0,
         Preserve = 1,
         React = 2,
-        ReactNative = 3
+        ReactNative = 3,
+        ReactJSX = 4,
+        ReactJSXDev = 5
     }
     export enum ImportsNotUsedAsValues {
         Remove = 0,

@@ -2,6 +2,17 @@ namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
 
+    const jsxOptionMap = new Map(getEntries({
+        "preserve": JsxEmit.Preserve,
+        "react-native": JsxEmit.ReactNative,
+        "react": JsxEmit.React,
+        "react-jsx": JsxEmit.ReactJSX,
+        "react-jsxdev": JsxEmit.ReactJSXDev,
+    }));
+
+    /* @internal */
+    export const inverseJsxOptionMap = new Map(arrayFrom(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const)));
+
     // NOTE: The order here is important to default lib ordering as entries will have the same
     //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
     //       order also affects overload resolution when a type declared in one lib is
@@ -366,11 +377,7 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: new Map(getEntries({
-                "preserve": JsxEmit.Preserve,
-                "react-native": JsxEmit.ReactNative,
-                "react": JsxEmit.React
-            })),
+            type: jsxOptionMap,
             affectsSourceFile: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -780,6 +787,12 @@ namespace ts {
             type: "string",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_the_JSX_fragment_factory_function_to_use_when_targeting_react_JSX_emit_with_jsxFactory_compiler_option_is_specified_e_g_Fragment
+        },
+        {
+            name: "jsxImportSource",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react
         },
         {
             name: "resolveJsonModule",

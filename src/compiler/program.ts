@@ -3196,6 +3196,9 @@ namespace ts {
                 if (options.reactNamespace) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
                 }
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFactory", inverseJsxOptionMap.get("" + options.jsx));
+                }
                 if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
                     createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
                 }
@@ -3208,8 +3211,23 @@ namespace ts {
                 if (!options.jsxFactory) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "jsxFragmentFactory", "jsxFactory");
                 }
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFragmentFactory", inverseJsxOptionMap.get("" + options.jsx));
+                }
                 if (!parseIsolatedEntityName(options.jsxFragmentFactory, languageVersion)) {
                     createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
+                }
+            }
+
+            if (options.reactNamespace) {
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "reactNamespace", inverseJsxOptionMap.get("" + options.jsx));
+                }
+            }
+
+            if (options.jsxImportSource) {
+                if (options.jsx === JsxEmit.React) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxImportSource", inverseJsxOptionMap.get("" + options.jsx));
                 }
             }
 
