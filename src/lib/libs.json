@@ -14,6 +14,7 @@
         "dom.iterable.generated",
         "webworker.generated",
         "webworker.importscripts",
+        "webworker.iterable.generated",
         "scripthost",
         // By-feature options
         "es2015.core",
@@ -63,6 +64,7 @@
         "dom.generated": "lib.dom.d.ts",
         "dom.iterable.generated": "lib.dom.iterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
+        "webworker.iterable.generated": "lib.webworker.iterable.d.ts",
         "es5.full": "lib.d.ts",
         "es2015.full": "lib.es6.d.ts"
     }
