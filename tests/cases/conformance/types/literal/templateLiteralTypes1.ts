@@ -163,6 +163,10 @@ getPropValue(obj, s);  // unknown
 type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 type S2<S extends string> = S;
 
+// Check that infer T declarations are validated
+
+type TV1 = `${infer X}`;
+
 // Batched single character inferences for lower recursion depth
 
 type Chars<S extends string> =
