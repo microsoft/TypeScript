@@ -11,10 +11,11 @@
 ////export type T3 = {};
 ////export const V2 = {};
 ////export type T4 = {};
+////export type T5 = {};
 
 // @Filename: /c.ts
 ////export { T1, V1, T2 } from './a';
-////export { T3, V2, T4 } from './b';
+////export { T3, V2, T4, T5 } from './b';
 
 goTo.file("/c.ts");
 verify.codeFixAll({
@@ -24,6 +25,6 @@ verify.codeFixAll({
 `export { V1 } from './a';
 export type { T1, T2 } from './a';
 export { V2 } from './b';
-export type { T3, T4 } from './b';
+export type { T3, T4, T5 } from './b';
 `
 });
