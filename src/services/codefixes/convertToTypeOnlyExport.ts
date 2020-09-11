@@ -44,7 +44,11 @@ namespace ts.codefix {
                     exportDeclaration.modifiers,
                     /*isTypeOnly*/ true,
                     exportClause,
-                    exportDeclaration.moduleSpecifier));
+                    exportDeclaration.moduleSpecifier),
+                {
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+                });
         }
         else {
             const valueExportDeclaration = factory.updateExportDeclaration(
@@ -61,7 +65,10 @@ namespace ts.codefix {
                 factory.createNamedExports(typeExportSpecifiers),
                 exportDeclaration.moduleSpecifier);
 
-            changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration);
+            changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
+                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+            });
             changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
         }
     }
