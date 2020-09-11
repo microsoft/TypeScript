@@ -5412,6 +5412,10 @@ declare namespace ts {
     type WithMetadata<T> = T & {
         metadata?: unknown;
     };
+    enum SemanticClassificationFormat {
+        Original = "original",
+        TwentyTwenty = "2020"
+    }
     interface LanguageService {
         /** This is used as a part of restarting the language service. */
         cleanupSemanticCache(): void;
@@ -5463,10 +5467,22 @@ declare namespace ts {
         getCompilerOptionsDiagnostics(): Diagnostic[];
         /** @deprecated Use getEncodedSyntacticClassifications instead. */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
         /** @deprecated Use getEncodedSemanticClassifications instead. */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
+        /** Encoded as triples of [start, length, ClassificationType]. */
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
+        /**
+         * Gets semantic highlights information for a particular file. Has two formats, an older
+         * version used by VS and a format used by VS Code.
+         *
+         * @param fileName The path to the file
+         * @param position A text span to return results within
+         * @param format Which format to use, defaults to "original"
+         * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
+         */
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
         /**
          * Gets completion entries at a particular position in a file.
          *
@@ -5624,6 +5640,10 @@ declare namespace ts {
     interface ClassifiedSpan {
         textSpan: TextSpan;
         classificationType: ClassificationTypeNames;
+    }
+    interface ClassifiedSpan2020 {
+        textSpan: TextSpan;
+        classificationType: number;
     }
     /**
      * Navigation bar interface designed for visual studio's dual-column layout.
