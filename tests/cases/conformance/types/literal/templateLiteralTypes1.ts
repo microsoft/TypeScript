@@ -44,10 +44,10 @@ function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_$
 
 // String transformations using recursive conditional types
 
-type Join<T extends (string | number | boolean | bigint)[], D extends string> =
+type Join<T extends unknown[], D extends string> =
     T extends [] ? '' :
-    T extends [unknown] ? `${T[0]}` :
-    T extends [unknown, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
+    T extends [string | number | boolean | bigint] ? `${T[0]}` :
+    T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
     string;
 
 type TJ1 = Join<[1, 2, 3, 4], '.'>
