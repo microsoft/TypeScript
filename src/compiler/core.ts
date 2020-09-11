@@ -2250,18 +2250,40 @@ namespace ts {
         }
     }
 
-    export function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
+
+    /**
+     * Returns 's' left-padded with copies of 'padString' until it reaches the given 'length'.
+     * If omitted, 'padString' defaults to a single space.
+     * If 'length' is less than or equal to 's.length' or 'padString' is empty, returns 's' unchanged.
+     */
+    export function padLeft(s: string, length: number, padString = " ") {
+        if (length <= s.length || padString.length === 0) {
+            return s;
         }
-        return s;
+        else {
+            length -= s.length;                 // how much padding we need
+            if (length > padString.length) {    // need more than one copy of padString
+                padString += padString.repeat(length / padString.length);
+            }
+            return padString.slice(0, length) + s;
+        }
     }
 
-    export function padRight(s: string, length: number) {
-        while (s.length < length) {
-            s = s + " ";
+    /**
+     * Returns 's' right-padded with copies of 'padString' until it reaches the given 'length'.
+     * If omitted, 'padString' defaults to a single space.
+     * If 'length' is less than or equal to 's.length' or 'padString' is empty, returns 's' unchanged.
+     */
+    export function padRight(s: string, length: number, padString = " ") {
+        if (length <= s.length || padString.length === 0) {
+            return s;
         }
-
-        return s;
+        else {
+            length -= s.length;
+            if (length > padString.length) {    // need more than one copy of padString
+                padString += padString.repeat(length / padString.length);
+            }
+            return s + padString.slice(0, length);
+        }
     }
 }
