@@ -5787,6 +5787,8 @@ namespace ts {
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
+        /** The directory of the config file that specified 'paths'. Used to resolve relative paths when 'baseUrl' is absent. */
+        /*@internal*/ pathsBasePath?: string;
         /*@internal*/ plugins?: PluginImport[];
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;

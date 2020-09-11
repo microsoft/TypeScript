@@ -3493,10 +3493,6 @@
         "category": "Error",
         "code": 5059
     },
-    "Option 'paths' cannot be used without specifying '--baseUrl' option.": {
-        "category": "Error",
-        "code": 5060
-    },
     "Pattern '{0}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5061
@@ -3612,6 +3608,10 @@
     "Option '{0}' cannot be specified when option 'jsx' is '{1}'.": {
         "category": "Error",
         "code": 5089
+    },
+    "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
+        "category": "Error",
+        "code": 5090
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
