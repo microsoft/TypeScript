@@ -5783,6 +5783,7 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        noUncheckedIndexSignatures?: boolean;
         out?: string;
         outDir?: string;
         outFile?: string;
