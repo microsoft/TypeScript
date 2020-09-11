@@ -1062,10 +1062,70 @@ namespace ts {
         function errorByThrowType(location: Node | undefined, type: Type) {
             if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
             let message = "";
-            if (type.flags & TypeFlags.StringLiteral) message = (<StringLiteralType>type).value;
-            else message = getTypeNameForErrorDisplay(type);
+            const diagnostic = getDiagnosticFromThrowType(type);
+            if (diagnostic) {
+                const [base, ...args] = diagnostic;
+                message = "\n    " + formatMessage(/*_dummy*/0, base, ...map(args, getTypeNameForErrorDisplay));
+            }
+            else message = getMessageFromThrowType(type);
             error(location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, message);
         }
+
+        function getMessageFromThrowType(type: Type): string {
+            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            if (type.flags & TypeFlags.StringLiteral) return (<StringLiteralType>type).value;
+            const message = getTypeOfPropertyOfType(type, <__String>"message");
+            if (message) {
+                if (message.flags & TypeFlags.StringLiteral) return (<StringLiteralType>message).value;
+            }
+            return getTypeNameForErrorDisplay(type);
+        }
+        // function getTypeFromThrowType(type: Type): Type {
+        //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+        //     return getTypeOfPropertyOfType(type, <__String>"type") || errorType;
+        // }
+        function getDiagnosticFromThrowType(type: Type): readonly [DiagnosticMessage, ...Type[]] | undefined {
+            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            const diag = getTypeOfPropertyOfType(type, <__String>"diagnostic");
+            if (!diag) return undefined;
+            const message = <StringLiteralType>getTupleElementType(diag, 0);
+            if (!message || !(message.flags & TypeFlags.StringLiteral)) return undefined;
+            if (!Diagnostics.hasOwnProperty(message.value)) return undefined;
+            // cause error() only accept 4 arguments at most.
+            return [
+                Diagnostics[message.value as keyof typeof Diagnostics],
+                getTupleElementType(diag, 1) || undefinedType,
+                getTupleElementType(diag, 2) || undefinedType,
+                getTupleElementType(diag, 3) || undefinedType,
+                getTupleElementType(diag, 4) || undefinedType,
+            ] as const;
+        }
+        // function getCategoryFromThrowType(type: Type): DiagnosticCategory {
+        //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+        //     const category = <StringLiteralType>getTypeOfPropertyOfType(type, <__String>"diagnostic");
+        //     if (!category || !(category.flags & TypeFlags.StringLiteral)) return DiagnosticCategory.Error;
+        //     switch (category.value.toLowerCase()) {
+        //         case "error": return DiagnosticCategory.Error;
+        //         case "suggestion": return DiagnosticCategory.Suggestion;
+        //         case "warning": return DiagnosticCategory.Warning;
+        //         default: return DiagnosticCategory.Message;
+        //     }
+        // }
+        // function getDeprecatedFromThrowType(type: Type): boolean {
+        //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+        //     const dep = getTypeOfPropertyOfType(type, <__String>"deprecated");
+        //     return dep === trueType;
+        // }
+        // function getSuggestionFromThrowType(type: Type): string | undefined {
+        //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+        //     const suggestion = <StringLiteralType>getTypeOfPropertyOfType(type, <__String>"suggestion");
+        //     if (!suggestion || !(suggestion.flags & TypeFlags.StringLiteral)) return undefined;
+        //     return suggestion.value;
+        // }
+        // function getMessageChainFromThrowType(type: Type): Type | undefined {
+        //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+        //     return getTypeOfPropertyOfType(type, <__String>"next");
+        // }
 
         function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
