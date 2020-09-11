@@ -1,0 +1,11 @@
+tests/cases/compiler/throwType_identifier.ts(2,13): error TS2794: Type instantiated results in a throw type saying: 
+    please use window.name
+
+
+==== tests/cases/compiler/throwType_identifier.ts (1 errors) ====
+    declare const name: throw 'please use window.name'
+    console.log(name, 123, window.name)
+                ~~~~
+!!! error TS2794: Type instantiated results in a throw type saying: 
+!!! error TS2794:     please use window.name
+    export {}

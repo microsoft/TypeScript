@@ -1,0 +1,14 @@
+=== tests/cases/compiler/throwType_identifier.ts ===
+declare const name: throw 'please use window.name'
+>name : Symbol(name, Decl(throwType_identifier.ts, 0, 13))
+
+console.log(name, 123, window.name)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(name, Decl(throwType_identifier.ts, 0, 13))
+>window.name : Symbol(Window.name, Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>name : Symbol(Window.name, Decl(lib.dom.d.ts, --, --))
+
+export {}

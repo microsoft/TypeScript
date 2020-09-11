@@ -1,0 +1,16 @@
+=== tests/cases/compiler/throwType_identifier.ts ===
+declare const name: throw 'please use window.name'
+>name : never
+
+console.log(name, 123, window.name)
+>console.log(name, 123, window.name) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>name : never
+>123 : 123
+>window.name : string
+>window : Window & typeof globalThis
+>name : string
+
+export {}
