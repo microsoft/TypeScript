@@ -42,6 +42,7 @@
         "es2019.symbol",
         "es2020.bigint",
         "es2020.promise",
+        "es2020.sharedmemory",
         "es2020.string",
         "es2020.symbol.wellknown",
         "es2020.intl",

@@ -53,6 +53,19 @@ class C {
 // await allowed in aliased import
 import { await as _await } from "./other";
 
+// newlines
+// await in throw
+throw await
+    1;
+
+// await in var
+let y = await
+    1;
+
+// await in expression statement;
+await
+    1;
+
 //// [other.ts]
 const _await = 1;
 
@@ -106,3 +119,10 @@ let C = class C {
 C = __decorate([
     (await dec)
 ], C);
+// newlines
+// await in throw
+throw await 1;
+// await in var
+let y = await 1;
+// await in expression statement;
+await 1;

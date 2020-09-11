@@ -31,3 +31,31 @@ x = true;
 x; // number
 >x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
 
+// https://github.com/microsoft/TypeScript/issues/35484
+type D = { done: true, value: 1 } | { done: false, value: 2 };
+>D : Symbol(D, Decl(controlFlowAssignmentExpression.ts, 9, 2))
+>done : Symbol(done, Decl(controlFlowAssignmentExpression.ts, 12, 10))
+>value : Symbol(value, Decl(controlFlowAssignmentExpression.ts, 12, 22))
+>done : Symbol(done, Decl(controlFlowAssignmentExpression.ts, 12, 37))
+>value : Symbol(value, Decl(controlFlowAssignmentExpression.ts, 12, 50))
+
+declare function fn(): D;
+>fn : Symbol(fn, Decl(controlFlowAssignmentExpression.ts, 12, 62))
+>D : Symbol(D, Decl(controlFlowAssignmentExpression.ts, 9, 2))
+
+let o: D;
+>o : Symbol(o, Decl(controlFlowAssignmentExpression.ts, 14, 3))
+>D : Symbol(D, Decl(controlFlowAssignmentExpression.ts, 9, 2))
+
+if ((o = fn()).done) {
+>(o = fn()).done : Symbol(done, Decl(controlFlowAssignmentExpression.ts, 12, 10), Decl(controlFlowAssignmentExpression.ts, 12, 37))
+>o : Symbol(o, Decl(controlFlowAssignmentExpression.ts, 14, 3))
+>fn : Symbol(fn, Decl(controlFlowAssignmentExpression.ts, 12, 62))
+>done : Symbol(done, Decl(controlFlowAssignmentExpression.ts, 12, 10), Decl(controlFlowAssignmentExpression.ts, 12, 37))
+
+    const y: 1 = o.value;
+>y : Symbol(y, Decl(controlFlowAssignmentExpression.ts, 16, 9))
+>o.value : Symbol(value, Decl(controlFlowAssignmentExpression.ts, 12, 22))
+>o : Symbol(o, Decl(controlFlowAssignmentExpression.ts, 14, 3))
+>value : Symbol(value, Decl(controlFlowAssignmentExpression.ts, 12, 22))
+}

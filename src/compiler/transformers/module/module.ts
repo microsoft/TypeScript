@@ -99,7 +99,19 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+                const chunkSize = 50;
+                for (let i=0; i<currentModuleInfo.exportedNames!.length; i += chunkSize) {
+                    append(
+                        statements,
+                        factory.createExpressionStatement(
+                            reduceLeft(
+                                currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
+                                (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                                factory.createVoidZero() as Expression
+                            )
+                        )
+                    );
+                }
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -700,7 +712,6 @@ namespace ts {
 
             const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
             if (compilerOptions.esModuleInterop) {
-                context.requestEmitHelper(importStarHelper);
                 return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
             }
             return promise;
@@ -715,7 +726,6 @@ namespace ts {
             const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
             let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
             if (compilerOptions.esModuleInterop) {
-                context.requestEmitHelper(importStarHelper);
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
             }
 
@@ -755,8 +765,7 @@ namespace ts {
                 return innerExpr;
             }
             if (getExportNeedsImportStarHelper(node)) {
-                context.requestEmitHelper(importStarHelper);
-                return factory.createCallExpression(context.getEmitHelperFactory().getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+                return emitHelpers().createImportStarHelper(innerExpr);
             }
             return innerExpr;
         }
@@ -766,11 +775,9 @@ namespace ts {
                 return innerExpr;
             }
             if (getImportNeedsImportStarHelper(node)) {
-                context.requestEmitHelper(importStarHelper);
                 return emitHelpers().createImportStarHelper(innerExpr);
             }
             if (getImportNeedsImportDefaultHelper(node)) {
-                context.requestEmitHelper(importDefaultHelper);
                 return emitHelpers().createImportDefaultHelper(innerExpr);
             }
             return innerExpr;
@@ -1015,7 +1022,7 @@ namespace ts {
                             setOriginalNode(
                                 setTextRange(
                                     factory.createExpressionStatement(
-                                        context.getEmitHelperFactory().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
+                                        emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
                                     ),
                                     specifier),
                                 specifier
@@ -1023,10 +1030,13 @@ namespace ts {
                         );
                     }
                     else {
+                        const exportNeedsImportDefault =
+                            !!compilerOptions.esModuleInterop &&
+                            !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
+                            idText(specifier.propertyName || specifier.name) === "default";
                         const exportedValue = factory.createPropertyAccessExpression(
-                            generatedName,
-                            specifier.propertyName || specifier.name
-                        );
+                            exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
+                            specifier.propertyName || specifier.name);
                         statements.push(
                             setOriginalNode(
                                 setTextRange(
@@ -1045,15 +1055,17 @@ namespace ts {
             else if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export * as ns from "mod";
+                // export * as default from "mod";
                 statements.push(
                     setOriginalNode(
                         setTextRange(
                             factory.createExpressionStatement(
                                 createExportExpression(
                                     factory.cloneNode(node.exportClause.name),
-                                    moduleKind !== ModuleKind.AMD ?
-                                        getHelperExpressionForExport(node, createRequireCall(node)) :
-                                        factory.createIdentifier(idText(node.exportClause.name))
+                                    getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
+                                        createRequireCall(node) :
+                                        isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                            factory.createIdentifier(idText(node.exportClause.name)))
                                 )
                             ),
                             node
@@ -1069,7 +1081,7 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createExpressionStatement(
-                            createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                            emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
                         ),
                         node),
                     node
@@ -1197,6 +1209,7 @@ namespace ts {
 
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier> | undefined;
+                let removeCommentsOnExpressions = false;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
                 for (const variable of node.declarationList.declarations) {
@@ -1208,7 +1221,31 @@ namespace ts {
                         variables = append(variables, variable);
                     }
                     else if (variable.initializer) {
-                        expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
+                        if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {
+                            const expression = factory.createAssignment(
+                                setTextRange(
+                                    factory.createPropertyAccessExpression(
+                                        factory.createIdentifier("exports"),
+                                        variable.name
+                                    ),
+                                    /*location*/ variable.name
+                                ),
+                                factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name))
+                            );
+                            const updatedVariable = factory.createVariableDeclaration(
+                                variable.name,
+                                variable.exclamationToken,
+                                variable.type,
+                                visitNode(variable.initializer, moduleExpressionElementVisitor)
+                            );
+
+                            variables = append(variables, updatedVariable);
+                            expressions = append(expressions, expression);
+                            removeCommentsOnExpressions = true;
+                        }
+                        else {
+                            expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
+                        }
                     }
                 }
 
@@ -1217,7 +1254,11 @@ namespace ts {
                 }
 
                 if (expressions) {
-                    statements = append(statements, setOriginalNode(setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node), node));
+                    const statement = setOriginalNode(setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node), node);
+                    if (removeCommentsOnExpressions) {
+                        removeAllComments(statement);
+                    }
+                    statements = append(statements, statement);
                 }
             }
             else {
@@ -1855,24 +1896,6 @@ namespace ts {
                 }
             }
         }
-    }
-
-    // emit output for the __export helper function
-    const exportStarHelper: UnscopedEmitHelper = {
-        name: "typescript:export-star",
-        importName: "__exportStar",
-        scoped: false,
-        dependencies: [createBindingHelper],
-        priority: 2,
-        text: `
-            var __exportStar = (this && this.__exportStar) || function(m, exports) {
-                for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-            };`
-    };
-
-    function createExportStarHelper(context: TransformationContext, module: Expression) {
-        context.requestEmitHelper(exportStarHelper);
-        return context.factory.createCallExpression(context.getEmitHelperFactory().getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, context.factory.createIdentifier("exports")]);
     }
 
     // emit helper for dynamic import

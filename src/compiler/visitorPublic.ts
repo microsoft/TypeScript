@@ -321,6 +321,8 @@ namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+    /* @internal */
+    export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -563,6 +565,7 @@ namespace ts {
                 return factory.updateMappedTypeNode((<MappedTypeNode>node),
                     nodeVisitor((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
+                    nodeVisitor((<MappedTypeNode>node).nameType, visitor, isTypeNode),
                     nodeVisitor((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).type, visitor, isTypeNode));
 

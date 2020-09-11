@@ -27,9 +27,9 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const { program } = context;
             const checker = program.getTypeChecker();
-            const seen = createMap<true>();
+            const seen = new Map<string, true>();
 
-            const typeDeclToMembers = new NodeMap<ClassOrInterface, ClassOrInterfaceInfo[]>();
+            const typeDeclToMembers = new Map<ClassOrInterface, ClassOrInterfaceInfo[]>();
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
@@ -44,7 +44,7 @@ namespace ts.codefix {
                     }
                     else {
                         const { parentDeclaration, token } = info;
-                        const infos = typeDeclToMembers.getOrUpdate(parentDeclaration, () => []);
+                        const infos = getOrUpdate(typeDeclToMembers, parentDeclaration, () => []);
                         if (!infos.some(i => i.token.text === token.text)) infos.push(info);
                     }
                 });

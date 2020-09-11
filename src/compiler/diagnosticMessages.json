@@ -659,7 +659,7 @@
         "category": "Error",
         "code": 1207
     },
-    "All files must be modules when the '--isolatedModules' flag is provided.": {
+    "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
         "category": "Error",
         "code": 1208
     },
@@ -880,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
     },
@@ -936,7 +936,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments": {
+    "Dynamic import cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -1008,7 +1008,7 @@
         "category": "Error",
         "code": 1344
     },
-    "An expression of type 'void' cannot be tested for truthiness": {
+    "An expression of type 'void' cannot be tested for truthiness.": {
         "category": "Error",
         "code": 1345
     },
@@ -1164,7 +1164,34 @@
         "category": "Error",
         "code": 1384
     },
-
+    "Function type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1385
+    },
+    "Constructor type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1386
+    },
+    "Function type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1387
+    },
+    "Constructor type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1388
+    },
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
+    },
+    "Provides a root package name when using outFile with declarations.": {
+        "category": "Message",
+        "code": 1390
+    },
+    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
+        "category": "Error",
+        "code": 1391
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1669,6 +1696,10 @@
     "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2418
+    },
+    "Types of construct signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2254,7 +2285,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'": {
+    "Property '{0}' is a static member of type '{1}'.": {
         "category": "Error",
         "code": 2576
     },
@@ -2414,6 +2445,26 @@
         "category": "Error",
         "code": 2617
     },
+    "Source has {0} element(s) but target requires {1}.": {
+        "category": "Error",
+        "code": 2618
+    },
+    "Source has {0} element(s) but target allows only {1}.": {
+        "category": "Error",
+        "code": 2619
+    },
+    "Target requires {0} element(s) but source may have fewer.": {
+        "category": "Error",
+        "code": 2620
+    },
+    "Target allows only {0} element(s) but source may have more.": {
+        "category": "Error",
+        "code": 2621
+    },
+    "Element at index {0} is variadic in one type but not in the other.": {
+        "category": "Error",
+        "code": 2622
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -2571,6 +2622,10 @@
         "category": "Error",
         "code": 2689
     },
+    "'{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?": {
+        "category": "Error",
+        "code": 2690
+    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
@@ -2704,7 +2759,7 @@
         "category": "Error",
         "code": 2723
     },
-    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+    "'{0}' has no exported member named '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2724
     },
@@ -2736,7 +2791,7 @@
         "category": "Error",
         "code": 2731
     },
-    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.": {
         "category": "Error",
         "code": 2732
     },
@@ -2976,6 +3031,14 @@
         "category": "Error",
         "code": 2791
     },
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+        "category": "Error",
+        "code": 2792
+    },
+    "Template literal type argument '{0}' is not literal type or a generic type.": {
+        "category": "Error",
+        "code": 2793
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3020,6 +3083,10 @@
     "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
+    },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
     },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
@@ -4313,7 +4380,7 @@
         "category": "Message",
         "code": 6204
     },
-    "All type parameters are unused": {
+    "All type parameters are unused.": {
         "category": "Error",
         "code": 6205
     },
@@ -4433,9 +4500,21 @@
         "category": "Error",
         "code": 6234
     },
+    "Disable loading referenced projects.": {
+        "category": "Message",
+        "code": 6235
+    },
+    "Arguments for the rest parameter '{0}' were not provided.": {
+        "category": "Error",
+        "code": 6236
+    },
+    "Generates an event trace and a list of types.": {
+        "category": "Message",
+        "code": 6237
+    },
     "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
         "category": "Error",
-        "code": 6235
+        "code": 6238
     },
 
     "Projects to reference": {
@@ -5143,10 +5222,6 @@
         "category": "Message",
         "code": 90008
     },
-    "Remove destructuring": {
-        "category": "Message",
-        "code": 90009
-    },
     "Remove variable statement": {
         "category": "Message",
         "code": 90010
@@ -5263,6 +5338,14 @@
         "category": "Message",
         "code": 90038
     },
+    "Remove unused destructuring declaration": {
+        "category": "Message",
+        "code": 90039
+    },
+    "Remove unused declarations for: '{0}'": {
+        "category": "Message",
+        "code": 90041
+    },
     "Declare a private field named '{0}'.": {
         "category": "Message",
         "code": 90053
@@ -5274,6 +5357,10 @@
     "Convert function '{0}' to class": {
         "category": "Message",
         "code": 95002
+    },
+    "Convert '{0}' to '{1} in {0}'": {
+        "category": "Message",
+        "code": 95003
     },
     "Extract to {0} in {1}": {
         "category": "Message",
@@ -5342,6 +5429,10 @@
     "Add definite assignment assertion to property '{0}'": {
         "category": "Message",
         "code": 95020
+    },
+    "Convert all type literals to mapped type": {
+        "category": "Message",
+        "code": 95021
     },
     "Add all missing members": {
         "category": "Message",
@@ -5807,6 +5898,26 @@
         "category": "Message",
         "code": 95137
     },
+    "Switch each misused '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95138
+    },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95139
+    },
+    "Could not find convertible access expression": {
+        "category": "Message",
+        "code": 95140
+    },
+    "Could not find matching access expressions": {
+        "category": "Message",
+        "code": 95141
+    },
+    "Can only convert logical AND access chains": {
+        "category": "Message",
+        "code": 95142
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5820,7 +5931,7 @@
         "category": "Error",
         "code": 18007
     },
-    "Private identifiers cannot be used as parameters": {
+    "Private identifiers cannot be used as parameters.": {
         "category": "Error",
         "code": 18009
     },
@@ -5860,7 +5971,7 @@
         "category": "Error",
         "code": 18018
     },
-    "'{0}' modifier cannot be used with a private identifier": {
+    "'{0}' modifier cannot be used with a private identifier.": {
         "category": "Error",
         "code": 18019
     },

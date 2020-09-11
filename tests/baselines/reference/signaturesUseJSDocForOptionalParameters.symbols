@@ -3,6 +3,8 @@ function MyClass() {
 >MyClass : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
 
   this.prop = null;
+>this.prop : Symbol(MyClass.prop, Decl(jsDocOptionality.js, 0, 20))
+>this : Symbol(MyClass, Decl(jsDocOptionality.js, 0, 0))
 >prop : Symbol(MyClass.prop, Decl(jsDocOptionality.js, 0, 20))
 }
 /**

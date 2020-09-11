@@ -37,12 +37,12 @@ namespace ts {
          */
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
 
-        let enclosingFunctionParameterNames: UnderscoreEscapedMap<true>;
+        let enclosingFunctionParameterNames: Set<__String>;
 
         /**
          * Keeps track of property names accessed on super (`super.x`) within async functions.
          */
-        let capturedSuperProperties: UnderscoreEscapedMap<true>;
+        let capturedSuperProperties: Set<__String>;
         /** Whether the async function contains an element access on super (`super[x]`). */
         let hasSuperElementAccess: boolean;
         /** A set of node IDs for generated super accessors (variable statements). */
@@ -129,7 +129,7 @@ namespace ts {
 
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
-                        capturedSuperProperties.set(node.name.escapedText, true);
+                        capturedSuperProperties.add(node.name.escapedText);
                     }
                     return visitEachChild(node, visitor, context);
 
@@ -184,15 +184,15 @@ namespace ts {
         }
 
         function visitCatchClauseInAsyncBody(node: CatchClause) {
-            const catchClauseNames = createUnderscoreEscapedMap<true>();
+            const catchClauseNames = new Set<__String>();
             recordDeclarationName(node.variableDeclaration!, catchClauseNames); // TODO: GH#18217
 
             // names declared in a catch variable are block scoped
-            let catchClauseUnshadowedNames: UnderscoreEscapedMap<true> | undefined;
+            let catchClauseUnshadowedNames: Set<__String> | undefined;
             catchClauseNames.forEach((_, escapedName) => {
                 if (enclosingFunctionParameterNames.has(escapedName)) {
                     if (!catchClauseUnshadowedNames) {
-                        catchClauseUnshadowedNames = cloneMap(enclosingFunctionParameterNames);
+                        catchClauseUnshadowedNames = new Set(enclosingFunctionParameterNames);
                     }
                     catchClauseUnshadowedNames.delete(escapedName);
                 }
@@ -372,9 +372,9 @@ namespace ts {
             );
         }
 
-        function recordDeclarationName({ name }: ParameterDeclaration | VariableDeclaration | BindingElement, names: UnderscoreEscapedMap<true>) {
+        function recordDeclarationName({ name }: ParameterDeclaration | VariableDeclaration | BindingElement, names: Set<__String>) {
             if (isIdentifier(name)) {
-                names.set(name.escapedText, true);
+                names.add(name.escapedText);
             }
             else {
                 for (const element of name.elements) {
@@ -466,7 +466,7 @@ namespace ts {
             // promise constructor.
 
             const savedEnclosingFunctionParameterNames = enclosingFunctionParameterNames;
-            enclosingFunctionParameterNames = createUnderscoreEscapedMap<true>();
+            enclosingFunctionParameterNames = new Set();
             for (const parameter of node.parameters) {
                 recordDeclarationName(parameter, enclosingFunctionParameterNames);
             }
@@ -474,7 +474,7 @@ namespace ts {
             const savedCapturedSuperProperties = capturedSuperProperties;
             const savedHasSuperElementAccess = hasSuperElementAccess;
             if (!isArrowFunction) {
-                capturedSuperProperties = createUnderscoreEscapedMap<true>();
+                capturedSuperProperties = new Set();
                 hasSuperElementAccess = false;
             }
 
@@ -501,7 +501,7 @@ namespace ts {
 
                 if (emitSuperHelpers) {
                     enableSubstitutionForAsyncMethodsWithSuper();
-                    if (hasEntries(capturedSuperProperties)) {
+                    if (capturedSuperProperties.size) {
                         const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
                         substitutedSuperAccessors[getNodeId(variableStatement)] = true;
                         insertStatementsAfterStandardPrologue(statements, [variableStatement]);
@@ -727,7 +727,7 @@ namespace ts {
     }
 
     /** Creates a variable named `_super` with accessor properties for the given property names. */
-    export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: UnderscoreEscapedMap<true>) {
+    export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: Set<__String>) {
         // Create a variable declaration with a getter/setter (if binding) definition for each name:
         //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
         const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) !== 0;

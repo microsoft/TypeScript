@@ -105,7 +105,7 @@ namespace ts.refactor {
         if (!node) return undefined;
         if (isIntersectionTypeNode(node)) {
             const result: TypeElement[] = [];
-            const seen = createMap<true>();
+            const seen = new Map<string, true>();
             for (const type of node.types) {
                 const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
                 if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {
@@ -190,7 +190,7 @@ namespace ts.refactor {
             selection
         );
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
     }
 
     function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
@@ -204,8 +204,9 @@ namespace ts.refactor {
             /* heritageClauses */ undefined,
             typeElements
         );
+        setTextRange(newTypeNode, typeElements[0]?.parent);
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
     }
 
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {

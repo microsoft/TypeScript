@@ -136,7 +136,18 @@ namespace ts.server.protocol {
         SelectionRange = "selectionRange",
         /* @internal */
         SelectionRangeFull = "selectionRange-full",
-
+        ToggleLineComment = "toggleLineComment",
+        /* @internal */
+        ToggleLineCommentFull = "toggleLineComment-full",
+        ToggleMultilineComment = "toggleMultilineComment",
+        /* @internal */
+        ToggleMultilineCommentFull = "toggleMultilineComment-full",
+        CommentSelection = "commentSelection",
+        /* @internal */
+        CommentSelectionFull = "commentSelection-full",
+        UncommentSelection = "uncommentSelection",
+        /* @internal */
+        UncommentSelectionFull = "uncommentSelection-full",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
@@ -248,6 +259,10 @@ namespace ts.server.protocol {
          * Time spent updating the program graph, in milliseconds.
          */
         updateGraphDurationMs?: number;
+        /**
+         * The time spent creating or updating the auto-import program, in milliseconds.
+         */
+        createAutoImportProviderProgramDurationMs?: number;
     }
 
     /**
@@ -1538,6 +1553,26 @@ namespace ts.server.protocol {
         parent?: SelectionRange;
     }
 
+    export interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: FileRangeRequestArgs;
+    }
+
+    export interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: FileRangeRequestArgs;
+    }
+
+    export interface CommentSelectionRequest extends FileRequest {
+        command: CommandTypes.CommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+
+    export interface UncommentSelectionRequest extends FileRequest {
+        command: CommandTypes.UncommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+
     /**
      *  Information found in an "open" request.
      */
@@ -2159,6 +2194,11 @@ namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+        /**
+         * If true, this completion was for an auto-import of a module not yet in the program, but listed
+         * in the project package.json.
+         */
+        isPackageJsonImport?: true;
     }
 
     /**
@@ -2216,6 +2256,12 @@ namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        readonly optionalReplacementSpan?: TextSpan;
         readonly entries: readonly CompletionEntry[];
     }
 
@@ -3178,6 +3224,7 @@ namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
     }
 
     export interface CompilerOptions {

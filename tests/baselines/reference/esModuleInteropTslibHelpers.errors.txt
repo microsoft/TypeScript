@@ -1,0 +1,23 @@
+tests/cases/compiler/file2.ts(1,1): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+
+
+==== tests/cases/compiler/refs.d.ts (0 errors) ====
+    declare module "path";
+==== tests/cases/compiler/file.ts (0 errors) ====
+    import path from "path";
+    path.resolve("", "../");
+    export class Foo { }
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    import * as path from "path";
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
+    path.resolve("", "../");
+    export class Foo2 { }
+==== tests/cases/compiler/file3.ts (0 errors) ====
+    import {default as resolve} from "path";
+    resolve("", "../");
+    export class Foo3 { }
+==== tests/cases/compiler/file4.ts (0 errors) ====
+    import {Bar, default as resolve} from "path";
+    resolve("", "../");
+    export { Bar }

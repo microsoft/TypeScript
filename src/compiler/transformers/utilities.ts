@@ -8,9 +8,9 @@ namespace ts {
     export interface ExternalModuleInfo {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
+        exportSpecifiers: ESMap<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
         exportedBindings: Identifier[][]; // exported names of local declarations
-        exportedNames: Identifier[] | undefined; // all exported names local to module
+        exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
@@ -69,7 +69,7 @@ namespace ts {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
-        const uniqueExports = createMap<boolean>();
+        const uniqueExports = new Map<string, boolean>();
         let exportedNames: Identifier[] | undefined;
         let hasExportDefault = false;
         let exportEquals: ExportAssignment | undefined;
@@ -122,6 +122,8 @@ namespace ts {
                                     uniqueExports.set(idText(name), true);
                                     exportedNames = append(exportedNames, name);
                                 }
+                                // we use the same helpers for `export * as ns` as we do for `import * as ns`
+                                hasImportStar = true;
                             }
                         }
                     }
@@ -201,7 +203,9 @@ namespace ts {
             for (const specifier of cast(node.exportClause, isNamedExports).elements) {
                 if (!uniqueExports.get(idText(specifier.name))) {
                     const name = specifier.propertyName || specifier.name;
-                    exportSpecifiers.add(idText(name), specifier);
+                    if (!node.moduleSpecifier) {
+                        exportSpecifiers.add(idText(name), specifier);
+                    }
 
                     const decl = resolver.getReferencedImportDeclaration(name)
                         || resolver.getReferencedValueDeclaration(name);
@@ -217,7 +221,7 @@ namespace ts {
         }
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: ESMap<string, boolean>, exportedNames: Identifier[] | undefined) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {

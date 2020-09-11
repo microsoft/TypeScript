@@ -1,20 +1,35 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/adonis-framework/lib/util.js(24,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/providers/ConfigProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ConfigProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'ConfigProvider'.
 node_modules/adonis-framework/providers/EncryptionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/EncryptionProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'EncryptionProvider'.
 node_modules/adonis-framework/providers/EnvProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/EnvProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'EnvProvider'.
 node_modules/adonis-framework/providers/EventProvider.js(12,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/EventProvider.js(17,10): error TS2339: Property 'app' does not exist on type 'EventProvider'.
 node_modules/adonis-framework/providers/HashProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/HashProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'HashProvider'.
 node_modules/adonis-framework/providers/HelpersProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/HelpersProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'HelpersProvider'.
 node_modules/adonis-framework/providers/MiddlewareProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/MiddlewareProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'MiddlewareProvider'.
 node_modules/adonis-framework/providers/RequestProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/RequestProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'RequestProvider'.
 node_modules/adonis-framework/providers/ResponseProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ResponseProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'ResponseProvider'.
 node_modules/adonis-framework/providers/RouteProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/RouteProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'RouteProvider'.
 node_modules/adonis-framework/providers/ServerProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ServerProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'ServerProvider'.
 node_modules/adonis-framework/providers/SessionProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/SessionProvider.js(15,10): error TS2339: Property 'app' does not exist on type 'SessionProvider'.
+node_modules/adonis-framework/providers/SessionProvider.js(20,10): error TS2339: Property 'app' does not exist on type 'SessionProvider'.
 node_modules/adonis-framework/providers/StaticProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/StaticProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'StaticProvider'.
 node_modules/adonis-framework/providers/ViewProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
+node_modules/adonis-framework/providers/ViewProvider.js(14,10): error TS2339: Property 'app' does not exist on type 'ViewProvider'.
 node_modules/adonis-framework/src/Config/index.js(37,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
@@ -77,8 +92,8 @@ node_modules/adonis-framework/src/Exceptions/index.js(178,21): error TS2554: Exp
 node_modules/adonis-framework/src/Exceptions/index.js(191,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(205,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
-node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean'.
-  Type '""' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'string | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Helpers/index.js(105,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(106,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(164,18): error TS2554: Expected 3 arguments, but got 2.

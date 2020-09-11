@@ -10,6 +10,5 @@ async function f() {
     try {
         const x = await fetch('https://typescriptlang.org');
         return x.statusText;
-    }
-    catch (e) { }
+    } catch (e) { }
 }
