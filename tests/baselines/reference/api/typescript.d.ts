@@ -2841,11 +2841,11 @@ declare namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        noUncheckedIndexSignatures?: boolean;
         out?: string;
         outDir?: string;
         outFile?: string;
         paths?: MapLike<string[]>;
-        noUncheckedIndexSignatures?: boolean;
         preserveConstEnums?: boolean;
         preserveSymlinks?: boolean;
         project?: string;
