@@ -2492,7 +2492,49 @@ namespace FourSlash {
             Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos)!, "**"));
         }
 
-        private verifyClassifications(expected: { classificationType: string; text: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[], sourceFileText: string) {
+        private classificationToIdentifier(classification: number){
+
+            const tokenTypes: string[] = [];
+            tokenTypes[ts.classifier.v2020.TokenType.class] = "class";
+            tokenTypes[ts.classifier.v2020.TokenType.enum] = "enum";
+            tokenTypes[ts.classifier.v2020.TokenType.interface] = "interface";
+            tokenTypes[ts.classifier.v2020.TokenType.namespace] = "namespace";
+            tokenTypes[ts.classifier.v2020.TokenType.typeParameter] = "typeParameter";
+            tokenTypes[ts.classifier.v2020.TokenType.type] = "type";
+            tokenTypes[ts.classifier.v2020.TokenType.parameter] = "parameter";
+            tokenTypes[ts.classifier.v2020.TokenType.variable] = "variable";
+            tokenTypes[ts.classifier.v2020.TokenType.enumMember] = "enumMember";
+            tokenTypes[ts.classifier.v2020.TokenType.property] = "property";
+            tokenTypes[ts.classifier.v2020.TokenType.function] = "function";
+            tokenTypes[ts.classifier.v2020.TokenType.member] = "member";
+
+            const tokenModifiers: string[] = [];
+            tokenModifiers[ts.classifier.v2020.TokenModifier.async] = "async";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.declaration] = "declaration";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.readonly] = "readonly";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.static] = "static";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.local] = "local";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.defaultLibrary] = "defaultLibrary";
+
+
+            function getTokenTypeFromClassification(tsClassification: number): number | undefined {
+                if (tsClassification > ts.classifier.v2020.TokenEncodingConsts.modifierMask) {
+                    return (tsClassification >> ts.classifier.v2020.TokenEncodingConsts.typeOffset) - 1;
+                }
+                return undefined;
+            }
+
+            function getTokenModifierFromClassification(tsClassification: number) {
+                return tsClassification & ts.classifier.v2020.TokenEncodingConsts.modifierMask;
+            }
+
+            const typeIdx = getTokenTypeFromClassification(classification) || 0;
+            const modSet = getTokenModifierFromClassification(classification);
+
+            return [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
+        }
+
+        private verifyClassifications(expected: { classificationType: string | number, text?: string; textSpan?: TextSpan }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[] , sourceFileText: string) {
             if (actual.length !== expected.length) {
                 this.raiseError("verifyClassifications failed - expected total classifications to be " + expected.length +
                     ", but was " + actual.length +
@@ -2501,10 +2543,12 @@ namespace FourSlash {
 
             ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
                 const expectedType = expectedClassification.classificationType;
-                if (expectedType !== actualClassification.classificationType) {
+                const actualType = typeof actualClassification.classificationType === "number"  ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
+
+                if (expectedType !== actualType) {
                     this.raiseError("verifyClassifications failed - expected classifications type to be " +
                         expectedType + ", but was " +
-                        actualClassification.classificationType +
+                        actualType +
                         jsonMismatchString());
                 }
 
@@ -2555,10 +2599,30 @@ namespace FourSlash {
             }
         }
 
-        public verifySemanticClassifications(expected: { classificationType: string; text: string }[]) {
+        public replaceWithSemanticClassifications(format: ts.SemanticClassificationFormat.TwentyTwenty) {
             const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
-                ts.createTextSpan(0, this.activeFile.content.length));
+                ts.createTextSpan(0, this.activeFile.content.length), format);
+            const replacement = [`const c2 = classification("2020");`,`verify.semanticClassificationsAre("2020",`];
+            for (const a of actual) {
+                const identifier = this.classificationToIdentifier(a.classificationType as number);
+                const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
+                replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
+            };
+            replacement.push(");");
 
+            throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
+
+            // const fs = require("fs");
+            // const testfilePath = this.originalInputFileName.slice(1);
+            // const testfile = fs.readFileSync(testfilePath, "utf8");
+            // const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
+            // fs.writeFileSync(testfilePath, newfile);
+        }
+
+
+        public verifySemanticClassifications(format: ts.SemanticClassificationFormat, expected: { classificationType: string | number; text?: string }[]) {
+            const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
+                ts.createTextSpan(0, this.activeFile.content.length), format);
             this.verifyClassifications(expected, actual, this.activeFile.content);
         }
 
@@ -3859,7 +3923,7 @@ namespace FourSlash {
             const cancellation = new FourSlashInterface.Cancellation(state);
             // eslint-disable-next-line no-eval
             const f = eval(wrappedCode);
-            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
+            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
         catch (err) {
             // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.

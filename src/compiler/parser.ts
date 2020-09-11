@@ -614,6 +614,7 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+        tracing.begin(tracing.Phase.Parse, "createSourceFile", { path: fileName });
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -628,6 +629,7 @@ namespace ts {
 
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
+        tracing.end();
         return result;
     }
 
@@ -8877,6 +8879,8 @@ namespace ts {
                 }
                 case "jsx":
                 case "jsxfrag":
+                case "jsximportsource":
+                case "jsxruntime":
                     return; // Accessed directly
                 default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
             }

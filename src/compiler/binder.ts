@@ -174,12 +174,14 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+        tracing.begin(tracing.Phase.Bind, "bindSourceFile", { path: file.path });
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
+        tracing.end();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -2806,10 +2808,10 @@ namespace ts {
                 return symbol;
             });
             if (symbol) {
-                const flags = isClassExpression(node.right) ?
-                    SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
-                    SymbolFlags.Property | SymbolFlags.ExportValue;
-                declareSymbol(symbol.exports!, symbol, node.left, flags, SymbolFlags.None);
+                const isAlias = isAliasableExpression(node.right) && (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
+                const flags = isAlias ? SymbolFlags.Alias : SymbolFlags.Property | SymbolFlags.ExportValue;
+                const excludeFlags = isAlias ? SymbolFlags.AliasExcludes : SymbolFlags.None;
+                declareSymbol(symbol.exports!, symbol, node.left, flags, excludeFlags);
             }
         }
 

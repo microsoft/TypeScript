@@ -4479,8 +4479,8 @@
       <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import cannot have type arguments.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Der dynamische Import kann nicht über Typargumente verfügen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der dynamische Import kann keine Typargumente aufweisen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
