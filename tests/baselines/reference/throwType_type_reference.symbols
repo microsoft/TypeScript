@@ -1,0 +1,17 @@
+=== tests/cases/compiler/throwType_type_reference.ts ===
+type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${typeof T}"`
+>MustNumber : Symbol(MustNumber, Decl(throwType_type_reference.ts, 0, 0))
+>T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
+>T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
+>T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
+>T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
+
+type A = MustNumber<1>
+>A : Symbol(A, Decl(throwType_type_reference.ts, 0, 92))
+>MustNumber : Symbol(MustNumber, Decl(throwType_type_reference.ts, 0, 0))
+
+type B = MustNumber<typeof window>
+>B : Symbol(B, Decl(throwType_type_reference.ts, 1, 22))
+>MustNumber : Symbol(MustNumber, Decl(throwType_type_reference.ts, 0, 0))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+

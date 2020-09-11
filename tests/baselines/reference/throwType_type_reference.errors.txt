@@ -1,0 +1,12 @@
+tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2794: Type instantiated results in a throw type saying: 
+    Expected number, but found "Window & typeof globalThis"
+
+
+==== tests/cases/compiler/throwType_type_reference.ts (1 errors) ====
+    type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${typeof T}"`
+    type A = MustNumber<1>
+    type B = MustNumber<typeof window>
+             ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2794: Type instantiated results in a throw type saying: 
+!!! error TS2794:     Expected number, but found "Window & typeof globalThis"
+    

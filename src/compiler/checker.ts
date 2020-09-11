@@ -31422,6 +31422,7 @@ namespace ts {
             }
             forEach(node.typeArguments, checkSourceElement);
             const type = getTypeFromTypeReference(node);
+            if (type.flags & TypeFlags.ThrowType) errorByThrowType(node, type);
             if (type !== errorType) {
                 if (node.typeArguments && produceDiagnostics) {
                     const typeParameters = getTypeParametersForTypeReference(node);
