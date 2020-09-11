@@ -15,7 +15,7 @@ namespace ts.codefix {
             const fixedExportDeclarations = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
-                if (exportSpecifier && !addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
+                if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
                     fixSingleExportDeclaration(changes, exportSpecifier, context);
                 }
             });
