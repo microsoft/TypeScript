@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts ===
+// Mapped type 'as N' clauses
+
+type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+>Getters : Symbol(Getters, Decl(mappedTypeAsClauses.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
+
+type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
+>TG1 : Symbol(TG1, Decl(mappedTypeAsClauses.ts, 2, 82))
+>Getters : Symbol(Getters, Decl(mappedTypeAsClauses.ts, 0, 0))
+>foo : Symbol(foo, Decl(mappedTypeAsClauses.ts, 3, 20))
+>bar : Symbol(bar, Decl(mappedTypeAsClauses.ts, 3, 33))
+>baz : Symbol(baz, Decl(mappedTypeAsClauses.ts, 3, 46))
+>z : Symbol(z, Decl(mappedTypeAsClauses.ts, 3, 53))
+
+// Mapped type with 'as N' clause has no constraint on 'in T' clause
+
+type PropDef<K extends keyof any, T> = { name: K, type: T };
+>PropDef : Symbol(PropDef, Decl(mappedTypeAsClauses.ts, 3, 70))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 7, 13))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 7, 33))
+>name : Symbol(name, Decl(mappedTypeAsClauses.ts, 7, 40))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 7, 13))
+>type : Symbol(type, Decl(mappedTypeAsClauses.ts, 7, 49))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 7, 33))
+
+type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: P['type'] };
+>TypeFromDefs : Symbol(TypeFromDefs, Decl(mappedTypeAsClauses.ts, 7, 60))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 9, 18))
+>PropDef : Symbol(PropDef, Decl(mappedTypeAsClauses.ts, 3, 70))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 9, 58))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 9, 18))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 9, 58))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 9, 58))
+
+type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
+>TP1 : Symbol(TP1, Decl(mappedTypeAsClauses.ts, 9, 92))
+>TypeFromDefs : Symbol(TypeFromDefs, Decl(mappedTypeAsClauses.ts, 7, 60))
+>name : Symbol(name, Decl(mappedTypeAsClauses.ts, 11, 25))
+>type : Symbol(type, Decl(mappedTypeAsClauses.ts, 11, 36))
+>name : Symbol(name, Decl(mappedTypeAsClauses.ts, 11, 55))
+>type : Symbol(type, Decl(mappedTypeAsClauses.ts, 11, 66))
+>name : Symbol(name, Decl(mappedTypeAsClauses.ts, 11, 85))
+>type : Symbol(type, Decl(mappedTypeAsClauses.ts, 11, 96))
+
+// No array or tuple type mapping when 'as N' clause present
+
+type TA1 = Getters<string[]>;
+>TA1 : Symbol(TA1, Decl(mappedTypeAsClauses.ts, 11, 114))
+>Getters : Symbol(Getters, Decl(mappedTypeAsClauses.ts, 0, 0))
+
+type TA2 = Getters<[number, boolean]>;
+>TA2 : Symbol(TA2, Decl(mappedTypeAsClauses.ts, 15, 29))
+>Getters : Symbol(Getters, Decl(mappedTypeAsClauses.ts, 0, 0))
+
+// Filtering using 'as N' clause
+
+type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
+>Methods : Symbol(Methods, Decl(mappedTypeAsClauses.ts, 16, 38))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
+
+type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | number }>;
+>TM1 : Symbol(TM1, Decl(mappedTypeAsClauses.ts, 20, 80))
+>Methods : Symbol(Methods, Decl(mappedTypeAsClauses.ts, 16, 38))
+>foo : Symbol(foo, Decl(mappedTypeAsClauses.ts, 21, 20))
+>bar : Symbol(bar, Decl(mappedTypeAsClauses.ts, 21, 35))
+>x : Symbol(x, Decl(mappedTypeAsClauses.ts, 21, 40))
+>baz : Symbol(baz, Decl(mappedTypeAsClauses.ts, 21, 60))
+
+// Mapping to multiple names using 'as N' clause
+
+type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
+>DoubleProp : Symbol(DoubleProp, Decl(mappedTypeAsClauses.ts, 21, 85))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 25, 16))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 25, 24))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 25, 16))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 25, 24))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 25, 24))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 25, 16))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 25, 24))
+
+type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
+>TD1 : Symbol(TD1, Decl(mappedTypeAsClauses.ts, 25, 75))
+>DoubleProp : Symbol(DoubleProp, Decl(mappedTypeAsClauses.ts, 21, 85))
+>a : Symbol(a, Decl(mappedTypeAsClauses.ts, 26, 23))
+>b : Symbol(b, Decl(mappedTypeAsClauses.ts, 26, 34))
+
+type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
+>TD2 : Symbol(TD2, Decl(mappedTypeAsClauses.ts, 26, 48))
+>TD1 : Symbol(TD1, Decl(mappedTypeAsClauses.ts, 25, 75))
+
+type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
+>TD3 : Symbol(TD3, Decl(mappedTypeAsClauses.ts, 27, 21))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 28, 9))
+>DoubleProp : Symbol(DoubleProp, Decl(mappedTypeAsClauses.ts, 21, 85))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 28, 9))
+

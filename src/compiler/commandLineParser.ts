@@ -198,6 +198,15 @@ namespace ts {
             description: Diagnostics.Generates_a_CPU_profile
         },
         {
+            name: "generateTrace",
+            type: "string",
+            isFilePath: true,
+            isCommandLineOnly: true,
+            paramType: Diagnostics.DIRECTORY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Generates_an_event_trace_and_a_list_of_types
+        },
+        {
             name: "incremental",
             shortName: "i",
             type: "boolean",
@@ -993,6 +1002,14 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
         },
+        {
+            name: "bundledPackageName",
+            type: "string",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Provides_a_root_package_name_when_using_outFile_with_declarations,
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",

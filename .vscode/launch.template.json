@@ -47,14 +47,24 @@
       "console": "integratedTerminal",
       "outFiles": [
         "${workspaceRoot}/built/local/run.js"
-      ]
+      ],
+
+      // NOTE: To use this, you must switch the "type" above to "pwa-node". You may also need to follow the instructions
+      // here: https://github.com/microsoft/vscode-js-debug#nightly-extension to use the js-debug nightly until
+      // this feature is shipping in insiders or to a release:
+      // "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     },
     {
       // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
       "type": "node",
       "request": "attach",
       "name": "Attach to VS Code TS Server via Port",
-      "processId": "${command:PickProcess}"
+      "processId": "${command:PickProcess}",
+
+      // NOTE: To use this, you must switch the "type" above to "pwa-node". You may also need to follow the instructions
+      // here: https://github.com/microsoft/vscode-js-debug#nightly-extension to use the js-debug nightly until
+      // this feature is shipping in insiders or to a release:
+      // "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     }
   ]
 }

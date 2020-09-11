@@ -300,9 +300,17 @@ namespace ts {
                     sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
+            tracing.begin(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
+            tracing.end();
+
+            tracing.begin(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
+            tracing.end();
+
+            tracing.begin(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
+            tracing.end();
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -862,6 +870,8 @@ namespace ts {
         let sourceMapGenerator: SourceMapGenerator | undefined;
         let sourceMapSource: SourceMapSource;
         let sourceMapSourceIndex = -1;
+        let mostRecentlyAddedSourceMapSource: SourceMapSource;
+        let mostRecentlyAddedSourceMapSourceIndex = -1;
 
         // Comments
         let containerPos = -1;
@@ -1311,6 +1321,8 @@ namespace ts {
                         return emitConstructSignature(<ConstructSignatureDeclaration>node);
                     case SyntaxKind.IndexSignature:
                         return emitIndexSignature(<IndexSignatureDeclaration>node);
+                    case SyntaxKind.TemplateLiteralTypeSpan:
+                        return emitTemplateTypeSpan(<TemplateLiteralTypeSpan>node);
 
                     // Types
                     case SyntaxKind.TypePredicate:
@@ -1355,6 +1367,8 @@ namespace ts {
                         return emitMappedType(<MappedTypeNode>node);
                     case SyntaxKind.LiteralType:
                         return emitLiteralType(<LiteralTypeNode>node);
+                    case SyntaxKind.TemplateLiteralType:
+                        return emitTemplateType(<TemplateLiteralTypeNode>node);
                     case SyntaxKind.ImportType:
                         return emitImportTypeNode(<ImportTypeNode>node);
                     case SyntaxKind.JSDocAllType:
@@ -1546,6 +1560,10 @@ namespace ts {
                     case SyntaxKind.JSDocClassTag:
                     case SyntaxKind.JSDocTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
+                    case SyntaxKind.JSDocSeeTag:
+                        return emitJSDocSeeTag(node as JSDocSeeTag);
+                    case SyntaxKind.JSDocNameReference:
+                        return emitJSDocNameReference(node as JSDocNameReference);
 
                     case SyntaxKind.JSDocComment:
                         return emitJSDoc(node as JSDoc);
@@ -2004,6 +2022,20 @@ namespace ts {
             writeTrailingSemicolon();
         }
 
+        function emitTemplateTypeSpan(node: TemplateLiteralTypeSpan) {
+            const keyword = node.casing === TemplateCasing.Uppercase ? "uppercase" :
+                node.casing === TemplateCasing.Lowercase ? "lowercase" :
+                node.casing === TemplateCasing.Capitalize ? "capitalize" :
+                node.casing === TemplateCasing.Uncapitalize ? "uncapitalize" :
+                undefined;
+            if (keyword) {
+                writeKeyword(keyword);
+                writeSpace();
+            }
+            emit(node.type);
+            emit(node.literal);
+        }
+
         function emitSemicolonClassElement() {
             writeTrailingSemicolon();
         }
@@ -2196,6 +2228,12 @@ namespace ts {
             writePunctuation("[");
 
             pipelineEmit(EmitHint.MappedTypeParameter, node.typeParameter);
+            if (node.nameType) {
+                writeSpace();
+                writeKeyword("as");
+                writeSpace();
+                emit(node.nameType);
+            }
 
             writePunctuation("]");
             if (node.questionToken) {
@@ -2220,6 +2258,11 @@ namespace ts {
 
         function emitLiteralType(node: LiteralTypeNode) {
             emitExpression(node.literal);
+        }
+
+        function emitTemplateType(node: TemplateLiteralTypeNode) {
+            emit(node.head);
+            emitList(node, node.templateSpans, ListFormat.TemplateExpressionSpans);
         }
 
         function emitImportTypeNode(node: ImportTypeNode) {
@@ -3501,6 +3544,19 @@ namespace ts {
             emitJSDocComment(tag.comment);
         }
 
+        function emitJSDocSeeTag(tag: JSDocSeeTag) {
+            emitJSDocTagName(tag.tagName);
+            emit(tag.name);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocNameReference(node: JSDocNameReference) {
+            writeSpace();
+            writePunctuation("{");
+            emit(node.name);
+            writePunctuation("}");
+        }
+
         function emitJSDocHeritageTag(tag: JSDocImplementsTag | JSDocAugmentsTag) {
             emitJSDocTagName(tag.tagName);
             writeSpace();
@@ -4544,7 +4600,11 @@ namespace ts {
                 }
             }
 
-            return getLiteralText(node, currentSourceFile!, neverAsciiEscape, jsxAttributeEscape);
+            const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
+                | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
+                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0);
+
+            return getLiteralText(node, currentSourceFile!, flags);
         }
 
         /**
@@ -5337,9 +5397,10 @@ namespace ts {
         function emitSourcePos(source: SourceMapSource, pos: number) {
             if (source !== sourceMapSource) {
                 const savedSourceMapSource = sourceMapSource;
+                const savedSourceMapSourceIndex = sourceMapSourceIndex;
                 setSourceMapSource(source);
                 emitPos(pos);
-                setSourceMapSource(savedSourceMapSource);
+                resetSourceMapSource(savedSourceMapSource, savedSourceMapSourceIndex);
             }
             else {
                 emitPos(pos);
@@ -5386,6 +5447,13 @@ namespace ts {
 
             sourceMapSource = source;
 
+            if (source === mostRecentlyAddedSourceMapSource) {
+                // Fast path for when the new source map is the most recently added, in which case
+                // we use its captured index without going through the source map generator.
+                sourceMapSourceIndex = mostRecentlyAddedSourceMapSourceIndex;
+                return;
+            }
+
             if (isJsonSourceMapSource(source)) {
                 return;
             }
@@ -5394,6 +5462,14 @@ namespace ts {
             if (printerOptions.inlineSources) {
                 sourceMapGenerator!.setSourceContent(sourceMapSourceIndex, source.text);
             }
+
+            mostRecentlyAddedSourceMapSource = source;
+            mostRecentlyAddedSourceMapSourceIndex = sourceMapSourceIndex;
+        }
+
+        function resetSourceMapSource(source: SourceMapSource, sourceIndex: number) {
+            sourceMapSource = source;
+            sourceMapSourceIndex = sourceIndex;
         }
 
         function isJsonSourceMapSource(sourceFile: SourceMapSource) {

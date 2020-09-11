@@ -1472,15 +1472,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";All_files_must_be_modules_when_the_isolatedModules_flag_is_provided_1208" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[All files must be modules when the '--isolatedModules' flag is provided.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['--isolatedModules' bayrağı sağlandığında tüm dosyalar modül olmalıdır.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";All_imports_in_import_declaration_are_unused_6192" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
@@ -6929,15 +6920,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[{0}' modülünün dışarı aktarılan '{1}' adlı bir üyesi yok. Şunu mu demek istediniz: '{2}'?]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead_2614" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?]]></Val>
@@ -11837,6 +11819,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_of_construct_signatures_are_incompatible_2419" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types of construct signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Yapı imzalarının türleri uyumsuz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_of_parameters_0_and_1_are_incompatible_2328" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types of parameters '{0}' and '{1}' are incompatible.]]></Val>
@@ -12485,6 +12476,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_imp_1208" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}', genel betik dosyası olarak kabul edildiğinden '--isolatedModules' altında derlenemiyor. Bunu bir modül haline getirmek için içeri aktarma, dışarı aktarma veya boş 'export {}' deyimi ekleyin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_cannot_be_used_as_a_JSX_component_2786" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' cannot be used as a JSX component.]]></Val>
@@ -12544,6 +12544,15 @@
           <Val><![CDATA['{0}' expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' bekleniyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_has_no_exported_member_named_1_Did_you_mean_2_2724" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' has no exported member named '{1}'. Did you mean '{2}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' öğesinin dışarı aktarılan '{1}' adlı bir üyesi yok. '{2}' demek mi istediniz?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12652,6 +12661,15 @@
           <Val><![CDATA['{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}', '{1}' anahtar sözcüğü için geçerli bir meta özellik değil. Bunu mu demek istediniz: '{2}'?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_not_allowed_as_a_variable_declaration_name_1389" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not allowed as a variable declaration name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' öğesinin değişken bildirim adı olarak kullanılmasına izin verilmiyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12841,6 +12859,15 @@
           <Val><![CDATA['{0}' only refers to a type, but is being used as a value here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' yalnızca bir türe başvuruyor, ancak burada bir değer olarak kullanılıyor.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0_2690" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' yalnızca bir türe başvuruyor, ancak burada bir değer olarak kullanılıyor. '{0}' içinde '{1}' kullanmak mı istediniz?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

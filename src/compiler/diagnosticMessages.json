@@ -936,7 +936,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments": {
+    "Dynamic import cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -1008,7 +1008,7 @@
         "category": "Error",
         "code": 1344
     },
-    "An expression of type 'void' cannot be tested for truthiness": {
+    "An expression of type 'void' cannot be tested for truthiness.": {
         "category": "Error",
         "code": 1345
     },
@@ -1180,7 +1180,18 @@
         "category": "Error",
         "code": 1388
     },
-
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
+    },
+    "Provides a root package name when using outFile with declarations.": {
+        "category": "Message",
+        "code": 1390
+    },
+    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
+        "category": "Error",
+        "code": 1391
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1685,6 +1696,10 @@
     "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2418
+    },
+    "Types of construct signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -2270,7 +2285,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'": {
+    "Property '{0}' is a static member of type '{1}'.": {
         "category": "Error",
         "code": 2576
     },
@@ -2607,6 +2622,10 @@
         "category": "Error",
         "code": 2689
     },
+    "'{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?": {
+        "category": "Error",
+        "code": 2690
+    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
@@ -2740,7 +2759,7 @@
         "category": "Error",
         "code": 2723
     },
-    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+    "'{0}' has no exported member named '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2724
     },
@@ -2772,7 +2791,7 @@
         "category": "Error",
         "code": 2731
     },
-    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.": {
         "category": "Error",
         "code": 2732
     },
@@ -3016,7 +3035,10 @@
         "category": "Error",
         "code": 2792
     },
-
+    "Template literal type argument '{0}' is not literal type or a generic type.": {
+        "category": "Error",
+        "code": 2793
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4354,7 +4376,7 @@
         "category": "Message",
         "code": 6204
     },
-    "All type parameters are unused": {
+    "All type parameters are unused.": {
         "category": "Error",
         "code": 6205
     },
@@ -4481,6 +4503,10 @@
     "Arguments for the rest parameter '{0}' were not provided.": {
         "category": "Error",
         "code": 6236
+    },
+    "Generates an event trace and a list of types.": {
+        "category": "Message",
+        "code": 6237
     },
 
     "Projects to reference": {
@@ -5324,6 +5350,10 @@
         "category": "Message",
         "code": 95002
     },
+    "Convert '{0}' to '{1} in {0}'": {
+        "category": "Message",
+        "code": 95003
+    },
     "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
@@ -5391,6 +5421,10 @@
     "Add definite assignment assertion to property '{0}'": {
         "category": "Message",
         "code": 95020
+    },
+    "Convert all type literals to mapped type": {
+        "category": "Message",
+        "code": 95021
     },
     "Add all missing members": {
         "category": "Message",
@@ -5889,7 +5923,7 @@
         "category": "Error",
         "code": 18007
     },
-    "Private identifiers cannot be used as parameters": {
+    "Private identifiers cannot be used as parameters.": {
         "category": "Error",
         "code": 18009
     },
@@ -5929,7 +5963,7 @@
         "category": "Error",
         "code": 18018
     },
-    "'{0}' modifier cannot be used with a private identifier": {
+    "'{0}' modifier cannot be used with a private identifier.": {
         "category": "Error",
         "code": 18019
     },

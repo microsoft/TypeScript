@@ -2,6 +2,7 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "outFile": "../../built/local/harness.js",
+        "moduleResolution": "node",
         "types": [
             "node", "mocha", "chai"
         ],

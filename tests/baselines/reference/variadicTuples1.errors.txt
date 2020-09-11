@@ -41,9 +41,12 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Typ
   Type '"2"' is not assignable to type 'number | "0" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "1"'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(346,14): error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(354,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(393,19): error TS1256: A rest element must be last in a tuple type.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(396,20): error TS1256: A rest element must be last in a tuple type.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(397,12): error TS1256: A rest element must be last in a tuple type.
 
 
-==== tests/cases/conformance/types/tuple/variadicTuples1.ts (20 errors) ====
+==== tests/cases/conformance/types/tuple/variadicTuples1.ts (23 errors) ====
     // Variadics in tuple types
     
     type TV0<T extends unknown[]> = [string, ...T];
@@ -496,4 +499,20 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(354,26): error TS2322: Ty
     
     callApi(getUser);
     callApi(getOrgUser);
+    
+    // Repro from #40235
+    
+    type Numbers = number[];
+    type Unbounded = [...Numbers, boolean];
+                      ~~~~~~~~~~
+!!! error TS1256: A rest element must be last in a tuple type.
+    const data: Unbounded = [false, false];
+    
+    type U1 = [string, ...Numbers, boolean];
+                       ~~~~~~~~~~
+!!! error TS1256: A rest element must be last in a tuple type.
+    type U2 = [...[string, ...Numbers], boolean];
+               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1256: A rest element must be last in a tuple type.
+    type U3 = [...[string, number], boolean];
     

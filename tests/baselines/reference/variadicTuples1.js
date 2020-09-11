@@ -388,6 +388,16 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 callApi(getUser);
 callApi(getOrgUser);
 
+// Repro from #40235
+
+type Numbers = number[];
+type Unbounded = [...Numbers, boolean];
+const data: Unbounded = [false, false];
+
+type U1 = [string, ...Numbers, boolean];
+type U2 = [...[string, ...Numbers], boolean];
+type U3 = [...[string, number], boolean];
+
 
 //// [variadicTuples1.js]
 "use strict";
@@ -609,6 +619,7 @@ function callApi(method) {
 }
 callApi(getUser);
 callApi(getOrgUser);
+var data = [false, false];
 
 
 //// [variadicTuples1.d.ts]
@@ -774,3 +785,9 @@ declare function getOrgUser(id: string, orgId: number, options?: {
     z?: boolean;
 }): void;
 declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args_0: T) => U;
+declare type Numbers = number[];
+declare type Unbounded = [...Numbers, boolean];
+declare const data: Unbounded;
+declare type U1 = [string, ...Numbers, boolean];
+declare type U2 = [...[string, ...Numbers], boolean];
+declare type U3 = [...[string, number], boolean];

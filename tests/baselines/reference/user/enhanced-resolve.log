@@ -36,6 +36,8 @@ node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(235,4): error TS2322:
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(246,4): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(252,24): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(257,28): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/Resolver.js(56,8): error TS2339: Property '_pluginCompat' does not exist on type 'Resolver'.
+node_modules/enhanced-resolve/lib/Resolver.js(65,8): error TS2339: Property '_pluginCompat' does not exist on type 'Resolver'.
 node_modules/enhanced-resolve/lib/Resolver.js(189,18): error TS2339: Property 'push' does not exist on type 'Set<any>'.
 node_modules/enhanced-resolve/lib/Resolver.js(210,13): error TS2339: Property 'details' does not exist on type 'Error'.
 node_modules/enhanced-resolve/lib/Resolver.js(211,13): error TS2339: Property 'missing' does not exist on type 'Error'.
