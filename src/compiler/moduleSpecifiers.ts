@@ -157,7 +157,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
-        const { baseUrl, paths, rootDirs } = compilerOptions;
+        const { baseUrl, paths, rootDirs, bundledPackageName } = compilerOptions;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
@@ -170,8 +170,9 @@ namespace ts.moduleSpecifiers {
             return relativePath;
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+        const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
         const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
 
         if (relativePreference === RelativePreference.NonRelative) {
@@ -278,7 +279,7 @@ namespace ts.moduleSpecifiers {
                 const isInNodeModules = pathContainsNodeModules(path);
                 allFileNames.set(path, { path: getCanonicalFileName(path), isRedirect, isInNodeModules });
                 importedFileFromNodeModules = importedFileFromNodeModules || isInNodeModules;
-                // dont return value, so we collect everything
+                // don't return value, so we collect everything
             }
         );
 
