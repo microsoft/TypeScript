@@ -23,6 +23,7 @@ namespace ts {
         ["dom.iterable", "lib.dom.iterable.d.ts"],
         ["webworker", "lib.webworker.d.ts"],
         ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
+        ["webworker.iterable", "lib.webworker.iterable.d.ts"],
         ["scripthost", "lib.scripthost.d.ts"],
         // ES2015 Or ESNext By-feature options
         ["es2015.core", "lib.es2015.core.d.ts"],

@@ -1,26 +1,6 @@
 /////////////////////////////
-/// DOM Iterable APIs
+/// Worker Iterable APIs
 /////////////////////////////
-
-interface AudioParam {
-    setValueCurveAtTime(values: Iterable<number>, startTime: number, duration: number): AudioParam;
-}
-
-interface AudioParamMap extends ReadonlyMap<string, AudioParam> {
-}
-
-interface BaseAudioContext {
-    createIIRFilter(feedforward: Iterable<number>, feedback: Iterable<number>): IIRFilterNode;
-    createPeriodicWave(real: Iterable<number>, imag: Iterable<number>, constraints?: PeriodicWaveConstraints): PeriodicWave;
-}
-
-interface CSSRuleList {
-    [Symbol.iterator](): IterableIterator<CSSRule>;
-}
-
-interface CSSStyleDeclaration {
-    [Symbol.iterator](): IterableIterator<string>;
-}
 
 interface Cache {
     addAll(requests: Iterable<RequestInfo>): Promise<void>;
@@ -30,27 +10,8 @@ interface CanvasPathDrawingStyles {
     setLineDash(segments: Iterable<number>): void;
 }
 
-interface ClientRectList {
-    [Symbol.iterator](): IterableIterator<ClientRect>;
-}
-
-interface DOMRectList {
-    [Symbol.iterator](): IterableIterator<DOMRect>;
-}
-
 interface DOMStringList {
     [Symbol.iterator](): IterableIterator<string>;
-}
-
-interface DOMTokenList {
-    [Symbol.iterator](): IterableIterator<string>;
-    entries(): IterableIterator<[number, string]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<string>;
-}
-
-interface DataTransferItemList {
-    [Symbol.iterator](): IterableIterator<DataTransferItem>;
 }
 
 interface FileList {
@@ -71,26 +32,6 @@ interface FormData {
      * Returns a list of values in the list.
      */
     values(): IterableIterator<FormDataEntryValue>;
-}
-
-interface HTMLAllCollection {
-    [Symbol.iterator](): IterableIterator<Element>;
-}
-
-interface HTMLCollectionBase {
-    [Symbol.iterator](): IterableIterator<Element>;
-}
-
-interface HTMLCollectionOf<T extends Element> {
-    [Symbol.iterator](): IterableIterator<T>;
-}
-
-interface HTMLFormElement {
-    [Symbol.iterator](): IterableIterator<Element>;
-}
-
-interface HTMLSelectElement {
-    [Symbol.iterator](): IterableIterator<Element>;
 }
 
 interface Headers {
@@ -125,124 +66,6 @@ interface IDBObjectStore {
     createIndex(name: string, keyPath: string | Iterable<string>, options?: IDBIndexParameters): IDBIndex;
 }
 
-interface MediaKeyStatusMap {
-    [Symbol.iterator](): IterableIterator<[BufferSource, MediaKeyStatus]>;
-    entries(): IterableIterator<[BufferSource, MediaKeyStatus]>;
-    keys(): IterableIterator<BufferSource>;
-    values(): IterableIterator<MediaKeyStatus>;
-}
-
-interface MediaList {
-    [Symbol.iterator](): IterableIterator<string>;
-}
-
-interface MimeTypeArray {
-    [Symbol.iterator](): IterableIterator<MimeType>;
-}
-
-interface NamedNodeMap {
-    [Symbol.iterator](): IterableIterator<Attr>;
-}
-
-interface Navigator {
-    requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
-}
-
-interface NodeList {
-    [Symbol.iterator](): IterableIterator<Node>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
-    entries(): IterableIterator<[number, Node]>;
-    /**
-     * Returns an list of keys in the list.
-     */
-    keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list.
-     */
-    values(): IterableIterator<Node>;
-}
-
-interface NodeListOf<TNode extends Node> {
-    [Symbol.iterator](): IterableIterator<TNode>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
-    entries(): IterableIterator<[number, TNode]>;
-    /**
-     * Returns an list of keys in the list.
-     */
-    keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list.
-     */
-    values(): IterableIterator<TNode>;
-}
-
-interface Plugin {
-    [Symbol.iterator](): IterableIterator<MimeType>;
-}
-
-interface PluginArray {
-    [Symbol.iterator](): IterableIterator<Plugin>;
-}
-
-interface RTCRtpTransceiver {
-    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
-}
-
-interface RTCStatsReport extends ReadonlyMap<string, any> {
-}
-
-interface SVGLengthList {
-    [Symbol.iterator](): IterableIterator<SVGLength>;
-}
-
-interface SVGNumberList {
-    [Symbol.iterator](): IterableIterator<SVGNumber>;
-}
-
-interface SVGPointList {
-    [Symbol.iterator](): IterableIterator<DOMPoint>;
-}
-
-interface SVGStringList {
-    [Symbol.iterator](): IterableIterator<string>;
-}
-
-interface SourceBufferList {
-    [Symbol.iterator](): IterableIterator<SourceBuffer>;
-}
-
-interface SpeechGrammarList {
-    [Symbol.iterator](): IterableIterator<SpeechGrammar>;
-}
-
-interface SpeechRecognitionResult {
-    [Symbol.iterator](): IterableIterator<SpeechRecognitionAlternative>;
-}
-
-interface SpeechRecognitionResultList {
-    [Symbol.iterator](): IterableIterator<SpeechRecognitionResult>;
-}
-
-interface StyleSheetList {
-    [Symbol.iterator](): IterableIterator<CSSStyleSheet>;
-}
-
-interface TextTrackCueList {
-    [Symbol.iterator](): IterableIterator<TextTrackCue>;
-}
-
-interface TextTrackList {
-    [Symbol.iterator](): IterableIterator<TextTrack>;
-}
-
-interface TouchList {
-    [Symbol.iterator](): IterableIterator<Touch>;
-}
-
 interface URLSearchParams {
     [Symbol.iterator](): IterableIterator<[string, string]>;
     /**
@@ -259,16 +82,8 @@ interface URLSearchParams {
     values(): IterableIterator<string>;
 }
 
-interface VRDisplay {
-    requestPresent(layers: Iterable<VRLayer>): Promise<void>;
-}
-
 interface WEBGL_draw_buffers {
     drawBuffersWEBGL(buffers: Iterable<GLenum>): void;
-}
-
-interface WebAuthentication {
-    makeCredential(accountInformation: Account, cryptoParameters: Iterable<ScopedCredentialParameters>, attestationChallenge: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer | null, options?: ScopedCredentialOptions): Promise<ScopedCredentialInfo>;
 }
 
 interface WebGL2RenderingContextBase {
