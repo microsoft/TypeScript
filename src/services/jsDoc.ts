@@ -132,8 +132,8 @@ namespace ts.JsDoc {
         return [{
             ...createTextSpanFromNode(see.name),
             link: { // TODO: FileSpanWithContext is in services, but maybe a counterpart exists over here?
-                file: getSourceFileOfNode(symbol.valueDeclaration).fileName,
-                span: createTextSpanFromNode(symbol.valueDeclaration)
+                fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
+                textSpan: createTextSpanFromNode(symbol.valueDeclaration)
             }
         }]
     }

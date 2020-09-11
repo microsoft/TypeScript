@@ -1013,10 +1013,7 @@ namespace ts {
     }
 
     export interface JSDocLink extends TextSpan {
-        link: {
-            span: TextSpan
-            file: string,
-        };
+        link: DocumentSpan;
     }
 
     export interface QuickInfo {
