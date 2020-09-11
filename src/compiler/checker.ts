@@ -33881,8 +33881,9 @@ namespace ts {
                 if (iterationTypes === noIterationTypes) {
                     if (errorNode) {
                         reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
-                        errorNode = undefined;
                     }
+                    setCachedIterationTypes(type, cacheKey, noIterationTypes);
+                    return undefined;
                 }
                 else {
                     allIterationTypes = append(allIterationTypes, iterationTypes);
@@ -34222,6 +34223,28 @@ namespace ts {
                     error(errorNode, diagnostic, methodName);
                 }
                 return methodName === "next" ? anyIterationTypes : undefined;
+            }
+
+            // If the method signature comes exclusively from the global iterator or generator type,
+            // create iteration types from its type arguments like `getIterationTypesOfIteratorFast`
+            // does (so as to remove `undefined` from the next and return types). We arrive here when
+            // a contextual type for a generator was not a direct reference to one of those global types,
+            // but looking up `methodType` referred to one of them (and nothing else). E.g., in
+            // `interface SpecialIterator extends Iterator<number> {}`, `SpecialIterator` is not a
+            // reference to `Iterator`, but its `next` member derives exclusively from `Iterator`.
+            if (methodType?.symbol && methodSignatures.length === 1) {
+                const globalGeneratorType = resolver.getGlobalGeneratorType(/*reportErrors*/ false);
+                const globalIteratorType = resolver.getGlobalIteratorType(/*reportErrors*/ false);
+                const isGeneratorMethod = globalGeneratorType.symbol?.members?.get(methodName as __String) === methodType.symbol;
+                const isIteratorMethod = !isGeneratorMethod && globalIteratorType.symbol?.members?.get(methodName as __String) === methodType.symbol;
+                if (isGeneratorMethod || isIteratorMethod) {
+                    const globalType = isGeneratorMethod ? globalGeneratorType : globalIteratorType;
+                    const { mapper } = methodType as AnonymousType;
+                    return createIterationTypes(
+                        getMappedType(globalType.typeParameters![0], mapper!),
+                        getMappedType(globalType.typeParameters![1], mapper!),
+                        methodName === "next" ? getMappedType(globalType.typeParameters![2], mapper!) : undefined);
+                }
             }
 
             // Extract the first parameter and return type of each signature.
