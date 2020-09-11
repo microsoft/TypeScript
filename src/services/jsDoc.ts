@@ -128,14 +128,12 @@ namespace ts.JsDoc {
         const see = tag as JSDocSeeTag;
         if (!see.name) return
         const symbol = checker.getSymbolAtLocation(see.name)
-        if (!symbol) return
+        if (!symbol || !symbol.valueDeclaration) return
         return [{
-            pos: symbol.valueDeclaration.pos,
-            end: symbol.valueDeclaration.end,
+            ...createTextSpanFromNode(see.name),
             link: { // TODO: FileSpanWithContext is in services, but maybe a counterpart exists over here?
-                start: { line: symbol.valueDeclaration.pos, offset: 0 }, // huuff, not sure at all how to produce a line/offset pair
-                end: { line: symbol.valueDeclaration.end, offset: 0 },
                 file: getSourceFileOfNode(symbol.valueDeclaration).fileName,
+                span: createTextSpanFromNode(symbol.valueDeclaration)
             }
         }]
     }

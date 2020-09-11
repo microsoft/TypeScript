@@ -1924,7 +1924,9 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags associated with symbol.
          */
-        tags: JSDocTagInfo[];
+        tags: JSDocTagInfo[]; // TODO: Needs to use location pairs instead of spans. That probalby means no more re-use of JSDocTagInfo
+        // I need to find out how this is handled elsewhere in server.
+        // Also, where to put the handling when I do figure out what it should be.
     }
 
     /**

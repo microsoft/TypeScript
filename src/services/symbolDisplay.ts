@@ -530,7 +530,7 @@ namespace ts.SymbolDisplay {
                     }
 
                     documentation = rhsSymbol.getDocumentationComment(typeChecker);
-                    tags = rhsSymbol.getJsDocTags();
+                    tags = rhsSymbol.getJsDocTags(typeChecker);
                     if (documentation.length > 0) {
                         break;
                     }
@@ -539,7 +539,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (tags.length === 0 && !hasMultipleSignatures) {
-            tags = symbol.getJsDocTags();
+            tags = symbol.getJsDocTags(typeChecker);
         }
 
         if (documentation.length === 0 && documentationFromAlias) {
