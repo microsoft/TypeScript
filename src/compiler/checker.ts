@@ -1059,16 +1059,19 @@ namespace ts {
             return diagnostic;
         }
 
-        function errorByThrowType(location: Node | undefined, type: Type) {
+        function errorByThrowType(location: Node, type: Type) {
             if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+
             let message = "";
             const diagnostic = getDiagnosticFromThrowType(type);
             if (diagnostic) {
                 const [base, ...args] = diagnostic;
-                message = "\n    " + formatMessage(/*_dummy*/0, base, ...map(args, getTypeNameForErrorDisplay));
+                message = formatMessage(/*_dummy*/0, base, ...map(args, getTypeNameForErrorDisplay));
             }
             else message = getMessageFromThrowType(type);
-            error(location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, message);
+
+            const category = getCategoryFromThrowType(type);
+            appendDiagnosticWithCategory(category, location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, "\n    " + message);
         }
 
         function getMessageFromThrowType(type: Type): string {
@@ -1100,17 +1103,17 @@ namespace ts {
                 getTupleElementType(diag, 4) || undefinedType,
             ] as const;
         }
-        // function getCategoryFromThrowType(type: Type): DiagnosticCategory {
-        //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
-        //     const category = <StringLiteralType>getTypeOfPropertyOfType(type, <__String>"diagnostic");
-        //     if (!category || !(category.flags & TypeFlags.StringLiteral)) return DiagnosticCategory.Error;
-        //     switch (category.value.toLowerCase()) {
-        //         case "error": return DiagnosticCategory.Error;
-        //         case "suggestion": return DiagnosticCategory.Suggestion;
-        //         case "warning": return DiagnosticCategory.Warning;
-        //         default: return DiagnosticCategory.Message;
-        //     }
-        // }
+        function getCategoryFromThrowType(type: Type): DiagnosticCategory {
+            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            const category = <StringLiteralType>getTypeOfPropertyOfType(type, <__String>"category");
+            if (!category || !(category.flags & TypeFlags.StringLiteral)) return DiagnosticCategory.Error;
+            switch (category.value.toLowerCase()) {
+                case "error": return DiagnosticCategory.Error;
+                case "suggestion": return DiagnosticCategory.Suggestion;
+                case "warning": return DiagnosticCategory.Warning;
+                default: return DiagnosticCategory.Message;
+            }
+        }
         // function getDeprecatedFromThrowType(type: Type): boolean {
         //     if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
         //     const dep = getTypeOfPropertyOfType(type, <__String>"deprecated");
@@ -1135,8 +1138,21 @@ namespace ts {
                 suggestionDiagnostics.add({ ...diagnostic, category: DiagnosticCategory.Suggestion });
             }
         }
+        /** @deprecated use appendDiagnosticWithCategory */
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
             addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator
+        }
+        function appendDiagnosticWithCategory(category: DiagnosticCategory | undefined, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+            const diag = "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message);  // eslint-disable-line no-in-operator
+            diag.category = category ?? diag.category;
+            switch (category) {
+                case DiagnosticCategory.Error:
+                case DiagnosticCategory.Warning:
+                    return diagnostics.add(diag);
+                case DiagnosticCategory.Suggestion:
+                case DiagnosticCategory.Message:
+                    return suggestionDiagnostics.add(diag);
+            }
         }
 
         function errorAndMaybeSuggestAwait(
@@ -15175,7 +15191,7 @@ namespace ts {
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
             if (!(type && mapper && couldContainTypeVariables(type))) {
-                if (type && (type.flags & TypeFlags.ThrowType)) errorByThrowType(currentNode, type);
+                if (type && (type.flags & TypeFlags.ThrowType) && currentNode) errorByThrowType(currentNode, type);
                 return type;
             }
             if (instantiationDepth === 50 || instantiationCount >= 5000000) {
