@@ -1,18 +1,15 @@
 /** @internal */
 namespace ts.classifier.v2020 {
 
-    /** @internal */
     export const enum TokenEncodingConsts {
         typeOffset = 8,
         modifierMask = (1 << typeOffset) - 1
     }
 
-    /** @internal */
     export const enum TokenType {
         class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member
     }
 
-    /** @internal */
     export const enum TokenModifier {
         declaration, static, async, readonly, defaultLibrary, local
     }
@@ -92,7 +89,7 @@ namespace ts.classifier.v2020 {
                     if (typeIdx !== undefined) {
                         let modifierSet = 0;
                         if (node.parent) {
-                            const parentIsDeclaration = (isBindingElement(node.parent) || tokenFromDeclarationMapping[node.parent.kind] === typeIdx);
+                            const parentIsDeclaration = (isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx);
                             if (parentIsDeclaration && (<NamedDeclaration>node.parent).name === node) {
                                 modifierSet = 1 << TokenModifier.declaration;
                             }
@@ -166,7 +163,7 @@ namespace ts.classifier.v2020 {
         if (decl && isBindingElement(decl)) {
             decl = getDeclarationForBindingElement(decl);
         }
-        return decl && tokenFromDeclarationMapping[decl.kind];
+        return decl && tokenFromDeclarationMapping.get(decl.kind);
     }
 
     function reclassifyByType(typeChecker: TypeChecker, node: Node, typeIdx: TokenType): TokenType {
@@ -228,25 +225,25 @@ namespace ts.classifier.v2020 {
         return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
     }
 
-    const tokenFromDeclarationMapping: { [name: string]: TokenType } = {
-        [SyntaxKind.VariableDeclaration]: TokenType.variable,
-        [SyntaxKind.Parameter]: TokenType.parameter,
-        [SyntaxKind.PropertyDeclaration]: TokenType.property,
-        [SyntaxKind.ModuleDeclaration]: TokenType.namespace,
-        [SyntaxKind.EnumDeclaration]: TokenType.enum,
-        [SyntaxKind.EnumMember]: TokenType.enumMember,
-        [SyntaxKind.ClassDeclaration]: TokenType.class,
-        [SyntaxKind.MethodDeclaration]: TokenType.member,
-        [SyntaxKind.FunctionDeclaration]: TokenType.function,
-        [SyntaxKind.FunctionExpression]: TokenType.function,
-        [SyntaxKind.MethodSignature]: TokenType.member,
-        [SyntaxKind.GetAccessor]: TokenType.property,
-        [SyntaxKind.SetAccessor]: TokenType.property,
-        [SyntaxKind.PropertySignature]: TokenType.property,
-        [SyntaxKind.InterfaceDeclaration]: TokenType.interface,
-        [SyntaxKind.TypeAliasDeclaration]: TokenType.type,
-        [SyntaxKind.TypeParameter]: TokenType.typeParameter,
-        [SyntaxKind.PropertyAssignment]: TokenType.property,
-        [SyntaxKind.ShorthandPropertyAssignment]: TokenType.property
-    };
+    const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
+        [SyntaxKind.VariableDeclaration, TokenType.variable],
+        [SyntaxKind.Parameter, TokenType.parameter],
+        [SyntaxKind.PropertyDeclaration, TokenType.property],
+        [SyntaxKind.ModuleDeclaration, TokenType.namespace],
+        [SyntaxKind.EnumDeclaration, TokenType.enum],
+        [SyntaxKind.EnumMember, TokenType.enumMember],
+        [SyntaxKind.ClassDeclaration, TokenType.class],
+        [SyntaxKind.MethodDeclaration, TokenType.member],
+        [SyntaxKind.FunctionDeclaration, TokenType.function],
+        [SyntaxKind.FunctionExpression, TokenType.function],
+        [SyntaxKind.MethodSignature, TokenType.member],
+        [SyntaxKind.GetAccessor, TokenType.property],
+        [SyntaxKind.SetAccessor, TokenType.property],
+        [SyntaxKind.PropertySignature, TokenType.property],
+        [SyntaxKind.InterfaceDeclaration, TokenType.interface],
+        [SyntaxKind.TypeAliasDeclaration, TokenType.type],
+        [SyntaxKind.TypeParameter, TokenType.typeParameter],
+        [SyntaxKind.PropertyAssignment, TokenType.property],
+        [SyntaxKind.ShorthandPropertyAssignment, TokenType.property]
+    ]);
 }
