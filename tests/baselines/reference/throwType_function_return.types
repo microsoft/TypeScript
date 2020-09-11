@@ -1,0 +1,53 @@
+=== tests/cases/compiler/throwType_function_return.ts ===
+class X<T> {
+>X : X<T>
+
+    constructor(public item: T) { }
+>item : T
+
+    add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
+>add : (a: T) => T extends number | string | bigint ? T : throw `Cannot apply + operator on this type`
+>a : T
+
+        // @ts-ignore
+        return a + this.item
+>a + this.item : any
+>a : T
+>this.item : T
+>this : this
+>item : T
+    }
+}
+new X(1).add(2).toExponential()
+>new X(1).add(2).toExponential() : string
+>new X(1).add(2).toExponential : (fractionDigits?: number) => string
+>new X(1).add(2) : number
+>new X(1).add : (a: number) => number
+>new X(1) : X<number>
+>X : typeof X
+>1 : 1
+>add : (a: number) => number
+>2 : 2
+>toExponential : (fractionDigits?: number) => string
+
+new X("").add("").toLowerCase()
+>new X("").add("").toLowerCase() : string
+>new X("").add("").toLowerCase : () => string
+>new X("").add("") : string
+>new X("").add : (a: string) => string
+>new X("") : X<string>
+>X : typeof X
+>"" : ""
+>add : (a: string) => string
+>"" : ""
+>toLowerCase : () => string
+
+new X({}).add({})
+>new X({}).add({}) : never
+>new X({}).add : (a: {}) => never
+>new X({}) : X<{}>
+>X : typeof X
+>{} : {}
+>add : (a: {}) => never
+>{} : {}
+

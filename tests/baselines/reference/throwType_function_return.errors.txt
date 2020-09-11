@@ -1,0 +1,19 @@
+tests/cases/compiler/throwType_function_return.ts(10,1): error TS2794: Type instantiated results in a throw type saying: 
+    Cannot apply + operator on this type
+
+
+==== tests/cases/compiler/throwType_function_return.ts (1 errors) ====
+    class X<T> {
+        constructor(public item: T) { }
+        add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
+            // @ts-ignore
+            return a + this.item
+        }
+    }
+    new X(1).add(2).toExponential()
+    new X("").add("").toLowerCase()
+    new X({}).add({})
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2794: Type instantiated results in a throw type saying: 
+!!! error TS2794:     Cannot apply + operator on this type
+    

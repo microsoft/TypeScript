@@ -1,0 +1,43 @@
+=== tests/cases/compiler/throwType_function_return.ts ===
+class X<T> {
+>X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+
+    constructor(public item: T) { }
+>item : Symbol(X.item, Decl(throwType_function_return.ts, 1, 16))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+
+    add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
+>add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+>a : Symbol(a, Decl(throwType_function_return.ts, 2, 8))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+
+        // @ts-ignore
+        return a + this.item
+>a : Symbol(a, Decl(throwType_function_return.ts, 2, 8))
+>this.item : Symbol(X.item, Decl(throwType_function_return.ts, 1, 16))
+>this : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
+>item : Symbol(X.item, Decl(throwType_function_return.ts, 1, 16))
+    }
+}
+new X(1).add(2).toExponential()
+>new X(1).add(2).toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>new X(1).add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+>X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
+>add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+new X("").add("").toLowerCase()
+>new X("").add("").toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>new X("").add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+>X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
+>add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+
+new X({}).add({})
+>new X({}).add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+>X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
+>add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+
