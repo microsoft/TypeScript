@@ -9,13 +9,14 @@ export class B extends A { }
 
 
 
+
 //// [all.d.ts]
-declare module "ref/a" {
+declare module "out/ref/a" {
     export class A {
     }
 }
-declare module "b" {
-    import { A } from "ref/a";
+declare module "out/b" {
+    import { A } from "out/ref/a";
     export class B extends A {
     }
 }

@@ -54,9 +54,28 @@ module.exports = {testFn, testFnTypes};
 
 
 //// [file.d.ts]
-export var myTypes: {
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+export const myTypes: {
     [x: string]: any;
 };
+export namespace myTypes {
+    type typeA = string | RegExp | (string | RegExp)[];
+    type typeB = {
+        /**
+         * - Prop 1.
+         */
+        prop1: string | RegExp | (string | RegExp)[];
+        /**
+         * - Prop 2.
+         */
+        prop2: string;
+    };
+    type typeC = Function | typeB;
+}
 //// [file2.d.ts]
 /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
 /**
@@ -65,7 +84,16 @@ export var myTypes: {
  * @param {testFnTypes.input} input - Input.
  * @returns {number|null} Result.
  */
-export function testFn(input: any): number | null;
+export function testFn(input: boolean | Function | {
+    /**
+     * - Prop 1.
+     */
+    prop1: string | RegExp | (string | RegExp)[];
+    /**
+     * - Prop 2.
+     */
+    prop2: string;
+}): number | null;
 /**
  * @namespace testFnTypes
  * @global
@@ -75,5 +103,14 @@ export const testFnTypes: {
     [x: string]: any;
 };
 export namespace testFnTypes {
-    type input = any;
+    type input = boolean | Function | {
+        /**
+         * - Prop 1.
+         */
+        prop1: string | RegExp | (string | RegExp)[];
+        /**
+         * - Prop 2.
+         */
+        prop2: string;
+    };
 }

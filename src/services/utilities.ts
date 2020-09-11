@@ -105,6 +105,9 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
+        else if (isEntityName(node) && isJSDocNameReference(node.parent)) {
+            return SemanticMeaning.All;
+        }
         else if (isTypeReference(node)) {
             return SemanticMeaning.Type;
         }
@@ -1770,6 +1773,7 @@ namespace ts {
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
+            getCompilerOptions: () => program.getCompilerOptions()
         };
     }
 

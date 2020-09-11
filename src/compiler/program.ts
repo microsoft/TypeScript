@@ -734,6 +734,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
+        tracing.begin(tracing.Phase.Program, "createProgram", {});
         performance.mark("beforeProgram");
 
         const host = createProgramOptions.host || createCompilerHost(options);
@@ -948,6 +949,7 @@ namespace ts {
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
+            getTypeCatalog: () => getDiagnosticsProducingTypeChecker().getTypeCatalog(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getInstantiationCount: () => getDiagnosticsProducingTypeChecker().getInstantiationCount(),
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
@@ -982,6 +984,7 @@ namespace ts {
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
+        tracing.end();
 
         return program;
 
@@ -1505,6 +1508,7 @@ namespace ts {
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
             Debug.assert(!outFile(options));
+            tracing.begin(tracing.Phase.Emit, "emitBuildInfo", {});
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
                 notImplementedResolver,
@@ -1517,6 +1521,7 @@ namespace ts {
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
+            tracing.end();
             return emitResult;
         }
 
@@ -1577,7 +1582,10 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
+            tracing.begin(tracing.Phase.Emit, "emit", { path: sourceFile?.path });
+            const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
+            tracing.end();
+            return result;
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
@@ -3130,6 +3138,11 @@ namespace ts {
                 }
             }
 
+            // Without a package name, for multiple files being bundled into a .d.ts file you basically get a file which doesn't wrk
+            if (outputFile && getEmitDeclarations(options) && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && !options.bundledPackageName) {
+                createDiagnosticForOptionName(Diagnostics.The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_declaration_emit, options.out ? "out" : "outFile");
+            }
+
             if (options.resolveJsonModule) {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
@@ -3182,6 +3195,9 @@ namespace ts {
                 if (options.reactNamespace) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
                 }
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFactory", inverseJsxOptionMap.get("" + options.jsx));
+                }
                 if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
                     createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
                 }
@@ -3194,8 +3210,23 @@ namespace ts {
                 if (!options.jsxFactory) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "jsxFragmentFactory", "jsxFactory");
                 }
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFragmentFactory", inverseJsxOptionMap.get("" + options.jsx));
+                }
                 if (!parseIsolatedEntityName(options.jsxFragmentFactory, languageVersion)) {
                     createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
+                }
+            }
+
+            if (options.reactNamespace) {
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "reactNamespace", inverseJsxOptionMap.get("" + options.jsx));
+                }
+            }
+
+            if (options.jsxImportSource) {
+                if (options.jsx === JsxEmit.React) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxImportSource", inverseJsxOptionMap.get("" + options.jsx));
                 }
             }
 

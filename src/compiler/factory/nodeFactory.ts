@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createTemplateLiteralTypeSpan,
+            updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
             createTypePredicateNode,
             updateTypePredicateNode,
@@ -138,6 +140,8 @@ namespace ts {
             updateMappedTypeNode,
             createLiteralTypeNode,
             updateLiteralTypeNode,
+            createTemplateLiteralType,
+            updateTemplateLiteralType,
             createObjectBindingPattern,
             updateObjectBindingPattern,
             createArrayBindingPattern,
@@ -337,6 +341,10 @@ namespace ts {
             updateJSDocAugmentsTag,
             createJSDocImplementsTag,
             updateJSDocImplementsTag,
+            createJSDocSeeTag,
+            updateJSDocSeeTag,
+            createJSDocNameReference,
+            updateJSDocNameReference,
             // lazily load factory members for JSDoc tags with similar structure
             get createJSDocTypeTag() { return getJSDocTypeLikeTagCreateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
             get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
@@ -1596,6 +1604,25 @@ namespace ts {
                 : node;
         }
 
+        // @api
+        function createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            const node = createBaseNode<TemplateLiteralTypeSpan>(SyntaxKind.TemplateLiteralTypeSpan);
+            node.casing = casing;
+            node.type = type;
+            node.literal = literal;
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            return node.casing !== casing
+                || node.type !== type
+                || node.literal !== literal
+                ? update(createTemplateLiteralTypeSpan(casing, type, literal), node)
+                : node;
+        }
+
         //
         // Types
         //
@@ -1888,6 +1915,23 @@ namespace ts {
         }
 
         // @api
+        function createTemplateLiteralType(head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
+            const node = createBaseNode<TemplateLiteralTypeNode>(SyntaxKind.TemplateLiteralType);
+            node.head = head;
+            node.templateSpans = createNodeArray(templateSpans);
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateTemplateLiteralType(node: TemplateLiteralTypeNode, head: TemplateHead, templateSpans: readonly TemplateLiteralTypeSpan[]) {
+            return node.head !== head
+                || node.templateSpans !== templateSpans
+                ? update(createTemplateLiteralType(head, templateSpans), node)
+                : node;
+        }
+
+        // @api
         function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf = false) {
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             node.argument = argument;
@@ -1964,10 +2008,11 @@ namespace ts {
         }
 
         // @api
-        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function createMappedTypeNode(readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             const node = createBaseNode<MappedTypeNode>(SyntaxKind.MappedType);
             node.readonlyToken = readonlyToken;
             node.typeParameter = typeParameter;
+            node.nameType = nameType;
             node.questionToken = questionToken;
             node.type = type;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1975,12 +2020,13 @@ namespace ts {
         }
 
         // @api
-        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyKeyword | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, nameType: TypeNode | undefined, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode {
             return node.readonlyToken !== readonlyToken
                 || node.typeParameter !== typeParameter
+                || node.nameType !== nameType
                 || node.questionToken !== questionToken
                 || node.type !== type
-                ? update(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
+                ? update(createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), node)
                 : node;
         }
 
@@ -4257,6 +4303,36 @@ namespace ts {
             const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
             node.class = className;
             return node;
+        }
+
+        // @api
+        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+            const node = createBaseJSDocTag<JSDocSeeTag>(SyntaxKind.JSDocSeeTag, tagName ?? createIdentifier("see"), comment);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+            return node.tagName !== tagName
+                || node.name !== name
+                || node.comment !== comment
+                ? update(createJSDocSeeTag(tagName, name, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocNameReference(name: EntityName): JSDocNameReference {
+            const node = createBaseNode<JSDocNameReference>(SyntaxKind.JSDocNameReference);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference {
+            return node.name !== name
+                ? update(createJSDocNameReference(name), node)
+                : node;
         }
 
         // @api

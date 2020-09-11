@@ -2,6 +2,17 @@ namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
 
+    const jsxOptionMap = new Map(getEntries({
+        "preserve": JsxEmit.Preserve,
+        "react-native": JsxEmit.ReactNative,
+        "react": JsxEmit.React,
+        "react-jsx": JsxEmit.ReactJSX,
+        "react-jsxdev": JsxEmit.ReactJSXDev,
+    }));
+
+    /* @internal */
+    export const inverseJsxOptionMap = new Map(arrayFrom(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const)));
+
     // NOTE: The order here is important to default lib ordering as entries will have the same
     //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
     //       order also affects overload resolution when a type declared in one lib is
@@ -51,6 +62,7 @@ namespace ts {
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
         ["es2020.bigint", "lib.es2020.bigint.d.ts"],
         ["es2020.promise", "lib.es2020.promise.d.ts"],
+        ["es2020.sharedmemory", "lib.es2020.sharedmemory.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
@@ -196,6 +208,15 @@ namespace ts {
             paramType: Diagnostics.FILE_OR_DIRECTORY,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Generates_a_CPU_profile
+        },
+        {
+            name: "generateTrace",
+            type: "string",
+            isFilePath: true,
+            isCommandLineOnly: true,
+            paramType: Diagnostics.DIRECTORY,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Generates_an_event_trace_and_a_list_of_types
         },
         {
             name: "incremental",
@@ -356,11 +377,7 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: new Map(getEntries({
-                "preserve": JsxEmit.Preserve,
-                "react-native": JsxEmit.ReactNative,
-                "react": JsxEmit.React
-            })),
+            type: jsxOptionMap,
             affectsSourceFile: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -772,6 +789,12 @@ namespace ts {
             description: Diagnostics.Specify_the_JSX_fragment_factory_function_to_use_when_targeting_react_JSX_emit_with_jsxFactory_compiler_option_is_specified_e_g_Fragment
         },
         {
+            name: "jsxImportSource",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react
+        },
+        {
             name: "resolveJsonModule",
             type: "boolean",
             affectsModuleResolution: true,
@@ -993,6 +1016,14 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
         },
+        {
+            name: "bundledPackageName",
+            type: "string",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Provides_a_root_package_name_when_using_outFile_with_declarations,
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",

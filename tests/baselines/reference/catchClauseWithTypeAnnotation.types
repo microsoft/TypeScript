@@ -111,5 +111,41 @@ function fn(x: boolean) {
 >x : any
 >x : boolean
 
+    try { } catch ({ x }) { } // should be OK
+>x : any
+
+    try { } catch ({ x }: any) { x.foo; } // should be OK
+>x : any
+>x.foo : any
+>x : any
+>foo : any
+
+    try { } catch ({ x }: any1) { x.foo;} // should be OK
+>x : any
+>x.foo : any
+>x : any
+>foo : any
+
+    try { } catch ({ x }: unknown) { console.log(x); } // should be OK
+>x : any
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : any
+
+    try { } catch ({ x }: unknown1) { console.log(x); } // should be OK
+>x : any
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : any
+
+    try { } catch ({ x }: object) { } // error in the type
+>x : any
+
+    try { } catch ({ x }: Error) { } // error in the type
+>x : any
 }
 
