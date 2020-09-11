@@ -31520,16 +31520,16 @@ namespace ts {
             registerForUnusedIdentifiersCheck(node);
         }
 
-        function checkTemplateType(node: TemplateLiteralTypeNode) {
-            forEachChild(node, checkSourceElement);
-            getTypeFromTypeNode(node);
+        function checkTemplateLiteralType(node: TemplateLiteralTypeNode) {
             for (const span of node.templateSpans) {
+                checkSourceElement(span.type);
                 const type = getTypeFromTypeNode(span.type);
                 checkTypeAssignableTo(type, templateConstraintType, span.type);
                 if (!everyType(type, t => !!(t.flags & TypeFlags.Literal) || isGenericIndexType(t))) {
                     error(span.type, Diagnostics.Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
                 }
             }
+            getTypeFromTypeNode(node);
         }
 
         function checkImportType(node: ImportTypeNode) {
@@ -36146,7 +36146,7 @@ namespace ts {
                 case SyntaxKind.InferType:
                     return checkInferType(<InferTypeNode>node);
                 case SyntaxKind.TemplateLiteralType:
-                    return checkTemplateType(<TemplateLiteralTypeNode>node);
+                    return checkTemplateLiteralType(<TemplateLiteralTypeNode>node);
                 case SyntaxKind.ImportType:
                     return checkImportType(<ImportTypeNode>node);
                 case SyntaxKind.NamedTupleMember:
