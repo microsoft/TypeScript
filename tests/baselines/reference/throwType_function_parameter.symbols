@@ -1,0 +1,14 @@
+=== tests/cases/compiler/throwType_function_parameter.ts ===
+function checkParameterPosition<T extends number>(y: T extends 1234 ? throw 'No zero' : T) { }
+>checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 0, 32))
+>y : Symbol(y, Decl(throwType_function_parameter.ts, 0, 50))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 0, 32))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 0, 32))
+
+checkParameterPosition(1234)
+>checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
+
+checkParameterPosition(12345678)
+>checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
+
