@@ -42,10 +42,10 @@ function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_$
 
 // String transformations using recursive conditional types
 
-type Join<T extends (string | number | boolean | bigint)[], D extends string> =
+type Join<T extends unknown[], D extends string> =
     T extends [] ? '' :
-    T extends [unknown] ? `${T[0]}` :
-    T extends [unknown, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
+    T extends [string | number | boolean | bigint] ? `${T[0]}` :
+    T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
     string;
 
 type TJ1 = Join<[1, 2, 3, 4], '.'>
@@ -161,6 +161,10 @@ getPropValue(obj, s);  // unknown
 type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 type S2<S extends string> = S;
 
+// Check that infer T declarations are validated
+
+type TV1 = `${infer X}`;
+
 // Batched single character inferences for lower recursion depth
 
 type Chars<S extends string> =
@@ -255,7 +259,7 @@ declare function fa2<T, U extends T, A extends string, B extends A>(x: {
 }, y: {
     [Q in A as `p_${Q}`]: U;
 }): void;
-declare type Join<T extends (string | number | boolean | bigint)[], D extends string> = T extends [] ? '' : T extends [unknown] ? `${T[0]}` : T extends [unknown, ...infer U] ? `${T[0]}${D}${Join<U, D>}` : string;
+declare type Join<T extends unknown[], D extends string> = T extends [] ? '' : T extends [string | number | boolean | bigint] ? `${T[0]}` : T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` : string;
 declare type TJ1 = Join<[1, 2, 3, 4], '.'>;
 declare type TJ2 = Join<['foo', 'bar', 'baz'], '-'>;
 declare type TJ3 = Join<[], '.'>;
@@ -331,6 +335,7 @@ declare const obj: {
 };
 declare type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 declare type S2<S extends string> = S;
+declare type TV1 = `${infer X}`;
 declare type Chars<S extends string> = string extends S ? string[] : S extends `${infer C0}${infer C1}${infer C2}${infer C3}${infer C4}${infer C5}${infer C6}${infer C7}${infer C8}${infer C9}${infer R}` ? [C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, ...Chars<R>] : S extends `${infer C}${infer R}` ? [C, ...Chars<R>] : S extends '' ? [] : never;
 declare type L1 = Chars<'FooBarBazThisIsALongerString'>;
 declare type Foo<T> = T extends `*${infer S}*` ? S : never;

@@ -1,8 +1,6 @@
 // @module: amd
 // @traceResolution: true
 
-// paths should error in the absence of baseurl
-
 // @filename: c:/root/tsconfig.json
 {
     "compilerOptions": {

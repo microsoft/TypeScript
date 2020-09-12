@@ -179,6 +179,7 @@ a_1.X;
           "./*"
         ]
       },
+      "pathsBasePath": "/src",
       "listFiles": true,
       "configFilePath": "./tsconfig.b.json"
     },

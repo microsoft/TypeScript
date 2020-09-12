@@ -1184,7 +1184,14 @@
         "category": "Error",
         "code": 1389
     },
-
+    "Provides a root package name when using outFile with declarations.": {
+        "category": "Message",
+        "code": 1390
+    },
+    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
+        "category": "Error",
+        "code": 1391
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -3486,10 +3493,6 @@
         "category": "Error",
         "code": 5059
     },
-    "Option 'paths' cannot be used without specifying '--baseUrl' option.": {
-        "category": "Error",
-        "code": 5060
-    },
     "Pattern '{0}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5061
@@ -3601,6 +3604,14 @@
     "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
         "category": "Error",
         "code": 5088
+    },
+    "Option '{0}' cannot be specified when option 'jsx' is '{1}'.": {
+        "category": "Error",
+        "code": 5089
+    },
+    "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
+        "category": "Error",
+        "code": 5090
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4501,6 +4512,10 @@
         "category": "Message",
         "code": 6237
     },
+    "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
+        "category": "Error",
+        "code": 6238
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4704,6 +4719,11 @@
     "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
         "category": "Error",
         "code": 6504
+    },
+
+    "Include 'undefined' in index signature results": {
+        "category": "Message",
+        "code": 6800
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
