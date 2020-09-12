@@ -172,6 +172,15 @@ type Chars<S extends string> =
 
 type L1 = Chars<'FooBarBazThisIsALongerString'>;  // ['F', 'o', 'o', 'B', 'a', 'r', ...]
 
+// Infer never when source isn't a literal type that matches the pattern
+
+type Foo<T> = T extends `*${infer S}*` ? S : never;
+
+type TF1 = Foo<any>;      // never
+type TF2 = Foo<string>;   // never
+type TF3 = Foo<'abc'>;    // never
+type TF4 = Foo<'*abc*'>;  // 'abc'
+
 // Cross product unions limited to 100,000 constituents
 
 type A = any;
@@ -324,6 +333,11 @@ declare type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 declare type S2<S extends string> = S;
 declare type Chars<S extends string> = string extends S ? string[] : S extends `${infer C0}${infer C1}${infer C2}${infer C3}${infer C4}${infer C5}${infer C6}${infer C7}${infer C8}${infer C9}${infer R}` ? [C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, ...Chars<R>] : S extends `${infer C}${infer R}` ? [C, ...Chars<R>] : S extends '' ? [] : never;
 declare type L1 = Chars<'FooBarBazThisIsALongerString'>;
+declare type Foo<T> = T extends `*${infer S}*` ? S : never;
+declare type TF1 = Foo<any>;
+declare type TF2 = Foo<string>;
+declare type TF3 = Foo<'abc'>;
+declare type TF4 = Foo<'*abc*'>;
 declare type A = any;
 declare type U1 = {
     a1: A;
