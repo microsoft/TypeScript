@@ -1,0 +1,9 @@
+=== tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression.js ===
+function D () { }
+>D : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
+
+exports["D"] = D;
+>exports : Symbol("tests/cases/conformance/salsa/moduleExportAliasElementAccessExpression", Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
+>"D" : Symbol("D", Decl(moduleExportAliasElementAccessExpression.js, 0, 17))
+>D : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
+
