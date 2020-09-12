@@ -97,39 +97,7 @@ declare namespace Intl {
         unit?: RelativeTimeFormatUnit;
     }
 
-    class RelativeTimeFormat {
-        /**
-         * Constructor creates [Intl.RelativeTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat)
-         * objects
-         *
-         * @param locales - A string with a [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers), or an array of such strings.
-         *  For the general form and interpretation of the locales argument,
-         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
-         *
-         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters)
-         *  with some or all of options of the formatting.
-         *  An object with some or all of the following properties:
-         *  - `localeMatcher` - The locale matching algorithm to use.
-         *    Possible values are `"lookup"` and `"best fit"`; the default is `"best fit"`.
-         *    For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
-         *  - `numeric` - The format of output message.
-         *    Possible values are: `"always"` (default, e.g., `1 day ago`) or `"auto"` (e.g., `yesterday`).
-         *    The `"auto"` value allows to not always have to use numeric values in the output.
-         *  - `style` - The length of the internationalized message. Possible values are:
-         *    `"long"` (default, e.g., in 1 month),
-         *    `"short"` (e.g., in 1 mo.)
-         *    or `"narrow"` (e.g., in 1 mo.). The narrow style could be similar to the short style for some locales.
-         *
-         * @returns [Intl.RelativeTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat) object.
-         *
-         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat).
-         *
-         * [Specification](https://tc39.es/ecma402/#sec-intl-relativetimeformat-constructor).
-         */
-        constructor(
-            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
-            options?: RelativeTimeFormatOptions,
-        );
+    interface RelativeTimeFormat {
         /**
          * Formats a value and a unit according to the locale
          * and formatting options of the given
@@ -209,6 +177,52 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-intl.relativetimeformat.prototype.resolvedoptions)
          */
         resolvedOptions(): ResolvedRelativeTimeFormatOptions;
+    }
+
+    /**
+     * The [`Intl.RelativeTimeFormat`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat)
+     * object is a constructor for objects that enable language-sensitive relative time formatting.
+     *
+     * Part of [Intl object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+     * namespace and the [ECMAScript Internationalization API](https://www.ecma-international.org/publications/standards/Ecma-402.htm).
+     *
+     * [Compatibility](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat#Browser_compatibility).
+     *
+     * [Polyfills](https://github.com/tc39/proposal-intl-relative-time#polyfills).
+     */
+    const RelativeTimeFormat: {
+        /**
+         * Constructor creates [Intl.RelativeTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat)
+         * objects
+         *
+         * @param locales - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646), or an array of such strings.
+         *  For the general form and interpretation of the locales argument,
+         *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
+         *
+         * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat#Parameters)
+         *  with some or all of options of the formatting.
+         *  An object with some or all of the following properties:
+         *  - `localeMatcher` - The locale matching algorithm to use.
+         *    Possible values are `"lookup"` and `"best fit"`; the default is `"best fit"`.
+         *    For information about this option, see [Intl page](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation).
+         *  - `numeric` - The format of output message.
+         *    Possible values are: `"always"` (default, e.g., `1 day ago`) or `"auto"` (e.g., `yesterday`).
+         *    The `"auto"` value allows to not always have to use numeric values in the output.
+         *  - `style` - The length of the internationalized message. Possible values are:
+         *    `"long"` (default, e.g., in 1 month),
+         *    `"short"` (e.g., in 1 mo.)
+         *    or `"narrow"` (e.g., in 1 mo.). The narrow style could be similar to the short style for some locales.
+         *
+         * @returns [Intl.RelativeTimeFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RelativeTimeFormat) object.
+         *
+         * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat).
+         *
+         * [Specification](https://tc39.es/ecma402/#sec-intl-relativetimeformat-constructor).
+         */
+        new(
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
+            options?: RelativeTimeFormatOptions,
+        ): RelativeTimeFormat;
 
         /**
          * Returns an array containing those of the provided locales
@@ -241,11 +255,11 @@ declare namespace Intl {
          *
          * [Specification](https://tc39.es/ecma402/#sec-Intl.RelativeTimeFormat.supportedLocalesOf).
          */
-        static supportedLocalesOf(
-            locales: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
+        supportedLocalesOf(
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
         ): UnicodeBCP47LocaleIdentifier[];
-    }
+    };
 
     interface NumberFormatOptions {
         notation?: string;
