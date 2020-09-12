@@ -1,19 +1,24 @@
+tests/cases/compiler/throwType_function_return.ts(5,1): error TS2794: Type instantiated results in a throw type saying: 
+    Cannot divided by 0
 tests/cases/compiler/throwType_function_return.ts(10,1): error TS2794: Type instantiated results in a throw type saying: 
-    Cannot apply + operator on this type
+    Wrong
 
 
-==== tests/cases/compiler/throwType_function_return.ts (1 errors) ====
-    class X<T> {
-        constructor(public item: T) { }
-        add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
-            // @ts-ignore
-            return a + this.item
-        }
+==== tests/cases/compiler/throwType_function_return.ts (2 errors) ====
+    function checkedDivide<T extends number>(x: T): T extends 0 ? throw 'Cannot divided by 0' : number {
+        if (x === 0) throw new Error('')
+        return 5 / x
     }
-    new X(1).add(2).toExponential()
-    new X("").add("").toLowerCase()
-    new X({}).add({})
-    ~~~~~~~~~~~~~~~~~
+    checkedDivide(0)
+    ~~~~~~~~~~~~~~~~
 !!! error TS2794: Type instantiated results in a throw type saying: 
-!!! error TS2794:     Cannot apply + operator on this type
+!!! error TS2794:     Cannot divided by 0
+    checkedDivide(1)
+    
+    const theAnswerToEverything = <T>(x: T): T extends 42 ? T : throw "Wrong" => x
+    theAnswerToEverything(42 as const)
+    theAnswerToEverything('')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2794: Type instantiated results in a throw type saying: 
+!!! error TS2794:     Wrong
     

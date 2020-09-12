@@ -1,43 +1,36 @@
 === tests/cases/compiler/throwType_function_return.ts ===
-class X<T> {
->X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
->T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+function checkedDivide<T extends number>(x: T): T extends 0 ? throw 'Cannot divided by 0' : number {
+>checkedDivide : Symbol(checkedDivide, Decl(throwType_function_return.ts, 0, 0))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 23))
+>x : Symbol(x, Decl(throwType_function_return.ts, 0, 41))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 23))
+>T : Symbol(T, Decl(throwType_function_return.ts, 0, 23))
 
-    constructor(public item: T) { }
->item : Symbol(X.item, Decl(throwType_function_return.ts, 1, 16))
->T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
+    if (x === 0) throw new Error('')
+>x : Symbol(x, Decl(throwType_function_return.ts, 0, 41))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-    add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
->add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
->a : Symbol(a, Decl(throwType_function_return.ts, 2, 8))
->T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
->T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
->T : Symbol(T, Decl(throwType_function_return.ts, 0, 8))
-
-        // @ts-ignore
-        return a + this.item
->a : Symbol(a, Decl(throwType_function_return.ts, 2, 8))
->this.item : Symbol(X.item, Decl(throwType_function_return.ts, 1, 16))
->this : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
->item : Symbol(X.item, Decl(throwType_function_return.ts, 1, 16))
-    }
+    return 5 / x
+>x : Symbol(x, Decl(throwType_function_return.ts, 0, 41))
 }
-new X(1).add(2).toExponential()
->new X(1).add(2).toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
->new X(1).add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
->X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
->add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+checkedDivide(0)
+>checkedDivide : Symbol(checkedDivide, Decl(throwType_function_return.ts, 0, 0))
 
-new X("").add("").toLowerCase()
->new X("").add("").toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
->new X("").add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
->X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
->add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+checkedDivide(1)
+>checkedDivide : Symbol(checkedDivide, Decl(throwType_function_return.ts, 0, 0))
 
-new X({}).add({})
->new X({}).add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
->X : Symbol(X, Decl(throwType_function_return.ts, 0, 0))
->add : Symbol(X.add, Decl(throwType_function_return.ts, 1, 35))
+const theAnswerToEverything = <T>(x: T): T extends 42 ? T : throw "Wrong" => x
+>theAnswerToEverything : Symbol(theAnswerToEverything, Decl(throwType_function_return.ts, 7, 5))
+>T : Symbol(T, Decl(throwType_function_return.ts, 7, 31))
+>x : Symbol(x, Decl(throwType_function_return.ts, 7, 34))
+>T : Symbol(T, Decl(throwType_function_return.ts, 7, 31))
+>T : Symbol(T, Decl(throwType_function_return.ts, 7, 31))
+>T : Symbol(T, Decl(throwType_function_return.ts, 7, 31))
+>x : Symbol(x, Decl(throwType_function_return.ts, 7, 34))
+
+theAnswerToEverything(42 as const)
+>theAnswerToEverything : Symbol(theAnswerToEverything, Decl(throwType_function_return.ts, 7, 5))
+
+theAnswerToEverything('')
+>theAnswerToEverything : Symbol(theAnswerToEverything, Decl(throwType_function_return.ts, 7, 5))
 

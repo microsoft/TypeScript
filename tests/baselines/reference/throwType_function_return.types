@@ -1,53 +1,45 @@
 === tests/cases/compiler/throwType_function_return.ts ===
-class X<T> {
->X : X<T>
+function checkedDivide<T extends number>(x: T): T extends 0 ? throw 'Cannot divided by 0' : number {
+>checkedDivide : <T extends number>(x: T) => T extends 0 ? throw 'Cannot divided by 0' : number
+>x : T
 
-    constructor(public item: T) { }
->item : T
+    if (x === 0) throw new Error('')
+>x === 0 : boolean
+>x : T
+>0 : 0
+>new Error('') : Error
+>Error : ErrorConstructor
+>'' : ""
 
-    add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
->add : (a: T) => T extends number | string | bigint ? T : throw `Cannot apply + operator on this type`
->a : T
-
-        // @ts-ignore
-        return a + this.item
->a + this.item : any
->a : T
->this.item : T
->this : this
->item : T
-    }
+    return 5 / x
+>5 / x : number
+>5 : 5
+>x : T
 }
-new X(1).add(2).toExponential()
->new X(1).add(2).toExponential() : string
->new X(1).add(2).toExponential : (fractionDigits?: number) => string
->new X(1).add(2) : number
->new X(1).add : (a: number) => number
->new X(1) : X<number>
->X : typeof X
+checkedDivide(0)
+>checkedDivide(0) : never
+>checkedDivide : <T extends number>(x: T) => T extends 0 ? never : number
+>0 : 0
+
+checkedDivide(1)
+>checkedDivide(1) : number
+>checkedDivide : <T extends number>(x: T) => T extends 0 ? never : number
 >1 : 1
->add : (a: number) => number
->2 : 2
->toExponential : (fractionDigits?: number) => string
 
-new X("").add("").toLowerCase()
->new X("").add("").toLowerCase() : string
->new X("").add("").toLowerCase : () => string
->new X("").add("") : string
->new X("").add : (a: string) => string
->new X("") : X<string>
->X : typeof X
->"" : ""
->add : (a: string) => string
->"" : ""
->toLowerCase : () => string
+const theAnswerToEverything = <T>(x: T): T extends 42 ? T : throw "Wrong" => x
+>theAnswerToEverything : <T>(x: T) => T extends 42 ? T : never
+><T>(x: T): T extends 42 ? T : throw "Wrong" => x : <T>(x: T) => T extends 42 ? T : never
+>x : T
+>x : T
 
-new X({}).add({})
->new X({}).add({}) : never
->new X({}).add : (a: {}) => never
->new X({}) : X<{}>
->X : typeof X
->{} : {}
->add : (a: {}) => never
->{} : {}
+theAnswerToEverything(42 as const)
+>theAnswerToEverything(42 as const) : 42
+>theAnswerToEverything : <T>(x: T) => T extends 42 ? T : never
+>42 as const : 42
+>42 : 42
+
+theAnswerToEverything('')
+>theAnswerToEverything('') : never
+>theAnswerToEverything : <T>(x: T) => T extends 42 ? T : never
+>'' : ""
 

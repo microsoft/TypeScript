@@ -1,10 +1,10 @@
-class X<T> {
-    constructor(public item: T) { }
-    add(a: T): T extends number | string | bigint ? T : throw `Cannot apply + operator on this type` {
-        // @ts-ignore
-        return a + this.item
-    }
+function checkedDivide<T extends number>(x: T): T extends 0 ? throw 'Cannot divided by 0' : number {
+    if (x === 0) throw new Error('')
+    return 5 / x
 }
-new X(1).add(2).toExponential()
-new X("").add("").toLowerCase()
-new X({}).add({})
+checkedDivide(0)
+checkedDivide(1)
+
+const theAnswerToEverything = <T>(x: T): T extends 42 ? T : throw "Wrong" => x
+theAnswerToEverything(42 as const)
+theAnswerToEverything('')

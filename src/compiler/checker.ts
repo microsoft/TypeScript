@@ -15191,7 +15191,6 @@ namespace ts {
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
             if (!(type && mapper && couldContainTypeVariables(type))) {
-                if (type && (type.flags & TypeFlags.ThrowType) && currentNode) errorByThrowType(currentNode, type);
                 return type;
             }
             if (instantiationDepth === 50 || instantiationCount >= 5000000) {
@@ -34398,9 +34397,22 @@ namespace ts {
         function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
-            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) ?? errorType :
+            const type = isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) ?? errorType :
                 isAsync ? getAwaitedType(returnType) ?? errorType :
                 returnType;
+            return dropThrowTypeInConditionalType(type);
+        }
+        function dropThrowTypeInConditionalType(type: Type): Type {
+            if (!(type.flags & TypeFlags.Conditional)) return type;
+            const cond = <ConditionalType>type;
+            // don't instatiate the type
+            const left = dropThrowTypeInConditionalType(getTypeFromTypeNode(cond.root.node.trueType));
+            const right = dropThrowTypeInConditionalType(getTypeFromTypeNode(cond.root.node.falseType));
+            if ((left.flags & TypeFlags.ThrowType) ^ (right.flags & TypeFlags.ThrowType)) {
+                if (left.flags & TypeFlags.ThrowType) return right;
+                else return left;
+            }
+            return cond;
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
