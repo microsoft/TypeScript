@@ -34407,16 +34407,17 @@ namespace ts {
             return dropThrowTypeInConditionalType(type);
         }
         function dropThrowTypeInConditionalType(type: Type): Type {
-            if (!(type.flags & TypeFlags.Conditional)) return type;
-            const cond = <ConditionalType>type;
-            // don't instatiate the type
-            const left = dropThrowTypeInConditionalType(getTypeFromTypeNode(cond.root.node.trueType));
-            const right = dropThrowTypeInConditionalType(getTypeFromTypeNode(cond.root.node.falseType));
-            if (isThrowType(left) !== isThrowType(right)) {
-                if (isThrowType(left)) return right;
-                else return left;
+            let result = type;
+            while (true) {
+                if (!(result.flags & TypeFlags.Conditional)) return result;
+                const left = getTrueTypeFromConditionalType(<ConditionalType>result);
+                const right = getFalseTypeFromConditionalType(<ConditionalType>result);
+                if (isThrowType(left) !== isThrowType(right)) {
+                    if (isThrowType(left)) result = right;
+                    else result = left;
+                }
+                else return type;
             }
-            return cond;
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
