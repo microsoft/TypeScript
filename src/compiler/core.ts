@@ -2252,38 +2252,24 @@ namespace ts {
 
 
     /**
-     * Returns 's' left-padded with copies of 'padString' until it reaches the given 'length'.
-     * If omitted, 'padString' defaults to a single space.
-     * If 'length' is less than or equal to 's.length' or 'padString' is empty, returns 's' unchanged.
+     * Returns string left-padded with spaces or zeros until it reaches the given length.
+     *
+     * @param s String to pad.
+     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString Character to use as padding (default " ").
      */
-    export function padLeft(s: string, length: number, padString = " ") {
-        if (length <= s.length || padString.length === 0) {
-            return s;
-        }
-        else {
-            length -= s.length;                 // how much padding we need
-            if (length > padString.length) {    // need more than one copy of padString
-                padString += padString.repeat(length / padString.length);
-            }
-            return padString.slice(0, length) + s;
-        }
+    export function padLeft(s: string, length: number, padString: " " | "0" = " ") {
+        return length <= s.length ? s : padString.repeat(length - s.length) + s;
     }
 
     /**
-     * Returns 's' right-padded with copies of 'padString' until it reaches the given 'length'.
-     * If omitted, 'padString' defaults to a single space.
-     * If 'length' is less than or equal to 's.length' or 'padString' is empty, returns 's' unchanged.
+     * Returns string right-padded with spaces until it reaches the given length.
+     *
+     * @param s String to pad.
+     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString Character to use as padding (default " ").
      */
-    export function padRight(s: string, length: number, padString = " ") {
-        if (length <= s.length || padString.length === 0) {
-            return s;
-        }
-        else {
-            length -= s.length;
-            if (length > padString.length) {    // need more than one copy of padString
-                padString += padString.repeat(length / padString.length);
-            }
-            return s + padString.slice(0, length);
-        }
+    export function padRight(s: string, length: number, padString: " " = " ") {
+        return length <= s.length ? s : s + padString.repeat(length - s.length);
     }
 }
