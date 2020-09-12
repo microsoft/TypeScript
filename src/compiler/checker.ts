@@ -1059,8 +1059,11 @@ namespace ts {
             return diagnostic;
         }
 
+        function checkThrowType(location: Node, type: Type) {
+            if (isThrowType(type)) errorByThrowType(location, type.value);
+        }
         function errorByThrowType(location: Node, type: Type) {
-            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            if (isThrowType(type)) type = type.value;
 
             let message = "";
             const diagnostic = getDiagnosticFromThrowType(type);
@@ -1073,9 +1076,12 @@ namespace ts {
             const category = getCategoryFromThrowType(type);
             appendDiagnosticWithCategory(category, location, Diagnostics.Type_instantiated_results_in_a_throw_type_saying_Colon_0, "\n    " + message);
         }
+        function isThrowType(type: Type): type is ThrowType {
+            return !!(type.flags & TypeFlags.ThrowType);
+        }
 
         function getMessageFromThrowType(type: Type): string {
-            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            if (isThrowType(type)) type = type.value;
             if (type.flags & TypeFlags.StringLiteral) return (<StringLiteralType>type).value;
             const message = getTypeOfPropertyOfType(type, <__String>"message");
             if (message) {
@@ -1088,7 +1094,7 @@ namespace ts {
         //     return getTypeOfPropertyOfType(type, <__String>"type") || errorType;
         // }
         function getDiagnosticFromThrowType(type: Type): readonly [DiagnosticMessage, ...Type[]] | undefined {
-            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            if (isThrowType(type)) type = type.value;
             const diag = getTypeOfPropertyOfType(type, <__String>"diagnostic");
             if (!diag) return undefined;
             const message = <StringLiteralType>getTupleElementType(diag, 0);
@@ -1104,7 +1110,7 @@ namespace ts {
             ] as const;
         }
         function getCategoryFromThrowType(type: Type): DiagnosticCategory {
-            if (type.flags & TypeFlags.ThrowType) type = (<ThrowType>type).value;
+            if (isThrowType(type)) type = type.value;
             const category = <StringLiteralType>getTypeOfPropertyOfType(type, <__String>"category");
             if (!category || !(category.flags & TypeFlags.StringLiteral)) return DiagnosticCategory.Error;
             switch (category.value.toLowerCase()) {
@@ -15258,8 +15264,8 @@ namespace ts {
                     return sub;
                 }
             }
-            if (flags & TypeFlags.ThrowType) {
-                const errorMessage = instantiateType((<ThrowType>type).value, mapper);
+            if (isThrowType(type)) {
+                const errorMessage = instantiateType(type.value, mapper);
                 return createThrowType(errorMessage);
             }
             return type;
@@ -19472,9 +19478,7 @@ namespace ts {
         // results for union and intersection types for performance reasons.
         function couldContainTypeVariables(type: Type): boolean {
             const objectFlags = getObjectFlags(type);
-            if (type.flags & TypeFlags.ThrowType) {
-                return couldContainTypeVariables((<ThrowType>type).value);
-            }
+            if (isThrowType(type)) return couldContainTypeVariables(type.value);
             if (objectFlags & ObjectFlags.CouldContainTypeVariablesComputed) {
                 return !!(objectFlags & ObjectFlags.CouldContainTypeVariables);
             }
@@ -22562,7 +22566,7 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
-            if (type.flags & TypeFlags.ThrowType) errorByThrowType(node, type);
+            checkThrowType(node, type);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -25538,6 +25542,7 @@ namespace ts {
                     return errorType;
                 }
                 propType = isThisPropertyAccessInConstructor(node, prop) ? autoType : getConstraintForLocation(getTypeOfSymbol(prop), node);
+                checkThrowType(node, propType);
             }
             return getFlowTypeOfAccessExpression(node, prop, propType, right);
         }
@@ -26571,6 +26576,7 @@ namespace ts {
                     const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
                     if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
                         Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
+                        checkThrowType(arg, paramType);
                         maybeAddMissingAwaitInfo(arg, checkArgType, paramType);
                         return errorOutputContainer.errors || emptyArray;
                     }
@@ -27956,9 +27962,7 @@ namespace ts {
             }
 
             const returnType = getReturnTypeOfSignature(signature);
-            if (returnType.flags & TypeFlags.ThrowType) {
-                errorByThrowType(node, returnType);
-            }
+            checkThrowType(node, returnType);
             // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
@@ -31421,7 +31425,7 @@ namespace ts {
             }
             forEach(node.typeArguments, checkSourceElement);
             const type = getTypeFromTypeReference(node);
-            if (type.flags & TypeFlags.ThrowType) errorByThrowType(node, type);
+            checkThrowType(node, type);
             if (type !== errorType) {
                 if (node.typeArguments && produceDiagnostics) {
                     const typeParameters = getTypeParametersForTypeReference(node);
@@ -34408,8 +34412,8 @@ namespace ts {
             // don't instatiate the type
             const left = dropThrowTypeInConditionalType(getTypeFromTypeNode(cond.root.node.trueType));
             const right = dropThrowTypeInConditionalType(getTypeFromTypeNode(cond.root.node.falseType));
-            if ((left.flags & TypeFlags.ThrowType) ^ (right.flags & TypeFlags.ThrowType)) {
-                if (left.flags & TypeFlags.ThrowType) return right;
+            if (isThrowType(left) !== isThrowType(right)) {
+                if (isThrowType(left)) return right;
                 else return left;
             }
             return cond;

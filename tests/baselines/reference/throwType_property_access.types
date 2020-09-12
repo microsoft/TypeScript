@@ -1,0 +1,15 @@
+=== tests/cases/compiler/throwType_property_access.ts ===
+class X<T> {
+>X : X<T>
+
+    i: T extends number ? throw '' : string = {} as any
+>i : T extends number ? never : string
+>{} as any : any
+>{} : {}
+}
+new X<0>().i
+>new X<0>().i : never
+>new X<0>() : X<0>
+>X : typeof X
+>i : never
+
