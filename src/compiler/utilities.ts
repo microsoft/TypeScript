@@ -974,6 +974,13 @@ namespace ts {
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
         let errorNode: Node | undefined = node;
+
+        if (errorNode === undefined) {
+            // If we don't have a better node, then just set the error on the first token of
+            // construct.
+            return getSpanOfTokenAtPosition(sourceFile, 0);
+        }
+
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 const pos = skipTrivia(sourceFile.text, 0, /*stopAfterLineBreak*/ false);
@@ -1012,8 +1019,8 @@ namespace ts {
         }
 
         if (errorNode === undefined) {
-            // If we don't have a better node, then just set the error on the first token of
-            // construct.
+            // this check has to happen twice because the node may have come in undefined, or we may have set it
+            // earlier on line 1010
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
