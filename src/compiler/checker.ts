@@ -13666,9 +13666,9 @@ namespace ts {
                             return undefinedType;
                         }
                         else if (indexType.flags & (TypeFlags.Number | TypeFlags.String)) {
-                            const types = ts.map((<ResolvedType>objectType).properties, property => {
+                            const types = map((<ResolvedType>objectType).properties, property => {
                                 return getTypeOfSymbol(property);
-                            })
+                            });
                             return getUnionType(append(types, undefinedType));
                         }
                     }
