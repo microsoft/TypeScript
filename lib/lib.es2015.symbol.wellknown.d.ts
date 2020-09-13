@@ -83,6 +83,11 @@ interface SymbolConstructor {
 }
 
 interface Symbol {
+    /**
+     * Converts a Symbol object to a symbol.
+     */
+    [Symbol.toPrimitive](hint: string): symbol;
+
     readonly [Symbol.toStringTag]: string;
 }
 

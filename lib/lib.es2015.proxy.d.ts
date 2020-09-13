@@ -29,7 +29,6 @@ interface ProxyHandler<T extends object> {
     set? (target: T, p: PropertyKey, value: any, receiver: any): boolean;
     deleteProperty? (target: T, p: PropertyKey): boolean;
     defineProperty? (target: T, p: PropertyKey, attributes: PropertyDescriptor): boolean;
-    enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
     construct? (target: T, argArray: any, newTarget?: any): object;

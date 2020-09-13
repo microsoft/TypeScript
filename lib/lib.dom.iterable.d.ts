@@ -129,6 +129,13 @@ interface Headers {
     values(): IterableIterator<string>;
 }
 
+interface IDBDatabase {
+    /**
+     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
+     */
+    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
+}
+
 interface IDBObjectStore {
     /**
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.

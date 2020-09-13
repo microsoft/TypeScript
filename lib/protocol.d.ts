@@ -65,6 +65,10 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        ToggleLineComment = "toggleLineComment",
+        ToggleMultilineComment = "toggleMultilineComment",
+        CommentSelection = "commentSelection",
+        UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
@@ -156,6 +160,10 @@ declare namespace ts.server.protocol {
          * Time spent updating the program graph, in milliseconds.
          */
         updateGraphDurationMs?: number;
+        /**
+         * The time spent creating or updating the auto-import program, in milliseconds.
+         */
+        createAutoImportProviderProgramDurationMs?: number;
     }
     /**
      * Arguments for FileRequest messages.
@@ -1093,6 +1101,22 @@ declare namespace ts.server.protocol {
         textSpan: TextSpan;
         parent?: SelectionRange;
     }
+    interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface CommentSelectionRequest extends FileRequest {
+        command: CommandTypes.CommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+    interface UncommentSelectionRequest extends FileRequest {
+        command: CommandTypes.UncommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
     /**
      *  Information found in an "open" request.
      */
@@ -1597,6 +1621,11 @@ declare namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+        /**
+         * If true, this completion was for an auto-import of a module not yet in the program, but listed
+         * in the project package.json.
+         */
+        isPackageJsonImport?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -1646,6 +1675,12 @@ declare namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        readonly optionalReplacementSpan?: TextSpan;
         readonly entries: readonly CompletionEntry[];
     }
     interface CompletionDetailsResponse extends Response {
@@ -2445,6 +2480,7 @@ declare namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
     }
     interface CompilerOptions {
         allowJs?: boolean;
