@@ -13661,7 +13661,8 @@ namespace ts {
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (isObjectLiteralType(objectType)) {
-                        if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                        if (noImplicitAny && indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                            diagnostics.add(createDiagnosticForNode(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, (indexType as StringLiteralType).value, typeToString(objectType)));
                             return undefinedType;
                         }
                         else if (indexType.flags & (TypeFlags.Number | TypeFlags.String)) {
