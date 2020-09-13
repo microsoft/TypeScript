@@ -20056,14 +20056,12 @@ namespace ts {
             }
 
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
-                if (source.flags & (TypeFlags.StringLike | TypeFlags.Index)) {
-                    const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateLiteralType(<StringLiteralType>source, target) :
-                        source.flags & TypeFlags.TemplateLiteral && arraysEqual((<TemplateLiteralType>source).texts, target.texts) && arraysEqual((<TemplateLiteralType>source).casings, target.casings)? (<TemplateLiteralType>source).types :
-                        undefined;
-                    const types = target.types;
-                    for (let i = 0; i < types.length; i++) {
-                        inferFromTypes(matches ? matches[i] : source.flags & TypeFlags.StringLiteral ? neverType : stringType, types[i]);
-                    }
+                const matches = source.flags & TypeFlags.StringLiteral ? inferLiteralsFromTemplateLiteralType(<StringLiteralType>source, target) :
+                    source.flags & TypeFlags.TemplateLiteral && arraysEqual((<TemplateLiteralType>source).texts, target.texts) && arraysEqual((<TemplateLiteralType>source).casings, target.casings)? (<TemplateLiteralType>source).types :
+                    undefined;
+                const types = target.types;
+                for (let i = 0; i < types.length; i++) {
+                    inferFromTypes(matches ? matches[i] : neverType, types[i]);
                 }
             }
 

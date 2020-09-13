@@ -178,6 +178,15 @@ type Chars<S extends string> =
 
 type L1 = Chars<'FooBarBazThisIsALongerString'>;  // ['F', 'o', 'o', 'B', 'a', 'r', ...]
 
+// Infer never when source isn't a literal type that matches the pattern
+
+type Foo<T> = T extends `*${infer S}*` ? S : never;
+
+type TF1 = Foo<any>;      // never
+type TF2 = Foo<string>;   // never
+type TF3 = Foo<'abc'>;    // never
+type TF4 = Foo<'*abc*'>;  // 'abc'
+
 // Cross product unions limited to 100,000 constituents
 
 type A = any;
