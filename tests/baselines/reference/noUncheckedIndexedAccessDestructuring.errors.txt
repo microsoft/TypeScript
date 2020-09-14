@@ -1,8 +1,12 @@
 tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(12,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(16,9): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(50,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(59,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts (2 errors) ====
+==== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts (4 errors) ====
     declare const strArray: string[];
     declare const strStrTuple: [string, string];
     
@@ -57,6 +61,9 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(16,9):
     
     // Assignment forms
     [target_string] = strArray; // Should error
+     ~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
     [target_string_undef] = strArray;  // Should OK
     [,,, ...target_string_arr] = strArray; // Should OK
     
@@ -66,5 +73,8 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(16,9):
     
         let q: number;
         ({ q } = numMapPoint); // Should error
+           ~
+!!! error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'number'.
     }
     

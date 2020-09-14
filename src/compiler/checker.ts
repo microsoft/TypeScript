@@ -13643,7 +13643,7 @@ namespace ts {
                         return undefined;
                     }
                     const shouldIncludeUndefined =
-                        compilerOptions.noUncheckedIndexSignatures &&
+                        compilerOptions.noUncheckedIndexedAccess &&
                         (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
