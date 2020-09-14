@@ -4834,8 +4834,10 @@ namespace ts {
         Null            = 1 << 16,
         Never           = 1 << 17,  // Never type
         TypeParameter   = 1 << 18,  // Type parameter
-        TypeConstructor = 1<< 27,   // Type Constructor, this is an additional flag of TypeParameter.
-        TypeConstructorWrapper = 1<< 28,   // Type Constructor, this is an additional flag of TypeParameter.
+        // @internal
+        TypeConstructorDeclaration = 1<< 27,   // Type Constructor Declaration, this is an additional flag of TypeParameter. This should include the constraint and parameter constrait.
+        // @internal
+        TypeConstructorInstance = 1<< 28,   // Type Constructor, this is an additional flag of TypeParameter. This should include the concentrate arguments(not mapped yet).
         Object          = 1 << 19,  // Object type
         Union           = 1 << 20,  // Union (T | U)
         Intersection    = 1 << 21,  // Intersection (T & U)
@@ -5273,14 +5275,20 @@ namespace ts {
         isThisType?: boolean;
         /* @internal */
         resolvedDefaultType?: Type;
+    }
 
-        // would it be used? or we just need the number of parameters?
+    // Type parameters (TypeFlags.TypeParameter | TypeFlags.TypeConstructorDeclaration)
+    export interface TypeConstructorDeclaration extends TypeParameter{
         /* @internal */
-        tParams?: number; // Or it should be TypeParameter[]? In parser I parse the node use a BNF in scala paper.
+        tParams?: number; // Not allowed constraint for now, this might be a very complex feature.
+    }
+
+    // Type parameters (TypeFlags.TypeParameter | TypeFlags.TypeConstructorInstance)
+    export interface TypeConstructorInstance extends TypeParameter{
         /* @internal */
         resolvedTypeConstructorParam?: Type[];
         /* @internal */
-        origionalTypeParameter?: TypeParameter;
+        origionalTypeConstructorDeclaration?: TypeConstructorDeclaration;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

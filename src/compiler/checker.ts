@@ -9391,10 +9391,10 @@ namespace ts {
                 const declration = symbol.declarations[index];
                 // this means it is typeConstructor.
                 if (isTypeParameterDeclaration(declration) && declration.tParamDeclarations && declration.tParamDeclarations.length > 0) {
-                    tmp.flags |= TypeFlags.TypeConstructor;
+                    tmp.flags |= TypeFlags.TypeConstructorDeclaration;
                     // This line is important, which combines Node and Type.
-                    // for now Node.paras is not used but its length.
-                    tmp.tParams = declration.tParamDeclarations.length;
+                    // for now Node.paras is not used but its length. So constrait is not used for now.
+                    (<TypeConstructorDeclaration>tmp).tParams = declration.tParamDeclarations.length;
                 }
                 links.declaredType = tmp;
             }
@@ -12048,7 +12048,7 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 const isJs = isInJSFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
-                if (isTypeReferenceNode(node) && node.isTypeArguments) { }
+                if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) { }
                 else {
                     if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                         const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
@@ -12144,7 +12144,7 @@ namespace ts {
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
-            Debug.assert(isTypeReferenceNode(node));
+            // Debug.assert(isTypeReferenceNode(node));
             if (symbol === unknownSymbol) {
                 return errorType;
             }
@@ -12164,16 +12164,16 @@ namespace ts {
                                                       ^     this should not report as error.
                     }
                 */
-                if (isTypeConstructorTypeParameter(res)) {
+                if (isTypeParameterTypeConstructorDeclaration(res)) {
                     if(node.typeArguments?.length !== res.tParams){
                         //check whether type arguments match type parameters.
                     }
                     // res.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
                     // return res;
                     const tmp = createTypeParameter(symbol);
-                    tmp.flags |= TypeFlags.TypeConstructorWrapper;
-                    tmp.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
-                    tmp.origionalTypeParameter = res;
+                    tmp.flags |= TypeFlags.TypeConstructorInstance;
+                    (<TypeConstructorInstance>tmp).resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
+                    (<TypeConstructorInstance>tmp).origionalTypeConstructorDeclaration = res;
                     return tmp;
                 }
                 if (checkNoTypeArguments(node, symbol)) {
@@ -12357,11 +12357,6 @@ namespace ts {
         }
 
         function typeArgumentsFromTypeReferenceNode(node: NodeWithTypeArguments): Type[] | undefined {
-            forEach(node.typeArguments, (t) => {
-                if (isTypeReferenceNode(t)) {
-                    t.isTypeArguments = true;
-                }
-            });
             return map(node.typeArguments, getTypeFromTypeNode);
         }
 
@@ -13663,8 +13658,12 @@ namespace ts {
             return !!(type.flags & TypeFlags.TypeParameter && (<TypeParameter>type).isThisType);
         }
 
-        function isTypeConstructorTypeParameter(type: Type): type is TypeParameter {
-            return !!(type.flags & TypeFlags.TypeParameter && !!(<TypeParameter>type).tParams);
+        function isTypeParameterTypeConstructorDeclaration(type: Type): type is TypeConstructorDeclaration {
+            return !!(type.flags & TypeFlags.TypeParameter && type.flags & TypeFlags.TypeConstructorDeclaration);
+        }
+
+        function isTypeParameterTypeConstructorInstance(type: Type): type is TypeConstructorInstance {
+            return !!(type.flags & TypeFlags.TypeParameter && type.flags & TypeFlags.TypeConstructorInstance);
         }
 
         function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -15012,9 +15011,9 @@ namespace ts {
         // this function is mainly for the change in function `getObjectTypeInstantiation`, another choice is written in the comment of that changed line.
         function instantiateTypeOfTypeParameter(type: TypeParameter, mapper: TypeMapper): Type {
             const flags = type.flags;
-            if (flags & TypeFlags.TypeConstructorWrapper) {
+            if (isTypeParameterTypeConstructorInstance(type)) {
                 debugger;
-                const origionalTypeConstructorParameter = type.origionalTypeParameter!;
+                const origionalTypeConstructorParameter = type.origionalTypeConstructorDeclaration!;
                 const resolvedTypeConstructorParam = type.resolvedTypeConstructorParam;
                 const concentrateGenericType = getMappedType(origionalTypeConstructorParameter, mapper);
                 if (concentrateGenericType === origionalTypeConstructorParameter) {
@@ -15024,8 +15023,9 @@ namespace ts {
                 const newTypeArguments = instantiateTypes(resolvedTypeConstructorParam, mapper);
                 return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
             }
-            else if (flags & TypeFlags.TypeConstructor) {
+            else if (flags & TypeFlags.TypeConstructorDeclaration) {
                 // this is a demo implement, and not well considered.
+                // ATTENTION: this might cause error.(just guess, in which condition the declaration would be mapped?)
                 return getMappedType(type, mapper);
             }
             else {
@@ -30313,12 +30313,12 @@ namespace ts {
                 return quickType;
             }
             // If a type has been cached for the node, return it.
-            // if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
-            //     const cachedType = flowTypeCache[getNodeId(node)];
-            //     if (cachedType) {
-            //         return cachedType;
-            //     }
-            // }
+            if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
+                const cachedType = flowTypeCache[getNodeId(node)];
+                if (cachedType) {
+                    return cachedType;
+                }
+            }
             const startInvocationCount = flowInvocationCount;
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.

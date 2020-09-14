@@ -2452,7 +2452,15 @@ namespace ts {
                     break;
                 }
             }
-
+            const res = createNodeArray(list, listPos, /*end*/ undefined, commaStart >= 0);
+            // Or we could add a nodeFlag, or we could add this code in each *parseTypeArguments* functions.
+            if (parsingContext | (1 << ParsingContext.TypeArguments)){
+                forEach(res, (t) => {
+                    if (isTypeReferenceNode(t)) {
+                        t.isTypeArguments = true;
+                    }
+                });
+            }
             parsingContext = saveParsingContext;
             // Recording the trailing comma is deliberately done after the previous
             // loop, and not just if we see a list terminator. This is because the list
@@ -2460,7 +2468,7 @@ namespace ts {
             // was a trailing comma.
             // Check if the last token was a comma.
             // Always preserve a trailing comma by marking it on the NodeArray
-            return createNodeArray(list, listPos, /*end*/ undefined, commaStart >= 0);
+            return res;
         }
 
         function getExpectedCommaDiagnostic(kind: ParsingContext) {
