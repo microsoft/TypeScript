@@ -2788,7 +2788,10 @@ declare namespace ts {
         DynamicPriority = 2
     }
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
-    export interface CompilerOptions {
+    export interface CompilerOptions extends DeclaredCompilerOptions {
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+    }
+    export interface DeclaredCompilerOptions {
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
@@ -2879,7 +2882,6 @@ declare namespace ts {
         typeRoots?: string[];
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
-        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     export interface WatchOptions {
         watchFile?: WatchFileKind;

@@ -5712,7 +5712,11 @@ namespace ts {
 
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
-    export interface CompilerOptions {
+    export interface CompilerOptions extends DeclaredCompilerOptions {
+        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
+    }
+
+    export interface DeclaredCompilerOptions {
         /*@internal*/ all?: boolean;
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
@@ -5830,8 +5834,6 @@ namespace ts {
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
-
-        [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
 
     export interface WatchOptions {

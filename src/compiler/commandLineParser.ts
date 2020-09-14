@@ -243,67 +243,7 @@ namespace ts {
         },
     ];
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
-        // CommandLine only options
-        ...commonOptionsWithBuild,
-        {
-            name: "all",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Show_all_compiler_options,
-        },
-        {
-            name: "version",
-            shortName: "v",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Print_the_compiler_s_version,
-        },
-        {
-            name: "init",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
-        },
-        {
-            name: "project",
-            shortName: "p",
-            type: "string",
-            isFilePath: true,
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            paramType: Diagnostics.FILE_OR_DIRECTORY,
-            description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
-        },
-        {
-            name: "build",
-            type: "boolean",
-            shortName: "b",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date
-        },
-        {
-            name: "showConfig",
-            type: "boolean",
-            category: Diagnostics.Command_line_Options,
-            isCommandLineOnly: true,
-            description: Diagnostics.Print_the_final_configuration_instead_of_building
-        },
-        {
-            name: "listFilesOnly",
-            type: "boolean",
-            category: Diagnostics.Command_line_Options,
-            affectsSemanticDiagnostics: true,
-            affectsEmit: true,
-            isCommandLineOnly: true,
-            description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing
-        },
-
+    const declaredCompilerOptions: (CommandLineOption & { name:  keyof DeclaredCompilerOptions })[] = [
         // Basic
         {
             name: "target",
@@ -1038,7 +978,70 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
+        }
+    ];
+
+    /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        // CommandLine only options
+        ...commonOptionsWithBuild,
+        {
+            name: "all",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Show_all_compiler_options,
         },
+        {
+            name: "version",
+            shortName: "v",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Print_the_compiler_s_version,
+        },
+        {
+            name: "init",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Initializes_a_TypeScript_project_and_creates_a_tsconfig_json_file,
+        },
+        {
+            name: "project",
+            shortName: "p",
+            type: "string",
+            isFilePath: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            paramType: Diagnostics.FILE_OR_DIRECTORY,
+            description: Diagnostics.Compile_the_project_given_the_path_to_its_configuration_file_or_to_a_folder_with_a_tsconfig_json,
+        },
+        {
+            name: "build",
+            type: "boolean",
+            shortName: "b",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date
+        },
+        {
+            name: "showConfig",
+            type: "boolean",
+            category: Diagnostics.Command_line_Options,
+            isCommandLineOnly: true,
+            description: Diagnostics.Print_the_final_configuration_instead_of_building
+        },
+        {
+            name: "listFilesOnly",
+            type: "boolean",
+            category: Diagnostics.Command_line_Options,
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
+            isCommandLineOnly: true,
+            description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing
+        },
+        ...declaredCompilerOptions,
         {
             // A list of plugins to load in the language service
             name: "plugins",
