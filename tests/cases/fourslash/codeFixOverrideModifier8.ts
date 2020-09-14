@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @pedanticOverride: true
+// @noImplicitOverride: true
 //// function ff () {
 ////     return class {
 ////         [|override foo () {}|]

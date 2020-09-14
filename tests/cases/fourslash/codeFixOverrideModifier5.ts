@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @pedanticOverride: true
+// @noImplicitOverride: true
 //// class C {
 ////     [|override foo(v: string) {}|]
 //// }

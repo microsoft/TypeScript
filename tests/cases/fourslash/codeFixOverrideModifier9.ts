@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// @pedanticOverride: true
+// @noImplicitOverride: true
 
 //// class B {
 ////     a: string
