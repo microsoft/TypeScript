@@ -3552,6 +3552,9 @@
       <Item ItemId=";Convert_all_type_literals_to_mapped_type_95021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert all type literals to mapped type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést všechny literály typů na namapovaný typ]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
