@@ -350,16 +350,18 @@ declare namespace FourSlashInterface {
          */
         syntacticClassificationsAre(...classifications: {
             classificationType: string;
-            text: string;
+            text?: string;
         }[]): void;
         /**
          * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
          */
-        semanticClassificationsAre(...classifications: {
-            classificationType: string;
-            text: string;
+        semanticClassificationsAre(format: "original" | "2020", ...classifications: {
+            classificationType: string | number;
+            text?: string;
             textSpan?: TextSpan;
         }[]): void;
+        /** Edits the current testfile and replaces with the semantic classifications */
+        replaceWithSemanticClassifications(format: "2020")
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
         renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
@@ -461,118 +463,123 @@ declare namespace FourSlashInterface {
         resetCancelled(): void;
         setCancelled(numberOfCalls?: number): void;
     }
-    module classification {
-        function comment(text: string, position?: number): {
+
+    interface ModernClassificationFactory {
+        semanticToken(identifier: string, name: string)
+    }
+
+    interface ClassificationFactory {
+        comment(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function identifier(text: string, position?: number): {
+        identifier(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function keyword(text: string, position?: number): {
+        keyword(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function numericLiteral(text: string, position?: number): {
+        numericLiteral(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function operator(text: string, position?: number): {
+        operator(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function stringLiteral(text: string, position?: number): {
+        stringLiteral(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function whiteSpace(text: string, position?: number): {
+        whiteSpace(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function text(text: string, position?: number): {
+        text(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function punctuation(text: string, position?: number): {
+        punctuation(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function docCommentTagName(text: string, position?: number): {
+        docCommentTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function className(text: string, position?: number): {
+        className(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function enumName(text: string, position?: number): {
+        enumName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function interfaceName(text: string, position?: number): {
+        interfaceName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function moduleName(text: string, position?: number): {
+        moduleName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function typeParameterName(text: string, position?: number): {
+        typeParameterName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function parameterName(text: string, position?: number): {
+        parameterName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function typeAliasName(text: string, position?: number): {
+        typeAliasName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxOpenTagName(text: string, position?: number): {
+        jsxOpenTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxCloseTagName(text: string, position?: number): {
+        jsxCloseTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxSelfClosingTagName(text: string, position?: number): {
+        jsxSelfClosingTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxAttribute(text: string, position?: number): {
+        jsxAttribute(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxText(text: string, position?: number): {
+        jsxText(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxAttributeStringLiteralValue(text: string, position?: number): {
+        jsxAttributeStringLiteralValue(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
@@ -757,17 +764,19 @@ declare var edit: FourSlashInterface.edit;
 declare var debug: FourSlashInterface.debug;
 declare var format: FourSlashInterface.format;
 declare var cancellation: FourSlashInterface.cancellation;
-declare var classification: typeof FourSlashInterface.classification;
+declare function classification(format: "original"): FourSlashInterface.ClassificationFactory;
+declare function classification(format: "2020"): FourSlashInterface.ModernClassificationFactory;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
-        LocationPriority = "0",
-        OptionalMember = "1",
-        MemberDeclaredBySpreadAssignment = "2",
-        SuggestedClassMembers = "3",
-        GlobalsOrKeywords = "4",
-        AutoImportSuggestions = "5",
-        JavascriptIdentifiers = "6"
+        LocalDeclarationPriority = "0",
+        LocationPriority = "1",
+        OptionalMember = "2",
+        MemberDeclaredBySpreadAssignment = "3",
+        SuggestedClassMembers = "4",
+        GlobalsOrKeywords = "5",
+        AutoImportSuggestions = "6",
+        JavascriptIdentifiers = "7"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"

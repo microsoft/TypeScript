@@ -17,6 +17,7 @@
         "performance.ts",
         "perfLogger.ts",
         "semver.ts",
+        "tracing.ts",
 
         "types.ts",
         "sys.ts",

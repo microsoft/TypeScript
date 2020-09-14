@@ -1383,3 +1383,26 @@ callApi(getOrgUser);
 >callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
 >getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
 
+// Repro from #40235
+
+type Numbers = number[];
+>Numbers : Numbers
+
+type Unbounded = [...Numbers, boolean];
+>Unbounded : (number | boolean)[]
+
+const data: Unbounded = [false, false];
+>data : (number | boolean)[]
+>[false, false] : false[]
+>false : false
+>false : false
+
+type U1 = [string, ...Numbers, boolean];
+>U1 : [string, ...(number | boolean)[]]
+
+type U2 = [...[string, ...Numbers], boolean];
+>U2 : [string, ...(number | boolean)[]]
+
+type U3 = [...[string, number], boolean];
+>U3 : [string, number, boolean]
+
