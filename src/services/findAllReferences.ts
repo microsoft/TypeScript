@@ -1894,13 +1894,17 @@ namespace ts.FindAllReferences {
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
-                    if (type && isStringLiteral(ref) && ref.text === node.text) {
-                        const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
-                        if (type !== checker.getStringType() && type === refType) {
+                    if (isStringLiteral(ref) && ref.text === node.text) {
+                        if (type) {
+                            const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
+                            if (type !== checker.getStringType() && type === refType) {
+                                return nodeEntry(ref, EntryKind.StringLiteral);
+                            }
+                        }
+                        else {
                             return nodeEntry(ref, EntryKind.StringLiteral);
                         }
                     }
-                    return undefined;
                 });
             });
 
