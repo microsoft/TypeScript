@@ -3,7 +3,7 @@ namespace ts.codefix {
     const fixName = "addVoidToPromise";
     const fixId = "addVoidToPromise";
     const errorCodes = [
-        Diagnostics.Expected_0_arguments_but_got_1.code
+        Diagnostics.Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise.code
     ];
     registerCodeFix({
         errorCodes,
@@ -21,23 +21,18 @@ namespace ts.codefix {
 
     function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan, program: Program, seen?: Set<ParameterDeclaration>) {
         const node = getTokenAtPosition(sourceFile, span.start);
-        if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node) return;
+        if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node || node.parent.arguments.length !== 0) return;
 
         const checker = program.getTypeChecker();
         const symbol = checker.getSymbolAtLocation(node);
 
         // decl should be `new Promise((<decl>) => {})`
         const decl = symbol?.valueDeclaration;
-        if (!decl || !isParameter(decl) || !(isArrowFunction(decl.parent) || isFunctionExpression(decl.parent)) || !isNewExpression(decl.parent.parent) || !isIdentifier(decl.parent.parent.expression)) return;
+        if (!decl || !isParameter(decl) || !isNewExpression(decl.parent.parent)) return;
 
         // no need to make this change if we have already seen this parameter.
         if (seen?.has(decl)) return;
         seen?.add(decl);
-
-        // make sure its the global promise
-        const constructorSymbol = checker.getSymbolAtLocation(decl.parent.parent.expression);
-        if (!constructorSymbol || symbolName(constructorSymbol) !== "Promise" || !isGlobalDeclaration(constructorSymbol.valueDeclaration)) return;
-
 
         const typeArguments = getEffectiveTypeArguments(decl.parent.parent);
         if (some(typeArguments)) {

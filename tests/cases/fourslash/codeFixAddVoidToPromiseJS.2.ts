@@ -9,7 +9,7 @@
 ////const p2 = /** @type {Promise<number>} */(new Promise(resolve => resolve()));
 
 verify.codeFix({
-    errorCode: 2554,
+    errorCode: 2794,
     description: "Add 'void' to Promise resolved without a value",
     index: 2,
     newFileContent: `const p2 = /** @type {Promise<number | void>} */(new Promise(resolve => resolve()));`

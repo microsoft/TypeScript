@@ -3039,6 +3039,10 @@
         "category": "Error",
         "code": 2793
     },
+    "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
+        "category": "Error",
+        "code": 2794
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
