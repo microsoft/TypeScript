@@ -1039,7 +1039,6 @@ namespace ts {
                 node = node.parent;
             }
             return !isStatementCondition(node) &&
-                !isLogicalAssignmentExpression(node.parent) &&
                 !isLogicalExpression(node.parent) &&
                 !(isOptionalChain(node.parent) && node.parent.expression === node);
         }
