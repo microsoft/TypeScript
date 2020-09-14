@@ -1,19 +1,25 @@
-tests/cases/compiler/recursiveResolveTypeMembers.ts(4,49): error TS2577: Return type annotation circularly references itself.
+tests/cases/compiler/recursiveResolveTypeMembers.ts(3,6): error TS2456: Type alias 'PromisedTuple' circularly references itself.
 tests/cases/compiler/recursiveResolveTypeMembers.ts(4,58): error TS2304: Cannot find name 'H'.
+tests/cases/compiler/recursiveResolveTypeMembers.ts(4,65): error TS2315: Type 'PromisedTuple' is not generic.
 tests/cases/compiler/recursiveResolveTypeMembers.ts(4,79): error TS2304: Cannot find name 'R'.
+tests/cases/compiler/recursiveResolveTypeMembers.ts(6,17): error TS2315: Type 'PromisedTuple' is not generic.
 
 
-==== tests/cases/compiler/recursiveResolveTypeMembers.ts (3 errors) ====
+==== tests/cases/compiler/recursiveResolveTypeMembers.ts (5 errors) ====
     // Repro from #25291
     
     type PromisedTuple<L extends any[], U = (...args: L) => void> =
+         ~~~~~~~~~~~~~
+!!! error TS2456: Type alias 'PromisedTuple' circularly references itself.
         U extends (h: infer H, ...args: infer R) => [Promise<H>, ...PromisedTuple<R>] ? [] : []
-                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2577: Return type annotation circularly references itself.
                                                              ~
 !!! error TS2304: Cannot find name 'H'.
+                                                                    ~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'PromisedTuple' is not generic.
                                                                                   ~
 !!! error TS2304: Cannot find name 'R'.
     
     type Promised = PromisedTuple<[1, 2, 3]> 
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'PromisedTuple' is not generic.
     

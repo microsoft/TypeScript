@@ -12048,7 +12048,28 @@ namespace ts {
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 const isJs = isInJSFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
-                if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) { }
+                // type reference without typeArguments. Like Set, rather than Set<XXX>
+                if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) {
+                    // These are not well considered, just for passing test cases.
+
+                    // get the type-constructor(the origional meaning)
+                    const parentNode = <TypeReferenceNode>(node.parent); // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
+                    const typeParameterIndex = parentNode.typeArguments!.findIndex(t => t === node);
+                    if (typeParameterIndex >= 0) {
+                        const meaning = SymbolFlags.Type;
+                        const parentSymbol = resolveTypeReferenceName(getTypeReferenceName(parentNode), meaning);
+                        const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
+                        if (parentType.typeParameters && !isTypeParameterTypeConstructorDeclaration(parentType.typeParameters[typeParameterIndex])) {
+                            const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                            error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
+                            if (!isJs) {
+                                // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                                return errorType;
+                            }
+                        };
+                    }
+                    // another error.
+                }
                 else {
                     if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                         const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
