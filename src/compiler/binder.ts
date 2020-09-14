@@ -2811,6 +2811,7 @@ namespace ts {
                 const isAlias = isAliasableExpression(node.right) && (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
                 const flags = isAlias ? SymbolFlags.Alias : SymbolFlags.Property | SymbolFlags.ExportValue;
                 const excludeFlags = isAlias ? SymbolFlags.AliasExcludes : SymbolFlags.None;
+                setParent(node.left, node);
                 declareSymbol(symbol.exports!, symbol, node.left, flags, excludeFlags);
             }
         }
