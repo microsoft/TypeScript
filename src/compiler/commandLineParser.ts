@@ -243,7 +243,7 @@ namespace ts {
         },
     ];
 
-    const declaredCompilerOptions: (CommandLineOption & { name:  keyof DeclaredCompilerOptions })[] = [
+    const declaredCompilerOptions: (CommandLineOption & { name: keyof DeclaredCompilerOptions })[] = [
         // Basic
         {
             name: "target",
