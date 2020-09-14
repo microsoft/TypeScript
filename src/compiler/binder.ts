@@ -2810,8 +2810,8 @@ namespace ts {
             if (symbol) {
                 const isAlias = isAliasableExpression(node.right) && (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
                 const flags = isAlias ? SymbolFlags.Alias : SymbolFlags.Property | SymbolFlags.ExportValue;
-                const excludeFlags = isAlias ? SymbolFlags.AliasExcludes : SymbolFlags.None;
-                declareSymbol(symbol.exports!, symbol, node.left, flags, excludeFlags);
+                setParent(node.left, node);
+                declareSymbol(symbol.exports!, symbol, node.left, flags, SymbolFlags.None);
             }
         }
 
