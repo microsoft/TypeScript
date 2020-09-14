@@ -1,5 +1,5 @@
 // @declaration: true
-// @pedanticOverride: true
+// @noImplicitOverride: true
 class B {
     public baz: number = 1;
     constructor(public foo: string, public bar: number) {

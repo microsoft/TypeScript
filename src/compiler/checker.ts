@@ -34911,7 +34911,7 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.pedanticOverride && !nodeInAmbientContext) {
+            if (compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
                 checkMembersForMissingOverrideModifier(node, type, typeWithThis);
             }
 
@@ -38361,7 +38361,7 @@ namespace ts {
                         if (flags & ModifierFlags.AccessibilityModifier) {
                             return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
                         }
-                        else if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
                         }
                         else if (flags & ModifierFlags.Static) {
@@ -38397,7 +38397,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
                         }
-                        else if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         else if (flags & ModifierFlags.Async) {
@@ -38467,7 +38467,7 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
-                        else if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                        else if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "override");
                         }
                         else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
@@ -38543,7 +38543,7 @@ namespace ts {
                 if (flags & ModifierFlags.Abstract) {
                     return grammarErrorOnNode(lastStatic!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract"); // TODO: GH#18217
                 }
-                if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                if (compilerOptions.noImplicitOverride && flags & ModifierFlags.Override) {
                     return grammarErrorOnNode(lastOverride!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override"); // TODO: GH#18217
                 }
                 else if (flags & ModifierFlags.Async) {

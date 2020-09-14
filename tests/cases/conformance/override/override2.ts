@@ -1,5 +1,5 @@
 // @declaration: true
-// @pedanticOverride: true
+// @noImplicitOverride: true
 abstract class AB {
     abstract foo(v: string): void;
 

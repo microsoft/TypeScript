@@ -1,5 +1,5 @@
 // @declaration: true
-// @pedanticOverride: true
+// @noImplicitOverride: true
 class B {
     a: string
 }

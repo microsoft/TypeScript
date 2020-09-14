@@ -1,5 +1,5 @@
 // @declaration: true
-// @pedanticOverride: true
+// @noImplicitOverride: true
 interface B {
     foo (): void
     bar (): void

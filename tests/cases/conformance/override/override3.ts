@@ -1,5 +1,5 @@
 // @declaration: true
-// @pedanticOverride: true
+// @noImplicitOverride: true
 declare class B {
     foo(): void
     bar(): void

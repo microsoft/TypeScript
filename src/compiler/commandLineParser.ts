@@ -633,7 +633,7 @@ namespace ts {
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
         {
-            name: "pedanticOverride",
+            name: "noImplicitOverride",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,

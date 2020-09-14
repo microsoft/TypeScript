@@ -61,7 +61,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
     // "noUncheckedIndexedAccess": true,      /* Include 'undefined' in index signature results */
-    // "pedanticOverride": true,              /* Force overriding members in derived classes to be marked with an 'override' modifier. */
+    // "noImplicitOverride": true,            /* Force overriding members in derived classes to be marked with an 'override' modifier. */
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */

@@ -1,5 +1,5 @@
 // @declaration: true
-// @pedanticOverride: true
+// @noImplicitOverride: true
 class B {
     p1: number = 1;
     p2: number = 2;
