@@ -1005,7 +1005,7 @@ function f23(o) {
 }
 function f30(o) {
     if (!!true) {
-        assert(o !== null && o !== void 0 && o.foo);
+        assert(o === null || o === void 0 ? void 0 : o.foo);
         o.foo;
     }
     if (!!true) {
@@ -1017,7 +1017,7 @@ function f30(o) {
         o.foo;
     }
     if (!!true) {
-        assertNonNull(o !== null && o !== void 0 && o.foo);
+        assertNonNull(o === null || o === void 0 ? void 0 : o.foo);
         o.foo;
     }
 }

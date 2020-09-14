@@ -44,9 +44,9 @@ o2 !== null && o2 !== void 0 && o2.b["c"];
 (_k = (_j = o5.b) !== null && _j !== void 0 && _j.call(o5)["c"].d) !== null && _k !== void 0 && _k["e"];
 (_m = (_l = o5["b"]) !== null && _l !== void 0 && _l.call(o5)["c"].d) !== null && _m !== void 0 && _m.e;
 (_p = (_o = o5["b"]) !== null && _o !== void 0 && _o.call(o5)["c"].d) !== null && _p !== void 0 && _p["e"];
-(_q = o6()) === null || _q === void 0 ? void 0 : _q["x"];
+(_q = o6()) !== null && _q !== void 0 && _q["x"];
 // GH#36031
-o2 === null || o2 === void 0 ? void 0 : o2["b"].c;
-o2 === null || o2 === void 0 ? void 0 : o2["b"]["c"];
+o2 !== null && o2 !== void 0 && o2["b"].c;
+o2 !== null && o2 !== void 0 && o2["b"]["c"];
 o2 === null || o2 === void 0 ? void 0 : o2["b"].c;
 o2 === null || o2 === void 0 ? void 0 : o2["b"]["c"];

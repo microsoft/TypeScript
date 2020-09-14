@@ -76,7 +76,7 @@ o2 !== null && o2 !== void 0 && o2["b"].apply(o2, __spreadArrays([1], [2, 3], [4
 (_l = o3["b"]) !== null && _l !== void 0 && _l.call.apply(_l, __spreadArrays([o3], [1, 2])).c;
 (_m = o3["b"]) !== null && _m !== void 0 && _m.call.apply(_m, __spreadArrays([o3, 1], [2, 3], [4])).c;
 var v = o4 === null || o4 === void 0 ? void 0 : o4(incr);
-(_o = o5()) === null || _o === void 0 ? void 0 : _o();
+(_o = o5()) !== null && _o !== void 0 && _o();
 // GH#36031
-o2 === null || o2 === void 0 ? void 0 : o2.b().toString;
+o2 !== null && o2 !== void 0 && o2.b().toString;
 o2 === null || o2 === void 0 ? void 0 : o2.b().toString;
