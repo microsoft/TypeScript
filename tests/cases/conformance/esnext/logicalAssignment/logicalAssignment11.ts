@@ -3,10 +3,9 @@
 
 let x: string | undefined;
 
-// let d: string | undefined;
-// d ?? (d = x ?? "x")
-// d.length;
-
+let d: string | undefined;
+d ?? (d = x ?? "x")
+d.length;
 
 let e: string | undefined;
 e ??= x ?? "x"
