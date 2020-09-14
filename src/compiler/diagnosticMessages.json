@@ -5923,6 +5923,14 @@
         "category": "Message",
         "code": 95142
     },
+    "Add 'void' to Promise resolved without a value": {
+        "category": "Message",
+        "code": 95143
+    },
+    "Add 'void' to all Promises resolved without a value": {
+        "category": "Message",
+        "code": 95144
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
