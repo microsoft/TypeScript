@@ -136,7 +136,7 @@ namespace ts {
             name: "excludeDirectories",
             type: "list",
             element: {
-                name: "excludeDirectories",
+                name: "excludeDirectory",
                 type: "string",
                 isFilePath: true,
                 extraValidation: specToDiagnostic
@@ -148,7 +148,7 @@ namespace ts {
             name: "excludeFiles",
             type: "list",
             element: {
-                name: "excludeFiles",
+                name: "excludeFile",
                 type: "string",
                 isFilePath: true,
                 extraValidation: specToDiagnostic
