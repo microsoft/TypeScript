@@ -339,17 +339,23 @@ namespace FourSlash {
                         this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
                     }
                 });
-                if (!compilationOptions.noLib) {
-                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                        Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
 
-                    compilationOptions.lib?.forEach(fileName => {
+                if (!compilationOptions.noLib) {
+                    const seen = new Set<string>();
+                    const addSourceFile = (fileName: string) => {
+                        if (seen.has(fileName)) return;
+                        seen.add(fileName);
                         const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                         ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                        if (libFile) {
-                            this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        if (!ts.some(libFile.libReferenceDirectives)) return;
+                        for (const directive of libFile.libReferenceDirectives) {
+                            addSourceFile(`lib.${directive.fileName}.d.ts`);
                         }
-                    });
+                    };
+
+                    addSourceFile(Harness.Compiler.defaultLibFileName);
+                    compilationOptions.lib?.forEach(addSourceFile);
                 }
             }
 
@@ -3878,7 +3884,7 @@ namespace FourSlash {
         const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
         const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
         const actualFileName = Harness.IO.resolvePath(fileName) || absoluteFileName;
-        const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true } });
+        const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true, inlineSources: true } });
         if (output.diagnostics!.length > 0) {
             throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
         }
@@ -3888,7 +3894,7 @@ namespace FourSlash {
     function runCode(code: string, state: TestState, fileName: string): void {
         // Compile and execute the test
         const generatedFile = ts.changeExtension(fileName, ".js");
-        const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${code}\n//# sourceURL=${generatedFile}\n})`;
+        const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
         type SourceMapSupportModule = typeof import("source-map-support") & {
             // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
