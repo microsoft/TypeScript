@@ -107,6 +107,7 @@
         "codefixes/splitTypeOnlyImport.ts",
         "codefixes/convertConstToLet.ts",
         "codefixes/fixExpectedComma.ts",
+        "codefixes/fixAddVoidToPromise.ts",
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/convertToOptionalChainExpression.ts",
