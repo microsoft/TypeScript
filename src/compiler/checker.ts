@@ -34911,9 +34911,7 @@ namespace ts {
                 }
             }
 
-            if (compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
-                checkMembersForMissingOverrideModifier(node, type, typeWithThis);
-            }
+            checkMembersForMissingOverrideModifier(node, type, typeWithThis);
 
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
@@ -34950,6 +34948,7 @@ namespace ts {
         }
 
         function checkMembersForMissingOverrideModifier(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
+            const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
             const baseTypeNode = getEffectiveBaseTypeNode(node);
             const baseTypes = baseTypeNode && getBaseTypes(type);
             const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
@@ -34975,7 +34974,7 @@ namespace ts {
                         if (prop && !baseProp && hasOverride) {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                         }
-                        else if (prop && baseProp && !hasOverride) {
+                        else if (prop && baseProp && !hasOverride && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
                             const diag = memberIsParameterProperty ?
                                 Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0 :
                                 Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
