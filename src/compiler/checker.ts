@@ -34993,7 +34993,7 @@ namespace ts {
             }
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
-                if (baseWithThis) {
+                if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (declaredProp) {
                         const baseClassName = typeToString(baseWithThis);
