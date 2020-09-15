@@ -12054,7 +12054,7 @@ namespace ts {
                     // Maybe all those code should be removed and written in other places.
                     debugger;
                     // get the type-constructor(the origional meaning)
-                    const parentNode = <NodeWithTypeArguments|CallExpression>node.parent; // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
+                    const parentNode = <NodeWithTypeArguments | CallExpression>node.parent; // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
                     const typeParameterIndex = parentNode.typeArguments!.findIndex(t => t === node);
                     if (typeParameterIndex >= 0) {
                         if (isTypeReferenceNode(parentNode)) {
@@ -12069,7 +12069,8 @@ namespace ts {
                                     return errorType;
                                 }
                             };
-                        } else if (isCallExpression(parentNode)) {
+                        }
+                        else if (isCallExpression(parentNode)) {
                             debugger;
                             const parentType = <ObjectType>getTypeOfExpression(parentNode.expression);
                             if (!(parentType.flags & TypeFlags.Object)) {
