@@ -4311,6 +4311,9 @@ namespace ts {
                     approximateLength: 0
                 };
                 const resultingNode = cb(context);
+                if (context.truncating && context.flags & NodeBuilderFlags.NoTruncation) {
+                    context.tracker?.reportTruncationError?.();
+                }
                 return context.encounteredError ? undefined : resultingNode;
             }
 
@@ -6828,6 +6831,7 @@ namespace ts {
                             break;
                         case SyntaxKind.BinaryExpression:
                         case SyntaxKind.PropertyAccessExpression:
+                        case SyntaxKind.ElementAccessExpression:
                             // Could be best encoded as though an export specifier or as though an export assignment
                             // If name is default or export=, do an export assignment
                             // Otherwise do an export specifier
@@ -13643,7 +13647,7 @@ namespace ts {
                         return undefined;
                     }
                     const shouldIncludeUndefined =
-                        compilerOptions.noUncheckedIndexSignatures &&
+                        compilerOptions.noUncheckedIndexedAccess &&
                         (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);

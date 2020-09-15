@@ -5783,7 +5783,7 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
-        noUncheckedIndexSignatures?: boolean;
+        noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;
         outFile?: string;
@@ -7867,6 +7867,7 @@ namespace ts {
         reportInaccessibleUniqueSymbolError?(): void;
         reportCyclicStructureError?(): void;
         reportLikelyUnsafeImportRequiredError?(specifier: string): void;
+        reportTruncationError?(): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;

@@ -1489,10 +1489,13 @@
       </Item>
       <Item ItemId=";All_type_parameters_are_unused_6205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[All type parameters are unused]]></Val>
+          <Val><![CDATA[All type parameters are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Все параметры типа не используются]]></Val>
+            <Val><![CDATA[Ни один из параметров типа не используется.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[All type parameters are unused]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1777,10 +1780,13 @@
       </Item>
       <Item ItemId=";An_expression_of_type_void_cannot_be_tested_for_truthiness_1345" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness]]></Val>
+          <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Выражение типа "void" не может быть проверено на истинность]]></Val>
+            <Val><![CDATA[Выражение типа "void" не может быть проверено на истинность.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2605,10 +2611,13 @@
       </Item>
       <Item ItemId=";Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension_2732" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
+          <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Не удается найти модуль "{0}". Рекомендуется использовать "--resolveJsonModule" для импорта модуля с расширением ".json".]]></Val>
+            <Val><![CDATA[Не удается найти модуль "{0}". Рекомендуется использовать параметр "--resolveJsonModule" для импорта модуля с расширением ".json".]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3440,6 +3449,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_0_to_1_in_0_95003" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert '{0}' to '{1} in {0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать "{0}" в "{1} в {0}"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_0_to_mapped_object_type_95055" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
@@ -3517,6 +3535,15 @@
           <Val><![CDATA[Convert all to default imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Преобразовать все в импорт по умолчанию]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_type_literals_to_mapped_type_95021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all type literals to mapped type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать все литералы типов в сопоставленный тип]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4471,10 +4498,13 @@
       </Item>
       <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
+          <Val><![CDATA[Dynamic import cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[При динамическом импорте не могут использоваться аргументы типов]]></Val>
+            <Val><![CDATA[При динамическом импорте не могут использоваться аргументы типов.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5618,6 +5648,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Generates_an_event_trace_and_a_list_of_types_6237" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generates an event trace and a list of types.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Generates_corresponding_d_ts_file_6002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates corresponding '.d.ts' file.]]></Val>
@@ -6032,6 +6068,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Включать модули, импортированные с расширением .json]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Include_undefined_in_index_signature_results_6800" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7247,6 +7289,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash_5090" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Non_simple_parameter_declared_here_1348" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
@@ -7565,6 +7613,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Option_0_cannot_be_specified_when_option_jsx_is_1_5089" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' cannot be specified when option 'jsx' is '{1}'.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Option_0_cannot_be_specified_when_option_target_is_ES3_5048" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' cannot be specified when option 'target' is 'ES3'.]]></Val>
@@ -7633,15 +7687,6 @@
           <Val><![CDATA[Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Параметр isolatedModules можно использовать, только если указан параметр --module или если параметр target — ES2015 или выше.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Option_paths_cannot_be_used_without_specifying_baseUrl_option_5060" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option 'paths' cannot be used without specifying '--baseUrl' option.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр paths невозможно использовать без указания параметра "--baseUrl".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8242,10 +8287,13 @@
       </Item>
       <Item ItemId=";Private_identifiers_cannot_be_used_as_parameters_18009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
+          <Val><![CDATA[Private identifiers cannot be used as parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Закрытые идентификаторы запрещено использовать в качестве параметров]]></Val>
+            <Val><![CDATA[Закрытые идентификаторы не могут использоваться в качестве параметров.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8479,10 +8527,13 @@
       </Item>
       <Item ItemId=";Property_0_is_a_static_member_of_type_1_2576" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' is a static member of type '{1}']]></Val>
+          <Val><![CDATA[Property '{0}' is a static member of type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Свойство "{0}" является членом типа "{1}"]]></Val>
+            <Val><![CDATA[Свойство "{0}" является статическим элементом типа "{1}".]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Property '{0}' is a static member of type '{1}']]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8735,6 +8786,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Предоставление полной поддержки для итерируемых элементов в for-of, расширение и деструктуризация при выборе целевой платформы ES5 или ES3.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Provides_a_root_package_name_when_using_outFile_with_declarations_1390" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Provides a root package name when using outFile with declarations.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9884,6 +9941,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react_6238" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir_6058" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the root directory of input files. Use to control the output directory structure with --outDir.]]></Val>
@@ -10175,6 +10238,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_0_modifier_can_only_be_used_in_TypeScript_files_8009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' modifier can only be used in TypeScript files.]]></Val>
@@ -10253,6 +10322,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Текст оператора if не может быть пустым.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_de_1391" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12826,10 +12901,13 @@
       </Item>
       <Item ItemId=";_0_modifier_cannot_be_used_with_a_private_identifier_18019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot be used with a private identifier]]></Val>
+          <Val><![CDATA['{0}' modifier cannot be used with a private identifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Модификатор "{0}" запрещено использовать с закрытым идентификатором.]]></Val>
+            <Val><![CDATA[Модификатор "{0}" не может использоваться с закрытым идентификатором.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA['{0}' modifier cannot be used with a private identifier]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
