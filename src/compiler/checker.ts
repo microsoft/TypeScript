@@ -12972,6 +12972,26 @@ namespace ts {
             return true;
         }
 
+        function removeStructurallyIdenticalTypes(types: Type[]): void {
+            const len = types.length;
+            if (len === 0 || isSetOfLiteralsFromSameEnum(types)) {
+                return;
+            }
+            let i = len;
+            while (i > 0) {
+                i--;
+                const source = types[i];
+                for (const target of types) {
+                    if (source !== target) {
+                        if (isTypeIdenticalTo(source, target)) {
+                            orderedRemoveItemAt(types, i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
             let i = types.length;
             while (i > 0) {
@@ -13006,7 +13026,7 @@ namespace ts {
             const typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
-                if (includes & TypeFlags.AnyOrUnknown) {
+                if (includes & TypeFlags.AnyOrUnknown && unionReduction !== UnionReduction.Exact) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
                 }
                 switch (unionReduction) {
@@ -13019,6 +13039,9 @@ namespace ts {
                         if (!removeSubtypes(typeSet, !(includes & TypeFlags.IncludesStructuredOrInstantiable))) {
                             return errorType;
                         }
+                        break;
+                    case UnionReduction.Exact:
+                        removeStructurallyIdenticalTypes(typeSet);
                         break;
                 }
                 if (typeSet.length === 0) {
@@ -18243,6 +18266,11 @@ namespace ts {
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: undefined, skipPartial?: boolean): Type | undefined;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type, skipPartial?: boolean): Type;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type, skipPartial?: boolean) {
+            const reduced = getUnionType(target.types, UnionReduction.Exact, target.aliasSymbol, target.aliasTypeArguments);
+            if (!(reduced.flags & TypeFlags.Union)) {
+                return reduced;
+            }
+            target = reduced as UnionType;
             // undefined=unknown, true=discriminated, false=not discriminated
             // The state of each type progresses from left to right. Discriminated types stop at 'true'.
             const discriminable = target.types.map(_ => undefined) as (boolean | undefined)[];
