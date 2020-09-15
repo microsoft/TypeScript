@@ -4,10 +4,10 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(39,5): error TS23
     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
       Type 'string' is not assignable to type 'B'.
         'string' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(159,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(191,16): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(195,16): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(199,16): error TS2590: Expression produces a union type that is too complex to represent.
 
 
 ==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (6 errors) ====
@@ -105,12 +105,6 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
     type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
     type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
     type T27 = FirstTwoAndRest<'a'>;  // unknown
-    
-    type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-    type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-    
-    type TC1 = Capitalize<'foo'>;  // 'Foo'
-    type TC2 = Uncapitalize<'Foo'>;  // 'foo'
     
     type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
     

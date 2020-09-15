@@ -88,12 +88,6 @@ type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
 type T27 = FirstTwoAndRest<'a'>;  // unknown
 
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-
-type TC1 = Capitalize<'foo'>;  // 'Foo'
-type TC2 = Uncapitalize<'Foo'>;  // 'foo'
-
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
 type HexColor<S extends string> =
