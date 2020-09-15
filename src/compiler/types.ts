@@ -4892,6 +4892,7 @@ namespace ts {
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
         TemplateLiteral = 1 << 27,  // Template literal type
+        StringMapping   = 1 << 28,  // Uppercase/Lowercase type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4909,7 +4910,7 @@ namespace ts {
         Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | TemplateLiteral,
+        StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
         NumberLike = Number | NumberLiteral | Enum,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
@@ -4922,7 +4923,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index | TemplateLiteral,
+        InstantiablePrimitive = Index | TemplateLiteral | StringMapping,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
@@ -4930,7 +4931,7 @@ namespace ts {
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
-        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | TemplateLiteral,
+        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | TemplateLiteral | StringMapping,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -5382,6 +5383,11 @@ namespace ts {
         texts: readonly string[];  // Always one element longer than casings/types
         casings: readonly TemplateCasing[];  // Always at least one element
         types: readonly Type[];  // Always at least one element
+    }
+
+    export interface StringMappingType extends InstantiableType {
+        symbol: Symbol;  // globalUppercaseSymbol/globalLowercaseSymbol
+        type: Type;  // Type argument
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
