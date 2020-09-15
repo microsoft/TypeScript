@@ -13545,10 +13545,10 @@ namespace ts {
         }
 
         function getStringMappingType(symbol: Symbol, type: Type): Type {
-            return type.flags & TypeFlags.Union ? mapType(type, t => getStringMappingType(symbol, t)) :
+            return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
                 isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
                 type.flags & TypeFlags.StringLiteral ? getLiteralType(symbol.escapedName === "Uppercase" ? (<StringLiteralType>type).value.toUpperCase() : (<StringLiteralType>type).value.toLowerCase()) :
-                stringType;
+                type;
         }
 
         function getStringMappingTypeForGenericType(symbol: Symbol, type: Type): Type {
