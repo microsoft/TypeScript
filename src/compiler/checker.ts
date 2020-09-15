@@ -12051,22 +12051,43 @@ namespace ts {
                 // type reference without typeArguments. Like Set, rather than Set<XXX>
                 if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) {
                     // These are not well considered, just for passing test cases.
-
+                    // Maybe all those code should be removed and written in other places.
+                    debugger;
                     // get the type-constructor(the origional meaning)
-                    const parentNode = <TypeReferenceNode>(node.parent); // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
+                    const parentNode = <NodeWithTypeArguments|CallExpression>node.parent; // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
                     const typeParameterIndex = parentNode.typeArguments!.findIndex(t => t === node);
                     if (typeParameterIndex >= 0) {
-                        const meaning = SymbolFlags.Type;
-                        const parentSymbol = resolveTypeReferenceName(getTypeReferenceName(parentNode), meaning);
-                        const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
-                        if (parentType.typeParameters && !isTypeParameterTypeConstructorDeclaration(parentType.typeParameters[typeParameterIndex])) {
-                            const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
-                            error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
-                            if (!isJs) {
-                                // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                        if (isTypeReferenceNode(parentNode)) {
+                            const meaning = SymbolFlags.Type;
+                            const parentSymbol = resolveTypeReferenceName(getTypeReferenceName(parentNode), meaning);
+                            const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
+                            if (parentType.typeParameters && !isTypeParameterTypeConstructorDeclaration(parentType.typeParameters[typeParameterIndex])) {
+                                const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
+                                if (!isJs) {
+                                    // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                                    return errorType;
+                                }
+                            };
+                        } else if (isCallExpression(parentNode)) {
+                            debugger;
+                            const parentType = <ObjectType>getTypeOfExpression(parentNode.expression);
+                            if (!(parentType.flags & TypeFlags.Object)) {
                                 return errorType;
                             }
-                        };
+                            if (!parentType.callSignatures?.some(sig => sig.typeParameters && sig.typeParameters[typeParameterIndex] && isTypeParameterTypeConstructorDeclaration(sig.typeParameters[typeParameterIndex]))) {
+                                const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
+                                if (!isJs) {
+                                    // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                                    return errorType;
+                                }
+                            }
+                        }
+                        else {
+                            debugger;
+                            return errorType;
+                        }
                     }
                     // another error.
                 }
@@ -30334,12 +30355,12 @@ namespace ts {
                 return quickType;
             }
             // If a type has been cached for the node, return it.
-            if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
-                const cachedType = flowTypeCache[getNodeId(node)];
-                if (cachedType) {
-                    return cachedType;
-                }
-            }
+            // if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
+            //     const cachedType = flowTypeCache[getNodeId(node)];
+            //     if (cachedType) {
+            //         return cachedType;
+            //     }
+            // }
             const startInvocationCount = flowInvocationCount;
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.
