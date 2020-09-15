@@ -34992,6 +34992,12 @@ namespace ts {
                 checkClassMember(member);
             }
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
+                const nodeLink = getNodeLinks(member);
+                if (nodeLink.checkedByOverride) {
+                    return;
+                }
+                nodeLink.checkedByOverride = true;
+
                 const hasOverride = hasOverrideModifier(member);
                 if (baseWithThis) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
