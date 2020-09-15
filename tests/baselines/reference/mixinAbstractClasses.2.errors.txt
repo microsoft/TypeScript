@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/mixinAbstractClasses.2.ts(7,11): error TS2793: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+tests/cases/conformance/classes/mixinAbstractClasses.2.ts(7,11): error TS2794: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
 tests/cases/conformance/classes/mixinAbstractClasses.2.ts(21,7): error TS2515: Non-abstract class 'DerivedFromAbstract' does not implement inherited abstract member 'abstractBaseMethod' from class 'AbstractBase & Mixin'.
 tests/cases/conformance/classes/mixinAbstractClasses.2.ts(25,1): error TS2511: Cannot create an instance of an abstract class.
 
@@ -12,7 +12,7 @@ tests/cases/conformance/classes/mixinAbstractClasses.2.ts(25,1): error TS2511: C
         // error expected: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
         class MixinClass extends baseClass implements Mixin {
               ~~~~~~~~~~
-!!! error TS2793: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
+!!! error TS2794: A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.
             mixinMethod() {
             }
         }

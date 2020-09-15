@@ -42,7 +42,7 @@ namespace ts.Completions.StringCompletions {
                     name: type.value,
                     kindModifiers: ScriptElementKindModifier.none,
                     kind: ScriptElementKind.string,
-                    sortText: "0",
+                    sortText: SortText.LocationPriority,
                     replacementSpan: getReplacementSpanForContextToken(contextToken)
                 }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
@@ -130,7 +130,11 @@ namespace ts.Completions.StringCompletions {
                         //          bar: string;
                         //      }
                         //      let x: Foo["/*completion position*/"]
-                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((grandParent as IndexedAccessTypeNode).objectType));
+                        const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
+                        if (!rangeContainsPosition(indexType, position)) {
+                            return undefined;
+                        }
+                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
                     case SyntaxKind.ImportType:
                         return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     case SyntaxKind.UnionType: {

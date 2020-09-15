@@ -1,13 +1,14 @@
 /* @internal */
 namespace ts.Completions {
     export enum SortText {
-        LocationPriority = "0",
-        OptionalMember = "1",
-        MemberDeclaredBySpreadAssignment = "2",
-        SuggestedClassMembers = "3",
-        GlobalsOrKeywords = "4",
-        AutoImportSuggestions = "5",
-        JavascriptIdentifiers = "6"
+        LocalDeclarationPriority = "0",
+        LocationPriority = "1",
+        OptionalMember = "2",
+        MemberDeclaredBySpreadAssignment = "3",
+        SuggestedClassMembers = "4",
+        GlobalsOrKeywords = "5",
+        AutoImportSuggestions = "6",
+        JavascriptIdentifiers = "7"
     }
     export type Log = (message: string) => void;
 
@@ -1270,7 +1271,7 @@ namespace ts.Completions {
             else {
                 for (const symbol of type.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                        addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
+                        addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
                     }
                 }
             }
@@ -1307,12 +1308,20 @@ namespace ts.Completions {
                 }
                 else if (preferences.includeCompletionsWithInsertText) {
                     addSymbolOriginInfo(symbol);
+                    addSymbolSortInfo(symbol);
                     symbols.push(symbol);
                 }
             }
             else {
                 addSymbolOriginInfo(symbol);
+                addSymbolSortInfo(symbol);
                 symbols.push(symbol);
+            }
+
+            function addSymbolSortInfo(symbol: Symbol) {
+                if (isStaticProperty(symbol)) {
+                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.LocalDeclarationPriority;
+                }
             }
 
             function addSymbolOriginInfo(symbol: Symbol) {
@@ -2816,5 +2825,9 @@ namespace ts.Completions {
             return true;
         }
         return false;
+    }
+
+    function isStaticProperty(symbol: Symbol) {
+        return !!(symbol.valueDeclaration && getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Static && isClassLike(symbol.valueDeclaration.parent));
     }
 }

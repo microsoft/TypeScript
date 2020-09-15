@@ -1490,10 +1490,13 @@
       </Item>
       <Item ItemId=";All_type_parameters_are_unused_6205" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[All type parameters are unused]]></Val>
+          <Val><![CDATA[All type parameters are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tutti i parametri di tipo sono inutilizzati]]></Val>
+            <Val><![CDATA[Tutti i parametri di tipo sono inutilizzati.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[All type parameters are unused]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1778,10 +1781,13 @@
       </Item>
       <Item ItemId=";An_expression_of_type_void_cannot_be_tested_for_truthiness_1345" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness]]></Val>
+          <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Non è possibile testare la veridicità di un'espressione di tipo 'void']]></Val>
+            <Val><![CDATA[Non è possibile testare la veridicità di un'espressione di tipo 'void'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[An expression of type 'void' cannot be tested for truthiness]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2606,10 +2612,13 @@
       </Item>
       <Item ItemId=";Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension_2732" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
+          <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Non è possibile trovare il modulo '{0}'. Provare a usare '--resolveJsonModule' per importare il modulo con estensione '.json']]></Val>
+            <Val><![CDATA[Non è possibile trovare il modulo '{0}'. Provare a usare '--resolveJsonModule' per importare il modulo con estensione '.json'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4472,10 +4481,13 @@
       </Item>
       <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
+          <Val><![CDATA[Dynamic import cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nell'importazione dinamica non possono essere presenti argomenti tipo]]></Val>
+            <Val><![CDATA[Nell'importazione dinamica non possono essere presenti argomenti tipo.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8243,10 +8255,13 @@
       </Item>
       <Item ItemId=";Private_identifiers_cannot_be_used_as_parameters_18009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
+          <Val><![CDATA[Private identifiers cannot be used as parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Non è possibile usare gli identificatori privati come parametri]]></Val>
+            <Val><![CDATA[Non è possibile usare gli identificatori privati come parametri.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Private identifiers cannot be used as parameters]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8480,10 +8495,13 @@
       </Item>
       <Item ItemId=";Property_0_is_a_static_member_of_type_1_2576" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' is a static member of type '{1}']]></Val>
+          <Val><![CDATA[Property '{0}' is a static member of type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La proprietà '{0}' è un membro statico di tipo '{1}']]></Val>
+            <Val><![CDATA[La proprietà '{0}' è un membro statico di tipo '{1}'.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Property '{0}' is a static member of type '{1}']]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12827,10 +12845,13 @@
       </Item>
       <Item ItemId=";_0_modifier_cannot_be_used_with_a_private_identifier_18019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot be used with a private identifier]]></Val>
+          <Val><![CDATA['{0}' modifier cannot be used with a private identifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Non è possibile usare il modificatore '{0}' con un identificatore privato]]></Val>
+            <Val><![CDATA[Non è possibile usare il modificatore '{0}' con un identificatore privato.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA['{0}' modifier cannot be used with a private identifier]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>

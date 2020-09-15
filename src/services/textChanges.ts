@@ -56,6 +56,8 @@ namespace ts.textChanges {
     export enum TrailingTriviaOption {
         /** Exclude all trailing trivia (use getEnd()) */
         Exclude,
+        /** Doesn't include whitespace, but does strip comments */
+        ExcludeWhitespace,
         /** Include trailing trivia */
         Include,
     }
@@ -209,10 +211,19 @@ namespace ts.textChanges {
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         const { end } = node;
         const { trailingTriviaOption } = options;
-        if (trailingTriviaOption === TrailingTriviaOption.Exclude || (isExpression(node) && trailingTriviaOption !== TrailingTriviaOption.Include)) {
+        if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
+            return end;
+        }
+        if (trailingTriviaOption === TrailingTriviaOption.ExcludeWhitespace) {
+            const comments = concatenate(getTrailingCommentRanges(sourceFile.text, end), getLeadingCommentRanges(sourceFile.text, end));
+            const realEnd = comments?.[comments.length - 1]?.end;
+            if (realEnd) {
+                return realEnd;
+            }
             return end;
         }
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
+
         return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
             ? newEnd
             : end;

@@ -256,7 +256,7 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const preProgram = ts.length(rootFiles) < 100 ? ts.createProgram(rootFiles || [], { ...compilerOptions, traceResolution: false }, host) : undefined;
+        const preProgram = ts.length(rootFiles) < 100 ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
         const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
         const program = ts.createProgram(rootFiles || [], compilerOptions, host);
