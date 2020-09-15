@@ -2272,4 +2272,14 @@ namespace ts {
     export function padRight(s: string, length: number, padString: " " = " ") {
         return length <= s.length ? s : s + padString.repeat(length - s.length);
     }
+
+    export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
+    export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
+        const len = array.length;
+        let index = 0;
+        while (index < len && predicate(array[index])) {
+            index++;
+        }
+        return array.slice(0, index);
+    }
 }

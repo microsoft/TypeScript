@@ -35,7 +35,7 @@ declare const strMap: { [s: string]: boolean };
 // All of these should be errors
 const e1: boolean = strMap["foo"];
 >e1 : boolean
->strMap["foo"] : boolean
+>strMap["foo"] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >"foo" : "foo"
 
@@ -47,41 +47,41 @@ const e2: boolean = strMap.bar;
 
 const e3: boolean = strMap[0];
 >e3 : boolean
->strMap[0] : boolean
+>strMap[0] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >0 : 0
 
 const e4: boolean = strMap[0 as string | number];
 >e4 : boolean
->strMap[0 as string | number] : boolean
+>strMap[0 as string | number] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >0 as string | number : string | number
 >0 : 0
 
 const e5: boolean = strMap[0 as string | 0 | 1];
 >e5 : boolean
->strMap[0 as string | 0 | 1] : boolean
+>strMap[0 as string | 0 | 1] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >0 as string | 0 | 1 : string | 0 | 1
 >0 : 0
 
 const e6: boolean = strMap[0 as 0 | 1];
 >e6 : boolean
->strMap[0 as 0 | 1] : boolean
+>strMap[0 as 0 | 1] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >0 as 0 | 1 : 0 | 1
 >0 : 0
 
 const e7: boolean = strMap["foo" as "foo" | "baz"];
 >e7 : boolean
->strMap["foo" as "foo" | "baz"] : boolean
+>strMap["foo" as "foo" | "baz"] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >"foo" as "foo" | "baz" : "foo" | "baz"
 >"foo" : "foo"
 
 const e8: boolean = strMap[NumericEnum1.A];
 >e8 : boolean
->strMap[NumericEnum1.A] : boolean
+>strMap[NumericEnum1.A] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >NumericEnum1.A : NumericEnum1.A
 >NumericEnum1 : typeof NumericEnum1
@@ -89,7 +89,7 @@ const e8: boolean = strMap[NumericEnum1.A];
 
 const e9: boolean = strMap[NumericEnum2.A];
 >e9 : boolean
->strMap[NumericEnum2.A] : boolean
+>strMap[NumericEnum2.A] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >NumericEnum2.A : NumericEnum2.A
 >NumericEnum2 : typeof NumericEnum2
@@ -97,7 +97,7 @@ const e9: boolean = strMap[NumericEnum2.A];
 
 const e10: boolean = strMap[StringEnum1.A];
 >e10 : boolean
->strMap[StringEnum1.A] : boolean
+>strMap[StringEnum1.A] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >StringEnum1.A : StringEnum1.A
 >StringEnum1 : typeof StringEnum1
@@ -105,7 +105,7 @@ const e10: boolean = strMap[StringEnum1.A];
 
 const e11: boolean = strMap[StringEnum1.A as StringEnum1];
 >e11 : boolean
->strMap[StringEnum1.A as StringEnum1] : boolean
+>strMap[StringEnum1.A as StringEnum1] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >StringEnum1.A as StringEnum1 : StringEnum1
 >StringEnum1.A : StringEnum1.A
@@ -114,7 +114,7 @@ const e11: boolean = strMap[StringEnum1.A as StringEnum1];
 
 const e12: boolean = strMap[NumericEnum1.A as NumericEnum1];
 >e12 : boolean
->strMap[NumericEnum1.A as NumericEnum1] : boolean
+>strMap[NumericEnum1.A as NumericEnum1] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >NumericEnum1.A as NumericEnum1 : NumericEnum1
 >NumericEnum1.A : NumericEnum1.A
@@ -123,7 +123,7 @@ const e12: boolean = strMap[NumericEnum1.A as NumericEnum1];
 
 const e13: boolean = strMap[NumericEnum2.A as NumericEnum2];
 >e13 : boolean
->strMap[NumericEnum2.A as NumericEnum2] : boolean
+>strMap[NumericEnum2.A as NumericEnum2] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >NumericEnum2.A as NumericEnum2 : NumericEnum2
 >NumericEnum2.A : NumericEnum2.A
@@ -132,7 +132,7 @@ const e13: boolean = strMap[NumericEnum2.A as NumericEnum2];
 
 const e14: boolean = strMap[null as any];
 >e14 : boolean
->strMap[null as any] : boolean
+>strMap[null as any] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >null as any : any
 >null : null
@@ -140,7 +140,7 @@ const e14: boolean = strMap[null as any];
 // Should be OK
 const ok1: boolean | undefined = strMap["foo"];
 >ok1 : boolean | undefined
->strMap["foo"] : boolean
+>strMap["foo"] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >"foo" : "foo"
 
@@ -208,27 +208,27 @@ declare const numMap: { [s: number]: boolean };
 // All of these should be ok
 const num_ok1: boolean = numMap[0];
 >num_ok1 : boolean
->numMap[0] : boolean
+>numMap[0] : boolean | undefined
 >numMap : { [s: number]: boolean; }
 >0 : 0
 
 const num_ok2: boolean = numMap[0 as number];
 >num_ok2 : boolean
->numMap[0 as number] : boolean
+>numMap[0 as number] : boolean | undefined
 >numMap : { [s: number]: boolean; }
 >0 as number : number
 >0 : 0
 
 const num_ok3: boolean = numMap[0 as 0 | 1];
 >num_ok3 : boolean
->numMap[0 as 0 | 1] : boolean
+>numMap[0 as 0 | 1] : boolean | undefined
 >numMap : { [s: number]: boolean; }
 >0 as 0 | 1 : 0 | 1
 >0 : 0
 
 const num_ok4: boolean = numMap[NumericEnum1.A];
 >num_ok4 : boolean
->numMap[NumericEnum1.A] : boolean
+>numMap[NumericEnum1.A] : boolean | undefined
 >numMap : { [s: number]: boolean; }
 >NumericEnum1.A : NumericEnum1.A
 >NumericEnum1 : typeof NumericEnum1
@@ -236,7 +236,7 @@ const num_ok4: boolean = numMap[NumericEnum1.A];
 
 const num_ok5: boolean = numMap[NumericEnum2.A];
 >num_ok5 : boolean
->numMap[NumericEnum2.A] : boolean
+>numMap[NumericEnum2.A] : boolean | undefined
 >numMap : { [s: number]: boolean; }
 >NumericEnum2.A : NumericEnum2.A
 >NumericEnum2 : typeof NumericEnum2
@@ -250,7 +250,7 @@ function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
 
     // Should error
     return arg["blah"];
->arg["blah"] : boolean
+>arg["blah"] : boolean | undefined
 >arg : T
 >"blah" : "blah"
 }
@@ -262,7 +262,7 @@ function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
     // Should OK
     return arg["blah"]!;
 >arg["blah"]! : boolean
->arg["blah"] : boolean
+>arg["blah"] : boolean | undefined
 >arg : T
 >"blah" : "blah"
 }
@@ -272,7 +272,7 @@ function generic3<T extends string>(arg: T): boolean {
 
     // Should error
     return strMap[arg];
->strMap[arg] : boolean
+>strMap[arg] : boolean | undefined
 >strMap : { [s: string]: boolean; }
 >arg : T
 }
@@ -303,7 +303,7 @@ let yy = "y";
 >"y" : "y"
 
 obj1[yy];
->obj1[yy] : string | number
+>obj1[yy] : string | number | undefined
 >obj1 : { [key: string]: string | number; x: string; y: number; }
 >yy : string
 
@@ -312,7 +312,7 @@ let z = "z";
 >"z" : "z"
 
 obj1[z];
->obj1[z] : string | number
+>obj1[z] : string | number | undefined
 >obj1 : { [key: string]: string | number; x: string; y: number; }
 >z : string
 
@@ -325,7 +325,7 @@ declare const strMapUnion: { [s: string]: boolean } | { [s: string]: number };
 // Should error
 const f1: boolean | number = strMapUnion["foo"];
 >f1 : number | boolean
->strMapUnion["foo"] : number | boolean
+>strMapUnion["foo"] : number | boolean | undefined
 >strMapUnion : { [s: string]: boolean; } | { [s: string]: number; }
 >"foo" : "foo"
 

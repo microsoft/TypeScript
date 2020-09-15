@@ -4087,6 +4087,12 @@ namespace ts {
         return options.outFile || options.out;
     }
 
+    /** Returns 'undefined' if and only if 'options.paths' is undefined. */
+    export function getPathsBasePath(options: CompilerOptions, host: { getCurrentDirectory?(): string }) {
+        if (!options.paths) return undefined;
+        return options.baseUrl ?? Debug.checkDefined(options.pathsBasePath || host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
+    }
+
     export interface EmitFileNames {
         jsFilePath?: string | undefined;
         sourceMapFilePath?: string | undefined;

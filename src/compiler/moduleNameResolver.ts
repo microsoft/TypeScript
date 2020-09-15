@@ -788,7 +788,7 @@ namespace ts {
     }
 
     function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
-        const { baseUrl, paths, pathsBasePath } = state.compilerOptions;
+        const { baseUrl, paths } = state.compilerOptions;
         if (paths && !pathIsRelative(moduleName)) {
             if (state.traceEnabled) {
                 if (baseUrl) {
@@ -796,7 +796,7 @@ namespace ts {
                 }
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            const baseDirectory = baseUrl ?? Debug.checkDefined(pathsBasePath || state.host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
+            const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
             return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
         }
     }
