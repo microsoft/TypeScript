@@ -1,0 +1,79 @@
+=== tests/cases/conformance/override/overrideWithoutNoImplicitOverride1.ts ===
+export declare class AmbientClass {
+>AmbientClass : Symbol(AmbientClass, Decl(overrideWithoutNoImplicitOverride1.ts, 0, 0))
+
+    override yadda(): void;
+>yadda : Symbol(AmbientClass.yadda, Decl(overrideWithoutNoImplicitOverride1.ts, 0, 35))
+}
+
+export class NonAmbientClass {
+>NonAmbientClass : Symbol(NonAmbientClass, Decl(overrideWithoutNoImplicitOverride1.ts, 2, 1))
+
+    override yadda(): void {}
+>yadda : Symbol(NonAmbientClass.yadda, Decl(overrideWithoutNoImplicitOverride1.ts, 4, 30))
+}
+
+/////
+
+export declare class AmbientBase {
+>AmbientBase : Symbol(AmbientBase, Decl(overrideWithoutNoImplicitOverride1.ts, 6, 1))
+
+    foo(): void;
+>foo : Symbol(AmbientBase.foo, Decl(overrideWithoutNoImplicitOverride1.ts, 10, 34))
+}
+
+export declare class AmbientDerived extends AmbientBase {
+>AmbientDerived : Symbol(AmbientDerived, Decl(overrideWithoutNoImplicitOverride1.ts, 12, 1))
+>AmbientBase : Symbol(AmbientBase, Decl(overrideWithoutNoImplicitOverride1.ts, 6, 1))
+
+    foo(): void;
+>foo : Symbol(AmbientDerived.foo, Decl(overrideWithoutNoImplicitOverride1.ts, 14, 57))
+
+    override bar(): void;
+>bar : Symbol(AmbientDerived.bar, Decl(overrideWithoutNoImplicitOverride1.ts, 15, 16))
+}
+
+/////
+
+declare namespace ambientNamespace {
+>ambientNamespace : Symbol(ambientNamespace, Decl(overrideWithoutNoImplicitOverride1.ts, 18, 1))
+
+    export class AmbientBase {
+>AmbientBase : Symbol(AmbientBase, Decl(overrideWithoutNoImplicitOverride1.ts, 22, 36))
+
+        foo(): void;
+>foo : Symbol(AmbientBase.foo, Decl(overrideWithoutNoImplicitOverride1.ts, 23, 30))
+    }
+
+    export class AmbientDerived extends AmbientBase {
+>AmbientDerived : Symbol(AmbientDerived, Decl(overrideWithoutNoImplicitOverride1.ts, 25, 5))
+>AmbientBase : Symbol(AmbientBase, Decl(overrideWithoutNoImplicitOverride1.ts, 22, 36))
+
+        foo(): void;
+>foo : Symbol(AmbientDerived.foo, Decl(overrideWithoutNoImplicitOverride1.ts, 27, 53))
+
+        override bar(): void;
+>bar : Symbol(AmbientDerived.bar, Decl(overrideWithoutNoImplicitOverride1.ts, 28, 20))
+    }
+}
+
+/////
+
+export class NonAmbientBase {
+>NonAmbientBase : Symbol(NonAmbientBase, Decl(overrideWithoutNoImplicitOverride1.ts, 32, 1))
+
+    foo(): void {}
+>foo : Symbol(NonAmbientBase.foo, Decl(overrideWithoutNoImplicitOverride1.ts, 36, 29))
+}
+
+export class NonAmbientDerived extends NonAmbientBase {
+>NonAmbientDerived : Symbol(NonAmbientDerived, Decl(overrideWithoutNoImplicitOverride1.ts, 38, 1))
+>NonAmbientBase : Symbol(NonAmbientBase, Decl(overrideWithoutNoImplicitOverride1.ts, 32, 1))
+
+    foo(): void {}
+>foo : Symbol(NonAmbientDerived.foo, Decl(overrideWithoutNoImplicitOverride1.ts, 40, 55))
+
+    override bar(): void {}
+>bar : Symbol(NonAmbientDerived.bar, Decl(overrideWithoutNoImplicitOverride1.ts, 41, 18))
+}
+
