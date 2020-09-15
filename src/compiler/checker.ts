@@ -256,6 +256,20 @@ namespace ts {
         VoidIsNonOptional = 1 << 1,
     }
 
+    const enum IntrinsicTypeKind {
+        Uppercase,
+        Lowercase,
+        Capitalize,
+        Uncapitalize
+    }
+
+    const intrinsicTypeKinds: ReadonlyESMap<string, IntrinsicTypeKind> = new Map(getEntries({
+        Uppercase: IntrinsicTypeKind.Uppercase,
+        Lowercase: IntrinsicTypeKind.Lowercase,
+        Capitalize: IntrinsicTypeKind.Capitalize,
+        Uncapitalize: IntrinsicTypeKind.Uncapitalize
+    }));
+
     function SymbolLinks(this: SymbolLinks) {
     }
 
@@ -12132,7 +12146,7 @@ namespace ts {
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
-            if (type === intrinsicMarkerType && isIntrinsicTypeName(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
+            if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
                 return getStringMappingType(symbol, typeArguments[0]);
             }
             const links = getSymbolLinks(symbol);
@@ -13547,8 +13561,18 @@ namespace ts {
         function getStringMappingType(symbol: Symbol, type: Type): Type {
             return type.flags & (TypeFlags.Union | TypeFlags.Never) ? mapType(type, t => getStringMappingType(symbol, t)) :
                 isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
-                type.flags & TypeFlags.StringLiteral ? getLiteralType(symbol.escapedName === "Uppercase" ? (<StringLiteralType>type).value.toUpperCase() : (<StringLiteralType>type).value.toLowerCase()) :
+                type.flags & TypeFlags.StringLiteral ? getLiteralType(applyStringMapping(symbol, (<StringLiteralType>type).value)) :
                 type;
+        }
+
+        function applyStringMapping(symbol: Symbol, str: string) {
+            switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {
+                case IntrinsicTypeKind.Uppercase: return str.toUpperCase();
+                case IntrinsicTypeKind.Lowercase: return str.toLowerCase();
+                case IntrinsicTypeKind.Capitalize: return str.charAt(0).toUpperCase() + str.slice(1);
+                case IntrinsicTypeKind.Uncapitalize: return str.charAt(0).toLowerCase() + str.slice(1);
+            }
+            return str;
         }
 
         function getStringMappingTypeForGenericType(symbol: Symbol, type: Type): Type {
@@ -35344,7 +35368,7 @@ namespace ts {
             checkExportsOnMergedDeclarations(node);
             checkTypeParameters(node.typeParameters);
             if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
-                if (!isIntrinsicTypeName(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
+                if (!intrinsicTypeKinds.has(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
                     error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
                 }
             }
@@ -35352,10 +35376,6 @@ namespace ts {
                 checkSourceElement(node.type);
                 registerForUnusedIdentifiersCheck(node);
             }
-        }
-
-        function isIntrinsicTypeName(name: string) {
-            return name === "Uppercase" || name === "Lowercase";
         }
 
         function computeEnumMemberValues(node: EnumDeclaration) {

@@ -1521,12 +1521,12 @@ type Lowercase<S extends string> = intrinsic;
 /**
  * Convert first character of string literal type to uppercase
  */
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${Uppercase<H>}${T}` : S;
+type Capitalize<S extends string> = intrinsic;
 
 /**
  * Convert first character of string literal type to lowercase
  */
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${Lowercase<H>}${T}` : S;
+type Uncapitalize<S extends string> = intrinsic;
 
 /**
  * Marker for contextual 'this' type
