@@ -1,0 +1,6 @@
+=== tests/cases/compiler/declarationEmitTupleRestSignatureLeadingVariadic.ts ===
+const f = <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]): void => {};
+>f : <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]) => void
+><TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]): void => {} : <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]) => void
+>args : [...TFirstArgs, TLastArg]
+
