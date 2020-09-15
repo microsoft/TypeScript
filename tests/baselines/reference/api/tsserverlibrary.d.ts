@@ -664,6 +664,7 @@ declare namespace ts {
         readonly constraint?: TypeNode;
         readonly default?: TypeNode;
         expression?: Expression;
+        tParamDeclarations?: NodeArray<TypeParameterDeclaration>;
     }
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
         readonly kind: SignatureDeclaration["kind"];
@@ -2590,6 +2591,10 @@ declare namespace ts {
     }
     export interface TypeParameter extends InstantiableType {
     }
+    export interface TypeConstructorDeclaration extends TypeParameter {
+    }
+    export interface TypeConstructorInstance extends TypeParameter {
+    }
     export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
@@ -3150,7 +3155,7 @@ declare namespace ts {
         updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;
         createComputedPropertyName(expression: Expression): ComputedPropertyName;
         updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
-        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode, tParams?: NodeArray<TypeParameterDeclaration>): TypeParameterDeclaration;
         updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
         createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
         updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
@@ -10005,7 +10010,7 @@ declare namespace ts {
     /** @deprecated Use `factory.updateComputedPropertyName` or the factory supplied by your transformation context instead. */
     const updateComputedPropertyName: (node: ComputedPropertyName, expression: Expression) => ComputedPropertyName;
     /** @deprecated Use `factory.createTypeParameterDeclaration` or the factory supplied by your transformation context instead. */
-    const createTypeParameterDeclaration: (name: string | Identifier, constraint?: TypeNode | undefined, defaultType?: TypeNode | undefined) => TypeParameterDeclaration;
+    const createTypeParameterDeclaration: (name: string | Identifier, constraint?: TypeNode | undefined, defaultType?: TypeNode | undefined, tParams?: NodeArray<TypeParameterDeclaration> | undefined) => TypeParameterDeclaration;
     /** @deprecated Use `factory.updateTypeParameterDeclaration` or the factory supplied by your transformation context instead. */
     const updateTypeParameterDeclaration: (node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) => TypeParameterDeclaration;
     /** @deprecated Use `factory.createParameterDeclaration` or the factory supplied by your transformation context instead. */
