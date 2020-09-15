@@ -167,6 +167,7 @@ namespace ts {
         DeclareKeyword,
         GetKeyword,
         InferKeyword,
+        IntrinsicKeyword,
         IsKeyword,
         KeyOfKeyword,
         ModuleKeyword,
@@ -574,6 +575,7 @@ namespace ts {
         | SyntaxKind.InKeyword
         | SyntaxKind.InstanceOfKeyword
         | SyntaxKind.InterfaceKeyword
+        | SyntaxKind.IntrinsicKeyword
         | SyntaxKind.IsKeyword
         | SyntaxKind.KeyOfKeyword
         | SyntaxKind.LetKeyword
@@ -635,6 +637,7 @@ namespace ts {
         | SyntaxKind.AnyKeyword
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
+        | SyntaxKind.IntrinsicKeyword
         | SyntaxKind.NeverKeyword
         | SyntaxKind.NumberKeyword
         | SyntaxKind.ObjectKeyword
@@ -5386,8 +5389,8 @@ namespace ts {
     }
 
     export interface StringMappingType extends InstantiableType {
-        symbol: Symbol;  // globalUppercaseSymbol/globalLowercaseSymbol
-        type: Type;  // Type argument
+        symbol: Symbol;
+        type: Type;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)

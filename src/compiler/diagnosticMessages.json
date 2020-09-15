@@ -3039,6 +3039,10 @@
         "category": "Error",
         "code": 2793
     },
+    "The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.": {
+        "category": "Error",
+        "code": 2794
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -873,8 +873,6 @@ namespace ts {
         let anyArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
-        let globalUppercaseSymbol: Symbol | undefined;
-        let globalLowercaseSymbol: Symbol | undefined;
         let deferredGlobalNonNullableTypeAlias: Symbol;
 
         // The library files are only loaded when the feature is used.
@@ -4147,9 +4145,6 @@ namespace ts {
 
         function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
             // get symbol of the first identifier of the entityName
-            if (isIntrinsicMarkerTypeReference(entityName.parent)) {
-                return { accessibility: SymbolAccessibility.Accessible };
-            }
             let meaning: SymbolFlags;
             if (entityName.parent.kind === SyntaxKind.TypeQuery ||
                 isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent) ||
@@ -4348,9 +4343,7 @@ namespace ts {
 
                 if (type.flags & TypeFlags.Any) {
                     context.approximateLength += 3;
-                    return type === intrinsicMarkerType ?
-                        factory.createTypeReferenceNode(factory.createIdentifier(intrinsicMarkerType.intrinsicName), /*typeArguments*/ undefined) :
-                        factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    return factory.createKeywordTypeNode(type === intrinsicMarkerType ? SyntaxKind.IntrinsicKeyword : SyntaxKind.AnyKeyword);
                 }
                 if (type.flags & TypeFlags.Unknown) {
                     return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
@@ -12138,10 +12131,10 @@ namespace ts {
         }
 
         function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined): Type {
-            if ((symbol === globalUppercaseSymbol || symbol === globalLowercaseSymbol) && typeArguments && typeArguments.length === 1) {
+            const type = getDeclaredTypeOfSymbol(symbol);
+            if (type === intrinsicMarkerType && isIntrinsicTypeName(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
                 return getStringMappingType(symbol, typeArguments[0]);
             }
-            const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters!;
             const id = getTypeListId(typeArguments);
@@ -12550,23 +12543,6 @@ namespace ts {
 
         function getGlobalBigIntType(reportErrors: boolean) {
             return deferredGlobalBigIntType || (deferredGlobalBigIntType = getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
-        }
-
-        function getIntrinsicSymbolOrUndefined(name: __String): Symbol | undefined {
-            const symbol = getGlobalTypeSymbol(name, /*reportErrors*/ false);
-            if (symbol && symbol.flags & SymbolFlags.TypeAlias) {
-                const declaration = find(symbol.declarations, isTypeAliasDeclaration);
-                const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                if (declaration && declaration.type.kind === SyntaxKind.TypeReference && length(typeParameters) === 1) {
-                    const typeReference = <TypeReferenceNode>declaration.type;
-                    if (isIdentifier(typeReference.typeName) && typeReference.typeName.escapedText === intrinsicMarkerType.intrinsicName && !typeReference.typeArguments) {
-                        const links = getSymbolLinks(symbol);
-                        links.declaredType = intrinsicMarkerType;
-                        links.typeParameters = typeParameters;
-                        return symbol;
-                    }
-                }
-            }
         }
 
         /**
@@ -13571,7 +13547,7 @@ namespace ts {
         function getStringMappingType(symbol: Symbol, type: Type): Type {
             return type.flags & TypeFlags.Union ? mapType(type, t => getStringMappingType(symbol, t)) :
                 isGenericIndexType(type) ? getStringMappingTypeForGenericType(symbol, type) :
-                type.flags & TypeFlags.StringLiteral ? getLiteralType(symbol === globalUppercaseSymbol ? (<StringLiteralType>type).value.toUpperCase() : (<StringLiteralType>type).value.toLowerCase()) :
+                type.flags & TypeFlags.StringLiteral ? getLiteralType(symbol.escapedName === "Uppercase" ? (<StringLiteralType>type).value.toUpperCase() : (<StringLiteralType>type).value.toLowerCase()) :
                 stringType;
         }
 
@@ -14696,6 +14672,8 @@ namespace ts {
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
                     return node.flags & NodeFlags.JavaScriptFile && !noImplicitAny ? anyType : nonPrimitiveType;
+                case SyntaxKind.IntrinsicKeyword:
+                    return intrinsicMarkerType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword as TypeNodeSyntaxKind:
                     // TODO(rbuckton): `ThisKeyword` is no longer a `TypeNode`, but we defensively allow it here because of incorrect casts in the Language Service and because of `isPartOfTypeNode`.
@@ -35365,18 +35343,19 @@ namespace ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkExportsOnMergedDeclarations(node);
             checkTypeParameters(node.typeParameters);
-            if (!isIntrinsicMarkerTypeReference(node.type)) {
+            if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
+                if (!isIntrinsicTypeName(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
+                    error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
+                }
+            }
+            else {
                 checkSourceElement(node.type);
                 registerForUnusedIdentifiersCheck(node);
             }
         }
 
-        function isIntrinsicMarkerTypeReference(node: Node) {
-            if (isTypeReferenceNode(node) && isTypeAliasDeclaration(node.parent)) {
-                const symbol = getSymbolOfNode(node.parent);
-                return symbol === globalUppercaseSymbol || symbol === globalLowercaseSymbol;
-            }
-            return false;
+        function isIntrinsicTypeName(name: string) {
+            return name === "Uppercase" || name === "Lowercase";
         }
 
         function computeEnumMemberValues(node: EnumDeclaration) {
@@ -38237,9 +38216,6 @@ namespace ts {
             globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as __String, /*arity*/ 1) || globalArrayType;
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
             globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as __String, /*arity*/ 1);
-
-            globalUppercaseSymbol = getIntrinsicSymbolOrUndefined("Uppercase" as __String);
-            globalLowercaseSymbol = getIntrinsicSymbolOrUndefined("Lowercase" as __String);
 
             if (augmentations) {
                 // merge _nonglobal_ module augmentations.
