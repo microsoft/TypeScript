@@ -2,7 +2,7 @@ tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(6,22): error TS2344:
 tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(13,22): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(20,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(27,25): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(35,38): error TS2794: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(35,38): error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
 tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(40,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<T>'.
 tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(42,5): error TS2322: Type 'string' is not assignable to type 'Uppercase<U>'.
 tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(43,5): error TS2322: Type 'Uppercase<T>' is not assignable to type 'Uppercase<U>'.
@@ -57,7 +57,7 @@ tests/cases/conformance/types/typeAliases/intrinsicTypes.ts(43,5): error TS2322:
     
     type MyUppercase<S extends string> = intrinsic;  // Error
                                          ~~~~~~~~~
-!!! error TS2794: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
+!!! error TS2795: The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.
     
     function foo1<T extends string, U extends T>(s: string, x: Uppercase<T>, y: Uppercase<U>) {
         s = x;
