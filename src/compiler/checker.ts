@@ -18263,7 +18263,7 @@ namespace ts {
                     i++;
                 }
             }
-            let match = discriminable.indexOf(/*searchElement*/ true);
+            const match = discriminable.indexOf(/*searchElement*/ true);
             if (match === -1) {
                 return defaultValue;
             }
