@@ -12085,6 +12085,26 @@ namespace ts {
                                 }
                             }
                         }
+                        else if (isExpressionWithTypeArguments(parentNode)) {
+                            debugger;
+                            if (!isIdentifier(parentNode.expression)) {
+                                debugger;
+                                return errorType;
+                            }
+                            const parentSymbol = getSymbolOfNameOrPropertyAccessExpression(parentNode.expression);
+                            if (!parentSymbol) {
+                                return errorType;
+                            }
+                            const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
+                            if (parentType.typeParameters && !isTypeParameterTypeConstructorDeclaration(parentType.typeParameters[typeParameterIndex])) {
+                                const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
+                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
+                                if (!isJs) {
+                                    // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
+                                    return errorType;
+                                }
+                            };
+                        }
                         else {
                             debugger;
                             return errorType;
