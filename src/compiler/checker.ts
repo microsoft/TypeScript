@@ -13598,7 +13598,7 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (reportDeprecated && accessNode && prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
+                    if (reportDeprecated && accessNode && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
@@ -25481,10 +25481,9 @@ namespace ts {
                 propType = (compilerOptions.noUncheckedIndexSignatures && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
             }
             else {
-                if (prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
+                if (getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
                     errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
-
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
                 getNodeLinks(node).resolvedSymbol = prop;
