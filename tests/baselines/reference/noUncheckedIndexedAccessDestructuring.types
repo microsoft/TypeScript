@@ -9,7 +9,7 @@ declare const strStrTuple: [string, string];
 
 // Destructuring from a simple array -> include undefined
 const [s1] = strArray;
->s1 : string
+>s1 : string | undefined
 >strArray : string[]
 
 s1.toString(); // Should error, s1 possibly undefined
@@ -51,7 +51,7 @@ declare const strMap: { [s: string]: string };
 >s : string
 
 const { t1 } = strMap;
->t1 : string
+>t1 : string | undefined
 >strMap : { [s: string]: string; }
 
 t1.toString(); // Should error, t1 possibly undefined
@@ -82,7 +82,7 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
     const { x, y, z } = numMapPoint;
 >x : number
 >y : number
->z : number
+>z : number | undefined
 >numMapPoint : { x: number; y: number; } & { [s: string]: number; }
 
     x.toFixed(); // Should OK
