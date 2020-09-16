@@ -20,4 +20,4 @@
 //// }
 
 goTo.position(0);
-verify.numberOfErrorsInCurrentFile(1);
+verify.numberOfErrorsInCurrentFile(2);
