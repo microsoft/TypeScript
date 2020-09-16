@@ -648,19 +648,21 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            const programTime = performance.getDuration("Program");
-            const bindTime = performance.getDuration("Bind");
-            const checkTime = performance.getDuration("Check");
-            const emitTime = performance.getDuration("Emit");
+            const programTime = performance.isEnabled() ? performance.getDuration("Program") : 0;
+            const bindTime = performance.isEnabled() ? performance.getDuration("Bind") : 0;
+            const checkTime = performance.isEnabled() ? performance.getDuration("Check") : 0;
+            const emitTime = performance.isEnabled() ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
                 const caches = program.getRelationCacheSizes();
                 reportCountStatistic("Assignability cache size", caches.assignable);
                 reportCountStatistic("Identity cache size", caches.identity);
                 reportCountStatistic("Subtype cache size", caches.subtype);
                 reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
-                performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                if (performance.isEnabled()) {
+                    performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                }
             }
-            else {
+            else if (performance.isEnabled()) {
                 // Individual component times.
                 // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
                 // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -672,10 +674,16 @@ namespace ts {
                 reportTimeStatistic("Check time", checkTime);
                 reportTimeStatistic("Emit time", emitTime);
             }
-            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            if (performance.isEnabled()) {
+                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            }
             reportStatistics();
-
-            performance.disable();
+            if (!performance.isEnabled()) {
+                sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+            }
+            else {
+                performance.disable();
+            }
         }
 
         function reportStatistics() {

@@ -67,7 +67,17 @@ namespace ts.performance {
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
         if (perfHooks && enabled) {
-            perfHooks.performance.measure(measureName, startMarkName, endMarkName);
+            // NodeJS perf_hooks depends on call arity, not 'undefined' checks, so we
+            // need to be sure we call 'measure' with the correct number of arguments.
+            if (startMarkName === undefined) {
+                perfHooks.performance.measure(measureName);
+            }
+            else if (endMarkName === undefined) {
+                perfHooks.performance.measure(measureName, startMarkName);
+            }
+            else {
+                perfHooks.performance.measure(measureName, startMarkName, endMarkName);
+            }
         }
     }
 
@@ -100,15 +110,23 @@ namespace ts.performance {
         });
     }
 
+    /**
+     * Indicates whether the performance API is enabled.
+     */
+    export function isEnabled() {
+        return enabled;
+    }
+
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
         if (!enabled) {
             perfHooks ||= tryGetNativePerformanceHooks() || ShimPerformance?.createPerformanceHooksShim(timestamp);
-            if (!perfHooks) throw new Error("TypeScript requires an environment that provides a compatible native Web Performance API implementation.");
+            if (!perfHooks) return false;
             perfObserver ||= new perfHooks.PerformanceObserver(list => perfEntryList = list);
             perfObserver.observe({ entryTypes: ["mark", "measure"] });
             enabled = true;
         }
+        return true;
     }
 
     /** Disables performance measurements for the compiler. */
