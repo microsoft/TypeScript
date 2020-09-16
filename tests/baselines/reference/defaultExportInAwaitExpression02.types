@@ -3,11 +3,11 @@ const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
 >x : Promise<unknown>
 >new Promise( ( resolve, reject ) => { resolve( {} ); } ) : Promise<unknown>
 >Promise : PromiseConstructor
->( resolve, reject ) => { resolve( {} ); } : (resolve: (value?: unknown) => void, reject: (reason?: any) => void) => void
->resolve : (value?: unknown) => void
+>( resolve, reject ) => { resolve( {} ); } : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
 >reject : (reason?: any) => void
 >resolve( {} ) : void
->resolve : (value?: unknown) => void
+>resolve : (value: unknown) => void
 >{} : {}
 
 export default x;

@@ -1,0 +1,12 @@
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment4.ts(5,7): error TS2548: Type 'number[] | null' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment4.ts (1 errors) ====
+    // #35497
+    
+    
+    declare const data: number[] | null;
+    const [value] = data; // Error
+          ~~~~~~~
+!!! error TS2548: Type 'number[] | null' is not an array type or does not have a '[Symbol.iterator]()' method that returns an iterator.
+    

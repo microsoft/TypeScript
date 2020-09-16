@@ -206,6 +206,7 @@ namespace ts {
             case SyntaxKind.MappedType:
                 return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
+                    visitNode(cbNode, (<MappedTypeNode>node).nameType) ||
                     visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
@@ -424,6 +425,10 @@ namespace ts {
                 return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNode, cbNodes, (<TemplateExpression>node).templateSpans);
             case SyntaxKind.TemplateSpan:
                 return visitNode(cbNode, (<TemplateSpan>node).expression) || visitNode(cbNode, (<TemplateSpan>node).literal);
+            case SyntaxKind.TemplateLiteralType:
+                return visitNode(cbNode, (<TemplateLiteralTypeNode>node).head) || visitNodes(cbNode, cbNodes, (<TemplateLiteralTypeNode>node).templateSpans);
+            case SyntaxKind.TemplateLiteralTypeSpan:
+                return visitNode(cbNode, (<TemplateLiteralTypeSpan>node).type) || visitNode(cbNode, (<TemplateLiteralTypeSpan>node).literal);
             case SyntaxKind.ComputedPropertyName:
                 return visitNode(cbNode, (<ComputedPropertyName>node).expression);
             case SyntaxKind.HeritageClause:
@@ -477,6 +482,11 @@ namespace ts {
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
+            case SyntaxKind.JSDocSeeTag:
+                return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocSeeTag).name);
+            case SyntaxKind.JSDocNameReference:
+                return visitNode(cbNode, (node as JSDocNameReference).name);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -604,6 +614,7 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+        tracing.begin(tracing.Phase.Parse, "createSourceFile", { path: fileName });
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -618,6 +629,7 @@ namespace ts {
 
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
+        tracing.end();
         return result;
     }
 
@@ -2587,6 +2599,49 @@ namespace ts {
             );
         }
 
+        function parseTemplateType(): TemplateLiteralTypeNode {
+            const pos = getNodePos();
+            return finishNode(
+                factory.createTemplateLiteralType(
+                    parseTemplateHead(/*isTaggedTemplate*/ false),
+                    parseTemplateTypeSpans()
+                ),
+                pos
+            );
+        }
+
+        function parseTemplateTypeSpans() {
+            const pos = getNodePos();
+            const list = [];
+            let node: TemplateLiteralTypeSpan;
+            do {
+                node = parseTemplateTypeSpan();
+                list.push(node);
+            }
+            while (node.literal.kind === SyntaxKind.TemplateMiddle);
+            return createNodeArray(list, pos);
+        }
+
+        function parseTemplateTypeSpan(): TemplateLiteralTypeSpan {
+            const pos = getNodePos();
+            return finishNode(
+                factory.createTemplateLiteralTypeSpan(
+                    parseTemplateCasing(),
+                    parseType(),
+                    parseLiteralOfTemplateSpan(/*isTaggedTemplate*/ false)
+                ),
+                pos
+            );
+        }
+
+        function parseTemplateCasing(): TemplateCasing {
+            return parseOptional(SyntaxKind.UppercaseKeyword) ? TemplateCasing.Uppercase :
+                parseOptional(SyntaxKind.LowercaseKeyword) ? TemplateCasing.Lowercase :
+                parseOptional(SyntaxKind.CapitalizeKeyword) ? TemplateCasing.Capitalize :
+                parseOptional(SyntaxKind.UncapitalizeKeyword) ? TemplateCasing.Uncapitalize :
+                TemplateCasing.None;
+        }
+
         function parseLiteralOfTemplateSpan(isTaggedTemplate: boolean) {
             if (token() === SyntaxKind.CloseBraceToken) {
                 reScanTemplateToken(isTaggedTemplate);
@@ -3260,6 +3315,7 @@ namespace ts {
             }
             parseExpected(SyntaxKind.OpenBracketToken);
             const typeParameter = parseMappedTypeParameter();
+            const nameType = parseOptional(SyntaxKind.AsKeyword) ? parseType() : undefined;
             parseExpected(SyntaxKind.CloseBracketToken);
             let questionToken: QuestionToken | PlusToken | MinusToken | undefined;
             if (token() === SyntaxKind.QuestionToken || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
@@ -3271,7 +3327,7 @@ namespace ts {
             const type = parseTypeAnnotation();
             parseSemicolon();
             parseExpected(SyntaxKind.CloseBraceToken);
-            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), pos);
+            return finishNode(factory.createMappedTypeNode(readonlyToken, typeParameter, nameType, questionToken, type), pos);
         }
 
         function parseTupleElementType() {
@@ -3452,6 +3508,8 @@ namespace ts {
                     return parseImportType();
                 case SyntaxKind.AssertsKeyword:
                     return lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine) ? parseAssertsTypePredicate() : parseTypeReference();
+                case SyntaxKind.TemplateHead:
+                    return parseTemplateType();
                 default:
                     return parseTypeReference();
             }
@@ -3493,6 +3551,8 @@ namespace ts {
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.AssertsKeyword:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
                     return true;
                 case SyntaxKind.FunctionKeyword:
                     return !inStartOfParameter;
@@ -7163,6 +7223,19 @@ namespace ts {
                 return finishNode(result, pos);
             }
 
+            export function parseJSDocNameReference(): JSDocNameReference {
+                const pos = getNodePos();
+                const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
+                const entityName = parseEntityName(/* allowReservedWords*/ false);
+                if (hasBrace) {
+                    parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
+                }
+
+                const result = factory.createJSDocNameReference(entityName);
+                fixupParentReferences(result);
+                return finishNode(result, pos);
+            }
+
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
@@ -7444,6 +7517,9 @@ namespace ts {
                         case "callback":
                             tag = parseCallbackTag(start, tagName, margin, indentText);
                             break;
+                        case "see":
+                            tag = parseSeeTag(start, tagName, margin, indentText);
+                            break;
                         default:
                             tag = parseUnknownTag(start, tagName, margin, indentText);
                             break;
@@ -7672,6 +7748,13 @@ namespace ts {
                     const end = getNodePos();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
                     return finishNode(factory.createJSDocTypeTag(tagName, typeExpression, comments), start, end);
+                }
+
+                function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
+                    const nameExpression = parseJSDocNameReference();
+                    const end = getNodePos();
+                    const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
+                    return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start, end);
                 }
 
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
@@ -8809,6 +8892,8 @@ namespace ts {
                 }
                 case "jsx":
                 case "jsxfrag":
+                case "jsximportsource":
+                case "jsxruntime":
                     return; // Accessed directly
                 default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
             }

@@ -562,10 +562,17 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean) {
+    export const enum GetLiteralTextFlags {
+        None = 0,
+        NeverAsciiEscape = 1 << 0,
+        JsxAttributeEscape = 1 << 1,
+        TerminateUnterminatedLiterals = 1 << 2,
+    }
+
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(
+        if (!nodeIsSynthesized(node) && node.parent && !(flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) && !(
             (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
             isBigIntLiteral(node)
         )) {
@@ -576,8 +583,8 @@ namespace ts {
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral: {
-                const escapeText = jsxAttributeEscape ? escapeJsxAttributeString :
-                    neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
+                    flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
                 if ((<StringLiteral>node).singleQuote) {
                     return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
@@ -592,7 +599,7 @@ namespace ts {
             case SyntaxKind.TemplateTail: {
                 // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
                 // had to include a backslash: `not \${a} substitution`.
-                const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
 
                 const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
@@ -610,7 +617,11 @@ namespace ts {
             }
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
+                return node.text;
             case SyntaxKind.RegularExpressionLiteral:
+                if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) {
+                    return node.text + (node.text.charCodeAt(node.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
+                }
                 return node.text;
         }
 
@@ -1858,7 +1869,7 @@ namespace ts {
 
     export function getExternalModuleRequireArgument(node: Node) {
         return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
-            && (getLeftmostPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+            && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -1928,8 +1939,10 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        node = getRootDeclaration(node);
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
+        if (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
@@ -4008,6 +4021,7 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
@@ -4031,7 +4045,16 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
+        if (referencePath) {
+            return ensurePathIsNonModuleName(extensionless);
+        }
+        const options = host.getCompilerOptions();
+        const rootPkgName = options.bundledPackageName || "";
+        const newPath = combinePaths(rootPkgName, extensionless);
+        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
+            return newPath.slice(0, newPath.length - "/index".length);
+        }
+        return newPath;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4062,6 +4085,12 @@ namespace ts {
 
     export function outFile(options: CompilerOptions) {
         return options.outFile || options.out;
+    }
+
+    /** Returns 'undefined' if and only if 'options.paths' is undefined. */
+    export function getPathsBasePath(options: CompilerOptions, host: { getCurrentDirectory?(): string }) {
+        if (!options.paths) return undefined;
+        return options.baseUrl ?? Debug.checkDefined(options.pathsBasePath || host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
     }
 
     export interface EmitFileNames {
@@ -5452,8 +5481,8 @@ namespace ts {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
 
-    export function getLeftmostPropertyAccessExpression(expr: Expression): Expression {
-        while (isPropertyAccessExpression(expr)) {
+    export function getLeftmostAccessExpression(expr: Expression): Expression {
+        while (isAccessExpression(expr)) {
             expr = expr.expression;
         }
         return expr;
@@ -5520,7 +5549,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging) {
+        if (Debug.isDebugging || tracing.isTracing()) {
             this.checker = checker;
         }
     }
@@ -5922,6 +5951,10 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+    }
+
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
@@ -5934,6 +5967,22 @@ namespace ts {
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
+    }
+
+    export function getJSXTransformEnabled(options: CompilerOptions): boolean {
+        const jsx = options.jsx;
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
+    }
+
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        return compilerOptions.jsx === JsxEmit.ReactJSX ||
+            compilerOptions.jsx === JsxEmit.ReactJSXDev ||
+            compilerOptions.jsxImportSource ||
+            jsxImportSourcePragma ?
+                jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
+                undefined;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -6375,7 +6424,7 @@ namespace ts {
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[] {
-        const needJsExtensions = options && options.allowJs;
+        const needJsExtensions = options && getAllowJSCompilerOption(options);
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
             return needJsExtensions ? allSupportedExtensions : supportedTSExtensions;
