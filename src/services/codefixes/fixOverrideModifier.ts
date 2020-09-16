@@ -10,7 +10,7 @@ namespace ts.codefix {
         Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code,
         Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_implemented_an_abstract_method_that_declared_in_the_base_class_0.code,
         Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code,
-        Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0.code
+        Diagnostics.This_parameter_property_must_be_rewritten_as_a_property_declaration_with_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code
     ];
 
     const errorCodeFixIdMap: Record<number, [DiagnosticMessage, string | undefined, DiagnosticMessage | undefined]> = {
@@ -26,7 +26,7 @@ namespace ts.codefix {
         [Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code]: [
             Diagnostics.Remove_override_modifier, fixRemoveOverrideId, Diagnostics.Remove_all_override_modifier
         ],
-        [Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0.code]: [
+        [Diagnostics.This_parameter_property_must_be_rewritten_as_a_property_declaration_with_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code]: [
             Diagnostics.Convert_to_property_declaration_and_add_override_modifier,
             fixConvertToPropertyDeclarationId,
             Diagnostics.Convert_all_to_property_declaration_and_add_override_modifier
@@ -73,7 +73,7 @@ namespace ts.codefix {
             case Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code:
             case Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_implemented_an_abstract_method_that_declared_in_the_base_class_0.code:
                 return doRemoveOverrideModifierChange(changeTracker, context.sourceFile, pos);
-            case Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0.code:
+            case Diagnostics.This_parameter_property_must_be_rewritten_as_a_property_declaration_with_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code:
                 return doConvertToPropertyDeclaration(changeTracker, context.sourceFile, pos);
             default:
                 Debug.fail("Unexpected error code: " + errorCode);
