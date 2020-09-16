@@ -3,7 +3,7 @@
 
 // Mapped type 'as N' clauses
 
-type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 
 // Mapped type with 'as N' clause has no constraint on 'in T' clause
