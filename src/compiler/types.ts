@@ -187,10 +187,6 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
-        UppercaseKeyword,
-        LowercaseKeyword,
-        CapitalizeKeyword,
-        UncapitalizeKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -545,7 +541,6 @@ namespace ts {
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
-        | SyntaxKind.CapitalizeKeyword
         | SyntaxKind.CaseKeyword
         | SyntaxKind.CatchKeyword
         | SyntaxKind.ClassKeyword
@@ -579,7 +574,6 @@ namespace ts {
         | SyntaxKind.IsKeyword
         | SyntaxKind.KeyOfKeyword
         | SyntaxKind.LetKeyword
-        | SyntaxKind.LowercaseKeyword
         | SyntaxKind.ModuleKeyword
         | SyntaxKind.NamespaceKeyword
         | SyntaxKind.NeverKeyword
@@ -607,11 +601,9 @@ namespace ts {
         | SyntaxKind.TryKeyword
         | SyntaxKind.TypeKeyword
         | SyntaxKind.TypeOfKeyword
-        | SyntaxKind.UncapitalizeKeyword
         | SyntaxKind.UndefinedKeyword
         | SyntaxKind.UniqueKeyword
         | SyntaxKind.UnknownKeyword
-        | SyntaxKind.UppercaseKeyword
         | SyntaxKind.VarKeyword
         | SyntaxKind.VoidKeyword
         | SyntaxKind.WhileKeyword
@@ -1668,17 +1660,8 @@ namespace ts {
     export interface TemplateLiteralTypeSpan extends TypeNode {
         readonly kind: SyntaxKind.TemplateLiteralTypeSpan,
         readonly parent: TemplateLiteralTypeNode;
-        readonly casing: TemplateCasing;
         readonly type: TypeNode;
         readonly literal: TemplateMiddle | TemplateTail;
-    }
-
-    export const enum TemplateCasing {
-        None,
-        Uppercase,
-        Lowercase,
-        Capitalize,
-        Uncapitalize,
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -5383,8 +5366,7 @@ namespace ts {
     }
 
     export interface TemplateLiteralType extends InstantiableType {
-        texts: readonly string[];  // Always one element longer than casings/types
-        casings: readonly TemplateCasing[];  // Always at least one element
+        texts: readonly string[];  // Always one element longer than types
         types: readonly Type[];  // Always at least one element
     }
 
@@ -6783,8 +6765,8 @@ namespace ts {
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
-        updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
 
         //
         // Types
