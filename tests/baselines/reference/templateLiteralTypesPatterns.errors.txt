@@ -1,0 +1,30 @@
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(7,7): error TS2322: Type '"no slash"' is not assignable to type '`/${string}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(14,10): error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(16,10): error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+
+
+==== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts (3 errors) ====
+    type RequiresLeadingSlash = `/${string}`;
+    
+    // ok
+    const a: RequiresLeadingSlash = "/bin";
+    
+    // not ok
+    const b: RequiresLeadingSlash = "no slash";
+          ~
+!!! error TS2322: Type '"no slash"' is not assignable to type '`/${string}`'.
+    
+    type Protocol<T extends string, U extends string> = `${T}://${U}`;
+    function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
+    // ok, has protocol
+    download("http://example.com/protocol");
+    // issues error - no protocol
+    download("example.com/noprotocol");
+             ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"example.com/noprotocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+    // issues error, incorrect protocol
+    download("gopher://example.com/protocol");
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"gopher://example.com/protocol"' is not assignable to parameter of type '`http://${string}` | `https://${string}` | `ftp://${string}`'.
+    
+    const q: RequiresLeadingSlash extends string ? true : false = true;

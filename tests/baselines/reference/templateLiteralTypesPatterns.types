@@ -1,0 +1,45 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts ===
+type RequiresLeadingSlash = `/${string}`;
+>RequiresLeadingSlash : `/${string}`
+
+// ok
+const a: RequiresLeadingSlash = "/bin";
+>a : `/${string}`
+>"/bin" : "/bin"
+
+// not ok
+const b: RequiresLeadingSlash = "no slash";
+>b : `/${string}`
+>"no slash" : "no slash"
+
+type Protocol<T extends string, U extends string> = `${T}://${U}`;
+>Protocol : `${T}://${U}`
+
+function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
+>download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
+>hostSpec : `http://${string}` | `https://${string}` | `ftp://${string}`
+
+// ok, has protocol
+download("http://example.com/protocol");
+>download("http://example.com/protocol") : void
+>download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>"http://example.com/protocol" : "http://example.com/protocol"
+
+// issues error - no protocol
+download("example.com/noprotocol");
+>download("example.com/noprotocol") : void
+>download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>"example.com/noprotocol" : "example.com/noprotocol"
+
+// issues error, incorrect protocol
+download("gopher://example.com/protocol");
+>download("gopher://example.com/protocol") : void
+>download : (hostSpec: `http://${string}` | `https://${string}` | `ftp://${string}`) => void
+>"gopher://example.com/protocol" : "gopher://example.com/protocol"
+
+const q: RequiresLeadingSlash extends string ? true : false = true;
+>q : true
+>true : true
+>false : false
+>true : true
+

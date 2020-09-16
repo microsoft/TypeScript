@@ -1,0 +1,42 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts ===
+type RequiresLeadingSlash = `/${string}`;
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+// ok
+const a: RequiresLeadingSlash = "/bin";
+>a : Symbol(a, Decl(templateLiteralTypesPatterns.ts, 3, 5))
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+// not ok
+const b: RequiresLeadingSlash = "no slash";
+>b : Symbol(b, Decl(templateLiteralTypesPatterns.ts, 6, 5))
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+type Protocol<T extends string, U extends string> = `${T}://${U}`;
+>Protocol : Symbol(Protocol, Decl(templateLiteralTypesPatterns.ts, 6, 43))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 8, 14))
+>U : Symbol(U, Decl(templateLiteralTypesPatterns.ts, 8, 31))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 8, 14))
+>U : Symbol(U, Decl(templateLiteralTypesPatterns.ts, 8, 31))
+
+function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+>hostSpec : Symbol(hostSpec, Decl(templateLiteralTypesPatterns.ts, 9, 18))
+>Protocol : Symbol(Protocol, Decl(templateLiteralTypesPatterns.ts, 6, 43))
+
+// ok, has protocol
+download("http://example.com/protocol");
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+
+// issues error - no protocol
+download("example.com/noprotocol");
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+
+// issues error, incorrect protocol
+download("gopher://example.com/protocol");
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+
+const q: RequiresLeadingSlash extends string ? true : false = true;
+>q : Symbol(q, Decl(templateLiteralTypesPatterns.ts, 17, 5))
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
