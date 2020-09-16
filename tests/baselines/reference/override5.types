@@ -99,7 +99,7 @@ class ADD extends AD {
 >ADD : ADD
 >AD : AD
 
-    override f(): void {
+    f(): void {
 >f : () => void
 
     }

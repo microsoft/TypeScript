@@ -3428,6 +3428,10 @@
         "category": "Error",
         "code": 4114
     },
+    "This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4115
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

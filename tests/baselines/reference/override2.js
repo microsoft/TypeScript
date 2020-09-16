@@ -2,7 +2,8 @@
 abstract class AB {
     abstract foo(v: string): void;
 
-    abstract bar(v: string): void
+    abstract bar(v: string): void;
+    abstract baz(v: string): void;
 }
 
 abstract class AD1 extends AB {
@@ -16,11 +17,13 @@ abstract class AD2 extends AB {
 abstract class AD3 extends AB {
     override foo(v: ''): void { } // need override?
     abstract bar(): void;
+    baz(): void { }
 }
 
 class D4 extends AB {
     override foo(v: ''): void {}
     override bar(v: ''): void {}
+    baz(): void { }
 }
 
 //// [override2.js]
@@ -62,6 +65,7 @@ var AD3 = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     AD3.prototype.foo = function (v) { }; // need override?
+    AD3.prototype.baz = function () { };
     return AD3;
 }(AB));
 var D4 = /** @class */ (function (_super) {
@@ -71,6 +75,7 @@ var D4 = /** @class */ (function (_super) {
     }
     D4.prototype.foo = function (v) { };
     D4.prototype.bar = function (v) { };
+    D4.prototype.baz = function () { };
     return D4;
 }(AB));
 
@@ -79,6 +84,7 @@ var D4 = /** @class */ (function (_super) {
 declare abstract class AB {
     abstract foo(v: string): void;
     abstract bar(v: string): void;
+    abstract baz(v: string): void;
 }
 declare abstract class AD1 extends AB {
 }
@@ -88,8 +94,10 @@ declare abstract class AD2 extends AB {
 declare abstract class AD3 extends AB {
     override foo(v: ''): void;
     abstract bar(): void;
+    baz(): void;
 }
 declare class D4 extends AB {
     override foo(v: ''): void;
     override bar(v: ''): void;
+    baz(): void;
 }

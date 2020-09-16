@@ -94,7 +94,7 @@ class ADD extends AD {
 >ADD : Symbol(ADD, Decl(override5.ts, 45, 1))
 >AD : Symbol(AD, Decl(override5.ts, 35, 1))
 
-    override f(): void {
+    f(): void {
 >f : Symbol(ADD.f, Decl(override5.ts, 47, 22))
 
     }

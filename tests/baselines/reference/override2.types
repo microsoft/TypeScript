@@ -6,8 +6,12 @@ abstract class AB {
 >foo : (v: string) => void
 >v : string
 
-    abstract bar(v: string): void
+    abstract bar(v: string): void;
 >bar : (v: string) => void
+>v : string
+
+    abstract baz(v: string): void;
+>baz : (v: string) => void
 >v : string
 }
 
@@ -36,6 +40,9 @@ abstract class AD3 extends AB {
 
     abstract bar(): void;
 >bar : () => void
+
+    baz(): void { }
+>baz : () => void
 }
 
 class D4 extends AB {
@@ -49,4 +56,7 @@ class D4 extends AB {
     override bar(v: ''): void {}
 >bar : (v: '') => void
 >v : ""
+
+    baz(): void { }
+>baz : () => void
 }

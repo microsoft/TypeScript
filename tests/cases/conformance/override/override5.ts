@@ -48,7 +48,7 @@ abstract class AND {
 }
 
 class ADD extends AD {
-    override f(): void {
+    f(): void {
 
     }
     override b(): void {

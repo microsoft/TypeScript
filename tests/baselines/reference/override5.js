@@ -47,7 +47,7 @@ abstract class AND {
 }
 
 class ADD extends AD {
-    override f(): void {
+    f(): void {
 
     }
     override b(): void {
@@ -150,6 +150,6 @@ declare abstract class AND {
     abstract override b(): void;
 }
 declare class ADD extends AD {
-    override f(): void;
+    f(): void;
     override b(): void;
 }
