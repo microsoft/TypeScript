@@ -1,7 +1,7 @@
 //// [mappedTypeAsClauses.ts]
 // Mapped type 'as N' clauses
 
-type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 
 // Mapped type with 'as N' clause has no constraint on 'in T' clause
@@ -37,7 +37,7 @@ type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & str
 
 //// [mappedTypeAsClauses.d.ts]
 declare type Getters<T> = {
-    [P in keyof T & string as `get${capitalize P}`]: () => T[P];
+    [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P];
 };
 declare type TG1 = Getters<{
     foo: string;

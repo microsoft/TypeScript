@@ -16,16 +16,16 @@ type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 
-// Casing modifiers
+// Casing intrinsics
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
     let s1: string = name;
     let s2: 'getFoo' | 'getBar' = name;
 }
@@ -63,14 +63,14 @@ type T23 = MatchPair<'[123]'>;  // unknown
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
 
 type SnakeToCamelCase<S extends string> =
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${lowercase T}` :
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Lowercase<T>}` :
     SnakeToPascalCase<S>;
 
 type SnakeToPascalCase<S extends string> =
     string extends S ? string :
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
     never;
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
@@ -239,10 +239,10 @@ declare type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
 declare type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 declare type ToString<T extends string | number | boolean | bigint> = `${T}`;
 declare type TS1 = ToString<'abc' | 42 | true | -1234n>;
-declare type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+declare type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 declare type TCA1 = Cases<'bar'>;
 declare type TCA2 = Cases<'BAR'>;
-declare function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`): void;
+declare function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`): void;
 declare function fa1<T>(x: T, y: {
     [P in keyof T]: T[P];
 }, z: {
@@ -263,8 +263,8 @@ declare type T21 = MatchPair<'[foo,bar]'>;
 declare type T22 = MatchPair<' [1,2]'>;
 declare type T23 = MatchPair<'[123]'>;
 declare type T24 = MatchPair<'[1,2,3,4]'>;
-declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${lowercase T}` : SnakeToPascalCase<S>;
-declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${capitalize `${lowercase T}`}` : never;
+declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Lowercase<T>}` : SnakeToPascalCase<S>;
+declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` : never;
 declare type RR0 = SnakeToPascalCase<'hello_world_foo'>;
 declare type RR1 = SnakeToPascalCase<'FOO_BAR_BAZ'>;
 declare type RR2 = SnakeToCamelCase<'hello_world_foo'>;

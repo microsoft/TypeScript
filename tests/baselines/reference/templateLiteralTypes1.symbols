@@ -47,18 +47,22 @@ type TS1 = ToString<'abc' | 42 | true | -1234n>;
 >TS1 : Symbol(TS1, Decl(templateLiteralTypes1.ts, 14, 69))
 >ToString : Symbol(ToString, Decl(templateLiteralTypes1.ts, 10, 75))
 
-// Casing modifiers
+// Casing intrinsics
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 >Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 15, 48))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
->TCA1 : Symbol(TCA1, Decl(templateLiteralTypes1.ts, 19, 97))
+>TCA1 : Symbol(TCA1, Decl(templateLiteralTypes1.ts, 19, 101))
 >Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 15, 48))
 
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
@@ -67,10 +71,11 @@ type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 >test : Symbol(test, Decl(templateLiteralTypes1.ts, 22, 25))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 26, 14))
 >name : Symbol(name, Decl(templateLiteralTypes1.ts, 26, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 26, 14))
 
     let s1: string = name;
@@ -208,17 +213,19 @@ type SnakeToCamelCase<S extends string> =
 >SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 61, 34))
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
 
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 64, 22))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 64, 33))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 64, 22))
 >SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 64, 33))
 
-    S extends `${infer T}` ? `${lowercase T}` :
+    S extends `${infer T}` ? `${Lowercase<T>}` :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 65, 22))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 65, 22))
 
     SnakeToPascalCase<S>;
@@ -232,17 +239,21 @@ type SnakeToPascalCase<S extends string> =
     string extends S ? string :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
 
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
 >SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
 
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
 
     never;
