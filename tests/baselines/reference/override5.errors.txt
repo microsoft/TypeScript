@@ -6,11 +6,10 @@ tests/cases/conformance/override/override5.ts(25,14): error TS1029: 'public' mod
 tests/cases/conformance/override/override5.ts(27,5): error TS1089: 'override' modifier cannot appear on a constructor declaration.
 tests/cases/conformance/override/override5.ts(44,23): error TS4111: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
 tests/cases/conformance/override/override5.ts(45,23): error TS4111: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
-tests/cases/conformance/override/override5.ts(49,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AD'.
 tests/cases/conformance/override/override5.ts(52,14): error TS4115: This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class 'AD'.
 
 
-==== tests/cases/conformance/override/override5.ts (10 errors) ====
+==== tests/cases/conformance/override/override5.ts (9 errors) ====
     class B {
         p1: number = 1;
         p2: number = 2;
@@ -76,8 +75,6 @@ tests/cases/conformance/override/override5.ts(52,14): error TS4115: This member 
     
     class ADD extends AD {
         f(): void {
-        ~
-!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AD'.
     
         }
         override b(): void {

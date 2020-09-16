@@ -1,13 +1,9 @@
-tests/cases/conformance/override/override2.ts(13,14): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
 tests/cases/conformance/override/override2.ts(17,14): error TS4115: This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class 'AB'.
-tests/cases/conformance/override/override2.ts(18,14): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
-tests/cases/conformance/override/override2.ts(19,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
 tests/cases/conformance/override/override2.ts(23,14): error TS4115: This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class 'AB'.
 tests/cases/conformance/override/override2.ts(24,14): error TS4115: This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class 'AB'.
-tests/cases/conformance/override/override2.ts(25,5): error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
 
 
-==== tests/cases/conformance/override/override2.ts (7 errors) ====
+==== tests/cases/conformance/override/override2.ts (3 errors) ====
     abstract class AB {
         abstract foo(v: string): void;
     
@@ -21,8 +17,6 @@ tests/cases/conformance/override/override2.ts(25,5): error TS4113: This member m
     
     abstract class AD2 extends AB {
         abstract foo(v: ''): void // need override?
-                 ~~~
-!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
     }
     
     abstract class AD3 extends AB {
@@ -30,11 +24,7 @@ tests/cases/conformance/override/override2.ts(25,5): error TS4113: This member m
                  ~~~
 !!! error TS4115: This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class 'AB'.
         abstract bar(): void;
-                 ~~~
-!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
         baz(): void { }
-        ~~~
-!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
     }
     
     class D4 extends AB {
@@ -45,6 +35,4 @@ tests/cases/conformance/override/override2.ts(25,5): error TS4113: This member m
                  ~~~
 !!! error TS4115: This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class 'AB'.
         baz(): void { }
-        ~~~
-!!! error TS4113: This member must have an 'override' modifier because it overrides a member in the base class 'AB'.
     }

@@ -35003,13 +35003,14 @@ namespace ts {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                         }
                         else if (prop && baseProp && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
-                            if (!hasOverride) {
+                            const baseHasAbstract = hasAbstractModifier(baseProp.valueDeclaration);
+                            if (!hasOverride && !baseHasAbstract) {
                                 const diag = memberIsParameterProperty ?
                                     Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0 :
                                     Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
                                 error(member, diag, baseClassName);
                             }
-                            else if (!hasAbstractModifier(member) && hasAbstractModifier(baseProp.valueDeclaration)) {
+                            else if (hasOverride && !hasAbstractModifier(member) && baseHasAbstract) {
                                 error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_implemented_an_abstract_method_that_declared_in_the_base_class_0, baseClassName);
                             }
                         }
