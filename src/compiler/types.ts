@@ -4185,7 +4185,6 @@ namespace ts {
         None = 0,
         Literal,
         Subtype,
-        Exact,
     }
 
     /* @internal */
