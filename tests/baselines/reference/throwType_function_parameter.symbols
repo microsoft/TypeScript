@@ -1,14 +1,48 @@
 === tests/cases/compiler/throwType_function_parameter.ts ===
-function checkParameterPosition<T extends number>(y: T extends 1234 ? throw 'No zero' : T) { }
+function checkParameterPosition<T extends number>(y: T extends 1234 ? throw 'No zero' : T) {
 >checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 0, 32))
 >y : Symbol(y, Decl(throwType_function_parameter.ts, 0, 50))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 0, 32))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 0, 32))
 
+    y.toExponential()
+>y.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(throwType_function_parameter.ts, 0, 50))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+}
 checkParameterPosition(1234)
 >checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
 
 checkParameterPosition(12345678)
 >checkParameterPosition : Symbol(checkParameterPosition, Decl(throwType_function_parameter.ts, 0, 0))
+
+type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
+>MustNumber : Symbol(MustNumber, Decl(throwType_function_parameter.ts, 4, 32))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
+
+type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
+>MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 72))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
+
+function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
+>f2 : Symbol(f2, Decl(throwType_function_parameter.ts, 7, 73))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 8, 12))
+>a : Symbol(a, Decl(throwType_function_parameter.ts, 8, 15))
+>MustNumber : Symbol(MustNumber, Decl(throwType_function_parameter.ts, 4, 32))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 8, 12))
+>b : Symbol(b, Decl(throwType_function_parameter.ts, 8, 32))
+>MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 72))
+>T : Symbol(T, Decl(throwType_function_parameter.ts, 8, 12))
+
+    a = b
+>a : Symbol(a, Decl(throwType_function_parameter.ts, 8, 15))
+>b : Symbol(b, Decl(throwType_function_parameter.ts, 8, 32))
+}
 

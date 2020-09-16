@@ -17387,6 +17387,8 @@ namespace ts {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
+                        // If at least one of X1 or X2 is throw type, they are considered related.
+                        // If at least one of Y1 or Y2 is throw type, they are considered related.
                         const sourceParams = (source as ConditionalType).root.inferTypeParameters;
                         let sourceExtends = (<ConditionalType>source).extendsType;
                         let mapper: TypeMapper | undefined;
@@ -17399,8 +17401,12 @@ namespace ts {
                         }
                         if (isTypeIdenticalTo(sourceExtends, (<ConditionalType>target).extendsType) &&
                             (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
-                            if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(<ConditionalType>source), mapper), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
-                                result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
+                            const sourceTrueType = dropThrowTypeInConditionalType(instantiateType(getTrueTypeFromConditionalType(<ConditionalType>source), mapper));
+                            const targetTrueType = dropThrowTypeInConditionalType(getTrueTypeFromConditionalType(<ConditionalType>target));
+                            if (result = (sourceTrueType.flags | targetTrueType.flags) & TypeFlags.ThrowType ? Ternary.True : isRelatedTo(sourceTrueType, targetTrueType, reportErrors)) {
+                                const sourceFalseType = dropThrowTypeInConditionalType(getFalseTypeFromConditionalType(<ConditionalType>source));
+                                const targetFalseType = dropThrowTypeInConditionalType(getFalseTypeFromConditionalType(<ConditionalType>target));
+                                result &= (sourceFalseType.flags | targetFalseType.flags) & TypeFlags.ThrowType ? Ternary.True : isRelatedTo(sourceFalseType, targetFalseType, reportErrors);
                             }
                             if (result) {
                                 resetErrorInfo(saveErrorInfo);

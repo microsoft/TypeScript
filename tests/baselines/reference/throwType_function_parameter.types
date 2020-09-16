@@ -1,8 +1,14 @@
 === tests/cases/compiler/throwType_function_parameter.ts ===
-function checkParameterPosition<T extends number>(y: T extends 1234 ? throw 'No zero' : T) { }
+function checkParameterPosition<T extends number>(y: T extends 1234 ? throw 'No zero' : T) {
 >checkParameterPosition : <T extends number>(y: T extends 1234 ? throw 'No zero' : T) => void
 >y : T extends 1234 ? never : T
 
+    y.toExponential()
+>y.toExponential() : string
+>y.toExponential : (fractionDigits?: number) => string
+>y : T extends 1234 ? never : T
+>toExponential : (fractionDigits?: number) => string
+}
 checkParameterPosition(1234)
 >checkParameterPosition(1234) : void
 >checkParameterPosition : <T extends number>(y: T extends 1234 ? never : T) => void
@@ -12,4 +18,21 @@ checkParameterPosition(12345678)
 >checkParameterPosition(12345678) : void
 >checkParameterPosition : <T extends number>(y: T extends 1234 ? never : T) => void
 >12345678 : 12345678
+
+type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
+>MustNumber : MustNumber<T>
+
+type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
+>MustNumber2 : MustNumber2<T>
+
+function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
+>f2 : <T>(a: MustNumber<T>, b: MustNumber2<T>) => void
+>a : MustNumber<T>
+>b : MustNumber2<T>
+
+    a = b
+>a = b : MustNumber2<T>
+>a : MustNumber<T>
+>b : MustNumber2<T>
+}
 
