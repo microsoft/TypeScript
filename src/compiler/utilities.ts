@@ -4577,6 +4577,10 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Override);
     }
 
+    export function hasAbstractModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Abstract);
+    }
+
     export function hasAmbientModifier(node: Node): boolean {
         return hasSyntacticModifier(node, ModifierFlags.Ambient);
     }

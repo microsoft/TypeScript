@@ -35002,7 +35002,7 @@ namespace ts {
                         if (prop && !baseProp && hasOverride) {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                         }
-                        else if (prop && baseProp && !hasOverride && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+                        else if (prop && baseProp && !hasOverride && compilerOptions.noImplicitOverride && !nodeInAmbientContext && !hasAbstractModifier(baseProp.valueDeclaration)) {
                             const diag = memberIsParameterProperty ?
                                 Diagnostics.This_parameter_must_convert_into_property_declaration_because_it_overrides_a_member_in_the_base_class_0 :
                                 Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
