@@ -75,6 +75,7 @@
         "unittests/semver.ts",
         "unittests/createMapShim.ts",
         "unittests/createSetShim.ts",
+        "unittests/createPerformanceHooksShim.ts",
         "unittests/transform.ts",
         "unittests/config/commandLineParsing.ts",
         "unittests/config/configurationExtension.ts",
