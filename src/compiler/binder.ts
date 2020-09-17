@@ -174,14 +174,15 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        tracing.begin(tracing.Phase.Bind, "bindSourceFile", { path: file.path });
+        const tracingData: tracing.EventData = [tracing.Phase.Bind, "bindSourceFile", { path: file.path }];
+        tracing.begin(...tracingData);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
-        tracing.end();
+        tracing.end(...tracingData);
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
