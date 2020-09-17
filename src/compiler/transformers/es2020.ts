@@ -34,7 +34,8 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:
-                  return visitCallExpression(node, isExpressionStatement);
+                  return visitCallExpression(node as CallExpression, isExpressionStatement);
+
                 case SyntaxKind.BinaryExpression:
                     if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
                         return transformNullishCoalescingExpression(<BinaryExpression>node);
