@@ -60,7 +60,7 @@ namespace ts {
 
         function visitCallExpression(node: Node, isExpressionStatement: boolean): VisitResult<Node> {
           if (node.flags & NodeFlags.OptionalChain) {
-              const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false, /*isDelete*/ false, /*hasUnusedOrFalsyResult*/ isExpressionStatement);
+              const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false, /*isDelete*/ false, /*isExpressionStatement*/ isExpressionStatement);
               Debug.assertNotNode(updated, isSyntheticReference);
               return updated;
           }
@@ -80,7 +80,7 @@ namespace ts {
         function visitNonOptionalPropertyOrElementAccessExpression(node: AccessExpression, captureThisArg: boolean, isDelete: boolean, isExpressionStatement: boolean): Expression {
             if (isOptionalChain(node)) {
                 // If `node` is an optional chain, then it is the outermost chain of an optional expression.
-                return visitOptionalExpression(node, captureThisArg, isDelete, /*hasUnusedOrFalsyResult*/ isExpressionStatement);
+                return visitOptionalExpression(node, captureThisArg, isDelete, /*isExpressionStatement*/ isExpressionStatement);
             }
 
             let expression: Expression = visitNode(node.expression, visitor, isExpression);
@@ -107,7 +107,7 @@ namespace ts {
         function visitNonOptionalCallExpression(node: CallExpression, captureThisArg: boolean, isExpressionStatement: boolean): Expression {
             if (isOptionalChain(node)) {
                 // If `node` is an optional chain, then it is the outermost chain of an optional expression.
-                return visitOptionalExpression(node, captureThisArg, /*isDelete*/ false, /*hasUnusedOrFalsyResult*/ isExpressionStatement);
+                return visitOptionalExpression(node, captureThisArg, /*isDelete*/ false, /*isExpressionStatement*/ isExpressionStatement);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -122,9 +122,9 @@ namespace ts {
             }
         }
 
-        function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean, hasUnusedOrFalsyResult: boolean): Expression {
+        function visitOptionalExpression(node: OptionalChain, captureThisArg: boolean, isDelete: boolean, isExpressionStatement: boolean): Expression {
             const { expression, chain } = flattenChain(node);
-            const left = visitNonOptionalExpression(expression, isCallChain(chain[0]), /*isDelete*/ false, hasUnusedOrFalsyResult);
+            const left = visitNonOptionalExpression(expression, isCallChain(chain[0]), /*isDelete*/ false, isExpressionStatement);
             const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
             let leftExpression = isSyntheticReference(left) ? left.expression : left;
             let capturedLeft: Expression = leftExpression;
@@ -174,9 +174,9 @@ namespace ts {
                 setOriginalNode(rightExpression, segment);
             }
 
-            const notNull = createNotNullCondition(leftExpression, capturedLeft, /*invert*/ !hasUnusedOrFalsyResult);
+            const notNull = createNotNullCondition(leftExpression, capturedLeft, /*invert*/ !isExpressionStatement);
             let target;
-            if (hasUnusedOrFalsyResult) {
+            if (hasUnusedOrFalsyResultisExpressionStatement) {
                 target = isDelete
                     ? factory.createLogicalAnd(notNull, factory.createDeleteExpression(rightExpression))
                     : factory.createLogicalAnd(notNull, rightExpression);
