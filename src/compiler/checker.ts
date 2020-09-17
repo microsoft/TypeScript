@@ -60,7 +60,8 @@ namespace ts {
         GeneratorYield,
     }
 
-    const enum TypeFacts {
+    /** @internal */
+    export const enum TypeFacts {
         None = 0,
         TypeofEQString = 1 << 0,      // typeof x === "string"
         TypeofEQNumber = 1 << 1,      // typeof x === "number"
