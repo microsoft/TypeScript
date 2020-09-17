@@ -1956,7 +1956,7 @@ namespace ts.server {
         }
 
         hasRoots() {
-            return !!this.rootFileNames?.length;
+            return !!ts.some(this.rootFileNames);
         }
 
         markAsDirty() {
