@@ -46,7 +46,15 @@ namespace ts.tracing {
         });
 
         traceFd = fs.openSync(tracePath, "w");
-        fs.writeSync(traceFd, `[\n`);
+
+        // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
+        const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
+        fs.writeSync(traceFd,
+                     "[\n"
+                     + [{ name: "process_name", args: { name: "tsc" }, ...meta },
+                        { name: "thread_name", args: { name: "Main" }, ...meta },
+                        { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
+                       .map(v => JSON.stringify(v)).join(",\n"));
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog (unless the `fs` module is unavailable). */
@@ -58,11 +66,7 @@ namespace ts.tracing {
 
         Debug.assert(fs);
 
-        // This both indicates that the trace is untruncated and conveniently
-        // ensures that the last array element won't have a trailing comma.
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","ts":${1000 * timestamp()},"name":"done","s":"g"}\n`);
-        fs.writeSync(traceFd, `]\n`);
-
+        fs.writeSync(traceFd, `\n]\n`);
         fs.closeSync(traceFd);
         traceFd = undefined;
 
@@ -88,38 +92,46 @@ namespace ts.tracing {
         Emit = "emit",
     }
 
-    export function begin(phase: Phase, name: string, args: object) {
-        if (!traceFd) {
-            return;
-        }
-        Debug.assert(fs);
+    export type EventData = [phase: Phase, name: string, args?: object];
 
-        performance.mark("beginTracing");
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"B","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","args":{ "ts": ${JSON.stringify(args)} }},\n`);
-        performance.mark("endTracing");
-        performance.measure("Tracing", "beginTracing", "endTracing");
+    /** Note: `push`/`pop` should be used by default.
+     * `begin`/`end` are for special cases where we need the data point even if the event never
+     * terminates (typically for reducing a scenario too big to trace to one that can be completed).
+     * In the future we might implement an exit handler to dump unfinished events which would
+     * deprecate these operations.
+     */
+    export function begin(phase: Phase, name: string, args?: object) {
+        writeEvent("B", phase, name, args);
+    }
+    export function end(phase: Phase, name: string, args?: object) {
+        writeEvent("E", phase, name, args);
     }
 
-    export function end() {
-        if (!traceFd) {
-            return;
-        }
-        Debug.assert(fs);
-
-        performance.mark("beginTracing");
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"E","ts":${1000 * timestamp()}},\n`);
-        performance.mark("endTracing");
-        performance.measure("Tracing", "beginTracing", "endTracing");
+    export function instant(phase: Phase, name: string, args?: object) {
+        writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
-    export function instant(phase: Phase, name: string, args: object) {
-        if (!traceFd) {
-            return;
-        }
-        Debug.assert(fs);
+    // Used for "Complete" (ph:"X") events
+    const completeEvents: { phase: Phase, name: string, args?: object, time: number }[] = [];
+    export function push(phase: Phase, name: string, args?: object) {
+        completeEvents.push({ phase, name, args, time: 1000 * timestamp() });
+    }
+    export function pop() {
+        Debug.assert(completeEvents.length > 0);
+        const { phase, name, args, time } = completeEvents.pop()!;
+        const dur = 1000 * timestamp() - time;
+        writeEvent("X", phase, name, args, `"dur":${dur}`, time);
+    }
 
+    function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,
+                       time: number = 1000 * timestamp()) {
+        if (!traceFd) return;
+        Debug.assert(fs);
         performance.mark("beginTracing");
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","s":"g","args":{ "ts": ${JSON.stringify(args)} }},\n`);
+        fs.writeSync(traceFd, `,\n{"pid":1,"tid":1,"ph":"${eventType}","cat":"${phase}","ts":${time},"name":"${name}"`);
+        if (extras) fs.writeSync(traceFd, `,${extras}`);
+        if (args) fs.writeSync(traceFd, `,"args":${JSON.stringify(args)}`);
+        fs.writeSync(traceFd, `}`);
         performance.mark("endTracing");
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
