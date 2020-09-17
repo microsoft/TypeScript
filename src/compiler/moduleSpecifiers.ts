@@ -1,7 +1,7 @@
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
 namespace ts.moduleSpecifiers {
-    const enum RelativePreference { Relative, NonRelative, Auto }
+    const enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
     // See UserPreferences#importPathEnding
     const enum Ending { Minimal, Index, JsExtension }
 
@@ -13,7 +13,11 @@ namespace ts.moduleSpecifiers {
 
     function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
         return {
-            relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
+            relativePreference:
+                importModuleSpecifierPreference === "relative" ? RelativePreference.Relative :
+                importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
+                importModuleSpecifierPreference === "external-non-relative" ? RelativePreference.ExternalNonRelative :
+                RelativePreference.Shortest,
             ending: getEnding(),
         };
         function getEnding(): Ending {
@@ -147,17 +151,19 @@ namespace ts.moduleSpecifiers {
 
     interface Info {
         readonly getCanonicalFileName: GetCanonicalFileName;
+        readonly importingSourceFileName: Path
         readonly sourceDirectory: Path;
     }
     // importingSourceFileName is separate because getEditsForFileRename may need to specify an updated path
     function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
         const sourceDirectory = getDirectoryPath(importingSourceFileName);
-        return { getCanonicalFileName, sourceDirectory };
+        return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
     }
 
-    function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
+    function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs, bundledPackageName } = compilerOptions;
+        const { sourceDirectory, getCanonicalFileName } = info;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
@@ -174,13 +180,34 @@ namespace ts.moduleSpecifiers {
         const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
         const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
-        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
+        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths.path;
 
         if (relativePreference === RelativePreference.NonRelative) {
             return nonRelative;
         }
 
-        if (relativePreference !== RelativePreference.Auto) Debug.assertNever(relativePreference);
+        if (relativePreference === RelativePreference.ExternalNonRelative) {
+            Debug.assertIsDefined(host.getNearestAncestorDirectoryWithPackageJson);
+            const projectDirectory = host.getCurrentDirectory();
+            const modulePath = toPath(moduleFileName, projectDirectory, getCanonicalFileName);
+            const sourceIsInternal = startsWith(sourceDirectory, projectDirectory);
+            const targetIsInternal = startsWith(modulePath, projectDirectory);
+            if (sourceIsInternal && !targetIsInternal || !sourceIsInternal && targetIsInternal) {
+                // 1. The import path crosses the boundary of the tsconfig.json-containing directory.
+                return nonRelative;
+            }
+
+            const nearestTargetPackageJson = host.getNearestAncestorDirectoryWithPackageJson(getDirectoryPath(modulePath));
+            const nearestSourcePackageJson = host.getNearestAncestorDirectoryWithPackageJson(sourceDirectory);
+            if (nearestSourcePackageJson !== nearestTargetPackageJson) {
+                // 2. The importing and imported files are part of different packages.
+                return nonRelative;
+            }
+
+            return relativePath;
+        }
+
+        if (relativePreference !== RelativePreference.Shortest) Debug.assertNever(relativePreference);
 
         // Prefer a relative import over a baseUrl import if it has fewer components.
         return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
@@ -325,7 +352,7 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): { key: string, path: string } | undefined {
         for (const key in paths) {
             for (const patternText of paths[key]) {
                 const pattern = removeFileExtension(normalizePath(patternText));
@@ -338,11 +365,11 @@ namespace ts.moduleSpecifiers {
                         endsWith(relativeToBaseUrl, suffix) ||
                         !suffix && relativeToBaseUrl === removeTrailingDirectorySeparator(prefix)) {
                         const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length);
-                        return key.replace("*", matchedStar);
+                        return { key, path: key.replace("*", matchedStar) };
                     }
                 }
                 else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
-                    return key;
+                    return { key, path: key };
                 }
             }
         }
@@ -431,7 +458,7 @@ namespace ts.moduleSpecifiers {
                         versionPaths.paths
                     );
                     if (fromPaths !== undefined) {
-                        moduleFileToTry = combinePaths(packageRootPath, fromPaths);
+                        moduleFileToTry = combinePaths(packageRootPath, fromPaths.path);
                     }
                 }
 
