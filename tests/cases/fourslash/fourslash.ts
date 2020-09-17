@@ -383,6 +383,7 @@ declare namespace FourSlashInterface {
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
+        getWarningDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
         getEditsForFileRename(options: {

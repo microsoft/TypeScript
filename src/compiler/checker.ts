@@ -1073,7 +1073,7 @@ namespace ts {
                 suggestionDiagnostics.add({ ...diagnostic, category });
             }
         }
-    
+
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
             const category = isError ? DiagnosticCategory.Error : DiagnosticCategory.Suggestion;
             addErrorOrWarningOrSuggestion(category, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator

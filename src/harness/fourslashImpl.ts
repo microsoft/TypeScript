@@ -1250,6 +1250,10 @@ namespace FourSlash {
             this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
         }
 
+        public getWarningDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]): void {
+            this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "warning");
+        }
+
         private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
             assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => {
                 const range = e.range || this.getRangesInFile()[0];
