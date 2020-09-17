@@ -1065,16 +1065,23 @@ namespace ts {
             return diagnostic;
         }
 
-        function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
-            if (isError) {
+        function addErrorOrWarningOrSuggestion(category: DiagnosticCategory, diagnostic: DiagnosticWithLocation) {
+            if (category === DiagnosticCategory.Error || category === DiagnosticCategory.Warning) {
                 diagnostics.add(diagnostic);
             }
             else {
-                suggestionDiagnostics.add({ ...diagnostic, category: DiagnosticCategory.Suggestion });
+                suggestionDiagnostics.add({ ...diagnostic, category });
             }
         }
+    
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
-            addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator
+            const category = isError ? DiagnosticCategory.Error : DiagnosticCategory.Suggestion;
+            addErrorOrWarningOrSuggestion(category, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator
+        }
+
+        function wraningOrSuggestion(isWraning: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+            const category = isWraning ? DiagnosticCategory.Warning : DiagnosticCategory.Suggestion;
+            addErrorOrWarningOrSuggestion(category, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator
         }
 
         function errorAndMaybeSuggestAwait(
@@ -13600,7 +13607,7 @@ namespace ts {
                 if (prop) {
                     if (reportDeprecated && accessNode && prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
-                        errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
+                        wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -22477,7 +22484,7 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             if (declaration && getCombinedNodeFlags(declaration) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
-                errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
+                wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
@@ -25482,7 +25489,7 @@ namespace ts {
             }
             else {
                 if (prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
-                    errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
+                    wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -27968,7 +27975,7 @@ namespace ts {
         function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
             if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
                 const suggestionNode = getDeprecatedSuggestionNode(node);
-                errorOrSuggestion(/*isError*/ false, suggestionNode, Diagnostics._0_is_deprecated, signatureToString(signature));
+                wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, suggestionNode, Diagnostics._0_is_deprecated, signatureToString(signature));
             }
         }
 
@@ -29197,7 +29204,7 @@ namespace ts {
             const operandType = checkExpression(node.expression);
             const awaitedType = checkAwaitedType(operandType, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
             if (awaitedType === operandType && awaitedType !== errorType && !(operandType.flags & TypeFlags.AnyOrUnknown)) {
-                addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(node, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
+                addErrorOrWarningOrSuggestion(/*category*/ DiagnosticCategory.Suggestion, createDiagnosticForNode(node, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
             }
             return awaitedType;
         }
@@ -31413,7 +31420,7 @@ namespace ts {
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
                     if (some(symbol.declarations, d => isTypeDeclaration(d) && !!(d.flags & NodeFlags.Deprecated))) {
-                        errorOrSuggestion(/* isError */ false, getDeprecatedSuggestionNode(node), Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                        wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, getDeprecatedSuggestionNode(node), Diagnostics._0_is_deprecated, symbol.escapedName as string);
                     }
                     if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
                         error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
@@ -35815,7 +35822,7 @@ namespace ts {
                 }
 
                 if (isImportSpecifier(node) && every(target.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {
-                    errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                    wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
         }
@@ -39712,7 +39719,7 @@ namespace ts {
                 return;
             }
 
-            addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(node, Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers));
+            addErrorOrWarningOrSuggestion(/*category*/ DiagnosticCategory.Suggestion, createDiagnosticForNode(node, Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers));
         }
 
         function checkGrammarBigIntLiteral(node: BigIntLiteral): boolean {
