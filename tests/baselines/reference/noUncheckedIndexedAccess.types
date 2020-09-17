@@ -41,9 +41,9 @@ const e1: boolean = strMap["foo"];
 
 const e2: boolean = strMap.bar;
 >e2 : boolean
->strMap.bar : boolean
+>strMap.bar : boolean | undefined
 >strMap : { [s: string]: boolean; }
->bar : boolean
+>bar : boolean | undefined
 
 const e3: boolean = strMap[0];
 >e3 : boolean
@@ -146,9 +146,9 @@ const ok1: boolean | undefined = strMap["foo"];
 
 const ok2: boolean | undefined = strMap.bar;
 >ok2 : boolean | undefined
->strMap.bar : boolean
+>strMap.bar : boolean | undefined
 >strMap : { [s: string]: boolean; }
->bar : boolean
+>bar : boolean | undefined
 
 type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
 >T_OK1 : any

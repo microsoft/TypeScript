@@ -5645,6 +5645,9 @@
       <Item ItemId=";Generates_an_event_trace_and_a_list_of_types_6237" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates an event trace and a list of types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Olay izleme ve tür listesi oluşturur.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6068,6 +6071,9 @@
       <Item ItemId=";Include_undefined_in_index_signature_results_6800" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dizin imzası sonuçlarına 'undefined' öğesini ekle]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7286,6 +7292,9 @@
       <Item ItemId=";Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash_5090" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['baseUrl' ayarlanmadığında göreli olmayan yollara izin verilmez. Başına './' koymayı deneyin]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7610,6 +7619,9 @@
       <Item ItemId=";Option_0_cannot_be_specified_when_option_jsx_is_1_5089" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' cannot be specified when option 'jsx' is '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['jsx' seçeneği '{1}' olduğunda '{0}' seçeneği belirtilemez.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8786,6 +8798,9 @@
       <Item ItemId=";Provides_a_root_package_name_when_using_outFile_with_declarations_1390" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Provides a root package name when using outFile with declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bildirimler ile outFile kullanılırken bir kök paketi adı sağlar.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9938,6 +9953,9 @@
       <Item ItemId=";Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react_6238" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`jsx` ve `jsxs` fabrika işlevlerini içeri aktarmak için kullanılacak modül tanımlayıcısını (ör. react) belirtin.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10235,6 +10253,9 @@
       <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Şablon sabit değerli tür bağımsız değişkeni ('{0}') sabit değerli tür veya genel bir tür değil.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10322,6 +10343,9 @@
       <Item ItemId=";The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_de_1391" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bildirim gösterimi ile outFile ve düğüm modülü çözümlemesi kullanılırken `bundledPackageName` seçeneği belirtilmelidir.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

@@ -2,6 +2,8 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(3,32): error TS2344
   Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(12,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(13,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+  Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(14,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(15,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
@@ -49,7 +51,7 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(79,7): error TS2322
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(85,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (27 errors) ====
+==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (28 errors) ====
     type CheckBooleanOnly<T extends boolean> = any;
     // Validate CheckBooleanOnly works - should error
     type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
@@ -69,6 +71,9 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(85,1): error TS2322
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e2: boolean = strMap.bar;
+          ~~
+!!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'boolean'.
     const e3: boolean = strMap[0];
           ~~
 !!! error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.

@@ -5642,6 +5642,9 @@
       <Item ItemId=";Generates_an_event_trace_and_a_list_of_types_6237" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates an event trace and a list of types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Generuje śledzenie zdarzeń i listę typów.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6065,6 +6068,9 @@
       <Item ItemId=";Include_undefined_in_index_signature_results_6800" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Uwzględnij element „undefined” w wynikach sygnatury indeksu]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7283,6 +7289,9 @@
       <Item ItemId=";Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash_5090" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ścieżki inne niż względne nie są dozwolone, gdy nie jest ustawiona wartość „baseUrl”. Czy nie zostały pominięte początkowe znaki „./”?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7607,6 +7616,9 @@
       <Item ItemId=";Option_0_cannot_be_specified_when_option_jsx_is_1_5089" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' cannot be specified when option 'jsx' is '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nie można określić opcji „{0}”, jeśli opcja „jsx” ma wartość „{1}”.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8780,6 +8792,9 @@
       <Item ItemId=";Provides_a_root_package_name_when_using_outFile_with_declarations_1390" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Provides a root package name when using outFile with declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dostarcza nazwę pakietu głównego podczas używania opcji outFile z deklaracjami.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9932,6 +9947,9 @@
       <Item ItemId=";Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react_6238" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Określ specyfikator modułu, który ma być używany do importowania funkcji fabryki „jsx” i „jsxs” na przykład z platformy React]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10229,6 +10247,9 @@
       <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Argument typu literału szablonu „{0}” nie jest typem literału ani typem ogólnym.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10316,6 +10337,9 @@
       <Item ItemId=";The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_de_1391" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Opcja „bundledPackageName” musi być podana, gdy używana jest opcja outFile i rozpoznawanie modułu węzła z emitowaniem deklaracji.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
