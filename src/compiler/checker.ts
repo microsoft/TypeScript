@@ -12115,12 +12115,13 @@ namespace ts {
                 if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) {
                     // These are not well considered, just for passing test cases.
                     // Maybe all those code should be removed and written in other places.
-                    debugger;
+
                     // get the type-constructor(the origional meaning)
                     const parentNode = <NodeWithTypeArguments | CallExpression>node.parent; // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
                     const typeParameterIndex = parentNode.typeArguments!.findIndex(t => t === node);
                     if (typeParameterIndex >= 0) {
                         if (isTypeReferenceNode(parentNode)) {
+                            debugger;
                             const meaning = SymbolFlags.Type;
                             const parentSymbol = resolveTypeReferenceName(getTypeReferenceName(parentNode), meaning);
                             const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
