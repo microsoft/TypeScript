@@ -1,13 +1,12 @@
 /*@internal*/
 /** Performance measurements for the compiler. */
 namespace ts.performance {
-    declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
-    const profilerEvent: (markName: string) => void = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true ? onProfilerEvent : noop;
-
     let perfHooks: PerformanceHooks | undefined;
     let perfObserver: PerformanceObserver | undefined;
     let perfEntryList: PerformanceObserverEntryList | undefined;
-    let enabled = false;
+    // when set, indicates the implementation of `Performance` to use for user timing.
+    // when unset, indicates user timing is unavailable or disabled.
+    let performanceImpl: Performance | undefined;
 
     export interface Timer {
         enter(): void;
@@ -50,9 +49,8 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function mark(markName: string) {
-        if (perfHooks && enabled) {
-            perfHooks.performance.mark(markName);
-            profilerEvent(markName);
+        if (performanceImpl) {
+            performanceImpl.mark(markName);
         }
     }
 
@@ -66,17 +64,17 @@ namespace ts.performance {
      *      used.
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
-        if (perfHooks && enabled) {
+        if (performanceImpl) {
             // NodeJS perf_hooks depends on call arity, not 'undefined' checks, so we
             // need to be sure we call 'measure' with the correct number of arguments.
             if (startMarkName === undefined) {
-                perfHooks.performance.measure(measureName);
+                performanceImpl.measure(measureName);
             }
             else if (endMarkName === undefined) {
-                perfHooks.performance.measure(measureName, startMarkName);
+                performanceImpl.measure(measureName, startMarkName);
             }
             else {
-                perfHooks.performance.measure(measureName, startMarkName, endMarkName);
+                performanceImpl.measure(measureName, startMarkName, endMarkName);
             }
         }
     }
@@ -114,17 +112,17 @@ namespace ts.performance {
      * Indicates whether the performance API is enabled.
      */
     export function isEnabled() {
-        return enabled;
+        return !!performanceImpl;
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        if (!enabled) {
+        if (!performanceImpl) {
             perfHooks ||= tryGetNativePerformanceHooks() || ShimPerformance?.createPerformanceHooksShim(timestamp);
             if (!perfHooks) return false;
             perfObserver ||= new perfHooks.PerformanceObserver(list => perfEntryList = list);
             perfObserver.observe({ entryTypes: ["mark", "measure"] });
-            enabled = true;
+            performanceImpl = perfHooks.performance;
         }
         return true;
     }
@@ -132,6 +130,6 @@ namespace ts.performance {
     /** Disables performance measurements for the compiler. */
     export function disable() {
         perfObserver?.disconnect();
-        enabled = false;
+        performanceImpl = undefined;
     }
 }
