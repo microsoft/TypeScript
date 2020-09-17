@@ -1955,6 +1955,10 @@ namespace ts.server {
             return super.updateGraph();
         }
 
+        hasRoots() {
+            return !!this.rootFileNames?.length;
+        }
+
         markAsDirty() {
             this.rootFileNames = undefined;
             super.markAsDirty();
