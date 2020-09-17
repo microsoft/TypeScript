@@ -59,9 +59,9 @@ namespace ts {
             return { expression: chain.expression, chain: links };
         }
 
-        function visitCallExpression(node: Node, isExpressionStatement: boolean): VisitResult<Node> {
-          if (node.flags & NodeFlags.OptionalChain) {
-              const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false, /*isDelete*/ false, /*hasUnusedOrFalsyResult*/ isExpressionStatement);
+        function visitCallExpression(node: CallExpression, isExpressionStatement: boolean): VisitResult<Node> {
+          if (isOptionalChain(node)) {
+              const updated = visitOptionalExpression(node, /*captureThisArg*/ false, /*isDelete*/ false, /*hasUnusedOrFalsyResult*/ isExpressionStatement);
               Debug.assertNotNode(updated, isSyntheticReference);
               return updated;
           }
