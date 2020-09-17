@@ -632,6 +632,14 @@ namespace ts {
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
+        {
+            name: "warnOnDeprecated",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Include_undefined_in_index_signature_results
+        },
 
         // Module Resolution
         {

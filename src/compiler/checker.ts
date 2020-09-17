@@ -1066,7 +1066,7 @@ namespace ts {
         }
 
         function addErrorOrWarningOrSuggestion(category: DiagnosticCategory, diagnostic: DiagnosticWithLocation) {
-            if (category === DiagnosticCategory.Error || category === DiagnosticCategory.Warning) {
+            if (category === DiagnosticCategory.Error) {
                 diagnostics.add(diagnostic);
             }
             else {
