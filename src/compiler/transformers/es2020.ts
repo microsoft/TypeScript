@@ -177,7 +177,7 @@ namespace ts {
 
             const notNull = createNotNullCondition(leftExpression, capturedLeft, /*invert*/ !isExpressionStatement);
             let target;
-            if (hasUnusedOrFalsyResultisExpressionStatement) {
+            if (isExpressionStatement) {
                 target = isDelete
                     ? factory.createLogicalAnd(notNull, factory.createDeleteExpression(rightExpression))
                     : factory.createLogicalAnd(notNull, rightExpression);
