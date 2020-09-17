@@ -34,7 +34,8 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.CallExpression:
-                  return visitCallExpression(node, isExpressionStatement);
+                  return visitCallExpression(node as CallExpression, isExpressionStatement);
+
                 case SyntaxKind.BinaryExpression:
                     if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
                         return transformNullishCoalescingExpression(<BinaryExpression>node);
@@ -58,9 +59,9 @@ namespace ts {
             return { expression: chain.expression, chain: links };
         }
 
-        function visitCallExpression(node: Node, isExpressionStatement: boolean): VisitResult<Node> {
-          if (node.flags & NodeFlags.OptionalChain) {
-              const updated = visitOptionalExpression(node as OptionalChain, /*captureThisArg*/ false, /*isDelete*/ false, /*isExpressionStatement*/ isExpressionStatement);
+        function visitCallExpression(node: CallExpression, isExpressionStatement: boolean): VisitResult<Node> {
+          if (isOptionalChain(node)) {
+              const updated = visitOptionalExpression(node, /*captureThisArg*/ false, /*isDelete*/ false, /*isExpressionStatement*/ isExpressionStatement);
               Debug.assertNotNode(updated, isSyntheticReference);
               return updated;
           }
