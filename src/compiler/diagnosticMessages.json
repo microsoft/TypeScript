@@ -4729,6 +4729,10 @@
         "category": "Message",
         "code": 6800
     },
+    "Issue an warning if declaration is deprecated": {
+        "category": "Message",
+        "code": 6801
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -633,12 +633,12 @@ namespace ts {
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
         {
-            name: "warnOnDeprecated",
+            name: "warningOnDeprecated",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
-            description: Diagnostics.Include_undefined_in_index_signature_results
+            description: Diagnostics.Issue_an_warning_if_declaration_is_deprecated
         },
 
         // Module Resolution

@@ -5784,7 +5784,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
-        warnOnDeprecated?: boolean;
+        warningOnDeprecated?: boolean;
         out?: string;
         outDir?: string;
         outFile?: string;

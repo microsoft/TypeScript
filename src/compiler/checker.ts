@@ -13607,7 +13607,7 @@ namespace ts {
                 if (prop) {
                     if (reportDeprecated && accessNode && prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
-                        wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
+                        wraningOrSuggestion(!!compilerOptions.warningOnDeprecated, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -22484,7 +22484,7 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             if (declaration && getCombinedNodeFlags(declaration) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
-                wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
+                wraningOrSuggestion(!!compilerOptions.warningOnDeprecated, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
@@ -25489,7 +25489,7 @@ namespace ts {
             }
             else {
                 if (prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
-                    wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, right, Diagnostics._0_is_deprecated, right.escapedText as string);
+                    wraningOrSuggestion(!!compilerOptions.warningOnDeprecated, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -27975,7 +27975,7 @@ namespace ts {
         function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
             if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
                 const suggestionNode = getDeprecatedSuggestionNode(node);
-                wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, suggestionNode, Diagnostics._0_is_deprecated, signatureToString(signature));
+                wraningOrSuggestion(!!compilerOptions.warningOnDeprecated, suggestionNode, Diagnostics._0_is_deprecated, signatureToString(signature));
             }
         }
 
@@ -31420,7 +31420,7 @@ namespace ts {
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
                     if (some(symbol.declarations, d => isTypeDeclaration(d) && !!(d.flags & NodeFlags.Deprecated))) {
-                        wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, getDeprecatedSuggestionNode(node), Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                        wraningOrSuggestion(!!compilerOptions.warningOnDeprecated, getDeprecatedSuggestionNode(node), Diagnostics._0_is_deprecated, symbol.escapedName as string);
                     }
                     if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
                         error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
@@ -35822,7 +35822,7 @@ namespace ts {
                 }
 
                 if (isImportSpecifier(node) && every(target.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {
-                    wraningOrSuggestion(!!compilerOptions.warnOnDeprecated, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                    wraningOrSuggestion(!!compilerOptions.warningOnDeprecated, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
         }
