@@ -2842,6 +2842,7 @@ declare namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         noUncheckedIndexedAccess?: boolean;
+        warningOnDeprecated?: boolean;
         out?: string;
         outDir?: string;
         outFile?: string;
