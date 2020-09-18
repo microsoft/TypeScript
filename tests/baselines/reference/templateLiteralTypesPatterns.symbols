@@ -164,130 +164,144 @@ numbers("a10");
 numbers("10a");
 >numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
 
+// whitespace and comments aren't part of numbers
+numbers("- 1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-/**/1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
 declare function bigints(x: `${bigint}`): void;
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
->x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 70, 25))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 74, 25))
 
 // the following should work
 bigints("1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0b1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0x1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0o1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 // bigints do not allow scientific notation in their parsing/scanning, so these are all errors
 bigints("1e21");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1E21");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1e-21");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1E-21");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 // these are all errors because they're not big_int_s
 bigints("1.0");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1.1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1.1");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1.1e-10");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1.1E-10");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1.1e-10");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 // the following should be errors since they're not numbers
 bigints("?");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("NaN");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("Infinity");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("+Infinity");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-Infinity");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1_000");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// whitespace and comments aren't part of numbers
+bigints("- 1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-/**/1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 // the following should be errors since they don't match the pattern
 bigints("a10n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("10an");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 // the following should all be errors because the `BigInt` constructor (and thus bigint parsing) doesn't take the trailing `n` used in literals
 bigints("1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0b1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0x1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("0o1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1e21n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1E21n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1e-21n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1E-21n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1.1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1.1n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1.1e-10n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("-1.1E-10n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
 bigints("1.1e-10n");
->bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 68, 15))
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 

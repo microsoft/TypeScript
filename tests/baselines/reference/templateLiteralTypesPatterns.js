@@ -69,6 +69,10 @@ numbers("1_000");
 numbers("a10");
 numbers("10a");
 
+// whitespace and comments aren't part of numbers
+numbers("- 1");
+numbers("-/**/1");
+
 declare function bigints(x: `${bigint}`): void;
 // the following should work
 bigints("1");
@@ -99,6 +103,10 @@ bigints("Infinity");
 bigints("+Infinity");
 bigints("-Infinity");
 bigints("1_000");
+
+// whitespace and comments aren't part of numbers
+bigints("- 1");
+bigints("-/**/1");
 
 // the following should be errors since they don't match the pattern
 bigints("a10n");
@@ -176,6 +184,9 @@ numbers("1_000");
 // the following should be errors since they don't match the pattern
 numbers("a10");
 numbers("10a");
+// whitespace and comments aren't part of numbers
+numbers("- 1");
+numbers("-/**/1");
 // the following should work
 bigints("1");
 bigints("-1");
@@ -202,6 +213,9 @@ bigints("Infinity");
 bigints("+Infinity");
 bigints("-Infinity");
 bigints("1_000");
+// whitespace and comments aren't part of numbers
+bigints("- 1");
+bigints("-/**/1");
 // the following should be errors since they don't match the pattern
 bigints("a10n");
 bigints("10an");

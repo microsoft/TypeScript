@@ -232,6 +232,17 @@ numbers("10a");
 >numbers : (x: `${number}`) => void
 >"10a" : "10a"
 
+// whitespace and comments aren't part of numbers
+numbers("- 1");
+>numbers("- 1") : void
+>numbers : (x: `${number}`) => void
+>"- 1" : "- 1"
+
+numbers("-/**/1");
+>numbers("-/**/1") : void
+>numbers : (x: `${number}`) => void
+>"-/**/1" : "-/**/1"
+
 declare function bigints(x: `${bigint}`): void;
 >bigints : (x: `${bigint}`) => void
 >x : `${bigint}`
@@ -349,6 +360,17 @@ bigints("1_000");
 >bigints("1_000") : void
 >bigints : (x: `${bigint}`) => void
 >"1_000" : "1_000"
+
+// whitespace and comments aren't part of numbers
+bigints("- 1");
+>bigints("- 1") : void
+>bigints : (x: `${bigint}`) => void
+>"- 1" : "- 1"
+
+bigints("-/**/1");
+>bigints("-/**/1") : void
+>bigints : (x: `${bigint}`) => void
+>"-/**/1" : "-/**/1"
 
 // the following should be errors since they don't match the pattern
 bigints("a10n");
