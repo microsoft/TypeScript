@@ -208,33 +208,36 @@ namespace ts {
             let objectProperties: Expression;
             const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
-            if (attrs.length === 0) {
-                objectProperties = factory.createObjectLiteralExpression([]);
-                // When there are no attributes, React wants {}
-            }
-            else {
+
+            let segments: Expression[] = [];
+            if (attrs.length) {
                 // Map spans of JsxAttribute nodes into object literals and spans
                 // of JsxSpreadAttribute nodes into expressions.
-                const segments = flatten<Expression | ObjectLiteralExpression>(
+                segments = flatten(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
                         : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
                     )
                 );
 
-                if (children && children.length) {
-                    const result = convertJsxChildrenToChildrenPropObject(children);
-                    if (result) {
-                        segments.push(result);
-                    }
-                }
-
                 if (isJsxSpreadAttribute(attrs[0])) {
                     // We must always emit at least one object literal before a spread
                     // argument.factory.createObjectLiteral
                     segments.unshift(factory.createObjectLiteralExpression());
                 }
+            }
+            if (children && children.length) {
+                const result = convertJsxChildrenToChildrenPropObject(children);
+                if (result) {
+                    segments.push(result);
+                }
+            }
 
+            if (segments.length === 0) {
+                objectProperties = factory.createObjectLiteralExpression([]);
+                // When there are no attributes, React wants {}
+            }
+            else {
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
