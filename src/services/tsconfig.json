@@ -103,6 +103,7 @@
         "codefixes/wrapJsxInFragment.ts",
         "codefixes/convertToMappedObjectType.ts",
         "codefixes/removeAccidentalCallParentheses.ts",
+        "codefixes/removeTsSpecificConstructs.ts",
         "codefixes/removeUnnecessaryAwait.ts",
         "codefixes/splitTypeOnlyImport.ts",
         "codefixes/convertConstToLet.ts",
