@@ -29,6 +29,20 @@ type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
 type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
 
+// Repro from #40619
+
+type Lazyify<T> = {
+    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+};
+
+interface Person {
+    readonly name: string;
+    age: number;
+    location?: string;
+}
+
+type LazyPerson = Lazyify<Person>;
+
 
 //// [mappedTypeAsClauses.js]
 "use strict";
@@ -82,3 +96,12 @@ declare type TD1 = DoubleProp<{
 }>;
 declare type TD2 = keyof TD1;
 declare type TD3<U> = keyof DoubleProp<U>;
+declare type Lazyify<T> = {
+    [K in keyof T as `get${capitalize string & K}`]: () => T[K];
+};
+interface Person {
+    readonly name: string;
+    age: number;
+    location?: string;
+}
+declare type LazyPerson = Lazyify<Person>;

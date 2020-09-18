@@ -108,3 +108,36 @@ type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & str
 >DoubleProp : Symbol(DoubleProp, Decl(mappedTypeAsClauses.ts, 21, 85))
 >U : Symbol(U, Decl(mappedTypeAsClauses.ts, 28, 9))
 
+// Repro from #40619
+
+type Lazyify<T> = {
+>Lazyify : Symbol(Lazyify, Decl(mappedTypeAsClauses.ts, 28, 34))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
+
+    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
+
+};
+
+interface Person {
+>Person : Symbol(Person, Decl(mappedTypeAsClauses.ts, 34, 2))
+
+    readonly name: string;
+>name : Symbol(Person.name, Decl(mappedTypeAsClauses.ts, 36, 18))
+
+    age: number;
+>age : Symbol(Person.age, Decl(mappedTypeAsClauses.ts, 37, 26))
+
+    location?: string;
+>location : Symbol(Person.location, Decl(mappedTypeAsClauses.ts, 38, 16))
+}
+
+type LazyPerson = Lazyify<Person>;
+>LazyPerson : Symbol(LazyPerson, Decl(mappedTypeAsClauses.ts, 40, 1))
+>Lazyify : Symbol(Lazyify, Decl(mappedTypeAsClauses.ts, 28, 34))
+>Person : Symbol(Person, Decl(mappedTypeAsClauses.ts, 34, 2))
+
