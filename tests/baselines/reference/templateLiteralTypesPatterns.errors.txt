@@ -52,9 +52,11 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(126,9): er
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(127,9): error TS2345: Argument of type '"-1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(128,9): error TS2345: Argument of type '"-1.1E-10n"' is not assignable to parameter of type '`${bigint}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(129,9): error TS2345: Argument of type '"1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(140,1): error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(141,1): error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts (54 errors) ====
+==== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts (56 errors) ====
     type RequiresLeadingSlash = `/${string}`;
     
     // ok
@@ -292,4 +294,34 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(129,9): er
     bigints("1.1e-10n");
             ~~~~~~~~~~
 !!! error TS2345: Argument of type '"1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
+    
+    type AStr = `a${string}`;
+    type ANum = `a${number}`;
+    type AAny = `a${any}`;
+    
+    declare var str: AStr;
+    declare var num: ANum;
+    declare var anyish: AAny;
+    
+    // not ok
+    num = str;
+    ~~~
+!!! error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
+    anyish = `bno`
+    ~~~~~~
+!!! error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
+    
+    // ok
+    str = num;
+    anyish = str;
+    str = anyish;
+    anyish = num;
+    num = anyish;
+    anyish = `aok`
+    
+    
+    // Validates variance isn't measured as strictly covariant
+    type AGen<T extends string | number> = {field: `a${T}`};
+    const shouldWork1: AGen<string> = null as any as AGen<"yes">;
+    const shouldWork2: AGen<string> = null as any as AGen<number>;
     

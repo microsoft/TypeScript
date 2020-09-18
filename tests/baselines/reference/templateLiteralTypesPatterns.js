@@ -129,6 +129,32 @@ bigints("-1.1e-10n");
 bigints("-1.1E-10n");
 bigints("1.1e-10n");
 
+type AStr = `a${string}`;
+type ANum = `a${number}`;
+type AAny = `a${any}`;
+
+declare var str: AStr;
+declare var num: ANum;
+declare var anyish: AAny;
+
+// not ok
+num = str;
+anyish = `bno`
+
+// ok
+str = num;
+anyish = str;
+str = anyish;
+anyish = num;
+num = anyish;
+anyish = `aok`
+
+
+// Validates variance isn't measured as strictly covariant
+type AGen<T extends string | number> = {field: `a${T}`};
+const shouldWork1: AGen<string> = null as any as AGen<"yes">;
+const shouldWork2: AGen<string> = null as any as AGen<number>;
+
 
 //// [templateLiteralTypesPatterns.js]
 "use strict";
@@ -235,3 +261,15 @@ bigints("-1.1n");
 bigints("-1.1e-10n");
 bigints("-1.1E-10n");
 bigints("1.1e-10n");
+// not ok
+num = str;
+anyish = "bno";
+// ok
+str = num;
+anyish = str;
+str = anyish;
+anyish = num;
+num = anyish;
+anyish = "aok";
+var shouldWork1 = null;
+var shouldWork2 = null;

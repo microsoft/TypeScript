@@ -13518,7 +13518,7 @@ namespace ts {
                     text += s;
                     text += texts[i + 1];
                 }
-                else if (isGenericIndexType(t) || templateConstraintType.types.indexOf(t) !== -1) {
+                else if (isGenericIndexType(t) || isPatternLiteralTypeHoleType(t)) {
                     newTypes.push(t);
                     newCasings.push(casings[i]);
                     newTexts.push(text);
@@ -13784,8 +13784,12 @@ namespace ts {
                 accessNode;
         }
 
+        function isPatternLiteralTypeHoleType(type: Type) {
+            return templateConstraintType.types.indexOf(type) !== -1 || !!(type.flags & TypeFlags.Any);
+        }
+
         function isPatternLiteralType(type: Type) {
-            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, t => templateConstraintType.types.indexOf(t) !== -1);
+            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralTypeHoleType);
         }
 
         function isGenericObjectType(type: Type): boolean {
@@ -17318,7 +17322,7 @@ namespace ts {
                     if (isPatternLiteralType(target)) {
                         // match all non-`string` segemnts
                         const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
-                        if (result && every(result, (r, i) => stringLiteralTypeParsesAsType(r, (target as TemplateLiteralType).types[i]))) {
+                        if (result && every(result, (r, i) => isStringLiteralTypeValueParsableAsType(r, (target as TemplateLiteralType).types[i]))) {
                             return Ternary.True;
                         }
                     }
@@ -17363,8 +17367,15 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.TemplateLiteral) {
+                    if (target.flags & TypeFlags.TemplateLiteral &&
+                        (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
+                        (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
+                        every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
+                        every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
+                        return Ternary.True;
+                    }
                     const constraint = getBaseConstraintOfType(source);
-                    if (constraint && (result = isRelatedTo(constraint, target, reportErrors))) {
+                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -19663,9 +19674,9 @@ namespace ts {
             return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
         }
 
-        function stringLiteralTypeParsesAsType(s: StringLiteralType, target: Type): boolean {
+        function isStringLiteralTypeValueParsableAsType(s: StringLiteralType, target: Type): boolean {
             if (target.flags & TypeFlags.Union) {
-                return !!forEachType(target, t => stringLiteralTypeParsesAsType(s, t));
+                return !!forEachType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
             }
             switch (target) {
                 case stringType: return true;
@@ -19677,7 +19688,7 @@ namespace ts {
                 case falseType: return s.value === "false";
                 case undefinedType: return s.value === "undefined";
                 case nullType: return s.value === "null";
-                default: return false;
+                default: return !!(target.flags & TypeFlags.Any);
             }
         }
 

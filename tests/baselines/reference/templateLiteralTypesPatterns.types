@@ -459,3 +459,81 @@ bigints("1.1e-10n");
 >bigints : (x: `${bigint}`) => void
 >"1.1e-10n" : "1.1e-10n"
 
+type AStr = `a${string}`;
+>AStr : `a${string}`
+
+type ANum = `a${number}`;
+>ANum : `a${number}`
+
+type AAny = `a${any}`;
+>AAny : `a${any}`
+
+declare var str: AStr;
+>str : `a${string}`
+
+declare var num: ANum;
+>num : `a${number}`
+
+declare var anyish: AAny;
+>anyish : `a${any}`
+
+// not ok
+num = str;
+>num = str : `a${string}`
+>num : `a${number}`
+>str : `a${string}`
+
+anyish = `bno`
+>anyish = `bno` : "bno"
+>anyish : `a${any}`
+>`bno` : "bno"
+
+// ok
+str = num;
+>str = num : `a${number}`
+>str : `a${string}`
+>num : `a${number}`
+
+anyish = str;
+>anyish = str : `a${string}`
+>anyish : `a${any}`
+>str : `a${string}`
+
+str = anyish;
+>str = anyish : `a${any}`
+>str : `a${string}`
+>anyish : `a${any}`
+
+anyish = num;
+>anyish = num : `a${number}`
+>anyish : `a${any}`
+>num : `a${number}`
+
+num = anyish;
+>num = anyish : `a${any}`
+>num : `a${number}`
+>anyish : `a${any}`
+
+anyish = `aok`
+>anyish = `aok` : "aok"
+>anyish : `a${any}`
+>`aok` : "aok"
+
+
+// Validates variance isn't measured as strictly covariant
+type AGen<T extends string | number> = {field: `a${T}`};
+>AGen : AGen<T>
+>field : `a${T}`
+
+const shouldWork1: AGen<string> = null as any as AGen<"yes">;
+>shouldWork1 : AGen<string>
+>null as any as AGen<"yes"> : AGen<"yes">
+>null as any : any
+>null : null
+
+const shouldWork2: AGen<string> = null as any as AGen<number>;
+>shouldWork2 : AGen<string>
+>null as any as AGen<number> : AGen<number>
+>null as any : any
+>null : null
+

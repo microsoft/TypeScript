@@ -305,3 +305,74 @@ bigints("-1.1E-10n");
 bigints("1.1e-10n");
 >bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
 
+type AStr = `a${string}`;
+>AStr : Symbol(AStr, Decl(templateLiteralTypesPatterns.ts, 128, 20))
+
+type ANum = `a${number}`;
+>ANum : Symbol(ANum, Decl(templateLiteralTypesPatterns.ts, 130, 25))
+
+type AAny = `a${any}`;
+>AAny : Symbol(AAny, Decl(templateLiteralTypesPatterns.ts, 131, 25))
+
+declare var str: AStr;
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+>AStr : Symbol(AStr, Decl(templateLiteralTypesPatterns.ts, 128, 20))
+
+declare var num: ANum;
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+>ANum : Symbol(ANum, Decl(templateLiteralTypesPatterns.ts, 130, 25))
+
+declare var anyish: AAny;
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+>AAny : Symbol(AAny, Decl(templateLiteralTypesPatterns.ts, 131, 25))
+
+// not ok
+num = str;
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+
+anyish = `bno`
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+// ok
+str = num;
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+
+anyish = str;
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+
+str = anyish;
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+anyish = num;
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+
+num = anyish;
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+anyish = `aok`
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+
+// Validates variance isn't measured as strictly covariant
+type AGen<T extends string | number> = {field: `a${T}`};
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 152, 10))
+>field : Symbol(field, Decl(templateLiteralTypesPatterns.ts, 152, 40))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 152, 10))
+
+const shouldWork1: AGen<string> = null as any as AGen<"yes">;
+>shouldWork1 : Symbol(shouldWork1, Decl(templateLiteralTypesPatterns.ts, 153, 5))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+
+const shouldWork2: AGen<string> = null as any as AGen<number>;
+>shouldWork2 : Symbol(shouldWork2, Decl(templateLiteralTypesPatterns.ts, 154, 5))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+
