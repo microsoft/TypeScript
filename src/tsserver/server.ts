@@ -484,8 +484,9 @@ namespace ts.server {
         private constructed: boolean | undefined;
 
         constructor() {
+            let isConstructed = false;
             const event: Event | undefined = (body: object, eventName: string) => {
-                if (this.constructed) {
+                if (isConstructed) {
                     this.event(body, eventName);
                 }
                 else {
@@ -539,6 +540,7 @@ namespace ts.server {
             }
 
             this.constructed = true;
+            isConstructed = true;
         }
 
         event<T extends object>(body: T, eventName: string): void {
