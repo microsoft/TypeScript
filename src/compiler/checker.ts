@@ -25651,7 +25651,15 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                        const lib = getSuggestedLibForNonexistentProperty(propNode, containingType);
+                        const property = declarationNameToString(propNode);
+                        const container = typeToString(containingType);
+                        if (lib) {
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_chaging_the_lib_compiler_option_to_2_or_later, property, container, lib);
+                        }
+                        else {
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, property, container);
+                        }
                     }
                 }
             }
@@ -25665,6 +25673,27 @@ namespace ts {
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {
             const prop = containingType.symbol && getPropertyOfType(getTypeOfSymbol(containingType.symbol), propName);
             return prop !== undefined && prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
+        }
+
+        function getSuggestedLibForNonexistentProperty(property: Identifier | PrivateIdentifier, containingType: Type) {
+            const container = containingType.symbol ? symbolName(containingType.symbol) : containingType.flags & (TypeFlags.String | TypeFlags.StringLike | TypeFlags.StringLiteral)  ? "String" : undefined;
+            if (container) {
+                const missingProperty = declarationNameToString(property);
+                const allFeatures = getScriptTargetFeatures();
+                const libs = Object.keys(allFeatures);
+                for (const lib of libs) {
+                    const featuresOfLib = allFeatures[lib];
+                    const featuresForContainingType = featuresOfLib[container];
+                    if (featuresForContainingType) {
+                        for (const feature of featuresForContainingType) {
+                            const isTheRequiredScriptTarget = feature.includes(missingProperty);
+                            if (isTheRequiredScriptTarget) {
+                                return lib;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
@@ -25755,7 +25784,22 @@ namespace ts {
          *         and 1 insertion/deletion at 3 characters)
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            return getSpellingSuggestion(name, symbols, getCandidateName);
+            if (!isSpellingSuggestionEdgeCase(name)) {
+                return getSpellingSuggestion(name, symbols, getCandidateName);
+            }
+
+            function isSpellingSuggestionEdgeCase(possibleEdgeCase: string) {
+                /**
+                 * Without this check, the user could be returned an unhelpful error message.
+                 * One case would be with getOwnPropertyDescriptor and getOwnPropertyDescriptors.
+                 * In this case, the user would be suggested to target getOwnPropertyDescriptor.
+                 * If he wanted to use the es2017 feature, he should be suggested to change his target lib to es2017.
+                 *
+                 */
+                const SPELLING_EDGE_CASES = ["getOwnPropertyDescriptors"];
+                return SPELLING_EDGE_CASES.includes(possibleEdgeCase);
+            }
+
             function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);
                 if (startsWith(candidateName, "\"")) {

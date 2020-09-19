@@ -562,6 +562,39 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
+    interface ScriptTargetFeatures {
+        [key: string]: { [key: string]: string[] };
+    };
+
+    export function getScriptTargetFeatures(): ScriptTargetFeatures {
+        return {
+            es2016: {
+                Array: ["includes"]
+            },
+            es2017: {
+                String: ["padStart", "padEnd"],
+                ObjectConstructor: ["values", "entries", "getOwnPropertyDescriptors"],
+                DateTimeFormat: ["formatToParts"],
+            },
+            es2018: {
+                Promise: ["finally"],
+                RegExpMatchArray: ["groups"],
+                RegExpExecArray: ["groups"],
+                RegExp: ["dotAll"],
+                Intl: ["PluralRules"],
+            },
+            es2019: {
+                Array: ["flat", "flatMap"],
+                ObjectConstructor: ["fromEntries"],
+                String: ["trimStart", "trimEnd", "trimLeft", "trimRight"],
+            },
+            es2020: {
+                Promise: ["allSettled"],
+                String: ["matchAll"]
+            }
+        };
+    }
+
     export const enum GetLiteralTextFlags {
         None = 0,
         NeverAsciiEscape = 1 << 0,
@@ -5783,7 +5816,6 @@ namespace ts {
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
         }
-
         return {
             messageText: text,
             category: message.category,

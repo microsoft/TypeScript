@@ -2193,6 +2193,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try chaging the `lib` compiler option to '{2}' or later.": {
+        "category": "Error",
+        "code": 2550
+    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
