@@ -25667,7 +25667,7 @@ namespace ts {
                         const container = typeToString(containingType);
                         const lib = getSuggestedLibForNonexistentProperty(property, container);
                         if (lib) {
-                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_chaging_the_lib_compiler_option_to_2_or_later, property, container, lib);
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2_or_later, property, container, lib);
                         }
                         else {
                             errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, property, container);
