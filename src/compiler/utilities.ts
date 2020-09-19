@@ -593,6 +593,7 @@ namespace ts {
                 Promise: ["allSettled"],
                 SymbolConstructor: ["matchAll"],
                 String: ["matchAll"],
+                DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"],
             },
             esnext: {
