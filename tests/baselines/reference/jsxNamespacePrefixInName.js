@@ -31,6 +31,7 @@ var upcaseComponent2 = <Upcase:element />  // Parsed as component: not ok
 
 var upcaseComponentUndeclared = <NS:something />
 
+
 //// [jsxNamespacePrefixInName.jsx]
 var justElement1 = <a:element />;
 var justElement2 = <a:element></a:element>;
