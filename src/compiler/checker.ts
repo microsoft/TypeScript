@@ -20404,6 +20404,14 @@ namespace ts {
                 case "Iterator":
                 case "AsyncIterator":
                     return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later;
+                case "SharedArrayBuffer":
+                case "Atomics":
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2017_or_later;
+                case "AsyncIterable":
+                case "AsyncIterableIterator":
+                case "AsyncGenerator":
+                case "AsyncGeneratorFunction":
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2018_or_later;
                 default:
                     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
@@ -25676,23 +25684,27 @@ namespace ts {
         }
 
         function getSuggestedLibForNonexistentProperty(property: Identifier | PrivateIdentifier, containingType: Type) {
-            const container = containingType.symbol ? symbolName(containingType.symbol) : containingType.flags & (TypeFlags.String | TypeFlags.StringLike | TypeFlags.StringLiteral)  ? "String" : undefined;
+            const container = containingType.symbol ? symbolName(containingType.symbol) : extractStringTypeFromFlags(containingType.flags);
             if (container) {
                 const missingProperty = declarationNameToString(property);
-                const allFeatures = getScriptTargetFeatures();
-                const libs = Object.keys(allFeatures);
-                for (const lib of libs) {
-                    const featuresOfLib = allFeatures[lib];
-                    const featuresForContainingType = featuresOfLib[container];
-                    if (featuresForContainingType) {
-                        for (const feature of featuresForContainingType) {
-                            const isTheRequiredScriptTarget = feature.includes(missingProperty);
-                            if (isTheRequiredScriptTarget) {
-                                return lib;
+                const allNewFeatures = getScriptTargetFeatures();
+                const targets = Object.keys(allNewFeatures);
+                for (const target of targets) {
+                    const newFeaturesOfTarget = allNewFeatures[target];
+                    const newFeaturesOfContainingType = newFeaturesOfTarget[container];
+                    if (newFeaturesOfContainingType) {
+                        for (const newFeature of newFeaturesOfContainingType) {
+                            const isTheCorrespondingScriptTarget = newFeature.includes(missingProperty);
+                            if (isTheCorrespondingScriptTarget) {
+                                return target;
                             }
                         }
                     }
                 }
+            }
+
+            function extractStringTypeFromFlags(flags: TypeFlags) {
+                return flags & (TypeFlags.String | TypeFlags.StringLike | TypeFlags.StringLiteral) ? "String" : undefined;
             }
         }
 

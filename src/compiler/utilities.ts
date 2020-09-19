@@ -563,7 +563,7 @@ namespace ts {
     }
 
     interface ScriptTargetFeatures {
-        [key: string]: { [key: string]: string[] };
+        [key: string]: { [key: string]: string[] | undefined };
     };
 
     export function getScriptTargetFeatures(): ScriptTargetFeatures {
@@ -581,16 +581,23 @@ namespace ts {
                 RegExpMatchArray: ["groups"],
                 RegExpExecArray: ["groups"],
                 RegExp: ["dotAll"],
-                Intl: ["PluralRules"],
+                Intl: ["PluralRules"]
             },
             es2019: {
                 Array: ["flat", "flatMap"],
                 ObjectConstructor: ["fromEntries"],
                 String: ["trimStart", "trimEnd", "trimLeft", "trimRight"],
+                Symbol: ["description"]
             },
             es2020: {
                 Promise: ["allSettled"],
-                String: ["matchAll"]
+                String: ["matchAll"],
+                RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"],
+            },
+            esnext: {
+                Promise: ["any"],
+                String: ["replaceAll"],
+                NumberFormat: ["formatToParts"]
             }
         };
     }

@@ -2301,6 +2301,10 @@
         "category": "Error",
         "code": 2578
     },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2017 or later.": {
+        "category": "Error",
+        "code": 2579
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2376,6 +2380,10 @@
     "'{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.": {
         "category": "Error",
         "code": 2598
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2018 or later.": {
+        "category": "Error",
+        "code": 2599
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
