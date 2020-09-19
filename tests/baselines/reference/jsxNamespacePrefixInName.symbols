@@ -66,3 +66,21 @@ var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
 >both3 : Symbol(both3, Decl(jsxNamespacePrefixInName.tsx, 18, 3))
 >a:attr : Symbol(a:attr, Decl(jsxNamespacePrefixInName.tsx, 18, 22))
 
+var endOfIdent1 = <a: attr={"value"} />;
+>endOfIdent1 : Symbol(endOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 20, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 20, 21))
+
+var endOfIdent2 = <a attr:={"value"} />;
+>endOfIdent2 : Symbol(endOfIdent2, Decl(jsxNamespacePrefixInName.tsx, 21, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 21, 20))
+
+var beginOfIdent1 = <:a attr={"value"} />;
+>beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 23, 3), Decl(jsxNamespacePrefixInName.tsx, 24, 3))
+>a : Symbol(a, Decl(jsxNamespacePrefixInName.tsx, 23, 22))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 23, 23))
+>"value" : Symbol("value", Decl(jsxNamespacePrefixInName.tsx, 23, 30))
+
+var beginOfIdent1 = <a :attr={"value"} />;
+>beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInName.tsx, 23, 3), Decl(jsxNamespacePrefixInName.tsx, 24, 3))
+>attr : Symbol(attr, Decl(jsxNamespacePrefixInName.tsx, 24, 24))
+

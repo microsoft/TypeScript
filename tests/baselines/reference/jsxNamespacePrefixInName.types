@@ -138,3 +138,39 @@ var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
 >"text" : "text"
 >a:element : any
 
+var endOfIdent1 = <a: attr={"value"} />;
+>endOfIdent1 : any
+><a: attr={"value"} /> : any
+>a : any
+>attr : string
+>"value" : "value"
+
+var endOfIdent2 = <a attr:={"value"} />;
+>endOfIdent2 : any
+><a attr:={"value"} /> : any
+>a : any
+>attr : true
+>"value" : "value"
+
+var beginOfIdent1 = <:a attr={"value"} />;
+>beginOfIdent1 : boolean
+>< : boolean
+> : any
+> : any
+>a : any
+>attr : boolean
+>{"value"} /> : boolean
+>{"value"} / : number
+>{"value"} : { value: any; }
+>"value" : any
+> : any
+> : any
+> : any
+
+var beginOfIdent1 = <a :attr={"value"} />;
+>beginOfIdent1 : boolean
+><a :attr={"value"} /> : any
+>a : any
+>attr : string
+>"value" : "value"
+

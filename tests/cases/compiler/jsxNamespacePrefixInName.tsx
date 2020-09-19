@@ -19,3 +19,9 @@ var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
 var both1 = <a:element a:attr={"value"} />;
 var both2 = <a:element k:attr={"value"}></a:element>;
 var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
+
+var endOfIdent1 = <a: attr={"value"} />;
+var endOfIdent2 = <a attr:={"value"} />;
+
+var beginOfIdent1 = <:a attr={"value"} />;
+var beginOfIdent1 = <a :attr={"value"} />;
