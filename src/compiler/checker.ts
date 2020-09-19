@@ -12171,7 +12171,7 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                if (numTypeArguments === 0) {
+                if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) {
                     const isTypeConstructorForTypeConstructorPoly = true; // should we check constraint here? or just pass the type if its parent is a TypeConstructor and accept this typeparameter as TypeConstructorPolymorphic
                     if (isTypeConstructorForTypeConstructorPoly) {
                         (<any>type).isConcentrateTypeConstructor = true;
