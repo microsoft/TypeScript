@@ -9439,7 +9439,7 @@ namespace ts {
                     tmp.flags |= TypeFlags.TypeConstructorDeclaration;
                     // This line is important, which combines Node and Type.
                     // for now Node.paras is not used but its length. So constrait is not used for now.
-                    (<TypeConstructorDeclaration>tmp).tParams = declration.tParamDeclarations.length;
+                    (<TypeConstructorPolymophsimDeclaration>tmp).tParams = declration.tParamDeclarations.length;
                 }
                 links.declaredType = tmp;
             }
@@ -12113,68 +12113,9 @@ namespace ts {
                 const isJsImplicitAny = !noImplicitAny && isJs;
                 // type reference without typeArguments. Like Set, rather than Set<XXX>
                 if (isTypeReferenceNode(node) && node.isTypeArguments && numTypeArguments === 0) {
+                    (<any>type).isConcentrateTypeConstructor = true;
                     // These are not well considered, just for passing test cases.
                     // Maybe all those code should be removed and written in other places.
-
-                    // get the type-constructor(the origional meaning)
-                    const parentNode = <NodeWithTypeArguments | CallExpression>node.parent; // the parser make sure it must be TypeReference with typeArguments(or its parent.patent.....)
-                    const typeParameterIndex = parentNode.typeArguments!.findIndex(t => t === node);
-                    if (typeParameterIndex >= 0) {
-                        if (isTypeReferenceNode(parentNode)) {
-                            debugger;
-                            const meaning = SymbolFlags.Type;
-                            const parentSymbol = resolveTypeReferenceName(getTypeReferenceName(parentNode), meaning);
-                            const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
-                            if (parentType.typeParameters && !isTypeParameterTypeConstructorDeclaration(parentType.typeParameters[typeParameterIndex])) {
-                                const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
-                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
-                                if (!isJs) {
-                                    // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
-                                    return errorType;
-                                }
-                            };
-                        }
-                        else if (isCallExpression(parentNode)) {
-                            debugger;
-                            const parentType = <ObjectType>getTypeOfExpression(parentNode.expression);
-                            if (!(parentType.flags & TypeFlags.Object)) {
-                                return errorType;
-                            }
-                            if (!parentType.callSignatures?.some(sig => sig.typeParameters && sig.typeParameters[typeParameterIndex] && isTypeParameterTypeConstructorDeclaration(sig.typeParameters[typeParameterIndex]))) {
-                                const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
-                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
-                                if (!isJs) {
-                                    // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
-                                    return errorType;
-                                }
-                            }
-                        }
-                        else if (isExpressionWithTypeArguments(parentNode)) {
-                            debugger;
-                            if (!isIdentifier(parentNode.expression)) {
-                                debugger;
-                                return errorType;
-                            }
-                            const parentSymbol = getSymbolOfNameOrPropertyAccessExpression(parentNode.expression);
-                            if (!parentSymbol) {
-                                return errorType;
-                            }
-                            const parentType = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(parentSymbol));
-                            if (parentType.typeParameters && !isTypeParameterTypeConstructorDeclaration(parentType.typeParameters[typeParameterIndex])) {
-                                const typeStr = typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType);
-                                error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, typeStr, minTypeArgumentCount, typeParameters.length);
-                                if (!isJs) {
-                                    // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
-                                    return errorType;
-                                }
-                            };
-                        }
-                        else {
-                            debugger;
-                            return errorType;
-                        }
-                    }
-                    // another error.
                 }
                 else {
                     if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
@@ -12230,6 +12171,14 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+                if (numTypeArguments === 0) {
+                    const isTypeConstructorForTypeConstructorPoly = true; // should we check constraint here? or just pass the type if its parent is a TypeConstructor and accept this typeparameter as TypeConstructorPolymorphic
+                    if (isTypeConstructorForTypeConstructorPoly) {
+                        (<any>type).isConcentrateTypeConstructor = true;
+                        (<any>type).origionalTypeAliasSymbol = symbol;
+                        return type;
+                    }
+                }
                 if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
                     error(node,
                         minTypeArgumentCount === typeParameters.length ?
@@ -12295,13 +12244,11 @@ namespace ts {
                     if(node.typeArguments?.length !== res.tParams){
                         //check whether type arguments match type parameters.
                     }
-                    // res.resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
-                    // return res;
-                    const tmp = createTypeParameter(symbol);
-                    tmp.flags |= TypeFlags.TypeConstructorInstance;
-                    (<TypeConstructorInstance>tmp).resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
-                    (<TypeConstructorInstance>tmp).origionalTypeConstructorDeclaration = res;
-                    return tmp;
+                    const typeConstructorInstance = createTypeParameter(symbol);
+                    typeConstructorInstance.flags |= TypeFlags.TypeConstructorInstance;
+                    (<TypeConstructorPolymophsimInstance>typeConstructorInstance).resolvedTypeConstructorParam = node.typeArguments?.map(getTypeFromTypeNode);
+                    (<TypeConstructorPolymophsimInstance>typeConstructorInstance).origionalTypeConstructorDeclaration = res;
+                    return typeConstructorInstance;
                 }
                 if (checkNoTypeArguments(node, symbol)) {
                     return getRegularTypeOfLiteralType(res);
@@ -13882,11 +13829,11 @@ namespace ts {
             return !!(type.flags & TypeFlags.TypeParameter && (<TypeParameter>type).isThisType);
         }
 
-        function isTypeParameterTypeConstructorDeclaration(type: Type): type is TypeConstructorDeclaration {
+        function isTypeParameterTypeConstructorDeclaration(type: Type): type is TypeConstructorPolymophsimDeclaration {
             return !!(type.flags & TypeFlags.TypeParameter && type.flags & TypeFlags.TypeConstructorDeclaration);
         }
 
-        function isTypeParameterTypeConstructorInstance(type: Type): type is TypeConstructorInstance {
+        function isTypeParameterTypeConstructorInstance(type: Type): type is TypeConstructorPolymophsimInstance {
             return !!(type.flags & TypeFlags.TypeParameter && type.flags & TypeFlags.TypeConstructorInstance);
         }
 
@@ -15261,7 +15208,15 @@ namespace ts {
                     return origionalTypeConstructorParameter;
                 }
                 const newTypeArguments = instantiateTypes(resolvedTypeConstructorParam, mapper);
-                return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
+                // concentrate type constructor is TypeAlias
+                if (!!concentrateGenericType.aliasSymbol) {
+                    const tmpSymbol: Symbol = (<any>concentrateGenericType).origionalTypeAliasSymbol;
+                    return getTypeAliasInstantiation(tmpSymbol, newTypeArguments);
+                }
+                // concentrate type constructor is Object of Interface/Class
+                else {
+                    return createNormalizedTypeReference((<TypeReference>concentrateGenericType).target, newTypeArguments);
+                }
             }
             else if (flags & TypeFlags.TypeConstructorDeclaration) {
                 // this is a demo implement, and not well considered.
