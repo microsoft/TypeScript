@@ -25,6 +25,11 @@ var endOfIdent2 = <a attr:={"value"} />;
 var beginOfIdent1 = <:a attr={"value"} />;
 var beginOfIdent1 = <a :attr={"value"} />;
 
+var Upcase = "mycomponent"
+var upcaseComponent1 = <ns:Upcase />  // Parsed as intrinsic: ok
+var upcaseComponent2 = <Upcase:element />  // Parsed as component: not ok
+
+var upcaseComponentUndeclared = <NS:something />
 
 //// [jsxNamespacePrefixInName.jsx]
 var justElement1 = <a:element />;
@@ -51,3 +56,7 @@ var endOfIdent1 = <a attr={"value"}/>;
 var endOfIdent2 = <a attr {..."value"}/>;
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
 var beginOfIdent1 = <a attr={"value"}/>;
+var Upcase = "mycomponent";
+var upcaseComponent1 = <ns:Upcase />; // Parsed as intrinsic: ok
+var upcaseComponent2 = <Upcase:element />; // Parsed as component: not ok
+var upcaseComponentUndeclared = <NS:something />;
