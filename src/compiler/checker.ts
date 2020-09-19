@@ -10458,7 +10458,7 @@ namespace ts {
                         existingProp.keyType = getUnionType([existingProp.keyType, keyType]);
                     }
                     else {
-                        const modifiersProp = getPropertyOfType(modifiersType, propName);
+                        const modifiersProp = isTypeUsableAsPropertyName(keyType) ? getPropertyOfType(modifiersType, getPropertyNameFromType(keyType)) : undefined;
                         const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
                             !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                         const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
@@ -23663,7 +23663,10 @@ namespace ts {
         function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
             return arrayContextualType && (
                 getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
-                || getIteratedTypeOrElementType(IterationUse.Element, arrayContextualType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false));
+                || mapType(
+                    arrayContextualType,
+                    t => getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
+                    /*noReductions*/ true));
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.

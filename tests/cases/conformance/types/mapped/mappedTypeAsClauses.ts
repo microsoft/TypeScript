@@ -30,3 +30,17 @@ type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
 type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
+
+// Repro from #40619
+
+type Lazyify<T> = {
+    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+};
+
+interface Person {
+    readonly name: string;
+    age: number;
+    location?: string;
+}
+
+type LazyPerson = Lazyify<Person>;
