@@ -11271,11 +11271,14 @@ namespace ts {
                 return (<UnionType>type).resolvedReducedType || ((<UnionType>type).resolvedReducedType = getReducedUnionType(<UnionType>type));
             }
             else if (type.flags & TypeFlags.Intersection) {
-                if (!((<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
-                    (<IntersectionType>type).objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
-                        (some(getPropertiesOfUnionOrIntersectionType(<IntersectionType>type), isNeverReducedProperty) ? ObjectFlags.IsNeverIntersection : 0);
+                const intersectionType = (<IntersectionType>type);
+                const innerThrowType = find(intersectionType.types, isThrowType);
+                if (innerThrowType) return innerThrowType;
+                if (!(intersectionType.objectFlags & ObjectFlags.IsNeverIntersectionComputed)) {
+                    intersectionType.objectFlags |= ObjectFlags.IsNeverIntersectionComputed |
+                        (some(getPropertiesOfUnionOrIntersectionType(intersectionType), isNeverReducedProperty) ? ObjectFlags.IsNeverIntersection : 0);
                 }
-                return (<IntersectionType>type).objectFlags & ObjectFlags.IsNeverIntersection ? neverType : type;
+                return intersectionType.objectFlags & ObjectFlags.IsNeverIntersection ? neverType : type;
             }
             return type;
         }
@@ -22572,7 +22575,7 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getConstraintForLocation(getTypeOfSymbol(localOrExportSymbol), node);
-            checkThrowType(node, type);
+            checkThrowType(node, getReducedType(type));
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
