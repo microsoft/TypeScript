@@ -1,7 +1,9 @@
+/// <reference types="node"/>
+
 /*@internal*/
 /** Tracing events for the compiler. */
 namespace ts.tracing {
-    let fs: typeof import("fs") | false | undefined;
+    let fs: typeof import("fs") | undefined;
 
     let traceCount = 0;
     let traceFd: number | undefined;
@@ -18,7 +20,6 @@ namespace ts.tracing {
                 fs = require("fs");
             }
             catch {
-                fs = false;
             }
         }
 
@@ -31,8 +32,8 @@ namespace ts.tracing {
         }
 
         // Note that writing will fail later on if it exists and is not a directory
-        if (!fs.existsSync(traceDir)) {
-            fs.mkdirSync(traceDir, { recursive: true });
+        if (!fs!.existsSync(traceDir)) {
+            fs!.mkdirSync(traceDir, { recursive: true });
         }
 
         const countPart = isBuildMode ? `.${++traceCount}` : ``;
@@ -45,8 +46,8 @@ namespace ts.tracing {
             typesPath,
         });
 
-        traceFd = fs.openSync(tracePath, "w");
-        fs.writeSync(traceFd, `[\n`);
+        traceFd = fs!.openSync(tracePath, "w");
+        fs!.writeSync(traceFd, `[\n`);
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog (unless the `fs` module is unavailable). */
@@ -56,14 +57,14 @@ namespace ts.tracing {
             return;
         }
 
-        Debug.assert(fs);
+        Debug.assert(!!fs);
 
         // This both indicates that the trace is untruncated and conveniently
         // ensures that the last array element won't have a trailing comma.
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","ts":${1000 * timestamp()},"name":"done","s":"g"}\n`);
-        fs.writeSync(traceFd, `]\n`);
+        fs!.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","ts":${1000 * timestamp()},"name":"done","s":"g"}\n`);
+        fs!.writeSync(traceFd, `]\n`);
 
-        fs.closeSync(traceFd);
+        fs!.closeSync(traceFd);
         traceFd = undefined;
 
         if (typeCatalog) {
@@ -92,10 +93,10 @@ namespace ts.tracing {
         if (!traceFd) {
             return;
         }
-        Debug.assert(fs);
+        Debug.assert(!!fs);
 
         performance.mark("beginTracing");
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"B","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","args":{ "ts": ${JSON.stringify(args)} }},\n`);
+        fs!.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"B","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","args":{ "ts": ${JSON.stringify(args)} }},\n`);
         performance.mark("endTracing");
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
@@ -104,10 +105,10 @@ namespace ts.tracing {
         if (!traceFd) {
             return;
         }
-        Debug.assert(fs);
+        Debug.assert(!!fs);
 
         performance.mark("beginTracing");
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"E","ts":${1000 * timestamp()}},\n`);
+        fs!.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"E","ts":${1000 * timestamp()}},\n`);
         performance.mark("endTracing");
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
@@ -116,10 +117,10 @@ namespace ts.tracing {
         if (!traceFd) {
             return;
         }
-        Debug.assert(fs);
+        Debug.assert(!!fs);
 
         performance.mark("beginTracing");
-        fs.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","s":"g","args":{ "ts": ${JSON.stringify(args)} }},\n`);
+        fs!.writeSync(traceFd, `{"pid":1,"tid":1,"ph":"i","cat":"${phase}","ts":${1000 * timestamp()},"name":"${name}","s":"g","args":{ "ts": ${JSON.stringify(args)} }},\n`);
         performance.mark("endTracing");
         performance.measure("Tracing", "beginTracing", "endTracing");
     }
@@ -132,17 +133,15 @@ namespace ts.tracing {
     }
 
     function dumpTypes(types: readonly Type[]) {
-        Debug.assert(fs);
+        Debug.assert(!!fs);
 
         performance.mark("beginDumpTypes");
 
         const typesPath = legend[legend.length - 1].typesPath!;
-        const typesFd = fs.openSync(typesPath, "w");
-
-        const recursionIdentityMap = new Map<object, number>();
+        const typesFd = fs!.openSync(typesPath, "w");
 
         // Cleverness: no line break here so that the type ID will match the line number
-        fs.writeSync(typesFd, "[");
+        fs!.writeSync(typesFd, "[");
 
         const numTypes = types.length;
         for (let i = 0; i < numTypes; i++) {
@@ -192,23 +191,10 @@ namespace ts.tracing {
                 };
             }
 
-            // We can't print out an arbitrary object, so just assign each one a unique number.
-            // Don't call it an "id" so people don't treat it as a type id.
-            let recursionToken: number | undefined;
-            const recursionIdentity = type.checker.getRecursionIdentity(type);
-            if (recursionIdentity) {
-                recursionToken = recursionIdentityMap.get(recursionIdentity);
-                if (!recursionToken) {
-                    recursionToken = recursionIdentityMap.size;
-                    recursionIdentityMap.set(recursionIdentity, recursionToken);
-                }
-            }
-
             const descriptor = {
                 id: type.id,
                 intrinsicName: (type as any).intrinsicName,
                 symbolName: symbol?.escapedName && unescapeLeadingUnderscores(symbol.escapedName),
-                recursionId: recursionToken,
                 unionTypes: (type.flags & TypeFlags.Union) ? (type as UnionType).types?.map(t => t.id) : undefined,
                 intersectionTypes: (type.flags & TypeFlags.Intersection) ? (type as IntersectionType).types.map(t => t.id) : undefined,
                 aliasTypeArguments: type.aliasTypeArguments?.map(t => t.id),
@@ -225,15 +211,15 @@ namespace ts.tracing {
                 display,
             };
 
-            fs.writeSync(typesFd, JSON.stringify(descriptor));
+            fs!.writeSync(typesFd, JSON.stringify(descriptor));
             if (i < numTypes - 1) {
-                fs.writeSync(typesFd, ",\n");
+                fs!.writeSync(typesFd, ",\n");
             }
         }
 
-        fs.writeSync(typesFd, "]\n");
+        fs!.writeSync(typesFd, "]\n");
 
-        fs.closeSync(typesFd);
+        fs!.closeSync(typesFd);
 
         performance.mark("endDumpTypes");
         performance.measure("Dump types", "beginDumpTypes", "endDumpTypes");
@@ -243,9 +229,9 @@ namespace ts.tracing {
         if (!legendPath) {
             return;
         }
-        Debug.assert(fs);
+        Debug.assert(!!fs);
 
-        fs.writeFileSync(legendPath, JSON.stringify(legend));
+        fs!.writeFileSync(legendPath, JSON.stringify(legend));
     }
 
     interface TraceRecord {
