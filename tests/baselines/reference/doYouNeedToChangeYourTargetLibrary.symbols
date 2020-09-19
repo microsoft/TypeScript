@@ -40,72 +40,87 @@ const testPromiseFinally = new Promise(() => {}).finally();
 >testPromiseFinally : Symbol(testPromiseFinally, Decl(doYouNeedToChangeYourTargetLibrary.ts, 14, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
-const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/).groups;
+const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
 >testRegExpMatchArrayGroups : Symbol(testRegExpMatchArrayGroups, Decl(doYouNeedToChangeYourTargetLibrary.ts, 15, 5))
 >"2019-04-30".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
-const testRegExpDotAll = new RegExp("foo", "s").dotAll;
->testRegExpDotAll : Symbol(testRegExpDotAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 16, 5))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
+>testRegExpExecArrayGroups : Symbol(testRegExpExecArrayGroups, Decl(doYouNeedToChangeYourTargetLibrary.ts, 16, 5))
+>/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+
+const testRegExpDotAll = /foo/g.dotAll;
+>testRegExpDotAll : Symbol(testRegExpDotAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 17, 5))
 
 const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
->testIntlPluralRules : Symbol(testIntlPluralRules, Decl(doYouNeedToChangeYourTargetLibrary.ts, 17, 5))
+>testIntlPluralRules : Symbol(testIntlPluralRules, Decl(doYouNeedToChangeYourTargetLibrary.ts, 18, 5))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
 
 const testAsyncGenerator: AsyncGenerator<any> = null as any;
->testAsyncGenerator : Symbol(testAsyncGenerator, Decl(doYouNeedToChangeYourTargetLibrary.ts, 18, 5))
+>testAsyncGenerator : Symbol(testAsyncGenerator, Decl(doYouNeedToChangeYourTargetLibrary.ts, 19, 5))
 
 const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
->testAsyncGeneratorFunction : Symbol(testAsyncGeneratorFunction, Decl(doYouNeedToChangeYourTargetLibrary.ts, 19, 5))
+>testAsyncGeneratorFunction : Symbol(testAsyncGeneratorFunction, Decl(doYouNeedToChangeYourTargetLibrary.ts, 20, 5))
 
 const testAsyncIterable: AsyncIterable<any> = null as any;
->testAsyncIterable : Symbol(testAsyncIterable, Decl(doYouNeedToChangeYourTargetLibrary.ts, 20, 5))
+>testAsyncIterable : Symbol(testAsyncIterable, Decl(doYouNeedToChangeYourTargetLibrary.ts, 21, 5))
 
 const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
->testAsyncIterableIterator : Symbol(testAsyncIterableIterator, Decl(doYouNeedToChangeYourTargetLibrary.ts, 21, 5))
+>testAsyncIterableIterator : Symbol(testAsyncIterableIterator, Decl(doYouNeedToChangeYourTargetLibrary.ts, 22, 5))
 
 // es2019
 const testArrayFlat = [].flat();
->testArrayFlat : Symbol(testArrayFlat, Decl(doYouNeedToChangeYourTargetLibrary.ts, 24, 5))
+>testArrayFlat : Symbol(testArrayFlat, Decl(doYouNeedToChangeYourTargetLibrary.ts, 25, 5))
 
 const testArrayFlatMap = [].flatMap();
->testArrayFlatMap : Symbol(testArrayFlatMap, Decl(doYouNeedToChangeYourTargetLibrary.ts, 25, 5))
+>testArrayFlatMap : Symbol(testArrayFlatMap, Decl(doYouNeedToChangeYourTargetLibrary.ts, 26, 5))
 
 const testObjectConstructorFromEntries = Object.fromEntries({});
->testObjectConstructorFromEntries : Symbol(testObjectConstructorFromEntries, Decl(doYouNeedToChangeYourTargetLibrary.ts, 26, 5))
+>testObjectConstructorFromEntries : Symbol(testObjectConstructorFromEntries, Decl(doYouNeedToChangeYourTargetLibrary.ts, 27, 5))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 const testStringTrimStart = "".trimStart();
->testStringTrimStart : Symbol(testStringTrimStart, Decl(doYouNeedToChangeYourTargetLibrary.ts, 27, 5))
+>testStringTrimStart : Symbol(testStringTrimStart, Decl(doYouNeedToChangeYourTargetLibrary.ts, 28, 5))
 
 const testStringTrimEnd = "".trimEnd();
->testStringTrimEnd : Symbol(testStringTrimEnd, Decl(doYouNeedToChangeYourTargetLibrary.ts, 28, 5))
+>testStringTrimEnd : Symbol(testStringTrimEnd, Decl(doYouNeedToChangeYourTargetLibrary.ts, 29, 5))
 
 const testStringTrimLeft = "".trimLeft();
->testStringTrimLeft : Symbol(testStringTrimLeft, Decl(doYouNeedToChangeYourTargetLibrary.ts, 29, 5))
+>testStringTrimLeft : Symbol(testStringTrimLeft, Decl(doYouNeedToChangeYourTargetLibrary.ts, 30, 5))
 
 const testStringTrimRight = "".trimRight();
->testStringTrimRight : Symbol(testStringTrimRight, Decl(doYouNeedToChangeYourTargetLibrary.ts, 30, 5))
+>testStringTrimRight : Symbol(testStringTrimRight, Decl(doYouNeedToChangeYourTargetLibrary.ts, 31, 5))
+
+const testSymbolDescription = Symbol("foo").description;
+>testSymbolDescription : Symbol(testSymbolDescription, Decl(doYouNeedToChangeYourTargetLibrary.ts, 32, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // es2020
 const testPromiseAllSettled = new Promise(() => {}).allSettled();
->testPromiseAllSettled : Symbol(testPromiseAllSettled, Decl(doYouNeedToChangeYourTargetLibrary.ts, 33, 5))
+>testPromiseAllSettled : Symbol(testPromiseAllSettled, Decl(doYouNeedToChangeYourTargetLibrary.ts, 35, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const testStringMatchAll = "".matchAll();
->testStringMatchAll : Symbol(testStringMatchAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 34, 5))
+>testStringMatchAll : Symbol(testStringMatchAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 36, 5))
+
+const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
+>testRegExpMatchAll : Symbol(testRegExpMatchAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 37, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const testBigInt = BigInt(123);
+>testBigInt : Symbol(testBigInt, Decl(doYouNeedToChangeYourTargetLibrary.ts, 38, 5))
 
 // esnext
 const testPromiseAny = new Promise(() => {}).any();
->testPromiseAny : Symbol(testPromiseAny, Decl(doYouNeedToChangeYourTargetLibrary.ts, 37, 5))
+>testPromiseAny : Symbol(testPromiseAny, Decl(doYouNeedToChangeYourTargetLibrary.ts, 41, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const testStringReplaceAll = "".replaceAll();
->testStringReplaceAll : Symbol(testStringReplaceAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 38, 5))
+>testStringReplaceAll : Symbol(testStringReplaceAll, Decl(doYouNeedToChangeYourTargetLibrary.ts, 42, 5))
 
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
->testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibrary.ts, 39, 5))
+>testNumberFormatFormatToParts : Symbol(testNumberFormatFormatToParts, Decl(doYouNeedToChangeYourTargetLibrary.ts, 43, 5))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

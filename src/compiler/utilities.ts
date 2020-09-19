@@ -587,10 +587,11 @@ namespace ts {
                 Array: ["flat", "flatMap"],
                 ObjectConstructor: ["fromEntries"],
                 String: ["trimStart", "trimEnd", "trimLeft", "trimRight"],
-                Symbol: ["description"]
+                symbol: ["description"]
             },
             es2020: {
                 Promise: ["allSettled"],
+                SymbolConstructor: ["matchAll"],
                 String: ["matchAll"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"],
             },

@@ -3055,6 +3055,10 @@
         "category": "Error",
         "code": 2794
     },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2020 or later.": {
+        "category": "Error",
+        "code": 2795
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

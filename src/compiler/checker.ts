@@ -20412,6 +20412,8 @@ namespace ts {
                 case "AsyncGenerator":
                 case "AsyncGeneratorFunction":
                     return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2018_or_later;
+                case "BigInt":
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2020_or_later;
                 default:
                     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
@@ -25659,9 +25661,9 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        const lib = getSuggestedLibForNonexistentProperty(propNode, containingType);
                         const property = declarationNameToString(propNode);
                         const container = typeToString(containingType);
+                        const lib = getSuggestedLibForNonexistentProperty(property, container);
                         if (lib) {
                             errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_chaging_the_lib_compiler_option_to_2_or_later, property, container, lib);
                         }
@@ -25683,28 +25685,34 @@ namespace ts {
             return prop !== undefined && prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
         }
 
-        function getSuggestedLibForNonexistentProperty(property: Identifier | PrivateIdentifier, containingType: Type) {
-            const container = containingType.symbol ? symbolName(containingType.symbol) : extractStringTypeFromFlags(containingType.flags);
-            if (container) {
-                const missingProperty = declarationNameToString(property);
-                const allNewFeatures = getScriptTargetFeatures();
-                const targets = Object.keys(allNewFeatures);
-                for (const target of targets) {
-                    const newFeaturesOfTarget = allNewFeatures[target];
-                    const newFeaturesOfContainingType = newFeaturesOfTarget[container];
-                    if (newFeaturesOfContainingType) {
-                        for (const newFeature of newFeaturesOfContainingType) {
-                            const isTheCorrespondingScriptTarget = newFeature.includes(missingProperty);
-                            if (isTheCorrespondingScriptTarget) {
-                                return target;
-                            }
+        function getSuggestedLibForNonexistentProperty(missingProperty: string, containingTypeString: string) {
+            const containingType = generalizeTypeString(containingTypeString);
+            const allNewFeatures = getScriptTargetFeatures();
+            const libTargets = Object.keys(allNewFeatures);
+            for (const libTarget of libTargets) {
+                const newFeaturesOfLib = allNewFeatures[libTarget];
+                const newFeaturesOfContainingType = newFeaturesOfLib[containingType];
+                if (newFeaturesOfContainingType) {
+                    for (const newFeature of newFeaturesOfContainingType) {
+                        const isNewFeatureTheMissingProperty = newFeature === missingProperty;
+                        if (isNewFeatureTheMissingProperty) {
+                            return libTarget;
                         }
                     }
                 }
             }
 
-            function extractStringTypeFromFlags(flags: TypeFlags) {
-                return flags & (TypeFlags.String | TypeFlags.StringLike | TypeFlags.StringLiteral) ? "String" : undefined;
+            function generalizeTypeString(typeString: string){
+                if (typeString.includes("[]")) {
+                    return "Array";
+                }
+                else if (typeString.includes("\"\"")) {
+                    return "String";
+                }
+                else if (typeString.includes("Promise")) {
+                    return "Promise";
+                }
+                return typeString;
             }
         }
 
