@@ -16,6 +16,12 @@ type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 
+// Nested template literal type normalization
+
+type TL1<T extends string> = `a${T}b${T}c`;
+type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
+type TL3 = TL2<'o'>;  // 'axoybxoyc'
+
 // Casing intrinsics
 
 type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
@@ -239,6 +245,9 @@ declare type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
 declare type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 declare type ToString<T extends string | number | boolean | bigint> = `${T}`;
 declare type TS1 = ToString<'abc' | 42 | true | -1234n>;
+declare type TL1<T extends string> = `a${T}b${T}c`;
+declare type TL2<U extends string> = TL1<`x${U}y`>;
+declare type TL3 = TL2<'o'>;
 declare type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 declare type TCA1 = Cases<'bar'>;
 declare type TCA2 = Cases<'BAR'>;
