@@ -13502,23 +13502,11 @@ namespace ts {
                     mapType(types[unionIndex], t => getTemplateLiteralType(texts, replaceElement(types, unionIndex, t))) :
                     errorType;
             }
-            const newTypes = [];
-            const newTexts = [];
+            const newTypes: Type[] = [];
+            const newTexts: string[] = [];
             let text = texts[0];
-            for (let i = 0; i < types.length; i++) {
-                const t = types[i];
-                if (t.flags & TypeFlags.Literal) {
-                    text += getTemplateStringForType(t) || "";
-                    text += texts[i + 1];
-                }
-                else if (isGenericIndexType(t)) {
-                    newTypes.push(t);
-                    newTexts.push(text);
-                    text = texts[i + 1];
-                }
-                else {
-                    return stringType;
-                }
+            if (!addSpans(texts, types)) {
+                return stringType;
             }
             if (newTypes.length === 0) {
                 return getLiteralType(text);
@@ -13530,6 +13518,30 @@ namespace ts {
                 templateLiteralTypes.set(id, type = createTemplateLiteralType(newTexts, newTypes));
             }
             return type;
+
+            function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
+                for (let i = 0; i < types.length; i++) {
+                    const t = types[i];
+                    if (t.flags & TypeFlags.Literal) {
+                        text += getTemplateStringForType(t) || "";
+                        text += texts[i + 1];
+                    }
+                    else if (t.flags & TypeFlags.TemplateLiteral) {
+                        text += (<TemplateLiteralType>t).texts[0];
+                        if (!addSpans((<TemplateLiteralType>t).texts, (<TemplateLiteralType>t).types)) return false;
+                        text += texts[i + 1];
+                    }
+                    else if (isGenericIndexType(t)) {
+                        newTypes.push(t);
+                        newTexts.push(text);
+                        text = texts[i + 1];
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
 
         function getTemplateStringForType(type: Type) {
