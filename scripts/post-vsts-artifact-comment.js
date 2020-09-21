@@ -23,7 +23,7 @@ async function main() {
     const tgzUrl = new URL(artifact.resource.url);
     tgzUrl.search = `artifactName=tgz&fileId=${file.blob.id}&fileName=${file.path}`;
     const link = "" + tgzUrl;
-    const gh = new Octokit();
+    const gh = new Octokit.Octokit();
     gh.authenticate({
         type: "token",
         token: process.argv[2]
@@ -57,7 +57,7 @@ main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
-        const gh = new Octokit();
+        const gh = new Octokit.Octokit();
         gh.authenticate({
             type: "token",
             token: process.argv[2]
