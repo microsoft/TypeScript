@@ -20,13 +20,12 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: (context) => {
-            const container = getTypeContainer(context, context.span);
-            if (!container) {
+            const info = getTypeContainer(context, context.span);
+            if (!info) {
                 return undefined;
             }
 
-
-            const edits = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, container));
+            const edits = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, info));
             if (edits.length > 0) {
                 return [createCodeFixAction(fixId, edits, Diagnostics.Remove_unnecessary_await, fixId, Diagnostics.Remove_all_unnecessary_uses_of_await)];
             }
@@ -34,29 +33,112 @@ namespace ts.codefix {
         fixIds: [fixId],
         getAllCodeActions: context => {
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const container = getTypeContainer(context, diag);
-                if (!container) {
+                const info = getTypeContainer(context, diag);
+                if (!info) {
                     return undefined;
                 }
-                makeChange(changes, context.sourceFile, container);
+                makeChange(changes, context.sourceFile, info);
             });
         },
     });
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, container: DefinitelyHasType) {
-        changeTracker.delete(sourceFile, container.type)
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
+        switch (info.kind) {
+            case TypeContainerKind.Modifier:
+                return makeModifiersChange(changeTracker, sourceFile, info.modifier, info.container);
+            case TypeContainerKind.Type:
+                return makeTypeAnnotationChange(changeTracker, sourceFile, info.container);
+            case TypeContainerKind.Declaration:
+                return makeTypeDeclarationChange(changeTracker, sourceFile, info.declaration);
+        }
+    }
+
+    function makeTypeAnnotationChange (changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, container: DefinitelyHasType) {
+        changeTracker.deleteTypeNode(sourceFile, container.type);
+    }
+
+    function makeModifiersChange (changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, modifier: Modifier, container: DefinitelyHasModifiers, deleteContainer?: boolean) {
+        if (!deleteContainer || !(getEffectiveModifierFlags(container) & ModifierFlags.Ambient)) {
+            changeTracker.deleteModifier(sourceFile, modifier);
+        }
+        else if (modifier.kind === SyntaxKind.DeclareKeyword) {
+            changeTracker.delete(sourceFile, container)
+        }
+    }
+
+    function makeTypeDeclarationChange (changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: TypeDeclarations) {
+        changeTracker.delete(sourceFile, declaration)
     }
 
     type DefinitelyHasType = HasType & { type: TypeNode }
+    type DefinitelyHasModifiers = HasModifiers & { modifiers: ModifiersArray }
 
-    function getTypeContainer (context: CodeFixContext | CodeFixAllContext, span: TextSpan): DefinitelyHasType | undefined {
+    const enum TypeContainerKind {
+        Type,
+        Modifier,
+        Declaration
+    }
+
+    interface TypeAnnotationInfo {
+        kind: TypeContainerKind.Type
+        container: DefinitelyHasType
+    }
+
+    interface ModifierInfo {
+        kind: TypeContainerKind.Modifier
+        container: DefinitelyHasModifiers
+        modifier: Modifier
+    }
+
+    type TypeDeclarations = TypeAliasDeclaration | InterfaceDeclaration | ModuleDeclaration
+
+    interface TypeDeclarationInfo {
+        kind: TypeContainerKind.Declaration
+        declaration: TypeDeclarations
+    }
+
+    type Info = TypeAnnotationInfo | ModifierInfo | TypeDeclarationInfo
+
+    function getTypeContainer (context: CodeFixContext | CodeFixAllContext, span: TextSpan): Info | undefined {
         const { sourceFile } = context;
 
         const currentNode = getTokenAtPosition(sourceFile, span.start);
-        if (!isTypeNode(currentNode) || !hasType(currentNode.parent) || currentNode.parent.type !== currentNode) {
-            return undefined;
+        if (isTypeNode(currentNode) && hasType(currentNode.parent) && currentNode.parent.type === currentNode) {
+            return {
+                kind: TypeContainerKind.Type,
+                container: currentNode.parent as DefinitelyHasType
+            };
         }
-        return currentNode.parent as DefinitelyHasType;
+        if (isModifier(currentNode) && hasModifier(currentNode.parent) && rangeContainsRange(currentNode.parent.modifiers, currentNode)) {
+            return {
+                kind: TypeContainerKind.Modifier,
+                container: currentNode.parent,
+                modifier: currentNode
+            }
+        }
+        if (isTypeDeclaration(currentNode, currentNode.parent) && currentNode.parent.name === currentNode) {
+            return {
+                kind: TypeContainerKind.Declaration,
+                declaration: currentNode.parent
+            }
+        }
+        return undefined;
+    }
+
+    function hasModifier(node: Node): node is DefinitelyHasModifiers {
+        return !!(node as HasModifiers).modifiers;
+    }
+
+    function isTypeDeclaration(currentNode: Node, container: Node): container is TypeDeclarations {
+        switch (container.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return (<ModuleDeclaration>container).name === currentNode && !!(getEffectiveModifierFlags(container) & ModifierFlags.Ambient);
+            default:
+                return false;
+        }
     }
 }
 

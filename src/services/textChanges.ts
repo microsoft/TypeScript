@@ -305,6 +305,11 @@ namespace ts.textChanges {
             this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }
 
+        public deleteTypeNode(sourceFile: SourceFile, node: TypeNode): void {
+            const previousToken = findPrecedingToken(node.getFullStart(), sourceFile);
+            this.deleteNodeRange(sourceFile, previousToken ?? node, node);
+        }
+
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
