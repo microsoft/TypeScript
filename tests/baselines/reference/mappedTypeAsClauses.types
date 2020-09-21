@@ -66,3 +66,25 @@ type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
 type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
 >TD3 : `${keyof U & string}1` | `${keyof U & string}2`
 
+// Repro from #40619
+
+type Lazyify<T> = {
+>Lazyify : Lazyify<T>
+
+    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+};
+
+interface Person {
+    readonly name: string;
+>name : string
+
+    age: number;
+>age : number
+
+    location?: string;
+>location : string | undefined
+}
+
+type LazyPerson = Lazyify<Person>;
+>LazyPerson : Lazyify<Person>
+
