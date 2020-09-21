@@ -871,6 +871,14 @@
         "category": "Error",
         "code": 1262
     },
+    "Declarations with initializers cannot also have definite assignment assertions.": {
+        "category": "Error",
+        "code": 1263
+    },
+    "Declarations with definite assignment assertions must also have type annotations.": {
+        "category": "Error",
+        "code": 1264
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
