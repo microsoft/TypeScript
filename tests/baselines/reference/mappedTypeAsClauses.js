@@ -32,7 +32,7 @@ type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & str
 // Repro from #40619
 
 type Lazyify<T> = {
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 };
 
 interface Person {
@@ -97,7 +97,7 @@ declare type TD1 = DoubleProp<{
 declare type TD2 = keyof TD1;
 declare type TD3<U> = keyof DoubleProp<U>;
 declare type Lazyify<T> = {
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K];
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];
 };
 interface Person {
     readonly name: string;

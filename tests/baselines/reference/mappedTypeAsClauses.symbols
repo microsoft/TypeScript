@@ -115,9 +115,10 @@ type Lazyify<T> = {
 >Lazyify : Symbol(Lazyify, Decl(mappedTypeAsClauses.ts, 28, 34))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
 
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
