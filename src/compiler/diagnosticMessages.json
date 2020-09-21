@@ -851,10 +851,6 @@
         "category": "Error",
         "code": 1257
     },
-    "Definite assignment assertions can only be used along with a type annotation.": {
-        "category": "Error",
-        "code": 1258
-    },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",
         "code": 1259

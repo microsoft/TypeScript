@@ -39487,7 +39487,7 @@ namespace ts {
             if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || node.flags & NodeFlags.Ambient)) {
                 const message = node.initializer
                     ? Diagnostics.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions
-                    : Diagnostics.Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation;
+                    : Diagnostics.Declarations_with_definite_assignment_assertions_must_also_have_type_annotations;
                 return grammarErrorOnNode(node.exclamationToken, message);
             }
 
