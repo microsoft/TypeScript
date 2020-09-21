@@ -9360,7 +9360,6 @@ declare namespace ts.server {
         private rootFileNames;
         isOrphan(): boolean;
         updateGraph(): boolean;
-        hasRoots(): boolean;
         markAsDirty(): void;
         getScriptFileNames(): string[];
         getLanguageService(): never;
