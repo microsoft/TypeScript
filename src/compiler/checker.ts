@@ -13650,6 +13650,10 @@ namespace ts {
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags, reportDeprecated?: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
+            const shouldIncludeUndefined =
+                compilerOptions.noUncheckedIndexedAccess &&
+                (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
+
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
@@ -13687,7 +13691,10 @@ namespace ts {
                         }
                     }
                     errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, IndexKind.Number));
-                    return mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
+                    return mapType(objectType, t => {
+                        const restType = getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType;
+                        return shouldIncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
+                    });
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
@@ -13703,9 +13710,6 @@ namespace ts {
                         }
                         return undefined;
                     }
-                    const shouldIncludeUndefined =
-                        compilerOptions.noUncheckedIndexedAccess &&
-                        (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
