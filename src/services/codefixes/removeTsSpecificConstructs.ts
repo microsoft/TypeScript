@@ -50,6 +50,8 @@ namespace ts.codefix {
                 return makeTypeAnnotationChange(changeTracker, sourceFile, info.container);
             case TypeContainerKind.Declaration:
                 return makeTypeDeclarationChange(changeTracker, sourceFile, info.declaration);
+            case TypeContainerKind.TypeParameter:
+                return makeTypeParametersChange(changeTracker, sourceFile, info.container);
         }
     }
 
@@ -70,13 +72,20 @@ namespace ts.codefix {
         changeTracker.delete(sourceFile, declaration)
     }
 
+    function makeTypeParametersChange (changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, container: DefinitelyHasTypeParameters) {
+        changeTracker.delete(sourceFile, container.typeParameters)
+    }
+
     type DefinitelyHasType = HasType & { type: TypeNode }
     type DefinitelyHasModifiers = HasModifiers & { modifiers: ModifiersArray }
+
+    type DefinitelyHasTypeParameters = DeclarationWithTypeParameterChildren & { typeParameters: NodeArray<TypeParameterDeclaration> }
 
     const enum TypeContainerKind {
         Type,
         Modifier,
-        Declaration
+        Declaration,
+        TypeParameter,
     }
 
     interface TypeAnnotationInfo {
@@ -97,7 +106,12 @@ namespace ts.codefix {
         declaration: TypeDeclarations
     }
 
-    type Info = TypeAnnotationInfo | ModifierInfo | TypeDeclarationInfo
+    interface TypeParameterDeclarationInfo {
+        kind: TypeContainerKind.TypeParameter
+        container: DefinitelyHasTypeParameters
+    }
+
+    type Info = TypeAnnotationInfo | ModifierInfo | TypeDeclarationInfo | TypeParameterDeclarationInfo
 
     function getTypeContainer (context: CodeFixContext | CodeFixAllContext, span: TextSpan): Info | undefined {
         const { sourceFile } = context;
@@ -120,6 +134,12 @@ namespace ts.codefix {
             return {
                 kind: TypeContainerKind.Declaration,
                 declaration: currentNode.parent
+            }
+        }
+        if (isDeclarationWithTypeParameterChildren(currentNode.parent) && currentNode.parent.typeParameters && rangeContainsRange(currentNode.parent.typeParameters, currentNode)) {
+            return {
+                kind: TypeContainerKind.TypeParameter,
+                container: currentNode.parent as DefinitelyHasTypeParameters
             }
         }
         return undefined;
