@@ -1,17 +1,18 @@
 === tests/cases/conformance/types/mapped/mappedTypeAsClauses.ts ===
 // Mapped type 'as N' clauses
 
-type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 >Getters : Symbol(Getters, Decl(mappedTypeAsClauses.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
->TG1 : Symbol(TG1, Decl(mappedTypeAsClauses.ts, 2, 82))
+>TG1 : Symbol(TG1, Decl(mappedTypeAsClauses.ts, 2, 83))
 >Getters : Symbol(Getters, Decl(mappedTypeAsClauses.ts, 0, 0))
 >foo : Symbol(foo, Decl(mappedTypeAsClauses.ts, 3, 20))
 >bar : Symbol(bar, Decl(mappedTypeAsClauses.ts, 3, 33))
@@ -114,9 +115,10 @@ type Lazyify<T> = {
 >Lazyify : Symbol(Lazyify, Decl(mappedTypeAsClauses.ts, 28, 34))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
 
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))

@@ -27,7 +27,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(33,45): error TS2550:
 tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(36,53): error TS2550: Property 'allSettled' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(37,31): error TS2550: Property 'matchAll' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(38,47): error TS2550: Property 'matchAll' does not exist on type 'SymbolConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(39,20): error TS2795: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the `lib` compiler option to es2020 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(39,20): error TS2796: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the `lib` compiler option to es2020 or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(42,46): error TS2550: Property 'any' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(43,33): error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(44,70): error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
@@ -132,7 +132,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts(44,70): error TS2550:
 !!! error TS2550: Property 'matchAll' does not exist on type 'SymbolConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
     const testBigInt = BigInt(123);
                        ~~~~~~
-!!! error TS2795: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the `lib` compiler option to es2020 or later.
+!!! error TS2796: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the `lib` compiler option to es2020 or later.
     
     // esnext
     const testPromiseAny = new Promise(() => {}).any();

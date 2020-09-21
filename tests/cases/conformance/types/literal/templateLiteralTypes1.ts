@@ -18,16 +18,22 @@ type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 
-// Casing modifiers
+// Nested template literal type normalization
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+type TL1<T extends string> = `a${T}b${T}c`;
+type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
+type TL3 = TL2<'o'>;  // 'axoybxoyc'
+
+// Casing intrinsics
+
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
     let s1: string = name;
     let s2: 'getFoo' | 'getBar' = name;
 }
@@ -65,14 +71,14 @@ type T23 = MatchPair<'[123]'>;  // unknown
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
 
 type SnakeToCamelCase<S extends string> =
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${lowercase T}` :
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Lowercase<T>}` :
     SnakeToPascalCase<S>;
 
 type SnakeToPascalCase<S extends string> =
     string extends S ? string :
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
     never;
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
@@ -87,12 +93,6 @@ type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer 
 type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
 type T27 = FirstTwoAndRest<'a'>;  // unknown
-
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-
-type TC1 = Capitalize<'foo'>;  // 'Foo'
-type TC2 = Uncapitalize<'Foo'>;  // 'foo'
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
