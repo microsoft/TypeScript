@@ -95,7 +95,11 @@ declare const myRecord1: { a: string; b: string };
 declare const myRecord2: { a: string; b: string, [key: string]: string };
 const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
 const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
-const fn3 = <Key extends keyof typeof myRecord2>(key: Key): string => myRecord2[key]; // Should error
+const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+    myRecord2[key] = undefined; // Should error
+    const v: string = myRecord2[key]; // Should error
+};
+
 
 
 //// [noUncheckedIndexedAccess.js]
@@ -174,4 +178,7 @@ var variadicOk1 = nonEmptyStringArray[0]; // Should OK
 var variadicError1 = nonEmptyStringArray[1]; // Should error
 var fn1 = function (key) { return myRecord1[key]; }; // Should OK
 var fn2 = function (key) { return myRecord2[key]; }; // Should OK
-var fn3 = function (key) { return myRecord2[key]; }; // Should error
+var fn3 = function (key) {
+    myRecord2[key] = undefined; // Should error
+    var v = myRecord2[key]; // Should error
+};

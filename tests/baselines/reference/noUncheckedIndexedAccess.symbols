@@ -330,12 +330,23 @@ const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[
 >myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
 >key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 95, 49))
 
-const fn3 = <Key extends keyof typeof myRecord2>(key: Key): string => myRecord2[key]; // Should error
+const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
 >fn3 : Symbol(fn3, Decl(noUncheckedIndexedAccess.ts, 96, 5))
 >Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 96, 13))
 >myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
 >key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 96, 49))
 >Key : Symbol(Key, Decl(noUncheckedIndexedAccess.ts, 96, 13))
+
+    myRecord2[key] = undefined; // Should error
 >myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
 >key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 96, 49))
+>undefined : Symbol(undefined)
+
+    const v: string = myRecord2[key]; // Should error
+>v : Symbol(v, Decl(noUncheckedIndexedAccess.ts, 98, 9))
+>myRecord2 : Symbol(myRecord2, Decl(noUncheckedIndexedAccess.ts, 93, 13))
+>key : Symbol(key, Decl(noUncheckedIndexedAccess.ts, 96, 49))
+
+};
+
 

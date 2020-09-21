@@ -397,12 +397,25 @@ const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[
 >myRecord2 : { [key: string]: string; a: string; b: string; }
 >key : Key
 
-const fn3 = <Key extends keyof typeof myRecord2>(key: Key): string => myRecord2[key]; // Should error
->fn3 : <Key extends string | number>(key: Key) => string
-><Key extends keyof typeof myRecord2>(key: Key): string => myRecord2[key] : <Key extends string | number>(key: Key) => string
+const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+>fn3 : <Key extends string | number>(key: Key) => void
+><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends string | number>(key: Key) => void
 >myRecord2 : { [key: string]: string; a: string; b: string; }
 >key : Key
+
+    myRecord2[key] = undefined; // Should error
+>myRecord2[key] = undefined : undefined
 >myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
 >myRecord2 : { [key: string]: string; a: string; b: string; }
 >key : Key
+>undefined : undefined
+
+    const v: string = myRecord2[key]; // Should error
+>v : string
+>myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+>myRecord2 : { [key: string]: string; a: string; b: string; }
+>key : Key
+
+};
+
 
