@@ -1671,7 +1671,7 @@ namespace ts.server {
             }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
-                if (!this.autoImportProviderHost.hasRoots()) {
+                if (this.autoImportProviderHost.isEmpty()) {
                     this.autoImportProviderHost.close();
                     this.autoImportProviderHost = undefined;
                     return undefined;
@@ -1935,6 +1935,10 @@ namespace ts.server {
             this.rootFileNames = initialRootNames;
         }
 
+        isEmpty() {
+            return !some(this.rootFileNames);
+        }
+
         isOrphan() {
             return true;
         }
@@ -1953,10 +1957,6 @@ namespace ts.server {
             this.rootFileNames = rootFileNames;
             this.hostProject.getImportSuggestionsCache().clear();
             return super.updateGraph();
-        }
-
-        hasRoots() {
-            return !!ts.some(this.rootFileNames);
         }
 
         markAsDirty() {
