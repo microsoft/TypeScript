@@ -1935,6 +1935,7 @@ namespace ts.server {
             this.rootFileNames = initialRootNames;
         }
 
+        /*@internal*/
         isEmpty() {
             return !some(this.rootFileNames);
         }
