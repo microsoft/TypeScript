@@ -24,10 +24,24 @@
 //// }) =>
 ////     (<div>Hello world</div>)
 ////
-//// export const Bar3 = ({
+//// export const Bar4 = ({
 ////     foo,
 ////     bar,
 //// }) =>
+////     <div>Hello world</div>
+////
+//// export const Bar5 = () => (
+////     <div>Hello world</div>
+//// )
+//// 
+//// export const Bar6 = () => (<div>Hello world</div>)
+//// 
+//// export const Bar7 = () => <div>Hello world</div>
+//// 
+//// export const Bar8 = () =>
+////     (<div>Hello world</div>)
+//// 
+//// export const Bar9 = () =>
 ////     <div>Hello world</div>
 
 verify.formatDocumentChangesNothing();
