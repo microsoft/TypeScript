@@ -551,7 +551,6 @@ namespace ts {
             }
 
             // Return array of values that needs emit
-            // Return array of values that needs emit
             return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
         }
     }
