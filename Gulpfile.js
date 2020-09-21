@@ -457,7 +457,7 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ true, /*watchMode*/ false);
-task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
+task("runtests-parallel", series(preBuild, preTest));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
     "   --no-lint": "disables lint.",
