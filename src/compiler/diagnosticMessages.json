@@ -3043,6 +3043,14 @@
         "category": "Error",
         "code": 2794
     },
+    "Type Constructor Polymorphism type parameter {0} could not accept proper type {1}": {
+        "category": "Error",
+        "code": 2800
+    },
+    "Proper Constructor Polymorphism type parameter {0} could not accept Generic type {1} ": {
+        "category": "Error",
+        "code": 2801
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

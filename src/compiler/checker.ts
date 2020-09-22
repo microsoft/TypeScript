@@ -12099,6 +12099,62 @@ namespace ts {
             return length(type.target.typeParameters);
         }
 
+        /**
+         * we assueme that typeArgument must be a TypeReference TypeArgument, which means it get the typeConstructor parent which take it as a typeArgument.
+         */
+        function isTypeConstructorArgumentValidInTypeConstructorPolymorisic(typeArgument: TypeReferenceNode) {
+            // Question! should we assume typeArgument always does not have any type argument?
+
+            const parentNode = typeArgument.parent;
+            // I am not sure whether the parent could have the typeArgument, maybe the grandparent?
+            if (!isTypeReferenceNode(parentNode)) {
+                debugger;
+                return false;
+            }
+            const argumentIndex = parentNode.typeArguments?.findIndex(ta => ta === typeArgument);
+            if(!argumentIndex){
+                // never happens. If code runs here, it means we find the parent wrongly or we do not find the proper argument node(it might have typecasting or sth else?)
+                return false;
+            }
+
+            const typeParametersOfArgument = getTypeParametersForTypeReference(typeArgument);
+
+            const typeParameterIndex = argumentIndex;
+            const typeParameters = getTypeParametersForTypeReference(parentNode);
+            if (!typeParameters) {
+                return false;
+            }
+            const correspondTypeParameter = typeParameters[typeParameterIndex];
+            if(!isTypeParameterTypeConstructorDeclaration(correspondTypeParameter)){
+                // error: type constructor could not be used as Generic. Like T could not be replaced by Set
+                return false;
+            }
+            if(correspondTypeParameter.tParams !== ){
+
+            }
+        }
+
+        function getTypeParameterFromTypeConstructorSymbol(symbol:Symbol){
+            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
+                const typeParameters = type.localTypeParameters;
+                return typeParameters;
+            }
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                // const type = getDeclaredTypeOfSymbol(symbol);
+                const links = getSymbolLinks(symbol);
+                const typeParameters = links.typeParameters;
+                return typeParameters;
+            }
+        }
+
+        // I wish the symbol should be a interface/class/alias
+        function getSymbolOfTypeConstructorTypeReference(typeConstructor: TypeReferenceNode): Symbol | undefined {
+            let symbol: Symbol|undefined;
+            const meaning = SymbolFlags.Type;
+            symbol = resolveTypeReferenceName(getTypeReferenceName(typeConstructor), meaning);
+            return symbol;
+        }
 
         /**
          * Get type from type-reference that reference to class or interface
