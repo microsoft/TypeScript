@@ -167,6 +167,7 @@ namespace ts {
         DeclareKeyword,
         GetKeyword,
         InferKeyword,
+        IntrinsicKeyword,
         IsKeyword,
         KeyOfKeyword,
         ModuleKeyword,
@@ -186,10 +187,6 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
-        UppercaseKeyword,
-        LowercaseKeyword,
-        CapitalizeKeyword,
-        UncapitalizeKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -544,7 +541,6 @@ namespace ts {
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
-        | SyntaxKind.CapitalizeKeyword
         | SyntaxKind.CaseKeyword
         | SyntaxKind.CatchKeyword
         | SyntaxKind.ClassKeyword
@@ -574,10 +570,10 @@ namespace ts {
         | SyntaxKind.InKeyword
         | SyntaxKind.InstanceOfKeyword
         | SyntaxKind.InterfaceKeyword
+        | SyntaxKind.IntrinsicKeyword
         | SyntaxKind.IsKeyword
         | SyntaxKind.KeyOfKeyword
         | SyntaxKind.LetKeyword
-        | SyntaxKind.LowercaseKeyword
         | SyntaxKind.ModuleKeyword
         | SyntaxKind.NamespaceKeyword
         | SyntaxKind.NeverKeyword
@@ -605,11 +601,9 @@ namespace ts {
         | SyntaxKind.TryKeyword
         | SyntaxKind.TypeKeyword
         | SyntaxKind.TypeOfKeyword
-        | SyntaxKind.UncapitalizeKeyword
         | SyntaxKind.UndefinedKeyword
         | SyntaxKind.UniqueKeyword
         | SyntaxKind.UnknownKeyword
-        | SyntaxKind.UppercaseKeyword
         | SyntaxKind.VarKeyword
         | SyntaxKind.VoidKeyword
         | SyntaxKind.WhileKeyword
@@ -635,6 +629,7 @@ namespace ts {
         | SyntaxKind.AnyKeyword
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
+        | SyntaxKind.IntrinsicKeyword
         | SyntaxKind.NeverKeyword
         | SyntaxKind.NumberKeyword
         | SyntaxKind.ObjectKeyword
@@ -1665,17 +1660,8 @@ namespace ts {
     export interface TemplateLiteralTypeSpan extends TypeNode {
         readonly kind: SyntaxKind.TemplateLiteralTypeSpan,
         readonly parent: TemplateLiteralTypeNode;
-        readonly casing: TemplateCasing;
         readonly type: TypeNode;
         readonly literal: TemplateMiddle | TemplateTail;
-    }
-
-    export const enum TemplateCasing {
-        None,
-        Uppercase,
-        Lowercase,
-        Capitalize,
-        Uncapitalize,
     }
 
     // Note: 'brands' in our syntax nodes serve to give us a small amount of nominal typing.
@@ -4892,6 +4878,7 @@ namespace ts {
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
         TemplateLiteral = 1 << 27,  // Template literal type
+        StringMapping   = 1 << 28,  // Uppercase/Lowercase type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4909,7 +4896,7 @@ namespace ts {
         Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
         Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
-        StringLike = String | StringLiteral | TemplateLiteral,
+        StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
         NumberLike = Number | NumberLiteral | Enum,
         BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
@@ -4922,7 +4909,7 @@ namespace ts {
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
         InstantiableNonPrimitive = TypeVariable | Conditional | Substitution,
-        InstantiablePrimitive = Index | TemplateLiteral,
+        InstantiablePrimitive = Index | TemplateLiteral | StringMapping,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
@@ -4930,7 +4917,7 @@ namespace ts {
         /* @internal */
         Simplifiable = IndexedAccess | Conditional,
         /* @internal */
-        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | TemplateLiteral,
+        Substructure = Object | Union | Intersection | Index | IndexedAccess | Conditional | Substitution | TemplateLiteral | StringMapping,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -5379,9 +5366,13 @@ namespace ts {
     }
 
     export interface TemplateLiteralType extends InstantiableType {
-        texts: readonly string[];  // Always one element longer than casings/types
-        casings: readonly TemplateCasing[];  // Always at least one element
+        texts: readonly string[];  // Always one element longer than types
         types: readonly Type[];  // Always at least one element
+    }
+
+    export interface StringMappingType extends InstantiableType {
+        symbol: Symbol;
+        type: Type;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
@@ -6774,8 +6765,8 @@ namespace ts {
         createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
-        updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
 
         //
         // Types
