@@ -568,33 +568,61 @@ namespace ts {
 
     export function getScriptTargetFeatures(): ScriptTargetFeatures {
         return {
+            es2015: {
+                Array: ["find", "findIndex", "fill", "copyWithin", "entries", "keys", "values"],
+                RegExp: ["flags", "sticky", "unicode"],
+                Reflect: ["apply", "construct", "defineProperty", "deleteProperty", "get"," getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"],
+                ArrayConstructor: ["from", "of"],
+                ObjectConstructor: ["assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"],
+                NumberConstructor: ["isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"],
+                Math: ["clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"],
+                Map: ["entries", "keys", "values"],
+                Set: ["entries", "keys", "values"],
+                Promise: ["all", "race", "reject", "resolve"],
+                Symbol: ["for", "keyFor"],
+                WeakMap: ["entries", "keys", "values"],
+                WeakSet: ["entries", "keys", "values"],
+                Iterator: [""],
+                AsyncIterator: [""],
+                String: ["codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"],
+                StringConstructor: ["fromCodePoint", "raw"]
+            },
             es2016: {
                 Array: ["includes"]
             },
             es2017: {
+                Atomics: [""],
+                SharedArrayBuffer: [""],
                 String: ["padStart", "padEnd"],
                 ObjectConstructor: ["values", "entries", "getOwnPropertyDescriptors"],
-                DateTimeFormat: ["formatToParts"],
+                DateTimeFormat: ["formatToParts"]
             },
             es2018: {
                 Promise: ["finally"],
                 RegExpMatchArray: ["groups"],
                 RegExpExecArray: ["groups"],
                 RegExp: ["dotAll"],
-                Intl: ["PluralRules"]
+                Intl: ["PluralRules"],
+                AsyncIterable: [""],
+                AsyncIterableIterator: [""],
+                AsyncGenerator: [""],
+                AsyncGeneratorFunction: [""],
             },
             es2019: {
                 Array: ["flat", "flatMap"],
                 ObjectConstructor: ["fromEntries"],
                 String: ["trimStart", "trimEnd", "trimLeft", "trimRight"],
-                symbol: ["description"]
+                Symbol: ["description"]
             },
             es2020: {
+                BigInt: [""],
+                BigInt64Array: [""],
+                BigUint64Array: [""],
                 Promise: ["allSettled"],
                 SymbolConstructor: ["matchAll"],
                 String: ["matchAll"],
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
-                RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"],
+                RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
             esnext: {
                 Promise: ["any"],

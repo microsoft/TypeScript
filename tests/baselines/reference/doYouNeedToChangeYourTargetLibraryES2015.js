@@ -1,5 +1,18 @@
-//// [doYouNeedToChangeYourTargetLibrary.ts]
+//// [doYouNeedToChangeYourTargetLibraryES2015.ts]
 // es2015
+const noOp = () => {};
+const testReflectApply = Reflect.apply(noOp, this, []);
+const testReflectConstruct = Reflect.construct(noOp, []);
+const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
+const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
+const testReflectGet = Reflect.get({}, "");
+const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
+const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
+const testReflectIsExtensible = Reflect.isExtensible({});
+const testReflectOwnKeys = Reflect.ownKeys({});
+const testReflectPreventExtensions = Reflect.preventExtensions({});
+const testReflectSet = Reflect.set({}, "", 0);
+const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {}); 
 const testArrayFind = [""].find((val, idx, obj) => {
     return true;
 });
@@ -74,58 +87,30 @@ const testStringSub = "".sub();
 const testStringSup = "".sup();
 const testStringConstructorFromCodePoint = String.fromCodePoint();
 const testStringConstructorRaw = String.raw``;
+const testRegExpFlags = /abc/g.flags;
+const testRegExpSticky = /abc/g.sticky;
+const testRegExpUnicode = /abc/g.unicode;
 
-// es2016
-const testIncludes = ["hello"].includes("world");
 
-// es2017
-const testStringPadStart = "".padStart(2);
-const testStringPadEnd = "".padEnd(2);
-const testObjectConstructorValues = Object.values({});
-const testObjectConstructorEntries = Object.entries({});
-const testObjectConstructorGetOwnPropertyDescriptors = Object.getOwnPropertyDescriptors({});
-const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
-const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
-const testSharedArrayBuffer = new SharedArrayBuffer(5);
-
-// es2018
-const testPromiseFinally = new Promise(() => {}).finally();
-const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
-const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
-const testRegExpDotAll = /foo/g.dotAll;
-const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
-const testAsyncGenerator: AsyncGenerator<any> = null as any;
-const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
-const testAsyncIterable: AsyncIterable<any> = null as any;
-const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
-
-// es2019
-const testArrayFlat = [].flat();
-const testArrayFlatMap = [].flatMap();
-const testObjectConstructorFromEntries = Object.fromEntries({});
-const testStringTrimStart = "".trimStart();
-const testStringTrimEnd = "".trimEnd();
-const testStringTrimLeft = "".trimLeft();
-const testStringTrimRight = "".trimRight();
-const testSymbolDescription = Symbol("foo").description;
-
-// es2020
-const testPromiseAllSettled = new Promise(() => {}).allSettled();
-const testStringMatchAll = "".matchAll();
-const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
-const testBigInt = BigInt(123);
-
-// esnext
-const testPromiseAny = new Promise(() => {}).any();
-const testStringReplaceAll = "".replaceAll();
-const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
-
-//// [doYouNeedToChangeYourTargetLibrary.js]
+//// [doYouNeedToChangeYourTargetLibraryES2015.js]
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
 // es2015
+var noOp = function () { };
+var testReflectApply = Reflect.apply(noOp, this, []);
+var testReflectConstruct = Reflect.construct(noOp, []);
+var testReflectDefineProperty = Reflect.defineProperty({}, "", {});
+var testReflectDeleteProperty = Reflect.deleteProperty({}, "");
+var testReflectGet = Reflect.get({}, "");
+var testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
+var testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
+var testReflectIsExtensible = Reflect.isExtensible({});
+var testReflectOwnKeys = Reflect.ownKeys({});
+var testReflectPreventExtensions = Reflect.preventExtensions({});
+var testReflectSet = Reflect.set({}, "", 0);
+var testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {});
 var testArrayFind = [""].find(function (val, idx, obj) {
     return true;
 });
@@ -200,42 +185,6 @@ var testStringSub = "".sub();
 var testStringSup = "".sup();
 var testStringConstructorFromCodePoint = String.fromCodePoint();
 var testStringConstructorRaw = String.raw(__makeTemplateObject([""], [""]));
-// es2016
-var testIncludes = ["hello"].includes("world");
-// es2017
-var testStringPadStart = "".padStart(2);
-var testStringPadEnd = "".padEnd(2);
-var testObjectConstructorValues = Object.values({});
-var testObjectConstructorEntries = Object.entries({});
-var testObjectConstructorGetOwnPropertyDescriptors = Object.getOwnPropertyDescriptors({});
-var testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
-var testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
-var testSharedArrayBuffer = new SharedArrayBuffer(5);
-// es2018
-var testPromiseFinally = new Promise(function () { })["finally"]();
-var testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
-var testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
-var testRegExpDotAll = /foo/g.dotAll;
-var testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
-var testAsyncGenerator = null;
-var testAsyncGeneratorFunction = null;
-var testAsyncIterable = null;
-var testAsyncIterableIterator = null;
-// es2019
-var testArrayFlat = [].flat();
-var testArrayFlatMap = [].flatMap();
-var testObjectConstructorFromEntries = Object.fromEntries({});
-var testStringTrimStart = "".trimStart();
-var testStringTrimEnd = "".trimEnd();
-var testStringTrimLeft = "".trimLeft();
-var testStringTrimRight = "".trimRight();
-var testSymbolDescription = Symbol("foo").description;
-// es2020
-var testPromiseAllSettled = new Promise(function () { }).allSettled();
-var testStringMatchAll = "".matchAll();
-var testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
-var testBigInt = BigInt(123);
-// esnext
-var testPromiseAny = new Promise(function () { }).any();
-var testStringReplaceAll = "".replaceAll();
-var testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+var testRegExpFlags = /abc/g.flags;
+var testRegExpSticky = /abc/g.sticky;
+var testRegExpUnicode = /abc/g.unicode;

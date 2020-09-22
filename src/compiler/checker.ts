@@ -2013,7 +2013,15 @@ namespace ts {
                             }
                         }
                         if (!suggestion) {
-                            error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg!));
+                            if (nameArg) {
+                                const lib = getSuggestedLibForNonExistentName(nameArg);
+                                if (lib) {
+                                    error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), lib);
+                                }
+                                else {
+                                    error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
+                                }
+                            }
                         }
                         suggestionCount++;
                     }
@@ -20483,19 +20491,17 @@ namespace ts {
                 case "WeakSet":
                 case "Iterator":
                 case "AsyncIterator":
-                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later;
                 case "SharedArrayBuffer":
                 case "Atomics":
-                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2017_or_later;
                 case "AsyncIterable":
                 case "AsyncIterableIterator":
                 case "AsyncGenerator":
                 case "AsyncGeneratorFunction":
-                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2018_or_later;
                 case "BigInt":
+                case "Reflect":
                 case "BigInt64Array":
                 case "BigUint64Array":
-                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2020_or_later;
+                    return Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later;
                 default:
                     if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         return Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer;
@@ -25752,14 +25758,14 @@ namespace ts {
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        const property = declarationNameToString(propNode);
+                        const missingProperty = declarationNameToString(propNode);
                         const container = typeToString(containingType);
-                        const lib = getSuggestedLibForNonexistentProperty(property, container);
+                        const lib = getSuggestedLibForNonexistentProperty(missingProperty, containingType);
                         if (lib) {
-                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2_or_later, property, container, lib);
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2_or_later, missingProperty, container, lib);
                         }
                         else {
-                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, property, container);
+                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, missingProperty, container);
                         }
                     }
                 }
@@ -25776,34 +25782,36 @@ namespace ts {
             return prop !== undefined && prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
         }
 
-        function getSuggestedLibForNonexistentProperty(missingProperty: string, containingTypeString: string) {
-            const containingType = generalizeTypeString(containingTypeString);
-            const allNewFeatures = getScriptTargetFeatures();
-            const libTargets = Object.keys(allNewFeatures);
+        function getSuggestedLibForNonExistentName(name: __String | Identifier) {
+            const missingName = diagnosticName(name);
+            const allFeatures = getScriptTargetFeatures();
+            const libTargets = getOwnKeys(allFeatures);
             for (const libTarget of libTargets) {
-                const newFeaturesOfLib = allNewFeatures[libTarget];
-                const newFeaturesOfContainingType = newFeaturesOfLib[containingType];
-                if (newFeaturesOfContainingType) {
-                    for (const newFeature of newFeaturesOfContainingType) {
-                        const isNewFeatureTheMissingProperty = newFeature === missingProperty;
-                        if (isNewFeatureTheMissingProperty) {
-                            return libTarget;
-                        }
+                const containingTypes = getOwnKeys(allFeatures[libTarget]);
+                for (const containingType of containingTypes) {
+                    if (containingType === missingName) {
+                        return libTarget;
                     }
                 }
             }
+        }
 
-            function generalizeTypeString(typeString: string){
-                if (typeString.includes("[]")) {
-                    return "Array";
+        function getSuggestedLibForNonexistentProperty(missingProperty: string, containingType: Type) {
+            const container = getApparentType(containingType).symbol;
+            if (container) {
+                const allFeatures = getScriptTargetFeatures();
+                const libTargets = getOwnKeys(allFeatures);
+                for (const libTarget of libTargets) {
+                    const featuresOfLib = allFeatures[libTarget];
+                    const featuresOfContainingType = featuresOfLib[symbolName(container)];
+                    if (featuresOfContainingType) {
+                        for (const feature of featuresOfContainingType) {
+                            if (feature === missingProperty) {
+                                return libTarget;
+                            }
+                        }
+                    }
                 }
-                else if (typeString.includes("\"\"")) {
-                    return "String";
-                }
-                else if (typeString.includes("Promise")) {
-                    return "Promise";
-                }
-                return typeString;
             }
         }
 
@@ -25895,21 +25903,7 @@ namespace ts {
          *         and 1 insertion/deletion at 3 characters)
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            if (!isSpellingSuggestionEdgeCase(name)) {
-                return getSpellingSuggestion(name, symbols, getCandidateName);
-            }
-
-            function isSpellingSuggestionEdgeCase(possibleEdgeCase: string) {
-                /**
-                 * Without this check, the user could be returned an unhelpful error message.
-                 * One case would be with getOwnPropertyDescriptor and getOwnPropertyDescriptors.
-                 * In this case, the user would be suggested to target getOwnPropertyDescriptor.
-                 * If he wanted to use the es2017 feature, he should be suggested to change his target lib to es2017.
-                 *
-                 */
-                const SPELLING_EDGE_CASES = ["getOwnPropertyDescriptors"];
-                return SPELLING_EDGE_CASES.includes(possibleEdgeCase);
-            }
+            return getSpellingSuggestion(name, symbols, getCandidateName);
 
             function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);

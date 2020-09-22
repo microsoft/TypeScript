@@ -1,5 +1,116 @@
-=== tests/cases/compiler/doYouNeedToChangeYourTargetLibrary.ts ===
+=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts ===
 // es2015
+const noOp = () => {};
+>noOp : () => void
+>() => {} : () => void
+
+const testReflectApply = Reflect.apply(noOp, this, []);
+>testReflectApply : any
+>Reflect.apply(noOp, this, []) : any
+>Reflect.apply : any
+>Reflect : any
+>apply : any
+>noOp : () => void
+>this : typeof globalThis
+>[] : undefined[]
+
+const testReflectConstruct = Reflect.construct(noOp, []);
+>testReflectConstruct : any
+>Reflect.construct(noOp, []) : any
+>Reflect.construct : any
+>Reflect : any
+>construct : any
+>noOp : () => void
+>[] : undefined[]
+
+const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
+>testReflectDefineProperty : any
+>Reflect.defineProperty({}, "", {}) : any
+>Reflect.defineProperty : any
+>Reflect : any
+>defineProperty : any
+>{} : {}
+>"" : ""
+>{} : {}
+
+const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
+>testReflectDeleteProperty : any
+>Reflect.deleteProperty({}, "") : any
+>Reflect.deleteProperty : any
+>Reflect : any
+>deleteProperty : any
+>{} : {}
+>"" : ""
+
+const testReflectGet = Reflect.get({}, "");
+>testReflectGet : any
+>Reflect.get({}, "") : any
+>Reflect.get : any
+>Reflect : any
+>get : any
+>{} : {}
+>"" : ""
+
+const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
+>testReflectGetOwnPropertyDescriptor : any
+>Reflect.getOwnPropertyDescriptor({}, "") : any
+>Reflect.getOwnPropertyDescriptor : any
+>Reflect : any
+>getOwnPropertyDescriptor : any
+>{} : {}
+>"" : ""
+
+const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
+>testReflectGetPrototypeOf : any
+>Reflect.getPrototypeOf({}) : any
+>Reflect.getPrototypeOf : any
+>Reflect : any
+>getPrototypeOf : any
+>{} : {}
+
+const testReflectIsExtensible = Reflect.isExtensible({});
+>testReflectIsExtensible : any
+>Reflect.isExtensible({}) : any
+>Reflect.isExtensible : any
+>Reflect : any
+>isExtensible : any
+>{} : {}
+
+const testReflectOwnKeys = Reflect.ownKeys({});
+>testReflectOwnKeys : any
+>Reflect.ownKeys({}) : any
+>Reflect.ownKeys : any
+>Reflect : any
+>ownKeys : any
+>{} : {}
+
+const testReflectPreventExtensions = Reflect.preventExtensions({});
+>testReflectPreventExtensions : any
+>Reflect.preventExtensions({}) : any
+>Reflect.preventExtensions : any
+>Reflect : any
+>preventExtensions : any
+>{} : {}
+
+const testReflectSet = Reflect.set({}, "", 0);
+>testReflectSet : any
+>Reflect.set({}, "", 0) : any
+>Reflect.set : any
+>Reflect : any
+>set : any
+>{} : {}
+>"" : ""
+>0 : 0
+
+const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {}); 
+>testReflectSetPrototypeOf : any
+>Reflect.setPrototypeOf({}, {}) : any
+>Reflect.setPrototypeOf : any
+>Reflect : any
+>setPrototypeOf : any
+>{} : {}
+>{} : {}
+
 const testArrayFind = [""].find((val, idx, obj) => {
 >testArrayFind : any
 >[""].find((val, idx, obj) => {    return true;}) : any
@@ -553,271 +664,21 @@ const testStringConstructorRaw = String.raw``;
 >raw : any
 >`` : ""
 
-// es2016
-const testIncludes = ["hello"].includes("world");
->testIncludes : any
->["hello"].includes("world") : any
->["hello"].includes : any
->["hello"] : string[]
->"hello" : "hello"
->includes : any
->"world" : "world"
+const testRegExpFlags = /abc/g.flags;
+>testRegExpFlags : any
+>/abc/g.flags : any
+>/abc/g : RegExp
+>flags : any
 
-// es2017
-const testStringPadStart = "".padStart(2);
->testStringPadStart : any
->"".padStart(2) : any
->"".padStart : any
->"" : ""
->padStart : any
->2 : 2
+const testRegExpSticky = /abc/g.sticky;
+>testRegExpSticky : any
+>/abc/g.sticky : any
+>/abc/g : RegExp
+>sticky : any
 
-const testStringPadEnd = "".padEnd(2);
->testStringPadEnd : any
->"".padEnd(2) : any
->"".padEnd : any
->"" : ""
->padEnd : any
->2 : 2
-
-const testObjectConstructorValues = Object.values({});
->testObjectConstructorValues : any
->Object.values({}) : any
->Object.values : any
->Object : ObjectConstructor
->values : any
->{} : {}
-
-const testObjectConstructorEntries = Object.entries({});
->testObjectConstructorEntries : any
->Object.entries({}) : any
->Object.entries : any
->Object : ObjectConstructor
->entries : any
->{} : {}
-
-const testObjectConstructorGetOwnPropertyDescriptors = Object.getOwnPropertyDescriptors({});
->testObjectConstructorGetOwnPropertyDescriptors : any
->Object.getOwnPropertyDescriptors({}) : any
->Object.getOwnPropertyDescriptors : any
->Object : ObjectConstructor
->getOwnPropertyDescriptors : any
->{} : {}
-
-const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
->testIntlFormatToParts : any
->new Intl.DateTimeFormat("en-US").formatToParts() : any
->new Intl.DateTimeFormat("en-US").formatToParts : any
->new Intl.DateTimeFormat("en-US") : Intl.DateTimeFormat
->Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; }
->Intl : typeof Intl
->DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; }
->"en-US" : "en-US"
->formatToParts : any
-
-const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
->testAtomics : any
->Atomics.add(new Uint8Array(0), 0, 0) : any
->Atomics.add : any
->Atomics : any
->add : any
->new Uint8Array(0) : Uint8Array
->Uint8Array : Uint8ArrayConstructor
->0 : 0
->0 : 0
->0 : 0
-
-const testSharedArrayBuffer = new SharedArrayBuffer(5);
->testSharedArrayBuffer : any
->new SharedArrayBuffer(5) : any
->SharedArrayBuffer : any
->5 : 5
-
-// es2018
-const testPromiseFinally = new Promise(() => {}).finally();
->testPromiseFinally : any
->new Promise(() => {}).finally() : any
->new Promise(() => {}).finally : any
->new Promise(() => {}) : any
->Promise : any
->() => {} : () => void
->finally : any
-
-const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
->testRegExpMatchArrayGroups : any
->"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups : any
->"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g) : RegExpMatchArray
->"2019-04-30".match : (regexp: string | RegExp) => RegExpMatchArray
->"2019-04-30" : "2019-04-30"
->match : (regexp: string | RegExp) => RegExpMatchArray
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
->groups : any
-
-const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups;
->testRegExpExecArrayGroups : any
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30").groups : any
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec("2019-04-30") : RegExpExecArray
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g.exec : (string: string) => RegExpExecArray
->/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
->exec : (string: string) => RegExpExecArray
->"2019-04-30" : "2019-04-30"
->groups : any
-
-const testRegExpDotAll = /foo/g.dotAll;
->testRegExpDotAll : any
->/foo/g.dotAll : any
->/foo/g : RegExp
->dotAll : any
-
-const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
->testIntlPluralRules : any
->new Intl.PluralRules("ar-EG").select(0) : any
->new Intl.PluralRules("ar-EG").select : any
->new Intl.PluralRules("ar-EG") : any
->Intl.PluralRules : any
->Intl : typeof Intl
->PluralRules : any
->"ar-EG" : "ar-EG"
->select : any
->0 : 0
-
-const testAsyncGenerator: AsyncGenerator<any> = null as any;
->testAsyncGenerator : any
->null as any : any
->null : null
-
-const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
->testAsyncGeneratorFunction : any
->null as any : any
->null : null
-
-const testAsyncIterable: AsyncIterable<any> = null as any;
->testAsyncIterable : any
->null as any : any
->null : null
-
-const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
->testAsyncIterableIterator : any
->null as any : any
->null : null
-
-// es2019
-const testArrayFlat = [].flat();
->testArrayFlat : any
->[].flat() : any
->[].flat : any
->[] : undefined[]
->flat : any
-
-const testArrayFlatMap = [].flatMap();
->testArrayFlatMap : any
->[].flatMap() : any
->[].flatMap : any
->[] : undefined[]
->flatMap : any
-
-const testObjectConstructorFromEntries = Object.fromEntries({});
->testObjectConstructorFromEntries : any
->Object.fromEntries({}) : any
->Object.fromEntries : any
->Object : ObjectConstructor
->fromEntries : any
->{} : {}
-
-const testStringTrimStart = "".trimStart();
->testStringTrimStart : any
->"".trimStart() : any
->"".trimStart : any
->"" : ""
->trimStart : any
-
-const testStringTrimEnd = "".trimEnd();
->testStringTrimEnd : any
->"".trimEnd() : any
->"".trimEnd : any
->"" : ""
->trimEnd : any
-
-const testStringTrimLeft = "".trimLeft();
->testStringTrimLeft : any
->"".trimLeft() : any
->"".trimLeft : any
->"" : ""
->trimLeft : any
-
-const testStringTrimRight = "".trimRight();
->testStringTrimRight : any
->"".trimRight() : any
->"".trimRight : any
->"" : ""
->trimRight : any
-
-const testSymbolDescription = Symbol("foo").description;
->testSymbolDescription : any
->Symbol("foo").description : any
->Symbol("foo") : any
->Symbol : any
->"foo" : "foo"
->description : any
-
-// es2020
-const testPromiseAllSettled = new Promise(() => {}).allSettled();
->testPromiseAllSettled : any
->new Promise(() => {}).allSettled() : any
->new Promise(() => {}).allSettled : any
->new Promise(() => {}) : any
->Promise : any
->() => {} : () => void
->allSettled : any
-
-const testStringMatchAll = "".matchAll();
->testStringMatchAll : any
->"".matchAll() : any
->"".matchAll : any
->"" : ""
->matchAll : any
-
-const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
->testRegExpMatchAll : any
->/matchAll/g[Symbol.matchAll]("matchAll") : any
->/matchAll/g[Symbol.matchAll] : any
->/matchAll/g : RegExp
->Symbol.matchAll : any
->Symbol : any
->matchAll : any
->"matchAll" : "matchAll"
-
-const testBigInt = BigInt(123);
->testBigInt : any
->BigInt(123) : any
->BigInt : any
->123 : 123
-
-// esnext
-const testPromiseAny = new Promise(() => {}).any();
->testPromiseAny : any
->new Promise(() => {}).any() : any
->new Promise(() => {}).any : any
->new Promise(() => {}) : any
->Promise : any
->() => {} : () => void
->any : any
-
-const testStringReplaceAll = "".replaceAll();
->testStringReplaceAll : any
->"".replaceAll() : any
->"".replaceAll : any
->"" : ""
->replaceAll : any
-
-const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
->testNumberFormatFormatToParts : any
->new Intl.NumberFormat("en-US").formatToParts() : any
->new Intl.NumberFormat("en-US").formatToParts : any
->new Intl.NumberFormat("en-US") : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
->Intl : typeof Intl
->NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
->"en-US" : "en-US"
->formatToParts : any
+const testRegExpUnicode = /abc/g.unicode;
+>testRegExpUnicode : any
+>/abc/g.unicode : any
+>/abc/g : RegExp
+>unicode : any
 
