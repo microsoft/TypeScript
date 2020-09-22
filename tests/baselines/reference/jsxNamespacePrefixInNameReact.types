@@ -177,22 +177,13 @@ var beginOfIdent1 = <a :attr={"value"} />;
 >attr : string
 >"value" : "value"
 
-var Upcase = "mycomponent"
->Upcase : string
->"mycomponent" : "mycomponent"
-
-var upcaseComponent1 = <ns:Upcase />  // Parsed as intrinsic: ok
+var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
 >upcaseComponent1 : any
 ><ns:Upcase /> : any
 >ns:Upcase : any
 
-var upcaseComponent2 = <Upcase:element />  // Parsed as component: not ok
+var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
 >upcaseComponent2 : any
 ><Upcase:element /> : any
 >Upcase:element : any
-
-var upcaseComponentUndeclared = <NS:something />
->upcaseComponentUndeclared : any
-><NS:something /> : any
->NS:something : any
 

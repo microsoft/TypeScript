@@ -8,8 +8,11 @@ declare namespace JSX {
 >"ns:attribute" : string
 
     },
-    "ns:NamespacedUpcaseAlsoIntrinsic": any
+    "ns:NamespacedUpcaseAlsoIntrinsic": any,
 >"ns:NamespacedUpcaseAlsoIntrinsic" : any
+
+    "NS:NamespacedUpcaseAlsoIntrinsic": any
+>"NS:NamespacedUpcaseAlsoIntrinsic" : any
   }
 }
 
@@ -19,10 +22,15 @@ const valid = <ns:element ns:attribute="yep" />;
 >ns:element : any
 >ns:attribute : string
 
-const validUpcase = <ns:NamespacedUpcaseAlsoIntrinsic />;
->validUpcase : any
+const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
+>validUpcase1 : any
 ><ns:NamespacedUpcaseAlsoIntrinsic /> : any
 >ns:NamespacedUpcaseAlsoIntrinsic : any
+
+const validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;
+>validUpcase2 : any
+><NS:NamespacedUpcaseAlsoIntrinsic /> : any
+>NS:NamespacedUpcaseAlsoIntrinsic : any
 
 const invalid1 = <element />;
 >invalid1 : any

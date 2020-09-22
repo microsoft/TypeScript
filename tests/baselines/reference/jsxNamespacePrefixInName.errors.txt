@@ -27,11 +27,9 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,38): error TS1005: ':' expe
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,41): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(24,42): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInName.tsx(25,24): error TS1003: Identifier expected.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(29,25): error TS2304: Cannot find name 'Upcase:element'.
-tests/cases/compiler/jsxNamespacePrefixInName.tsx(31,34): error TS2304: Cannot find name 'NS:something'.
 
 
-==== tests/cases/compiler/jsxNamespacePrefixInName.tsx (31 errors) ====
+==== tests/cases/compiler/jsxNamespacePrefixInName.tsx (29 errors) ====
     var justElement1 = <a:element />;
     var justElement2 = <a:element></a:element>;
     var justElement3 = <a:element attr={"value"}></a:element>;
@@ -116,13 +114,6 @@ tests/cases/compiler/jsxNamespacePrefixInName.tsx(31,34): error TS2304: Cannot f
                            ~
 !!! error TS1003: Identifier expected.
     
-    var Upcase = "mycomponent"
-    var upcaseComponent1 = <ns:Upcase />  // Parsed as intrinsic: ok
-    var upcaseComponent2 = <Upcase:element />  // Parsed as component: not ok
-                            ~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'Upcase:element'.
-    
-    var upcaseComponentUndeclared = <NS:something />
-                                     ~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'NS:something'.
+    var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
+    var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
     

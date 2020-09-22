@@ -87,15 +87,9 @@ var beginOfIdent1 = <a :attr={"value"} />;
 >beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInNameReact.tsx, 25, 3), Decl(jsxNamespacePrefixInNameReact.tsx, 26, 3))
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 26, 24))
 
-var Upcase = "mycomponent"
->Upcase : Symbol(Upcase, Decl(jsxNamespacePrefixInNameReact.tsx, 28, 3))
+var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
+>upcaseComponent1 : Symbol(upcaseComponent1, Decl(jsxNamespacePrefixInNameReact.tsx, 28, 3))
 
-var upcaseComponent1 = <ns:Upcase />  // Parsed as intrinsic: ok
->upcaseComponent1 : Symbol(upcaseComponent1, Decl(jsxNamespacePrefixInNameReact.tsx, 29, 3))
-
-var upcaseComponent2 = <Upcase:element />  // Parsed as component: not ok
->upcaseComponent2 : Symbol(upcaseComponent2, Decl(jsxNamespacePrefixInNameReact.tsx, 30, 3))
-
-var upcaseComponentUndeclared = <NS:something />
->upcaseComponentUndeclared : Symbol(upcaseComponentUndeclared, Decl(jsxNamespacePrefixInNameReact.tsx, 32, 3))
+var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+>upcaseComponent2 : Symbol(upcaseComponent2, Decl(jsxNamespacePrefixInNameReact.tsx, 29, 3))
 

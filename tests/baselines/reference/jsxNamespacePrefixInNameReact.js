@@ -27,11 +27,8 @@ var endOfIdent2 = <a attr:={"value"} />;
 var beginOfIdent1 = <:a attr={"value"} />;
 var beginOfIdent1 = <a :attr={"value"} />;
 
-var Upcase = "mycomponent"
-var upcaseComponent1 = <ns:Upcase />  // Parsed as intrinsic: ok
-var upcaseComponent2 = <Upcase:element />  // Parsed as component: not ok
-
-var upcaseComponentUndeclared = <NS:something />
+var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
+var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
 
 
 //// [jsxNamespacePrefixInNameReact.js]
@@ -70,7 +67,5 @@ var endOfIdent1 = React.createElement("a", { attr: "value" });
 var endOfIdent2 = React.createElement("a", __assign({ attr: true }, "value"));
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
 var beginOfIdent1 = React.createElement("a", { attr: "value" });
-var Upcase = "mycomponent";
-var upcaseComponent1 = React.createElement("ns:Upcase", null); // Parsed as intrinsic: ok
-var upcaseComponent2 = React.createElement(Upcase:element, null); // Parsed as component: not ok
-var upcaseComponentUndeclared = React.createElement(NS:something, null);
+var upcaseComponent1 = React.createElement("ns:Upcase", null); // Parsed as intrinsic
+var upcaseComponent2 = React.createElement("Upcase:element", null); // Parsed as instrinsic

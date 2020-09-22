@@ -6,12 +6,14 @@ declare namespace JSX {
     "ns:element": {
       "ns:attribute": string;
     },
-    "ns:NamespacedUpcaseAlsoIntrinsic": any
+    "ns:NamespacedUpcaseAlsoIntrinsic": any,
+    "NS:NamespacedUpcaseAlsoIntrinsic": any
   }
 }
 
 const valid = <ns:element ns:attribute="yep" />;
-const validUpcase = <ns:NamespacedUpcaseAlsoIntrinsic />;
+const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
+const validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;
 
 const invalid1 = <element />;
 const invalid2 = <ns:element attribute="nope" />;
