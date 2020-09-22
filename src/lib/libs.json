@@ -47,6 +47,7 @@
         "es2020.string",
         "es2020.symbol.wellknown",
         "es2020.intl",
+        "esnext.array",
         "esnext.intl",
         "esnext.string",
         "esnext.promise",

@@ -12,4 +12,10 @@ interface String {
      * @param replacer A function that returns the replacement text.
      */
     replaceAll(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+
+    /**
+     * Access string by relative indexing.
+     * @param index index to access.
+     */
+    item(index: number): string | undefined;
 }
