@@ -1,0 +1,22 @@
+=== tests/cases/conformance/types/namedTypes/a.ts ===
+export enum Foo {
+>Foo : Foo
+
+    "1-1",
+>"1-1" : Foo.1-1
+
+    "1-2"
+>"1-2" : Foo.1-2
+}
+=== tests/cases/conformance/types/namedTypes/b.ts ===
+import {Foo} from "./a";
+>Foo : typeof Foo
+
+export type FooFirst = Foo."1-1";
+>FooFirst : Foo.1-1
+>Foo : any
+
+export type FirstFoo = import("./a").Foo."1-1";
+>FirstFoo : Foo.1-1
+>Foo : any
+

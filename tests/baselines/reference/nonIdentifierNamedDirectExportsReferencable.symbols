@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/namedTypes/export.js ===
+exports["a thing"] = class {
+>exports : Symbol("tests/cases/conformance/types/namedTypes/export", Decl(export.js, 0, 0))
+>"a thing" : Symbol("a thing", Decl(export.js, 0, 0))
+
+    a;
+>a : Symbol("a thing".a, Decl(export.js, 0, 28))
+
+    b;
+>b : Symbol("a thing".b, Decl(export.js, 1, 6))
+}
+=== tests/cases/conformance/types/namedTypes/usage.ts ===
+import * as ns from "./export";
+>ns : Symbol(ns, Decl(usage.ts, 0, 6))
+
+export const instance: ns."a thing" = new ns["a thing"]();
+>instance : Symbol(instance, Decl(usage.ts, 2, 12))
+>ns : Symbol(ns, Decl(usage.ts, 0, 6))
+>ns : Symbol(ns, Decl(usage.ts, 0, 6))
+>"a thing" : Symbol(ns["a thing"], Decl(export.js, 0, 0))
+

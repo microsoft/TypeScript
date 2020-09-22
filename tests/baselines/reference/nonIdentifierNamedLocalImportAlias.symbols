@@ -1,0 +1,84 @@
+=== tests/cases/conformance/types/namedTypes/export.js ===
+exports["another one"] = class {
+>exports : Symbol("a thing", Decl(export.js, 0, 0))
+>"another one" : Symbol("another one", Decl(export.js, 0, 0))
+
+    c;
+>c : Symbol("another one".c, Decl(export.js, 0, 32))
+
+    d;
+>d : Symbol("another one".d, Decl(export.js, 1, 6))
+
+};
+exports["a thing"] = exports;
+>exports : Symbol("a thing", Decl(export.js, 0, 0))
+>"a thing" : Symbol("a thing", Decl(export.js, 3, 2))
+>exports : Symbol("a thing", Decl(export.js, 0, 0))
+
+=== tests/cases/conformance/types/namedTypes/usage.ts ===
+import * as A from "./export";
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+import Result = A."a thing";
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+export const another: Result."another one" = new Result["another one"]();
+>another : Symbol(another, Decl(usage.ts, 3, 12))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>"another one" : Symbol(A["another one"], Decl(export.js, 0, 0))
+
+export const again: A."a thing"."a thing"."another one" = null as any as A."another one";
+>again : Symbol(again, Decl(usage.ts, 4, 12))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+export const type: typeof Result."a thing"."another one" = {} as any;
+>type : Symbol(type, Decl(usage.ts, 5, 12))
+>Result."a thing"."another one" : Symbol(A["another one"], Decl(export.js, 0, 0))
+>Result."a thing" : Symbol(A["a thing"], Decl(export.js, 3, 2))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+
+import Result2 = A.'a thing';
+>Result2 : Symbol(Result2, Decl(usage.ts, 5, 69))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+export const another2: Result.'another one' = new Result['another one']();
+>another2 : Symbol(another2, Decl(usage.ts, 9, 12))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>'another one' : Symbol(A["another one"], Decl(export.js, 0, 0))
+
+export const again2: A.'a thing'.'a thing'.'another one' = null as any as A.'another one';
+>again2 : Symbol(again2, Decl(usage.ts, 10, 12))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+export const type2: typeof Result.'a thing'.'another one' = {} as any;
+>type2 : Symbol(type2, Decl(usage.ts, 11, 12))
+>Result.'a thing'.'another one' : Symbol(A["another one"], Decl(export.js, 0, 0))
+>Result.'a thing' : Symbol(A["a thing"], Decl(export.js, 3, 2))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+
+import Result3 = A.`a thing`;
+>Result3 : Symbol(Result3, Decl(usage.ts, 11, 70))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+export const another3: Result.`another one` = new Result[`another one`]();
+>another3 : Symbol(another3, Decl(usage.ts, 15, 12))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+>`another one` : Symbol(A["another one"], Decl(export.js, 0, 0))
+
+export const again3: A.`a thing`.`a thing`.`another one` = null as any as A.`another one`;
+>again3 : Symbol(again3, Decl(usage.ts, 16, 12))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+>A : Symbol(A, Decl(usage.ts, 0, 6))
+
+export const type3: typeof Result.`a thing`.`another one` = {} as any;
+>type3 : Symbol(type3, Decl(usage.ts, 17, 12))
+>Result.`a thing`.`another one` : Symbol(A["another one"], Decl(export.js, 0, 0))
+>Result.`a thing` : Symbol(A["a thing"], Decl(export.js, 3, 2))
+>Result : Symbol(Result, Decl(usage.ts, 0, 30))
+

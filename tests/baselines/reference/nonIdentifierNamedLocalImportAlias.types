@@ -1,0 +1,116 @@
+=== tests/cases/conformance/types/namedTypes/export.js ===
+exports["another one"] = class {
+>exports["another one"] = class {    c;    d;} : typeof "another one"
+>exports["another one"] : typeof "another one"
+>exports : typeof "a thing"
+>"another one" : "another one"
+>class {    c;    d;} : typeof "another one"
+
+    c;
+>c : any
+
+    d;
+>d : any
+
+};
+exports["a thing"] = exports;
+>exports["a thing"] = exports : typeof "a thing"
+>exports["a thing"] : typeof "a thing"
+>exports : typeof "a thing"
+>"a thing" : "a thing"
+>exports : typeof "a thing"
+
+=== tests/cases/conformance/types/namedTypes/usage.ts ===
+import * as A from "./export";
+>A : typeof A
+
+import Result = A."a thing";
+>Result : typeof A
+>A : typeof A
+
+export const another: Result."another one" = new Result["another one"]();
+>another : A."another one"
+>Result : any
+>new Result["another one"]() : A."another one"
+>Result["another one"] : typeof A."another one"
+>Result : typeof A
+>"another one" : "another one"
+
+export const again: A."a thing"."a thing"."another one" = null as any as A."another one";
+>again : A."another one"
+>A : any
+>null as any as A."another one" : A."another one"
+>null as any : any
+>null : null
+>A : any
+
+export const type: typeof Result."a thing"."another one" = {} as any;
+>type : typeof A."another one"
+>Result."a thing"."another one" : typeof A."another one"
+>Result."a thing" : typeof A
+>Result : typeof A
+>"a thing" : typeof A
+>"another one" : typeof A."another one"
+>{} as any : any
+>{} : {}
+
+import Result2 = A.'a thing';
+>Result2 : typeof A
+>A : typeof A
+
+export const another2: Result.'another one' = new Result['another one']();
+>another2 : A."another one"
+>Result : any
+>new Result['another one']() : A."another one"
+>Result['another one'] : typeof A."another one"
+>Result : typeof A
+>'another one' : "another one"
+
+export const again2: A.'a thing'.'a thing'.'another one' = null as any as A.'another one';
+>again2 : A."another one"
+>A : any
+>null as any as A.'another one' : A."another one"
+>null as any : any
+>null : null
+>A : any
+
+export const type2: typeof Result.'a thing'.'another one' = {} as any;
+>type2 : typeof A."another one"
+>Result.'a thing'.'another one' : typeof A."another one"
+>Result.'a thing' : typeof A
+>Result : typeof A
+>'a thing' : typeof A
+>'another one' : typeof A."another one"
+>{} as any : any
+>{} : {}
+
+import Result3 = A.`a thing`;
+>Result3 : typeof A
+>A : typeof A
+
+export const another3: Result.`another one` = new Result[`another one`]();
+>another3 : A."another one"
+>Result : any
+>new Result[`another one`]() : A."another one"
+>Result[`another one`] : typeof A."another one"
+>Result : typeof A
+>`another one` : "another one"
+
+export const again3: A.`a thing`.`a thing`.`another one` = null as any as A.`another one`;
+>again3 : A."another one"
+>A : any
+>null as any as A.`another one` : A."another one"
+>null as any : any
+>null : null
+>A : any
+
+export const type3: typeof Result.`a thing`.`another one` = {} as any;
+>type3 : typeof A."another one"
+>Result.`a thing`.`another one` : typeof A."another one"
+>Result.`a thing` : typeof A
+>Result : typeof A
+>`a thing` : typeof A
+>`another one` : typeof A."another one"
+>{} as any : any
+>{} : {}
+

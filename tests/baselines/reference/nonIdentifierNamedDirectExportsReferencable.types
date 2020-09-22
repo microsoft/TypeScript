@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/namedTypes/export.js ===
+exports["a thing"] = class {
+>exports["a thing"] = class {    a;    b;} : typeof "a thing"
+>exports["a thing"] : typeof "a thing"
+>exports : typeof import("tests/cases/conformance/types/namedTypes/export")
+>"a thing" : "a thing"
+>class {    a;    b;} : typeof "a thing"
+
+    a;
+>a : any
+
+    b;
+>b : any
+}
+=== tests/cases/conformance/types/namedTypes/usage.ts ===
+import * as ns from "./export";
+>ns : typeof ns
+
+export const instance: ns."a thing" = new ns["a thing"]();
+>instance : ns."a thing"
+>ns : any
+>new ns["a thing"]() : ns."a thing"
+>ns["a thing"] : typeof ns."a thing"
+>ns : typeof ns
+>"a thing" : "a thing"
+
