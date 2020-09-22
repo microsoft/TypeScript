@@ -614,6 +614,7 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+        tracing.begin(tracing.Phase.Parse, "createSourceFile", { path: fileName });
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -628,6 +629,7 @@ namespace ts {
 
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
+        tracing.end();
         return result;
     }
 
@@ -2616,21 +2618,11 @@ namespace ts {
             const pos = getNodePos();
             return finishNode(
                 factory.createTemplateLiteralTypeSpan(
-                    parseTemplateCasing(),
                     parseType(),
                     parseLiteralOfTemplateSpan(/*isTaggedTemplate*/ false)
                 ),
                 pos
             );
-        }
-
-        function parseTemplateCasing(): TemplateCasing {
-            return parseOptional(SyntaxKind.UppercaseKeyword) ? TemplateCasing.Uppercase :
-                parseOptional(SyntaxKind.LowercaseKeyword) ? TemplateCasing.Lowercase :
-                parseOptional(SyntaxKind.CapitalizeKeyword) ? TemplateCasing.Capitalize :
-                parseOptional(SyntaxKind.UncapitalizeKeyword) ? TemplateCasing.Uncapitalize :
-                parseOptional(SyntaxKind.TypeOfKeyword) ? TemplateCasing.TypeOf :
-                TemplateCasing.None;
         }
 
         function parseLiteralOfTemplateSpan(isTaggedTemplate: boolean) {
@@ -6752,7 +6744,7 @@ namespace ts {
             const name = parseIdentifier();
             const typeParameters = parseTypeParameters();
             parseExpected(SyntaxKind.EqualsToken);
-            const type = parseType();
+            const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
             parseSemicolon();
             const node = factory.createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -8880,6 +8872,8 @@ namespace ts {
                 }
                 case "jsx":
                 case "jsxfrag":
+                case "jsximportsource":
+                case "jsxruntime":
                     return; // Accessed directly
                 default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
             }

@@ -300,9 +300,17 @@ namespace ts {
                     sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
+            tracing.begin(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
+            tracing.end();
+
+            tracing.begin(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
+            tracing.end();
+
+            tracing.begin(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
+            tracing.end();
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -2015,16 +2023,6 @@ namespace ts {
         }
 
         function emitTemplateTypeSpan(node: TemplateLiteralTypeSpan) {
-            const keyword = node.casing === TemplateCasing.Uppercase ? "uppercase" :
-                node.casing === TemplateCasing.Lowercase ? "lowercase" :
-                node.casing === TemplateCasing.Capitalize ? "capitalize" :
-                node.casing === TemplateCasing.Uncapitalize ? "uncapitalize" :
-                node.casing === TemplateCasing.TypeOf ? "typeof" :
-                undefined;
-            if (keyword) {
-                writeKeyword(keyword);
-                writeSpace();
-            }
             emit(node.type);
             emit(node.literal);
         }

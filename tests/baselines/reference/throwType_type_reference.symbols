@@ -4,7 +4,6 @@ type MustNumber<T> = T extends number ? T : throw `Expected number, but found "$
 >T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
 >T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
 >T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
->T : Symbol(T, Decl(throwType_type_reference.ts, 0, 16))
 
 type A = MustNumber<1>
 >A : Symbol(A, Decl(throwType_type_reference.ts, 0, 92))

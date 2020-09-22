@@ -22,11 +22,9 @@ type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
->T : Symbol(T, Decl(throwType_function_parameter.ts, 6, 16))
 
 type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
 >MustNumber2 : Symbol(MustNumber2, Decl(throwType_function_parameter.ts, 6, 72))
->T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))
 >T : Symbol(T, Decl(throwType_function_parameter.ts, 7, 17))

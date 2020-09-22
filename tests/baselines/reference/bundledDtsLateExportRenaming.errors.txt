@@ -1,0 +1,30 @@
+error TS1391: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1391: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/compiler/index.ts (0 errors) ====
+    export * from "./nested";
+    
+==== tests/cases/compiler/nested/base.ts (0 errors) ====
+    import { B } from "./shared";
+    
+    export function f() {
+        return new B();
+    }
+    
+==== tests/cases/compiler/nested/derived.ts (0 errors) ====
+    import { f } from "./base";
+    
+    export function g() {
+        return f();
+    }
+    
+==== tests/cases/compiler/nested/index.ts (0 errors) ====
+    export * from "./base";
+    
+    export * from "./derived";
+    export * from "./shared";
+    
+==== tests/cases/compiler/nested/shared.ts (0 errors) ====
+    export class B {}
+    

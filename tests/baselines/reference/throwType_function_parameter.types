@@ -21,9 +21,11 @@ checkParameterPosition(12345678)
 
 type MustNumber<T> = T extends number ? T : throw `"found "${typeof T}"`
 >MustNumber : MustNumber<T>
+>T : any
 
 type MustNumber2<T> = T extends number ? T : throw `"found "${typeof T}"`
 >MustNumber2 : MustNumber2<T>
+>T : any
 
 function f2<T>(a: MustNumber<T>, b: MustNumber2<T>) {
 >f2 : <T>(a: MustNumber<T>, b: MustNumber2<T>) => void

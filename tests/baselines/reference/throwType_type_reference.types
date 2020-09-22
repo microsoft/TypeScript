@@ -1,6 +1,7 @@
 === tests/cases/compiler/throwType_type_reference.ts ===
 type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${typeof T}"`
 >MustNumber : MustNumber<T>
+>T : any
 
 type A = MustNumber<1>
 >A : 1

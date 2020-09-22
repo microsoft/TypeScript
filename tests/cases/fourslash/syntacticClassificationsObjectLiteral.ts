@@ -11,7 +11,7 @@
 ////    v: v += v,
 ////};
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.keyword("var"), c.identifier("v"), c.operator("="), c.numericLiteral("10e0"), c.punctuation(";"),
     c.keyword("var"), c.identifier("x"), c.operator("="), c.punctuation("{"),
@@ -23,3 +23,18 @@ verify.syntacticClassificationsAre(
     c.identifier("void"), c.punctuation(":"), c.keyword("void"), c.numericLiteral("0"), c.punctuation(","),
     c.identifier("v"), c.punctuation(":"), c.identifier("v"), c.operator("+="), c.identifier("v"), c.punctuation(","),
     c.punctuation("}"), c.punctuation(";"));
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("variable.declaration", "v"), 
+    c2.semanticToken("variable.declaration", "x"), 
+    c2.semanticToken("property.declaration", "p1"), 
+    c2.semanticToken("property.declaration", "p2"), 
+    c2.semanticToken("property.declaration", "any"), 
+    c2.semanticToken("property.declaration", "function"), 
+    c2.semanticToken("property.declaration", "var"), 
+    c2.semanticToken("property.declaration", "void"), 
+    c2.semanticToken("property.declaration", "v"), 
+    c2.semanticToken("variable", "v"), 
+    c2.semanticToken("variable", "v"), 
+);
