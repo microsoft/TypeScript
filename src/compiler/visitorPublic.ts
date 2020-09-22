@@ -935,7 +935,8 @@ namespace ts {
                     nodesVisitor((<ImportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ImportDeclaration>node).modifiers, visitor, isModifier),
                     nodeVisitor((<ImportDeclaration>node).importClause, visitor, isImportClause),
-                    nodeVisitor((<ImportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                    nodeVisitor((<ImportDeclaration>node).moduleSpecifier, visitor, isExpression),
+                    nodeVisitor((<ImportDeclaration>node).assertClause, visitor, isAssertClause));
 
             case SyntaxKind.ImportClause:
                 return factory.updateImportClause(<ImportClause>node,
@@ -972,7 +973,8 @@ namespace ts {
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
                     (node as ExportDeclaration).isTypeOnly,
                     nodeVisitor((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
-                    nodeVisitor((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
+                    nodeVisitor((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression),
+                    nodeVisitor((<ExportDeclaration>node).assertClause, visitor, isAssertClause));
 
             case SyntaxKind.NamedExports:
                 return factory.updateNamedExports(<NamedExports>node,

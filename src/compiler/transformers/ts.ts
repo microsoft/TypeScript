@@ -2828,7 +2828,9 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     importClause,
-                    node.moduleSpecifier)
+                    node.moduleSpecifier,
+                    node.assertClause
+                    )
                 : undefined;
         }
 
@@ -2919,7 +2921,8 @@ namespace ts {
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
                     exportClause,
-                    node.moduleSpecifier)
+                    node.moduleSpecifier,
+                    node.assertClause)
                 : undefined;
         }
 
@@ -2984,6 +2987,7 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 /*importClause*/ undefined,
                                 node.moduleReference.expression,
+                                /*assertClause*/ undefined
                             ),
                             node,
                         ),

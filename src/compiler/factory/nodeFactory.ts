@@ -287,6 +287,10 @@ namespace ts {
             updateImportDeclaration,
             createImportClause,
             updateImportClause,
+            createAssertClause,
+            updateAssertClause,
+            createAssertEntry,
+            updateAssertEntry,
             createNamespaceImport,
             updateNamespaceImport,
             createNamespaceExport,
@@ -3790,7 +3794,8 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
-            moduleSpecifier: Expression
+            moduleSpecifier: Expression,
+            assertClause: AssertClause | undefined
         ): ImportDeclaration {
             const node = createBaseDeclaration<ImportDeclaration>(
                 SyntaxKind.ImportDeclaration,
@@ -3799,6 +3804,7 @@ namespace ts {
             );
             node.importClause = importClause;
             node.moduleSpecifier = moduleSpecifier;
+            node.assertClause = assertClause;
             node.transformFlags |=
                 propagateChildFlags(node.importClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -3812,13 +3818,15 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
-            moduleSpecifier: Expression
+            moduleSpecifier: Expression,
+            assertClause: AssertClause | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
-                ? update(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier), node)
+                || node.assertClause !== assertClause
+                ? update(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier, assertClause), node)
                 : node;
         }
 
@@ -3844,6 +3852,38 @@ namespace ts {
                 || node.name !== name
                 || node.namedBindings !== namedBindings
                 ? update(createImportClause(isTypeOnly, name, namedBindings), node)
+                : node;
+        }
+
+        // @api
+        function createAssertClause(elements: NodeArray<AssertEntry> | undefined): AssertClause {
+            const node = createBaseNode<AssertClause>(SyntaxKind.AssertClause);
+            node.elements = elements;
+            node.transformFlags |= TransformFlags.ContainsESNext;
+            return node;
+        }
+
+        // @api
+        function updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry> | undefined): AssertClause {
+            return node.elements !== elements
+                ? update(createAssertClause(elements), node)
+                : node;
+        }
+
+        // @api
+        function createAssertEntry(name: AssertionKey, value: StringLiteral): AssertEntry {
+            const node = createBaseNode<AssertEntry>(SyntaxKind.AssertEntry);
+            node.name = name;
+            node.value = value;
+            node.transformFlags |= TransformFlags.ContainsESNext;
+            return node;
+        }
+
+        // @api
+        function updateAssertEntry (node: AssertEntry, name: AssertionKey, value: StringLiteral): AssertEntry {
+            return node.name !== name
+                || node.value !== value
+                ? update(createAssertEntry(name, value), node)
                 : node;
         }
 
@@ -3958,7 +3998,8 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
-            moduleSpecifier?: Expression
+            moduleSpecifier?: Expression,
+            assertClause?: AssertClause
         ) {
             const node = createBaseDeclaration<ExportDeclaration>(
                 SyntaxKind.ExportDeclaration,
@@ -3968,6 +4009,7 @@ namespace ts {
             node.isTypeOnly = isTypeOnly;
             node.exportClause = exportClause;
             node.moduleSpecifier = moduleSpecifier;
+            node.assertClause = assertClause;
             node.transformFlags |=
                 propagateChildFlags(node.exportClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -3982,14 +4024,16 @@ namespace ts {
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
-            moduleSpecifier: Expression | undefined
+            moduleSpecifier: Expression | undefined,
+            assertClause: AssertClause | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.isTypeOnly !== isTypeOnly
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
-                ? update(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier), node)
+                || node.assertClause !== assertClause
+                ? update(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
                 : node;
         }
 
@@ -5776,9 +5820,9 @@ namespace ts {
                 isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
                 isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
                 isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
-                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
+                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier, node.assertClause) :
                 isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
-                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :
+                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
                 Debug.assertNever(node);
         }
 

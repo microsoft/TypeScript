@@ -702,7 +702,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     decl.modifiers,
                     decl.importClause,
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    decl.assertClause
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -714,7 +715,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), decl.assertClause);
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -724,7 +725,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), decl.assertClause) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -739,7 +740,8 @@ namespace ts {
                         visibleDefaultBinding,
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    decl.assertClause
                 );
             }
             // Augmentation of export depends on import
@@ -749,7 +751,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     decl.modifiers,
                     /*importClause*/ undefined,
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    decl.assertClause
                 );
             }
             // Nothing visible
@@ -1084,6 +1087,7 @@ namespace ts {
                         input.isTypeOnly,
                         input.exportClause,
                         rewriteModuleSpecifier(input, input.moduleSpecifier),
+                        input.assertClause
                     );
                 }
                 case SyntaxKind.ExportAssignment: {

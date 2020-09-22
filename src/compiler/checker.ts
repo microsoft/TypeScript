@@ -6130,7 +6130,7 @@ namespace ts {
 
                 function inlineExportModifiers(statements: Statement[]) {
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
-                    const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause && isNamedExports(d.exportClause));
+                    const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !d.assertClause && !!d.exportClause && isNamedExports(d.exportClause));
                     if (index >= 0) {
                         const exportDecl = statements[index] as ExportDeclaration & { readonly exportClause: NamedExports };
                         const replacements = mapDefined(exportDecl.exportClause.elements, e => {
@@ -6162,7 +6162,8 @@ namespace ts {
                                     exportDecl.exportClause,
                                     replacements
                                 ),
-                                exportDecl.moduleSpecifier
+                                exportDecl.moduleSpecifier,
+                                exportDecl.assertClause
                             );
                         }
                     }
@@ -6798,7 +6799,8 @@ namespace ts {
                                 // We use `target.parent || target` below as `target.parent` is unset when the target is a module which has been export assigned
                                 // And then made into a default by the `esModuleInterop` or `allowSyntheticDefaultImports` flag
                                 // In such cases, the `target` refers to the module itself already
-                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
+                                 /*assertClause*/ undefined
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceImport:
@@ -6806,7 +6808,8 @@ namespace ts {
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, /*importClause*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
-                                factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target, context)),
+                                 /*assertClause*/ undefined
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExport:
@@ -6831,7 +6834,8 @@ namespace ts {
                                             factory.createIdentifier(localName)
                                         )
                                     ])),
-                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
+                                 /*assertClause*/ undefined
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.ExportSpecifier:

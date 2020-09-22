@@ -2120,7 +2120,7 @@ namespace ts {
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
                 const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
-                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference,  /*assertClause*/ undefined);
                 addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
                 setParent(externalHelpersModuleReference, importDecl);
                 setParent(importDecl, file);
