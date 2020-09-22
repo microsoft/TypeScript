@@ -11710,6 +11710,13 @@ namespace ts {
         }
 
         function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
+            tracing.begin(tracing.Phase.Check, "addTypeToUnion", { typeSetIds: typeSet.map(t => t.id), includes, typeId: type.id });
+            const result = addTypeToUnionWorker(typeSet, includes, type);
+            tracing.end();
+            return result;
+        }
+
+        function addTypeToUnionWorker(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
                 return addTypesToUnion(typeSet, includes, (<UnionType>type).types);

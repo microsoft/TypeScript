@@ -1,7 +1,7 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const ado = require("azure-devops-node-api");
 const { default: fetch } = require("node-fetch");
 
@@ -23,11 +23,11 @@ async function main() {
     const tgzUrl = new URL(artifact.resource.url);
     tgzUrl.search = `artifactName=tgz&fileId=${file.blob.id}&fileName=${file.path}`;
     const link = "" + tgzUrl;
-    const gh = new Octokit.Octokit();
-    gh.authenticate({
+    console.log("Artifact URL = " + link);
+    const gh = new Octokit({auth: {
         type: "token",
         token: process.argv[2]
-    });
+    }});
 
     // Please keep the strings "an installable tgz" and "packed" in this message, as well as the devDependencies section,
     // so that the playgrounds deployment process can find these comments.
@@ -57,7 +57,7 @@ main().catch(async e => {
     console.error(e);
     process.exitCode = 1;
     if (process.env.SOURCE_ISSUE) {
-        const gh = new Octokit.Octokit();
+        const gh = new Octokit();
         gh.authenticate({
             type: "token",
             token: process.argv[2]
