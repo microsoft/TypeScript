@@ -180,7 +180,7 @@ namespace ts {
         IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
     }
 
-    export const enum AccessFlags {
+    const enum AccessFlags {
         None = 0,
         NoIndexSignatures = 1 << 0,
         Writing = 1 << 1,
