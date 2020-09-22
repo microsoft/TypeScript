@@ -1416,6 +1416,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_void_to_Promise_resolved_without_a_value_95143" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[値なしで解決された Promise に 'void' を追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_void_to_all_Promises_resolved_without_a_value_95144" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[値なしで解決されたすべての Promise に 'void' を追加します]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
@@ -4877,6 +4895,15 @@
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[{0} 個の引数が必要ですが、{1} 個指定されました。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise_2794" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} 引数が必要ですが、{1} が指定されました。'Promise' の型引数に 'void' を含めましたか?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10517,6 +10544,15 @@
           <Val><![CDATA[The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' の推定型はアクセス不可能な '{1}' 型を参照します。型の注釈が必要です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_ty_7056" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このノードの推定型は、コンパイラがシリアル化する最大長を超えています。明示的な型の注釈が必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
