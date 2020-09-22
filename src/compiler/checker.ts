@@ -24575,10 +24575,11 @@ namespace ts {
         }
 
         /**
-         * Returns true iff the JSX element name would be a valid JS identifier, ignoring restrictions about keywords not being identifiers
+         * Returns true if the hyphen character is not in the JSX element name. The hyphen character, if present,
+         * would prevent it from being a valid JS identifier, ignoring restrictions about keywords not being identifiers
          */
         function isUnhyphenatedJsxName(name: string | __String) {
-            // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
+            // - is one of only two characters supported in JSX attribute names that isn't valid in JavaScript identifiers, : being the other
             return !stringContains(name as string, "-");
         }
 
