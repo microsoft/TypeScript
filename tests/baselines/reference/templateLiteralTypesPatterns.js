@@ -155,6 +155,11 @@ type AGen<T extends string | number> = {field: `a${T}`};
 const shouldWork1: AGen<string> = null as any as AGen<"yes">;
 const shouldWork2: AGen<string> = null as any as AGen<number>;
 
+// validates concatenation of patterns
+type A = `${number}`;
+type B = `${A} ${A}`;
+const exampleBad: B = "anything"; // fails
+const exampleGood: B = "1 2"; // ok
 
 //// [templateLiteralTypesPatterns.js]
 "use strict";
@@ -273,3 +278,5 @@ num = anyish;
 anyish = "aok";
 var shouldWork1 = null;
 var shouldWork2 = null;
+var exampleBad = "anything"; // fails
+var exampleGood = "1 2"; // ok

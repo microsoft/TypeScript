@@ -54,9 +54,10 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(128,9): er
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(129,9): error TS2345: Argument of type '"1.1e-10n"' is not assignable to parameter of type '`${bigint}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(140,1): error TS2322: Type '`a${string}`' is not assignable to type '`a${number}`'.
 tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(141,1): error TS2322: Type '"bno"' is not assignable to type '`a${any}`'.
+tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(160,7): error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
 
 
-==== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts (56 errors) ====
+==== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts (57 errors) ====
     type RequiresLeadingSlash = `/${string}`;
     
     // ok
@@ -325,3 +326,10 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(141,1): er
     const shouldWork1: AGen<string> = null as any as AGen<"yes">;
     const shouldWork2: AGen<string> = null as any as AGen<number>;
     
+    // validates concatenation of patterns
+    type A = `${number}`;
+    type B = `${A} ${A}`;
+    const exampleBad: B = "anything"; // fails
+          ~~~~~~~~~~
+!!! error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
+    const exampleGood: B = "1 2"; // ok

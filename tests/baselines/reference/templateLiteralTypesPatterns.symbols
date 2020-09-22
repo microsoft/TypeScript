@@ -376,3 +376,20 @@ const shouldWork2: AGen<string> = null as any as AGen<number>;
 >AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
 >AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
 
+// validates concatenation of patterns
+type A = `${number}`;
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 154, 62))
+
+type B = `${A} ${A}`;
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 154, 62))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 154, 62))
+
+const exampleBad: B = "anything"; // fails
+>exampleBad : Symbol(exampleBad, Decl(templateLiteralTypesPatterns.ts, 159, 5))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
+
+const exampleGood: B = "1 2"; // ok
+>exampleGood : Symbol(exampleGood, Decl(templateLiteralTypesPatterns.ts, 160, 5))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
+

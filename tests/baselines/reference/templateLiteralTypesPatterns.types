@@ -537,3 +537,18 @@ const shouldWork2: AGen<string> = null as any as AGen<number>;
 >null as any : any
 >null : null
 
+// validates concatenation of patterns
+type A = `${number}`;
+>A : `${number}`
+
+type B = `${A} ${A}`;
+>B : `${number} ${number}`
+
+const exampleBad: B = "anything"; // fails
+>exampleBad : `${number} ${number}`
+>"anything" : "anything"
+
+const exampleGood: B = "1 2"; // ok
+>exampleGood : `${number} ${number}`
+>"1 2" : "1 2"
+
