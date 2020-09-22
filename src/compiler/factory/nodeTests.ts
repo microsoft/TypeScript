@@ -525,6 +525,10 @@ namespace ts {
         return node.kind === SyntaxKind.AssertEntry;
     }
 
+    export function isAssertionKey(node: Node): node is AssertionKey {
+        return isStringLiteral(node) || isIdentifier(node);
+    }
+
     export function isNamespaceImport(node: Node): node is NamespaceImport {
         return node.kind === SyntaxKind.NamespaceImport;
     }

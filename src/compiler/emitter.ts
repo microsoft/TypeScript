@@ -1472,6 +1472,10 @@ namespace ts {
                         return emitImportDeclaration(<ImportDeclaration>node);
                     case SyntaxKind.ImportClause:
                         return emitImportClause(<ImportClause>node);
+                    case SyntaxKind.AssertClause:
+                        return emitAssertClause(<AssertClause>node);
+                    case SyntaxKind.AssertEntry:
+                        return emitAssertEntry(<AssertEntry>node);
                     case SyntaxKind.NamespaceImport:
                         return emitNamespaceImport(<NamespaceImport>node);
                     case SyntaxKind.NamespaceExport:
@@ -3182,7 +3186,30 @@ namespace ts {
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
+            if (node.assertClause) {
+                writeSpace();
+                emit(node.assertClause)
+            }
             writeTrailingSemicolon();
+        }
+
+        function emitAssertClause(node: AssertClause) {
+            const elements = node.elements;
+            emitExpressionList(node, elements, ListFormat.ImportClauseEntries);
+        }
+
+        function emitAssertEntry(node: AssertEntry) {
+            emit(node.name);
+            writePunctuation(":");
+            writeSpace();
+            
+            const value = node.value;
+            /** @see emitPropertyAssignment */
+            if (emitTrailingCommentsOfPosition && (getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
+                const commentRange = getCommentRange(value);
+                emitTrailingCommentsOfPosition(commentRange.pos);
+            }
+            emit(value);
         }
 
         function emitImportClause(node: ImportClause) {

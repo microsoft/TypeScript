@@ -398,6 +398,11 @@ namespace ts {
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
+            case SyntaxKind.AssertClause:
+                return visitNodes(cbNode, cbNodes, (<AssertClause>node).elements);
+            case SyntaxKind.AssertEntry:
+                return visitNode(cbNode, (<AssertEntry>node).name) ||
+                    visitNode(cbNode, (<AssertEntry>node).value);
             case SyntaxKind.NamespaceExportDeclaration:
                 return visitNode(cbNode, (<NamespaceExportDeclaration>node).name);
 

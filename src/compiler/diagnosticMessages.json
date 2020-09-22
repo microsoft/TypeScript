@@ -3055,6 +3055,10 @@
         "category": "Error",
         "code": 2795
     },
+    "Import assertions are not available when targeting lower than esnext.": {
+        "category": "Error",
+        "code": 2796
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

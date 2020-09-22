@@ -35931,11 +35931,19 @@ namespace ts {
             }
         }
 
+        function checkGrammarImportAssertion(declaration: ImportDeclaration | ExportDeclaration) {
+            const target = getEmitScriptTarget(compilerOptions);
+            if (target < ScriptTarget.ESNext && declaration.assertClause) {
+                grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_not_available_when_targeting_lower_than_esnext);
+            }
+        }
+
         function checkImportDeclaration(node: ImportDeclaration) {
             if (checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
                 // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
+            checkGrammarImportAssertion(node);
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
@@ -36007,6 +36015,7 @@ namespace ts {
                 return;
             }
 
+            checkGrammarImportAssertion(node);
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }

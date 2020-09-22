@@ -944,6 +944,15 @@ namespace ts {
                     nodeVisitor((<ImportClause>node).name, visitor, isIdentifier),
                     nodeVisitor((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
 
+            case SyntaxKind.AssertClause:
+                return factory.updateAssertClause(<AssertClause>node,
+                    nodesVisitor((node as AssertClause).elements, visitor, isAssertEntry));
+
+            case SyntaxKind.AssertEntry:
+                return factory.updateAssertEntry(<AssertEntry>node,
+                    nodeVisitor((<AssertEntry>node).name, visitor, isAssertionKey),
+                    nodeVisitor((<AssertEntry>node).value, visitor, isStringLiteral));
+            
             case SyntaxKind.NamespaceImport:
                 return factory.updateNamespaceImport(<NamespaceImport>node,
                     nodeVisitor((<NamespaceImport>node).name, visitor, isIdentifier));
