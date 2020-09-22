@@ -851,10 +851,6 @@
         "category": "Error",
         "code": 1257
     },
-    "Definite assignment assertions can only be used along with a type annotation.": {
-        "category": "Error",
-        "code": 1258
-    },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",
         "code": 1259
@@ -870,6 +866,14 @@
     "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
         "category": "Error",
         "code": 1262
+    },
+    "Declarations with initializers cannot also have definite assignment assertions.": {
+        "category": "Error",
+        "code": 1263
+    },
+    "Declarations with definite assignment assertions must also have type annotations.": {
+        "category": "Error",
+        "code": 1264
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -3042,6 +3046,10 @@
     "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
         "category": "Error",
         "code": 2794
+    },
+    "The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.": {
+        "category": "Error",
+        "code": 2795
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

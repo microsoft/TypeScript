@@ -1,7 +1,7 @@
 //// [mappedTypeAsClauses.ts]
 // Mapped type 'as N' clauses
 
-type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 
 // Mapped type with 'as N' clause has no constraint on 'in T' clause
@@ -29,6 +29,20 @@ type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
 type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
 
+// Repro from #40619
+
+type Lazyify<T> = {
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
+};
+
+interface Person {
+    readonly name: string;
+    age: number;
+    location?: string;
+}
+
+type LazyPerson = Lazyify<Person>;
+
 
 //// [mappedTypeAsClauses.js]
 "use strict";
@@ -37,7 +51,7 @@ type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & str
 
 //// [mappedTypeAsClauses.d.ts]
 declare type Getters<T> = {
-    [P in keyof T & string as `get${capitalize P}`]: () => T[P];
+    [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P];
 };
 declare type TG1 = Getters<{
     foo: string;
@@ -82,3 +96,12 @@ declare type TD1 = DoubleProp<{
 }>;
 declare type TD2 = keyof TD1;
 declare type TD3<U> = keyof DoubleProp<U>;
+declare type Lazyify<T> = {
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];
+};
+interface Person {
+    readonly name: string;
+    age: number;
+    location?: string;
+}
+declare type LazyPerson = Lazyify<Person>;

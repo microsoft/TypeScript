@@ -47,277 +47,278 @@ type TS1 = ToString<'abc' | 42 | true | -1234n>;
 >TS1 : Symbol(TS1, Decl(templateLiteralTypes1.ts, 14, 69))
 >ToString : Symbol(ToString, Decl(templateLiteralTypes1.ts, 10, 75))
 
-// Casing modifiers
+// Nested template literal type normalization
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
->Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 15, 48))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 11))
+type TL1<T extends string> = `a${T}b${T}c`;
+>TL1 : Symbol(TL1, Decl(templateLiteralTypes1.ts, 15, 48))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 9))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 9))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 19, 9))
+
+type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
+>TL2 : Symbol(TL2, Decl(templateLiteralTypes1.ts, 19, 43))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 20, 9))
+>TL1 : Symbol(TL1, Decl(templateLiteralTypes1.ts, 15, 48))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 20, 9))
+
+type TL3 = TL2<'o'>;  // 'axoybxoyc'
+>TL3 : Symbol(TL3, Decl(templateLiteralTypes1.ts, 20, 43))
+>TL2 : Symbol(TL2, Decl(templateLiteralTypes1.ts, 19, 43))
+
+// Casing intrinsics
+
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
+>Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 21, 20))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
->TCA1 : Symbol(TCA1, Decl(templateLiteralTypes1.ts, 19, 97))
->Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 15, 48))
+>TCA1 : Symbol(TCA1, Decl(templateLiteralTypes1.ts, 25, 101))
+>Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 21, 20))
 
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
->TCA2 : Symbol(TCA2, Decl(templateLiteralTypes1.ts, 21, 25))
->Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 15, 48))
+>TCA2 : Symbol(TCA2, Decl(templateLiteralTypes1.ts, 27, 25))
+>Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 21, 20))
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
->test : Symbol(test, Decl(templateLiteralTypes1.ts, 22, 25))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 26, 14))
->name : Symbol(name, Decl(templateLiteralTypes1.ts, 26, 39))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 26, 14))
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
+>test : Symbol(test, Decl(templateLiteralTypes1.ts, 28, 25))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 32, 14))
+>name : Symbol(name, Decl(templateLiteralTypes1.ts, 32, 39))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 32, 14))
 
     let s1: string = name;
->s1 : Symbol(s1, Decl(templateLiteralTypes1.ts, 27, 7))
->name : Symbol(name, Decl(templateLiteralTypes1.ts, 26, 39))
+>s1 : Symbol(s1, Decl(templateLiteralTypes1.ts, 33, 7))
+>name : Symbol(name, Decl(templateLiteralTypes1.ts, 32, 39))
 
     let s2: 'getFoo' | 'getBar' = name;
->s2 : Symbol(s2, Decl(templateLiteralTypes1.ts, 28, 7))
->name : Symbol(name, Decl(templateLiteralTypes1.ts, 26, 39))
+>s2 : Symbol(s2, Decl(templateLiteralTypes1.ts, 34, 7))
+>name : Symbol(name, Decl(templateLiteralTypes1.ts, 32, 39))
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
->fa1 : Symbol(fa1, Decl(templateLiteralTypes1.ts, 29, 1))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 31, 13))
->x : Symbol(x, Decl(templateLiteralTypes1.ts, 31, 16))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 31, 13))
->y : Symbol(y, Decl(templateLiteralTypes1.ts, 31, 21))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 31, 28))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 31, 13))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 31, 13))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 31, 28))
->z : Symbol(z, Decl(templateLiteralTypes1.ts, 31, 50))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 31, 57))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 31, 13))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 31, 57))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 31, 13))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 31, 57))
+>fa1 : Symbol(fa1, Decl(templateLiteralTypes1.ts, 35, 1))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 37, 13))
+>x : Symbol(x, Decl(templateLiteralTypes1.ts, 37, 16))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 37, 13))
+>y : Symbol(y, Decl(templateLiteralTypes1.ts, 37, 21))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 37, 28))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 37, 13))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 37, 13))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 37, 28))
+>z : Symbol(z, Decl(templateLiteralTypes1.ts, 37, 50))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 37, 57))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 37, 13))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 37, 57))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 37, 13))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 37, 57))
 
     y = x;
->y : Symbol(y, Decl(templateLiteralTypes1.ts, 31, 21))
->x : Symbol(x, Decl(templateLiteralTypes1.ts, 31, 16))
+>y : Symbol(y, Decl(templateLiteralTypes1.ts, 37, 21))
+>x : Symbol(x, Decl(templateLiteralTypes1.ts, 37, 16))
 
     z = x;  // Error
->z : Symbol(z, Decl(templateLiteralTypes1.ts, 31, 50))
->x : Symbol(x, Decl(templateLiteralTypes1.ts, 31, 16))
+>z : Symbol(z, Decl(templateLiteralTypes1.ts, 37, 50))
+>x : Symbol(x, Decl(templateLiteralTypes1.ts, 37, 16))
 }
 
 function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {
->fa2 : Symbol(fa2, Decl(templateLiteralTypes1.ts, 34, 1))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 36, 13))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 36, 15))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 36, 13))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 36, 28))
->B : Symbol(B, Decl(templateLiteralTypes1.ts, 36, 46))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 36, 28))
->x : Symbol(x, Decl(templateLiteralTypes1.ts, 36, 60))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 36, 66))
->B : Symbol(B, Decl(templateLiteralTypes1.ts, 36, 46))
->P : Symbol(P, Decl(templateLiteralTypes1.ts, 36, 66))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 36, 13))
->y : Symbol(y, Decl(templateLiteralTypes1.ts, 36, 91))
->Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 36, 98))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 36, 28))
->Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 36, 98))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 36, 15))
+>fa2 : Symbol(fa2, Decl(templateLiteralTypes1.ts, 40, 1))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 42, 13))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 42, 15))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 42, 13))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 42, 28))
+>B : Symbol(B, Decl(templateLiteralTypes1.ts, 42, 46))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 42, 28))
+>x : Symbol(x, Decl(templateLiteralTypes1.ts, 42, 60))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 42, 66))
+>B : Symbol(B, Decl(templateLiteralTypes1.ts, 42, 46))
+>P : Symbol(P, Decl(templateLiteralTypes1.ts, 42, 66))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 42, 13))
+>y : Symbol(y, Decl(templateLiteralTypes1.ts, 42, 91))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 42, 98))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 42, 28))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 42, 98))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 42, 15))
 
     x = y;
->x : Symbol(x, Decl(templateLiteralTypes1.ts, 36, 60))
->y : Symbol(y, Decl(templateLiteralTypes1.ts, 36, 91))
+>x : Symbol(x, Decl(templateLiteralTypes1.ts, 42, 60))
+>y : Symbol(y, Decl(templateLiteralTypes1.ts, 42, 91))
 
     y = x;  // Error
->y : Symbol(y, Decl(templateLiteralTypes1.ts, 36, 91))
->x : Symbol(x, Decl(templateLiteralTypes1.ts, 36, 60))
+>y : Symbol(y, Decl(templateLiteralTypes1.ts, 42, 91))
+>x : Symbol(x, Decl(templateLiteralTypes1.ts, 42, 60))
 }
 
 // String transformations using recursive conditional types
 
 type Join<T extends unknown[], D extends string> =
->Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 39, 1))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 43, 10))
->D : Symbol(D, Decl(templateLiteralTypes1.ts, 43, 30))
+>Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 45, 1))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 49, 10))
+>D : Symbol(D, Decl(templateLiteralTypes1.ts, 49, 30))
 
     T extends [] ? '' :
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 43, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 49, 10))
 
     T extends [string | number | boolean | bigint] ? `${T[0]}` :
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 43, 10))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 43, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 49, 10))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 49, 10))
 
     T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 43, 10))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 46, 59))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 43, 10))
->D : Symbol(D, Decl(templateLiteralTypes1.ts, 43, 30))
->Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 39, 1))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 46, 59))
->D : Symbol(D, Decl(templateLiteralTypes1.ts, 43, 30))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 49, 10))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 52, 59))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 49, 10))
+>D : Symbol(D, Decl(templateLiteralTypes1.ts, 49, 30))
+>Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 45, 1))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 52, 59))
+>D : Symbol(D, Decl(templateLiteralTypes1.ts, 49, 30))
 
     string;
 
 type TJ1 = Join<[1, 2, 3, 4], '.'>
->TJ1 : Symbol(TJ1, Decl(templateLiteralTypes1.ts, 47, 11))
->Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 39, 1))
+>TJ1 : Symbol(TJ1, Decl(templateLiteralTypes1.ts, 53, 11))
+>Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 45, 1))
 
 type TJ2 = Join<['foo', 'bar', 'baz'], '-'>;
->TJ2 : Symbol(TJ2, Decl(templateLiteralTypes1.ts, 49, 34))
->Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 39, 1))
+>TJ2 : Symbol(TJ2, Decl(templateLiteralTypes1.ts, 55, 34))
+>Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 45, 1))
 
 type TJ3 = Join<[], '.'>
->TJ3 : Symbol(TJ3, Decl(templateLiteralTypes1.ts, 50, 44))
->Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 39, 1))
+>TJ3 : Symbol(TJ3, Decl(templateLiteralTypes1.ts, 56, 44))
+>Join : Symbol(Join, Decl(templateLiteralTypes1.ts, 45, 1))
 
 // Inference based on delimiters
 
 type MatchPair<S extends string> = S extends `[${infer A},${infer B}]` ? [A, B] : unknown;
->MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 51, 24))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 55, 15))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 55, 15))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 55, 54))
->B : Symbol(B, Decl(templateLiteralTypes1.ts, 55, 65))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 55, 54))
->B : Symbol(B, Decl(templateLiteralTypes1.ts, 55, 65))
+>MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 57, 24))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 61, 15))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 61, 15))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 61, 54))
+>B : Symbol(B, Decl(templateLiteralTypes1.ts, 61, 65))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 61, 54))
+>B : Symbol(B, Decl(templateLiteralTypes1.ts, 61, 65))
 
 type T20 = MatchPair<'[1,2]'>;  // ['1', '2']
->T20 : Symbol(T20, Decl(templateLiteralTypes1.ts, 55, 90))
->MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 51, 24))
+>T20 : Symbol(T20, Decl(templateLiteralTypes1.ts, 61, 90))
+>MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 57, 24))
 
 type T21 = MatchPair<'[foo,bar]'>;  // ['foo', 'bar']
->T21 : Symbol(T21, Decl(templateLiteralTypes1.ts, 57, 30))
->MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 51, 24))
+>T21 : Symbol(T21, Decl(templateLiteralTypes1.ts, 63, 30))
+>MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 57, 24))
 
 type T22 = MatchPair<' [1,2]'>;  // unknown
->T22 : Symbol(T22, Decl(templateLiteralTypes1.ts, 58, 34))
->MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 51, 24))
+>T22 : Symbol(T22, Decl(templateLiteralTypes1.ts, 64, 34))
+>MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 57, 24))
 
 type T23 = MatchPair<'[123]'>;  // unknown
->T23 : Symbol(T23, Decl(templateLiteralTypes1.ts, 59, 31))
->MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 51, 24))
+>T23 : Symbol(T23, Decl(templateLiteralTypes1.ts, 65, 31))
+>MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 57, 24))
 
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
->T24 : Symbol(T24, Decl(templateLiteralTypes1.ts, 60, 30))
->MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 51, 24))
+>T24 : Symbol(T24, Decl(templateLiteralTypes1.ts, 66, 30))
+>MatchPair : Symbol(MatchPair, Decl(templateLiteralTypes1.ts, 57, 24))
 
 type SnakeToCamelCase<S extends string> =
->SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 61, 34))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
+>SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 67, 34))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 69, 22))
 
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 64, 22))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 64, 33))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 64, 22))
->SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 64, 33))
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 69, 22))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
+>SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
 
-    S extends `${infer T}` ? `${lowercase T}` :
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 65, 22))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 65, 22))
+    S extends `${infer T}` ? `${Lowercase<T>}` :
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 69, 22))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
 
     SnakeToPascalCase<S>;
->SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 63, 22))
+>SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 69, 22))
 
 type SnakeToPascalCase<S extends string> =
->SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
+>SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 74, 23))
 
     string extends S ? string :
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 74, 23))
 
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
->SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
->U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 74, 23))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 76, 22))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 76, 33))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 76, 22))
+>SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
+>U : Symbol(U, Decl(templateLiteralTypes1.ts, 76, 33))
 
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 68, 23))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 74, 23))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 77, 22))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 77, 22))
 
     never;
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
->RR0 : Symbol(RR0, Decl(templateLiteralTypes1.ts, 72, 10))
->SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
+>RR0 : Symbol(RR0, Decl(templateLiteralTypes1.ts, 78, 10))
+>SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
 
 type RR1 = SnakeToPascalCase<'FOO_BAR_BAZ'>;  // 'FooBarBaz'
->RR1 : Symbol(RR1, Decl(templateLiteralTypes1.ts, 74, 48))
->SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 66, 25))
+>RR1 : Symbol(RR1, Decl(templateLiteralTypes1.ts, 80, 48))
+>SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
 
 type RR2 = SnakeToCamelCase<'hello_world_foo'>;  // 'helloWorldFoo'
->RR2 : Symbol(RR2, Decl(templateLiteralTypes1.ts, 75, 44))
->SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 61, 34))
+>RR2 : Symbol(RR2, Decl(templateLiteralTypes1.ts, 81, 44))
+>SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 67, 34))
 
 type RR3 = SnakeToCamelCase<'FOO_BAR_BAZ'>;  // 'fooBarBaz'
->RR3 : Symbol(RR3, Decl(templateLiteralTypes1.ts, 76, 47))
->SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 61, 34))
+>RR3 : Symbol(RR3, Decl(templateLiteralTypes1.ts, 82, 47))
+>SnakeToCamelCase : Symbol(SnakeToCamelCase, Decl(templateLiteralTypes1.ts, 67, 34))
 
 // Single character inference
 
 type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer R}` ? [`${A}${B}`, R] : unknown;
->FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 77, 43))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 81, 21))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 81, 21))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 81, 59))
->B : Symbol(B, Decl(templateLiteralTypes1.ts, 81, 69))
->R : Symbol(R, Decl(templateLiteralTypes1.ts, 81, 79))
->A : Symbol(A, Decl(templateLiteralTypes1.ts, 81, 59))
->B : Symbol(B, Decl(templateLiteralTypes1.ts, 81, 69))
->R : Symbol(R, Decl(templateLiteralTypes1.ts, 81, 79))
+>FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 83, 43))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 87, 21))
+>S : Symbol(S, Decl(templateLiteralTypes1.ts, 87, 21))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 87, 59))
+>B : Symbol(B, Decl(templateLiteralTypes1.ts, 87, 69))
+>R : Symbol(R, Decl(templateLiteralTypes1.ts, 87, 79))
+>A : Symbol(A, Decl(templateLiteralTypes1.ts, 87, 59))
+>B : Symbol(B, Decl(templateLiteralTypes1.ts, 87, 69))
+>R : Symbol(R, Decl(templateLiteralTypes1.ts, 87, 79))
 
 type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
->T25 : Symbol(T25, Decl(templateLiteralTypes1.ts, 81, 112))
->FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 77, 43))
+>T25 : Symbol(T25, Decl(templateLiteralTypes1.ts, 87, 112))
+>FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 83, 43))
 
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
->T26 : Symbol(T26, Decl(templateLiteralTypes1.ts, 83, 36))
->FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 77, 43))
+>T26 : Symbol(T26, Decl(templateLiteralTypes1.ts, 89, 36))
+>FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 83, 43))
 
 type T27 = FirstTwoAndRest<'a'>;  // unknown
->T27 : Symbol(T27, Decl(templateLiteralTypes1.ts, 84, 33))
->FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 77, 43))
-
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
->Capitalize : Symbol(Capitalize, Decl(templateLiteralTypes1.ts, 85, 32))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 87, 16))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 87, 16))
->H : Symbol(H, Decl(templateLiteralTypes1.ts, 87, 54))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 87, 64))
->H : Symbol(H, Decl(templateLiteralTypes1.ts, 87, 54))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 87, 64))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 87, 16))
-
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
->Uncapitalize : Symbol(Uncapitalize, Decl(templateLiteralTypes1.ts, 87, 96))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 88, 18))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 88, 18))
->H : Symbol(H, Decl(templateLiteralTypes1.ts, 88, 56))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 88, 66))
->H : Symbol(H, Decl(templateLiteralTypes1.ts, 88, 56))
->T : Symbol(T, Decl(templateLiteralTypes1.ts, 88, 66))
->S : Symbol(S, Decl(templateLiteralTypes1.ts, 88, 18))
-
-type TC1 = Capitalize<'foo'>;  // 'Foo'
->TC1 : Symbol(TC1, Decl(templateLiteralTypes1.ts, 88, 98))
->Capitalize : Symbol(Capitalize, Decl(templateLiteralTypes1.ts, 85, 32))
-
-type TC2 = Uncapitalize<'Foo'>;  // 'foo'
->TC2 : Symbol(TC2, Decl(templateLiteralTypes1.ts, 90, 29))
->Uncapitalize : Symbol(Uncapitalize, Decl(templateLiteralTypes1.ts, 87, 96))
+>T27 : Symbol(T27, Decl(templateLiteralTypes1.ts, 90, 33))
+>FirstTwoAndRest : Symbol(FirstTwoAndRest, Decl(templateLiteralTypes1.ts, 83, 43))
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
 
 type HexColor<S extends string> =
 >HexColor : Symbol(HexColor, Decl(templateLiteralTypes1.ts, 93, 145))
@@ -339,12 +340,12 @@ type HexColor<S extends string> =
 >G2 : Symbol(G2, Decl(templateLiteralTypes1.ts, 96, 56))
 >B1 : Symbol(B1, Decl(templateLiteralTypes1.ts, 96, 67))
 >B2 : Symbol(B2, Decl(templateLiteralTypes1.ts, 96, 78))
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
->HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 31))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
+>HexDigit : Symbol(HexDigit, Decl(templateLiteralTypes1.ts, 91, 32))
 
             S :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 95, 14))
