@@ -4218,7 +4218,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
+        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityNameNoRootLiteral, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
             const node = createBaseJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName ?? createIdentifier("param"), comment);
             node.typeExpression = typeExpression;
             node.name = name;
@@ -4228,7 +4228,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag {
+        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityNameNoRootLiteral, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4240,7 +4240,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
+        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityNameNoRootLiteral, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
             const node = createBaseJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName ?? createIdentifier("prop"), comment);
             node.typeExpression = typeExpression;
             node.name = name;
@@ -4250,7 +4250,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag {
+        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityNameNoRootLiteral, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed

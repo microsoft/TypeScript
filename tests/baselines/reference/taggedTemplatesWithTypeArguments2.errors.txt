@@ -6,9 +6,10 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(35,5)
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,14): error TS2754: 'super' may not use type arguments.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34): error TS1034: 'super' must be followed by an argument list or member access.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34): error TS2339: Property '`hello world`' does not exist on type 'SomeBase<number, string, T>'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts (8 errors) ====
+==== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts (9 errors) ====
     export interface SomethingTaggable {
         <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
     }
@@ -61,6 +62,8 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34
 !!! error TS2754: 'super' may not use type arguments.
                                      ~~~~~~~~~~~~~
 !!! error TS1034: 'super' must be followed by an argument list or member access.
+                                     ~~~~~~~~~~~~~
+!!! error TS2339: Property '`hello world`' does not exist on type 'SomeBase<number, string, T>'.
         }
     ~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.

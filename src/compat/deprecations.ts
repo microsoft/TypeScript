@@ -1215,7 +1215,7 @@ namespace ts {
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. */
-    export const createJSDocParamTag = Debug.deprecate(function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
+    export const createJSDocParamTag = Debug.deprecate(function createJSDocParamTag(name: EntityNameNoRootLiteral, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
         return factory.createJSDocParameterTag(/*tagName*/ undefined, name, isBracketed, typeExpression, /*isNameFirst*/ false, comment);
     }, factoryDeprecation);
 

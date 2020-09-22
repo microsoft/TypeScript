@@ -158,7 +158,7 @@ namespace ts.refactor {
                 }
             }
             else if (isTypeQueryNode(node)) {
-                if (isIdentifier(node.exprName)) {
+                if (!isQualifiedName(node.exprName)) {
                     const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /* excludeGlobals */ false);
                     if (symbol && rangeContainsSkipTrivia(statement, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
                         return true;

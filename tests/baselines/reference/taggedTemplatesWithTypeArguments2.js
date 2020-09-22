@@ -56,7 +56,7 @@ class SomeBase {
 }
 class SomeDerived extends SomeBase {
     constructor() {
-        super. `hello world`;
+        super.`hello world`;
     }
 }
 export {};

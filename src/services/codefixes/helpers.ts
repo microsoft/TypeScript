@@ -482,7 +482,7 @@ namespace ts.codefix {
     }
 
     function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Identifier): EntityName {
-        if (name.kind === SyntaxKind.Identifier) {
+        if (name.kind !== SyntaxKind.QualifiedName) {
             return newIdentifier;
         }
         return factory.createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);

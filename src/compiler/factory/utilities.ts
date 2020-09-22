@@ -37,12 +37,10 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(factory: NodeFactory, jsxFactory: EntityName, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(factory, jsxFactory.left, parent);
-            const right = factory.createIdentifier(idText(jsxFactory.right)) as Mutable<Identifier>;
-            right.escapedText = jsxFactory.right.escapedText;
-            return factory.createPropertyAccessExpression(left, right);
+            return isStringLiteralLike(jsxFactory.right) ? factory.createElementAccessExpression(left, factory.createStringLiteral(jsxFactory.right.text)) : factory.createPropertyAccessExpression(left, factory.createIdentifier(idText(jsxFactory.right)));
         }
         else {
-            return createReactNamespace(idText(jsxFactory), parent);
+            return createReactNamespace(qualifiedNameText(jsxFactory), parent);
         }
     }
 
@@ -162,7 +160,7 @@ namespace ts {
             const left = createExpressionFromEntityName(factory, node.left);
             // TODO(rbuckton): Does this need to be parented?
             const right = setParent(setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
-            return setTextRange(factory.createPropertyAccessExpression(left, right), node);
+            return setTextRange(isStringLiteralLike(right) ? factory.createElementAccessExpression(left, right) : factory.createPropertyAccessExpression(left, right), node);
         }
         else {
             // TODO(rbuckton): Does this need to be parented?

@@ -467,6 +467,12 @@ namespace ts {
         }
         return unescapeLeadingUnderscores(symbol.escapedName);
     }
+    export function qualifiedNameTextRaw(identifierOrString: Identifier | PrivateIdentifier | StringLiteralLike): __String {
+        return isIdentifier(identifierOrString) || isPrivateIdentifier(identifierOrString) ? identifierOrString.escapedText : escapeLeadingUnderscores(identifierOrString.text);
+    }
+    export function qualifiedNameText(identifierOrString: Identifier | PrivateIdentifier | StringLiteralLike): string {
+        return isIdentifier(identifierOrString) || isPrivateIdentifier(identifierOrString) ? idText(identifierOrString) : identifierOrString.text;
+    }
 
     /**
      * A JSDocTypedef tag has an _optional_ name field - if a name is not directly present, we should
@@ -1151,7 +1157,9 @@ namespace ts {
     export function isEntityName(node: Node): node is EntityName {
         const kind = node.kind;
         return kind === SyntaxKind.QualifiedName
-            || kind === SyntaxKind.Identifier;
+            || kind === SyntaxKind.Identifier
+            || kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
     export function isPropertyName(node: Node): node is PropertyName {

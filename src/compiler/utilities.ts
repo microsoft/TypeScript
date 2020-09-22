@@ -890,10 +890,14 @@ namespace ts {
         }
     }
 
-    export function entityNameToString(name: EntityNameOrEntityNameExpression | JsxTagNameExpression | PrivateIdentifier): string {
+    export function entityNameToString(name: EntityNameOrEntityNameExpression | JsxTagNameExpression | PrivateIdentifier | StringLiteralLike): string {
         switch (name.kind) {
             case SyntaxKind.ThisKeyword:
                 return "this";
+            case SyntaxKind.StringLiteral:
+                return name.singleQuote ? `'${escapeString(name.text, CharacterCodes.singleQuote)}'` : `"${escapeString(name.text, CharacterCodes.doubleQuote)}"`;
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return `\`${escapeString(name.text, CharacterCodes.backtick)}\``;
             case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.Identifier:
                 return getFullWidth(name) === 0 ? idText(name) : getTextOfNode(name);
@@ -4760,13 +4764,17 @@ namespace ts {
             case SyntaxKind.QualifiedName:
                 do {
                     node = node.left;
-                } while (node.kind !== SyntaxKind.Identifier);
+                } while (node.kind === SyntaxKind.QualifiedName);
+                Debug.assertNode(node, isIdentifier); // The only leftmost qualified name that's not identifier is import type node leftmost names
                 return node;
             case SyntaxKind.PropertyAccessExpression:
                 do {
                     node = node.expression;
                 } while (node.kind !== SyntaxKind.Identifier);
                 return node;
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return Debug.failBadSyntaxKind(node);
         }
     }
 

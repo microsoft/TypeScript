@@ -1387,7 +1387,7 @@ namespace ts {
             return false;
         }
 
-        type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression;
+        type SerializedEntityNameAsExpression = Identifier | BinaryExpression | PropertyAccessExpression | ElementAccessExpression;
         type SerializedTypeNode = SerializedEntityNameAsExpression | VoidExpression | ConditionalExpression;
 
         function getAccessorTypeNode(node: AccessorDeclaration) {
@@ -1730,6 +1730,9 @@ namespace ts {
                 const copied = serializeEntityNameAsExpression(node);
                 return createCheckedValue(copied, copied);
             }
+            if (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                return Debug.failBadSyntaxKind(node);
+            }
             if (node.left.kind === SyntaxKind.Identifier) {
                 // A.B -> typeof A !== undefined && A.B
                 return createCheckedValue(serializeEntityNameAsExpression(node.left), serializeEntityNameAsExpression(node));
@@ -1742,7 +1745,7 @@ namespace ts {
                     left.left,
                     factory.createStrictInequality(factory.createAssignment(temp, left.right), factory.createVoidZero())
                 ),
-                factory.createPropertyAccessExpression(temp, node.right)
+                isStringLiteralLike(node.right) ? factory.createElementAccessExpression(temp, factory.createStringLiteral(node.right.text)) : factory.createPropertyAccessExpression(temp, node.right)
             );
         }
 
@@ -1763,6 +1766,10 @@ namespace ts {
 
                 case SyntaxKind.QualifiedName:
                     return serializeQualifiedNameAsExpression(node);
+
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -1774,7 +1781,9 @@ namespace ts {
          *                    qualified name at runtime.
          */
         function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityNameAsExpression {
-            return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right);
+            return isStringLiteralLike(node.right)
+                ? factory.createElementAccessExpression(serializeEntityNameAsExpression(node.left), factory.createStringLiteral(node.right.text))
+                : factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right);
         }
 
         /**

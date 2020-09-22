@@ -2503,21 +2503,23 @@ namespace ts {
             return createMissingList<T>();
         }
 
-        function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
+        function parseEntityName(allowReservedWords: boolean, allowLeadingLiteral?: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
             const pos = getNodePos();
-            let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
+            let entity: EntityName = (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NoSubstitutionTemplateLiteral) && allowLeadingLiteral ? parseLiteralLikeNode(token()) as StringLiteralLike : allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
             let dotPos = getNodePos();
             while (parseOptional(SyntaxKind.DotToken)) {
                 if (token() === SyntaxKind.LessThanToken) {
-                    // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
-                    entity.jsdocDotPos = dotPos;
+                    // the entity is part of a JSDoc-style generic, so report an error
+                    if (!(contextFlags & NodeFlags.JSDoc)) {
+                        parseErrorAt(dotPos, dotPos + 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+                    }
                     break;
                 }
                 dotPos = getNodePos();
                 entity = finishNode(
                     factory.createQualifiedName(
                         entity,
-                        parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier
+                        parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false, /*allowStringLike*/ true)
                     ),
                     pos
                 );
@@ -2529,7 +2531,10 @@ namespace ts {
             return finishNode(factory.createQualifiedName(entity, name), entity.pos);
         }
 
-        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: boolean): Identifier | PrivateIdentifier {
+        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: true): Identifier | PrivateIdentifier;
+        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: false): Identifier;
+        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: false, allowStringLike: true): Identifier | StringLiteralLike;
+        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: boolean, allowStringLike?: boolean): Identifier | PrivateIdentifier | StringLiteralLike {
             // Technically a keyword is valid here as all identifiers and keywords are identifier names.
             // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
@@ -2563,6 +2568,10 @@ namespace ts {
             if (token() === SyntaxKind.PrivateIdentifier) {
                 const node = parsePrivateIdentifier();
                 return allowPrivateIdentifiers ? node : createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+            }
+
+            if (allowStringLike && token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                return parseLiteralLikeNode(token()) as StringLiteralLike;
             }
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
@@ -2701,8 +2710,8 @@ namespace ts {
 
         // TYPES
 
-        function parseEntityNameOfTypeReference() {
-            return parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
+        function parseEntityNameOfTypeReference(allowLeadingLiteral?: boolean) {
+            return parseEntityName(/*allowReservedWords*/ true, allowLeadingLiteral, Diagnostics.Type_expected);
         }
 
         function parseTypeArgumentsOfTypeReference() {
@@ -3413,7 +3422,7 @@ namespace ts {
             parseExpected(SyntaxKind.OpenParenToken);
             const type = parseType();
             parseExpected(SyntaxKind.CloseParenToken);
-            const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference() : undefined;
+            const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference(/*allowLeadingLiteral*/ true) : undefined;
             const typeArguments = parseTypeArgumentsOfTypeReference();
             return finishNode(factory.createImportTypeNode(type, qualifier, typeArguments, isTypeOf), pos);
         }
@@ -7630,7 +7639,7 @@ namespace ts {
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
-                function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
+                function parseBracketNameInPropertyAndParamTag(): { name: EntityNameNoRootLiteral, isBracketed: boolean } {
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
                     if (isBracketed) {
@@ -7965,8 +7974,8 @@ namespace ts {
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
-                    while (!ts.isIdentifier(a) || !ts.isIdentifier(b)) {
-                        if (!ts.isIdentifier(a) && !ts.isIdentifier(b) && a.right.escapedText === b.right.escapedText) {
+                    while (isQualifiedName(a) || isQualifiedName(b)) {
+                        if (isQualifiedName(a) && isQualifiedName(b) && qualifiedNameTextRaw(a.right) === qualifiedNameTextRaw(b.right)) {
                             a = a.left;
                             b = b.left;
                         }
@@ -7974,7 +7983,7 @@ namespace ts {
                             return false;
                         }
                     }
-                    return a.escapedText === b.escapedText;
+                    return qualifiedNameTextRaw(a) === qualifiedNameTextRaw(b);
                 }
 
                 function parseChildPropertyTag(indent: number) {
@@ -8089,8 +8098,8 @@ namespace ts {
                     return false;
                 }
 
-                function parseJSDocEntityName(): EntityName {
-                    let entity: EntityName = parseJSDocIdentifierName();
+                function parseJSDocEntityName(): EntityNameNoRootLiteral {
+                    let entity: EntityNameNoRootLiteral = parseJSDocIdentifierName();
                     if (parseOptional(SyntaxKind.OpenBracketToken)) {
                         parseExpected(SyntaxKind.CloseBracketToken);
                         // Note that y[] is accepted as an entity name, but the postfix brackets are not saved for checking.
