@@ -112,7 +112,7 @@ tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(27,24): error TS1003: Ide
 !!! error TS1109: Expression expected.
                                              ~
 !!! error TS1109: Expression expected.
-    var beginOfIdent1 = <a :attr={"value"} />;
+    var beginOfIdent2 = <a :attr={"value"} />;
                            ~
 !!! error TS1003: Identifier expected.
     

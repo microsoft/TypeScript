@@ -78,13 +78,13 @@ var endOfIdent2 = <a attr:={"value"} />;
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 23, 20))
 
 var beginOfIdent1 = <:a attr={"value"} />;
->beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInNameReact.tsx, 25, 3), Decl(jsxNamespacePrefixInNameReact.tsx, 26, 3))
+>beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInNameReact.tsx, 25, 3))
 >a : Symbol(a, Decl(jsxNamespacePrefixInNameReact.tsx, 25, 22))
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 25, 23))
 >"value" : Symbol("value", Decl(jsxNamespacePrefixInNameReact.tsx, 25, 30))
 
-var beginOfIdent1 = <a :attr={"value"} />;
->beginOfIdent1 : Symbol(beginOfIdent1, Decl(jsxNamespacePrefixInNameReact.tsx, 25, 3), Decl(jsxNamespacePrefixInNameReact.tsx, 26, 3))
+var beginOfIdent2 = <a :attr={"value"} />;
+>beginOfIdent2 : Symbol(beginOfIdent2, Decl(jsxNamespacePrefixInNameReact.tsx, 26, 3))
 >attr : Symbol(attr, Decl(jsxNamespacePrefixInNameReact.tsx, 26, 24))
 
 var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic

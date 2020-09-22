@@ -25,7 +25,7 @@ var endOfIdent1 = <a: attr={"value"} />;
 var endOfIdent2 = <a attr:={"value"} />;
 
 var beginOfIdent1 = <:a attr={"value"} />;
-var beginOfIdent1 = <a :attr={"value"} />;
+var beginOfIdent2 = <a :attr={"value"} />;
 
 var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
 var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
@@ -66,6 +66,6 @@ var both3 = React.createElement("a:element", { "a:attr": "value" }, "text");
 var endOfIdent1 = React.createElement("a", { attr: "value" });
 var endOfIdent2 = React.createElement("a", __assign({ attr: true }, "value"));
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
-var beginOfIdent1 = React.createElement("a", { attr: "value" });
+var beginOfIdent2 = React.createElement("a", { attr: "value" });
 var upcaseComponent1 = React.createElement("ns:Upcase", null); // Parsed as intrinsic
 var upcaseComponent2 = React.createElement("Upcase:element", null); // Parsed as instrinsic

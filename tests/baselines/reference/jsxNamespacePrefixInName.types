@@ -167,8 +167,8 @@ var beginOfIdent1 = <:a attr={"value"} />;
 > : any
 > : any
 
-var beginOfIdent1 = <a :attr={"value"} />;
->beginOfIdent1 : boolean
+var beginOfIdent2 = <a :attr={"value"} />;
+>beginOfIdent2 : any
 ><a :attr={"value"} /> : any
 >a : any
 >attr : string
