@@ -1,6 +1,6 @@
 interface Array<T> {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): T | undefined;
@@ -9,7 +9,7 @@ interface Array<T> {
 
 interface ReadonlyArray<T> {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): T | undefined;
@@ -17,7 +17,7 @@ interface ReadonlyArray<T> {
 
 interface Int8Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -25,7 +25,7 @@ interface Int8Array {
 
 interface Uint8Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -33,7 +33,7 @@ interface Uint8Array {
 
 interface Uint8ClampedArray {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -41,7 +41,7 @@ interface Uint8ClampedArray {
 
 interface Int16Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -49,7 +49,7 @@ interface Int16Array {
 
 interface Uint16Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -57,7 +57,7 @@ interface Uint16Array {
 
 interface Int32Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -65,7 +65,7 @@ interface Int32Array {
 
 interface Uint32Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -73,7 +73,7 @@ interface Uint32Array {
 
 interface Float32Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
@@ -81,7 +81,7 @@ interface Float32Array {
 
 interface Float64Array {
     /**
-     * Access string by relative indexing.
+     * Access item by relative indexing.
      * @param index index to access.
      */
     item(index: number): number | undefined;
