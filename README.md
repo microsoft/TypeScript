@@ -67,7 +67,7 @@ Install [Gulp](https://gulpjs.com/) tools and dev dependencies:
 
 ```bash
 npm install -g gulp
-npm install
+npm ci
 ```
 
 Use one of the following to build and test:
