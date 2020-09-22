@@ -1,0 +1,39 @@
+tests/cases/conformance/esnext/importAssertion/3.ts(7,11): error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+
+
+==== tests/cases/conformance/esnext/importAssertion/0.ts (0 errors) ====
+    export const a = 1;
+    export const b = 2;
+    
+==== tests/cases/conformance/esnext/importAssertion/1.ts (0 errors) ====
+    import './0' assert { type: "json" }
+    import { a, b } from './0' assert { "type": "json" }
+    import * as foo from './0' assert { type: "json" }
+    a;
+    b;
+    foo.a;
+    foo.b;
+    
+==== tests/cases/conformance/esnext/importAssertion/2.ts (0 errors) ====
+    import { a, b } from './0' assert {}
+    import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+    a;
+    b;
+    c;
+    d;
+    
+==== tests/cases/conformance/esnext/importAssertion/3.ts (2 errors) ====
+    const a = import('./0')
+    const b = import('./0', { type: "json" })
+    const c = import('./0', { type: "json", ttype: "typo" })
+    const d = import('./0', { })
+    declare function foo(): any;
+    const e = import('./0', foo())
+    const f = import()
+              ~~~~~~~~
+!!! error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+    const g = import('./0', {}, {})
+              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+    

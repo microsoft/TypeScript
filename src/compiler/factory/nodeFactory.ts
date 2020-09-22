@@ -3856,17 +3856,19 @@ namespace ts {
         }
 
         // @api
-        function createAssertClause(elements: NodeArray<AssertEntry> | undefined): AssertClause {
+        function createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause {
             const node = createBaseNode<AssertClause>(SyntaxKind.AssertClause);
             node.elements = elements;
+            node.multiLine = multiLine;
             node.transformFlags |= TransformFlags.ContainsESNext;
             return node;
         }
 
         // @api
-        function updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry> | undefined): AssertClause {
+        function updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause {
             return node.elements !== elements
-                ? update(createAssertClause(elements), node)
+                || node.multiLine !== multiLine
+                ? update(createAssertClause(elements, multiLine), node)
                 : node;
         }
 
@@ -3880,7 +3882,7 @@ namespace ts {
         }
 
         // @api
-        function updateAssertEntry (node: AssertEntry, name: AssertionKey, value: StringLiteral): AssertEntry {
+        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: StringLiteral): AssertEntry {
             return node.name !== name
                 || node.value !== value
                 ? update(createAssertEntry(name, value), node)

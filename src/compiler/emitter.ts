@@ -3188,21 +3188,23 @@ namespace ts {
             emitExpression(node.moduleSpecifier);
             if (node.assertClause) {
                 writeSpace();
-                emit(node.assertClause)
+                emit(node.assertClause);
             }
             writeTrailingSemicolon();
         }
 
         function emitAssertClause(node: AssertClause) {
+            emitTokenWithComment(SyntaxKind.AssertKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             const elements = node.elements;
-            emitExpressionList(node, elements, ListFormat.ImportClauseEntries);
+            emitNodeList(emitAssertEntry, node, elements, ListFormat.ImportClauseEntries);
         }
 
         function emitAssertEntry(node: AssertEntry) {
             emit(node.name);
             writePunctuation(":");
             writeSpace();
-            
+
             const value = node.value;
             /** @see emitPropertyAssignment */
             if (emitTrailingCommentsOfPosition && (getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
@@ -3274,6 +3276,10 @@ namespace ts {
                 emitTokenWithComment(SyntaxKind.FromKeyword, fromPos, writeKeyword, node);
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
+            }
+            if (node.assertClause) {
+                writeSpace();
+                emit(node.assertClause);
             }
             writeTrailingSemicolon();
         }

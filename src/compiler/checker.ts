@@ -39882,11 +39882,11 @@ namespace ts {
                 checkGrammarForDisallowedTrailingComma(nodeArguments);
             }
             else {
-                if (nodeArguments.length > 2) {
+                if (nodeArguments.length !== 1 && nodeArguments.length !== 2) {
                     return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_a_specifier_as_arguments_and_an_optional_assertion);
                 }
             }
-            return false
+            return false;
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
@@ -39904,7 +39904,7 @@ namespace ts {
             }
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
-            if (isSpreadElement(nodeArguments[0])) {
+            if (nodeArguments.length && isSpreadElement(nodeArguments[0])) {
                 return grammarErrorOnNode(nodeArguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
             }
             return false;

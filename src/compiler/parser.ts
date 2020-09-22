@@ -394,7 +394,8 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier);
+                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier) ||
+                    visitNode(cbNode, (<ImportDeclaration>node).assertClause);
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
@@ -417,7 +418,8 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<ExportDeclaration>node).exportClause) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier);
+                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier) ||
+                    visitNode(cbNode, (<ExportDeclaration>node).assertClause);
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
                 return visitNode(cbNode, (<ImportOrExportSpecifier>node).propertyName) ||
@@ -1698,7 +1700,7 @@ namespace ts {
         function isAssertionKey(): boolean {
             return tokenIsIdentifierOrKeyword(token()) ||
                 token() === SyntaxKind.StringLiteral;
-        } 
+        }
 
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
@@ -1865,7 +1867,7 @@ namespace ts {
                 case ParsingContext.ObjectBindingElements:
                     return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.AssertEntries:
-                    return isAssertionKey()
+                    return isAssertionKey();
                 case ParsingContext.HeritageClauseElement:
                     // If we see `{ ... }` then only consume it as an expression if it is followed by `,` or `{`
                     // That way we won't consume the body of a class in its heritage clause.
@@ -6915,11 +6917,10 @@ namespace ts {
                 parseExpected(SyntaxKind.FromKeyword);
             }
             const moduleSpecifier = parseModuleSpecifier();
-            const afterSpecifierPos = scanner.getStartPos();
 
             let assertClause: AssertClause | undefined;
             if (token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
-                assertClause = parseAssertClause(afterSpecifierPos);
+                assertClause = parseAssertClause();
             }
 
             parseSemicolon();
@@ -6927,18 +6928,31 @@ namespace ts {
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function parseAssertEntry () {
+        function parseAssertEntry() {
             const pos = getNodePos();
             const name = tokenIsIdentifierOrKeyword(token()) ? parseIdentifierName() : parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
-            parseExpected(SyntaxKind.ColonToken)
+            parseExpected(SyntaxKind.ColonToken);
             const value = parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
             return finishNode(factory.createAssertEntry(name, value), pos);
         }
 
-        function parseAssertClause(pos: number) {
-            parseExpected(SyntaxKind.AssertKeyword)
-            const elements = parseList(ParsingContext.AssertEntries, parseAssertEntry)
-            return finishNode(factory.createAssertClause(elements), pos);
+        function parseAssertClause() {
+            const pos = getNodePos();
+            parseExpected(SyntaxKind.AssertKeyword);
+            const openBracePosition = scanner.getTokenPos();
+            parseExpected(SyntaxKind.OpenBraceToken);
+            const multiLine = scanner.hasPrecedingLineBreak();
+            const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
+            return finishNode(factory.createAssertClause(elements, multiLine), pos);
         }
 
         function tokenAfterImportDefinitelyProducesImportDeclaration() {
@@ -7111,9 +7125,8 @@ namespace ts {
                     moduleSpecifier = parseModuleSpecifier();
                 }
             }
-            if (token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
-                const posAfterSpecifier = getNodePos();
-                assertClause = parseAssertClause(posAfterSpecifier);
+            if (moduleSpecifier && token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
+                assertClause = parseAssertClause();
             }
             parseSemicolon();
             setAwaitContext(savedAwaitContext);

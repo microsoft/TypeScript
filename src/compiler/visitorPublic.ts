@@ -946,13 +946,14 @@ namespace ts {
 
             case SyntaxKind.AssertClause:
                 return factory.updateAssertClause(<AssertClause>node,
-                    nodesVisitor((node as AssertClause).elements, visitor, isAssertEntry));
+                    nodesVisitor((node as AssertClause).elements, visitor, isAssertEntry),
+                    (node as AssertClause).multiLine);
 
             case SyntaxKind.AssertEntry:
                 return factory.updateAssertEntry(<AssertEntry>node,
                     nodeVisitor((<AssertEntry>node).name, visitor, isAssertionKey),
                     nodeVisitor((<AssertEntry>node).value, visitor, isStringLiteral));
-            
+
             case SyntaxKind.NamespaceImport:
                 return factory.updateNamespaceImport(<NamespaceImport>node,
                     nodeVisitor((<NamespaceImport>node).name, visitor, isIdentifier));
