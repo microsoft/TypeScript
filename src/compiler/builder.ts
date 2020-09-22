@@ -493,10 +493,10 @@ namespace ts {
         return !state.semanticDiagnosticsFromOldState.size;
     }
 
-    function isChangedSignagure(state: BuilderProgramState, path: Path) {
+    function isChangedSignature(state: BuilderProgramState, path: Path) {
         const newSignature = Debug.checkDefined(state.currentAffectedFilesSignatures).get(path);
-        const oldSignagure = Debug.checkDefined(state.fileInfos.get(path)).signature;
-        return newSignature !== oldSignagure;
+        const oldSignature = Debug.checkDefined(state.fileInfos.get(path)).signature;
+        return newSignature !== oldSignature;
     }
 
     /**
@@ -509,7 +509,7 @@ namespace ts {
             return;
         }
 
-        if (!isChangedSignagure(state, affectedFile.resolvedPath)) return;
+        if (!isChangedSignature(state, affectedFile.resolvedPath)) return;
 
         // Since isolated modules dont change js files, files affected by change in signature is itself
         // But we need to cleanup semantic diagnostics and queue dts emit for affected files
@@ -522,7 +522,7 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     seenFileNamesMap.set(currentPath, true);
                     const result = fn(state, currentPath);
-                    if (result && isChangedSignagure(state, currentPath)) {
+                    if (result && isChangedSignature(state, currentPath)) {
                         const currentSourceFile = Debug.checkDefined(state.program).getSourceFileByPath(currentPath)!;
                         queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
