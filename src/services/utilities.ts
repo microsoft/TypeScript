@@ -1795,7 +1795,8 @@ namespace ts {
             defaultImport || namedImports
                 ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
                 : undefined,
-            typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
+            typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
+            /*assertClause*/ undefined);
     }
 
     export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {

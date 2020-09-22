@@ -1211,7 +1211,7 @@ namespace ts {
         exportClause: NamedExportBindings | undefined,
         moduleSpecifier: Expression | undefined,
         isTypeOnly: boolean) {
-        return factory.updateExportDeclaration(node, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
+        return factory.updateExportDeclaration(node, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, /*assertClause*/ undefined);
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. */

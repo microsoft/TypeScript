@@ -32,12 +32,14 @@ namespace ts.codefix {
             importDeclaration.decorators,
             importDeclaration.modifiers,
             factory.updateImportClause(importClause, importClause.isTypeOnly, importClause.name, /*namedBindings*/ undefined),
-            importDeclaration.moduleSpecifier));
+            importDeclaration.moduleSpecifier,
+            importDeclaration.assertClause));
 
         changes.insertNodeAfter(context.sourceFile, importDeclaration, factory.createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
-            importDeclaration.moduleSpecifier));
+            importDeclaration.moduleSpecifier,
+            importDeclaration.assertClause));
     }
 }
