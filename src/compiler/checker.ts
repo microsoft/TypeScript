@@ -2439,10 +2439,11 @@ namespace ts {
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
-            if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
-                const name = (getLeftmostAccessExpression(node.initializer.expression) as CallExpression).arguments[0] as StringLiteral;
-                return isIdentifier(node.initializer.name)
-                    ? resolveSymbol(getPropertyOfType(resolveExternalModuleTypeByLiteral(name), node.initializer.name.escapedText))
+            const commonJSPropertyAccess = getCommonJSPropertyAccess(node)
+            if (commonJSPropertyAccess) {
+                const name = (getLeftmostAccessExpression(commonJSPropertyAccess.expression) as CallExpression).arguments[0] as StringLiteral;
+                return isIdentifier(commonJSPropertyAccess.name)
+                    ? resolveSymbol(getPropertyOfType(resolveExternalModuleTypeByLiteral(name), commonJSPropertyAccess.name.escapedText))
                     : undefined;
             }
             if (isVariableDeclaration(node) || node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
@@ -2637,15 +2638,17 @@ namespace ts {
             return result;
         }
 
-        function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
+        function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias: boolean): Symbol | undefined {
             if (symbol.flags & SymbolFlags.Module) {
-                const name = specifier.propertyName ?? specifier.name;
+                const name = !isPropertyAccessExpression(specifier) && specifier.propertyName || specifier.name;
                 if (!isIdentifier(name)) {
                     return undefined;
                 }
                 const exportSymbol = getExportsOfSymbol(symbol).get(name.escapedText);
                 const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
-                markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
+                if (!isPropertyAccessExpression(specifier)) {
+                    markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
+                }
                 return resolved;
             }
         }
@@ -2656,6 +2659,12 @@ namespace ts {
                 if (typeAnnotation) {
                     return resolveSymbol(getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name));
                 }
+            }
+        }
+
+        function getCommonJSPropertyAccess(node: Node) {
+            if(isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
+                return node.initializer;
             }
         }
 
@@ -2682,10 +2691,14 @@ namespace ts {
                     else {
                         symbolFromVariable = getPropertyOfVariable(targetSymbol, name.escapedText);
                     }
-
                     // if symbolFromVariable is export - get its final target
                     symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
-                    let symbolFromModule = getExportOfModule(targetSymbol, specifier, dontResolveAlias);
+
+                    const commonJSPropertyAccess = getCommonJSPropertyAccess(node)
+                    let symbolFromModule = getExportOfModule(targetSymbol, commonJSPropertyAccess || specifier, dontResolveAlias);
+                    if (commonJSPropertyAccess && symbolFromModule) {
+                        symbolFromModule = getPropertyOfType(getTypeOfSymbol(symbolFromModule), name.escapedText);
+                    }
                     if (symbolFromModule === undefined && name.escapedText === InternalSymbolName.Default) {
                         const file = find(moduleSymbol.declarations, isSourceFile);
                         if (canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias)) {
