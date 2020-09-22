@@ -39864,6 +39864,22 @@ namespace ts {
             return false;
         }
 
+        function checkGrammarImportCallArguments(node: ImportCall, nodeArguments: NodeArray<Expression>): boolean {
+            const target = getEmitScriptTarget(compilerOptions);
+            if (target < ScriptTarget.ESNext) {
+                if (nodeArguments.length !== 1) {
+                    return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+                }
+                checkGrammarForDisallowedTrailingComma(nodeArguments);
+            }
+            else {
+                if (nodeArguments.length > 2) {
+                    return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_a_specifier_as_arguments_and_an_optional_assertion);
+                }
+            }
+            return false
+        }
+
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
                 return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system_or_umd);
@@ -39874,10 +39890,9 @@ namespace ts {
             }
 
             const nodeArguments = node.arguments;
-            if (nodeArguments.length !== 1) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            if (checkGrammarImportCallArguments(node, nodeArguments)) {
+                return true;
             }
-            checkGrammarForDisallowedTrailingComma(nodeArguments);
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
             if (isSpreadElement(nodeArguments[0])) {

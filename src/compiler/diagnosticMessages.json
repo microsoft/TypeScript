@@ -1196,6 +1196,10 @@
         "category": "Error",
         "code": 1391
     },
+    "Dynamic import must have a specifier as arguments and an optional assertion": {
+        "category": "Error",
+        "code": 1392
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
