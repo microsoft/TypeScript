@@ -2439,7 +2439,7 @@ namespace ts {
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
-            const commonJSPropertyAccess = getCommonJSPropertyAccess(node)
+            const commonJSPropertyAccess = getCommonJSPropertyAccess(node);
             if (commonJSPropertyAccess) {
                 const name = (getLeftmostAccessExpression(commonJSPropertyAccess.expression) as CallExpression).arguments[0] as StringLiteral;
                 return isIdentifier(commonJSPropertyAccess.name)
@@ -2694,7 +2694,7 @@ namespace ts {
                     // if symbolFromVariable is export - get its final target
                     symbolFromVariable = resolveSymbol(symbolFromVariable, dontResolveAlias);
 
-                    const commonJSPropertyAccess = getCommonJSPropertyAccess(node)
+                    const commonJSPropertyAccess = getCommonJSPropertyAccess(node);
                     let symbolFromModule = getExportOfModule(targetSymbol, commonJSPropertyAccess || specifier, dontResolveAlias);
                     if (commonJSPropertyAccess && symbolFromModule) {
                         symbolFromModule = getPropertyOfType(getTypeOfSymbol(symbolFromModule), name.escapedText);
