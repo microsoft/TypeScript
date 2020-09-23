@@ -2,15 +2,17 @@ tests/cases/compiler/missingTypeArguments1.ts(4,15): error TS2314: Generic type 
 tests/cases/compiler/missingTypeArguments1.ts(9,26): error TS2314: Generic type 'X2<T>' requires 1 type argument(s).
 tests/cases/compiler/missingTypeArguments1.ts(14,9): error TS2314: Generic type 'X3<T>' requires 1 type argument(s).
 tests/cases/compiler/missingTypeArguments1.ts(19,11): error TS2314: Generic type 'X4<T>' requires 1 type argument(s).
+tests/cases/compiler/missingTypeArguments1.ts(19,11): error TS2801: Proper Polymorphism type parameter T could not accept Generic type X4 
 tests/cases/compiler/missingTypeArguments1.ts(24,9): error TS2314: Generic type 'X5<T>' requires 1 type argument(s).
 tests/cases/compiler/missingTypeArguments1.ts(29,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/missingTypeArguments1.ts(34,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/missingTypeArguments1.ts(39,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/missingTypeArguments1.ts(44,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/missingTypeArguments1.ts(44,11): error TS2801: Proper Polymorphism type parameter T could not accept Generic type Y 
 tests/cases/compiler/missingTypeArguments1.ts(49,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/missingTypeArguments1.ts (10 errors) ====
+==== tests/cases/compiler/missingTypeArguments1.ts (12 errors) ====
     interface I<T> { }
     class Y<T> {}
     class X<T> {
@@ -38,6 +40,8 @@ tests/cases/compiler/missingTypeArguments1.ts(49,9): error TS2314: Generic type 
         p4: I<X4>
               ~~
 !!! error TS2314: Generic type 'X4<T>' requires 1 type argument(s).
+              ~~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type X4 
     }
     var a4: X4<number>;
     
@@ -73,6 +77,8 @@ tests/cases/compiler/missingTypeArguments1.ts(49,9): error TS2314: Generic type 
         p9: I<Y>
               ~
 !!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+              ~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type Y 
     }
     var a9: X9<number>;
     

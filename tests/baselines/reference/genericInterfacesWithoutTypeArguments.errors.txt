@@ -1,8 +1,9 @@
 tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(3,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(4,10): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(4,10): error TS2801: Proper Polymorphism type parameter T could not accept Generic type I 
 
 
-==== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts (2 errors) ====
+==== tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts (3 errors) ====
     interface I<T> { }
     class C<T> { }
     var i: I;
@@ -11,4 +12,6 @@ tests/cases/compiler/genericInterfacesWithoutTypeArguments.ts(4,10): error TS231
     var c: C<I>;
              ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+             ~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type I 
     

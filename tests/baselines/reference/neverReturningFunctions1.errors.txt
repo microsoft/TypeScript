@@ -21,9 +21,10 @@ tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(139,9): error TS
 tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(141,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(148,9): error TS7027: Unreachable code detected.
 tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(204,74): error TS2801: Proper Polymorphism type parameter T could not accept Generic type Component 
 
 
-==== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts (23 errors) ====
+==== tests/cases/conformance/controlFlow/neverReturningFunctions1.ts (24 errors) ====
     function fail(message?: string): never {
         throw new Error(message);
     }
@@ -274,6 +275,8 @@ tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS
     ): ComponentConstructor<T>;
     
     export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
+                                                                             ~~~~~~~~~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type Component 
     
     const Component = registerComponent('test-component', {
     	schema: {

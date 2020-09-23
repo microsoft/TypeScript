@@ -19,25 +19,29 @@ tests/cases/compiler/returnTypeTypeArguments.ts(52,15): error TS2314: Generic ty
 tests/cases/compiler/returnTypeTypeArguments.ts(53,26): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(54,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(55,11): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(55,11): error TS2801: Proper Polymorphism type parameter T could not accept Generic type X 
 tests/cases/compiler/returnTypeTypeArguments.ts(56,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(57,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(58,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(59,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(60,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(60,11): error TS2801: Proper Polymorphism type parameter T could not accept Generic type Y 
 tests/cases/compiler/returnTypeTypeArguments.ts(61,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(65,15): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(66,26): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(67,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(68,11): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(68,11): error TS2801: Proper Polymorphism type parameter T could not accept Generic type X 
 tests/cases/compiler/returnTypeTypeArguments.ts(69,9): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(70,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(71,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(72,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 tests/cases/compiler/returnTypeTypeArguments.ts(73,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+tests/cases/compiler/returnTypeTypeArguments.ts(73,11): error TS2801: Proper Polymorphism type parameter T could not accept Generic type Y 
 tests/cases/compiler/returnTypeTypeArguments.ts(74,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/returnTypeTypeArguments.ts (37 errors) ====
+==== tests/cases/compiler/returnTypeTypeArguments.ts (41 errors) ====
     class One<T>{
         value: T;
     }
@@ -135,6 +139,8 @@ tests/cases/compiler/returnTypeTypeArguments.ts(74,9): error TS2314: Generic typ
         p4: I<X>
               ~
 !!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+              ~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type X 
         p5: X
             ~
 !!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
@@ -150,6 +156,8 @@ tests/cases/compiler/returnTypeTypeArguments.ts(74,9): error TS2314: Generic typ
         p9: I<Y>
               ~
 !!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+              ~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type Y 
         pa: Y
             ~
 !!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
@@ -168,6 +176,8 @@ tests/cases/compiler/returnTypeTypeArguments.ts(74,9): error TS2314: Generic typ
         p4: I<X>
               ~
 !!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+              ~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type X 
         p5: X
             ~
 !!! error TS2314: Generic type 'X<T>' requires 1 type argument(s).
@@ -183,6 +193,8 @@ tests/cases/compiler/returnTypeTypeArguments.ts(74,9): error TS2314: Generic typ
         p9: I<Y>
               ~
 !!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+              ~
+!!! error TS2801: Proper Polymorphism type parameter T could not accept Generic type Y 
         pa: Y
             ~
 !!! error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
