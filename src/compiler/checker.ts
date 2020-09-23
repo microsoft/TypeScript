@@ -12195,13 +12195,12 @@ namespace ts {
 
             // or this one? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias
             function getTypeParametersFromTypeConstructorSymbol(symbol: Symbol) {
+                const type = getDeclaredTypeOfSymbol(getMergedSymbol(symbol));  // this has work even in TypeAlias condition -- it give typeParameters value if there is not.
                 if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
-                    const typeParameters = type.localTypeParameters;
+                    const typeParameters = (<InterfaceType>type).localTypeParameters;
                     return typeParameters;
                 }
                 if (symbol.flags & SymbolFlags.TypeAlias) {
-                    // const type = getDeclaredTypeOfSymbol(symbol);
                     const links = getSymbolLinks(symbol);
                     const typeParameters = links.typeParameters;
                     return typeParameters;
