@@ -4902,6 +4902,9 @@
       <Item ItemId=";Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise_2794" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[需要 {0} 引數，但取得 {1}。您是否忘記將型別引數中的 'void' 包含到 'Promise'?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
