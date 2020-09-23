@@ -9880,7 +9880,7 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
     }
-    class Session implements EventSender {
+    class Session<MessageType = string> implements EventSender {
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
@@ -10038,7 +10038,9 @@ declare namespace ts.server {
         private resetCurrentRequest;
         executeWithRequestId<T>(requestId: number, f: () => T): T;
         executeCommand(request: protocol.Request): HandlerResponse;
-        onMessage(message: string): void;
+        onMessage(message: MessageType): void;
+        protected parseMessage(message: MessageType): protocol.Request;
+        protected toStringMessage(message: MessageType): string;
         private getFormatOptions;
         private getPreferences;
         private getHostFormatOptions;

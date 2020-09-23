@@ -730,7 +730,6 @@ namespace ts.server {
                 this.syntaxOnly = false;
             }
 
-            Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }

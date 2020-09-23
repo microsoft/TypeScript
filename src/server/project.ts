@@ -631,7 +631,7 @@ namespace ts.server {
             }
             updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
-            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
+            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, maybeBind(this.projectService.host, this.projectService.host.createHash)),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
         }
 
@@ -654,7 +654,10 @@ namespace ts.server {
                     const dtsFiles = outputFiles.filter(f => fileExtensionIs(f.name, Extension.Dts));
                     if (dtsFiles.length === 1) {
                         const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
-                        BuilderState.updateSignatureOfFile(this.builderState, this.projectService.host.createHash!(dtsFiles[0].text), sourceFile.resolvedPath);
+                        const signature = this.projectService.host.createHash ?
+                            this.projectService.host.createHash(dtsFiles[0].text) :
+                            generateDjb2Hash(dtsFiles[0].text);
+                        BuilderState.updateSignatureOfFile(this.builderState, signature, sourceFile.resolvedPath);
                     }
                 }
             }

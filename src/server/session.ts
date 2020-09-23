@@ -679,7 +679,7 @@ namespace ts.server {
         typesMapLocation?: string;
     }
 
-    export class Session<MessageType extends {} = string> implements EventSender {
+    export class Session<MessageType = string> implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -2905,7 +2905,7 @@ namespace ts.server {
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`request:${indent(message.toString())}`);
+                    this.logger.info(`request:${indent(this.toStringMessage(message))}`);
                 }
             }
 
@@ -2915,7 +2915,7 @@ namespace ts.server {
                 request = this.parseMessage(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
-                perfLogger.logStartCommand("" + request.command, message.toString().substring(0, 100));
+                perfLogger.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2945,7 +2945,7 @@ namespace ts.server {
                     return;
                 }
 
-                this.logErrorWorker(err, message.toString(), relevantFile);
+                this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
 
                 this.doOutput(
@@ -2959,6 +2959,10 @@ namespace ts.server {
 
         protected parseMessage(message: MessageType): protocol.Request {
             return <protocol.Request>JSON.parse(message as any as string);
+        }
+
+        protected toStringMessage(message: MessageType): string {
+            return message as any as string;
         }
 
         private getFormatOptions(file: NormalizedPath): FormatCodeSettings {
