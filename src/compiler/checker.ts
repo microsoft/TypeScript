@@ -6896,7 +6896,7 @@ namespace ts {
                     const name = unescapeLeadingUnderscores(symbol.escapedName);
                     const isExportEquals = name === InternalSymbolName.ExportEquals;
                     const isDefault = name === InternalSymbolName.Default;
-                    const isExportAssignment = isExportEquals || isDefault;
+                    const isExportAssignmentCompatibleSymbolName = isExportEquals || isDefault;
                     // synthesize export = ref
                     // ref should refer to either be a locally scoped symbol which we need to emit, or
                     // a reference to another namespace/module which we may need to emit an `import` statement for
@@ -6908,8 +6908,8 @@ namespace ts {
                         // In case `target` refers to a namespace member, look at the declaration and serialize the leftmost symbol in it
                         // eg, `namespace A { export class B {} }; exports = A.B;`
                         // Technically, this is all that's required in the case where the assignment is an entity name expression
-                        const expr = isExportAssignment ? getExportAssignmentExpression(aliasDecl as ExportAssignment | BinaryExpression) : getPropertyAssignmentAliasLikeExpression(aliasDecl as ShorthandPropertyAssignment | PropertyAssignment | PropertyAccessExpression);
-                        const first = isEntityNameExpression(expr) ? getFirstNonModuleExportsIdentifier(expr) : undefined;
+                        const expr = aliasDecl && ((isExportAssignment(aliasDecl) || isBinaryExpression(aliasDecl)) ? getExportAssignmentExpression(aliasDecl) : getPropertyAssignmentAliasLikeExpression(aliasDecl as ShorthandPropertyAssignment | PropertyAssignment | PropertyAccessExpression));
+                        const first = expr && isEntityNameExpression(expr) ? getFirstNonModuleExportsIdentifier(expr) : undefined;
                         const referenced = first && resolveEntityName(first, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, enclosingDeclaration);
                         if (referenced || target) {
                             includePrivateSymbol(referenced || target);
@@ -6922,7 +6922,7 @@ namespace ts {
                         // into the containing scope anyway, so we want to skip the visibility checks.
                         const oldTrack = context.tracker.trackSymbol;
                         context.tracker.trackSymbol = noop;
-                        if (isExportAssignment) {
+                        if (isExportAssignmentCompatibleSymbolName) {
                             results.push(factory.createExportAssignment(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
@@ -6931,11 +6931,11 @@ namespace ts {
                             ));
                         }
                         else {
-                            if (first === expr) {
+                            if (first === expr && first) {
                                 // serialize as `export {target as name}`
                                 serializeExportSpecifier(name, idText(first));
                             }
-                            else if (isClassExpression(expr)) {
+                            else if (expr && isClassExpression(expr)) {
                                 serializeExportSpecifier(name, getInternalSymbolName(target, symbolName(target)));
                             }
                             else {
@@ -6961,7 +6961,7 @@ namespace ts {
                         const typeToSerialize = getWidenedType(getTypeOfSymbol(getMergedSymbol(symbol)));
                         if (isTypeRepresentableAsFunctionNamespaceMerge(typeToSerialize, symbol)) {
                             // If there are no index signatures and `typeToSerialize` is an object type, emit as a namespace instead of a const
-                            serializeAsFunctionNamespaceMerge(typeToSerialize, symbol, varName, isExportAssignment ? ModifierFlags.None : ModifierFlags.Export);
+                            serializeAsFunctionNamespaceMerge(typeToSerialize, symbol, varName, isExportAssignmentCompatibleSymbolName ? ModifierFlags.None : ModifierFlags.Export);
                         }
                         else {
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
@@ -6974,7 +6974,7 @@ namespace ts {
                                 : name === varName ? ModifierFlags.Export
                                 : ModifierFlags.None);
                         }
-                        if (isExportAssignment) {
+                        if (isExportAssignmentCompatibleSymbolName) {
                             results.push(factory.createExportAssignment(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
