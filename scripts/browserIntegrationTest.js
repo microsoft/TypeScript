@@ -1,13 +1,15 @@
-const playwright = require("playwright");
+// @ts-check
 const chalk = require("chalk");
 const { join } = require("path");
 const { readFileSync } = require("fs");
+const { spawn } = require("child_process");
 
 // Turning this on will leave the Chromium browser open, giving you the
 // chance to open up the web inspector.
 const debugging = false;
 
 (async () => {
+  const playwright = await getPlaywright();
   for (const browserType of ["chromium", "firefox", "webkit"]) {
     const browser = await playwright[browserType].launch({ headless: !debugging });
     const context = await browser.newContext();
@@ -37,3 +39,34 @@ const debugging = false;
     }
   }
 })();
+
+process.on("unhandledRejection", (/** @type {any}*/ err) => {
+    if (err) {
+        console.error(err.stack || err.message);
+    }
+    process.exit(1);
+});
+
+function getPlaywright({
+    version = "0.12.1",
+    stdio = true
+} = {}) {
+    return new Promise((resolve, reject) => {
+        try {
+            // eslint-disable-next-line import/no-extraneous-dependencies
+            resolve(require("playwright"));
+        }
+        catch (_) {
+            spawn("npm", `install --no-save --no-package-lock playwright@${version}`.split(" "), { stdio: stdio ? "inherit" : "ignore" })
+            .on("exit", code => {
+                if (code === 0) {
+                    // eslint-disable-next-line import/no-extraneous-dependencies
+                    resolve(require("playwright"));
+                }
+                else {
+                    reject(new Error(`'npm install' exited with code ${code}`));
+                }
+            });
+        }
+    });
+}
