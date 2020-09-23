@@ -12918,13 +12918,39 @@ namespace ts {
             return false;
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
-            const flags = type.flags;
-            if (flags & TypeFlags.Union) {
-                return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
-            }
-            // We ignore 'never' types in unions
-            if (!(flags & TypeFlags.Never)) {
+        // Construct a type set from the given types.  Type ID order is applied, duplicates are removed,
+        // and nested types of the given kind are flattened into the set.
+        function makeUnion(types: readonly Type[]): [ Type[], TypeFlags ] {
+            tracing.begin(tracing.Phase.Check, "makeUnion", { typeIds: types.map(t => t.id) });
+
+            const typeSet: Type[] = [];
+            let includes: TypeFlags = 0;
+
+            const seen = new Set<number>();
+
+            const stack: Type[] = types.slice();
+
+            while(stack.length) {
+                const type = stack.pop()!;
+                if (seen.has(type.id)) {
+                    continue;
+                }
+                seen.add(type.id);
+
+                if (type.flags & TypeFlags.Union) {
+                    for (const member of (<UnionType>type).types) {
+                        stack.push(member);
+                    }
+                    continue;
+                }
+
+                const flags = type.flags;
+
+                // We ignore 'never' types in unions
+                if (flags & TypeFlags.Never) {
+                    continue;
+                }
+
                 includes |= flags & TypeFlags.IncludesMask;
                 if (flags & TypeFlags.StructuredOrInstantiable) includes |= TypeFlags.IncludesStructuredOrInstantiable;
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
@@ -12932,23 +12958,15 @@ namespace ts {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
                 }
                 else {
-                    const len = typeSet.length;
-                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                    if (index < 0) {
-                        typeSet.splice(~index, 0, type);
-                    }
+                    typeSet.push(type);
                 }
             }
-            return includes;
-        }
 
-        // Add the given types to the given type set. Order is preserved, duplicates are removed,
-        // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
-            for (const type of types) {
-                includes = addTypeToUnion(typeSet, includes, type);
-            }
-            return includes;
+            typeSet.sort((t1, t2) => t1.id - t2.id);
+
+            tracing.end();
+
+            return [typeSet, includes];
         }
 
         function isSetOfLiteralsFromSameEnum(types: readonly Type[]): boolean {
@@ -13037,8 +13055,7 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const typeSet: Type[] = [];
-            const includes = addTypesToUnion(typeSet, 0, types);
+            const [typeSet, includes] = makeUnion(types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
