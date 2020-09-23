@@ -1,5 +1,6 @@
-// @target: esnext, es2020
 // @declaration: true
+// @target: es2015
+// @module: es2015, commonjs, esnext
 
 // @filename: 0.ts
 export const a = 1;

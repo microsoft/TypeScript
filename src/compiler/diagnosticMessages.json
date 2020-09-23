@@ -3055,7 +3055,7 @@
         "category": "Error",
         "code": 2795
     },
-    "Import assertions are not available when targeting lower than esnext.": {
+    "Import assertions are only supported when the '--module' flag is set to 'esnext'.": {
         "category": "Error",
         "code": 2796
     },

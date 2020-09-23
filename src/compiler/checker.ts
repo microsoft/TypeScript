@@ -35932,9 +35932,8 @@ namespace ts {
         }
 
         function checkGrammarImportAssertion(declaration: ImportDeclaration | ExportDeclaration) {
-            const target = getEmitScriptTarget(compilerOptions);
-            if (target < ScriptTarget.ESNext && declaration.assertClause) {
-                grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_not_available_when_targeting_lower_than_esnext);
+            if (declaration.assertClause && moduleKind !== ModuleKind.ESNext) {
+                grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_flag_is_set_to_esnext);
             }
         }
 
@@ -39874,8 +39873,7 @@ namespace ts {
         }
 
         function checkGrammarImportCallArguments(node: ImportCall, nodeArguments: NodeArray<Expression>): boolean {
-            const target = getEmitScriptTarget(compilerOptions);
-            if (target < ScriptTarget.ESNext) {
+            if (moduleKind !== ModuleKind.ESNext) {
                 if (nodeArguments.length !== 1) {
                     return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
                 }
