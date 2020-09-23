@@ -17,8 +17,8 @@ async function produceLKG() {
     await copyTypesMap();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
-    await writeGitAttributes();
     await buildProtocol();
+    await writeGitAttributes();
 }
 
 async function copyLibFiles() {
