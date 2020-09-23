@@ -15,10 +15,10 @@ async function produceLKG() {
     await copyLibFiles();
     await copyLocalizedDiagnostics();
     await copyTypesMap();
-    await buildProtocol();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
     await writeGitAttributes();
+    await buildProtocol();
 }
 
 async function copyLibFiles() {
