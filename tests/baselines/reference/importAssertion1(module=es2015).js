@@ -64,7 +64,7 @@ const g = import('./0', {}, {});
 export declare const a = 1;
 export declare const b = 2;
 //// [1.d.ts]
-import './0' assert { type: "json" };
+import './0';
 //// [2.d.ts]
 export {};
 //// [3.d.ts]

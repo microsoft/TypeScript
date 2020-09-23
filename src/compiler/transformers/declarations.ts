@@ -703,7 +703,7 @@ namespace ts {
                     decl.modifiers,
                     decl.importClause,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    decl.assertClause
+                    /*assertClause*/ undefined
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -715,7 +715,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), decl.assertClause);
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined);
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -725,7 +725,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), decl.assertClause) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -741,7 +741,7 @@ namespace ts {
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    decl.assertClause
+                    /*assertClause*/ undefined
                 );
             }
             // Augmentation of export depends on import
@@ -752,7 +752,7 @@ namespace ts {
                     decl.modifiers,
                     /*importClause*/ undefined,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
-                    decl.assertClause
+                    /*assertClause*/ undefined
                 );
             }
             // Nothing visible
@@ -1087,7 +1087,7 @@ namespace ts {
                         input.isTypeOnly,
                         input.exportClause,
                         rewriteModuleSpecifier(input, input.moduleSpecifier),
-                        input.assertClause
+                        /*assertClause*/ undefined
                     );
                 }
                 case SyntaxKind.ExportAssignment: {
