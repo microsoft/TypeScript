@@ -3039,10 +3039,7 @@
         "category": "Error",
         "code": 2792
     },
-    "Template literal type argument '{0}' is not literal type or a generic type.": {
-        "category": "Error",
-        "code": 2793
-    },
+
     "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
         "category": "Error",
         "code": 2794

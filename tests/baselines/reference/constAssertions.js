@@ -303,7 +303,7 @@ declare function ff2<T extends string, U extends string>(x: T, y: U): `${T}-${U}
 declare const ts1: "foo-bar";
 declare const ts2: "foo-1" | "foo-0";
 declare const ts3: "top-left" | "top-right" | "bottom-left" | "bottom-right";
-declare function ff3(x: 'foo' | 'bar', y: object): string;
+declare function ff3(x: 'foo' | 'bar', y: object): `foo${string}` | `bar${string}`;
 declare type Action = "verify" | "write";
 declare type ContentMatch = "match" | "nonMatch";
 declare type Outcome = `${Action}_${ContentMatch}`;

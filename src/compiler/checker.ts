@@ -13569,7 +13569,7 @@ namespace ts {
                         if (!addSpans((<TemplateLiteralType>t).texts, (<TemplateLiteralType>t).types)) return false;
                         text += texts[i + 1];
                     }
-                    else if (isGenericIndexType(t) || isPatternLiteralTypeHoleType(t)) {
+                    else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                         newTypes.push(t);
                         newTexts.push(text);
                         text = texts[i + 1];
@@ -13848,12 +13848,12 @@ namespace ts {
                 accessNode;
         }
 
-        function isPatternLiteralTypeHoleType(type: Type) {
+        function isPatternLiteralPlaceholderType(type: Type) {
             return templateConstraintType.types.indexOf(type) !== -1 || !!(type.flags & TypeFlags.Any);
         }
 
         function isPatternLiteralType(type: Type) {
-            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralTypeHoleType);
+            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
         }
 
         function isGenericObjectType(type: Type): boolean {
@@ -17389,7 +17389,7 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
                     if (isPatternLiteralType(target)) {
-                        // match all non-`string` segemnts
+                        // match all non-`string` segments
                         const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
                         if (result && every(result, (r, i) => isStringLiteralTypeValueParsableAsType(r, (target as TemplateLiteralType).types[i]))) {
                             return Ternary.True;
@@ -31771,9 +31771,6 @@ namespace ts {
                 checkSourceElement(span.type);
                 const type = getTypeFromTypeNode(span.type);
                 checkTypeAssignableTo(type, templateConstraintType, span.type);
-                if (!everyType(type, t => !!(t.flags & TypeFlags.Literal) || isTypeAssignableTo(t, templateConstraintType))) {
-                    error(span.type, Diagnostics.Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
-                }
             }
             getTypeFromTypeNode(node);
         }
