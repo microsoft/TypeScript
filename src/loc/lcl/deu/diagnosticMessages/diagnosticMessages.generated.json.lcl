@@ -1413,6 +1413,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_void_to_Promise_resolved_without_a_value_95143" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["Void" zu ohne Wert aufgelöstem Promise hinzufügen]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_void_to_all_Promises_resolved_without_a_value_95144" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["Void" allen ohne Wert aufgelösten Promises hinzufügen]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
@@ -3447,6 +3465,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_0_to_1_in_0_95003" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert '{0}' to '{1} in {0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" in "{1} in {0}" konvertieren]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_0_to_mapped_object_type_95055" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
@@ -3524,6 +3551,15 @@
           <Val><![CDATA[Convert all to default imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Alle in Standardimporte konvertieren]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_type_literals_to_mapped_type_95021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all type literals to mapped type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Alle Typliterale in einen zugeordneten Typ konvertieren]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4479,8 +4515,8 @@
       <Item ItemId=";Dynamic_import_cannot_have_type_arguments_1326" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Dynamic import cannot have type arguments.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Der dynamische Import kann nicht über Typargumente verfügen.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der dynamische Import kann keine Typargumente aufweisen.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Dynamic import cannot have type arguments]]></Val>
@@ -4856,6 +4892,15 @@
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[{0} Argumente wurden erwartet, empfangen wurden aber {1}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise_2794" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Es wurden {0} Argumente erwartet, aber {1} erhalten. Sollte "void" in Ihr Typargument in "Promise" eingeschlossen werden?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5628,6 +5673,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Generates_an_event_trace_and_a_list_of_types_6237" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generates an event trace and a list of types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Generiert eine Ereignisablaufverfolgung und eine Liste von Typen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Generates_corresponding_d_ts_file_6002" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates corresponding '.d.ts' file.]]></Val>
@@ -6041,6 +6095,15 @@
           <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Importierte Module mit der Erweiterung "JSON" einschließen]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Include_undefined_in_index_signature_results_6800" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Include 'undefined' in index signature results]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["Nicht definiert" in Indexsignaturergebnisse einbeziehen]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7257,6 +7320,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash_5090" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nicht relative Pfade sind nur zulässig, wenn "baseUrl" festgelegt wurde. Fehlt am Anfang die Zeichenfolge "./"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Non_simple_parameter_declared_here_1348" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Non-simple parameter declared here.]]></Val>
@@ -7575,6 +7647,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Option_0_cannot_be_specified_when_option_jsx_is_1_5089" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option '{0}' cannot be specified when option 'jsx' is '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Option "{0}" kann nicht angegeben werden, wenn die Option "jsx" den Wert "{1}" aufweist.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Option_0_cannot_be_specified_when_option_target_is_ES3_5048" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' cannot be specified when option 'target' is 'ES3'.]]></Val>
@@ -7643,15 +7724,6 @@
           <Val><![CDATA[Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Die Option "isolatedModules" kann nur verwendet werden, wenn entweder die Option "--module" angegeben ist oder die Option "target" den Wert "ES2015" oder höher aufweist.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Option_paths_cannot_be_used_without_specifying_baseUrl_option_5060" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option 'paths' cannot be used without specifying '--baseUrl' option.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die "path"-Option kann nicht ohne Angabe der "-baseUrl"-Option angegeben werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8747,6 +8819,15 @@
           <Val><![CDATA[Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Bieten Sie vollständige Unterstützung für Iterablen in "for-of", Verteilung und Destrukturierung mit dem Ziel "ES5" oder "ES3".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Provides_a_root_package_name_when_using_outFile_with_declarations_1390" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Provides a root package name when using outFile with declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Stellt einen Stammpaketnamen bereit, wenn "outFile" mit Deklarationen verwendet wird.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9897,6 +9978,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react_6238" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geben Sie den Modulspezifizierer an, aus dem die Factoryfunktionen "jsx" und "jsxs" importiert werden sollen, z. B. "react".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Specify_the_root_directory_of_input_files_Use_to_control_the_output_directory_structure_with_outDir_6058" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the root directory of input files. Use to control the output directory structure with --outDir.]]></Val>
@@ -10188,6 +10278,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Typargument "{0}" des Vorlagenliterals ist weder ein Literaltyp noch ein generischer Typ.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_0_modifier_can_only_be_used_in_TypeScript_files_8009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' modifier can only be used in TypeScript files.]]></Val>
@@ -10265,6 +10364,15 @@
           <Val><![CDATA[The body of an 'if' statement cannot be the empty statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Der Text einer "if"-Anweisung kann keine leere Anweisung sein.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_de_1391" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Option "bundledPackageName" muss angegeben werden, wenn "outFile" und die Knotenmodulauflösung mit der Deklarationsausgabe verwendet werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10430,6 +10538,15 @@
           <Val><![CDATA[The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Der abgeleitete Typ von "{0}" verweist auf einen Typ "{1}", auf den nicht zugegriffen werden kann. Eine Typanmerkung ist erforderlich.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_ty_7056" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der abgeleitete Typ dieses Knotens überschreitet die maximale Länge, die vom Compiler serialisiert wird. Eine explizite Typanmerkung ist erforderlich.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

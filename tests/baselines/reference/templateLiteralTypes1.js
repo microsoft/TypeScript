@@ -16,16 +16,22 @@ type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 
-// Casing modifiers
+// Nested template literal type normalization
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+type TL1<T extends string> = `a${T}b${T}c`;
+type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
+type TL3 = TL2<'o'>;  // 'axoybxoyc'
+
+// Casing intrinsics
+
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
     let s1: string = name;
     let s2: 'getFoo' | 'getBar' = name;
 }
@@ -42,10 +48,10 @@ function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_$
 
 // String transformations using recursive conditional types
 
-type Join<T extends (string | number | boolean | bigint)[], D extends string> =
+type Join<T extends unknown[], D extends string> =
     T extends [] ? '' :
-    T extends [unknown] ? `${T[0]}` :
-    T extends [unknown, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
+    T extends [string | number | boolean | bigint] ? `${T[0]}` :
+    T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
     string;
 
 type TJ1 = Join<[1, 2, 3, 4], '.'>
@@ -63,14 +69,14 @@ type T23 = MatchPair<'[123]'>;  // unknown
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
 
 type SnakeToCamelCase<S extends string> =
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${lowercase T}` :
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Lowercase<T>}` :
     SnakeToPascalCase<S>;
 
 type SnakeToPascalCase<S extends string> =
     string extends S ? string :
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
     never;
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
@@ -85,12 +91,6 @@ type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer 
 type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
 type T27 = FirstTwoAndRest<'a'>;  // unknown
-
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-
-type TC1 = Capitalize<'foo'>;  // 'Foo'
-type TC2 = Uncapitalize<'Foo'>;  // 'foo'
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
@@ -161,6 +161,10 @@ getPropValue(obj, s);  // unknown
 type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 type S2<S extends string> = S;
 
+// Check that infer T declarations are validated
+
+type TV1 = `${infer X}`;
+
 // Batched single character inferences for lower recursion depth
 
 type Chars<S extends string> =
@@ -171,6 +175,15 @@ type Chars<S extends string> =
     never;
 
 type L1 = Chars<'FooBarBazThisIsALongerString'>;  // ['F', 'o', 'o', 'B', 'a', 'r', ...]
+
+// Infer never when source isn't a literal type that matches the pattern
+
+type Foo<T> = T extends `*${infer S}*` ? S : never;
+
+type TF1 = Foo<any>;      // never
+type TF2 = Foo<string>;   // never
+type TF3 = Foo<'abc'>;    // never
+type TF4 = Foo<'*abc*'>;  // 'abc'
 
 // Cross product unions limited to 100,000 constituents
 
@@ -232,10 +245,13 @@ declare type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
 declare type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 declare type ToString<T extends string | number | boolean | bigint> = `${T}`;
 declare type TS1 = ToString<'abc' | 42 | true | -1234n>;
-declare type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+declare type TL1<T extends string> = `a${T}b${T}c`;
+declare type TL2<U extends string> = TL1<`x${U}y`>;
+declare type TL3 = TL2<'o'>;
+declare type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 declare type TCA1 = Cases<'bar'>;
 declare type TCA2 = Cases<'BAR'>;
-declare function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`): void;
+declare function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`): void;
 declare function fa1<T>(x: T, y: {
     [P in keyof T]: T[P];
 }, z: {
@@ -246,7 +262,7 @@ declare function fa2<T, U extends T, A extends string, B extends A>(x: {
 }, y: {
     [Q in A as `p_${Q}`]: U;
 }): void;
-declare type Join<T extends (string | number | boolean | bigint)[], D extends string> = T extends [] ? '' : T extends [unknown] ? `${T[0]}` : T extends [unknown, ...infer U] ? `${T[0]}${D}${Join<U, D>}` : string;
+declare type Join<T extends unknown[], D extends string> = T extends [] ? '' : T extends [string | number | boolean | bigint] ? `${T[0]}` : T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` : string;
 declare type TJ1 = Join<[1, 2, 3, 4], '.'>;
 declare type TJ2 = Join<['foo', 'bar', 'baz'], '-'>;
 declare type TJ3 = Join<[], '.'>;
@@ -256,8 +272,8 @@ declare type T21 = MatchPair<'[foo,bar]'>;
 declare type T22 = MatchPair<' [1,2]'>;
 declare type T23 = MatchPair<'[123]'>;
 declare type T24 = MatchPair<'[1,2,3,4]'>;
-declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${lowercase T}` : SnakeToPascalCase<S>;
-declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${capitalize `${lowercase T}`}` : never;
+declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Lowercase<T>}` : SnakeToPascalCase<S>;
+declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` : never;
 declare type RR0 = SnakeToPascalCase<'hello_world_foo'>;
 declare type RR1 = SnakeToPascalCase<'FOO_BAR_BAZ'>;
 declare type RR2 = SnakeToCamelCase<'hello_world_foo'>;
@@ -266,10 +282,6 @@ declare type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}
 declare type T25 = FirstTwoAndRest<'abcde'>;
 declare type T26 = FirstTwoAndRest<'ab'>;
 declare type T27 = FirstTwoAndRest<'a'>;
-declare type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-declare type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-declare type TC1 = Capitalize<'foo'>;
-declare type TC2 = Uncapitalize<'Foo'>;
 declare type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 declare type HexColor<S extends string> = S extends `#${infer R1}${infer R2}${infer G1}${infer G2}${infer B1}${infer B2}` ? [
     R1,
@@ -322,8 +334,14 @@ declare const obj: {
 };
 declare type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 declare type S2<S extends string> = S;
+declare type TV1 = `${infer X}`;
 declare type Chars<S extends string> = string extends S ? string[] : S extends `${infer C0}${infer C1}${infer C2}${infer C3}${infer C4}${infer C5}${infer C6}${infer C7}${infer C8}${infer C9}${infer R}` ? [C0, C1, C2, C3, C4, C5, C6, C7, C8, C9, ...Chars<R>] : S extends `${infer C}${infer R}` ? [C, ...Chars<R>] : S extends '' ? [] : never;
 declare type L1 = Chars<'FooBarBazThisIsALongerString'>;
+declare type Foo<T> = T extends `*${infer S}*` ? S : never;
+declare type TF1 = Foo<any>;
+declare type TF2 = Foo<string>;
+declare type TF3 = Foo<'abc'>;
+declare type TF4 = Foo<'*abc*'>;
 declare type A = any;
 declare type U1 = {
     a1: A;

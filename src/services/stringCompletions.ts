@@ -42,7 +42,7 @@ namespace ts.Completions.StringCompletions {
                     name: type.value,
                     kindModifiers: ScriptElementKindModifier.none,
                     kind: ScriptElementKind.string,
-                    sortText: "0",
+                    sortText: SortText.LocationPriority,
                     replacementSpan: getReplacementSpanForContextToken(contextToken)
                 }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };

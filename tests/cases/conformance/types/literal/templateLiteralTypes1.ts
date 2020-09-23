@@ -18,16 +18,22 @@ type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 
-// Casing modifiers
+// Nested template literal type normalization
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+type TL1<T extends string> = `a${T}b${T}c`;
+type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
+type TL3 = TL2<'o'>;  // 'axoybxoyc'
+
+// Casing intrinsics
+
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
     let s1: string = name;
     let s2: 'getFoo' | 'getBar' = name;
 }
@@ -44,10 +50,10 @@ function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_$
 
 // String transformations using recursive conditional types
 
-type Join<T extends (string | number | boolean | bigint)[], D extends string> =
+type Join<T extends unknown[], D extends string> =
     T extends [] ? '' :
-    T extends [unknown] ? `${T[0]}` :
-    T extends [unknown, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
+    T extends [string | number | boolean | bigint] ? `${T[0]}` :
+    T extends [string | number | boolean | bigint, ...infer U] ? `${T[0]}${D}${Join<U, D>}` :
     string;
 
 type TJ1 = Join<[1, 2, 3, 4], '.'>
@@ -65,14 +71,14 @@ type T23 = MatchPair<'[123]'>;  // unknown
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
 
 type SnakeToCamelCase<S extends string> =
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${lowercase T}` :
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Lowercase<T>}` :
     SnakeToPascalCase<S>;
 
 type SnakeToPascalCase<S extends string> =
     string extends S ? string :
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
     never;
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
@@ -87,12 +93,6 @@ type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer 
 type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
 type T27 = FirstTwoAndRest<'a'>;  // unknown
-
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-
-type TC1 = Capitalize<'foo'>;  // 'Foo'
-type TC2 = Uncapitalize<'Foo'>;  // 'foo'
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
@@ -163,6 +163,10 @@ getPropValue(obj, s);  // unknown
 type S1<T> = T extends `foo${infer U}bar` ? S2<U> : never;
 type S2<S extends string> = S;
 
+// Check that infer T declarations are validated
+
+type TV1 = `${infer X}`;
+
 // Batched single character inferences for lower recursion depth
 
 type Chars<S extends string> =
@@ -173,6 +177,15 @@ type Chars<S extends string> =
     never;
 
 type L1 = Chars<'FooBarBazThisIsALongerString'>;  // ['F', 'o', 'o', 'B', 'a', 'r', ...]
+
+// Infer never when source isn't a literal type that matches the pattern
+
+type Foo<T> = T extends `*${infer S}*` ? S : never;
+
+type TF1 = Foo<any>;      // never
+type TF2 = Foo<string>;   // never
+type TF3 = Foo<'abc'>;    // never
+type TF4 = Foo<'*abc*'>;  // 'abc'
 
 // Cross product unions limited to 100,000 constituents
 

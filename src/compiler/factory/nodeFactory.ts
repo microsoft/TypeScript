@@ -1605,9 +1605,8 @@ namespace ts {
         }
 
         // @api
-        function createTemplateLiteralTypeSpan(casing: TemplateCasing, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+        function createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail) {
             const node = createBaseNode<TemplateLiteralTypeSpan>(SyntaxKind.TemplateLiteralTypeSpan);
-            node.casing = casing;
             node.type = type;
             node.literal = literal;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1615,11 +1614,10 @@ namespace ts {
         }
 
         // @api
-        function updateTemplateLiteralTypeSpan(casing: TemplateCasing, node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
-            return node.casing !== casing
-                || node.type !== type
+        function updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail) {
+            return node.type !== type
                 || node.literal !== literal
-                ? update(createTemplateLiteralTypeSpan(casing, type, literal), node)
+                ? update(createTemplateLiteralTypeSpan(type, literal), node)
                 : node;
         }
 

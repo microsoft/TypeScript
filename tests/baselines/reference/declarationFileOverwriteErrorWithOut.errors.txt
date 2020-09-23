@@ -11,3 +11,4 @@ error TS5055: Cannot write file 'tests/cases/compiler/out.d.ts' because it would
 ==== tests/cases/compiler/a.ts (0 errors) ====
     class d {
     }
+    
