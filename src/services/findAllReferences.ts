@@ -11,7 +11,7 @@ namespace ts.FindAllReferences {
         | { readonly type: DefinitionKind.Label; readonly node: Identifier }
         | { readonly type: DefinitionKind.Keyword; readonly node: Node }
         | { readonly type: DefinitionKind.This; readonly node: Node }
-        | { readonly type: DefinitionKind.String; readonly node: StringLiteral };
+        | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike };
 
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
@@ -621,7 +621,7 @@ namespace ts.FindAllReferences {
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
-                return !options.implementations && isStringLiteral(node) ? getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken) : undefined;
+                return !options.implementations && isStringLiteralLike(node) ? getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken) : undefined;
             }
 
             if (symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -769,7 +769,7 @@ namespace ts.FindAllReferences {
                         // At `module.exports = ...`, reference node is `module`
                         const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
                             isExportAssignment(decl) ? Debug.checkDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
-                                getNameOfDeclaration(decl) || decl;
+                            getNameOfDeclaration(decl) || decl;
                         references.push(nodeEntry(node));
                     }
                 }
@@ -881,7 +881,7 @@ namespace ts.FindAllReferences {
                         Debug.assert(node.parent.name === node);
                         return SpecialSearchKind.Class;
                     }
-                // falls through
+                    // falls through
                 default:
                     return SpecialSearchKind.None;
             }
@@ -1834,7 +1834,7 @@ namespace ts.FindAllReferences {
                     if (isObjectLiteralMethod(searchSpaceNode)) {
                         break;
                     }
-                // falls through
+                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.Constructor:
@@ -1847,7 +1847,7 @@ namespace ts.FindAllReferences {
                     if (isExternalModule(<SourceFile>searchSpaceNode) || isParameterName(thisOrSuperKeyword)) {
                         return undefined;
                     }
-                // falls through
+                    // falls through
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                     break;
@@ -1889,12 +1889,12 @@ namespace ts.FindAllReferences {
             }];
         }
 
-        function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
+        function getReferencesForStringLiteral(node: StringLiteralLike, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
             const type = getContextualTypeOrAncestorTypeNodeType(node, checker);
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
-                    if (isStringLiteral(ref) && ref.text === node.text) {
+                    if (isStringLiteralLike(ref) && ref.text === node.text) {
                         if (type) {
                             const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
                             if (type !== checker.getStringType() && type === refType) {
@@ -2126,8 +2126,8 @@ namespace ts.FindAllReferences {
         function isImplementation(node: Node): boolean {
             return !!(node.flags & NodeFlags.Ambient) ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node)) :
                 (isVariableLike(node) ? hasInitializer(node) :
-                    isFunctionLikeDeclaration(node) ? !!node.body :
-                        isClassLike(node) || isModuleOrEnumDeclaration(node));
+                isFunctionLikeDeclaration(node) ? !!node.body :
+                isClassLike(node) || isModuleOrEnumDeclaration(node));
         }
 
         export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
