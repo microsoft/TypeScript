@@ -88,7 +88,6 @@
         "mocha-fivemat-progress-reporter": "latest",
         "ms": "latest",
         "node-fetch": "^2.6.0",
-        "playwright": "0.12.1",
         "plugin-error": "latest",
         "pretty-hrtime": "^1.0.3",
         "prex": "^0.4.3",
