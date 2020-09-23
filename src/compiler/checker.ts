@@ -12143,7 +12143,7 @@ namespace ts {
                 return false;
             }
             const argumentIndex = parentNode.typeArguments?.findIndex(ta => ta === typeArgument);
-            if (!argumentIndex) {
+            if (argumentIndex === undefined || argumentIndex < 0) {
                 // never happens. If code runs here, it means we find the parent wrongly or we do not find the proper argument node(it might have typecasting or sth else?)
                 return false;
             }
