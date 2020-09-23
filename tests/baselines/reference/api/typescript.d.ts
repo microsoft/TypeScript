@@ -2630,9 +2630,9 @@ declare namespace ts {
     }
     export interface TypeParameter extends InstantiableType {
     }
-    export interface TypeConstructorDeclaration extends TypeParameter {
+    export interface TypeConstructorPolymorphismDeclaration extends TypeParameter {
     }
-    export interface TypeConstructorInstance extends TypeParameter {
+    export interface TypeConstructorPolymorphismInstance extends TypeParameter {
     }
     export interface IndexedAccessType extends InstantiableType {
         objectType: Type;

@@ -3047,9 +3047,13 @@
         "category": "Error",
         "code": 2800
     },
-    "Proper Constructor Polymorphism type parameter {0} could not accept Generic type {1} ": {
+    "Proper Polymorphism type parameter {0} could not accept Generic type {1} ": {
         "category": "Error",
         "code": 2801
+    },
+    "When Generic type {0} is used as type argument, its type parameter must match type constructor polymorphism {1}": {
+        "category": "Error",
+        "code": 2802
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

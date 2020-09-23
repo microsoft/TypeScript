@@ -5340,17 +5340,17 @@ namespace ts {
     }
 
     // Type parameters (TypeFlags.TypeParameter | TypeFlags.TypeConstructorDeclaration)
-    export interface TypeConstructorPolymophsimDeclaration extends TypeParameter{
+    export interface TypeConstructorPolymorphismDeclaration extends TypeParameter{
         /* @internal */
         tParams?: number; // Not allowed constraint for now, this might be a very complex feature.
     }
 
     // Type parameters (TypeFlags.TypeParameter | TypeFlags.TypeConstructorInstance)
-    export interface TypeConstructorPolymophsimInstance extends TypeParameter{
+    export interface TypeConstructorPolymorphismInstance extends TypeParameter{
         /* @internal */
         resolvedTypeConstructorParam?: Type[];
         /* @internal */
-        origionalTypeConstructorDeclaration?: TypeConstructorPolymophsimDeclaration;
+        origionalTypeConstructorDeclaration?: TypeConstructorPolymorphismDeclaration;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)
