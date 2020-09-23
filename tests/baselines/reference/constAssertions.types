@@ -441,13 +441,13 @@ const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
 >'right' : "right"
 
 function ff3(x: 'foo' | 'bar', y: object) {
->ff3 : (x: 'foo' | 'bar', y: object) => string
+>ff3 : (x: 'foo' | 'bar', y: object) => `foo${string}` | `bar${string}`
 >x : "foo" | "bar"
 >y : object
 
     return `${x}${y}` as const;
->`${x}${y}` as const : string
->`${x}${y}` : string
+>`${x}${y}` as const : `foo${string}` | `bar${string}`
+>`${x}${y}` : `foo${string}` | `bar${string}`
 >x : "foo" | "bar"
 >y : object
 }

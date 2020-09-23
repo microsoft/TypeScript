@@ -771,7 +771,7 @@ namespace ts {
         const stringNumberSymbolType = getUnionType([stringType, numberType, esSymbolType]);
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
-        const templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType]);
+        const templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType, nullType, undefinedType]) as UnionType;
 
         const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t);
         const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
@@ -13207,6 +13207,30 @@ namespace ts {
             return true;
         }
 
+        /**
+         * Returns `true` if the intersection of the template literals and string literals is the empty set, eg `get${string}` & "setX", and should reduce to `never`
+         */
+        function extractRedundantTemplateLiterals(types: Type[]): boolean {
+            let i = types.length;
+            const literals = filter(types, t => !!(t.flags & TypeFlags.StringLiteral));
+            while (i > 0) {
+                i--;
+                const t = types[i];
+                if (!(t.flags & TypeFlags.TemplateLiteral)) continue;
+                for (const t2 of literals) {
+                    if (isTypeSubtypeOf(t2, t)) {
+                        // eg, ``get${T}` & "getX"` is just `"getX"`
+                        orderedRemoveItemAt(types, i);
+                        break;
+                    }
+                    else if (isPatternLiteralType(t)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         function extractIrreducible(types: Type[], flag: TypeFlags) {
             if (every(types, t => !!(t.flags & TypeFlags.Union) && some((t as UnionType).types, tt => !!(tt.flags & flag)))) {
                 for (let i = 0; i < types.length; i++) {
@@ -13355,7 +13379,12 @@ namespace ts {
                     }
                 }
                 else {
-                    result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                    if (includes & TypeFlags.TemplateLiteral && includes & TypeFlags.StringLiteral && extractRedundantTemplateLiterals(typeSet)) {
+                        result = neverType;
+                    }
+                    else {
+                        result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
+                    }
                 }
                 intersectionTypes.set(id, result);
             }
@@ -13531,7 +13560,7 @@ namespace ts {
             function addSpans(texts: readonly string[], types: readonly Type[]): boolean {
                 for (let i = 0; i < types.length; i++) {
                     const t = types[i];
-                    if (t.flags & TypeFlags.Literal) {
+                    if (t.flags & (TypeFlags.Literal | TypeFlags.Null | TypeFlags.Undefined)) {
                         text += getTemplateStringForType(t) || "";
                         text += texts[i + 1];
                     }
@@ -13540,7 +13569,7 @@ namespace ts {
                         if (!addSpans((<TemplateLiteralType>t).texts, (<TemplateLiteralType>t).types)) return false;
                         text += texts[i + 1];
                     }
-                    else if (isGenericIndexType(t)) {
+                    else if (isGenericIndexType(t) || isPatternLiteralPlaceholderType(t)) {
                         newTypes.push(t);
                         newTexts.push(text);
                         text = texts[i + 1];
@@ -13558,6 +13587,8 @@ namespace ts {
                 type.flags & TypeFlags.NumberLiteral ? "" + (<NumberLiteralType>type).value :
                 type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((<BigIntLiteralType>type).value) :
                 type.flags & TypeFlags.BooleanLiteral ? (<IntrinsicType>type).intrinsicName :
+                type.flags & TypeFlags.Null ? "null" :
+                type.flags & TypeFlags.Undefined ? "undefined" :
                 undefined;
         }
 
@@ -13817,6 +13848,14 @@ namespace ts {
                 accessNode;
         }
 
+        function isPatternLiteralPlaceholderType(type: Type) {
+            return templateConstraintType.types.indexOf(type) !== -1 || !!(type.flags & TypeFlags.Any);
+        }
+
+        function isPatternLiteralType(type: Type) {
+            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
+        }
+
         function isGenericObjectType(type: Type): boolean {
             if (type.flags & TypeFlags.UnionOrIntersection) {
                 if (!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
@@ -13836,7 +13875,7 @@ namespace ts {
                 }
                 return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsGenericIndexType);
             }
-            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping));
+            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -14562,6 +14601,8 @@ namespace ts {
             return !!(type.flags & TypeFlags.Literal) && (<LiteralType>type).freshType === type;
         }
 
+        function getLiteralType(value: string): StringLiteralType;
+        function getLiteralType(value: string | number | PseudoBigInt, enumId?: number, symbol?: Symbol): LiteralType;
         function getLiteralType(value: string | number | PseudoBigInt, enumId?: number, symbol?: Symbol) {
             // We store all literal types in a single map with keys of the form '#NNN' and '@SSS',
             // where NNN is the text representation of a numeric literal and SSS are the characters
@@ -17346,6 +17387,15 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
+                    if (isPatternLiteralType(target)) {
+                        // match all non-`string` segments
+                        const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
+                        if (result && every(result, (r, i) => isStringLiteralTypeValueParsableAsType(r, (target as TemplateLiteralType).types[i]))) {
+                            return Ternary.True;
+                        }
+                    }
+                }
 
                 if (source.flags & TypeFlags.TypeVariable) {
                     if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
@@ -17386,8 +17436,15 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.TemplateLiteral) {
+                    if (target.flags & TypeFlags.TemplateLiteral &&
+                        (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
+                        (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
+                        every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
+                        every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
+                        return Ternary.True;
+                    }
                     const constraint = getBaseConstraintOfType(source);
-                    if (constraint && (result = isRelatedTo(constraint, target, reportErrors))) {
+                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -18308,12 +18365,12 @@ namespace ts {
 
             if (type.flags & TypeFlags.Instantiable) {
                 const constraint = getConstraintOfType(type);
-                if (constraint) {
+                if (constraint && constraint !== type) {
                     return typeCouldHaveTopLevelSingletonTypes(constraint);
                 }
             }
 
-            return isUnitType(type);
+            return isUnitType(type) || !!(type.flags & TypeFlags.TemplateLiteral);
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
@@ -19693,6 +19750,63 @@ namespace ts {
             return !!(type.symbol && some(type.symbol.declarations, hasSkipDirectInferenceFlag));
         }
 
+        function isValidBigIntString(s: string): boolean {
+            const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
+            let success = true;
+            scanner.setOnError(() => success = false);
+            scanner.setText(s + "n");
+            let result = scanner.scan();
+            if (result === SyntaxKind.MinusToken) {
+                result = scanner.scan();
+            }
+            const flags = scanner.getTokenFlags();
+            // validate that
+            // * scanning proceeded without error
+            // * a bigint can be scanned, and that when it is scanned, it is
+            // * the full length of the input string (so the scanner is one character beyond the augmented input length)
+            // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
+            return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator);
+        }
+
+        function isStringLiteralTypeValueParsableAsType(s: StringLiteralType, target: Type): boolean {
+            if (target.flags & TypeFlags.Union) {
+                return !!forEachType(target, t => isStringLiteralTypeValueParsableAsType(s, t));
+            }
+            switch (target) {
+                case stringType: return true;
+                case numberType: return s.value !== "" && isFinite(+(s.value));
+                case bigintType: return s.value !== "" && isValidBigIntString(s.value);
+                // the next 4 should be handled in `getTemplateLiteralType`, as they are all exactly one value, but are here for completeness, just in case
+                // this function is ever used on types which don't come from template literal holes
+                case trueType: return s.value === "true";
+                case falseType: return s.value === "false";
+                case undefinedType: return s.value === "undefined";
+                case nullType: return s.value === "null";
+                default: return !!(target.flags & TypeFlags.Any);
+            }
+        }
+
+        function inferLiteralsFromTemplateLiteralType(source: StringLiteralType, target: TemplateLiteralType): StringLiteralType[] | undefined {
+            const value = source.value;
+            const texts = target.texts;
+            const lastIndex = texts.length - 1;
+            const startText = texts[0];
+            const endText = texts[lastIndex];
+            if (!(value.startsWith(startText) && value.endsWith(endText))) return undefined;
+            const matches = [];
+            const str = value.slice(startText.length, value.length - endText.length);
+            let pos = 0;
+            for (let i = 1; i < lastIndex; i++) {
+                const delim = texts[i];
+                const delimPos = delim.length > 0 ? str.indexOf(delim, pos) : pos < str.length ? pos + 1 : -1;
+                if (delimPos < 0) return undefined;
+                matches.push(getLiteralType(str.slice(pos, delimPos)));
+                pos = delimPos + delim.length;
+            }
+            matches.push(getLiteralType(str.slice(pos)));
+            return matches;
+        }
+
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
             let bivariant = false;
             let propagationType: Type;
@@ -20168,27 +20282,6 @@ namespace ts {
                 for (let i = 0; i < types.length; i++) {
                     inferFromTypes(matches ? matches[i] : neverType, types[i]);
                 }
-            }
-
-            function inferLiteralsFromTemplateLiteralType(source: StringLiteralType, target: TemplateLiteralType): Type[] | undefined {
-                const value = source.value;
-                const texts = target.texts;
-                const lastIndex = texts.length - 1;
-                const startText = texts[0];
-                const endText = texts[lastIndex];
-                if (!(value.startsWith(startText) && value.endsWith(endText))) return undefined;
-                const matches = [];
-                const str = value.slice(startText.length, value.length - endText.length);
-                let pos = 0;
-                for (let i = 1; i < lastIndex; i++) {
-                    const delim = texts[i];
-                    const delimPos = delim.length > 0 ? str.indexOf(delim, pos) : pos < str.length ? pos + 1 : -1;
-                    if (delimPos < 0) return undefined;
-                    matches.push(getLiteralType(str.slice(pos, delimPos)));
-                    pos = delimPos + delim.length;
-                }
-                matches.push(getLiteralType(str.slice(pos)));
-                return matches;
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
@@ -31688,9 +31781,6 @@ namespace ts {
                 checkSourceElement(span.type);
                 const type = getTypeFromTypeNode(span.type);
                 checkTypeAssignableTo(type, templateConstraintType, span.type);
-                if (!everyType(type, t => !!(t.flags & TypeFlags.Literal) || isGenericIndexType(t))) {
-                    error(span.type, Diagnostics.Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type, typeToString(type));
-                }
             }
             getTypeFromTypeNode(node);
         }
