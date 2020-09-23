@@ -4170,7 +4170,7 @@ namespace ts {
     export const enum UnionReduction {
         None = 0,
         Literal,
-        Subtype
+        Subtype,
     }
 
     /* @internal */
