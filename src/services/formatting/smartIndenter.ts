@@ -558,10 +558,14 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                    return childKind !== SyntaxKind.Block;
+                case SyntaxKind.ArrowFunction:
+                    if (sourceFile && childKind === SyntaxKind.ParenthesizedExpression) {
+                        return rangeIsOnOneLine(sourceFile, child!);
+                    }
                     return childKind !== SyntaxKind.Block;
                 case SyntaxKind.ExportDeclaration:
                     return childKind !== SyntaxKind.NamedExports;

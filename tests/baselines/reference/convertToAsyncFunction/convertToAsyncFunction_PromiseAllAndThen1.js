@@ -12,7 +12,7 @@ function /*[#|*/f/*|]*/() {
 
 async function f() {
     await Promise.resolve();
-    return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function() {
+    return await Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function() {
         return fetch("https://github.com");
     }).then(res => res.toString())]);
 }
