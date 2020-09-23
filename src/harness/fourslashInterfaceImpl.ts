@@ -1065,6 +1065,10 @@ namespace FourSlashInterface {
             typeEntry("ConstructorParameters"),
             typeEntry("ReturnType"),
             typeEntry("InstanceType"),
+            typeEntry("Uppercase"),
+            typeEntry("Lowercase"),
+            typeEntry("Capitalize"),
+            typeEntry("Uncapitalize"),
             interfaceEntry("ThisType"),
             varEntry("ArrayBuffer"),
             interfaceEntry("ArrayBufferTypes"),
@@ -1370,6 +1374,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
             "async",
             "await",
         ].map(keywordEntry);
@@ -1510,6 +1515,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "as",
             "async",
             "await",
         ].map(keywordEntry);

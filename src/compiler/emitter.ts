@@ -2023,15 +2023,6 @@ namespace ts {
         }
 
         function emitTemplateTypeSpan(node: TemplateLiteralTypeSpan) {
-            const keyword = node.casing === TemplateCasing.Uppercase ? "uppercase" :
-                node.casing === TemplateCasing.Lowercase ? "lowercase" :
-                node.casing === TemplateCasing.Capitalize ? "capitalize" :
-                node.casing === TemplateCasing.Uncapitalize ? "uncapitalize" :
-                undefined;
-            if (keyword) {
-                writeKeyword(keyword);
-                writeSpace();
-            }
             emit(node.type);
             emit(node.literal);
         }
