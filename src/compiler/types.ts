@@ -5550,10 +5550,11 @@ namespace ts {
 
     /* @internal */
     export interface WideningContext {
-        parent?: WideningContext;       // Parent context
-        propertyName?: __String;        // Name of property in parent
-        siblings?: Type[];              // Types of siblings
-        resolvedProperties?: Symbol[];  // Properties occurring in sibling object literals
+        parent?: WideningContext;                          // Parent context
+        propertyName?: __String;                           // Name of property in parent
+        siblings?: Type[];                                 // Types of siblings
+        resolvedProperties?: Symbol[];                     // Properties occurring in sibling object literals
+        childContexts?: ESMap<__String, WideningContext>;  // WideningContexts with parent === this and propertyName as the key
     }
 
     /* @internal */

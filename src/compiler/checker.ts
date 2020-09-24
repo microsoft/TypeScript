@@ -19212,8 +19212,20 @@ namespace ts {
             return regularNew;
         }
 
-        function createWideningContext(parent: WideningContext | undefined, propertyName: __String | undefined, siblings: Type[] | undefined): WideningContext {
-            return { parent, propertyName, siblings, resolvedProperties: undefined };
+        function createSiblingWideningContext(siblings: Type[]): WideningContext {
+            return { siblings };
+        }
+
+        function createPropertyWideningContext(parent: WideningContext, propertyName: __String): WideningContext {
+            const cache = (parent.childContexts ??= new Map<__String, WideningContext>());
+            const existing = cache.get(propertyName);
+            if (existing) {
+                return existing;
+            }
+
+            const context: WideningContext = { parent, propertyName };
+            cache.set(propertyName, context);
+            return context;
         }
 
         function getSiblingsOfContext(context: WideningContext): Type[] {
@@ -19256,7 +19268,7 @@ namespace ts {
                 return prop;
             }
             const original = getTypeOfSymbol(prop);
-            const propContext = context && createWideningContext(context, prop.escapedName, /*siblings*/ undefined);
+            const propContext = context && createPropertyWideningContext(context, prop.escapedName);
             const widened = getWidenedTypeWithContext(original, propContext);
             return widened === original ? prop : createSymbolWithType(prop, widened);
         }
@@ -19310,7 +19322,7 @@ namespace ts {
                     result = getWidenedTypeOfObjectLiteral(type, context);
                 }
                 else if (type.flags & TypeFlags.Union) {
-                    const unionContext = context || createWideningContext(/*parent*/ undefined, /*propertyName*/ undefined, (<UnionType>type).types);
+                    const unionContext = context || createSiblingWideningContext((<UnionType>type).types);
                     const widenedTypes = sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithContext(t, unionContext));
                     // Widening an empty object literal transitions from a highly restrictive type to
                     // a highly inclusive one. For that reason we perform subtype reduction here if the
