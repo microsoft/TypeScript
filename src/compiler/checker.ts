@@ -12921,8 +12921,6 @@ namespace ts {
         // Construct a type set from the given types.  Type ID order is applied, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
         function makeUnion(types: readonly Type[]): [ Type[], TypeFlags ] {
-            tracing.begin(tracing.Phase.Check, "makeUnion", { typeIds: types.map(t => t.id) });
-
             const typeSet: Type[] = [];
             let includes: TypeFlags = 0;
 
@@ -12963,8 +12961,6 @@ namespace ts {
             }
 
             typeSet.sort((t1, t2) => t1.id - t2.id);
-
-            tracing.end();
 
             return [typeSet, includes];
         }
