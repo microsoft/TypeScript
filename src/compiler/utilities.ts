@@ -582,8 +582,8 @@ namespace ts {
                 Symbol: ["for", "keyFor"],
                 WeakMap: ["entries", "keys", "values"],
                 WeakSet: ["entries", "keys", "values"],
-                Iterator: [""],
-                AsyncIterator: [""],
+                Iterator: emptyArray,
+                AsyncIterator: emptyArray,
                 String: ["codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"],
                 StringConstructor: ["fromCodePoint", "raw"]
             },
@@ -591,8 +591,8 @@ namespace ts {
                 Array: ["includes"]
             },
             es2017: {
-                Atomics: [""],
-                SharedArrayBuffer: [""],
+                Atomics: emptyArray,
+                SharedArrayBuffer: emptyArray,
                 String: ["padStart", "padEnd"],
                 ObjectConstructor: ["values", "entries", "getOwnPropertyDescriptors"],
                 DateTimeFormat: ["formatToParts"]
@@ -603,10 +603,10 @@ namespace ts {
                 RegExpExecArray: ["groups"],
                 RegExp: ["dotAll"],
                 Intl: ["PluralRules"],
-                AsyncIterable: [""],
-                AsyncIterableIterator: [""],
-                AsyncGenerator: [""],
-                AsyncGeneratorFunction: [""],
+                AsyncIterable: emptyArray,
+                AsyncIterableIterator: emptyArray,
+                AsyncGenerator: emptyArray,
+                AsyncGeneratorFunction: emptyArray,
             },
             es2019: {
                 Array: ["flat", "flatMap"],
@@ -615,9 +615,9 @@ namespace ts {
                 Symbol: ["description"]
             },
             es2020: {
-                BigInt: [""],
-                BigInt64Array: [""],
-                BigUint64Array: [""],
+                BigInt: emptyArray,
+                BigInt64Array: emptyArray,
+                BigUint64Array: emptyArray,
                 Promise: ["allSettled"],
                 SymbolConstructor: ["matchAll"],
                 String: ["matchAll"],

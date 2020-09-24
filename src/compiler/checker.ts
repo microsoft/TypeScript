@@ -25760,9 +25760,9 @@ namespace ts {
                     else {
                         const missingProperty = declarationNameToString(propNode);
                         const container = typeToString(containingType);
-                        const lib = getSuggestedLibForNonexistentProperty(missingProperty, containingType);
+                        const lib = getSuggestedLibForNonExistentProperty(missingProperty, containingType);
                         if (lib) {
-                            errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2_or_later, missingProperty, container, lib);
+                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2_or_later, missingProperty, container, lib);
                         }
                         else {
                             errorInfo = chainDiagnosticMessages(elaborateNeverIntersection(errorInfo, containingType), Diagnostics.Property_0_does_not_exist_on_type_1, missingProperty, container);
@@ -25796,7 +25796,7 @@ namespace ts {
             }
         }
 
-        function getSuggestedLibForNonexistentProperty(missingProperty: string, containingType: Type) {
+        function getSuggestedLibForNonExistentProperty(missingProperty: string, containingType: Type) {
             const container = getApparentType(containingType).symbol;
             if (container) {
                 const allFeatures = getScriptTargetFeatures();
