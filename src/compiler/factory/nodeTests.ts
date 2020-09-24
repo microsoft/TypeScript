@@ -233,6 +233,10 @@ namespace ts {
         return node.kind === SyntaxKind.ImportType;
     }
 
+    export function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan {
+        return node.kind === SyntaxKind.TemplateLiteralTypeSpan;
+    }
+
     // Binding patterns
 
     export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
