@@ -2782,7 +2782,7 @@ namespace ts {
         }
 
         function getCommonJSPropertyAccess(node: Node) {
-            if(isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
+            if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
                 return node.initializer;
             }
         }
