@@ -1671,7 +1671,7 @@ namespace ts.server {
             }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
-                if (!this.autoImportProviderHost.hasRoots()) {
+                if (this.autoImportProviderHost.isEmpty()) {
                     this.autoImportProviderHost.close();
                     this.autoImportProviderHost = undefined;
                     return undefined;
@@ -1933,6 +1933,11 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
+        }
+
+        /*@internal*/
+        isEmpty() {
+            return !some(this.rootFileNames);
         }
 
         isOrphan() {
