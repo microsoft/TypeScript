@@ -24,9 +24,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [91merror[0m[90m TS2688: [0mCannot find type definition file for '@myapp/ts-types'.
-
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
@@ -79,7 +77,6 @@ declare namespace myapp {
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 

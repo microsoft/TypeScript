@@ -30,10 +30,17 @@ function foo() {
 >descriptors : error
 
     };
-    exports.methods = methods;
->exports.methods = methods : error
+    const m = function () {
+>m : () => void
+>function () {        // I have no idea what to put here    } : () => void
+
+        // I have no idea what to put here
+    }
+    exports.methods = m;
+>exports.methods = m : () => void
 >exports.methods : any
 >exports : any
 >methods : any
->methods : error
+>m : () => void
 }
+

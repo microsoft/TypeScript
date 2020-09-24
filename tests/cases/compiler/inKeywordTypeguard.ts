@@ -103,3 +103,10 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
         let n: never = x;
     }
 }
+function negativeIntersectionTest() {
+    if ("ontouchstart" in window) {
+        window.ontouchstart
+    } else {
+        window.ontouchstart
+    }
+}

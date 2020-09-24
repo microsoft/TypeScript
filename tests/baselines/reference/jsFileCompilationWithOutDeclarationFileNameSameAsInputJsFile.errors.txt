@@ -10,3 +10,4 @@ error TS5055: Cannot write file 'tests/cases/compiler/b.d.ts' because it would o
     
 ==== tests/cases/compiler/b.d.ts (0 errors) ====
     declare function foo(): boolean;
+    

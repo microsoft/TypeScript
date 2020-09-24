@@ -1,0 +1,21 @@
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformCustomImport.tsx ===
+/// <reference path="react16.d.ts" />
+const a = <>
+>a : JSX.Element
+><>  <p></p>  text  <div className="foo"></div></> : JSX.Element
+
+  <p></p>
+><p></p> : JSX.Element
+>p : any
+>p : any
+
+  text
+  <div className="foo"></div>
+><div className="foo"></div> : JSX.Element
+>div : any
+>className : string
+>div : any
+
+</>
+
+export {};

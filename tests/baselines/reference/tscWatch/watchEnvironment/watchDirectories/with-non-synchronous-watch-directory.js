@@ -27,7 +27,6 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -118,12 +117,10 @@ Output::
 >> Screen clear
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "file2";
 [7m [0m [91m                  ~~~~~~~[0m
-
 
 [[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
@@ -170,12 +167,10 @@ Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "file2";
 [7m [0m [91m                  ~~~~~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -371,7 +366,6 @@ Input::
 Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 

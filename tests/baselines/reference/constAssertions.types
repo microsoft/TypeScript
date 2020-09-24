@@ -354,3 +354,189 @@ let e3 = id(1) as const;  // Error
 >id : <T>(x: T) => T
 >1 : 1
 
+let t1 = 'foo' as const;
+>t1 : "foo"
+>'foo' as const : "foo"
+>'foo' : "foo"
+
+let t2 = 'bar' as const;
+>t2 : "bar"
+>'bar' as const : "bar"
+>'bar' : "bar"
+
+let t3 = `${t1}-${t2}` as const;
+>t3 : "foo-bar"
+>`${t1}-${t2}` as const : "foo-bar"
+>`${t1}-${t2}` : "foo-bar"
+>t1 : "foo"
+>t2 : "bar"
+
+let t4 = `${`(${t1})`}-${`(${t2})`}` as const;
+>t4 : "(foo)-(bar)"
+>`${`(${t1})`}-${`(${t2})`}` as const : "(foo)-(bar)"
+>`${`(${t1})`}-${`(${t2})`}` : "(foo)-(bar)"
+>`(${t1})` : "(foo)"
+>t1 : "foo"
+>`(${t2})` : "(bar)"
+>t2 : "bar"
+
+function ff1(x: 'foo' | 'bar', y: 1 | 2) {
+>ff1 : (x: 'foo' | 'bar', y: 1 | 2) => "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>x : "foo" | "bar"
+>y : 1 | 2
+
+    return `${x}-${y}` as const;
+>`${x}-${y}` as const : "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>`${x}-${y}` : "foo-1" | "foo-2" | "bar-1" | "bar-2"
+>x : "foo" | "bar"
+>y : 1 | 2
+}
+
+function ff2<T extends string, U extends string>(x: T, y: U) {
+>ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
+>x : T
+>y : U
+
+    return `${x}-${y}` as const;
+>`${x}-${y}` as const : `${T}-${U}`
+>`${x}-${y}` : `${T}-${U}`
+>x : T
+>y : U
+}
+
+const ts1 = ff2('foo', 'bar');
+>ts1 : "foo-bar"
+>ff2('foo', 'bar') : "foo-bar"
+>ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
+>'foo' : "foo"
+>'bar' : "bar"
+
+const ts2 = ff2('foo', !!true ? '0' : '1');
+>ts2 : "foo-1" | "foo-0"
+>ff2('foo', !!true ? '0' : '1') : "foo-1" | "foo-0"
+>ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
+>'foo' : "foo"
+>!!true ? '0' : '1' : "0" | "1"
+>!!true : true
+>!true : false
+>true : true
+>'0' : "0"
+>'1' : "1"
+
+const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
+>ts3 : "top-left" | "top-right" | "bottom-left" | "bottom-right"
+>ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right') : "top-left" | "top-right" | "bottom-left" | "bottom-right"
+>ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
+>!!true ? 'top' : 'bottom' : "top" | "bottom"
+>!!true : true
+>!true : false
+>true : true
+>'top' : "top"
+>'bottom' : "bottom"
+>!!true ? 'left' : 'right' : "left" | "right"
+>!!true : true
+>!true : false
+>true : true
+>'left' : "left"
+>'right' : "right"
+
+function ff3(x: 'foo' | 'bar', y: object) {
+>ff3 : (x: 'foo' | 'bar', y: object) => `foo${string}` | `bar${string}`
+>x : "foo" | "bar"
+>y : object
+
+    return `${x}${y}` as const;
+>`${x}${y}` as const : `foo${string}` | `bar${string}`
+>`${x}${y}` : `foo${string}` | `bar${string}`
+>x : "foo" | "bar"
+>y : object
+}
+
+type Action = "verify" | "write";
+>Action : Action
+
+type ContentMatch = "match" | "nonMatch";
+>ContentMatch : ContentMatch
+
+type Outcome = `${Action}_${ContentMatch}`;
+>Outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+
+function ff4(verify: boolean, contentMatches: boolean) {
+>ff4 : (verify: boolean, contentMatches: boolean) => "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>verify : boolean
+>contentMatches : boolean
+
+    const action : Action = verify ? `verify` : `write`;
+>action : Action
+>verify ? `verify` : `write` : Action
+>verify : boolean
+>`verify` : "verify"
+>`write` : "write"
+
+    const contentMatch: ContentMatch = contentMatches ? `match` : `nonMatch`;
+>contentMatch : ContentMatch
+>contentMatches ? `match` : `nonMatch` : ContentMatch
+>contentMatches : boolean
+>`match` : "match"
+>`nonMatch` : "nonMatch"
+
+    const outcome: Outcome = `${action}_${contentMatch}` as const;
+>outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>`${action}_${contentMatch}` as const : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>`${action}_${contentMatch}` : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>action : Action
+>contentMatch : ContentMatch
+
+    return outcome;
+>outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+}
+
+function ff5(verify: boolean, contentMatches: boolean) {
+>ff5 : (verify: boolean, contentMatches: boolean) => "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>verify : boolean
+>contentMatches : boolean
+
+    const action = verify ? `verify` : `write`;
+>action : "verify" | "write"
+>verify ? `verify` : `write` : Action
+>verify : boolean
+>`verify` : "verify"
+>`write` : "write"
+
+    const contentMatch = contentMatches ? `match` : `nonMatch`;
+>contentMatch : "match" | "nonMatch"
+>contentMatches ? `match` : `nonMatch` : ContentMatch
+>contentMatches : boolean
+>`match` : "match"
+>`nonMatch` : "nonMatch"
+
+    const outcome = `${action}_${contentMatch}` as const;
+>outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>`${action}_${contentMatch}` as const : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>`${action}_${contentMatch}` : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+>action : Action
+>contentMatch : ContentMatch
+
+    return outcome;
+>outcome : "verify_match" | "verify_nonMatch" | "write_match" | "write_nonMatch"
+}
+
+function accessorNames<S extends string>(propName: S) {
+>accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
+>propName : S
+
+    return [`get-${propName}`, `set-${propName}`] as const;
+>[`get-${propName}`, `set-${propName}`] as const : readonly [`get-${S}`, `set-${S}`]
+>[`get-${propName}`, `set-${propName}`] : readonly [`get-${S}`, `set-${S}`]
+>`get-${propName}` : `get-${S}`
+>propName : S
+>`set-${propName}` : `set-${S}`
+>propName : S
+}
+
+const ns1 = accessorNames('foo');
+>ns1 : readonly ["get-foo", "set-foo"]
+>accessorNames('foo') : readonly ["get-foo", "set-foo"]
+>accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
+>'foo' : "foo"
+

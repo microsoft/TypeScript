@@ -107,30 +107,22 @@ Output::
 >> Screen clear
 [[90m12:00:45 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:46 AM[0m] Projects in this build: 
     * sample1/core/tsconfig.json
     * sample1/logic/tsconfig.json
     * sample1/tests/tsconfig.json
 
-
 [[90m12:00:47 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist
-
 
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-
 [[90m12:01:03 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist
-
 
 [[90m12:01:04 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-
 [[90m12:01:13 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist
 
-
 [[90m12:01:14 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
-
 
 [[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -457,18 +449,13 @@ Output::
 >> Screen clear
 [[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:26 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
-
 
 [[90m12:01:27 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-
 [[90m12:01:40 AM[0m] Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-
 [[90m12:01:42 AM[0m] Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...
-
 
 [[90m12:01:43 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -606,18 +593,13 @@ Output::
 >> Screen clear
 [[90m12:01:47 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:48 AM[0m] Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'
-
 
 [[90m12:01:49 AM[0m] Building project '/user/username/projects/sample1/logic/tsconfig.json'...
 
-
 [[90m12:02:02 AM[0m] Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'
 
-
 [[90m12:02:03 AM[0m] Building project '/user/username/projects/sample1/tests/tsconfig.json'...
-
 
 [[90m12:02:13 AM[0m] Found 0 errors. Watching for file changes.
 

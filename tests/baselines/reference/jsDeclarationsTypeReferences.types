@@ -2,29 +2,30 @@
 /// <reference types="node" />
 
 const Something = require("fs").Something;
->Something : typeof import("fs").Something
->require("fs").Something : typeof import("fs").Something
+>Something : typeof Something
+>require("fs").Something : typeof Something
 >require("fs") : typeof import("fs")
 >require : any
 >"fs" : "fs"
->Something : typeof import("fs").Something
+>Something : typeof Something
 
 const thing = new Something();
->thing : import("fs").Something
->new Something() : import("fs").Something
->Something : typeof import("fs").Something
+>thing : Something
+>new Something() : Something
+>Something : typeof Something
 
 module.exports = {
->module.exports = {    thing} : { thing: import("fs").Something; }
->module.exports : { thing: import("fs").Something; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { thing: import("fs").Something; }; }
->exports : { thing: import("fs").Something; }
->{    thing} : { thing: import("fs").Something; }
+>module.exports = {    thing} : { thing: Something; }
+>module.exports : { thing: Something; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { thing: Something; }; }
+>exports : { thing: Something; }
+>{    thing} : { thing: Something; }
 
     thing
->thing : import("fs").Something
+>thing : Something
 
 };
+
 === tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")

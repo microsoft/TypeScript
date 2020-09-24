@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/use.js ===
 var mod = require('./mod1.js');
->mod : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; } | { Quack: number; Bar: typeof Bar; Quid: 2; }
->require('./mod1.js') : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; } | { Quack: number; Bar: typeof Bar; Quid: 2; }
+>mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }
+>require('./mod1.js') : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }
 >require : any
 >'./mod1.js' : "./mod1.js"
 
@@ -17,7 +17,7 @@ var bbb = new mod.Baz();
 >bbb : any
 >new mod.Baz() : any
 >mod.Baz : any
->mod : { Baz: typeof Baz; Bar: typeof Bar; Quid: 2; } | { Quack: number; Bar: typeof Bar; Quid: 2; }
+>mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }
 >Baz : any
 
 === tests/cases/conformance/jsdoc/mod1.js ===

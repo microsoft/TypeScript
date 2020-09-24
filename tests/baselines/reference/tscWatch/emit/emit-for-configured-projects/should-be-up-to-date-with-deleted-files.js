@@ -36,7 +36,6 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -129,7 +128,6 @@ export var T: number;export function Foo() { };
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
