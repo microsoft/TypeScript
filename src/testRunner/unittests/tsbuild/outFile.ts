@@ -666,7 +666,8 @@ ${internal} enum internalEnum { a, b, c }`);
                                 declarationMap: true,
                                 skipDefaultLibCheck: true,
                                 sourceMap: true,
-                                outFile: "./bin/first-output.js"
+                                outFile: "./bin/first-output.js",
+                                bundledPackageName: "first"
                             },
                             files: [sources[Project.first][Source.ts][Part.one]]
                         }));
@@ -677,7 +678,8 @@ ${internal} enum internalEnum { a, b, c }`);
                                 declarationMap: false,
                                 stripInternal: true,
                                 sourceMap: true,
-                                outFile: "./thirdjs/output/third-output.js"
+                                outFile: "./thirdjs/output/third-output.js",
+                                bundledPackageName: "third"
                             },
                             references: [{ path: "../first", prepend: true }],
                             files: [sources[Project.third][Source.ts][Part.one]]

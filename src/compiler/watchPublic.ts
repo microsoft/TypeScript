@@ -320,7 +320,6 @@ namespace ts {
             configFileName ?
                 getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory)) :
                 currentDirectory,
-            ResolutionKind.All,
             /*logChangesWhenResolvingModule*/ false
         );
         // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names

@@ -24,6 +24,7 @@ namespace ts {
         /* @internal */ extendedDiagnostics?: boolean;
         /* @internal */ locale?: string;
         /* @internal */ generateCpuProfile?: string;
+        /* @internal */ generateTrace?: string;
 
         [option: string]: CompilerOptionsValue | undefined;
     }
