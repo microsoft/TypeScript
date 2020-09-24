@@ -233,7 +233,7 @@ namespace ts {
         return node.kind === SyntaxKind.ImportType;
     }
 
-    export function isTemplateLiteralTypeSpan(node: Node):node is TemplateLiteralTypeSpan {
+    export function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan {
         return node.kind === SyntaxKind.TemplateLiteralTypeSpan;
     }
 

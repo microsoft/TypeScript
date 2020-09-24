@@ -572,7 +572,7 @@ namespace ts {
             case SyntaxKind.LiteralType:
                 return factory.updateLiteralTypeNode(<LiteralTypeNode>node,
                     nodeVisitor((<LiteralTypeNode>node).literal, visitor, isExpression));
-            
+
             case SyntaxKind.TemplateLiteralType:
                 return factory.updateTemplateLiteralType(<TemplateLiteralTypeNode>node,
                     nodeVisitor((<TemplateLiteralTypeNode>node).head, visitor, isTemplateHead),
