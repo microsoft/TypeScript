@@ -48,7 +48,6 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -218,7 +217,6 @@ export interface A {
 Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:58 AM[0m] Found 0 errors. Watching for file changes.
 

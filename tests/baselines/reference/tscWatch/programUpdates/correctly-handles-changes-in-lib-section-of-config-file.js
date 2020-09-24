@@ -28,12 +28,15 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
+<<<<<<< HEAD
 
 [96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+=======
+[96msrc/app.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2583: [0mCannot find name 'Promise'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
+>>>>>>> 4f9713c51579d0a5a5d0ce35b8a205eac6041726
 
 [7m1[0m var x: Promise<string>;
 [7m [0m [91m       ~~~~~~~[0m
-
 
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
@@ -82,7 +85,6 @@ Input::
 Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 

@@ -4170,7 +4170,7 @@ namespace ts {
     export const enum UnionReduction {
         None = 0,
         Literal,
-        Subtype
+        Subtype,
     }
 
     /* @internal */
@@ -4925,7 +4925,7 @@ namespace ts {
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesStructuredOrInstantiable = TypeParameter,

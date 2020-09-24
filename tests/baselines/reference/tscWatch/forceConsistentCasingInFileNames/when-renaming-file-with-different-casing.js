@@ -27,7 +27,6 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -93,12 +92,10 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/logger.ts' differs from already included file name '/user/username/projects/myproject/Logger.ts' only in casing.
 
 [7m1[0m import { logger } from "./logger"; new logger();
 [7m [0m [91m                       ~~~~~~~~~~[0m
-
 
 [[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
 

@@ -4368,6 +4368,7 @@ declare namespace ts {
     function isMappedTypeNode(node: Node): node is MappedTypeNode;
     function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
     function isImportTypeNode(node: Node): node is ImportTypeNode;
+    function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan;
     function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
     function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
     function isBindingElement(node: Node): node is BindingElement;
@@ -6956,6 +6957,11 @@ declare namespace ts.server.protocol {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+        /**
+         * A message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        notApplicableReason?: string;
     }
     interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
@@ -8983,6 +8989,7 @@ declare namespace ts.server.protocol {
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
     }
