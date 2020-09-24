@@ -61,8 +61,6 @@ Output::
 
 /lib/lib.d.ts
 /src/b.ts
-/lib/lib.d.ts
-/src/b.ts
 
 Found 1 error.
 

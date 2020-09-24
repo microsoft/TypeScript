@@ -1287,8 +1287,6 @@ namespace ts {
         const canEmitBuildInfo = !(buildResult & BuildResultFlags.SyntaxErrors) && program && !outFile(program.getCompilerOptions());
 
         reportAndStoreErrors(state, resolvedPath, diagnostics);
-        // List files if any other build error using program (emit errors already report files)
-        if (program && state.write) listFiles(program, state.write);
         state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
         if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
         afterProgramDone(state, program, config);
