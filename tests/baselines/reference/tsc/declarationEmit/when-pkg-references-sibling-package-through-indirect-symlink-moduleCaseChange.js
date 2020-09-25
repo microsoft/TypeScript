@@ -67,11 +67,11 @@ Output::
 pkg1/dist/types.d.ts
   Imported via './types' from file 'pkg1/dist/index.d.ts'
 pkg1/dist/index.d.ts
-  Imported via '@raymondfeng/pkg1' from file 'pkg2/dist/types.d.ts', PackageId:: '@raymondfeng/pkg1/dist/index.d.ts@1.0.0'
+  Imported via '@raymondfeng/pkg1' from file 'pkg2/dist/types.d.ts' with packageId '@raymondfeng/pkg1/dist/index.d.ts@1.0.0'
 pkg2/dist/types.d.ts
   Imported via './types' from file 'pkg2/dist/index.d.ts'
 pkg2/dist/index.d.ts
-  Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts', PackageId:: '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
+  Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts' with packageId '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
 pkg3/src/keys.ts
   Imported via './keys' from file 'pkg3/src/index.ts'
   Matched by include pattern '**/*' in tsconfig.json

@@ -32,6 +32,7 @@ a/lib/lib.d.ts
 a/b/f2.ts
   Imported via "./f2" from file 'a/b/f1.ts'
 a/b/f1.ts
+  Root file specified for compilation
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -104,6 +105,7 @@ a/c/f3.ts
 a/b/f2.ts
   Imported via "./f2" from file 'a/b/f1.ts'
 a/b/f1.ts
+  Root file specified for compilation
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 

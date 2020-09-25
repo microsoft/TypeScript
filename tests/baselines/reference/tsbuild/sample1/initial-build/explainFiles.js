@@ -121,10 +121,12 @@ src/core/some_decl.d.ts
 
 lib/lib.d.ts
   Default library
-src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+src/core/index.d.ts
   Imported via '../core/index' from file 'src/logic/index.ts'
-src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  File is output of project reference source 'src/core/index.ts'
+src/core/anotherModule.d.ts
   Imported via '../core/anotherModule' from file 'src/logic/index.ts'
+  File is output of project reference source 'src/core/anotherModule.ts'
 src/logic/index.ts
   Matched by include pattern '**/*' in tsconfig.json
 [[90m12:01:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
@@ -133,13 +135,16 @@ src/logic/index.ts
 
 lib/lib.d.ts
   Default library
-src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+src/core/index.d.ts
   Imported via '../core/index' from file 'src/tests/index.ts'
-src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  File is output of project reference source 'src/core/index.ts'
+src/core/anotherModule.d.ts
   Imported via '../core/anotherModule' from file 'src/logic/index.d.ts'
   Imported via '../core/anotherModule' from file 'src/tests/index.ts'
-src/logic/index.d.ts, output of project reference source 'src/logic/index.ts'
+  File is output of project reference source 'src/core/anotherModule.ts'
+src/logic/index.d.ts
   Imported via '../logic/index' from file 'src/tests/index.ts'
+  File is output of project reference source 'src/logic/index.ts'
 src/tests/index.ts
   Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
@@ -425,10 +430,12 @@ src/core/some_decl.d.ts
 
 lib/lib.d.ts
   Default library
-src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+src/core/index.d.ts
   Imported via '../core/index' from file 'src/logic/index.ts'
-src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  File is output of project reference source 'src/core/index.ts'
+src/core/anotherModule.d.ts
   Imported via '../core/anotherModule' from file 'src/logic/index.ts'
+  File is output of project reference source 'src/core/anotherModule.ts'
 src/logic/index.ts
   Matched by include pattern '**/*' in tsconfig.json
 [[90m12:04:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/core'
@@ -437,13 +444,16 @@ src/logic/index.ts
 
 lib/lib.d.ts
   Default library
-src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+src/core/index.d.ts
   Imported via '../core/index' from file 'src/tests/index.ts'
-src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  File is output of project reference source 'src/core/index.ts'
+src/core/anotherModule.d.ts
   Imported via '../core/anotherModule' from file 'src/logic/index.d.ts'
   Imported via '../core/anotherModule' from file 'src/tests/index.ts'
-src/logic/index.d.ts, output of project reference source 'src/logic/index.ts'
+  File is output of project reference source 'src/core/anotherModule.ts'
+src/logic/index.d.ts
   Imported via '../logic/index' from file 'src/tests/index.ts'
+  File is output of project reference source 'src/logic/index.ts'
 src/tests/index.ts
   Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success

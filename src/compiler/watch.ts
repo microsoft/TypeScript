@@ -147,9 +147,42 @@ namespace ts {
     }
 
     export function explainFiles(program: ProgramToEmitFilesAndReportErrors, write: (s: string) => void) {
+        const configExplainInfo = getFileFromConfigExplainInfo(program);
         const reasons = program.getFileIncludeReasons();
+        for (const file of program.getSourceFiles()) {
+            write(`${toFileName(program, file)}`);
+            reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, file, reason, configExplainInfo).messageText}`));
+            explainIfFileIsRedirect(program, file)?.forEach(d => write(`  ${d.messageText}`));
+        }
+    }
+
+    export function explainIfFileIsRedirect(program: ProgramToEmitFilesAndReportErrors, file: SourceFile): DiagnosticMessageChain[] | undefined {
+        let result: DiagnosticMessageChain[] | undefined;
+        if (file.path !== file.resolvedPath) {
+            (result ||= []).push(chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.File_is_output_of_project_reference_source_0,
+                toFileName(program, file.originalFileName)
+            ));
+        }
+        if (file.redirectInfo) {
+            (result ||= []).push(chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.File_redirects_to_file_0,
+                toFileName(program, file.redirectInfo.redirectTarget)
+            ));
+        }
+        return result;
+    }
+
+    export interface FileFromConfigExplainInfo {
+        basePath: string | undefined;
+        keyMapper: GetCanonicalFileName;
+        includeSpecs: { include: string; regExp: RegExp; }[] | undefined;
+    }
+    export function getFileFromConfigExplainInfo(program: ProgramToEmitFilesAndReportErrors): FileFromConfigExplainInfo {
         const options = program.getCompilerOptions();
-        const { filesSpecs, validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
+        const { validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
         const keyMapper = createGetCanonicalFileName(useCaseSensitiveFileNames);
         const basePath = options.configFile && getDirectoryPath(getNormalizedAbsolutePath(options.configFile.fileName, program.getCurrentDirectory()));
@@ -162,85 +195,129 @@ namespace ts {
                 regExp: getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames)
             });
         });
+        return { basePath, keyMapper, includeSpecs };
+    }
 
-        for (const file of program.getSourceFiles()) {
-            write(`${toFileName(program, file)}${file.path !== file.resolvedPath ? `, output of project reference source '${toFileName(program, file.originalFileName)}'` : ""}${file.redirectInfo ? `, redirects to '${toFileName(program, file.redirectInfo.redirectTarget)}'` : ""}`);
-            const fileReasons = reasons.get(file.path)!;
-            for (const reason of fileReasons) {
-                switch (reason.kind) {
-                    case FileIncludeKind.Import:
-                    case FileIncludeKind.ReferenceFile:
-                    case FileIncludeKind.TypeReferenceDirective:
-                    case FileIncludeKind.LibReferenceDirective:
-                        const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason, /*includePackageId*/ true);
-                        let referenceText = referecedFromFile.text.substring(pos, end);
-                        if (reason.kind !== FileIncludeKind.Import) referenceText = `'${referenceText}'`;
-                        write(`${referecedFileReasonPrefix(reason.kind)}${referenceText} from file '${toFileName(program, referecedFromFile)}'${packageIdToString(packageId)}`);
-                        break;
-                    case FileIncludeKind.RootFile:
-                        if (!options.configFile?.configFileSpecs) break;
-                        if (includeSpecs) {
-                            const filePath = keyMapper(getNormalizedAbsolutePath(file.originalFileName, basePath));
-                            const matchedByFiles = forEach(filesSpecs, fileSpec => keyMapper(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
-                            if (!matchedByFiles) {
-                                const fileName = getNormalizedAbsolutePath(file.originalFileName, basePath);
-                                const isJsonFile = fileExtensionIs(file.originalFileName, Extension.Json);
-                                const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
-                                if (matchedByInclude) {
-                                    write(`  Matched by include pattern '${matchedByInclude.include}' in tsconfig.json`);
-                                }
-                                else {
-                                    Debug.fail(`Did not find matching include for file  ${JSON.stringify({
-                                        fileName: file.fileName,
-                                        originalFileName: file.originalFileName,
-                                        filesSpecs,
-                                        validatedIncludeSpecs,
-                                    })}`);
-                                }
-                                break;
-                            }
-                        }
-                        write(`  Part of 'files' list in tsconfig.json`);
-                        break;
-                    case FileIncludeKind.ProjectReferenceFile:
-                        write(`  ${file.isDeclarationFile ? "Output" : "Source"} from referenced project '${toFileName(program, reason.config)}' included because ${outFile(options) ? `'--${options.outFile ? "outFile" : "out"}' specified` : `'--module' is specified as 'none'`}`);
-                        break;
-                    case FileIncludeKind.AutomaticTypeDirectiveFile:
-                        write(`  ${options.types ? `Entry point of type library '${reason.typeReference}' specified in compilerOptions` : `Entry point for implicit type library '${reason.typeReference}'`}${packageIdToString(reason.packageId)}`);
-                        break;
-                    case FileIncludeKind.LibFile:
-                        if (reason.lib) {
-                            write(`  Library '${reason.lib}' specified in compilerOptions`);
+    export function fileIncludeReasonToDiagnostics(
+        program: ProgramToEmitFilesAndReportErrors,
+        file: SourceFile,
+        reason: FileIncludeReason,
+        configFileExplainInfo?: FileFromConfigExplainInfo
+    ): DiagnosticMessageChain {
+        const options = program.getCompilerOptions();
+        if (isReferencedFile(reason)) {
+            const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason, /*includePackageId*/ true);
+            const referenceText = referecedFromFile.text.substring(pos, end);
+            let message: DiagnosticMessage;
+            switch (reason.kind) {
+                case FileIncludeKind.Import:
+                    message = packageId ?
+                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2 :
+                        Diagnostics.Imported_via_0_from_file_1;
+                    break;
+                case FileIncludeKind.ReferenceFile:
+                    message = packageId ?
+                        Diagnostics.Referenced_via_0_from_file_1_with_packageId_2 :
+                        Diagnostics.Referenced_via_0_from_file_1;
+                    break;
+                case FileIncludeKind.TypeReferenceDirective:
+                    message = packageId ?
+                        Diagnostics.Type_library_referenced_via_0_from_file_1_with_packageId_2 :
+                        Diagnostics.Type_library_referenced_via_0_from_file_1;
+                    break;
+                case FileIncludeKind.LibReferenceDirective:
+                    message = packageId ?
+                        Diagnostics.Library_referenced_via_0_from_file_1_with_packageId_2 :
+                        Diagnostics.Library_referenced_via_0_from_file_1;
+                    break;
+                default:
+                    Debug.assertNever(reason);
+            }
+            return chainDiagnosticMessages(
+                /*details*/ undefined,
+                message,
+                referenceText,
+                toFileName(program, referecedFromFile),
+                packageId && packageIdToString(packageId)
+            );
+        }
+        switch (reason.kind) {
+            case FileIncludeKind.RootFile:
+                if (!options.configFile?.configFileSpecs) {
+                    return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+                }
+                const { basePath, keyMapper, includeSpecs } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
+                if (includeSpecs) {
+                    const filePath = keyMapper(getNormalizedAbsolutePath(file.originalFileName, basePath));
+                    const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => keyMapper(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+                    if (!matchedByFiles) {
+                        const fileName = getNormalizedAbsolutePath(file.originalFileName, basePath);
+                        const isJsonFile = fileExtensionIs(file.originalFileName, Extension.Json);
+                        const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
+                        if (matchedByInclude) {
+                            return chainDiagnosticMessages(
+                                /*details*/ undefined,
+                                Diagnostics.Matched_by_include_pattern_0_in_tsconfig_json,
+                                matchedByInclude.include
+                            );
                         }
                         else {
-                            const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
-                            write(`  Default library${target ? ` for target '${target}'` : ""}`);
+                            Debug.fail(`Did not find matching include for file  ${JSON.stringify({
+                                fileName: file.fileName,
+                                originalFileName: file.originalFileName,
+                                ...options.configFile.configFileSpecs,
+                            })}`);
                         }
-                        break;
-                    default:
-                        Debug.assertNever(reason);
+                    }
                 }
-            }
-        }
-    }
-
-    function referecedFileReasonPrefix(refFileKind: ReferencedFileKind) {
-        switch (refFileKind) {
-            case FileIncludeKind.Import:
-                return `  Imported via `;
-            case FileIncludeKind.ReferenceFile:
-                return `  Refereced via `;
-            case FileIncludeKind.TypeReferenceDirective:
-                return `  Type library referenced via `;
-            case FileIncludeKind.LibReferenceDirective:
-                return `  Library referenced via `;
+                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
+            case FileIncludeKind.ProjectReferenceFile:
+                return chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    outFile(options) ?
+                        file.isDeclarationFile ?
+                            Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
+                            Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
+                        file.isDeclarationFile ?
+                            Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
+                            Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
+                    toFileName(program, reason.config),
+                    options.outFile ? "--outFile" : "--out",
+                );
+            case FileIncludeKind.AutomaticTypeDirectiveFile:
+                return chainDiagnosticMessages(
+                    /*details*/ undefined,
+                    options.types ?
+                        reason.packageId ?
+                            Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1 :
+                            Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions :
+                        reason.packageId ?
+                            Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1 :
+                            Diagnostics.Entry_point_for_implicit_type_library_0,
+                    reason.typeReference,
+                    reason.packageId && packageIdToString(reason.packageId),
+                );
+            case FileIncludeKind.LibFile:
+                if (reason.lib) {
+                    return chainDiagnosticMessages(
+                        /*details*/ undefined,
+                        Diagnostics.Library_0_specified_in_compilerOptions,
+                        reason.lib
+                    );
+                }
+                else {
+                    const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
+                    return chainDiagnosticMessages(
+                        /*details*/ undefined,
+                        target ?
+                            Diagnostics.Default_library_for_target_0 :
+                            Diagnostics.Default_library,
+                        target,
+                    );
+                }
             default:
-                Debug.assertNever(refFileKind);
+                Debug.assertNever(reason);
         }
-    }
-
-    function packageIdToString(packageId: PackageId | undefined) {
-        return packageId ? `, PackageId:: '${ts.packageIdToString(packageId)}'` : "";
     }
 
     function toFileName(program: ProgramToEmitFilesAndReportErrors, file: SourceFile | string) {

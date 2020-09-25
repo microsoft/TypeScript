@@ -1196,6 +1196,106 @@
         "category": "Error",
         "code": 1391
     },
+    "Imported via {0} from file '{1}'": {
+        "category": "Message",
+        "code": 1392
+    },
+    "Imported via {0} from file '{1}' with packageId '{2}'": {
+        "category": "Message",
+        "code": 1393
+    },
+    "Referenced via '{0}' from file '{1}'": {
+        "category": "Message",
+        "code": 1394
+    },
+    "Referenced via '{0}' from file '{1}' with packageId '{2}'": {
+        "category": "Message",
+        "code": 1395
+    },
+    "Type library referenced via '{0}' from file '{1}'": {
+        "category": "Message",
+        "code": 1396
+    },
+    "Type library referenced via '{0}' from file '{1}' with packageId '{2}'": {
+        "category": "Message",
+        "code": 1397
+    },
+    "Library referenced via '{0}' from file '{1}'": {
+        "category": "Message",
+        "code": 1398
+    },
+    "Library referenced via '{0}' from file '{1}' with packageId '{2}'": {
+        "category": "Message",
+        "code": 1399
+    },
+    "Matched by include pattern '{0}' in tsconfig.json": {
+        "category": "Message",
+        "code": 1400
+    },
+    "Part of 'files' list in tsconfig.json": {
+        "category": "Message",
+        "code": 1401
+    },
+    "Output from referenced project '{0}' included because '{1}' specified": {
+        "category": "Message",
+        "code": 1402
+    },
+    "Source from referenced project '{0}' included because '{1}' specified": {
+        "category": "Message",
+        "code": 1403
+    },
+    "Output from referenced project '{0}' included because '--module' is specified as 'none'": {
+        "category": "Message",
+        "code": 1404
+    },
+    "Source from referenced project '{0}' included because '--module' is specified as 'none'": {
+        "category": "Message",
+        "code": 1405
+    },
+    "Entry point of type library '{0}' specified in compilerOptions": {
+        "category": "Message",
+        "code": 1406
+    },
+    "Entry point of type library '{0}' specified in compilerOptions with packageId '{1}'": {
+        "category": "Message",
+        "code": 1407
+    },
+    "Entry point for implicit type library '{0}'": {
+        "category": "Message",
+        "code": 1408
+    },
+    "Entry point for implicit type library '{0}' with packageId '{1}'": {
+        "category": "Message",
+        "code": 1409
+    },
+    "Library '{0}' specified in compilerOptions": {
+        "category": "Message",
+        "code": 1410
+    },
+    "Default library": {
+        "category": "Message",
+        "code": 1411
+    },
+    "Default library for target '{0}'": {
+        "category": "Message",
+        "code": 1412
+    },
+    "Root file specified for compilation": {
+        "category": "Message",
+        "code": 1413
+    },
+    "File is output of project reference source '{0}'": {
+        "category": "Message",
+        "code": 1414
+    },
+    "File redirects to file '{0}'": {
+        "category": "Message",
+        "code": 1415
+    },
+    "The file is in the program because:": {
+        "category": "Message",
+        "code": 1416
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
