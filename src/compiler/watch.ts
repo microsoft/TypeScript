@@ -113,28 +113,7 @@ namespace ts {
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
-    /**
-     * Program structure needed to emit the files and report diagnostics
-     */
-    export interface ProgramToEmitFilesAndReportErrors {
-        useCaseSensitiveFileNames(): boolean;
-        getCurrentDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        getCompilerOptions(): CompilerOptions;
-        getSourceFiles(): readonly SourceFile[];
-        getSourceFileByPath(path: Path): SourceFile | undefined;
-        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
-        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
-        getConfigFileParsingDiagnostics(): readonly Diagnostic[];
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
-        emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
-    }
-
-    export function listFiles(program: ProgramToEmitFilesAndReportErrors, write: (s: string) => void) {
+    export function listFiles(program: Program | BuilderProgram, write: (s: string) => void) {
         const options = program.getCompilerOptions();
         if (options.explainFiles) {
             explainFiles(program, write);
@@ -146,30 +125,39 @@ namespace ts {
         }
     }
 
-    export function explainFiles(program: ProgramToEmitFilesAndReportErrors, write: (s: string) => void) {
+    export function explainFiles(program: Program | BuilderProgram, write: (s: string) => void) {
         const configExplainInfo = getFileFromConfigExplainInfo(program);
         const reasons = program.getFileIncludeReasons();
         for (const file of program.getSourceFiles()) {
-            write(`${toFileName(program, file)}`);
-            reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, file, reason, configExplainInfo).messageText}`));
-            explainIfFileIsRedirect(program, file)?.forEach(d => write(`  ${d.messageText}`));
+            write(`${toFileName(program, file, /*relativeFileName*/ true)}`);
+            reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, /*relativeFileNames*/ true, configExplainInfo).messageText}`));
+            explainIfFileIsRedirect(program, file, /*relativeFileNames*/ true)?.forEach(d => write(`  ${d.messageText}`));
         }
     }
 
-    export function explainIfFileIsRedirect(program: ProgramToEmitFilesAndReportErrors, file: SourceFile): DiagnosticMessageChain[] | undefined {
+    export type ProgramForFileExplaination = Pick<Program,
+        "useCaseSensitiveFileNames" |
+        "getCurrentDirectory" |
+        "getCanonicalFileName" |
+        "getCompilerOptions" |
+        "getSourceFileByPath" |
+        "getRootFileNames" |
+        "getResolvedProjectReferences"
+    >;
+    export function explainIfFileIsRedirect(program: ProgramForFileExplaination, file: SourceFile, relativeFileNames?: boolean): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
             (result ||= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_is_output_of_project_reference_source_0,
-                toFileName(program, file.originalFileName)
+                toFileName(program, file.originalFileName, relativeFileNames)
             ));
         }
         if (file.redirectInfo) {
             (result ||= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_redirects_to_file_0,
-                toFileName(program, file.redirectInfo.redirectTarget)
+                toFileName(program, file.redirectInfo.redirectTarget, relativeFileNames)
             ));
         }
         return result;
@@ -177,14 +165,12 @@ namespace ts {
 
     export interface FileFromConfigExplainInfo {
         basePath: string | undefined;
-        keyMapper: GetCanonicalFileName;
         includeSpecs: { include: string; regExp: RegExp; }[] | undefined;
     }
-    export function getFileFromConfigExplainInfo(program: ProgramToEmitFilesAndReportErrors): FileFromConfigExplainInfo {
+    export function getFileFromConfigExplainInfo(program: ProgramForFileExplaination): FileFromConfigExplainInfo {
         const options = program.getCompilerOptions();
         const { validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
-        const keyMapper = createGetCanonicalFileName(useCaseSensitiveFileNames);
         const basePath = options.configFile && getDirectoryPath(getNormalizedAbsolutePath(options.configFile.fileName, program.getCurrentDirectory()));
         let includeSpecs: { include: string; regExp: RegExp; }[] | undefined;
         forEach(validatedIncludeSpecs, include => {
@@ -195,18 +181,18 @@ namespace ts {
                 regExp: getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames)
             });
         });
-        return { basePath, keyMapper, includeSpecs };
+        return { basePath, includeSpecs };
     }
 
     export function fileIncludeReasonToDiagnostics(
-        program: ProgramToEmitFilesAndReportErrors,
-        file: SourceFile,
+        program: ProgramForFileExplaination,
         reason: FileIncludeReason,
+        relativeFileNames?: boolean,
         configFileExplainInfo?: FileFromConfigExplainInfo
     ): DiagnosticMessageChain {
         const options = program.getCompilerOptions();
         if (isReferencedFile(reason)) {
-            const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason, /*includePackageId*/ true);
+            const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
             const referenceText = referecedFromFile.text.substring(pos, end);
             let message: DiagnosticMessage;
             switch (reason.kind) {
@@ -216,9 +202,8 @@ namespace ts {
                         Diagnostics.Imported_via_0_from_file_1;
                     break;
                 case FileIncludeKind.ReferenceFile:
-                    message = packageId ?
-                        Diagnostics.Referenced_via_0_from_file_1_with_packageId_2 :
-                        Diagnostics.Referenced_via_0_from_file_1;
+                    Debug.assert(!packageId);
+                    message = Diagnostics.Referenced_via_0_from_file_1;
                     break;
                 case FileIncludeKind.TypeReferenceDirective:
                     message = packageId ?
@@ -226,9 +211,8 @@ namespace ts {
                         Diagnostics.Type_library_referenced_via_0_from_file_1;
                     break;
                 case FileIncludeKind.LibReferenceDirective:
-                    message = packageId ?
-                        Diagnostics.Library_referenced_via_0_from_file_1_with_packageId_2 :
-                        Diagnostics.Library_referenced_via_0_from_file_1;
+                    Debug.assert(!packageId);
+                    message = Diagnostics.Library_referenced_via_0_from_file_1;
                     break;
                 default:
                     Debug.assertNever(reason);
@@ -237,22 +221,21 @@ namespace ts {
                 /*details*/ undefined,
                 message,
                 referenceText,
-                toFileName(program, referecedFromFile),
+                toFileName(program, referecedFromFile, relativeFileNames),
                 packageId && packageIdToString(packageId)
             );
         }
         switch (reason.kind) {
             case FileIncludeKind.RootFile:
-                if (!options.configFile?.configFileSpecs) {
-                    return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
-                }
-                const { basePath, keyMapper, includeSpecs } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
+                if (!options.configFile?.configFileSpecs) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+                const { basePath, includeSpecs } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
                 if (includeSpecs) {
-                    const filePath = keyMapper(getNormalizedAbsolutePath(file.originalFileName, basePath));
-                    const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => keyMapper(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+                    const rootName = program.getRootFileNames()[reason.index];
+                    const fileName = getNormalizedAbsolutePath(rootName, basePath);
+                    const filePath = program.getCanonicalFileName(fileName);
+                    const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
                     if (!matchedByFiles) {
-                        const fileName = getNormalizedAbsolutePath(file.originalFileName, basePath);
-                        const isJsonFile = fileExtensionIs(file.originalFileName, Extension.Json);
+                        const isJsonFile = fileExtensionIs(fileName, Extension.Json);
                         const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
                         if (matchedByInclude) {
                             return chainDiagnosticMessages(
@@ -263,25 +246,28 @@ namespace ts {
                         }
                         else {
                             Debug.fail(`Did not find matching include for file  ${JSON.stringify({
-                                fileName: file.fileName,
-                                originalFileName: file.originalFileName,
+                                rootName,
+                                fileName,
                                 ...options.configFile.configFileSpecs,
                             })}`);
                         }
                     }
                 }
                 return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
-            case FileIncludeKind.ProjectReferenceFile:
+            case FileIncludeKind.SourceFromProjectReference:
+            case FileIncludeKind.OutputFromProjectReference:
+                const isOutput = reason.kind === FileIncludeKind.OutputFromProjectReference;
+                const referencedResolvedRef = Debug.checkDefined(program.getResolvedProjectReferences()?.[reason.index]);
                 return chainDiagnosticMessages(
                     /*details*/ undefined,
                     outFile(options) ?
-                        file.isDeclarationFile ?
+                        isOutput ?
                             Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
                             Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
-                        file.isDeclarationFile ?
+                        isOutput ?
                             Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
                             Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
-                    toFileName(program, reason.config),
+                    toFileName(program, referencedResolvedRef.sourceFile.fileName, relativeFileNames),
                     options.outFile ? "--outFile" : "--out",
                 );
             case FileIncludeKind.AutomaticTypeDirectiveFile:
@@ -298,37 +284,32 @@ namespace ts {
                     reason.packageId && packageIdToString(reason.packageId),
                 );
             case FileIncludeKind.LibFile:
-                if (reason.lib) {
-                    return chainDiagnosticMessages(
+                if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
+                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
+                return chainDiagnosticMessages(
                         /*details*/ undefined,
-                        Diagnostics.Library_0_specified_in_compilerOptions,
-                        reason.lib
-                    );
-                }
-                else {
-                    const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
-                    return chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        target ?
-                            Diagnostics.Default_library_for_target_0 :
-                            Diagnostics.Default_library,
-                        target,
-                    );
-                }
+                    target ?
+                        Diagnostics.Default_library_for_target_0 :
+                        Diagnostics.Default_library,
+                    target,
+                );
             default:
                 Debug.assertNever(reason);
         }
     }
 
-    function toFileName(program: ProgramToEmitFilesAndReportErrors, file: SourceFile | string) {
-        return convertToRelativePath(isString(file) ? file : file.fileName, program.getCurrentDirectory(), fileName => program.getCanonicalFileName(fileName));
+    function toFileName(program: ProgramForFileExplaination, file: SourceFile | string, relativeFileName: boolean | undefined) {
+        const fileName = isString(file) ? file : file.fileName;
+        return relativeFileName ?
+            convertToRelativePath(fileName, program.getCurrentDirectory(), fileName => program.getCanonicalFileName(fileName)) :
+            fileName;
     }
 
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
     export function emitFilesAndReportErrors(
-        program: ProgramToEmitFilesAndReportErrors,
+        program: Program | BuilderProgram,
         reportDiagnostic: DiagnosticReporter,
         write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,
@@ -387,7 +368,7 @@ namespace ts {
     }
 
     export function emitFilesAndReportErrorsAndGetExitStatus(
-        program: ProgramToEmitFilesAndReportErrors,
+        program: Program | BuilderProgram,
         reportDiagnostic: DiagnosticReporter,
         write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,

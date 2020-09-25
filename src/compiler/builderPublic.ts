@@ -56,7 +56,11 @@ namespace ts {
         /*@internal*/
         getSourceFileByPath(path: Path): SourceFile | undefined;
         /*@internal*/
-        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        getFileIncludeReasons: Program["getFileIncludeReasons"];
+        /*@internal*/
+        getRootFileNames: Program["getRootFileNames"];
+        /*@internal*/
+        getResolvedProjectReferences: Program["getResolvedProjectReferences"];
         /**
          * Get the diagnostics for compiler options
          */

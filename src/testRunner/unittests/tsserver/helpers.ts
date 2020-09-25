@@ -700,8 +700,39 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
+    interface DiagnosticChainText {
+        message: DiagnosticMessage;
+        args?: readonly string[];
+        next?: DiagnosticChainText[];
+    }
+
+    function isDiagnosticMessage(diagnostic: DiagnosticMessage | DiagnosticChainText): diagnostic is DiagnosticMessage {
+        return !!diagnostic && isString((diagnostic as DiagnosticMessage).message);
+    }
+    function getTextForDiagnostic(diag: DiagnosticMessage | DiagnosticChainText | undefined, args?: readonly string[], indent = 0) {
+        if (diag === undefined) return "";
+        if (isDiagnosticMessage(diag)) return formatStringFromArgs(diag.message, args || emptyArray);
+        let result = "";
+        if (indent) {
+            result += "\n";
+
+            for (let i = 0; i < indent; i++) {
+                result += "  ";
+            }
+        }
+        result += formatStringFromArgs(diag.message.message, diag.args || emptyArray);
+        indent++;
+        if (diag.next) {
+            for (const kid of diag.next) {
+                result += getTextForDiagnostic(kid, /*args*/ undefined, indent);
+            }
+        }
+        return result;
+    }
+
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage | DiagnosticChainText, args?: readonly string[], category?: string, reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
+        const diag = isDiagnosticMessage(message) ? message : message.message;
+        return { start, end, text: getTextForDiagnostic(message, args), code: diag.code, category: category || diagnosticCategoryName(diag), reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
     }
 
     export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
