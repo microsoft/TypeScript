@@ -25,7 +25,6 @@ Output::
 12:00:13 AM - Starting compilation in watch mode...
 
 
-
 12:00:16 AM - Found 0 errors. Watching for file changes.
 
 
@@ -69,7 +68,6 @@ Input::
 Output::
 
 12:00:19 AM - File change detected. Starting incremental compilation...
-
 
 
 12:00:23 AM - Found 0 errors. Watching for file changes.
