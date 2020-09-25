@@ -3,6 +3,9 @@ namespace ts.server {
     declare const addEventListener: any;
     declare const postMessage: any;
     declare const close: any;
+    declare const location: any;
+    declare const XMLHttpRequest: any;
+
     const nullLogger: Logger = {
         close: noop,
         hasLevel: returnFalse,
@@ -49,17 +52,34 @@ namespace ts.server {
     function createWebSystem(args: string[]) {
         Debug.assert(ts.sys === undefined);
         const returnEmptyString = () => "";
+
         const sys: ServerHost = {
             args,
-            newLine: "\r\n", // TODO::
-            useCaseSensitiveFileNames: false, // TODO::
-            readFile: returnUndefined, // TODO:: read lib Files
+            newLine: "\n", // This can be configured by clients
+            useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
+            readFile: (path: string, _encoding?: string): string | undefined => {
+                if (!path.startsWith("http:") && !path.startsWith("https:")) {
+                    return undefined;
+                }
+
+                const request = new XMLHttpRequest();
+                request.open("GET", path, /* asynchronous */ false);
+                request.send();
+
+                if (request.status !== 200) {
+                    return undefined;
+                }
+
+                return request.responseText;
+            },
 
             write: postMessage,
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,
 
-            getExecutingFilePath: returnEmptyString, // TODO:: Locale, lib locations, typesmap location, plugins
+            getExecutingFilePath: () => {
+                return location + "";
+            },
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
             /* eslint-disable no-restricted-globals */
@@ -77,11 +97,26 @@ namespace ts.server {
             // tryEnableSourceMapsForHost?(): void;
             // debugMode?: boolean;
 
-            // Future for semantic server mode
-            fileExists: returnFalse, // Module Resolution
-            directoryExists: returnFalse, // Module resolution
+            // For semantic server mode
+            fileExists: (path: string): boolean => {
+                if (!path.startsWith("http:") && !path.startsWith("https:")) {
+                    return false;
+                }
+
+                const request = new XMLHttpRequest();
+                request.open("HEAD", path, /* asynchronous */ false);
+                request.send();
+
+                return request.status === 200;
+            },
+            directoryExists: (_path: string): boolean => {
+                return false;
+            },
             readDirectory: notImplemented, // Configured project, typing installer
-            getDirectories: () => [], // For automatic type reference directives
+            getDirectories: (path: string) => {
+                console.log("paths", path);
+                return [];
+            }, // For automatic type reference directives
             createDirectory: notImplemented, // compile On save
             writeFile: notImplemented, // compile on save
             resolvePath: identity, // Plugins
