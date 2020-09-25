@@ -1,4 +1,4 @@
-tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts(3,12): error TS2796: Spread expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts(3,12): error TS2590: Expression produces a union type that is too complex to represent.
 
 
 ==== tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts (1 errors) ====
@@ -166,5 +166,5 @@ tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts(3,12): er
     ~~~~~~~~~~~
         };
     ~~~~~
-!!! error TS2796: Spread expression produces a union type that is too complex to represent.
+!!! error TS2590: Expression produces a union type that is too complex to represent.
     }
