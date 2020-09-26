@@ -11710,9 +11710,7 @@ namespace ts {
         }
 
         function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
-            tracing.begin(tracing.Phase.Check, "addTypeToUnion", { typeSetIds: typeSet.map(t => t.id), includes, typeId: type.id });
             const result = addTypeToUnionWorker(typeSet, includes, type);
-            tracing.end();
             return result;
         }
 
@@ -15572,9 +15570,7 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                tracing.begin(tracing.Phase.Check, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
                 const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                tracing.end();
                 return result;
             }
 
@@ -16654,7 +16650,6 @@ namespace ts {
         function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
-                tracing.begin(tracing.Phase.Check, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
                 // The emptyArray singleton is used to signal a recursive invocation.
                 cache.variances = emptyArray;
                 variances = [];
@@ -16689,7 +16684,6 @@ namespace ts {
                     variances.push(variance);
                 }
                 cache.variances = variances;
-                tracing.end();
             }
             return variances;
         }
