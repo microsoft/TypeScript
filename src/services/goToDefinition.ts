@@ -92,7 +92,21 @@ namespace ts.GoToDefinition {
                     getDefinitionFromSymbol(typeChecker, propertySymbol, node));
             }
         }
+
+        if (isShorthandPropertyAssignmentOfModuleExports(symbol)) {
+            const shorthandTarget = typeChecker.resolveName(symbol.name, symbol.valueDeclaration, SymbolFlags.Value, /*excludeGlobals*/ false);
+            if (shorthandTarget) {
+                return getDefinitionFromSymbol(typeChecker, shorthandTarget, node);
+            }
+        }
+
         return getDefinitionFromSymbol(typeChecker, symbol, node);
+    }
+
+    function isShorthandPropertyAssignmentOfModuleExports(symbol: Symbol): boolean {
+        const shorthandProperty = tryCast(symbol.valueDeclaration, isShorthandPropertyAssignment);
+        const binaryExpression = tryCast(shorthandProperty?.parent.parent, isAssignmentExpression);
+        return !!binaryExpression && getAssignmentDeclarationKind(binaryExpression) === AssignmentDeclarationKind.ModuleExports;
     }
 
     /**
