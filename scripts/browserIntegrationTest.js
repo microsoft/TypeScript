@@ -2,14 +2,22 @@
 const chalk = require("chalk");
 const { join } = require("path");
 const { readFileSync } = require("fs");
-const { spawn } = require("child_process");
+try {
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    require("playwright");
+}
+catch (error) {
+    throw new Error("Playwright is expected to be installed manually before running this script");
+}
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const playwright = require("playwright");
 
 // Turning this on will leave the Chromium browser open, giving you the
 // chance to open up the web inspector.
 const debugging = false;
 
 (async () => {
-  const playwright = await getPlaywright();
   for (const browserType of ["chromium", "firefox", "webkit"]) {
     const browser = await playwright[browserType].launch({ headless: !debugging, dumpio: true });
     const context = await browser.newContext();
@@ -37,7 +45,7 @@ const debugging = false;
     else {
         console.log("Not closing the browser, you'll need to exit the process in your terminal manually");
     }
-    console.log(`${browserType} :+1:`)
+    console.log(`${browserType} :+1:`);
   }
 })();
 
@@ -48,26 +56,3 @@ process.on("unhandledRejection", (/** @type {any}*/ err) => {
     process.exit(1);
 });
 
-function getPlaywright({
-    version = "0.12.1",
-    stdio = true
-} = {}) {
-    return new Promise((resolve, reject) => {
-        try {
-            // eslint-disable-next-line import/no-extraneous-dependencies
-            resolve(require("playwright"));
-        }
-        catch (_) {
-            spawn("npm", `install --no-save --no-package-lock playwright@${version}`.split(" "), { stdio: stdio ? "inherit" : "ignore" })
-            .on("exit", code => {
-                if (code === 0) {
-                    // eslint-disable-next-line import/no-extraneous-dependencies
-                    resolve(require("playwright"));
-                }
-                else {
-                    reject(new Error(`'npm install' exited with code ${code}`));
-                }
-            });
-        }
-    });
-}
