@@ -19,7 +19,7 @@ const debugging = false;
 
 (async () => {
   for (const browserType of ["chromium", "firefox", "webkit"]) {
-    const browser = await playwright[browserType].launch({ headless: !debugging, dumpio: true });
+    const browser = await playwright[browserType].launch({ headless: !debugging });
     const context = await browser.newContext();
     const page = await context.newPage();
 
@@ -31,7 +31,6 @@ const debugging = false;
 
     page.on("error", errorCaught);
     page.on("pageerror", errorCaught);
-    page.on("console", log => console[log._type](log._text));
 
     await page.setContent(`
     <html>
