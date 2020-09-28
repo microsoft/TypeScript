@@ -11,7 +11,7 @@ const debugging = false;
 (async () => {
   const playwright = await getPlaywright();
   for (const browserType of ["chromium", "firefox", "webkit"]) {
-    const browser = await playwright[browserType].launch({ headless: !debugging });
+    const browser = await playwright[browserType].launch({ headless: !debugging, dumpio: true });
     const context = await browser.newContext();
     const page = await context.newPage();
 
@@ -37,6 +37,7 @@ const debugging = false;
     else {
         console.log("Not closing the browser, you'll need to exit the process in your terminal manually");
     }
+    console.log(`${browserType} :+1:`)
   }
 })();
 
