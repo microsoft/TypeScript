@@ -174,7 +174,10 @@ namespace ts.moduleSpecifiers {
         const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
         const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
-        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
+        const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
+        if (!nonRelative) {
+            return relativePath;
+        }
 
         if (relativePreference === RelativePreference.NonRelative) {
             return nonRelative;
