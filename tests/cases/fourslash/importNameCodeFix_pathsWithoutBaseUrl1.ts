@@ -5,7 +5,7 @@
 ////   "compilerOptions": {
 ////     "module": "commonjs",
 ////     "paths": {
-////       "@app/*": ["lib/*"]
+////       "@app/*": ["./lib/*"]
 ////     }
 ////   }
 //// }
