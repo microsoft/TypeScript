@@ -37284,9 +37284,10 @@ namespace ts {
                     return getSymbolOfNode(node.parent);
                 case SyntaxKind.ImportType:
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal, ignoreErrors) : undefined;
-
                 case SyntaxKind.ExportKeyword:
                     return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
+                // case SyntaxKind.ShorthandPropertyAssignment:
+                //     return getSymbolOfNode(node);
 
                 default:
                     return undefined;
