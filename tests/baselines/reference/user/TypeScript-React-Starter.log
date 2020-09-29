@@ -1,0 +1,8 @@
+Exit Code: 2
+Standard output:
+node_modules/@types/enzyme/index.d.ts(368,15): error TS2304: Cannot find name 'Cheerio'.
+node_modules/@types/enzyme/index.d.ts(640,69): error TS2304: Cannot find name 'Cheerio'.
+
+
+
+Standard error:

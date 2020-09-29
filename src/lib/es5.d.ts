@@ -1376,7 +1376,7 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): arg is any[];
+    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? (unknown extends T ? never : readonly any[]) : any[];
     readonly prototype: any[];
 }
 
@@ -1396,7 +1396,7 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
-declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
 interface PromiseLike<T> {
     /**
@@ -1507,6 +1507,26 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
  * Obtain the return type of a constructor function type
  */
 type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+
+/**
+ * Convert string literal type to uppercase
+ */
+type Uppercase<S extends string> = intrinsic;
+
+/**
+ * Convert string literal type to lowercase
+ */
+type Lowercase<S extends string> = intrinsic;
+
+/**
+ * Convert first character of string literal type to uppercase
+ */
+type Capitalize<S extends string> = intrinsic;
+
+/**
+ * Convert first character of string literal type to lowercase
+ */
+type Uncapitalize<S extends string> = intrinsic;
 
 /**
  * Marker for contextual 'this' type

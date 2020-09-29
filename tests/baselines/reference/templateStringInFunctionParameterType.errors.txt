@@ -1,20 +1,10 @@
-tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts(1,12): error TS1138: Parameter declaration expected.
-tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts(1,19): error TS1005: ';' expected.
+tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts(1,12): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts (4 errors) ====
+==== tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts (1 errors) ====
     function f(`hello`);
-             ~
-!!! error TS2391: Function implementation is missing or not immediately following the declaration.
-             ~
-!!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/es6/templates/templateStringInFunctionParameterType.ts:3:10: The implementation signature is declared here.
                ~~~~~~~
-!!! error TS1138: Parameter declaration expected.
-                      ~
-!!! error TS1005: ';' expected.
+!!! error TS1003: Identifier expected.
     function f(x: string);
     function f(x: string) {
         return x;

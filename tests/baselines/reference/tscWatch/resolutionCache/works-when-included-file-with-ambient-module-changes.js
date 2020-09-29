@@ -33,12 +33,10 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
 [96mfoo.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
 
 [7m2[0m import * as fs from "fs";
 [7m [0m [91m                    ~~~~[0m
-
 
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
@@ -102,7 +100,6 @@ declare module "fs" {
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:25 AM[0m] Found 0 errors. Watching for file changes.
 

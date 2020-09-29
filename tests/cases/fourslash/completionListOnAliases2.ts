@@ -39,7 +39,14 @@ verify.completions(
     { marker: ["1", "7"], exact: ["F", "C", "E", "N", "V", "A"] },
     { marker: ["1Type", "7Type"], exact: ["I", "C", "E", "A"] },
     // Class C
-    { marker: "2", exact: ["prototype", "property", ...completion.functionMembers] },
+    {
+        marker: "2",
+        exact: [
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+            { name: "property", sortText: completion.SortText.LocalDeclarationPriority },
+            ...completion.functionMembers
+        ]
+    },
     // Enum E
     { marker: "3", exact: "value" },
     // Module N

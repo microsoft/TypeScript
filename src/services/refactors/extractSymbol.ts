@@ -439,7 +439,7 @@ namespace ts.refactor.extractSymbol {
                         // TODO: GH#18217 Silly to use `errors ||` since it's definitely not defined (see top of `visit`)
                         // Also, if we're only pushing one error, just use `let error: Diagnostic | undefined`!
                         // Also TODO: GH#19956
-                        (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
+                        (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
                         return true;
                     }
                     declarations.push(node.symbol);
@@ -448,7 +448,10 @@ namespace ts.refactor.extractSymbol {
                 // Some things can't be extracted in certain situations
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
-                        (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractImport));
+                        (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractImport));
+                        return true;
+                    case SyntaxKind.ExportAssignment:
+                        (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractExportedEntity));
                         return true;
                     case SyntaxKind.SuperKeyword:
                         // For a super *constructor call*, we have to be extracting the entire class,
@@ -457,7 +460,7 @@ namespace ts.refactor.extractSymbol {
                             // Super constructor call
                             const containingClass = getContainingClass(node)!; // TODO:GH#18217
                             if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
-                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
+                                (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                                 return true;
                             }
                         }
@@ -483,7 +486,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.FunctionDeclaration:
                         if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                             // You cannot extract global declarations
-                            (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
+                            (errors ||= []).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                         }
                         // falls through
                     case SyntaxKind.ClassExpression:
@@ -542,13 +545,13 @@ namespace ts.refactor.extractSymbol {
                         if (label) {
                             if (!contains(seenLabels, label.escapedText)) {
                                 // attempts to jump to label that is not in range to be extracted
-                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
+                                (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange));
                             }
                         }
                         else {
                             if (!(permittedJumps & (node.kind === SyntaxKind.BreakStatement ? PermittedJumps.Break : PermittedJumps.Continue))) {
                                 // attempt to break or continue in a forbidden context
-                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
+                                (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements));
                             }
                         }
                         break;
@@ -564,7 +567,7 @@ namespace ts.refactor.extractSymbol {
                             rangeFacts |= RangeFacts.HasReturn;
                         }
                         else {
-                            (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement));
+                            (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractRangeContainingConditionalReturnStatement));
                         }
                         break;
                     default:
