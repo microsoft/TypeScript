@@ -191,8 +191,9 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
-            if (children.length === 1) {
-                const result = transformJsxChildToExpression(children[0]);
+            const nonWhitespaceChildren = filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
+            if (length(nonWhitespaceChildren) === 1) {
+                const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createObjectLiteralExpression([
                     factory.createPropertyAssignment("children", result)
                 ]);
