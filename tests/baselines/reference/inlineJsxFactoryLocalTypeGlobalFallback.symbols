@@ -14,11 +14,11 @@ declare global {
         interface Element {
 >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
 
-            __domBrand: void;
+            __domBrand: never;
 >__domBrand : Symbol(Element.__domBrand, Decl(renderer.d.ts, 5, 27))
 
             children: Element[];
->children : Symbol(Element.children, Decl(renderer.d.ts, 6, 29))
+>children : Symbol(Element.children, Decl(renderer.d.ts, 6, 30))
 >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
 
             props: {};
@@ -54,11 +54,11 @@ export namespace predom {
         interface Element {
 >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
 
-            __predomBrand: void;
+            __predomBrand: never;
 >__predomBrand : Symbol(Element.__predomBrand, Decl(renderer2.d.ts, 5, 27))
 
             children: Element[];
->children : Symbol(Element.children, Decl(renderer2.d.ts, 6, 32))
+>children : Symbol(Element.children, Decl(renderer2.d.ts, 6, 33))
 >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
 
             props: {};

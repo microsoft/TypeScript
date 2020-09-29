@@ -6,8 +6,8 @@ export namespace dom {
 >e : string
         }
         interface Element {
-            __domBrand: void;
->__domBrand : void
+            __domBrand: never;
+>__domBrand : never
 
             props: {
 >props : { children?: Element[]; }
@@ -41,8 +41,8 @@ export namespace predom {
 >e : string
         }
         interface Element {
-            __predomBrand: void;
->__predomBrand : void
+            __predomBrand: never;
+>__predomBrand : never
 
             props: {
 >props : { children?: Element[]; }
@@ -110,8 +110,8 @@ export class MyClass implements predom.JSX.Element {
 >predom : () => predom.JSX.Element
 >JSX : any
 
-    __predomBrand!: void;
->__predomBrand : void
+    __predomBrand!: never;
+>__predomBrand : never
 
     constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
@@ -246,8 +246,8 @@ class DOMClass implements dom.JSX.Element {
 >dom : () => dom.JSX.Element
 >JSX : any
 
-    __domBrand!: void;
->__domBrand : void
+    __domBrand!: never;
+>__domBrand : never
 
     constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }

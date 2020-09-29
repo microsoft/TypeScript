@@ -1,0 +1,271 @@
+=== tests/cases/conformance/types/members/typesWithVoidProperty.ts ===
+interface X<T> {
+    done: true;
+>done : true
+>true : true
+
+    value: T;
+>value : T
+}
+
+interface Y<T> {
+    done: true;
+>done : true
+>true : true
+
+    value?: T;
+>value : T | undefined
+}
+
+declare let a: X<number>;
+>a : X<number>
+
+declare let b: X<void>;
+>b : X<void>
+
+declare let c: X<number | void>;
+>c : X<number | void>
+
+declare let d: Y<number>;
+>d : Y<number>
+
+a = b; // not allowed because `value` must be `number`
+>a = b : X<void>
+>a : X<number>
+>b : X<void>
+
+a = c; // not allowed because `value` must be `number`
+>a = c : X<number | void>
+>a : X<number>
+>c : X<number | void>
+
+a = d; // not allowed because `value` must be `number`
+>a = d : Y<number>
+>a : X<number>
+>d : Y<number>
+
+a = { done: true }; // not allowed because `value` is not optional (non-`void`)
+>a = { done: true } : { done: true; }
+>a : X<number>
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+
+a = { done: true, value: 1 }; // allowed because `value` must be `number`
+>a = { done: true, value: 1 } : { done: true; value: number; }
+>a : X<number>
+>{ done: true, value: 1 } : { done: true; value: number; }
+>done : true
+>true : true
+>value : number
+>1 : 1
+
+a = { done: true, value: undefined }; // not allowed because `value` must be `number`
+>a = { done: true, value: undefined } : { done: true; value: undefined; }
+>a : X<number>
+>{ done: true, value: undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined : undefined
+
+a = { done: true, value: undefined as undefined }; // not allowed because `value` must be `number`
+>a = { done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>a : X<number>
+>{ done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined as undefined : undefined
+>undefined : undefined
+
+a = { done: true, value: undefined as void }; // not allowed because `value` must be `number`
+>a = { done: true, value: undefined as void } : { done: true; value: void; }
+>a : X<number>
+>{ done: true, value: undefined as void } : { done: true; value: void; }
+>done : true
+>true : true
+>value : void
+>undefined as void : void
+>undefined : undefined
+
+b = a; // not allowed because `value` must be `void`
+>b = a : X<number>
+>b : X<void>
+>a : X<number>
+
+b = c; // not allowed because `value` must be `void`
+>b = c : X<number | void>
+>b : X<void>
+>c : X<number | void>
+
+b = d; // not allowed because `value` must be `void`
+>b = d : Y<number>
+>b : X<void>
+>d : Y<number>
+
+b = { done: true }; // allowed because `value` is optional due to `void`
+>b = { done: true } : { done: true; }
+>b : X<void>
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+
+b = { done: true, value: 1 }; // not allowed because `value` must be `void`
+>b = { done: true, value: 1 } : { done: true; value: number; }
+>b : X<void>
+>{ done: true, value: 1 } : { done: true; value: number; }
+>done : true
+>true : true
+>value : number
+>1 : 1
+
+b = { done: true, value: undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>b = { done: true, value: undefined } : { done: true; value: undefined; }
+>b : X<void>
+>{ done: true, value: undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined : undefined
+
+b = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>b = { done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>b : X<void>
+>{ done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined as undefined : undefined
+>undefined : undefined
+
+b = { done: true, value: undefined as void }; // allowed because `value` must be `void`
+>b = { done: true, value: undefined as void } : { done: true; value: void; }
+>b : X<void>
+>{ done: true, value: undefined as void } : { done: true; value: void; }
+>done : true
+>true : true
+>value : void
+>undefined as void : void
+>undefined : undefined
+
+c = a; // allowed because `value` can be `number`
+>c = a : X<number>
+>c : X<number | void>
+>a : X<number>
+
+c = b; // allowed because `value` can be `void`
+>c = b : X<void>
+>c : X<number | void>
+>b : X<void>
+
+c = d; // allowed because `value` can be `undefined`
+>c = d : Y<number>
+>c : X<number | void>
+>d : Y<number>
+
+c = { done: true }; // allowed because `value` is optional due to `void`
+>c = { done: true } : { done: true; }
+>c : X<number | void>
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+
+c = { done: true, value: 1 }; // allowed because `value` can be `number`
+>c = { done: true, value: 1 } : { done: true; value: number; }
+>c : X<number | void>
+>{ done: true, value: 1 } : { done: true; value: number; }
+>done : true
+>true : true
+>value : number
+>1 : 1
+
+c = { done: true, value: undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>c = { done: true, value: undefined } : { done: true; value: undefined; }
+>c : X<number | void>
+>{ done: true, value: undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined : undefined
+
+c = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>c = { done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>c : X<number | void>
+>{ done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined as undefined : undefined
+>undefined : undefined
+
+c = { done: true, value: undefined as void }; // allowed because `value` can be `void`
+>c = { done: true, value: undefined as void } : { done: true; value: void; }
+>c : X<number | void>
+>{ done: true, value: undefined as void } : { done: true; value: void; }
+>done : true
+>true : true
+>value : void
+>undefined as void : void
+>undefined : undefined
+
+d = a; // allowed because `value` must be `number | void`
+>d = a : X<number>
+>d : Y<number>
+>a : X<number>
+
+d = b; // not allowed because `value` must be `undefined`, and `void` is a supertype of `undefined`
+>d = b : X<void>
+>d : Y<number>
+>b : X<void>
+
+d = c; // not allowed allowed because `value` must be `undefined`, and `void` is a supertype of `undefined`
+>d = c : X<number | void>
+>d : Y<number>
+>c : X<number | void>
+
+d = { done: true }; // allowed because `value` is optional
+>d = { done: true } : { done: true; }
+>d : Y<number>
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+
+d = { done: true, value: 1 }; // allowed because `value` can be `number`
+>d = { done: true, value: 1 } : { done: true; value: number; }
+>d : Y<number>
+>{ done: true, value: 1 } : { done: true; value: number; }
+>done : true
+>true : true
+>value : number
+>1 : 1
+
+d = { done: true, value: undefined }; // allowed because `value` can be `undefined`
+>d = { done: true, value: undefined } : { done: true; value: undefined; }
+>d : Y<number>
+>{ done: true, value: undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined : undefined
+
+d = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined`
+>d = { done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>d : Y<number>
+>{ done: true, value: undefined as undefined } : { done: true; value: undefined; }
+>done : true
+>true : true
+>value : undefined
+>undefined as undefined : undefined
+>undefined : undefined
+
+d = { done: true, value: undefined as void }; // not allowed because `value` can be `undefined`, and `void` is a supertype of `undefined
+>d = { done: true, value: undefined as void } : { done: true; value: void; }
+>d : Y<number>
+>{ done: true, value: undefined as void } : { done: true; value: void; }
+>done : true
+>true : true
+>value : void
+>undefined as void : void
+>undefined : undefined
+

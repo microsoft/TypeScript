@@ -1,0 +1,197 @@
+=== tests/cases/conformance/types/members/typesWithVoidProperty.ts ===
+interface X<T> {
+>X : Symbol(X, Decl(typesWithVoidProperty.ts, 0, 0))
+>T : Symbol(T, Decl(typesWithVoidProperty.ts, 0, 12))
+
+    done: true;
+>done : Symbol(X.done, Decl(typesWithVoidProperty.ts, 0, 16))
+
+    value: T;
+>value : Symbol(X.value, Decl(typesWithVoidProperty.ts, 1, 15))
+>T : Symbol(T, Decl(typesWithVoidProperty.ts, 0, 12))
+}
+
+interface Y<T> {
+>Y : Symbol(Y, Decl(typesWithVoidProperty.ts, 3, 1))
+>T : Symbol(T, Decl(typesWithVoidProperty.ts, 5, 12))
+
+    done: true;
+>done : Symbol(Y.done, Decl(typesWithVoidProperty.ts, 5, 16))
+
+    value?: T;
+>value : Symbol(Y.value, Decl(typesWithVoidProperty.ts, 6, 15))
+>T : Symbol(T, Decl(typesWithVoidProperty.ts, 5, 12))
+}
+
+declare let a: X<number>;
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>X : Symbol(X, Decl(typesWithVoidProperty.ts, 0, 0))
+
+declare let b: X<void>;
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>X : Symbol(X, Decl(typesWithVoidProperty.ts, 0, 0))
+
+declare let c: X<number | void>;
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>X : Symbol(X, Decl(typesWithVoidProperty.ts, 0, 0))
+
+declare let d: Y<number>;
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>Y : Symbol(Y, Decl(typesWithVoidProperty.ts, 3, 1))
+
+a = b; // not allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+
+a = c; // not allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+
+a = d; // not allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+
+a = { done: true }; // not allowed because `value` is not optional (non-`void`)
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 18, 5))
+
+a = { done: true, value: 1 }; // allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 19, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 19, 17))
+
+a = { done: true, value: undefined }; // not allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 20, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 20, 17))
+>undefined : Symbol(undefined)
+
+a = { done: true, value: undefined as undefined }; // not allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 21, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 21, 17))
+>undefined : Symbol(undefined)
+
+a = { done: true, value: undefined as void }; // not allowed because `value` must be `number`
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 22, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 22, 17))
+>undefined : Symbol(undefined)
+
+b = a; // not allowed because `value` must be `void`
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+
+b = c; // not allowed because `value` must be `void`
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+
+b = d; // not allowed because `value` must be `void`
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+
+b = { done: true }; // allowed because `value` is optional due to `void`
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 27, 5))
+
+b = { done: true, value: 1 }; // not allowed because `value` must be `void`
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 28, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 28, 17))
+
+b = { done: true, value: undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 29, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 29, 17))
+>undefined : Symbol(undefined)
+
+b = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 30, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 30, 17))
+>undefined : Symbol(undefined)
+
+b = { done: true, value: undefined as void }; // allowed because `value` must be `void`
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 31, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 31, 17))
+>undefined : Symbol(undefined)
+
+c = a; // allowed because `value` can be `number`
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+
+c = b; // allowed because `value` can be `void`
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+
+c = d; // allowed because `value` can be `undefined`
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+
+c = { done: true }; // allowed because `value` is optional due to `void`
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 36, 5))
+
+c = { done: true, value: 1 }; // allowed because `value` can be `number`
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 37, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 37, 17))
+
+c = { done: true, value: undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 38, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 38, 17))
+>undefined : Symbol(undefined)
+
+c = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 39, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 39, 17))
+>undefined : Symbol(undefined)
+
+c = { done: true, value: undefined as void }; // allowed because `value` can be `void`
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 40, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 40, 17))
+>undefined : Symbol(undefined)
+
+d = a; // allowed because `value` must be `number | void`
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>a : Symbol(a, Decl(typesWithVoidProperty.ts, 10, 11))
+
+d = b; // not allowed because `value` must be `undefined`, and `void` is a supertype of `undefined`
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>b : Symbol(b, Decl(typesWithVoidProperty.ts, 11, 11))
+
+d = c; // not allowed allowed because `value` must be `undefined`, and `void` is a supertype of `undefined`
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>c : Symbol(c, Decl(typesWithVoidProperty.ts, 12, 11))
+
+d = { done: true }; // allowed because `value` is optional
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 45, 5))
+
+d = { done: true, value: 1 }; // allowed because `value` can be `number`
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 46, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 46, 17))
+
+d = { done: true, value: undefined }; // allowed because `value` can be `undefined`
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 47, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 47, 17))
+>undefined : Symbol(undefined)
+
+d = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined`
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 48, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 48, 17))
+>undefined : Symbol(undefined)
+
+d = { done: true, value: undefined as void }; // not allowed because `value` can be `undefined`, and `void` is a supertype of `undefined
+>d : Symbol(d, Decl(typesWithVoidProperty.ts, 13, 11))
+>done : Symbol(done, Decl(typesWithVoidProperty.ts, 49, 5))
+>value : Symbol(value, Decl(typesWithVoidProperty.ts, 49, 17))
+>undefined : Symbol(undefined)
+

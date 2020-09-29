@@ -88,9 +88,9 @@ i4 = i1;  // Ok
 i4 = i2;  // Ok
 i4 = i3;  // Ok
 
-interface Animal { animal: void }
-interface Dog extends Animal { dog: void }
-interface Cat extends Animal { cat: void }
+interface Animal { animal: never }
+interface Dog extends Animal { dog: never }
+interface Cat extends Animal { cat: never }
 
 interface Comparer1<T> {
     compare(a: T, b: T): number;

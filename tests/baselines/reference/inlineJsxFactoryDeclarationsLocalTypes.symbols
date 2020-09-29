@@ -14,11 +14,11 @@ export namespace dom {
         interface Element {
 >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
 
-            __domBrand: void;
+            __domBrand: never;
 >__domBrand : Symbol(Element.__domBrand, Decl(renderer.d.ts, 5, 27))
 
             props: {
->props : Symbol(Element.props, Decl(renderer.d.ts, 6, 29))
+>props : Symbol(Element.props, Decl(renderer.d.ts, 6, 30))
 
                 children?: Element[];
 >children : Symbol(children, Decl(renderer.d.ts, 7, 20))
@@ -65,11 +65,11 @@ export namespace predom {
         interface Element {
 >Element : Symbol(Element, Decl(renderer2.d.ts, 4, 9))
 
-            __predomBrand: void;
+            __predomBrand: never;
 >__predomBrand : Symbol(Element.__predomBrand, Decl(renderer2.d.ts, 5, 27))
 
             props: {
->props : Symbol(Element.props, Decl(renderer2.d.ts, 6, 32))
+>props : Symbol(Element.props, Decl(renderer2.d.ts, 6, 33))
 
                 children?: Element[];
 >children : Symbol(children, Decl(renderer2.d.ts, 7, 20))
@@ -137,7 +137,7 @@ export class MyClass implements predom.JSX.Element {
 >JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
 >Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))
 
-    __predomBrand!: void;
+    __predomBrand!: never;
 >__predomBrand : Symbol(MyClass.__predomBrand, Decl(component.tsx, 5, 52))
 
     constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
@@ -260,7 +260,7 @@ class DOMClass implements dom.JSX.Element {
 >JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
 >Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
 
-    __domBrand!: void;
+    __domBrand!: never;
 >__domBrand : Symbol(DOMClass.__domBrand, Decl(index.tsx, 8, 43))
 
     constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}

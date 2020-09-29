@@ -290,22 +290,22 @@ i4 = i3;  // Ok
 >i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))
 >i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
 
-interface Animal { animal: void }
+interface Animal { animal: never }
 >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
 >animal : Symbol(Animal.animal, Decl(strictFunctionTypesErrors.ts, 89, 18))
 
-interface Dog extends Animal { dog: void }
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+interface Dog extends Animal { dog: never }
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
 >dog : Symbol(Dog.dog, Decl(strictFunctionTypesErrors.ts, 90, 30))
 
-interface Cat extends Animal { cat: void }
->Cat : Symbol(Cat, Decl(strictFunctionTypesErrors.ts, 90, 42))
+interface Cat extends Animal { cat: never }
+>Cat : Symbol(Cat, Decl(strictFunctionTypesErrors.ts, 90, 43))
 >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
 >cat : Symbol(Cat.cat, Decl(strictFunctionTypesErrors.ts, 91, 30))
 
 interface Comparer1<T> {
->Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
+>Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 43))
 >T : Symbol(T, Decl(strictFunctionTypesErrors.ts, 93, 20))
 
     compare(a: T, b: T): number;
@@ -318,13 +318,13 @@ interface Comparer1<T> {
 
 declare let animalComparer1: Comparer1<Animal>;
 >animalComparer1 : Symbol(animalComparer1, Decl(strictFunctionTypesErrors.ts, 97, 11))
->Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
+>Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 43))
 >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
 
 declare let dogComparer1: Comparer1<Dog>;
 >dogComparer1 : Symbol(dogComparer1, Decl(strictFunctionTypesErrors.ts, 98, 11))
->Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 42))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Comparer1 : Symbol(Comparer1, Decl(strictFunctionTypesErrors.ts, 91, 43))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 
 animalComparer1 = dogComparer1;  // Ok
 >animalComparer1 : Symbol(animalComparer1, Decl(strictFunctionTypesErrors.ts, 97, 11))
@@ -354,7 +354,7 @@ declare let animalComparer2: Comparer2<Animal>;
 declare let dogComparer2: Comparer2<Dog>;
 >dogComparer2 : Symbol(dogComparer2, Decl(strictFunctionTypesErrors.ts, 108, 11))
 >Comparer2 : Symbol(Comparer2, Decl(strictFunctionTypesErrors.ts, 101, 31))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 
 animalComparer2 = dogComparer2;  // Error
 >animalComparer2 : Symbol(animalComparer2, Decl(strictFunctionTypesErrors.ts, 107, 11))
@@ -388,7 +388,7 @@ declare let animalCrate: Crate<Animal>;
 declare let dogCrate: Crate<Dog>;
 >dogCrate : Symbol(dogCrate, Decl(strictFunctionTypesErrors.ts, 121, 11))
 >Crate : Symbol(Crate, Decl(strictFunctionTypesErrors.ts, 111, 31))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 
 // Errors below should elaborate the reason for invariance
 
@@ -413,8 +413,8 @@ declare let fc2: (f: (x: Dog) => Dog) => void;
 >fc2 : Symbol(fc2, Decl(strictFunctionTypesErrors.ts, 131, 11))
 >f : Symbol(f, Decl(strictFunctionTypesErrors.ts, 131, 18))
 >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 131, 22))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 
 fc1 = fc2;  // Error
 >fc1 : Symbol(fc1, Decl(strictFunctionTypesErrors.ts, 130, 11))
@@ -442,7 +442,7 @@ namespace n1 {
         static f2(x: Dog): Animal { throw "wat"; };
 >f2 : Symbol(Foo.f2, Decl(strictFunctionTypesErrors.ts, 140, 53))
 >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 141, 18))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
     }
     declare let f1: (cb: typeof Foo.f1) => void;
@@ -491,7 +491,7 @@ namespace n2 {
 >f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 152, 15))
 >cb : Symbol(cb, Decl(strictFunctionTypesErrors.ts, 152, 21))
 >BivariantHack : Symbol(BivariantHack, Decl(strictFunctionTypesErrors.ts, 149, 14))
->Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 33))
+>Dog : Symbol(Dog, Decl(strictFunctionTypesErrors.ts, 89, 34))
 >Animal : Symbol(Animal, Decl(strictFunctionTypesErrors.ts, 87, 8))
 
     f1 = f2;

@@ -8,7 +8,7 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__pre
                 [e: string]: {};
             }
             interface Element {
-                __domBrand: void;
+                __domBrand: never;
                 children: Element[];
                 props: {};
             }
@@ -24,7 +24,7 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__pre
                 [e: string]: {};
             }
             interface Element {
-                __predomBrand: void;
+                __predomBrand: never;
                 children: Element[];
                 props: {};
             }

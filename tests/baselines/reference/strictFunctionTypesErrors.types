@@ -298,14 +298,14 @@ i4 = i3;  // Ok
 >i4 : Func<string, Func<string, void>>
 >i3 : Func<string, Func<Object, void>>
 
-interface Animal { animal: void }
->animal : void
+interface Animal { animal: never }
+>animal : never
 
-interface Dog extends Animal { dog: void }
->dog : void
+interface Dog extends Animal { dog: never }
+>dog : never
 
-interface Cat extends Animal { cat: void }
->cat : void
+interface Cat extends Animal { cat: never }
+>cat : never
 
 interface Comparer1<T> {
     compare(a: T, b: T): number;

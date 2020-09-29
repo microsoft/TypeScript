@@ -8,8 +8,8 @@ declare global {
 >e : string
         }
         interface Element {
-            __domBrand: void;
->__domBrand : void
+            __domBrand: never;
+>__domBrand : never
 
             children: Element[];
 >children : Element[]
@@ -36,8 +36,8 @@ export namespace predom {
 >e : string
         }
         interface Element {
-            __predomBrand: void;
->__predomBrand : void
+            __predomBrand: never;
+>__predomBrand : never
 
             children: Element[];
 >children : Element[]

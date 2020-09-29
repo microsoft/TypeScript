@@ -1,0 +1,136 @@
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(16,1): error TS2322: Type 'X<void>' is not assignable to type 'X<number>'.
+  Type 'void' is not assignable to type 'number'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(17,1): error TS2322: Type 'X<number | void>' is not assignable to type 'X<number>'.
+  Type 'number | void' is not assignable to type 'number'.
+    Type 'void' is not assignable to type 'number'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(18,1): error TS2322: Type 'Y<number>' is not assignable to type 'X<number>'.
+  Types of property 'value' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(19,1): error TS2741: Property 'value' is missing in type '{ done: true; }' but required in type 'X<number>'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(21,19): error TS2322: Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(22,19): error TS2322: Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(23,19): error TS2322: Type 'void' is not assignable to type 'number'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(25,1): error TS2322: Type 'X<number>' is not assignable to type 'X<void>'.
+  Type 'number' is not assignable to type 'void'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(26,1): error TS2322: Type 'X<number | void>' is not assignable to type 'X<void>'.
+  Type 'number | void' is not assignable to type 'void'.
+    Type 'number' is not assignable to type 'void'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(27,1): error TS2322: Type 'Y<number>' is not assignable to type 'X<void>'.
+  Types of property 'value' are incompatible.
+    Type 'number | undefined' is not assignable to type 'void'.
+      Type 'number' is not assignable to type 'void'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(29,19): error TS2322: Type 'number' is not assignable to type 'void'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(44,1): error TS2322: Type 'X<void>' is not assignable to type 'Y<number>'.
+  Types of property 'value' are incompatible.
+    Type 'void' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(45,1): error TS2322: Type 'X<number | void>' is not assignable to type 'Y<number>'.
+  Types of property 'value' are incompatible.
+    Type 'number | void' is not assignable to type 'number | undefined'.
+      Type 'void' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/members/typesWithVoidProperty.ts(50,19): error TS2322: Type 'void' is not assignable to type 'number | undefined'.
+
+
+==== tests/cases/conformance/types/members/typesWithVoidProperty.ts (14 errors) ====
+    interface X<T> {
+        done: true;
+        value: T;
+    }
+    
+    interface Y<T> {
+        done: true;
+        value?: T;
+    }
+    
+    declare let a: X<number>;
+    declare let b: X<void>;
+    declare let c: X<number | void>;
+    declare let d: Y<number>;
+    
+    a = b; // not allowed because `value` must be `number`
+    ~
+!!! error TS2322: Type 'X<void>' is not assignable to type 'X<number>'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
+    a = c; // not allowed because `value` must be `number`
+    ~
+!!! error TS2322: Type 'X<number | void>' is not assignable to type 'X<number>'.
+!!! error TS2322:   Type 'number | void' is not assignable to type 'number'.
+!!! error TS2322:     Type 'void' is not assignable to type 'number'.
+    a = d; // not allowed because `value` must be `number`
+    ~
+!!! error TS2322: Type 'Y<number>' is not assignable to type 'X<number>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+    a = { done: true }; // not allowed because `value` is not optional (non-`void`)
+    ~
+!!! error TS2741: Property 'value' is missing in type '{ done: true; }' but required in type 'X<number>'.
+!!! related TS2728 tests/cases/conformance/types/members/typesWithVoidProperty.ts:3:5: 'value' is declared here.
+    a = { done: true, value: 1 }; // allowed because `value` must be `number`
+    a = { done: true, value: undefined }; // not allowed because `value` must be `number`
+                      ~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/members/typesWithVoidProperty.ts:3:5: The expected type comes from property 'value' which is declared here on type 'X<number>'
+    a = { done: true, value: undefined as undefined }; // not allowed because `value` must be `number`
+                      ~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/members/typesWithVoidProperty.ts:3:5: The expected type comes from property 'value' which is declared here on type 'X<number>'
+    a = { done: true, value: undefined as void }; // not allowed because `value` must be `number`
+                      ~~~~~
+!!! error TS2322: Type 'void' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/members/typesWithVoidProperty.ts:3:5: The expected type comes from property 'value' which is declared here on type 'X<number>'
+    
+    b = a; // not allowed because `value` must be `void`
+    ~
+!!! error TS2322: Type 'X<number>' is not assignable to type 'X<void>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'void'.
+    b = c; // not allowed because `value` must be `void`
+    ~
+!!! error TS2322: Type 'X<number | void>' is not assignable to type 'X<void>'.
+!!! error TS2322:   Type 'number | void' is not assignable to type 'void'.
+!!! error TS2322:     Type 'number' is not assignable to type 'void'.
+    b = d; // not allowed because `value` must be `void`
+    ~
+!!! error TS2322: Type 'Y<number>' is not assignable to type 'X<void>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'void'.
+!!! error TS2322:       Type 'number' is not assignable to type 'void'.
+    b = { done: true }; // allowed because `value` is optional due to `void`
+    b = { done: true, value: 1 }; // not allowed because `value` must be `void`
+                      ~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'void'.
+!!! related TS6500 tests/cases/conformance/types/members/typesWithVoidProperty.ts:3:5: The expected type comes from property 'value' which is declared here on type 'X<void>'
+    b = { done: true, value: undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+    b = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+    b = { done: true, value: undefined as void }; // allowed because `value` must be `void`
+    
+    c = a; // allowed because `value` can be `number`
+    c = b; // allowed because `value` can be `void`
+    c = d; // allowed because `value` can be `undefined`
+    c = { done: true }; // allowed because `value` is optional due to `void`
+    c = { done: true, value: 1 }; // allowed because `value` can be `number`
+    c = { done: true, value: undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+    c = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined` (assignable to `void`)
+    c = { done: true, value: undefined as void }; // allowed because `value` can be `void`
+    
+    d = a; // allowed because `value` must be `number | void`
+    d = b; // not allowed because `value` must be `undefined`, and `void` is a supertype of `undefined`
+    ~
+!!! error TS2322: Type 'X<void>' is not assignable to type 'Y<number>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'void' is not assignable to type 'number | undefined'.
+    d = c; // not allowed allowed because `value` must be `undefined`, and `void` is a supertype of `undefined`
+    ~
+!!! error TS2322: Type 'X<number | void>' is not assignable to type 'Y<number>'.
+!!! error TS2322:   Types of property 'value' are incompatible.
+!!! error TS2322:     Type 'number | void' is not assignable to type 'number | undefined'.
+!!! error TS2322:       Type 'void' is not assignable to type 'number | undefined'.
+    d = { done: true }; // allowed because `value` is optional
+    d = { done: true, value: 1 }; // allowed because `value` can be `number`
+    d = { done: true, value: undefined }; // allowed because `value` can be `undefined`
+    d = { done: true, value: undefined as undefined }; // allowed because `value` can be `undefined`
+    d = { done: true, value: undefined as void }; // not allowed because `value` can be `undefined`, and `void` is a supertype of `undefined
+                      ~~~~~
+!!! error TS2322: Type 'void' is not assignable to type 'number | undefined'.
+!!! related TS6500 tests/cases/conformance/types/members/typesWithVoidProperty.ts:8:5: The expected type comes from property 'value' which is declared here on type 'Y<number>'
+    

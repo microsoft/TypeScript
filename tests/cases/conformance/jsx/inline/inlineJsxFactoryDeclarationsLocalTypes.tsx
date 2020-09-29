@@ -6,7 +6,7 @@ export namespace dom {
             [e: string]: {};
         }
         interface Element {
-            __domBrand: void;
+            __domBrand: never;
             props: {
                 children?: Element[];
             };
@@ -26,7 +26,7 @@ export namespace predom {
             [e: string]: {};
         }
         interface Element {
-            __predomBrand: void;
+            __predomBrand: never;
             props: {
                 children?: Element[];
             };
@@ -46,7 +46,7 @@ import { predom } from "./renderer2"
 export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
 
 export class MyClass implements predom.JSX.Element {
-    __predomBrand!: void;
+    __predomBrand!: never;
     constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
     render() {
         return <p>
@@ -69,7 +69,7 @@ elem = <h></h>; // Expect assignability error here
 const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
 
 class DOMClass implements dom.JSX.Element {
-    __domBrand!: void;
+    __domBrand!: never;
     constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
     render() {
         return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;

@@ -7,7 +7,7 @@ declare global {
             [e: string]: {};
         }
         interface Element {
-            __domBrand: void;
+            __domBrand: never;
             children: Element[];
             props: {};
         }
@@ -23,7 +23,7 @@ export namespace predom {
             [e: string]: {};
         }
         interface Element {
-            __predomBrand: void;
+            __predomBrand: never;
             children: Element[];
             props: {};
         }
