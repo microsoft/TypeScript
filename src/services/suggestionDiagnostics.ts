@@ -196,7 +196,7 @@ namespace ts {
                 return true;
             }
 
-            const symbol = checker.getSymbolOfExpando(node);
+            const symbol = checker.getSymbolOfExpando(node, /*allowDeclaration*/ false);
             return !!(symbol && (symbol.exports?.size || symbol.members?.size));
         }
 

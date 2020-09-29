@@ -8729,7 +8729,7 @@ namespace ts {
             let links = getSymbolLinks(symbol);
             const originalLinks = links;
             if (!links.type) {
-                const expando = symbol.valueDeclaration && getSymbolOfExpando(symbol.valueDeclaration);
+                const expando = symbol.valueDeclaration && getSymbolOfExpando(symbol.valueDeclaration, /*allowDeclaration*/ false);
                 if (expando) {
                     const merged = mergeJSSymbols(symbol, expando);
                     if (merged) {
@@ -28083,7 +28083,7 @@ namespace ts {
             return init ? getSymbolOfNode(init) : undefined;
         }
 
-        function getSymbolOfExpando(node: Node, allowDeclaration?: boolean): Symbol | undefined {
+        function getSymbolOfExpando(node: Node, allowDeclaration: boolean): Symbol | undefined {
             if (!node.parent) {
                 return undefined;
             }
@@ -28206,7 +28206,7 @@ namespace ts {
             }
 
             if (isInJSFile(node)) {
-                const jsSymbol = getSymbolOfExpando(node);
+                const jsSymbol = getSymbolOfExpando(node, /*allowDeclaration*/ false);
                 if (jsSymbol?.exports?.size) {
                     const jsAssignmentType = createAnonymousType(jsSymbol, jsSymbol.exports, emptyArray, emptyArray, undefined, undefined);
                     jsAssignmentType.objectFlags |= ObjectFlags.JSLiteral;
