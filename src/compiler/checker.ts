@@ -19801,7 +19801,7 @@ namespace ts {
             const lastIndex = texts.length - 1;
             const startText = texts[0];
             const endText = texts[lastIndex];
-            if (!(value.startsWith(startText) && value.endsWith(endText))) return undefined;
+            if (!(value.startsWith(startText) && value.slice(startText.length).endsWith(endText))) return undefined;
             const matches = [];
             const str = value.slice(startText.length, value.length - endText.length);
             let pos = 0;
