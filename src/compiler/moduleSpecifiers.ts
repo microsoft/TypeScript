@@ -180,27 +180,41 @@ namespace ts.moduleSpecifiers {
         const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
         const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
-        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths.path;
+        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
 
         if (relativePreference === RelativePreference.NonRelative) {
             return nonRelative;
         }
 
         if (relativePreference === RelativePreference.ExternalNonRelative) {
-            Debug.assertIsDefined(host.getNearestAncestorDirectoryWithPackageJson);
             const projectDirectory = host.getCurrentDirectory();
             const modulePath = toPath(moduleFileName, projectDirectory, getCanonicalFileName);
             const sourceIsInternal = startsWith(sourceDirectory, projectDirectory);
             const targetIsInternal = startsWith(modulePath, projectDirectory);
             if (sourceIsInternal && !targetIsInternal || !sourceIsInternal && targetIsInternal) {
                 // 1. The import path crosses the boundary of the tsconfig.json-containing directory.
+                //
+                //      src/
+                //        tsconfig.json
+                //        index.ts -------
+                //      lib/              | (path crosses tsconfig.json)
+                //        imported.ts <---
+                //
                 return nonRelative;
             }
 
-            const nearestTargetPackageJson = host.getNearestAncestorDirectoryWithPackageJson(getDirectoryPath(modulePath));
-            const nearestSourcePackageJson = host.getNearestAncestorDirectoryWithPackageJson(sourceDirectory);
+            const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
+            const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
             if (nearestSourcePackageJson !== nearestTargetPackageJson) {
                 // 2. The importing and imported files are part of different packages.
+                //
+                //      packages/a/
+                //        package.json
+                //        index.ts --------
+                //      packages/b/        | (path crosses package.json)
+                //        package.json     |
+                //        component.ts <---
+                //
                 return nonRelative;
             }
 
@@ -235,6 +249,15 @@ namespace ts.moduleSpecifiers {
             numberOfDirectorySeparators(a.path),
             numberOfDirectorySeparators(b.path)
         );
+    }
+
+    function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string) {
+        if (host.getNearestAncestorDirectoryWithPackageJson) {
+            return host.getNearestAncestorDirectoryWithPackageJson(fileName);
+        }
+        return !!forEachAncestorDirectory(fileName, directory => {
+            return host.fileExists(combinePaths(directory, "package.json")) ? true : undefined;
+        });
     }
 
     export function forEachFileNameOfModule<T>(
@@ -352,7 +375,7 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): { key: string, path: string } | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
         for (const key in paths) {
             for (const patternText of paths[key]) {
                 const pattern = removeFileExtension(normalizePath(patternText));
@@ -365,11 +388,11 @@ namespace ts.moduleSpecifiers {
                         endsWith(relativeToBaseUrl, suffix) ||
                         !suffix && relativeToBaseUrl === removeTrailingDirectorySeparator(prefix)) {
                         const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length);
-                        return { key, path: key.replace("*", matchedStar) };
+                        return key.replace("*", matchedStar);
                     }
                 }
                 else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
-                    return { key, path: key };
+                    return key;
                 }
             }
         }
@@ -458,7 +481,7 @@ namespace ts.moduleSpecifiers {
                         versionPaths.paths
                     );
                     if (fromPaths !== undefined) {
-                        moduleFileToTry = combinePaths(packageRootPath, fromPaths.path);
+                        moduleFileToTry = combinePaths(packageRootPath, fromPaths);
                     }
                 }
 
