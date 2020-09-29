@@ -1419,7 +1419,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить void в обещание, разрешенное без значения]]></Val>
+            <Val><![CDATA[Добавить "void" в Promise (обещание), разрешенное без значения]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1428,7 +1428,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить void во все обещания, разрешенные без значения]]></Val>
+            <Val><![CDATA[Добавить "void" во все Promise (обещания), разрешенные без значения]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3956,6 +3956,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declarations_with_definite_assignment_assertions_must_also_have_type_annotations_1264" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with definite assignment assertions must also have type annotations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Объявления с определенными утверждениями присваивания также должны иметь заметки типов.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declarations_with_initializers_cannot_also_have_definite_assignment_assertions_1263" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with initializers cannot also have definite assignment assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Объявления с инициализаторами не могут также иметь определенные утверждения присваивания.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declare_a_private_field_named_0_90053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare a private field named '{0}'.]]></Val>
@@ -4054,15 +4072,6 @@
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Экспорт модуля по умолчанию использует или имеет закрытое имя "{0}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation_1258" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Определенные утверждения присваивания можно использовать только вместе с заметкой с типом.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9129,7 +9138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Удалите неиспользуемые объявления для: "{0}"]]></Val>
+            <Val><![CDATA[Удалить неиспользуемые объявления для: "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9138,7 +9147,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused destructuring declaration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Удалите неиспользуемое объявление деструктурирования]]></Val>
+            <Val><![CDATA[Удалить неиспользуемое объявление деструктурирования]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10215,7 +10224,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Измените все неверно используемые "{0}" на "{1}"]]></Val>
+            <Val><![CDATA[Изменить все неверно используемые "{0}" на "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10279,15 +10288,6 @@
           <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Целевой объект требует следующего числа элементов — {0}, но источник может иметь меньше.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Аргумент типа литерала шаблона "{0}" не является типом литерала или универсальным типом.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10570,6 +10570,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Пересечение "{0}" было сокращено до "never", так как свойство "{1}" имеет конфликтующие типы в некоторых составляющих.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types_2795" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ключевое слово intrinsic можно использовать только для объявления внутренних типов, предоставляемых компилятором.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
