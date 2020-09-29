@@ -77,7 +77,9 @@ namespace ts.server {
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,
 
-           getExecutingFilePath: () => location + "",
+            getExecutingFilePath: () => {
+                return findArgument("--executingFilePath") || location + "";
+            },
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
             /* eslint-disable no-restricted-globals */
