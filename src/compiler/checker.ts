@@ -28123,8 +28123,7 @@ namespace ts {
                 decl = node;
             }
 
-            // TODO: Push allowDecl down to getexpandoinit
-            if (!decl || !allowDeclaration && (!name || !getExpandoInitializer(node, isPrototypeAccess(name)))) {
+            if (!decl || !name || (!allowDeclaration && !getExpandoInitializer(node, isPrototypeAccess(name)))) {
                 return undefined;
             }
             return getSymbolOfNode(decl);
