@@ -111,10 +111,7 @@ namespace ts.server {
                 return false;
             },
             readDirectory: notImplemented, // Configured project, typing installer
-            getDirectories: (path: string) => {
-                console.log("paths", path);
-                return [];
-            }, // For automatic type reference directives
+            getDirectories: () => [], // For automatic type reference directives
             createDirectory: notImplemented, // compile On save
             writeFile: notImplemented, // compile on save
             resolvePath: identity, // Plugins
