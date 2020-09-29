@@ -388,6 +388,7 @@ namespace ts {
             name: "jsx",
             type: jsxOptionMap,
             affectsSourceFile: true,
+            affectsEmit: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,

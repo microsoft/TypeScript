@@ -2528,7 +2528,7 @@ namespace ts {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
         const notAccessible = () => { typeIsAccessible = false; };
-        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
+        const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
             trackSymbol: (symbol, declaration, meaning) => {
                 typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
             },

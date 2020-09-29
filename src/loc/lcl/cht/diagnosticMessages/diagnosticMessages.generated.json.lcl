@@ -1420,7 +1420,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 'void' 新增到已解決但沒有值的 Promise]]></Val>
+            <Val><![CDATA[為已經解析但不具值的 Promise 新增 'void']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1429,7 +1429,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 'void' 新增到所有已解決但沒有值的 Promise]]></Val>
+            <Val><![CDATA[為已經解析但不具值的所有 Promise 新增 'void']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3472,7 +3472,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert '{0}' to '{1} in {0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將 '{0}' 轉換成「{0} 中的 {1}」]]></Val>
+            <Val><![CDATA[將 '{0}' 轉換成 '{1} in {0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3957,6 +3957,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declarations_with_definite_assignment_assertions_must_also_have_type_annotations_1264" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with definite assignment assertions must also have type annotations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[包含明確指派判斷提示的宣告也必須包含類型註釋。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declarations_with_initializers_cannot_also_have_definite_assignment_assertions_1263" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with initializers cannot also have definite assignment assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[包含初始設定式的宣告不得同時包含明確指派判斷提示。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declare_a_private_field_named_0_90053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare a private field named '{0}'.]]></Val>
@@ -4055,15 +4073,6 @@
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[模組的預設匯出具有或正在使用私用名稱 '{0}'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation_1258" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[明確的指派判斷提示只可搭配型別註解使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10216,7 +10225,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[將每個誤用的 '{0}' 切換為 '{1}']]></Val>
+            <Val><![CDATA[將每個誤用的 '{0}' 切換成 '{1}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10280,15 +10289,6 @@
           <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[目標需要 {0} 個元素，但來源的元素可能較少。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[樣板常值型別引數 ' {0} ' 不是常值型別或泛型型別。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10571,6 +10571,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[因為屬性 '{1}' 在某些部分有衝突的類型，所以交集 '{0}' 已縮減為 'never'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types_2795" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['intrinsic' 關鍵字只可用於宣告編譯器提供的內建類型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
