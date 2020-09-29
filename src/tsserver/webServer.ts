@@ -55,7 +55,7 @@ namespace ts.server {
 
         const sys: ServerHost = {
             args,
-            newLine: "\n", // This can be configured by clients
+            newLine: "\r\n", // This can be configured by clients
             useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
             readFile: (path: string, _encoding?: string): string | undefined => {
                 if (!path.startsWith("http:") && !path.startsWith("https:")) {
