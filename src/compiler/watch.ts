@@ -231,7 +231,7 @@ namespace ts {
                 const { basePath, includeSpecs } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
                 if (includeSpecs) {
                     const rootName = program.getRootFileNames()[reason.index];
-                    const fileName = getNormalizedAbsolutePath(rootName, basePath);
+                    const fileName = getNormalizedAbsolutePath(rootName, program.getCurrentDirectory());
                     const filePath = program.getCanonicalFileName(fileName);
                     const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
                     if (!matchedByFiles) {

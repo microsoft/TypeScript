@@ -3434,7 +3434,7 @@ namespace ts {
                     if (!options.configFile.configFileSpecs) return undefined;
                     const { basePath, includeSpecs } = getFileFromConfigExplainInfo(programForExplaination);
                     const rootName = rootNames[reason.index];
-                    const fileName = getNormalizedAbsolutePath(rootName, basePath);
+                    const fileName = getNormalizedAbsolutePath(rootName, getCurrentDirectory());
                     const filePath = getCanonicalFileName(fileName);
                     const matchedByFiles = find(options.configFile.configFileSpecs.validatedFilesSpec || emptyArray, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
                     if (matchedByFiles) {
