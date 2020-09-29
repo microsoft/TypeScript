@@ -905,6 +905,7 @@ namespace ts {
         let deferredGlobalGeneratorType: GenericType;
         let deferredGlobalIteratorYieldResultType: GenericType;
         let deferredGlobalIteratorReturnResultType: GenericType;
+        let deferredGlobalIteratorVoidReturnResultType: ObjectType;
         let deferredGlobalAsyncIterableType: GenericType;
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
@@ -12562,6 +12563,10 @@ namespace ts {
 
         function getGlobalIteratorReturnResultType(reportErrors: boolean) {
             return deferredGlobalIteratorReturnResultType || (deferredGlobalIteratorReturnResultType = getGlobalType("IteratorReturnResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorVoidReturnResultType(reportErrors: boolean) {
+            return deferredGlobalIteratorVoidReturnResultType || (deferredGlobalIteratorVoidReturnResultType = getGlobalType("IteratorVoidReturnResult" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType | undefined {
@@ -34430,6 +34435,9 @@ namespace ts {
             if (isReferenceToType(type, getGlobalIteratorReturnResultType(/*reportErrors*/ false))) {
                 const returnType = getTypeArguments(type as GenericType)[0];
                 return setCachedIterationTypes(type, "iterationTypesOfIteratorResult", createIterationTypes(/*yieldType*/ undefined, returnType, /*nextType*/ undefined));
+            }
+            if (isReferenceToType(type, getGlobalIteratorVoidReturnResultType(/*reportErrors*/ false))) {
+                return setCachedIterationTypes(type, "iterationTypesOfIteratorResult", createIterationTypes(/*yieldType*/ undefined, voidType, /*nextType*/ undefined));
             }
 
             // Choose any constituents that can produce the requested iteration type.

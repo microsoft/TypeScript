@@ -1,0 +1,302 @@
+=== tests/cases/compiler/iteratorVoidResult.ts ===
+// @strict
+
+//
+// Iterators with 'void'
+//
+
+const o1 = {
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+>{    [Symbol.iterator]() {        return {            next(): IteratorResult<number, void> {                return { done: true };            }        };    }} : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => { next(): IteratorResult<number, void>; }
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+        return {
+>{            next(): IteratorResult<number, void> {                return { done: true };            }        } : { next(): IteratorResult<number, void>; }
+
+            next(): IteratorResult<number, void> {
+>next : () => IteratorResult<number, void>
+
+                return { done: true };
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+            }
+        };
+    }
+};
+
+// should still be iterable
+for (const _ of o1) {}
+>_ : number
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+
+// should still be spreadable
+const a1 = [...o1];
+>a1 : number[]
+>[...o1] : number[]
+>...o1 : number
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+
+// should still destructure
+const [e1] = o1;
+>e1 : number
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+
+// verify value of r1
+const r1 = o1[Symbol.iterator]().next();
+>r1 : IteratorResult<number, void>
+>o1[Symbol.iterator]().next() : IteratorResult<number, void>
+>o1[Symbol.iterator]().next : () => IteratorResult<number, void>
+>o1[Symbol.iterator]() : { next(): IteratorResult<number, void>; }
+>o1[Symbol.iterator] : () => { next(): IteratorResult<number, void>; }
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>next : () => IteratorResult<number, void>
+
+if (r1.done) r1.value;
+>r1.done : boolean
+>r1 : IteratorResult<number, void>
+>done : boolean
+>r1.value : void
+>r1 : IteratorVoidReturnResult | IteratorReturnResult<void>
+>value : void
+
+(function* () {
+>(function* () {    // verify result of yield*    const x1 = yield * o1;}) : () => Generator<number, void, unknown>
+>function* () {    // verify result of yield*    const x1 = yield * o1;} : () => Generator<number, void, unknown>
+
+    // verify result of yield*
+    const x1 = yield * o1;
+>x1 : void
+>yield * o1 : void
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+
+});
+
+const o2 = {
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+>{    [Symbol.iterator]() {        return {            next(): IteratorResult<number, number | void> {                return { done: true };            }        };    }} : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : () => { next(): IteratorResult<number, number | void>; }
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+        return {
+>{            next(): IteratorResult<number, number | void> {                return { done: true };            }        } : { next(): IteratorResult<number, number | void>; }
+
+            next(): IteratorResult<number, number | void> {
+>next : () => IteratorResult<number, number | void>
+
+                return { done: true };
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+            }
+        };
+    }
+};
+
+// should still be iterable
+for (const _ of o2) {}
+>_ : number
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+
+// should still be spreadable
+const a2 = [...o2];
+>a2 : number[]
+>[...o2] : number[]
+>...o2 : number
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+
+// should still destructure
+const [e2] = o2;
+>e2 : number
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+
+// verify value of r2
+const r2 = o2[Symbol.iterator]().next();
+>r2 : IteratorResult<number, number | void>
+>o2[Symbol.iterator]().next() : IteratorResult<number, number | void>
+>o2[Symbol.iterator]().next : () => IteratorResult<number, number | void>
+>o2[Symbol.iterator]() : { next(): IteratorResult<number, number | void>; }
+>o2[Symbol.iterator] : () => { next(): IteratorResult<number, number | void>; }
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>next : () => IteratorResult<number, number | void>
+
+if (r2.done) r2.value;
+>r2.done : boolean
+>r2 : IteratorResult<number, number | void>
+>done : boolean
+>r2.value : number | void
+>r2 : IteratorVoidReturnResult | IteratorReturnResult<number | void>
+>value : number | void
+
+(function* () {
+>(function* () {    // verify result of yield*    const x2 = yield * o2;}) : () => Generator<number, void, unknown>
+>function* () {    // verify result of yield*    const x2 = yield * o2;} : () => Generator<number, void, unknown>
+
+    // verify result of yield*
+    const x2 = yield * o2;
+>x2 : number | void
+>yield * o2 : number | void
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+
+});
+
+//
+// AsyncIterators with 'void'
+//
+
+async function main() {
+>main : () => Promise<void>
+
+    // should still be iterable
+    for await (const _ of o1) {}
+>_ : number
+>o1 : { [Symbol.iterator](): { next(): IteratorResult<number, void>; }; }
+
+    for await (const _ of o2) {}
+>_ : number
+>o2 : { [Symbol.iterator](): { next(): IteratorResult<number, number | void>; }; }
+
+    const o3 = {
+>o3 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, void>>; }; }
+>{        [Symbol.asyncIterator]() {             return {                async next(): Promise<IteratorResult<number, void>> {                    return { done: true };                }            };        }    } : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, void>>; }; }
+
+        [Symbol.asyncIterator]() { 
+>[Symbol.asyncIterator] : () => { next(): Promise<IteratorResult<number, void>>; }
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+            return {
+>{                async next(): Promise<IteratorResult<number, void>> {                    return { done: true };                }            } : { next(): Promise<IteratorResult<number, void>>; }
+
+                async next(): Promise<IteratorResult<number, void>> {
+>next : () => Promise<IteratorResult<number, void>>
+
+                    return { done: true };
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+                }
+            };
+        }
+    };
+
+    // should still be iterable
+    for await (const _ of o3) {}
+>_ : number
+>o3 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, void>>; }; }
+
+    // verify value of r3
+    const r3 = await o3[Symbol.asyncIterator]().next();
+>r3 : IteratorResult<number, void>
+>await o3[Symbol.asyncIterator]().next() : IteratorResult<number, void>
+>o3[Symbol.asyncIterator]().next() : Promise<IteratorResult<number, void>>
+>o3[Symbol.asyncIterator]().next : () => Promise<IteratorResult<number, void>>
+>o3[Symbol.asyncIterator]() : { next(): Promise<IteratorResult<number, void>>; }
+>o3[Symbol.asyncIterator] : () => { next(): Promise<IteratorResult<number, void>>; }
+>o3 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, void>>; }; }
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>next : () => Promise<IteratorResult<number, void>>
+
+    if (r3.done) r3.value;
+>r3.done : boolean
+>r3 : IteratorResult<number, void>
+>done : boolean
+>r3.value : void
+>r3 : IteratorVoidReturnResult | IteratorReturnResult<void>
+>value : void
+
+    (async function* () {
+>(async function* () {        // verify result of yield*        const x1 = yield * o3;    }) : () => AsyncGenerator<number, void, unknown>
+>async function* () {        // verify result of yield*        const x1 = yield * o3;    } : () => AsyncGenerator<number, void, unknown>
+
+        // verify result of yield*
+        const x1 = yield * o3;
+>x1 : void
+>yield * o3 : void
+>o3 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, void>>; }; }
+
+    });
+
+    const o4 = {
+>o4 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, number | void>>; }; }
+>{        [Symbol.asyncIterator]() {            return {                async next(): Promise<IteratorResult<number, number | void>> {                    return { done: true };                }            };        }    } : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, number | void>>; }; }
+
+        [Symbol.asyncIterator]() {
+>[Symbol.asyncIterator] : () => { next(): Promise<IteratorResult<number, number | void>>; }
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+            return {
+>{                async next(): Promise<IteratorResult<number, number | void>> {                    return { done: true };                }            } : { next(): Promise<IteratorResult<number, number | void>>; }
+
+                async next(): Promise<IteratorResult<number, number | void>> {
+>next : () => Promise<IteratorResult<number, number | void>>
+
+                    return { done: true };
+>{ done: true } : { done: true; }
+>done : true
+>true : true
+                }
+            };
+        }
+    };
+
+    // should still be iterable
+    for await (const _ of o4) {}
+>_ : number
+>o4 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, number | void>>; }; }
+
+    // verify value of r4
+    const r4 = await o4[Symbol.asyncIterator]().next();
+>r4 : IteratorResult<number, number | void>
+>await o4[Symbol.asyncIterator]().next() : IteratorResult<number, number | void>
+>o4[Symbol.asyncIterator]().next() : Promise<IteratorResult<number, number | void>>
+>o4[Symbol.asyncIterator]().next : () => Promise<IteratorResult<number, number | void>>
+>o4[Symbol.asyncIterator]() : { next(): Promise<IteratorResult<number, number | void>>; }
+>o4[Symbol.asyncIterator] : () => { next(): Promise<IteratorResult<number, number | void>>; }
+>o4 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, number | void>>; }; }
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>next : () => Promise<IteratorResult<number, number | void>>
+
+    if (r4.done) r4.value;
+>r4.done : boolean
+>r4 : IteratorResult<number, number | void>
+>done : boolean
+>r4.value : number | void
+>r4 : IteratorVoidReturnResult | IteratorReturnResult<number | void>
+>value : number | void
+
+    (async function* () {
+>(async function* () {        // verify result of yield*        const x4 = yield * o4;    }) : () => AsyncGenerator<number, void, unknown>
+>async function* () {        // verify result of yield*        const x4 = yield * o4;    } : () => AsyncGenerator<number, void, unknown>
+
+        // verify result of yield*
+        const x4 = yield * o4;
+>x4 : number | void
+>yield * o4 : number | void
+>o4 : { [Symbol.asyncIterator](): { next(): Promise<IteratorResult<number, number | void>>; }; }
+
+    });
+}
+

@@ -1,0 +1,254 @@
+=== tests/cases/compiler/iteratorVoidResult.ts ===
+// @strict
+
+//
+// Iterators with 'void'
+//
+
+const o1 = {
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iteratorVoidResult.ts, 6, 12))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return {
+            next(): IteratorResult<number, void> {
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 8, 16))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+
+                return { done: true };
+>done : Symbol(done, Decl(iteratorVoidResult.ts, 10, 24))
+            }
+        };
+    }
+};
+
+// should still be iterable
+for (const _ of o1) {}
+>_ : Symbol(_, Decl(iteratorVoidResult.ts, 17, 10))
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+
+// should still be spreadable
+const a1 = [...o1];
+>a1 : Symbol(a1, Decl(iteratorVoidResult.ts, 20, 5))
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+
+// should still destructure
+const [e1] = o1;
+>e1 : Symbol(e1, Decl(iteratorVoidResult.ts, 23, 7))
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+
+// verify value of r1
+const r1 = o1[Symbol.iterator]().next();
+>r1 : Symbol(r1, Decl(iteratorVoidResult.ts, 26, 5))
+>o1[Symbol.iterator]().next : Symbol(next, Decl(iteratorVoidResult.ts, 8, 16))
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 8, 16))
+
+if (r1.done) r1.value;
+>r1.done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r1 : Symbol(r1, Decl(iteratorVoidResult.ts, 26, 5))
+>done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r1.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r1 : Symbol(r1, Decl(iteratorVoidResult.ts, 26, 5))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+(function* () {
+    // verify result of yield*
+    const x1 = yield * o1;
+>x1 : Symbol(x1, Decl(iteratorVoidResult.ts, 31, 9))
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+
+});
+
+const o2 = {
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iteratorVoidResult.ts, 34, 12))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return {
+            next(): IteratorResult<number, number | void> {
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 36, 16))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+
+                return { done: true };
+>done : Symbol(done, Decl(iteratorVoidResult.ts, 38, 24))
+            }
+        };
+    }
+};
+
+// should still be iterable
+for (const _ of o2) {}
+>_ : Symbol(_, Decl(iteratorVoidResult.ts, 45, 10))
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+
+// should still be spreadable
+const a2 = [...o2];
+>a2 : Symbol(a2, Decl(iteratorVoidResult.ts, 48, 5))
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+
+// should still destructure
+const [e2] = o2;
+>e2 : Symbol(e2, Decl(iteratorVoidResult.ts, 51, 7))
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+
+// verify value of r2
+const r2 = o2[Symbol.iterator]().next();
+>r2 : Symbol(r2, Decl(iteratorVoidResult.ts, 54, 5))
+>o2[Symbol.iterator]().next : Symbol(next, Decl(iteratorVoidResult.ts, 36, 16))
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 36, 16))
+
+if (r2.done) r2.value;
+>r2.done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r2 : Symbol(r2, Decl(iteratorVoidResult.ts, 54, 5))
+>done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r2.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r2 : Symbol(r2, Decl(iteratorVoidResult.ts, 54, 5))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+(function* () {
+    // verify result of yield*
+    const x2 = yield * o2;
+>x2 : Symbol(x2, Decl(iteratorVoidResult.ts, 59, 9))
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+
+});
+
+//
+// AsyncIterators with 'void'
+//
+
+async function main() {
+>main : Symbol(main, Decl(iteratorVoidResult.ts, 60, 3))
+
+    // should still be iterable
+    for await (const _ of o1) {}
+>_ : Symbol(_, Decl(iteratorVoidResult.ts, 68, 20))
+>o1 : Symbol(o1, Decl(iteratorVoidResult.ts, 6, 5))
+
+    for await (const _ of o2) {}
+>_ : Symbol(_, Decl(iteratorVoidResult.ts, 69, 20))
+>o2 : Symbol(o2, Decl(iteratorVoidResult.ts, 34, 5))
+
+    const o3 = {
+>o3 : Symbol(o3, Decl(iteratorVoidResult.ts, 71, 9))
+
+        [Symbol.asyncIterator]() { 
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(iteratorVoidResult.ts, 71, 16))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+            return {
+                async next(): Promise<IteratorResult<number, void>> {
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 73, 20))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+
+                    return { done: true };
+>done : Symbol(done, Decl(iteratorVoidResult.ts, 75, 28))
+                }
+            };
+        }
+    };
+
+    // should still be iterable
+    for await (const _ of o3) {}
+>_ : Symbol(_, Decl(iteratorVoidResult.ts, 82, 20))
+>o3 : Symbol(o3, Decl(iteratorVoidResult.ts, 71, 9))
+
+    // verify value of r3
+    const r3 = await o3[Symbol.asyncIterator]().next();
+>r3 : Symbol(r3, Decl(iteratorVoidResult.ts, 85, 9))
+>o3[Symbol.asyncIterator]().next : Symbol(next, Decl(iteratorVoidResult.ts, 73, 20))
+>o3 : Symbol(o3, Decl(iteratorVoidResult.ts, 71, 9))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 73, 20))
+
+    if (r3.done) r3.value;
+>r3.done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r3 : Symbol(r3, Decl(iteratorVoidResult.ts, 85, 9))
+>done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r3.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r3 : Symbol(r3, Decl(iteratorVoidResult.ts, 85, 9))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+    (async function* () {
+        // verify result of yield*
+        const x1 = yield * o3;
+>x1 : Symbol(x1, Decl(iteratorVoidResult.ts, 90, 13))
+>o3 : Symbol(o3, Decl(iteratorVoidResult.ts, 71, 9))
+
+    });
+
+    const o4 = {
+>o4 : Symbol(o4, Decl(iteratorVoidResult.ts, 93, 9))
+
+        [Symbol.asyncIterator]() {
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(iteratorVoidResult.ts, 93, 16))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+
+            return {
+                async next(): Promise<IteratorResult<number, number | void>> {
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 95, 20))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+
+                    return { done: true };
+>done : Symbol(done, Decl(iteratorVoidResult.ts, 97, 28))
+                }
+            };
+        }
+    };
+
+    // should still be iterable
+    for await (const _ of o4) {}
+>_ : Symbol(_, Decl(iteratorVoidResult.ts, 104, 20))
+>o4 : Symbol(o4, Decl(iteratorVoidResult.ts, 93, 9))
+
+    // verify value of r4
+    const r4 = await o4[Symbol.asyncIterator]().next();
+>r4 : Symbol(r4, Decl(iteratorVoidResult.ts, 107, 9))
+>o4[Symbol.asyncIterator]().next : Symbol(next, Decl(iteratorVoidResult.ts, 95, 20))
+>o4 : Symbol(o4, Decl(iteratorVoidResult.ts, 93, 9))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>next : Symbol(next, Decl(iteratorVoidResult.ts, 95, 20))
+
+    if (r4.done) r4.value;
+>r4.done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r4 : Symbol(r4, Decl(iteratorVoidResult.ts, 107, 9))
+>done : Symbol(done, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r4.value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>r4 : Symbol(r4, Decl(iteratorVoidResult.ts, 107, 9))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+    (async function* () {
+        // verify result of yield*
+        const x4 = yield * o4;
+>x4 : Symbol(x4, Decl(iteratorVoidResult.ts, 112, 13))
+>o4 : Symbol(o4, Decl(iteratorVoidResult.ts, 93, 9))
+
+    });
+}
+

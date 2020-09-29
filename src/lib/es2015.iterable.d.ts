@@ -18,7 +18,15 @@ interface IteratorReturnResult<TReturn> {
     value: TReturn;
 }
 
-type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
+interface IteratorVoidReturnResult {
+    done: true;
+    value?: void;
+}
+
+type IteratorResult<T, TReturn = any> =
+    | IteratorYieldResult<T>
+    | IteratorReturnResult<TReturn>
+    | (TReturn extends void ? IteratorVoidReturnResult : never);
 
 interface Iterator<T, TReturn = any, TNext = undefined> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
