@@ -956,13 +956,13 @@ namespace ts {
         oldProgram = undefined;
 
         const program: Program = {
-            getRootFileNames,
+            getRootFileNames: () => rootNames,
             getSourceFile,
             getSourceFileByPath,
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
             getFilesByNameMap: () => filesByName,
-            getCompilerOptions,
+            getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
             getGlobalDiagnostics,
@@ -976,8 +976,7 @@ namespace ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory,
             emit,
-            getCurrentDirectory,
-            getCanonicalFileName,
+            getCurrentDirectory: () => currentDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -1034,18 +1033,6 @@ namespace ts {
         tracing.end();
 
         return program;
-
-        function getRootFileNames() {
-            return rootNames;
-        }
-
-        function getCompilerOptions() {
-            return options;
-        }
-
-        function getCurrentDirectory() {
-            return currentDirectory;
-        }
 
         function resolveModuleNamesWorker(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) {
             performance.mark("beforeResolveModule");
@@ -3319,7 +3306,7 @@ namespace ts {
                     if (!options.configFile.configFileSpecs) return undefined;
                     const { basePath, includeSpecs } = getFileFromConfigExplainInfo(programForExplaination);
                     const rootName = rootNames[reason.index];
-                    const fileName = getNormalizedAbsolutePath(rootName, getCurrentDirectory());
+                    const fileName = getNormalizedAbsolutePath(rootName, currentDirectory);
                     const filePath = getCanonicalFileName(fileName);
                     const matchedByFiles = find(options.configFile.configFileSpecs.validatedFilesSpec || emptyArray, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
                     if (matchedByFiles) {

@@ -158,11 +158,8 @@ namespace ts {
         return result;
     }
 
-    export interface FileFromConfigExplainInfo {
-        basePath: string | undefined;
-        includeSpecs: { include: string; regExp: RegExp; }[] | undefined;
-    }
-    export function getFileFromConfigExplainInfo(program: Program): FileFromConfigExplainInfo {
+    export type FileFromConfigExplainInfo = ReturnType<typeof getFileFromConfigExplainInfo>;
+    export function getFileFromConfigExplainInfo(program: Program) {
         const options = program.getCompilerOptions();
         const { validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
@@ -176,7 +173,8 @@ namespace ts {
                 regExp: getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames)
             });
         });
-        return { basePath, includeSpecs };
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames)
+        return { basePath, includeSpecs, getCanonicalFileName };
     }
 
     export function fileIncludeReasonToDiagnostics(
@@ -223,12 +221,12 @@ namespace ts {
         switch (reason.kind) {
             case FileIncludeKind.RootFile:
                 if (!options.configFile?.configFileSpecs) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
-                const { basePath, includeSpecs } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
+                const { basePath, includeSpecs, getCanonicalFileName } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
                 if (includeSpecs) {
                     const rootName = program.getRootFileNames()[reason.index];
                     const fileName = getNormalizedAbsolutePath(rootName, program.getCurrentDirectory());
-                    const filePath = program.getCanonicalFileName(fileName);
-                    const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+                    const filePath = getCanonicalFileName(fileName);
+                    const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
                     if (!matchedByFiles) {
                         const isJsonFile = fileExtensionIs(fileName, Extension.Json);
                         const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
@@ -291,7 +289,7 @@ namespace ts {
     function toFileName(program: Program, file: SourceFile | string, relativeFileName: boolean | undefined) {
         const fileName = isString(file) ? file : file.fileName;
         return relativeFileName ?
-            convertToRelativePath(fileName, program.getCurrentDirectory(), fileName => program.getCanonicalFileName(fileName)) :
+            convertToRelativePath(fileName, program.getCurrentDirectory(), fileName => createGetCanonicalFileName(program.useCaseSensitiveFileNames())(fileName)) :
             fileName;
     }
 
