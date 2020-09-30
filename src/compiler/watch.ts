@@ -113,10 +113,14 @@ namespace ts {
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
-    export function listFiles(program: Program | BuilderProgram, write: (s: string) => void) {
+    export function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
+        return !!(program as T).getState;
+    }
+
+    export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {
         const options = program.getCompilerOptions();
         if (options.explainFiles) {
-            explainFiles(program, write);
+            explainFiles(isBuilderProgram(program) ? program.getProgram() : program, write);
         }
         else if (options.listFiles || options.listFilesOnly) {
             forEach(program.getSourceFiles(), file => {
@@ -125,7 +129,7 @@ namespace ts {
         }
     }
 
-    export function explainFiles(program: Program | BuilderProgram, write: (s: string) => void) {
+    export function explainFiles(program: Program, write: (s: string) => void) {
         const configExplainInfo = getFileFromConfigExplainInfo(program);
         const reasons = program.getFileIncludeReasons();
         for (const file of program.getSourceFiles()) {
@@ -135,16 +139,7 @@ namespace ts {
         }
     }
 
-    export type ProgramForFileExplaination = Pick<Program,
-        "useCaseSensitiveFileNames" |
-        "getCurrentDirectory" |
-        "getCanonicalFileName" |
-        "getCompilerOptions" |
-        "getSourceFileByPath" |
-        "getRootFileNames" |
-        "getResolvedProjectReferences"
-    >;
-    export function explainIfFileIsRedirect(program: ProgramForFileExplaination, file: SourceFile, relativeFileNames?: boolean): DiagnosticMessageChain[] | undefined {
+    export function explainIfFileIsRedirect(program: Program, file: SourceFile, relativeFileNames?: boolean): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
             (result ||= []).push(chainDiagnosticMessages(
@@ -167,7 +162,7 @@ namespace ts {
         basePath: string | undefined;
         includeSpecs: { include: string; regExp: RegExp; }[] | undefined;
     }
-    export function getFileFromConfigExplainInfo(program: ProgramForFileExplaination): FileFromConfigExplainInfo {
+    export function getFileFromConfigExplainInfo(program: Program): FileFromConfigExplainInfo {
         const options = program.getCompilerOptions();
         const { validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
@@ -185,7 +180,7 @@ namespace ts {
     }
 
     export function fileIncludeReasonToDiagnostics(
-        program: ProgramForFileExplaination,
+        program: Program,
         reason: FileIncludeReason,
         relativeFileNames?: boolean,
         configFileExplainInfo?: FileFromConfigExplainInfo
@@ -282,7 +277,7 @@ namespace ts {
                 if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
                 const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
                 return chainDiagnosticMessages(
-                        /*details*/ undefined,
+                    /*details*/ undefined,
                     target ?
                         Diagnostics.Default_library_for_target_0 :
                         Diagnostics.Default_library,
@@ -293,7 +288,7 @@ namespace ts {
         }
     }
 
-    function toFileName(program: ProgramForFileExplaination, file: SourceFile | string, relativeFileName: boolean | undefined) {
+    function toFileName(program: Program, file: SourceFile | string, relativeFileName: boolean | undefined) {
         const fileName = isString(file) ? file : file.fileName;
         return relativeFileName ?
             convertToRelativePath(fileName, program.getCurrentDirectory(), fileName => program.getCanonicalFileName(fileName)) :
@@ -303,8 +298,8 @@ namespace ts {
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(
-        program: Program | BuilderProgram,
+    export function emitFilesAndReportErrors<T extends BuilderProgram>(
+        program: Program | T,
         reportDiagnostic: DiagnosticReporter,
         write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,
@@ -362,8 +357,8 @@ namespace ts {
         };
     }
 
-    export function emitFilesAndReportErrorsAndGetExitStatus(
-        program: Program | BuilderProgram,
+    export function emitFilesAndReportErrorsAndGetExitStatus<T extends BuilderProgram>(
+        program: Program | T,
         reportDiagnostic: DiagnosticReporter,
         write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,

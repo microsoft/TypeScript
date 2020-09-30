@@ -53,14 +53,6 @@ namespace ts {
          * Get a list of files in the program
          */
         getSourceFiles(): readonly SourceFile[];
-        /*@internal*/
-        getSourceFileByPath(path: Path): SourceFile | undefined;
-        /*@internal*/
-        getFileIncludeReasons: Program["getFileIncludeReasons"];
-        /*@internal*/
-        getRootFileNames: Program["getRootFileNames"];
-        /*@internal*/
-        getResolvedProjectReferences: Program["getResolvedProjectReferences"];
         /**
          * Get the diagnostics for compiler options
          */
@@ -113,10 +105,6 @@ namespace ts {
          * Get the current directory of the program
          */
         getCurrentDirectory(): string;
-        /* @internal */
-        useCaseSensitiveFileNames(): boolean;
-        /*@internal*/
-        getCanonicalFileName(fileName: string): string;
         /*@internal*/
         close(): void;
     }

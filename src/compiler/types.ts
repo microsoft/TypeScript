@@ -3749,7 +3749,7 @@ namespace ts {
         ProjectReferenceFile |
         ReferencedFile |
         AutomaticTypeDirectiveFile;
-    
+
     /*@internal*/
     export const enum FilePreprocessingDiagnosticsKind {
         FilePreprocessingReferencedDiagnostic,
