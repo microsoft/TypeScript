@@ -48,6 +48,7 @@ Output::
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
+    Matched by include pattern '**/*' in 'tsconfig.json'
 
 [7m1[0m import a = require("./moduleC")
 [7m [0m [91m                   ~~~~~~~~~~~[0m
@@ -137,14 +138,14 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
 
-[96mmoduleA.ts[0m:[93m2[0m:[93m4[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
+[96mmoduleA.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
     Matched by include pattern '**/*' in 'tsconfig.json'
 
 [7m2[0m                     import a = require("./ModuleC")
-[7m [0m [91m   ~~~~~~~~~~~[0m
+[7m [0m [91m                                       ~~~~~~~~~~~[0m
 
   [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
     [7m1[0m import a = require("./moduleC")
@@ -155,13 +156,14 @@ Output::
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
+    Matched by include pattern '**/*' in 'tsconfig.json'
 
 [7m1[0m import a = require("./moduleC")
 [7m [0m [91m                   ~~~~~~~~~~~[0m
 
-  [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m
-    [7m1[0m import a = require("./ModuleC")
-    [7m [0m [96m                   ~~~~~~~~~~~[0m
+  [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m
+    [7m2[0m                     import a = require("./ModuleC")
+    [7m [0m [96m                                       ~~~~~~~~~~~[0m
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts

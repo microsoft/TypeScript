@@ -780,6 +780,11 @@ export = C;
                     };
                     const importHereInA = tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "moduleA.ts"]);
                     const importHereInB = tscWatch.getDiagnosticMessageChain(Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "moduleB.ts"]);
+                    const details = [tscWatch.getDiagnosticMessageChain(
+                        Diagnostics.The_file_is_in_the_program_because_Colon,
+                        emptyArray,
+                        [importHereInA, importHereInB, tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)]
+                    )];
                     return [
                         {
                             ...tscWatch.getDiagnosticOfFileFrom(
@@ -789,13 +794,7 @@ export = C;
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
                                     ["ModuleC.ts", "moduleC.ts" ],
-                                    [
-                                        tscWatch.getDiagnosticMessageChain(
-                                            Diagnostics.The_file_is_in_the_program_because_Colon,
-                                            emptyArray,
-                                            [importHereInA, importHereInB, tscWatch.getDiagnosticMessageChain(Diagnostics.Root_file_specified_for_compilation)]
-                                        )
-                                    ],
+                                    details,
                                 )
                             ),
                             relatedInformation: [importInB]
@@ -808,14 +807,7 @@ export = C;
                                 tscWatch.getDiagnosticMessageChain(
                                     Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
                                     ["moduleC.ts", "ModuleC.ts"],
-                                    [
-                                        tscWatch.getDiagnosticMessageChain(
-
-                                            Diagnostics.The_file_is_in_the_program_because_Colon,
-                                            emptyArray,
-                                            [importHereInA, importHereInB]
-                                        )
-                                    ],
+                                    details,
                                 )
                             ),
                             relatedInformation: [importInA]
@@ -1485,14 +1477,14 @@ import b = require("./moduleB");
                 },
             };
             const program1 = createProgram(names, {}, compilerHost);
-            const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();
+            const diagnostics1 = program1.getOptionsDiagnostics();
             assert.equal(diagnostics1.length, 1, "expected one diagnostic");
 
             createProgram(names, {}, compilerHost, program1);
             assert.isTrue(program1.structureIsReused === StructureIsReused.Completely);
-            const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
+            const diagnostics2 = program1.getOptionsDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
-            assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
+            assert.deepEqual(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
         });
 
         it("Modules in the same .d.ts file are preferred to external files", () => {
