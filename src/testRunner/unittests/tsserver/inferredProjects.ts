@@ -78,7 +78,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file1]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
 
             projectService.openClientFile(file1.path, file1.content);
 
@@ -250,7 +250,7 @@ namespace ts.projectSystem {
                 { path: "/c/file3.ts", content: "let z = 4;" }
             ];
             const host = createServerHost(files, { useCaseSensitiveFileNames });
-            const projectService = createProjectService(host, { useSingleInferredProject: true, }, { useInferredProjectPerProjectRoot: true });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
             projectService.setCompilerOptionsForInferredProjects({
                 allowJs: true,
                 target: ScriptTarget.ESNext

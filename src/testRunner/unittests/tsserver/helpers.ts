@@ -383,17 +383,9 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface CreateProjectServiceParameters {
-        cancellationToken?: HostCancellationToken;
-        logger?: server.Logger;
-        useSingleInferredProject?: boolean;
-        typingsInstaller?: server.ITypingsInstaller;
-        eventHandler?: server.ProjectServiceEventHandler;
-    }
-
     export class TestProjectService extends server.ProjectService {
         constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-            typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler, opts: Partial<server.ProjectServiceOptions> = {}) {
+            typingsInstaller: server.ITypingsInstaller, opts: Partial<server.ProjectServiceOptions> = {}) {
             super({
                 host,
                 logger,
@@ -402,7 +394,6 @@ namespace ts.projectSystem {
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
                 typesMapLocation: customTypesMap.path,
-                eventHandler,
                 ...opts
             });
         }
@@ -411,11 +402,12 @@ namespace ts.projectSystem {
             checkNumberOfProjects(this, count);
         }
     }
-    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
-        const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || createHasErrorMessageLogger().logger;
-        const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
+
+    export function createProjectService(host: server.ServerHost, options?: Partial<server.ProjectServiceOptions>) {
+        const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
+        const logger = options?.logger || createHasErrorMessageLogger().logger;
+        const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {

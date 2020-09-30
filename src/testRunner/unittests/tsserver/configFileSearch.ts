@@ -72,7 +72,7 @@ namespace ts.projectSystem {
                 content: "{}"
             };
             const host = createServerHost([f1, libFile, configFile, configFile2]);
-            const service = createProjectService(host, { useSingleInferredProject: true }, { useInferredProjectPerProjectRoot: true });
+            const service = createProjectService(host, { useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
             service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectDir);
             checkNumberOfProjects(service, { configuredProjects: 1 });
             assert.isDefined(service.configuredProjects.get(configFile.path));
