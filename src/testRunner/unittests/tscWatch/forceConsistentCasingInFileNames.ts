@@ -46,5 +46,38 @@ namespace ts.tscWatch {
                 }
             ]
         });
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "when relative information file location changes",
+            commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+            sys: () => {
+                const moduleA: File = {
+                    path: `${tscWatch.projectRoot}/moduleA.ts`,
+                    content: `import a = require("./ModuleC")`
+                };
+                const moduleB: File = {
+                    path: `${tscWatch.projectRoot}/moduleB.ts`,
+                    content: `import a = require("./moduleC")`
+                };
+                const moduleC: File = {
+                    path: `${tscWatch.projectRoot}/moduleC.ts`,
+                    content: `export const x = 10;`
+                };
+                const tsconfig: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })
+                };
+                return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], { currentDirectory: tscWatch.projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Prepend a line to moduleA",
+                    change: sys => sys.prependFile(`${tscWatch.projectRoot}/moduleA.ts`, `// some comment
+                    `),
+                    timeouts: runQueuedTimeoutCallbacks,
+                }
+            ],
+        });
     });
 }
