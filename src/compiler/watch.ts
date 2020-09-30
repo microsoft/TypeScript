@@ -130,59 +130,60 @@ namespace ts {
     }
 
     export function explainFiles(program: Program, write: (s: string) => void) {
-        const configExplainInfo = getFileFromConfigExplainInfo(program);
         const reasons = program.getFileIncludeReasons();
+        const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
+        const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), getCanonicalFileName);
         for (const file of program.getSourceFiles()) {
-            write(`${toFileName(program, file, /*relativeFileName*/ true)}`);
-            reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, /*relativeFileNames*/ true, configExplainInfo).messageText}`));
-            explainIfFileIsRedirect(program, file, /*relativeFileNames*/ true)?.forEach(d => write(`  ${d.messageText}`));
+            write(`${toFileName(file, relativeFileName)}`);
+            reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
+            explainIfFileIsRedirect(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
         }
     }
 
-    export function explainIfFileIsRedirect(program: Program, file: SourceFile, relativeFileNames?: boolean): DiagnosticMessageChain[] | undefined {
+    export function explainIfFileIsRedirect(file: SourceFile, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
             (result ||= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_is_output_of_project_reference_source_0,
-                toFileName(program, file.originalFileName, relativeFileNames)
+                toFileName(file.originalFileName, fileNameConvertor)
             ));
         }
         if (file.redirectInfo) {
             (result ||= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_redirects_to_file_0,
-                toFileName(program, file.redirectInfo.redirectTarget, relativeFileNames)
+                toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)
             ));
         }
         return result;
     }
 
-    export type FileFromConfigExplainInfo = ReturnType<typeof getFileFromConfigExplainInfo>;
-    export function getFileFromConfigExplainInfo(program: Program) {
-        const options = program.getCompilerOptions();
-        const { validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
-        const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
-        const basePath = options.configFile && getDirectoryPath(getNormalizedAbsolutePath(options.configFile.fileName, program.getCurrentDirectory()));
-        let includeSpecs: { include: string; regExp: RegExp; }[] | undefined;
-        forEach(validatedIncludeSpecs, include => {
-            const pattern = getPatternFromSpec(include, basePath!, "files");
-            if (!pattern) return;
-            (includeSpecs ||= []).push({
-                include,
-                regExp: getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames)
-            });
-        });
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames)
-        return { basePath, includeSpecs, getCanonicalFileName };
+    export function getMatchedFileSpec(program: Program, fileName: string) {
+        const configFile = program.getCompilerOptions().configFile;
+        if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
+
+        const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
+        const filePath = getCanonicalFileName(fileName);
+        const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
+        return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
     }
 
-    export function fileIncludeReasonToDiagnostics(
-        program: Program,
-        reason: FileIncludeReason,
-        relativeFileNames?: boolean,
-        configFileExplainInfo?: FileFromConfigExplainInfo
-    ): DiagnosticMessageChain {
+    export function getMatchedIncludeSpec(program: Program, fileName: string) {
+        const configFile = program.getCompilerOptions().configFile;
+        if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
+
+        const isJsonFile = fileExtensionIs(fileName, Extension.Json);
+        const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
+        const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
+        return find(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
+            if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
+            const pattern = getPatternFromSpec(includeSpec, basePath, "files");
+            return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
+        });
+    }
+
+    export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string,): DiagnosticMessageChain {
         const options = program.getCompilerOptions();
         if (isReferencedFile(reason)) {
             const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
@@ -214,34 +215,26 @@ namespace ts {
                 /*details*/ undefined,
                 message,
                 referenceText,
-                toFileName(program, referecedFromFile, relativeFileNames),
+                toFileName(referecedFromFile, fileNameConvertor),
                 packageId && packageIdToString(packageId)
             );
         }
         switch (reason.kind) {
             case FileIncludeKind.RootFile:
                 if (!options.configFile?.configFileSpecs) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
-                const { basePath, includeSpecs, getCanonicalFileName } = configFileExplainInfo || getFileFromConfigExplainInfo(program);
-                if (includeSpecs) {
-                    const rootName = program.getRootFileNames()[reason.index];
-                    const fileName = getNormalizedAbsolutePath(rootName, program.getCurrentDirectory());
-                    const filePath = getCanonicalFileName(fileName);
-                    const matchedByFiles = forEach(options.configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
-                    if (!matchedByFiles) {
-                        const isJsonFile = fileExtensionIs(fileName, Extension.Json);
-                        const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
-                        return matchedByInclude ?
-                            chainDiagnosticMessages(
-                                /*details*/ undefined,
-                                Diagnostics.Matched_by_include_pattern_0_in_1,
-                                matchedByInclude.include,
-                                toFileName(program, options.configFile, relativeFileNames)
-                            ) :
-                            // Could be additional files specified as roots
-                            chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
-                    }
-                }
-                return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
+                const fileName = getNormalizedAbsolutePath(program.getRootFileNames()[reason.index], program.getCurrentDirectory());
+                const matchedByFiles = getMatchedFileSpec(program, fileName);
+                if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
+                const matchedByInclude = getMatchedIncludeSpec(program, fileName);
+                return matchedByInclude ?
+                    chainDiagnosticMessages(
+                        /*details*/ undefined,
+                        Diagnostics.Matched_by_include_pattern_0_in_1,
+                        matchedByInclude,
+                        toFileName(options.configFile, fileNameConvertor)
+                    ) :
+                    // Could be additional files specified as roots
+                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const isOutput = reason.kind === FileIncludeKind.OutputFromProjectReference;
@@ -255,7 +248,7 @@ namespace ts {
                         isOutput ?
                             Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
                             Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
-                    toFileName(program, referencedResolvedRef.sourceFile.fileName, relativeFileNames),
+                    toFileName(referencedResolvedRef.sourceFile.fileName, fileNameConvertor),
                     options.outFile ? "--outFile" : "--out",
                 );
             case FileIncludeKind.AutomaticTypeDirectiveFile:
@@ -286,11 +279,9 @@ namespace ts {
         }
     }
 
-    function toFileName(program: Program, file: SourceFile | string, relativeFileName: boolean | undefined) {
+    function toFileName(file: SourceFile | string, fileNameConvertor?: (fileName: string) => string) {
         const fileName = isString(file) ? file : file.fileName;
-        return relativeFileName ?
-            convertToRelativePath(fileName, program.getCurrentDirectory(), fileName => createGetCanonicalFileName(program.useCaseSensitiveFileNames())(fileName)) :
-            fileName;
+        return fileNameConvertor ? fileNameConvertor(fileName) : fileName;
     }
 
     /**

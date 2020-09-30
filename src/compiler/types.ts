@@ -7958,8 +7958,6 @@ namespace ts {
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(): Diagnostic[];
         getDiagnostics(fileName: string): DiagnosticWithLocation[];
-
-        reattachFileDiagnostics(newFile: SourceFile): void;
     }
 
     // SyntaxKind.SyntaxList

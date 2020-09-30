@@ -3233,7 +3233,7 @@ namespace ts {
             if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
             const location = locationReason && getReferencedFileLocation(getSourceFileByPath, locationReason);
             const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-            const redirectInfo = file && explainIfFileIsRedirect(program, file);
+            const redirectInfo = file && explainIfFileIsRedirect(file);
             const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
             return location ?
                 createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
@@ -3246,7 +3246,7 @@ namespace ts {
                     locationReason = reason;
                 }
                 else if (locationReason !== reason) {
-                    relatedInfo = append(relatedInfo, fileIncludeReasonToRelatedInformation(program, reason));
+                    relatedInfo = append(relatedInfo, fileIncludeReasonToRelatedInformation(reason));
                 }
                 // Remove fileProcessingReason if its already included in fileReasons of the program
                 if (reason === fileProcessingReason) fileProcessingReason = undefined;
@@ -3267,10 +3267,7 @@ namespace ts {
             programDiagnostics.add(createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args));
         }
 
-        function fileIncludeReasonToRelatedInformation(
-            programForExplaination: Program,
-            reason: FileIncludeReason,
-        ): DiagnosticWithLocation | undefined {
+        function fileIncludeReasonToRelatedInformation(reason: FileIncludeReason): DiagnosticWithLocation | undefined {
             if (isReferencedFile(reason)) {
                 const { file: referencedFromFile, pos, end } = getReferencedFileLocation(getSourceFileByPath, reason);
                 let message: DiagnosticMessage;
@@ -3304,21 +3301,17 @@ namespace ts {
             switch (reason.kind) {
                 case FileIncludeKind.RootFile:
                     if (!options.configFile.configFileSpecs) return undefined;
-                    const { basePath, includeSpecs } = getFileFromConfigExplainInfo(programForExplaination);
-                    const rootName = rootNames[reason.index];
-                    const fileName = getNormalizedAbsolutePath(rootName, currentDirectory);
-                    const filePath = getCanonicalFileName(fileName);
-                    const matchedByFiles = find(options.configFile.configFileSpecs.validatedFilesSpec || emptyArray, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+                    const fileName = getNormalizedAbsolutePath(rootNames[reason.index], currentDirectory);
+                    const matchedByFiles = getMatchedFileSpec(program, fileName);
                     if (matchedByFiles) {
                         configFileNode = getTsConfigPropArrayElementValue(options.configFile, "files", matchedByFiles);
                         message = Diagnostics.File_is_matched_by_files_list_specified_here;
                         break;
                     }
-                    const isJsonFile = fileExtensionIs(fileName, Extension.Json);
-                    const matchedByInclude = includeSpecs && find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
+                    const matchedByInclude = getMatchedIncludeSpec(program, fileName);
                     // Could be additional files specified as roots
                     if (!matchedByInclude) return undefined;
-                    configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude.include);
+                    configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude);
                     message = Diagnostics.File_is_matched_by_include_pattern_specified_here;
                     break;
                 case FileIncludeKind.SourceFromProjectReference:

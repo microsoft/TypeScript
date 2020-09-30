@@ -3625,12 +3625,7 @@ namespace ts {
             lookup,
             getGlobalDiagnostics,
             getDiagnostics,
-            reattachFileDiagnostics
         };
-
-        function reattachFileDiagnostics(newFile: SourceFile): void {
-            forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
-        }
 
         function lookup(diagnostic: Diagnostic): Diagnostic | undefined {
             let diagnostics: SortedArray<Diagnostic> | undefined;
