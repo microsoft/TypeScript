@@ -71,7 +71,7 @@ lib/lib.d.ts
 src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
 src/src/index.ts
-  Matched by include pattern 'src/**/*' in tsconfig.json
+  Matched by include pattern 'src/**/*' in 'src/tsconfig_withInclude.json'
 
 Found 1 error.
 

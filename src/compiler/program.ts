@@ -3444,16 +3444,11 @@ namespace ts {
                     }
                     const isJsonFile = fileExtensionIs(fileName, Extension.Json);
                     const matchedByInclude = includeSpecs && find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
-                    if (matchedByInclude) {
-                        configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude.include);
-                        message = Diagnostics.File_is_matched_by_include_pattern_specified_here;
-                        break;
-                    }
-                    return Debug.fail(`Did not find matching include for file  ${JSON.stringify({
-                        rootName,
-                        rootFileName: fileName,
-                        ...options.configFile.configFileSpecs,
-                    })}`);
+                    // Could be additional files specified as roots
+                    if (!matchedByInclude) return undefined;
+                    configFileNode = getTsConfigPropArrayElementValue(options.configFile, "include", matchedByInclude.include);
+                    message = Diagnostics.File_is_matched_by_include_pattern_specified_here;
+                    break;
                 case FileIncludeKind.SourceFromProjectReference:
                 case FileIncludeKind.OutputFromProjectReference:
                     const referencedResolvedRef = Debug.checkDefined(resolvedProjectReferences?.[reason.index]);
@@ -3468,7 +3463,7 @@ namespace ts {
                         createDiagnosticForNodeInSourceFile(
                             sourceFile,
                             referencesSyntax.elements[index],
-                            reason.kind === FileIncludeKind.OutputFromProjectReference?
+                            reason.kind === FileIncludeKind.OutputFromProjectReference ?
                                 Diagnostics.File_is_output_from_referenced_project_specified_here :
                                 Diagnostics.File_is_source_from_referenced_project_specified_here,
                         ) :

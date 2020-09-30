@@ -63,9 +63,9 @@ lib/lib.d.ts
   Default library
 src/src/index.json
   Imported via "./index.json" from file 'src/src/index.ts'
-  Matched by include pattern 'src/**/*.json' in tsconfig.json
+  Matched by include pattern 'src/**/*.json' in 'src/tsconfig_withIncludeOfJson.json'
 src/src/index.ts
-  Matched by include pattern 'src/**/*' in tsconfig.json
+  Matched by include pattern 'src/**/*' in 'src/tsconfig_withIncludeOfJson.json'
 exitCode:: ExitStatus.Success
 
 

@@ -125,7 +125,7 @@ Output::
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
-    Matched by include pattern '**/*' in tsconfig.json
+    Matched by include pattern '**/*' in '/user/username/projects/myproject/tsconfig.json'
 
 [[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
 

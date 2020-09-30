@@ -35,7 +35,7 @@ Output::
 lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
-  Matched by include pattern 'src/**/*.ts' in tsconfig.json
+  Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
 exitCode:: ExitStatus.Success
 
 
@@ -91,7 +91,7 @@ Output::
 lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
-  Matched by include pattern 'src/**/*.ts' in tsconfig.json
+  Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
 exitCode:: ExitStatus.Success
 
 

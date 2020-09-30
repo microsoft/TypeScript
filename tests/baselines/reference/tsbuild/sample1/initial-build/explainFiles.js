@@ -110,11 +110,11 @@ Output::
 lib/lib.d.ts
   Default library
 src/core/anotherModule.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/some_decl.d.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 [[90m12:01:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/logic/tsconfig.json'...
@@ -128,7 +128,7 @@ src/core/anotherModule.d.ts
   Imported via '../core/anotherModule' from file 'src/logic/index.ts'
   File is output of project reference source 'src/core/anotherModule.ts'
 src/logic/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/logic/tsconfig.json'
 [[90m12:01:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/tests/tsconfig.json'...
@@ -419,11 +419,11 @@ Output::
 lib/lib.d.ts
   Default library
 src/core/anotherModule.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/some_decl.d.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 [[90m12:04:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because oldest output 'src/logic/index.js' is older than newest input 'src/core'
 
 [[90m12:04:00 AM[0m] Building project '/src/logic/tsconfig.json'...
@@ -437,7 +437,7 @@ src/core/anotherModule.d.ts
   Imported via '../core/anotherModule' from file 'src/logic/index.ts'
   File is output of project reference source 'src/core/anotherModule.ts'
 src/logic/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/logic/tsconfig.json'
 [[90m12:04:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/core'
 
 [[90m12:04:00 AM[0m] Building project '/src/tests/tsconfig.json'...
@@ -689,11 +689,11 @@ Output::
 lib/lib.d.ts
   Default library
 src/core/anotherModule.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 src/core/some_decl.d.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'src/core/tsconfig.json'
 [[90m12:07:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
 [[90m12:07:00 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...

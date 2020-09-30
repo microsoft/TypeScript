@@ -152,7 +152,7 @@ namespace ts.projectSystem {
                             next: [{
                                 message: Diagnostics.The_file_is_in_the_program_because_Colon,
                                 next: [
-                                    { message: Diagnostics.Matched_by_include_pattern_0_in_tsconfig_json, args: ["**/*"] },
+                                    { message: Diagnostics.Matched_by_include_pattern_0_in_1, args: ["**/*", tsconfig.path] },
                                     { message: Diagnostics.Imported_via_0_from_file_1, args: [`"./logger"`, anotherFile.path] }
                                 ]
                             }]

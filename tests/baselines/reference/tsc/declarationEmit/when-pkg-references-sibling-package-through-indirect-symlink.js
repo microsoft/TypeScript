@@ -74,9 +74,9 @@ pkg2/dist/index.d.ts
   Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts' with packageId '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
 pkg3/src/keys.ts
   Imported via './keys' from file 'pkg3/src/index.ts'
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
 pkg3/src/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'pkg3/tsconfig.json'
 
 Found 1 error.
 

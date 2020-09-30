@@ -237,20 +237,15 @@ namespace ts {
                     if (!matchedByFiles) {
                         const isJsonFile = fileExtensionIs(fileName, Extension.Json);
                         const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
-                        if (matchedByInclude) {
-                            return chainDiagnosticMessages(
+                        return matchedByInclude ?
+                            chainDiagnosticMessages(
                                 /*details*/ undefined,
-                                Diagnostics.Matched_by_include_pattern_0_in_tsconfig_json,
-                                matchedByInclude.include
-                            );
-                        }
-                        else {
-                            Debug.fail(`Did not find matching include for file  ${JSON.stringify({
-                                rootName,
-                                fileName,
-                                ...options.configFile.configFileSpecs,
-                            })}`);
-                        }
+                                Diagnostics.Matched_by_include_pattern_0_in_1,
+                                matchedByInclude.include,
+                                toFileName(program, options.configFile, relativeFileNames)
+                            ) :
+                            // Could be additional files specified as roots
+                            chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
                     }
                 }
                 return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);

@@ -1220,7 +1220,7 @@
         "category": "Message",
         "code": 1397
     },
-    "Matched by include pattern '{0}' in tsconfig.json": {
+    "Matched by include pattern '{0}' in '{1}'": {
         "category": "Message",
         "code": 1398
     },

@@ -30,9 +30,9 @@ Output::
 a/lib/lib.d.ts
   Default library
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -90,7 +90,7 @@ Output::
 a/lib/lib.d.ts
   Default library
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -138,9 +138,9 @@ Output::
 a/lib/lib.d.ts
   Default library
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
