@@ -537,71 +537,8 @@ namespace ts {
     }
 
     /*@internal*/
-    export const enum FileIncludeKind {
-        RootFile,
-        SourceFromProjectReference,
-        OutputFromProjectReference,
-        Import,
-        ReferenceFile,
-        TypeReferenceDirective,
-        LibFile,
-        LibReferenceDirective,
-        AutomaticTypeDirectiveFile
-    }
-
-    /*@internal*/
-    export interface RootFile {
-        kind: FileIncludeKind.RootFile,
-        index: number;
-    }
-
-    /*@internal*/
-    export interface LibFile {
-        kind: FileIncludeKind.LibFile;
-        index?: number;
-    }
-
-    /*@internal*/
-    export type ProjectReferenceFileKind = FileIncludeKind.SourceFromProjectReference |
-        FileIncludeKind.OutputFromProjectReference;
-
-    /*@internal*/
-    export interface ProjectReferenceFile {
-        kind: ProjectReferenceFileKind;
-        index: number;
-    }
-
-    /*@internal*/
-    export type ReferencedFileKind = FileIncludeKind.Import |
-        FileIncludeKind.ReferenceFile |
-        FileIncludeKind.TypeReferenceDirective |
-        FileIncludeKind.LibReferenceDirective;
-
-    /*@internal*/
-    export interface ReferencedFile {
-        kind: ReferencedFileKind;
-        file: Path;
-        index: number;
-    }
-
-    /*@internal*/
-    export interface AutomaticTypeDirectiveFile {
-        kind: FileIncludeKind.AutomaticTypeDirectiveFile;
-        typeReference: string;
-        packageId: PackageId | undefined;
-    }
-
-    /*@internal*/
-    export type FileIncludeReason =
-        RootFile |
-        LibFile |
-        ProjectReferenceFile |
-        ReferencedFile |
-        AutomaticTypeDirectiveFile;
-
-    /*@internal*/
-    export function isReferencedFileKind(kind: FileIncludeKind): kind is ReferencedFileKind {
-        switch (kind) {
+    export function isReferencedFile(reason: FileIncludeReason | undefined): reason is ReferencedFile {
+        switch (reason?.kind) {
             case FileIncludeKind.Import:
             case FileIncludeKind.ReferenceFile:
             case FileIncludeKind.TypeReferenceDirective:
@@ -610,11 +547,6 @@ namespace ts {
             default:
                 return false;
         }
-    }
-
-    /*@internal*/
-    export function isReferencedFile(reason: FileIncludeReason): reason is ReferencedFile {
-        return isReferencedFileKind(reason.kind);
     }
 
     /*@internal*/
@@ -643,33 +575,7 @@ namespace ts {
                 return Debug.assertNever(kind);
         }
         return { file, pos, end, packageId };
-    }
-
-    /*@internal*/
-    export const enum FilePreprocessingDiagnosticsKind {
-        FilePreprocessingReferencedDiagnostic,
-        FilePreprocessingFileExplainingDiagnostic
-    }
-
-    /*@internal*/
-    export interface FilePreprocessingReferencedDiagnostic {
-        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
-        reason: ReferencedFile;
-        diagnostic: DiagnosticMessage;
-        args?: (string | number | undefined)[];
-    }
-
-    /*@internal*/
-    export interface FilePreprocessingFileExplainingDiagnostic {
-        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
-        file?: Path;
-        fileProcessingReason: FileIncludeReason;
-        diagnostic: DiagnosticMessage;
-        args?: (string | number | undefined)[];
-    }
-
-    /*@internal*/
-    export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
+    }    
 
     /**
      * Determines if program structure is upto date or needs to be recreated
@@ -2422,7 +2328,7 @@ namespace ts {
                             fail(Diagnostics.File_0_not_found, fileName);
                         }
                     }
-                    else if (reason && isReferencedFile(reason) && canonicalFileName === host.getCanonicalFileName(getSourceFileByPath(reason.file)!.fileName)) {
+                    else if (isReferencedFile(reason) && canonicalFileName === host.getCanonicalFileName(getSourceFileByPath(reason.file)!.fileName)) {
                         fail(Diagnostics.A_file_cannot_have_a_reference_to_itself);
                     }
                 }
@@ -3405,7 +3311,7 @@ namespace ts {
             };
             let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
             let relatedInfo: Diagnostic[] | undefined;
-            let locationReason = fileProcessingReason && isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
+            let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
             if (file) fileReasons.get(file.path)?.forEach(processReason);
             if (fileProcessingReason) processReason(fileProcessingReason);
             // If we have location and there is only one reason file is in which is the location, dont add details for file include
@@ -3451,7 +3357,7 @@ namespace ts {
             reason: FileIncludeReason,
         ): DiagnosticWithLocation | undefined {
             if (isReferencedFile(reason)) {
-                const { file: referencedFromFile, pos, end } = getReferencedFileLocation(path => getSourceFileByPath(path), reason);
+                const { file: referencedFromFile, pos, end } = getReferencedFileLocation(getSourceFileByPath, reason);
                 let message: DiagnosticMessage;
                 switch (reason.kind) {
                     case FileIncludeKind.Import:
