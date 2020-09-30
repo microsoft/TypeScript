@@ -1937,48 +1937,6 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    export function getDeclarationOfExpando(node: Node): Node | undefined {
-        if (!node.parent) {
-            return undefined;
-        }
-        let name: Expression | BindingName | undefined;
-        let decl: Node | undefined;
-        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJSFile(node) && !isVarConst(node.parent)) {
-                return undefined;
-            }
-            name = node.parent.name;
-            decl = node.parent;
-        }
-        else if (isBinaryExpression(node.parent)) {
-            const parentNode = node.parent;
-            const parentNodeOperator = node.parent.operatorToken.kind;
-            if (parentNodeOperator === SyntaxKind.EqualsToken && parentNode.right === node) {
-                name = parentNode.left;
-                decl = name;
-            }
-            else if (parentNodeOperator === SyntaxKind.BarBarToken || parentNodeOperator === SyntaxKind.QuestionQuestionToken) {
-                if (isVariableDeclaration(parentNode.parent) && parentNode.parent.initializer === parentNode) {
-                    name = parentNode.parent.name;
-                    decl = parentNode.parent;
-                }
-                else if (isBinaryExpression(parentNode.parent) && parentNode.parent.operatorToken.kind === SyntaxKind.EqualsToken && parentNode.parent.right === parentNode) {
-                    name = parentNode.parent.left;
-                    decl = name;
-                }
-
-                if (!name || !isBindableStaticNameExpression(name) || !isSameEntityName(name, parentNode.left)) {
-                    return undefined;
-                }
-            }
-        }
-
-        if (!name || !getExpandoInitializer(node, isPrototypeAccess(name))) {
-            return undefined;
-        }
-        return decl;
-    }
-
     export function isAssignmentDeclaration(decl: Declaration) {
         return isBinaryExpression(decl) || isAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
@@ -2098,7 +2056,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: Expression, initializer: Expression): boolean {
+    export function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
             return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
