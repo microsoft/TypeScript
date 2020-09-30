@@ -1,10 +1,11 @@
-/*@internak*/
+/*@internal*/
 namespace ts.server {
     declare const addEventListener: any;
     declare const postMessage: any;
     declare const close: any;
     declare const location: any;
     declare const XMLHttpRequest: any;
+    declare const self: any;
 
     const nullLogger: Logger = {
         close: noop,
@@ -17,6 +18,91 @@ namespace ts.server {
         endGroup: noop,
         getLogFileName: returnUndefined,
     };
+
+    // Save off original versions before they are overwitten
+    const consoleLog = console.log.bind(console);
+    const consoleError = console.error.bind(console);
+
+    class ConsoleLogger implements Logger {
+
+        private readonly topLevelGroupName = "TS Server";
+
+        private currentGroupCount = 0;
+        private seq = 0;
+
+        constructor(
+            private readonly level: LogLevel
+        ) { }
+
+        close(): void {
+            // noop
+        }
+
+        hasLevel(level: LogLevel): boolean {
+            return this.level >= level;
+        }
+
+        loggingEnabled(): boolean {
+            return true;
+        }
+
+        perftrc(s: string): void {
+            this.msg(s, Msg.Perf);
+        }
+
+        info(s: string): void {
+            this.msg(s, Msg.Info);
+        }
+
+        err(s: string) {
+            this.msg(s, Msg.Err);
+        }
+
+        startGroup(): void {
+            ++this.currentGroupCount;
+        }
+
+        endGroup(): void {
+            this.currentGroupCount = Math.max(0, this.currentGroupCount - 1);
+        }
+
+        msg(s: string, type: Msg = Msg.Err): void {
+            s = `${type} ${this.seq.toString()} [${nowString()}] ${s}`;
+
+            switch (type) {
+                case Msg.Info:
+                    this.write(() => { consoleLog(s); });
+                    break;
+
+                case Msg.Perf:
+                    this.write(() => { consoleLog(s); });
+                    break;
+
+                case Msg.Err:
+                default:
+                    this.write(() => { consoleError(s); });
+                    break;
+            }
+
+            if (this.currentGroupCount === 0) {
+                this.seq++;
+            }
+        }
+
+        getLogFileName(): string | undefined {
+            return undefined;
+        }
+
+        private write(f: () => void) {
+            console.group(this.topLevelGroupName);
+            try {
+                f();
+            }
+            finally {
+                console.groupEnd();
+            }
+        }
+    }
 
     let unknownServerMode: string | undefined;
     function parseServerMode(): LanguageServiceMode | undefined {
@@ -41,12 +127,31 @@ namespace ts.server {
         const serverMode = parseServerMode();
         return {
             args,
-            logger: nullLogger,
+            logger: createLogger(),
             cancellationToken: nullCancellationToken,
             serverMode,
             unknownServerMode,
             startSession: startWebSession
         };
+    }
+
+    function createLogger() {
+        const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
+        return typeof cmdLineVerbosity === "undefined"
+            ? nullLogger
+            : new ConsoleLogger(cmdLineVerbosity);
+    }
+
+    function getLogLevel(level: string | undefined) {
+        if (level) {
+            const l = level.toLowerCase();
+            for (const name in LogLevel) {
+                if (isNaN(+name) && l === name.toLowerCase()) {
+                    return <LogLevel><any>LogLevel[name];
+                }
+            }
+        }
+        return undefined;
     }
 
     function createWebSystem(args: string[]) {
@@ -130,6 +235,21 @@ namespace ts.server {
         // TODO:: Locale setting?
     }
 
+    function hrtime(previous?: [number, number]) {
+        const now = self.performance.now(performance) * 1e-3;
+        let seconds = Math.floor(now);
+        let nanoseconds = Math.floor((now % 1) * 1e9);
+        if (typeof previous === "number") {
+            seconds = seconds - previous[0];
+            nanoseconds = nanoseconds - previous[1];
+            if (nanoseconds < 0) {
+                seconds--;
+                nanoseconds += 1e9;
+            }
+        }
+        return [seconds, nanoseconds];
+    }
+
     function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
         class WorkerSession extends Session<{}> {
             constructor() {
@@ -141,7 +261,7 @@ namespace ts.server {
                     ...options,
                     typingsInstaller: nullTypingsInstaller,
                     byteLength: notImplemented, // Formats the message text in send of Session which is override in this class so not needed
-                    hrtime: notImplemented, // Needed for perf logging which is disabled anyway
+                    hrtime,
                     logger,
                     canUseEvents: false,
                 });
