@@ -6800,7 +6800,9 @@ namespace ts {
                             }
                             // else fall through and treat commonjs require just like import=
                         case SyntaxKind.ImportEqualsDeclaration:
-                             if (target.escapedName === InternalSymbolName.ExportEquals) {
+                            // This _specifically_ only exists to handle json declarations - where we make aliases, but since
+                            // we emit no declarations for the json document, must not refer to it in the declarations
+                            if (target.escapedName === InternalSymbolName.ExportEquals && some(target.declarations, isJsonSourceFile)) {
                                 serializeMaybeAliasAssignment(symbol);
                                 break;
                             }
