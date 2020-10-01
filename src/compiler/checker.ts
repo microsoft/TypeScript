@@ -13979,8 +13979,8 @@ namespace ts {
             }
 
             const shouldIncludeUndefined = noUncheckedIndexedAccessCandidate ||
-                !!compilerOptions.noUncheckedIndexedAccess &&
-                (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition;
+                (!!compilerOptions.noUncheckedIndexedAccess &&
+                (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition);
 
             // If the object type has a string index signature and no other members we know that the result will
             // always be the type of that index signature and we can simplify accordingly.
