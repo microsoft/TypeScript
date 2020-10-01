@@ -147,6 +147,21 @@ namespace ts.tscWatch {
             const watch = getWatch(config, { noEmit: true }, sys, createProgram);
             return { sys, watch, mainFile, otherFile, config };
         }
+
+        function verifyOutputs(sys: System, emitSys: System) {
+            for (const output of [`${projectRoot}/main.js`, `${projectRoot}/main.d.ts`, `${projectRoot}/other.js`, `${projectRoot}/other.d.ts`, `${projectRoot}/tsconfig.tsbuildinfo`]) {
+                assert.strictEqual(sys.readFile(output), emitSys.readFile(output), `Output file text for ${output}`);
+            }
+        }
+
+        function verifyBuilder<T extends BuilderProgram, U extends BuilderProgram>(config: File, sys: System, emitSys: System, createProgram: CreateProgram<T>, createEmitProgram: CreateProgram<U>, optionsToExtend?: CompilerOptions) {
+            const watch = getWatch(config, /*optionsToExtend*/ optionsToExtend, sys, createProgram);
+            const emitWatch = getWatch(config, /*optionsToExtend*/ optionsToExtend, emitSys, createEmitProgram);
+            verifyOutputs(sys, emitSys);
+            watch.close();
+            emitWatch.close();
+        }
+
         it("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files", () => {
             const { sys, watch, mainFile, otherFile } = setup(createSemanticDiagnosticsBuilderProgram, "{}");
             checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
@@ -168,38 +183,59 @@ namespace ts.tscWatch {
             emitWatch.close();
 
             // Emit on both sys should result in same output
-            verifyBuilder(createEmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+            verifyBuilder(config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
 
             // Change file
             sys.appendFile(mainFile.path, "\n// SomeComment");
             emitSys.appendFile(mainFile.path, "\n// SomeComment");
 
             // Verify noEmit results in same output
-            verifyBuilder(createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
+            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
 
             // Emit on both sys should result in same output
-            verifyBuilder(createEmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+            verifyBuilder(config, sys, emitSys, createEmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
 
             // Change file
             sys.appendFile(mainFile.path, "\n// SomeComment");
             emitSys.appendFile(mainFile.path, "\n// SomeComment");
 
             // Emit on both the builders should result in same files
-            verifyBuilder(createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram);
+        });
 
-            function verifyOutputs(sys: System, emitSys: System) {
-                for (const output of [`${projectRoot}/main.js`, `${projectRoot}/main.d.ts`, `${projectRoot}/other.js`, `${projectRoot}/other.d.ts`, `${projectRoot}/tsconfig.tsbuildinfo`]) {
-                    assert.strictEqual(sys.readFile(output), emitSys.readFile(output), `Output file text for ${output}`);
-                }
-            }
+        it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { composite: true } })
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/main.ts`,
+                content: "export const x: string = 10;"
+            };
+            const otherFile: File = {
+                path: `${projectRoot}/other.ts`,
+                content: "export const y = 10;"
+            };
+            const sys = createWatchedSystem([config, mainFile, otherFile, libFile]);
+            const emitSys = createWatchedSystem([config, mainFile, otherFile, libFile]);
 
-            function verifyBuilder<T extends BuilderProgram, U extends BuilderProgram>(createProgram: CreateProgram<T>, createEmitProgram: CreateProgram<U>, optionsToExtend?: CompilerOptions) {
-                const watch = getWatch(config, /*optionsToExtend*/ optionsToExtend, sys, createProgram);
-                const emitWatch = getWatch(config, /*optionsToExtend*/ optionsToExtend, emitSys, createEmitProgram);
-                verifyOutputs(sys, emitSys);
-                watch.close();
-                emitWatch.close();
-            }
+            // Verify noEmit results in same output
+            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmitOnError: true });
+
+            // Change file
+            sys.appendFile(mainFile.path, "\n// SomeComment");
+            emitSys.appendFile(mainFile.path, "\n// SomeComment");
+
+            // Verify noEmit results in same output
+            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmitOnError: true });
+
+            // Fix error
+            const fixed = "export const x = 10;";
+            sys.appendFile(mainFile.path, fixed);
+            emitSys.appendFile(mainFile.path, fixed);
+
+            // Emit on both the builders should result in same files
+            verifyBuilder(config, sys, emitSys, createSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram, { noEmitOnError: true });
         });
     });
 }
