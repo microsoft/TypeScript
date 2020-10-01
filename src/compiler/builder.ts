@@ -1019,31 +1019,31 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
-            if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
-                assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
-                const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
-                if (result) return result;
-                if (!targetSourceFile) {
-                    // Emit and report any errors we ran into.
-                    let sourceMaps: SourceMapEmitResult[] = [];
-                    let emitSkipped = false;
-                    let diagnostics: Diagnostic[] | undefined;
-                    let emittedFiles: string[] = [];
+            if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
+            const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
+            if (result) return result;
 
-                    let affectedEmitResult: AffectedFileResult<EmitResult>;
-                    while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
-                        emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
-                        diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
-                        emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
-                        sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
-                    }
-                    return {
-                        emitSkipped,
-                        diagnostics: diagnostics || emptyArray,
-                        emittedFiles,
-                        sourceMaps
-                    };
+            // Emit only affected files if using builder for emit
+            if (!targetSourceFile && kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                // Emit and report any errors we ran into.
+                let sourceMaps: SourceMapEmitResult[] = [];
+                let emitSkipped = false;
+                let diagnostics: Diagnostic[] | undefined;
+                let emittedFiles: string[] = [];
+
+                let affectedEmitResult: AffectedFileResult<EmitResult>;
+                while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
+                    emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
+                    diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
+                    emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
+                    sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
                 }
+                return {
+                    emitSkipped,
+                    diagnostics: diagnostics || emptyArray,
+                    emittedFiles,
+                    sourceMaps
+                };
             }
             return Debug.checkDefined(state.program).emit(targetSourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
