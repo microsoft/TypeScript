@@ -5288,7 +5288,7 @@
         "category": "Message",
         "code": 90021
     },
-    "Import default '{0}' from module \"{1}\"": {
+    "Change spelling to '{0}'": {
         "category": "Message",
         "code": 90022
     },
@@ -5328,7 +5328,7 @@
         "category": "Message",
         "code": 90031
     },
-    "Change spelling to '{0}'": {
+    "Import default '{0}' from module \"{1}\"": {
         "category": "Message",
         "code": 90032
     },
