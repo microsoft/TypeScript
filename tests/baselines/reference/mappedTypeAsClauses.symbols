@@ -143,3 +143,48 @@ type LazyPerson = Lazyify<Person>;
 >Lazyify : Symbol(Lazyify, Decl(mappedTypeAsClauses.ts, 28, 34))
 >Person : Symbol(Person, Decl(mappedTypeAsClauses.ts, 34, 2))
 
+// Repro from #40833
+
+type Example = {foo: string, bar: number};
+>Example : Symbol(Example, Decl(mappedTypeAsClauses.ts, 42, 34))
+>foo : Symbol(foo, Decl(mappedTypeAsClauses.ts, 46, 16))
+>bar : Symbol(bar, Decl(mappedTypeAsClauses.ts, 46, 28))
+
+type PickByValueType<T, U> = {
+>PickByValueType : Symbol(PickByValueType, Decl(mappedTypeAsClauses.ts, 46, 42))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 48, 21))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 48, 23))
+
+  [K in keyof T as T[K] extends U ? K : never]: T[K]
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 49, 3))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 48, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 48, 21))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 49, 3))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 48, 23))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 49, 3))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 48, 21))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 49, 3))
+
+};
+
+type T1 = PickByValueType<Example, string>;
+>T1 : Symbol(T1, Decl(mappedTypeAsClauses.ts, 50, 2))
+>PickByValueType : Symbol(PickByValueType, Decl(mappedTypeAsClauses.ts, 46, 42))
+>Example : Symbol(Example, Decl(mappedTypeAsClauses.ts, 42, 34))
+
+const e1: T1 = {
+>e1 : Symbol(e1, Decl(mappedTypeAsClauses.ts, 53, 5))
+>T1 : Symbol(T1, Decl(mappedTypeAsClauses.ts, 50, 2))
+
+    foo: "hello"
+>foo : Symbol(foo, Decl(mappedTypeAsClauses.ts, 53, 16))
+
+};
+type T2 = keyof T1;
+>T2 : Symbol(T2, Decl(mappedTypeAsClauses.ts, 55, 2))
+>T1 : Symbol(T1, Decl(mappedTypeAsClauses.ts, 50, 2))
+
+const e2: T2 = "foo";
+>e2 : Symbol(e2, Decl(mappedTypeAsClauses.ts, 57, 5))
+>T2 : Symbol(T2, Decl(mappedTypeAsClauses.ts, 55, 2))
+
