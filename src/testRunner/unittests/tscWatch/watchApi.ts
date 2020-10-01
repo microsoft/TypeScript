@@ -123,4 +123,36 @@ namespace ts.tscWatch {
             checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
         });
     });
+
+    describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticDiagnosticsBuilderProgram", () => {
+        it("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files", () => {
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/main.ts`,
+                content: "export const x = 10;"
+            };
+            const otherFile: File = {
+                path: `${projectRoot}/other.ts`,
+                content: "export const y = 10;"
+            };
+            const sys = createWatchedSystem([config, mainFile, otherFile, libFile]);
+            const watchCompilerHost = createWatchCompilerHost(
+                config.path,
+                { noEmit: true },
+                sys,
+                createSemanticDiagnosticsBuilderProgram
+            );
+            const watch = createWatchProgram(watchCompilerHost);
+            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
+            sys.appendFile(mainFile.path, "\n// SomeComment");
+            sys.runQueuedTimeoutCallbacks();
+            const program = watch.getProgram().getProgram();
+            assert.deepEqual(program.getCachedSemanticDiagnostics(program.getSourceFile(mainFile.path)), []);
+            // Should not retrieve diagnostics for other file thats not changed
+            assert.deepEqual(program.getCachedSemanticDiagnostics(program.getSourceFile(otherFile.path)), /*expected*/ undefined);
+        });
+    });
 }

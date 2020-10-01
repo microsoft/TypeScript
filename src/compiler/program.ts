@@ -936,6 +936,7 @@ namespace ts {
             getOptionsDiagnostics,
             getGlobalDiagnostics,
             getSemanticDiagnostics,
+            getCachedSemanticDiagnostics,
             getSuggestionDiagnostics,
             getDeclarationDiagnostics,
             getBindAndCheckDiagnostics,
@@ -1654,6 +1655,12 @@ namespace ts {
 
         function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
+        }
+
+        function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
+           return sourceFile
+                ? cachedBindAndCheckDiagnosticsForFile.perFile?.get(sourceFile.path)
+                : cachedBindAndCheckDiagnosticsForFile.allDiagnostics;
         }
 
         function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
