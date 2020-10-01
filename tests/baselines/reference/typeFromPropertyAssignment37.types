@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/use.js ===
 const util = require('./mod')
->util : typeof import("tests/cases/conformance/salsa/mod")
->require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>util : typeof util
+>require('./mod') : typeof util
 >require : any
 >'./mod' : "./mod"
 
@@ -10,12 +10,12 @@ function n() {
 
     util.existy // no error
 >util.existy : () => void
->util : typeof import("tests/cases/conformance/salsa/mod")
+>util : typeof util
 >existy : () => void
 }
 util.existy // no error
 >util.existy : () => void
->util : typeof import("tests/cases/conformance/salsa/mod")
+>util : typeof util
 >existy : () => void
 
 === tests/cases/conformance/salsa/mod.js ===

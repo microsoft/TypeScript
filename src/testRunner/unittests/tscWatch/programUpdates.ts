@@ -481,6 +481,26 @@ export class A {
             changes: emptyArray
         });
 
+        verifyTscWatch({
+            scenario,
+            subScenario: "change module to none",
+            commandLineArgs: ["-w", "-p", configFilePath],
+            sys: () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "export {}\ndeclare global {}"
+                };
+                return createWatchedSystem([file1, libFile, configFile]);
+            },
+            changes: [{
+                caption: "change `module` to 'none'",
+                timeouts: checkSingleTimeoutQueueLengthAndRun,
+                change: sys => {
+                    sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
+                }
+            }]
+        });
+
         it("correctly migrate files between projects", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1574,6 +1594,34 @@ const b: string = a;`
                     change: sys => sys.writeFile(`${projectRoot}/a.ts`, `
 
 import { x } from "../b";`),
+                    timeouts: runQueuedTimeoutCallbacks,
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates emit on jsx option change",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const index: File = {
+                    path: `${projectRoot}/index.tsx`,
+                    content: `declare var React: any;\nconst d = <div />;`
+                };
+                const configFile: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            jsx: "preserve"
+                        }
+                    })
+                };
+                return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Update 'jsx' to 'react'",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]

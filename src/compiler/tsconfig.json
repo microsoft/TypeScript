@@ -1,7 +1,8 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler.js"
+        "outFile": "../../built/local/compiler.js",
+        "types": ["node"]
     },
 
     "references": [
@@ -16,6 +17,7 @@
         "performance.ts",
         "perfLogger.ts",
         "semver.ts",
+        "tracing.ts",
 
         "types.ts",
         "sys.ts",

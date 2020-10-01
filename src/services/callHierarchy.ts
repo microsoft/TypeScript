@@ -249,6 +249,10 @@ namespace ts.CallHierarchy {
                 }
                 return undefined;
             }
+            // #39453
+            if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                return location.initializer;
+            }
             if (!followingSymbol) {
                 let symbol = typeChecker.getSymbolAtLocation(location);
                 if (symbol) {

@@ -100,28 +100,6 @@ namespace ts {
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
-    /**
-     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
-     * At that point findAncestor returns undefined.
-     */
-    export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
-    export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined {
-        while (node) {
-            const result = callback(node);
-            if (result === "quit") {
-                return undefined;
-            }
-            else if (result) {
-                return node;
-            }
-            node = node.parent;
-        }
-        return undefined;
-    }
-
     export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
         while (true) {
             const res = callback(node);
@@ -483,7 +461,8 @@ namespace ts {
             return node.pos;
         }
 
-        if (isJSDocNode(node)) {
+        if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
+            // JsxText cannot actually contain comments, even though the scanner will think it sees comments
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
@@ -516,6 +495,10 @@ namespace ts {
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
         return !!findAncestor(node, isJSDocTypeExpression);
+    }
+
+    export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
+        return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
@@ -557,10 +540,17 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean) {
+    export const enum GetLiteralTextFlags {
+        None = 0,
+        NeverAsciiEscape = 1 << 0,
+        JsxAttributeEscape = 1 << 1,
+        TerminateUnterminatedLiterals = 1 << 2,
+    }
+
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(
+        if (!nodeIsSynthesized(node) && node.parent && !(flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) && !(
             (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
             isBigIntLiteral(node)
         )) {
@@ -571,8 +561,8 @@ namespace ts {
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral: {
-                const escapeText = jsxAttributeEscape ? escapeJsxAttributeString :
-                    neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
+                    flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
                 if ((<StringLiteral>node).singleQuote) {
                     return "'" + escapeText(node.text, CharacterCodes.singleQuote) + "'";
@@ -587,7 +577,7 @@ namespace ts {
             case SyntaxKind.TemplateTail: {
                 // If a NoSubstitutionTemplateLiteral appears to have a substitution in it, the original text
                 // had to include a backslash: `not \${a} substitution`.
-                const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
+                const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
 
                 const rawText = (<TemplateLiteralLikeNode>node).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
@@ -605,7 +595,11 @@ namespace ts {
             }
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
+                return node.text;
             case SyntaxKind.RegularExpressionLiteral:
+                if (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) {
+                    return node.text + (node.text.charCodeAt(node.text.length - 1) === CharacterCodes.backslash ? " /" : "/");
+                }
                 return node.text;
         }
 
@@ -1613,6 +1607,10 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
     }
 
+    export function isThisInitializedDeclaration(node: Node | undefined): boolean {
+        return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
+    }
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
@@ -1847,6 +1845,11 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
+    export function getExternalModuleRequireArgument(node: Node) {
+        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
+            && (getLeftmostAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+    }
+
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
@@ -1914,7 +1917,10 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
+        if (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
@@ -1929,48 +1935,6 @@ namespace ts {
 
     export function isStringDoubleQuoted(str: StringLiteralLike, sourceFile: SourceFile): boolean {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
-    }
-
-    export function getDeclarationOfExpando(node: Node): Node | undefined {
-        if (!node.parent) {
-            return undefined;
-        }
-        let name: Expression | BindingName | undefined;
-        let decl: Node | undefined;
-        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJSFile(node) && !isVarConst(node.parent)) {
-                return undefined;
-            }
-            name = node.parent.name;
-            decl = node.parent;
-        }
-        else if (isBinaryExpression(node.parent)) {
-            const parentNode = node.parent;
-            const parentNodeOperator = node.parent.operatorToken.kind;
-            if (parentNodeOperator === SyntaxKind.EqualsToken && parentNode.right === node) {
-                name = parentNode.left;
-                decl = name;
-            }
-            else if (parentNodeOperator === SyntaxKind.BarBarToken || parentNodeOperator === SyntaxKind.QuestionQuestionToken) {
-                if (isVariableDeclaration(parentNode.parent) && parentNode.parent.initializer === parentNode) {
-                    name = parentNode.parent.name;
-                    decl = parentNode.parent;
-                }
-                else if (isBinaryExpression(parentNode.parent) && parentNode.parent.operatorToken.kind === SyntaxKind.EqualsToken && parentNode.parent.right === parentNode) {
-                    name = parentNode.parent.left;
-                    decl = name;
-                }
-
-                if (!name || !isBindableStaticNameExpression(name) || !isSameEntityName(name, parentNode.left)) {
-                    return undefined;
-                }
-            }
-        }
-
-        if (!name || !getExpandoInitializer(node, isPrototypeAccess(name))) {
-            return undefined;
-        }
-        return decl;
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
@@ -2092,7 +2056,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: Expression, initializer: Expression): boolean {
+    export function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
             return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
@@ -2452,7 +2416,7 @@ namespace ts {
         }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
+    export function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
         return isVariableStatement(node) ? firstOrUndefined(node.declarationList.declarations) : undefined;
     }
 
@@ -2700,6 +2664,20 @@ namespace ts {
 
     export function walkUpParenthesizedExpressions(node: Node) {
         return walkUp(node, SyntaxKind.ParenthesizedExpression);
+    }
+
+    /**
+     * Walks up parenthesized types.
+     * It returns both the outermost parenthesized type and its parent.
+     * If given node is not a parenthesiezd type, undefined is return as the former.
+     */
+    export function walkUpParenthesizedTypesAndGetParentAndChild(node: Node): [ParenthesizedTypeNode | undefined, Node] {
+        let child: ParenthesizedTypeNode | undefined;
+        while (node && node.kind === SyntaxKind.ParenthesizedType) {
+            child = <ParenthesizedTypeNode>node;
+            node = node.parent;
+        }
+        return [child, node];
     }
 
     export function skipParentheses(node: Expression): Expression;
@@ -3993,6 +3971,7 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
@@ -4016,7 +3995,16 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
+        if (referencePath) {
+            return ensurePathIsNonModuleName(extensionless);
+        }
+        const options = host.getCompilerOptions();
+        const rootPkgName = options.bundledPackageName || "";
+        const newPath = combinePaths(rootPkgName, extensionless);
+        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
+            return newPath.slice(0, newPath.length - "/index".length);
+        }
+        return newPath;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4047,6 +4035,12 @@ namespace ts {
 
     export function outFile(options: CompilerOptions) {
         return options.outFile || options.out;
+    }
+
+    /** Returns 'undefined' if and only if 'options.paths' is undefined. */
+    export function getPathsBasePath(options: CompilerOptions, host: { getCurrentDirectory?(): string }) {
+        if (!options.paths) return undefined;
+        return options.baseUrl ?? Debug.checkDefined(options.pathsBasePath || host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
     }
 
     export interface EmitFileNames {
@@ -4769,7 +4763,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
+        if (!isExportDefaultSymbol(symbol)) return undefined;
+        for (const decl of symbol.declarations) {
+            if (decl.localSymbol) return decl.localSymbol;
+        }
+        return undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
@@ -5433,6 +5431,13 @@ namespace ts {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
 
+    export function getLeftmostAccessExpression(expr: Expression): Expression {
+        while (isAccessExpression(expr)) {
+            expr = expr.expression;
+        }
+        return expr;
+    }
+
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
         while (true) {
             switch (node.kind) {
@@ -5494,7 +5499,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging) {
+        if (Debug.isDebugging || tracing.isTracing()) {
             this.checker = checker;
         }
     }
@@ -5896,6 +5901,10 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+    }
+
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
@@ -5908,6 +5917,22 @@ namespace ts {
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
+    }
+
+    export function getJSXTransformEnabled(options: CompilerOptions): boolean {
+        const jsx = options.jsx;
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
+    }
+
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        return compilerOptions.jsx === JsxEmit.ReactJSX ||
+            compilerOptions.jsx === JsxEmit.ReactJSXDev ||
+            compilerOptions.jsxImportSource ||
+            jsxImportSourcePragma ?
+                jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
+                undefined;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -5926,28 +5951,57 @@ namespace ts {
         return true;
     }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyESMap<string, string> {
-        const result = new Map<string, string>();
+    export interface SymlinkedDirectory {
+        real: string;
+        realPath: Path;
+    }
+
+    export interface SymlinkCache {
+        getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+        getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
+        setSymlinkedDirectory(path: Path, directory: SymlinkedDirectory | false): void;
+        setSymlinkedFile(path: Path, real: string): void;
+    }
+
+    export function createSymlinkCache(): SymlinkCache {
+        let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedFiles: ESMap<Path, string> | undefined;
+        return {
+            getSymlinkedFiles: () => symlinkedFiles,
+            getSymlinkedDirectories: () => symlinkedDirectories,
+            setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
+            setSymlinkedDirectory: (path, directory) => (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory),
+        };
+    }
+
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
+        const cache = createSymlinkCache();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
                 res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
         for (const [resolvedPath, originalPath] of symlinks) {
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName);
-            result.set(commonOriginal, commonResolved);
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
+            if (commonResolved && commonOriginal) {
+                cache.setSymlinkedDirectory(
+                    toPath(commonOriginal, cwd, getCanonicalFileName),
+                    { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
+            }
         }
-        return result;
+        return cache;
     }
 
-    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] {
+    function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
         const aParts = getPathComponents(toPath(a, cwd, getCanonicalFileName));
         const bParts = getPathComponents(toPath(b, cwd, getCanonicalFileName));
+        let isDirectory = false;
         while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
             getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])) {
             aParts.pop();
             bParts.pop();
+            isDirectory = true;
         }
-        return [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)];
+        return isDirectory ? [getPathFromPathComponents(aParts), getPathFromPathComponents(bParts)] : undefined;
     }
 
     // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
@@ -6320,7 +6374,7 @@ namespace ts {
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[] {
-        const needJsExtensions = options && options.allowJs;
+        const needJsExtensions = options && getAllowJSCompilerOption(options);
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
             return needJsExtensions ? allSupportedExtensions : supportedTSExtensions;

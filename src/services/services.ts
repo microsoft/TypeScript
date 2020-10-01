@@ -1171,7 +1171,7 @@ namespace ts {
         }
     }
 
-    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
+    const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[] = [
         "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
@@ -1191,10 +1191,42 @@ namespace ts {
         "provideCallHierarchyOutgoingCalls",
     ];
 
+    const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
+        ...invalidOperationsInPartialSemanticMode,
+        "getCompletionsAtPosition",
+        "getCompletionEntryDetails",
+        "getCompletionEntrySymbol",
+        "getSignatureHelpItems",
+        "getQuickInfoAtPosition",
+        "getDefinitionAtPosition",
+        "getDefinitionAndBoundSpan",
+        "getImplementationAtPosition",
+        "getTypeDefinitionAtPosition",
+        "getReferencesAtPosition",
+        "findReferences",
+        "getOccurrencesAtPosition",
+        "getDocumentHighlights",
+        "getNavigateToItems",
+        "getRenameInfo",
+        "findRenameLocations",
+        "getApplicableRefactors",
+    ];
     export function createLanguageService(
         host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
-        syntaxOnly = false): LanguageService {
+        syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode,
+    ): LanguageService {
+        let languageServiceMode: LanguageServiceMode;
+        if (syntaxOnlyOrLanguageServiceMode === undefined) {
+            languageServiceMode = LanguageServiceMode.Semantic;
+        }
+        else if (typeof syntaxOnlyOrLanguageServiceMode === "boolean") {
+            // languageServiceMode = SyntaxOnly
+            languageServiceMode = syntaxOnlyOrLanguageServiceMode ? LanguageServiceMode.Syntactic : LanguageServiceMode.Semantic;
+        }
+        else {
+            languageServiceMode = syntaxOnlyOrLanguageServiceMode;
+        }
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let program: Program;
@@ -1244,6 +1276,7 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
+            Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1296,7 +1329,8 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
                 readFile,
-                realpath: host.realpath && (path => host.realpath!(path)),
+                getSymlinkCache: maybeBind(host, host.getSymlinkCache),
+                realpath: maybeBind(host, host.realpath),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
@@ -1309,21 +1343,12 @@ namespace ts {
                 },
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
-                hasChangedAutomaticTypeDirectiveNames
+                hasChangedAutomaticTypeDirectiveNames,
+                trace: maybeBind(host, host.trace),
+                resolveModuleNames: maybeBind(host, host.resolveModuleNames),
+                resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
+                useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             };
-            if (host.trace) {
-                compilerHost.trace = message => host.trace!(message);
-            }
-
-            if (host.resolveModuleNames) {
-                compilerHost.resolveModuleNames = (...args) => host.resolveModuleNames!(...args);
-            }
-            if (host.resolveTypeReferenceDirectives) {
-                compilerHost.resolveTypeReferenceDirectives = (...args) => host.resolveTypeReferenceDirectives!(...args);
-            }
-            if (host.useSourceOfProjectReferenceRedirect) {
-                compilerHost.useSourceOfProjectReferenceRedirect = () => host.useSourceOfProjectReferenceRedirect!();
-            }
             host.setCompilerHost?.(compilerHost);
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
@@ -1436,6 +1461,11 @@ namespace ts {
 
         // TODO: GH#18217 frequently asserted as defined
         function getProgram(): Program | undefined {
+            if (languageServiceMode === LanguageServiceMode.Syntactic) {
+                Debug.assert(program === undefined);
+                return undefined;
+            }
+
             synchronizeHostData();
 
             return program;
@@ -1797,22 +1827,37 @@ namespace ts {
             return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
             }
             synchronizeHostData();
-            return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
+                return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            }
+            else {
+                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            }
         }
 
-        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return { spans: [], endOfLineState: EndOfLineState.None };
             }
             synchronizeHostData();
-            return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.Original) {
+                return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            }
+            else {
+                return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            }
         }
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -2032,6 +2077,11 @@ namespace ts {
 
             // Push all text changes.
             for (let i = firstLine; i <= lastLine; i++) {
+                // If the range is multiline and ends on a beginning of a line, don't comment/uncomment.
+                if (firstLine !== lastLine && lineStarts[i] === textRange.end) {
+                    continue;
+                }
+
                 const lineTextStart = lineTextStarts.get(i.toString());
 
                 // If the line is not an empty line; otherwise no-op.
@@ -2511,14 +2561,26 @@ namespace ts {
             uncommentSelection,
         };
 
-        if (syntaxOnly) {
-            invalidOperationsOnSyntaxOnly.forEach(key =>
-                ls[key] = () => {
-                    throw new Error(`LanguageService Operation: ${key} not allowed on syntaxServer`);
-                }
-            );
+        switch (languageServiceMode) {
+            case LanguageServiceMode.Semantic:
+                break;
+            case LanguageServiceMode.PartialSemantic:
+                invalidOperationsInPartialSemanticMode.forEach(key =>
+                    ls[key] = () => {
+                        throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.PartialSemantic`);
+                    }
+                );
+                break;
+            case LanguageServiceMode.Syntactic:
+                invalidOperationsInSyntacticMode.forEach(key =>
+                    ls[key] = () => {
+                        throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.Syntactic`);
+                    }
+                );
+                break;
+            default:
+                Debug.assertNever(languageServiceMode);
         }
-
         return ls;
     }
 

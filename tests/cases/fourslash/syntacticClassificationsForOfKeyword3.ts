@@ -2,7 +2,7 @@
 
 //// for (var of; of; of) { }
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.keyword("for"),
     c.punctuation("("),
@@ -16,3 +16,10 @@ verify.syntacticClassificationsAre(
     c.punctuation("{"),
     c.punctuation("}")
     );
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("variable.declaration", "of"), 
+    c2.semanticToken("variable", "of"), 
+    c2.semanticToken("variable", "of"), 
+);

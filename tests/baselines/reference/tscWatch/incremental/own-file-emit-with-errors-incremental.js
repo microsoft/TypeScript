@@ -30,7 +30,6 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-
 Found 1 error.
 
 
@@ -123,7 +122,6 @@ Output::
 
 [7m1[0m const y: string = 20;
 [7m [0m [91m      ~[0m
-
 
 
 Found 1 error.

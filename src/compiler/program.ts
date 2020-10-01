@@ -702,7 +702,7 @@ namespace ts {
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
-        let symlinks: ReadonlyESMap<string, string> | undefined;
+        let symlinks: SymlinkCache | undefined;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
@@ -734,6 +734,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
+        tracing.begin(tracing.Phase.Program, "createProgram", {});
         performance.mark("beforeProgram");
 
         const host = createProgramOptions.host || createCompilerHost(options);
@@ -809,8 +810,9 @@ namespace ts {
 
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
-        const { onProgramCreateComplete, fileExists } = updateHostForUseSourceOfProjectReferenceRedirect({
+        const { onProgramCreateComplete, fileExists, directoryExists } = updateHostForUseSourceOfProjectReferenceRedirect({
             compilerHost: host,
+            getSymlinkCache,
             useSourceOfProjectReferenceRedirect,
             toPath,
             getResolvedProjectReferences,
@@ -947,6 +949,7 @@ namespace ts {
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
+            getTypeCatalog: () => getDiagnosticsProducingTypeChecker().getTypeCatalog(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getInstantiationCount: () => getDiagnosticsProducingTypeChecker().getInstantiationCount(),
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
@@ -971,7 +974,9 @@ namespace ts {
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
             fileExists,
-            getProbableSymlinks,
+            directoryExists,
+            getSymlinkCache,
+            realpath: host.realpath?.bind(host),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
 
@@ -979,6 +984,7 @@ namespace ts {
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
+        tracing.end();
 
         return program;
 
@@ -1480,7 +1486,7 @@ namespace ts {
                 getResolvedProjectReferenceToRedirect,
                 getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
-                getProbableSymlinks,
+                getSymlinkCache,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -1502,6 +1508,7 @@ namespace ts {
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
             Debug.assert(!outFile(options));
+            tracing.begin(tracing.Phase.Emit, "emitBuildInfo", {});
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
                 notImplementedResolver,
@@ -1514,6 +1521,7 @@ namespace ts {
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
+            tracing.end();
             return emitResult;
         }
 
@@ -1574,7 +1582,10 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
+            tracing.begin(tracing.Phase.Emit, "emit", { path: sourceFile?.path });
+            const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
+            tracing.end();
+            return result;
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
@@ -1744,13 +1755,13 @@ namespace ts {
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
-                return getMergedBindAndCheckDiagnostics(sourceFile, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
 
-        function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
+        function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
             const flatDiagnostics = flatten(allDiagnostics);
-            if (!sourceFile.commentDirectives?.length) {
+            if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
                 return flatDiagnostics;
             }
 
@@ -1851,7 +1862,7 @@ namespace ts {
                     switch (node.kind) {
                         case SyntaxKind.ImportClause:
                             if ((node as ImportClause).isTypeOnly) {
-                                diagnostics.push(createDiagnosticForNode(node.parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                                diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
                                 return "skip";
                             }
                             break;
@@ -2176,7 +2187,7 @@ namespace ts {
                 const r = /import|require/g;
                 while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                     const node = getNodeAtPosition(file, r.lastIndex);
-                    if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                         imports = append(imports, node.arguments[0]);
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
@@ -2649,7 +2660,7 @@ namespace ts {
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, (ref, index) => {
-                const referencedFileName = resolveTripleslashReference(ref.fileName, file.originalFileName);
+                const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
                 processSourceFile(
                     referencedFileName,
                     isDefaultLib,
@@ -2843,7 +2854,7 @@ namespace ts {
                         && !options.noResolve
                         && i < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !options.allowJs)
+                        && !(isJsFile && !getAllowJSCompilerOption(options))
                         && (isInJSFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
@@ -2983,10 +2994,6 @@ namespace ts {
                 }
             }
 
-            if (options.paths && options.baseUrl === undefined) {
-                createDiagnosticForOptionName(Diagnostics.Option_paths_cannot_be_used_without_specifying_baseUrl_option, "paths");
-            }
-
             if (options.composite) {
                 if (options.declaration === false) {
                     createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");
@@ -3044,6 +3051,9 @@ namespace ts {
                             if (typeOfSubst === "string") {
                                 if (!hasZeroOrOneAsteriskCharacter(subst)) {
                                     createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Substitution_0_in_pattern_1_can_have_at_most_one_Asterisk_character, subst, key);
+                                }
+                                if (!options.baseUrl && !pathIsRelative(subst) && !pathIsAbsolute(subst)) {
+                                    createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash);
                                 }
                             }
                             else {
@@ -3107,7 +3117,8 @@ namespace ts {
                 const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
-                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.All_files_must_be_modules_when_the_isolatedModules_flag_is_provided));
+                    programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length,
+                        Diagnostics._0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_import_export_or_an_empty_export_statement_to_make_it_a_module, getBaseFileName(firstNonExternalModuleSourceFile.fileName)));
                 }
             }
             else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {
@@ -3125,6 +3136,11 @@ namespace ts {
                     const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator!);
                     programDiagnostics.add(createFileDiagnostic(firstNonAmbientExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, options.out ? "out" : "outFile"));
                 }
+            }
+
+            // Without a package name, for multiple files being bundled into a .d.ts file you basically get a file which doesn't wrk
+            if (outputFile && getEmitDeclarations(options) && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && !options.bundledPackageName) {
+                createDiagnosticForOptionName(Diagnostics.The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_declaration_emit, options.out ? "out" : "outFile");
             }
 
             if (options.resolveJsonModule) {
@@ -3156,7 +3172,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_target_is_ES3, "useDefineForClassFields");
             }
 
-            if (options.checkJs && !options.allowJs) {
+            if (options.checkJs && !getAllowJSCompilerOption(options)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
@@ -3179,6 +3195,9 @@ namespace ts {
                 if (options.reactNamespace) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
                 }
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFactory", inverseJsxOptionMap.get("" + options.jsx));
+                }
                 if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
                     createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
                 }
@@ -3191,8 +3210,23 @@ namespace ts {
                 if (!options.jsxFactory) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "jsxFragmentFactory", "jsxFactory");
                 }
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxFragmentFactory", inverseJsxOptionMap.get("" + options.jsx));
+                }
                 if (!parseIsolatedEntityName(options.jsxFragmentFactory, languageVersion)) {
                     createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
+                }
+            }
+
+            if (options.reactNamespace) {
+                if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "reactNamespace", inverseJsxOptionMap.get("" + options.jsx));
+                }
+            }
+
+            if (options.jsxImportSource) {
+                if (options.jsx === JsxEmit.React) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxImportSource", inverseJsxOptionMap.get("" + options.jsx));
                 }
             }
 
@@ -3304,7 +3338,7 @@ namespace ts {
             });
         }
 
-        function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0: string | number, arg1: string | number, arg2?: string | number) {
+        function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
             let needCompilerDiagnostic = true;
             const pathsSyntax = getOptionPathsSyntax();
             for (const pathProp of pathsSyntax) {
@@ -3450,9 +3484,9 @@ namespace ts {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
 
-        function getProbableSymlinks(): ReadonlyESMap<string, string> {
-            if (host.getSymlinks) {
-                return host.getSymlinks();
+        function getSymlinkCache(): SymlinkCache {
+            if (host.getSymlinkCache) {
+                return host.getSymlinkCache();
             }
             return symlinks || (symlinks = discoverProbableSymlinks(
                 files,
@@ -3461,13 +3495,9 @@ namespace ts {
         }
     }
 
-    interface SymlinkedDirectory {
-        real: string;
-        realPath: Path;
-    }
-
     interface HostForUseSourceOfProjectReferenceRedirect {
         compilerHost: CompilerHost;
+        getSymlinkCache: () => SymlinkCache;
         useSourceOfProjectReferenceRedirect: boolean;
         toPath(fileName: string): Path;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
@@ -3477,9 +3507,6 @@ namespace ts {
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
         let setOfDeclarationDirectories: Set<Path> | undefined;
-        let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
-        let symlinkedFiles: ESMap<Path, string> | undefined;
-
         const originalFileExists = host.compilerHost.fileExists;
         const originalDirectoryExists = host.compilerHost.directoryExists;
         const originalGetDirectories = host.compilerHost.getDirectories;
@@ -3489,11 +3516,12 @@ namespace ts {
 
         host.compilerHost.fileExists = fileExists;
 
+        let directoryExists;
         if (originalDirectoryExists) {
             // This implementation of directoryExists checks if the directory being requested is
             // directory of .d.ts file for the referenced Project.
             // If it is it returns true irrespective of whether that directory exists on host
-            host.compilerHost.directoryExists = path => {
+            directoryExists = host.compilerHost.directoryExists = path => {
                 if (originalDirectoryExists.call(host.compilerHost, path)) {
                     handleDirectoryCouldBeSymlink(path);
                     return true;
@@ -3535,11 +3563,11 @@ namespace ts {
         // This is something we keep for life time of the host
         if (originalRealpath) {
             host.compilerHost.realpath = s =>
-                symlinkedFiles?.get(host.toPath(s)) ||
+                host.getSymlinkCache().getSymlinkedFiles()?.get(host.toPath(s)) ||
                 originalRealpath.call(host.compilerHost, s);
         }
 
-        return { onProgramCreateComplete, fileExists };
+        return { onProgramCreateComplete, fileExists, directoryExists };
 
         function onProgramCreateComplete() {
             host.compilerHost.fileExists = originalFileExists;
@@ -3585,20 +3613,20 @@ namespace ts {
 
             // Because we already watch node_modules, handle symlinks in there
             if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
-            if (!symlinkedDirectories) symlinkedDirectories = new Map();
+            const symlinkCache = host.getSymlinkCache();
             const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
-            if (symlinkedDirectories.has(directoryPath)) return;
+            if (symlinkCache.getSymlinkedDirectories()?.has(directoryPath)) return;
 
             const real = normalizePath(originalRealpath.call(host.compilerHost, directory));
             let realPath: Path;
             if (real === directory ||
                 (realPath = ensureTrailingDirectorySeparator(host.toPath(real))) === directoryPath) {
                 // not symlinked
-                symlinkedDirectories.set(directoryPath, false);
+                symlinkCache.setSymlinkedDirectory(directoryPath, false);
                 return;
             }
 
-            symlinkedDirectories.set(directoryPath, {
+            symlinkCache.setSymlinkedDirectory(directoryPath, {
                 real: ensureTrailingDirectorySeparator(real),
                 realPath
             });
@@ -3612,10 +3640,12 @@ namespace ts {
             const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
             if (result !== undefined) return result;
 
+            const symlinkCache = host.getSymlinkCache();
+            const symlinkedDirectories = symlinkCache.getSymlinkedDirectories();
             if (!symlinkedDirectories) return false;
             const fileOrDirectoryPath = host.toPath(fileOrDirectory);
             if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
-            if (isFile && symlinkedFiles && symlinkedFiles.has(fileOrDirectoryPath)) return true;
+            if (isFile && symlinkCache.getSymlinkedFiles()?.has(fileOrDirectoryPath)) return true;
 
             // If it contains node_modules check if its one of the symlinked path we know of
             return firstDefinedIterator(
@@ -3624,10 +3654,9 @@ namespace ts {
                     if (!symlinkedDirectory || !startsWith(fileOrDirectoryPath, directoryPath)) return undefined;
                     const result = fileOrDirectoryExistsUsingSource(fileOrDirectoryPath.replace(directoryPath, symlinkedDirectory.realPath));
                     if (isFile && result) {
-                        if (!symlinkedFiles) symlinkedFiles = new Map();
                         // Store the real path for the file'
                         const absolutePath = getNormalizedAbsolutePath(fileOrDirectory, host.compilerHost.getCurrentDirectory());
-                        symlinkedFiles.set(
+                        symlinkCache.setSymlinkedFile(
                             fileOrDirectoryPath,
                             `${symlinkedDirectory.real}${absolutePath.replace(new RegExp(directoryPath, "i"), "")}`
                         );
@@ -3775,7 +3804,7 @@ namespace ts {
             return options.jsx ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set;
         }
         function needAllowJs() {
-            return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+            return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
         }
         function needResolveJsonModule() {
             return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;

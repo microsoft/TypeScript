@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 13.x]
+        node-version: [10.x, 12.x, 14.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -30,8 +30,7 @@ jobs:
       run: |
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
-    - run:  npm install
-    - run:  npm update
+    - run:  npm ci
 
     # Re: https://github.com/actions/setup-node/pull/125
     - name: Register Problem Matcher for TSC
@@ -43,6 +42,9 @@ jobs:
     - name: Linter
       run:  npm run lint:ci
 
+    - name: Adding playwright
+      run: npm install --no-save --no-package-lock playwright
+
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
-    
+

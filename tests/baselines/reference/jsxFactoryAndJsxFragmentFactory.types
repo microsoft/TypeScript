@@ -2,6 +2,9 @@
 declare var h: any;
 >h : any
 
+declare var Frag: any;
+>Frag : any
+
 <></>;
 ><></> : error
 

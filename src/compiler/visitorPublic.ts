@@ -565,12 +565,23 @@ namespace ts {
                 return factory.updateMappedTypeNode((<MappedTypeNode>node),
                     nodeVisitor((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
+                    nodeVisitor((<MappedTypeNode>node).nameType, visitor, isTypeNode),
                     nodeVisitor((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
                 return factory.updateLiteralTypeNode(<LiteralTypeNode>node,
                     nodeVisitor((<LiteralTypeNode>node).literal, visitor, isExpression));
+
+            case SyntaxKind.TemplateLiteralType:
+                return factory.updateTemplateLiteralType(<TemplateLiteralTypeNode>node,
+                    nodeVisitor((<TemplateLiteralTypeNode>node).head, visitor, isTemplateHead),
+                    nodesVisitor((<TemplateLiteralTypeNode>node).templateSpans, visitor, isTemplateLiteralTypeSpan));
+
+            case SyntaxKind.TemplateLiteralTypeSpan:
+                return factory.updateTemplateLiteralTypeSpan(<TemplateLiteralTypeSpan>node,
+                    nodeVisitor((<TemplateLiteralTypeSpan>node).type, visitor, isTypeNode),
+                    nodeVisitor((<TemplateLiteralTypeSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:

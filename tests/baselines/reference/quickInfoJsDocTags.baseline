@@ -2,13 +2,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTags.ts",
-      "position": 272
+      "position": 298
     },
     "quickInfo": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
-        "start": 272,
+        "start": 298,
         "length": 3
       },
       "displayParts": [
@@ -99,6 +99,10 @@
         {
           "name": "returns",
           "text": "The result"
+        },
+        {
+          "name": "see",
+          "text": "x (the parameter)"
         }
       ]
     }
