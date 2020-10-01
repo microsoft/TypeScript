@@ -5355,10 +5355,19 @@ namespace ts {
 
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
             const pos = getNodePos();
+            const openBracketPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenBracketToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
-            parseExpected(SyntaxKind.CloseBracketToken);
+            if (!parseExpected(SyntaxKind.CloseBracketToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openBracketPosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
             return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
         }
 
@@ -6207,7 +6216,7 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.OpenBracketToken);
             const elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
-            parseExpected(SyntaxKind.CloseBracketToken);
+            parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(factory.createArrayBindingPattern(elements), pos);
         }
 
