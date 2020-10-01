@@ -35,6 +35,18 @@ namespace ts.server {
         return arg.split(",").filter(name => name !== "");
     }
 
+    export function getLogLevel(level: string | undefined) {
+        if (level) {
+            const l = level.toLowerCase();
+            for (const name in LogLevel) {
+                if (isNaN(+name) && l === name.toLowerCase()) {
+                    return <LogLevel><any>LogLevel[name];
+                }
+            }
+        }
+        return undefined;
+    }
+
     export interface StartInput {
         args: readonly string[];
         logger: Logger;

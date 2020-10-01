@@ -72,18 +72,6 @@ namespace ts.server {
         }
     }
 
-    function getLogLevel(level: string | undefined) {
-        if (level) {
-            const l = level.toLowerCase();
-            for (const name in LogLevel) {
-                if (isNaN(+name) && l === name.toLowerCase()) {
-                    return <LogLevel><any>LogLevel[name];
-                }
-            }
-        }
-        return undefined;
-    }
-
     let unknownServerMode: string | undefined;
     function parseServerMode(): LanguageServiceMode | undefined {
         const mode = findArgument("--serverMode");

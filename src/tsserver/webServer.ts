@@ -137,54 +137,33 @@ namespace ts.server {
 
     function createLogger() {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        return typeof cmdLineVerbosity === "undefined"
-            ? nullLogger
-            : new ConsoleLogger(cmdLineVerbosity);
-    }
-
-    function getLogLevel(level: string | undefined) {
-        if (level) {
-            const l = level.toLowerCase();
-            for (const name in LogLevel) {
-                if (isNaN(+name) && l === name.toLowerCase()) {
-                    return <LogLevel><any>LogLevel[name];
-                }
-            }
-        }
-        return undefined;
+        return typeof cmdLineVerbosity === "undefined" ? nullLogger : new ConsoleLogger(cmdLineVerbosity);
     }
 
     function createWebSystem(args: string[]) {
         Debug.assert(ts.sys === undefined);
         const returnEmptyString = () => "";
-
+        // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
+        const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, executingDirectoryPath) : undefined;
         const sys: ServerHost = {
             args,
             newLine: "\r\n", // This can be configured by clients
             useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
             readFile: (path: string, _encoding?: string): string | undefined => {
-                if (!path.startsWith("http:") && !path.startsWith("https:")) {
-                    return undefined;
-                }
+                const webPath = getWebPath(path);
+                if (!webPath) return undefined;
 
                 const request = new XMLHttpRequest();
-                request.open("GET", path, /* asynchronous */ false);
+                request.open("GET", webPath, /* asynchronous */ false);
                 request.send();
-
-                if (request.status !== 200) {
-                    return undefined;
-                }
-
-                return request.responseText;
+                return request.status === 200 ? request.responseText : undefined;
             },
 
             write: postMessage,
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,
 
-            getExecutingFilePath: () => {
-                return findArgument("--executingFilePath") || location + "";
-            },
+            getExecutingFilePath: () => directorySeparator,
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
             /* eslint-disable no-restricted-globals */
@@ -204,19 +183,15 @@ namespace ts.server {
 
             // For semantic server mode
             fileExists: (path: string): boolean => {
-                if (!path.startsWith("http:") && !path.startsWith("https:")) {
-                    return false;
-                }
+                const webPath = getWebPath(path);
+                if (!webPath) return false;
 
                 const request = new XMLHttpRequest();
-                request.open("HEAD", path, /* asynchronous */ false);
+                request.open("HEAD", webPath, /* asynchronous */ false);
                 request.send();
-
                 return request.status === 200;
             },
-            directoryExists: (_path: string): boolean => {
-                return false;
-            },
+            directoryExists: returnFalse, // Module resolution
             readDirectory: notImplemented, // Configured project, typing installer
             getDirectories: () => [], // For automatic type reference directives
             createDirectory: notImplemented, // compile On save
@@ -232,7 +207,12 @@ namespace ts.server {
             // getMemoryUsage?(): number;
         };
         ts.sys = sys;
-        // TODO:: Locale setting?
+        // Do this after sys has been set as findArguments is going to work only then
+        const executingDirectoryPath = ensureTrailingDirectorySeparator(getDirectoryPath(findArgument("--executingFilePath") || location + ""));
+        const localeStr = findArgument("--locale");
+        if (localeStr) {
+            validateLocaleAndSetLanguage(localeStr, sys);
+        }
     }
 
     function hrtime(previous?: [number, number]) {
@@ -276,7 +256,7 @@ namespace ts.server {
             }
 
             protected toStringMessage(message: {}) {
-                return message.toString();
+                return JSON.stringify(message, undefined, 2);
             }
 
             exit() {
