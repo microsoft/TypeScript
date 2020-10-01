@@ -5299,7 +5299,7 @@ interface Event {
     /**
      * Returns the object whose event listener's callback is currently being invoked.
      */
-    readonly currentTarget: EventTarget | null;
+    readonly currentTarget: EventTarget | ServiceWorker | null;
     /**
      * Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise.
      */
@@ -5318,7 +5318,7 @@ interface Event {
     /**
      * Returns the object to which event is dispatched (its target).
      */
-    readonly target: EventTarget | null;
+    readonly target: EventTarget | ServiceWorker | null;
     /**
      * Returns the event's timestamp as the number of milliseconds measured relative to the time origin.
      */
@@ -14870,13 +14870,17 @@ interface ServiceUIFrameContext {
 }
 declare var ServiceUIFrameContext: ServiceUIFrameContext;
 
+interface ServiceWorkerEvent extends Event {
+    readonly target: ServiceWorker;
+}
+
 interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
-    "statechange": Event;
+    "statechange": ServiceWorkerEvent;
 }
 
 /** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. */
 interface ServiceWorker extends EventTarget, AbstractWorker {
-    onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
+    onstatechange: ((this: ServiceWorker, ev: ServiceWorkerEvent) => any) | null;
     readonly scriptURL: string;
     readonly state: ServiceWorkerState;
     postMessage(message: any, transfer: Transferable[]): void;
