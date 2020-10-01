@@ -1069,7 +1069,8 @@ namespace ts {
                 }
 
                 // Add file to affected file pending emit to handle for later emit time
-                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                // Apart for emit builder do this for tsbuildinfo, do this for non emit builder when noEmit is set as tsbuildinfo is written and reused between emitters
+                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram || state.compilerOptions.noEmit) {
                     addToAffectedFilesPendingEmit(state, (affected as SourceFile).resolvedPath, BuilderFileEmit.Full);
                 }
 
