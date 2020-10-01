@@ -73,6 +73,7 @@ namespace ts {
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = new Map<string, boolean>();
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
+        const computeHash = maybeBind(system, system.createHash) || generateDjb2Hash;
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
             try {
@@ -128,7 +129,7 @@ namespace ts {
 
         let outputFingerprints: ESMap<string, OutputFingerprint>;
         function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
-            if (!isWatchSet(options) || !system.createHash || !system.getModifiedTime) {
+            if (!isWatchSet(options) || !system.getModifiedTime) {
                 system.writeFile(fileName, data, writeByteOrderMark);
                 return;
             }
@@ -137,7 +138,7 @@ namespace ts {
                 outputFingerprints = new Map<string, OutputFingerprint>();
             }
 
-            const hash = system.createHash(data);
+            const hash = computeHash(data);
             const mtimeBefore = system.getModifiedTime(fileName);
 
             if (mtimeBefore) {
