@@ -843,3 +843,29 @@ type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  //
 >TDigits : Symbol(TDigits, Decl(templateLiteralTypes1.ts, 200, 63))
 >TDigits : Symbol(TDigits, Decl(templateLiteralTypes1.ts, 200, 63))
 
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 208, 16))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 208, 16))
+
+type AA<T extends number, Q extends number> =
+>AA : Symbol(AA, Decl(templateLiteralTypes1.ts, 208, 79))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 210, 8))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 210, 25))
+
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 210, 8))
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 210, 25))
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>T : Symbol(T, Decl(templateLiteralTypes1.ts, 210, 8))
+>IsNegative : Symbol(IsNegative, Decl(templateLiteralTypes1.ts, 204, 76))
+>Q : Symbol(Q, Decl(templateLiteralTypes1.ts, 210, 25))
+
+type BB = AA<-2, -2>;
+>BB : Symbol(BB, Decl(templateLiteralTypes1.ts, 211, 123))
+>AA : Symbol(AA, Decl(templateLiteralTypes1.ts, 208, 79))
+
