@@ -25917,15 +25917,16 @@ namespace ts {
 
         function getSuggestedLibForNonExistentProperty(missingProperty: string, containingType: Type) {
             const container = getApparentType(containingType).symbol;
-            if (container) {
-                const allFeatures = getScriptTargetFeatures();
-                const libTargets = getOwnKeys(allFeatures);
-                for (const libTarget of libTargets) {
-                    const featuresOfLib = allFeatures[libTarget];
-                    const featuresOfContainingType = featuresOfLib[symbolName(container)];
-                    if (featuresOfContainingType !== undefined && contains(featuresOfContainingType, missingProperty)) {
-                        return libTarget;
-                    }
+            if (!container) {
+                return undefined;
+            }
+            const allFeatures = getScriptTargetFeatures();
+            const libTargets = getOwnKeys(allFeatures);
+            for (const libTarget of libTargets) {
+                const featuresOfLib = allFeatures[libTarget];
+                const featuresOfContainingType = featuresOfLib[symbolName(container)];
+                if (featuresOfContainingType !== undefined && contains(featuresOfContainingType, missingProperty)) {
+                    return libTarget;
                 }
             }
         }
