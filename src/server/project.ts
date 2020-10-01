@@ -1622,6 +1622,7 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
 
@@ -1667,6 +1668,10 @@ namespace ts.server {
         /*@internal*/
         getPackageJsonAutoImportProvider(): Program | undefined {
             if (this.autoImportProviderHost === false) {
+                return undefined;
+            }
+            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                this.autoImportProviderHost = false;
                 return undefined;
             }
             if (this.autoImportProviderHost) {
