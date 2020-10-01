@@ -61,7 +61,7 @@ type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b
 >b : number
 
 type TD2 = keyof TD1;  // 'a1' | 'a2' | 'b1' | 'b2'
->TD2 : "a1" | "b1" | "a2" | "b2"
+>TD2 : "a1" | "a2" | "b1" | "b2"
 
 type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & string}2`
 >TD3 : `${keyof U & string}1` | `${keyof U & string}2`
@@ -87,4 +87,36 @@ interface Person {
 
 type LazyPerson = Lazyify<Person>;
 >LazyPerson : Lazyify<Person>
+
+// Repro from #40833
+
+type Example = {foo: string, bar: number};
+>Example : Example
+>foo : string
+>bar : number
+
+type PickByValueType<T, U> = {
+>PickByValueType : PickByValueType<T, U>
+
+  [K in keyof T as T[K] extends U ? K : never]: T[K]
+};
+
+type T1 = PickByValueType<Example, string>;
+>T1 : PickByValueType<Example, string>
+
+const e1: T1 = {
+>e1 : PickByValueType<Example, string>
+>{    foo: "hello"} : { foo: string; }
+
+    foo: "hello"
+>foo : string
+>"hello" : "hello"
+
+};
+type T2 = keyof T1;
+>T2 : "foo"
+
+const e2: T2 = "foo";
+>e2 : "foo"
+>"foo" : "foo"
 

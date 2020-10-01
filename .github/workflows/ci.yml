@@ -42,6 +42,9 @@ jobs:
     - name: Linter
       run:  npm run lint:ci
 
+    - name: Adding playwright
+      run: npm install --no-save --no-package-lock playwright
+
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
 
