@@ -64,7 +64,7 @@ namespace ts.codefix {
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
             const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, host, program, useAutoImportProvider);
             const preferTypeOnlyImport = !!usageIsTypeOnly && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error;
-            const useRequire = shouldUseRequire(sourceFile, compilerOptions);
+            const useRequire = shouldUseRequire(sourceFile, program);
             const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, /*position*/ undefined, preferTypeOnlyImport, useRequire, host, preferences);
             addImport({ fixes: [fix], symbolName });
         }
@@ -211,7 +211,7 @@ namespace ts.codefix {
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const compilerOptions = program.getCompilerOptions();
         const exportInfos = getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program, /*useAutoImportProvider*/ true);
-        const useRequire = shouldUseRequire(sourceFile, compilerOptions);
+        const useRequire = shouldUseRequire(sourceFile, program);
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && !isSourceFileJS(sourceFile) && isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences)).moduleSpecifier;
         const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, position, preferTypeOnlyImport, useRequire, host, preferences);
@@ -362,10 +362,31 @@ namespace ts.codefix {
         });
     }
 
-    function shouldUseRequire(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        return isSourceFileJS(sourceFile)
-            && !sourceFile.externalModuleIndicator
-            && (!!sourceFile.commonJsModuleIndicator || getEmitModuleKind(compilerOptions) < ModuleKind.ES2015);
+    function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
+        // 1. TypeScript files don't use require variable declarations
+        if (!isSourceFileJS(sourceFile)) {
+            return false;
+        }
+
+        // 2. If the current source file is unambiguously CJS or ESM, go with that
+        if (sourceFile.commonJsModuleIndicator && !sourceFile.externalModuleIndicator) return true;
+        if (sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) return false;
+
+        // 3. If there's a tsconfig/jsconfig, use its module setting
+        const compilerOptions = program.getCompilerOptions();
+        if (compilerOptions.configFile) {
+            return getEmitModuleKind(compilerOptions) < ModuleKind.ES2015;
+        }
+
+        // 4. Match the first other JS file in the program that's unambiguously CJS or ESM
+        for (const otherFile of program.getSourceFiles()) {
+            if (otherFile === sourceFile || !isSourceFileJS(otherFile) || program.isSourceFileFromExternalLibrary(otherFile)) continue;
+            if (otherFile.commonJsModuleIndicator && !otherFile.externalModuleIndicator) return true;
+            if (otherFile.externalModuleIndicator && !otherFile.commonJsModuleIndicator) return false;
+        }
+
+        // 5. Literally nothing to go on
+        return true;
     }
 
     function getNewImportInfos(
@@ -445,7 +466,7 @@ namespace ts.codefix {
         const symbol = checker.getAliasedSymbol(umdSymbol);
         const symbolName = umdSymbol.name;
         const exportInfos: readonly SymbolExportInfo[] = [{ moduleSymbol: symbol, importKind: getUmdImportKind(sourceFile, program.getCompilerOptions()), exportedSymbolIsTypeOnly: false }];
-        const useRequire = shouldUseRequire(sourceFile, program.getCompilerOptions());
+        const useRequire = shouldUseRequire(sourceFile, program);
         const fixes = getFixForImport(exportInfos, symbolName, isIdentifier(token) ? token.getStart(sourceFile) : undefined, /*preferTypeOnlyImport*/ false, useRequire, program, sourceFile, host, preferences);
         return { fixes, symbolName };
     }
@@ -497,7 +518,7 @@ namespace ts.codefix {
 
         const compilerOptions = program.getCompilerOptions();
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && isValidTypeOnlyAliasUseSite(symbolToken);
-        const useRequire = shouldUseRequire(sourceFile, compilerOptions);
+        const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host);
         const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences)));
