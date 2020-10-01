@@ -6216,7 +6216,7 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.OpenBracketToken);
             const elements = parseDelimitedList(ParsingContext.ArrayBindingElements, parseArrayBindingElement);
-            parseExpected(SyntaxKind.CloseBraceToken);
+            parseExpected(SyntaxKind.CloseBracketToken);
             return finishNode(factory.createArrayBindingPattern(elements), pos);
         }
 
