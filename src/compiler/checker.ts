@@ -13552,6 +13552,9 @@ namespace ts {
                     mapType(types[unionIndex], t => getTemplateLiteralType(texts, replaceElement(types, unionIndex, t))) :
                     errorType;
             }
+            if (contains(types, wildcardType)) {
+                return wildcardType;
+            }
             const newTypes: Type[] = [];
             const newTexts: string[] = [];
             let text = texts[0];
