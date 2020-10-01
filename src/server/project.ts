@@ -1672,6 +1672,10 @@ namespace ts.server {
             if (this.autoImportProviderHost === false) {
                 return undefined;
             }
+            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                this.autoImportProviderHost = false;
+                return undefined;
+            }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 if (!this.autoImportProviderHost.hasRoots()) {
