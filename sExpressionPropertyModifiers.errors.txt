@@ -1,0 +1,278 @@
+[1;33mdiff --git a/lib/tsc.js b/lib/tsc.js[m
+[1;33mindex 0c650eda42..65897c1ff9 100644[m
+[1;33m--- a/lib/tsc.js[m
+[1;33m+++ b/lib/tsc.js[m
+[1;35m@@ -4320,7 +4320,7 @@[m [mvar ts;[m
+         Accessibility_modifier_already_seen: diag(1028, ts.DiagnosticCategory.Error, "Accessibility_modifier_already_seen_1028", "Accessibility modifier already seen."),[m
+         _0_modifier_must_precede_1_modifier: diag(1029, ts.DiagnosticCategory.Error, "_0_modifier_must_precede_1_modifier_1029", "'{0}' modifier must precede '{1}' modifier."),[m
+         _0_modifier_already_seen: diag(1030, ts.DiagnosticCategory.Error, "_0_modifier_already_seen_1030", "'{0}' modifier already seen."),[m
+[31m-        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on a class element."),[m
+[32m+[m[32m        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on class elements of this kind."),[m
+         super_must_be_followed_by_an_argument_list_or_member_access: diag(1034, ts.DiagnosticCategory.Error, "super_must_be_followed_by_an_argument_list_or_member_access_1034", "'super' must be followed by an argument list or member access."),[m
+         Only_ambient_modules_can_use_quoted_names: diag(1035, ts.DiagnosticCategory.Error, "Only_ambient_modules_can_use_quoted_names_1035", "Only ambient modules can use quoted names."),[m
+         Statements_are_not_allowed_in_ambient_contexts: diag(1036, ts.DiagnosticCategory.Error, "Statements_are_not_allowed_in_ambient_contexts_1036", "Statements are not allowed in ambient contexts."),[m
+[1;33mdiff --git a/lib/tsserver.js b/lib/tsserver.js[m
+[1;33mindex a9d5e00c58..2232da9150 100644[m
+[1;33m--- a/lib/tsserver.js[m
+[1;33m+++ b/lib/tsserver.js[m
+[1;35m@@ -6853,7 +6853,7 @@[m [mvar ts;[m
+         Accessibility_modifier_already_seen: diag(1028, ts.DiagnosticCategory.Error, "Accessibility_modifier_already_seen_1028", "Accessibility modifier already seen."),[m
+         _0_modifier_must_precede_1_modifier: diag(1029, ts.DiagnosticCategory.Error, "_0_modifier_must_precede_1_modifier_1029", "'{0}' modifier must precede '{1}' modifier."),[m
+         _0_modifier_already_seen: diag(1030, ts.DiagnosticCategory.Error, "_0_modifier_already_seen_1030", "'{0}' modifier already seen."),[m
+[31m-        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on a class element."),[m
+[32m+[m[32m        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on class elements of this kind."),[m
+         super_must_be_followed_by_an_argument_list_or_member_access: diag(1034, ts.DiagnosticCategory.Error, "super_must_be_followed_by_an_argument_list_or_member_access_1034", "'super' must be followed by an argument list or member access."),[m
+         Only_ambient_modules_can_use_quoted_names: diag(1035, ts.DiagnosticCategory.Error, "Only_ambient_modules_can_use_quoted_names_1035", "Only ambient modules can use quoted names."),[m
+         Statements_are_not_allowed_in_ambient_contexts: diag(1036, ts.DiagnosticCategory.Error, "Statements_are_not_allowed_in_ambient_contexts_1036", "Statements are not allowed in ambient contexts."),[m
+[1;33mdiff --git a/lib/tsserverlibrary.js b/lib/tsserverlibrary.js[m
+[1;33mindex 8370d32843..d92eab90e5 100644[m
+[1;33m--- a/lib/tsserverlibrary.js[m
+[1;33m+++ b/lib/tsserverlibrary.js[m
+[1;35m@@ -7003,7 +7003,7 @@[m [mvar ts;[m
+         Accessibility_modifier_already_seen: diag(1028, ts.DiagnosticCategory.Error, "Accessibility_modifier_already_seen_1028", "Accessibility modifier already seen."),[m
+         _0_modifier_must_precede_1_modifier: diag(1029, ts.DiagnosticCategory.Error, "_0_modifier_must_precede_1_modifier_1029", "'{0}' modifier must precede '{1}' modifier."),[m
+         _0_modifier_already_seen: diag(1030, ts.DiagnosticCategory.Error, "_0_modifier_already_seen_1030", "'{0}' modifier already seen."),[m
+[31m-        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on a class element."),[m
+[32m+[m[32m        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' cannot appear on class elements of this kind."),[m
+         super_must_be_followed_by_an_argument_list_or_member_access: diag(1034, ts.DiagnosticCategory.Error, "super_must_be_followed_by_an_argument_list_or_member_access_1034", "'super' must be followed by an argument list or member access."),[m
+         Only_ambient_modules_can_use_quoted_names: diag(1035, ts.DiagnosticCategory.Error, "Only_ambient_modules_can_use_quoted_names_1035", "Only ambient modules can use quoted names."),[m
+         Statements_are_not_allowed_in_ambient_contexts: diag(1036, ts.DiagnosticCategory.Error, "Statements_are_not_allowed_in_ambient_contexts_1036", "Statements are not allowed in ambient contexts."),[m
+[1;33mdiff --git a/lib/typescript.js b/lib/typescript.js[m
+[1;33mindex a03b3a6bc4..24e1baf15a 100644[m
+[1;33m--- a/lib/typescript.js[m
+[1;33m+++ b/lib/typescript.js[m
+[1;35m@@ -7003,7 +7003,7 @@[m [mvar ts;[m
+         Accessibility_modifier_already_seen: diag(1028, ts.DiagnosticCategory.Error, "Accessibility_modifier_already_seen_1028", "Accessibility modifier already seen."),[m
+         _0_modifier_must_precede_1_modifier: diag(1029, ts.DiagnosticCategory.Error, "_0_modifier_must_precede_1_modifier_1029", "'{0}' modifier must precede '{1}' modifier."),[m
+         _0_modifier_already_seen: diag(1030, ts.DiagnosticCategory.Error, "_0_modifier_already_seen_1030", "'{0}' modifier already seen."),[m
+[31m-        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on a class element."),[m
+[32m+[m[32m        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on class elements of this kind."),[m
+         super_must_be_followed_by_an_argument_list_or_member_access: diag(1034, ts.DiagnosticCategory.Error, "super_must_be_followed_by_an_argument_list_or_member_access_1034", "'super' must be followed by an argument list or member access."),[m
+         Only_ambient_modules_can_use_quoted_names: diag(1035, ts.DiagnosticCategory.Error, "Only_ambient_modules_can_use_quoted_names_1035", "Only ambient modules can use quoted names."),[m
+         Statements_are_not_allowed_in_ambient_contexts: diag(1036, ts.DiagnosticCategory.Error, "Statements_are_not_allowed_in_ambient_contexts_1036", "Statements are not allowed in ambient contexts."),[m
+[1;33mdiff --git a/lib/typescriptServices.js b/lib/typescriptServices.js[m
+[1;33mindex 51b0cbdc0a..74270edc42 100644[m
+[1;33m--- a/lib/typescriptServices.js[m
+[1;33m+++ b/lib/typescriptServices.js[m
+[1;35m@@ -7003,7 +7003,7 @@[m [mvar ts;[m
+         Accessibility_modifier_already_seen: diag(1028, ts.DiagnosticCategory.Error, "Accessibility_modifier_already_seen_1028", "Accessibility modifier already seen."),[m
+         _0_modifier_must_precede_1_modifier: diag(1029, ts.DiagnosticCategory.Error, "_0_modifier_must_precede_1_modifier_1029", "'{0}' modifier must precede '{1}' modifier."),[m
+         _0_modifier_already_seen: diag(1030, ts.DiagnosticCategory.Error, "_0_modifier_already_seen_1030", "'{0}' modifier already seen."),[m
+[31m-        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on a class element."),[m
+[32m+[m[32m        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on class elements of this kind."),[m
+         super_must_be_followed_by_an_argument_list_or_member_access: diag(1034, ts.DiagnosticCategory.Error, "super_must_be_followed_by_an_argument_list_or_member_access_1034", "'super' must be followed by an argument list or member access."),[m
+         Only_ambient_modules_can_use_quoted_names: diag(1035, ts.DiagnosticCategory.Error, "Only_ambient_modules_can_use_quoted_names_1035", "Only ambient modules can use quoted names."),[m
+         Statements_are_not_allowed_in_ambient_contexts: diag(1036, ts.DiagnosticCategory.Error, "Statements_are_not_allowed_in_ambient_contexts_1036", "Statements are not allowed in ambient contexts."),[m
+[1;33mdiff --git a/lib/typingsInstaller.js b/lib/typingsInstaller.js[m
+[1;33mindex 703a7a56a1..9c2c98d4ae 100644[m
+[1;33m--- a/lib/typingsInstaller.js[m
+[1;33m+++ b/lib/typingsInstaller.js[m
+[1;35m@@ -6842,7 +6842,7 @@[m [mvar ts;[m
+         Accessibility_modifier_already_seen: diag(1028, ts.DiagnosticCategory.Error, "Accessibility_modifier_already_seen_1028", "Accessibility modifier already seen."),[m
+         _0_modifier_must_precede_1_modifier: diag(1029, ts.DiagnosticCategory.Error, "_0_modifier_must_precede_1_modifier_1029", "'{0}' modifier must precede '{1}' modifier."),[m
+         _0_modifier_already_seen: diag(1030, ts.DiagnosticCategory.Error, "_0_modifier_already_seen_1030", "'{0}' modifier already seen."),[m
+[31m-        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on a class element."),[m
+[32m+[m[32m        _0_modifier_cannot_appear_on_a_class_element: diag(1031, ts.DiagnosticCategory.Error, "_0_modifier_cannot_appear_on_a_class_element_1031", "'{0}' modifier cannot appear on class elements of this kind."),[m
+         super_must_be_followed_by_an_argument_list_or_member_access: diag(1034, ts.DiagnosticCategory.Error, "super_must_be_followed_by_an_argument_list_or_member_access_1034", "'super' must be followed by an argument list or member access."),[m
+         Only_ambient_modules_can_use_quoted_names: diag(1035, ts.DiagnosticCategory.Error, "Only_ambient_modules_can_use_quoted_names_1035", "Only ambient modules can use quoted names."),[m
+         Statements_are_not_allowed_in_ambient_contexts: diag(1036, ts.DiagnosticCategory.Error, "Statements_are_not_allowed_in_ambient_contexts_1036", "Statements are not allowed in ambient contexts."),[m
+[1;33mdiff --git a/src/compiler/diagnosticMessages.json b/src/compiler/diagnosticMessages.json[m
+[1;33mindex 511f41157a..d3573d73cb 100644[m
+[1;33m--- a/src/compiler/diagnosticMessages.json[m
+[1;33m+++ b/src/compiler/diagnosticMessages.json[m
+[1;35m@@ -99,7 +99,7 @@[m
+         "category": "Error",[m
+         "code": 1030[m
+     },[m
+[31m-    "'{0}' modifier cannot appear on a class element.": {[m
+[32m+[m[32m    "'{0}' modifier cannot appear on class elements of this kind.": {[m
+         "category": "Error",[m
+         "code": 1031[m
+     },[m
+[1;33mdiff --git a/tests/baselines/reference/classExpressionPropertyModifiers.errors.txt b/tests/baselines/reference/classExpressionPropertyModifiers.errors.txt[m
+[1;33mindex cb01d65612..1dc4620ed4 100644[m
+[1;33m--- a/tests/baselines/reference/classExpressionPropertyModifiers.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/classExpressionPropertyModifiers.errors.txt[m
+[1;35m@@ -1,5 +1,5 @@[m
+ tests/cases/compiler/classExpressionPropertyModifiers.ts(2,36): error TS1039: Initializers are not allowed in ambient contexts.[m
+[31m-tests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'export' cannot appear on class elements of this kind.[m
+ [m
+ [m
+ ==== tests/cases/compiler/classExpressionPropertyModifiers.ts (2 errors) ====[m
+[1;35m@@ -9,6 +9,6 @@[m [mtests/cases/compiler/classExpressionPropertyModifiers.ts(3,5): error TS1031: 'ex[m
+ !!! error TS1039: Initializers are not allowed in ambient contexts.[m
+         export foo = 1;[m
+         ~~~~~~[m
+[31m-!!! error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'export' cannot appear on class elements of this kind.[m
+     }[m
+     [m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/derivedUninitializedPropertyDeclaration.errors.txt b/tests/baselines/reference/derivedUninitializedPropertyDeclaration.errors.txt[m
+[1;33mindex b66987ac4f..c7673eeecd 100644[m
+[1;33m--- a/tests/baselines/reference/derivedUninitializedPropertyDeclaration.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/derivedUninitializedPropertyDeclaration.errors.txt[m
+[1;35m@@ -1,5 +1,5 @@[m
+ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(12,21): error TS1255: A definite assignment assertion '!' is not permitted in this context.[m
+[31m-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' cannot appear on class elements of this kind.[m
+ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.[m
+ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.[m
+ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.[m
+[1;35m@@ -25,7 +25,7 @@[m [mtests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP[m
+     class BOther extends A {[m
+         declare m() { return 2 } // not allowed on methods[m
+         ~~~~~~~[m
+[31m-!!! error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'declare' cannot appear on class elements of this kind.[m
+                     ~[m
+ !!! error TS1183: An implementation cannot be declared in ambient contexts.[m
+         declare nonce: any; // ok, even though it's not in the base[m
+[1;33mdiff --git a/tests/baselines/reference/illegalModifiersOnClassElements.errors.txt b/tests/baselines/reference/illegalModifiersOnClassElements.errors.txt[m
+[1;33mindex 99ba043b52..dc697c9a11 100644[m
+[1;33m--- a/tests/baselines/reference/illegalModifiersOnClassElements.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/illegalModifiersOnClassElements.errors.txt[m
+[1;35m@@ -1,5 +1,5 @@[m
+ tests/cases/compiler/illegalModifiersOnClassElements.ts(2,19): error TS1039: Initializers are not allowed in ambient contexts.[m
+[31m-tests/cases/compiler/illegalModifiersOnClassElements.ts(3,5): error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/compiler/illegalModifiersOnClassElements.ts(3,5): error TS1031: 'export' cannot appear on class elements of this kind.[m
+ [m
+ [m
+ ==== tests/cases/compiler/illegalModifiersOnClassElements.ts (2 errors) ====[m
+[1;35m@@ -9,5 +9,5 @@[m [mtests/cases/compiler/illegalModifiersOnClassElements.ts(3,5): error TS1031: 'exp[m
+ !!! error TS1039: Initializers are not allowed in ambient contexts.[m
+         export bar = 1;[m
+         ~~~~~~[m
+[31m-!!! error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'export' cannot appear on class elements of this kind.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserConstructorDeclaration3.errors.txt b/tests/baselines/reference/parserConstructorDeclaration3.errors.txt[m
+[1;33mindex d7680e5d11..8337430ae3 100644[m
+[1;33m--- a/tests/baselines/reference/parserConstructorDeclaration3.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserConstructorDeclaration3.errors.txt[m
+[1;35m@@ -1,9 +1,9 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration3.ts(2,3): error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration3.ts(2,3): error TS1031: 'export' cannot appear on class elements of this kind.[m
+ [m
+ [m
+ ==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration3.ts (1 errors) ====[m
+     class C {[m
+       export constructor() { }[m
+       ~~~~~~[m
+[31m-!!! error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'export' cannot appear on class elements of this kind.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserConstructorDeclaration4.errors.txt b/tests/baselines/reference/parserConstructorDeclaration4.errors.txt[m
+[1;33mindex bd27ccbb25..ebe7beb2e4 100644[m
+[1;33m--- a/tests/baselines/reference/parserConstructorDeclaration4.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserConstructorDeclaration4.errors.txt[m
+[1;35m@@ -1,9 +1,9 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts(2,3): error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts(2,3): error TS1031: 'declare' cannot appear on class elements of this kind.[m
+ [m
+ [m
+ ==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts (1 errors) ====[m
+     class C {[m
+       declare constructor() { }[m
+       ~~~~~~~[m
+[31m-!!! error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'declare' cannot appear on class elements of this kind.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserMemberAccessorDeclaration10.errors.txt b/tests/baselines/reference/parserMemberAccessorDeclaration10.errors.txt[m
+[1;33mindex ece110db16..eed4cdbe21 100644[m
+[1;33m--- a/tests/baselines/reference/parserMemberAccessorDeclaration10.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserMemberAccessorDeclaration10.errors.txt[m
+[1;35m@@ -1,4 +1,4 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration10.ts(2,5): error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration10.ts(2,5): error TS1031: 'export' cannot appear on class elements of this kind.[m
+ tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration10.ts(2,16): error TS2378: A 'get' accessor must return a value.[m
+ [m
+ [m
+[1;35m@@ -6,7 +6,7 @@[m [mtests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemb[m
+     class C {[m
+         export get Foo() { }[m
+         ~~~~~~[m
+[31m-!!! error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'export' cannot appear on class elements of this kind.[m
+                    ~~~[m
+ !!! error TS2378: A 'get' accessor must return a value.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserMemberAccessorDeclaration11.errors.txt b/tests/baselines/reference/parserMemberAccessorDeclaration11.errors.txt[m
+[1;33mindex 3a04bfbbd0..42868818eb 100644[m
+[1;33m--- a/tests/baselines/reference/parserMemberAccessorDeclaration11.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserMemberAccessorDeclaration11.errors.txt[m
+[1;35m@@ -1,4 +1,4 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts(2,5): error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts(2,5): error TS1031: 'declare' cannot appear on class elements of this kind.[m
+ tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts(2,17): error TS2378: A 'get' accessor must return a value.[m
+ [m
+ [m
+[1;35m@@ -6,7 +6,7 @@[m [mtests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemb[m
+     class C {[m
+         declare get Foo() { }[m
+         ~~~~~~~[m
+[31m-!!! error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'declare' cannot appear on class elements of this kind.[m
+                     ~~~[m
+ !!! error TS2378: A 'get' accessor must return a value.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserMemberFunctionDeclaration4.errors.txt b/tests/baselines/reference/parserMemberFunctionDeclaration4.errors.txt[m
+[1;33mindex 9b665cc062..8e07a4669c 100644[m
+[1;33m--- a/tests/baselines/reference/parserMemberFunctionDeclaration4.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserMemberFunctionDeclaration4.errors.txt[m
+[1;35m@@ -1,9 +1,9 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration4.ts(2,5): error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration4.ts(2,5): error TS1031: 'export' cannot appear on class elements of this kind.[m
+ [m
+ [m
+ ==== tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration4.ts (1 errors) ====[m
+     class C {[m
+         export Foo() { }[m
+         ~~~~~~[m
+[31m-!!! error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'export' cannot appear on class elements of this kind.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserMemberFunctionDeclaration5.errors.txt b/tests/baselines/reference/parserMemberFunctionDeclaration5.errors.txt[m
+[1;33mindex 402355919a..ce4d0ee09f 100644[m
+[1;33m--- a/tests/baselines/reference/parserMemberFunctionDeclaration5.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserMemberFunctionDeclaration5.errors.txt[m
+[1;35m@@ -1,4 +1,4 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration5.ts(2,5): error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration5.ts(2,5): error TS1031: 'declare' cannot appear on class elements of this kind.[m
+ tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration5.ts(2,19): error TS1183: An implementation cannot be declared in ambient contexts.[m
+ [m
+ [m
+[1;35m@@ -6,7 +6,7 @@[m [mtests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemb[m
+     class C {[m
+         declare Foo() { }[m
+         ~~~~~~~[m
+[31m-!!! error TS1031: 'declare' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'declare' cannot appear on class elements of this kind.[m
+                       ~[m
+ !!! error TS1183: An implementation cannot be declared in ambient contexts.[m
+     }[m
+\ No newline at end of file[m
+[1;33mdiff --git a/tests/baselines/reference/parserMemberVariableDeclaration4.errors.txt b/tests/baselines/reference/parserMemberVariableDeclaration4.errors.txt[m
+[1;33mindex ee28c06162..b665dd1fee 100644[m
+[1;33m--- a/tests/baselines/reference/parserMemberVariableDeclaration4.errors.txt[m
+[1;33m+++ b/tests/baselines/reference/parserMemberVariableDeclaration4.errors.txt[m
+[1;35m@@ -1,9 +1,9 @@[m
+[31m-tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration4.ts(2,3): error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32mtests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration4.ts(2,3): error TS1031: 'export' cannot appear on class elements of this kind.[m
+ [m
+ [m
+ ==== tests/cases/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration4.ts (1 errors) ====[m
+     class C {[m
+       export Foo;[m
+       ~~~~~~[m
+[31m-!!! error TS1031: 'export' modifier cannot appear on a class element.[m
+[32m+[m[32m!!! error TS1031: 'export' cannot appear on class elements of this kind.[m
+     }[m
+\ No newline at end of file[m
