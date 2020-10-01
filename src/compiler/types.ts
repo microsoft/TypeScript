@@ -5323,6 +5323,12 @@ namespace ts {
     export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
+        /**
+         * @internal
+         * Indicates that --noUncheckedIndexedAccess may introduce 'undefined' into
+         * the resulting type, depending on how type variable constraints are resolved.
+         */
+        noUncheckedIndexedAccessCandidate: boolean;
         constraint?: Type;
         simplifiedForReading?: Type;
         simplifiedForWriting?: Type;
