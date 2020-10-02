@@ -1218,19 +1218,21 @@ namespace ts {
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
     export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T | undefined {
-        const sourceText = getSourceFileOfNode(body).text;
-        let currentPosition = sourceText.indexOf("return", body.pos);
+        const sourceText = getSourceFileOfNode(body)?.text as string | undefined;
+        let currentPosition = sourceText?.indexOf("return", body.pos) ?? body.pos;
 
         return traverse(body);
 
         function traverse(node: Node): T | undefined {
-            // Catch up to the current node.
-            while (0 <= currentPosition && currentPosition < node.pos) {
-                currentPosition = sourceText.indexOf("return", currentPosition + 1);
-            }
-            if (currentPosition < 0 || node.end <= currentPosition) {
-                // Nope, no candidates here.
-                return undefined;
+            if (sourceText !== undefined) {
+                // Catch up to the current node.
+                while (0 <= currentPosition && currentPosition < node.pos) {
+                    currentPosition = sourceText.indexOf("return", currentPosition + 1);
+                }
+                if (currentPosition < 0 || node.end <= currentPosition) {
+                    // Nope, no candidates here.
+                    return undefined;
+                }
             }
             switch (node.kind) {
                 case SyntaxKind.ReturnStatement:
