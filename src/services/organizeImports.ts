@@ -14,7 +14,6 @@ namespace ts.OrganizeImports {
         program: Program,
         preferences: UserPreferences,
     ) {
-
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
@@ -224,8 +223,8 @@ namespace ts.OrganizeImports {
             }
 
             newImportSpecifiers.push(...flatMap(namedImports, i => (i.importClause!.namedBindings as NamedImports).elements)); // TODO: GH#18217
-
-            const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
+            const sortedImportSpecifiers = map(sortSpecifiers(newImportSpecifiers), (specifier, index) =>
+                setTextRange(factory.createImportSpecifier(specifier.propertyName, specifier.name), newImportSpecifiers[index]));
 
             const importDecl = defaultImports.length > 0
                 ? defaultImports[0]
@@ -331,8 +330,8 @@ namespace ts.OrganizeImports {
             }
             const newExportSpecifiers: ExportSpecifier[] = [];
             newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
-
-            const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers);
+            const sortedExportSpecifiers = map(sortSpecifiers(newExportSpecifiers), (specifier, index) =>
+                setTextRange(factory.createExportSpecifier(specifier.propertyName, specifier.name), newExportSpecifiers[index]));
 
             const exportDecl = exportGroup[0];
             coalescedExports.push(
