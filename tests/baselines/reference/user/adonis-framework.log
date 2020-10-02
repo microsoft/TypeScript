@@ -105,7 +105,7 @@ node_modules/adonis-framework/src/Helpers/index.js(240,45): error TS2345: Argume
   Type 'undefined' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(256,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/adonis-framework/src/Helpers/index.js(330,31): error TS2339: Property 'mainModule' does not exist on type 'Process'.
+node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Middleware/index.js(87,38): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
@@ -136,12 +136,15 @@ node_modules/adonis-framework/src/Response/index.js(56,7): error TS1056: Accesso
 node_modules/adonis-framework/src/Response/index.js(68,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Response/index.js(76,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(95,16): error TS2304: Cannot find name 'Html'.
+node_modules/adonis-framework/src/Response/index.js(144,12): error TS1003: Identifier expected.
 node_modules/adonis-framework/src/Response/index.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(299,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(323,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/ResourceCollection.js(39,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Route/ResourceCollection.js(43,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/adonis-framework/src/Route/ResourceCollection.js(56,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/adonis-framework/src/Route/ResourceMember.js(39,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Route/ResourceMember.js(43,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/ResourceMember.js(56,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/group.js(34,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
@@ -180,6 +183,7 @@ node_modules/adonis-framework/src/Route/resource.js(198,22): error TS8029: JSDoc
 node_modules/adonis-framework/src/Route/resource.js(209,45): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/resource.js(286,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(314,62): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
@@ -226,12 +230,15 @@ node_modules/adonis-framework/src/Session/index.js(168,15): error TS2322: Type '
 node_modules/adonis-framework/src/Session/index.js(199,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(201,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(204,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/index.js(222,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Session/index.js(234,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(247,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(249,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Session/index.js(265,12): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Session/index.js(267,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(287,15): error TS2322: Type 'Generator<any, any, any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(293,12): error TS2532: Object is possibly 'undefined'.
+node_modules/adonis-framework/src/Static/index.js(45,18): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
 node_modules/adonis-framework/src/View/Form/index.js(75,11): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/View/Form/index.js(115,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/View/Form/index.js(147,63): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'any[]'.

@@ -1432,7 +1432,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar "void" a la promesa resuelta sin un valor]]></Val>
+            <Val><![CDATA[Agregar "void" a la instancia de Promise resuelta sin un valor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1441,7 +1441,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Agregar "void" a todas las promesas resueltas sin un valor]]></Val>
+            <Val><![CDATA[Agregar "void" a todas las instancias de Promise resueltas sin un valor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3484,7 +3484,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert '{0}' to '{1} in {0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Convertir "{0}" en "{1} en "{0}"]]></Val>
+            <Val><![CDATA[Convertir "{0}" a "{1} en "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3969,6 +3969,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declarations_with_definite_assignment_assertions_must_also_have_type_annotations_1264" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with definite assignment assertions must also have type annotations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las declaraciones con aserciones de asignación definitiva deben tener también anotaciones de tipo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declarations_with_initializers_cannot_also_have_definite_assignment_assertions_1263" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with initializers cannot also have definite assignment assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las declaraciones con inicializadores no pueden tener también aserciones de asignación definitiva.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declare_a_private_field_named_0_90053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare a private field named '{0}'.]]></Val>
@@ -4067,15 +4085,6 @@
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La exportación predeterminada del módulo tiene o usa el nombre privado '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation_1258" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las aserciones de asignación definitiva solo se pueden usar junto con una anotación de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9142,7 +9151,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Quitar las declaraciones sin usar para "{0}"]]></Val>
+            <Val><![CDATA[Quite las declaraciones sin usar para "{0}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9151,7 +9160,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused destructuring declaration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Quitar la declaración de desestructuración no utilizada]]></Val>
+            <Val><![CDATA[Quite la declaración de desestructuración no utilizada]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10228,7 +10237,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Cambiar cada elemento "{0}" usado incorrectamente a "{1}"]]></Val>
+            <Val><![CDATA[Cambie cada elemento "{0}" usado incorrectamente a "{1}"]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10292,15 +10301,6 @@
           <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[El destino requiere {0} elemento(s), pero el origen puede tener menos.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El argumento de tipo de literal de plantilla "{0}" no es un tipo literal ni un tipo genérico.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10583,6 +10583,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La intersección "{0}" se redujo a "never" porque la propiedad "{1}" tiene tipos en conflicto en algunos constituyentes.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types_2795" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La palabra clave "intrinsic" solo se puede usar para declarar tipos intrínsecos proporcionados por el compilador.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

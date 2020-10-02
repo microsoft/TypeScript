@@ -12,9 +12,9 @@ var ns = {}
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->ns.x : { status: "done"; m(n: number): void; }
+>ns.x : DoneStatus
 >ns : typeof ns
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: 'done',
@@ -28,9 +28,9 @@ ns.x = {
 
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->ns.x : { status: "done"; m(n: number): void; }
+>ns.x : DoneStatus
 >ns : typeof ns
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: 'done',
@@ -42,9 +42,9 @@ ns.x = {
 >n : number
 }
 ns.x
->ns.x : { status: "done"; m(n: number): void; }
+>ns.x : DoneStatus
 >ns : typeof ns
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 
 
 // this-property assignment
@@ -55,9 +55,9 @@ class Thing {
         /** @type {DoneStatus} */
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->this.s : { status: "done"; m(n: number): void; }
+>this.s : DoneStatus
 >this : this
->s : { status: "done"; m(n: number): void; }
+>s : DoneStatus
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
             status: 'done',
@@ -75,9 +75,9 @@ class Thing {
 
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->this.s : { status: "done"; m(n: number): void; }
+>this.s : DoneStatus
 >this : this
->s : { status: "done"; m(n: number): void; }
+>s : DoneStatus
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
 
             status: 'done',
@@ -96,9 +96,9 @@ class Thing {
 /** @type {DoneStatus} */
 exports.x = {
 >exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->exports.x : { status: "done"; m(n: number): void; }
+>exports.x : DoneStatus
 >exports : typeof import("tests/cases/conformance/salsa/test")
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
@@ -110,18 +110,18 @@ exports.x = {
 >n : number
 }
 exports.x
->exports.x : { status: "done"; m(n: number): void; }
+>exports.x : DoneStatus
 >exports : typeof import("tests/cases/conformance/salsa/test")
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 
 /** @type {DoneStatus} */
 module.exports.y = {
 >module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->module.exports.y : { status: "done"; m(n: number): void; }
+>module.exports.y : DoneStatus
 >module.exports : typeof import("tests/cases/conformance/salsa/test")
 >module : { "\"tests/cases/conformance/salsa/test\"": typeof import("tests/cases/conformance/salsa/test"); }
 >exports : typeof import("tests/cases/conformance/salsa/test")
->y : { status: "done"; m(n: number): void; }
+>y : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",
@@ -133,21 +133,21 @@ module.exports.y = {
 >n : number
 }
 module.exports.y
->module.exports.y : { status: "done"; m(n: number): void; }
+>module.exports.y : DoneStatus
 >module.exports : typeof import("tests/cases/conformance/salsa/test")
 >module : { "\"tests/cases/conformance/salsa/test\"": typeof import("tests/cases/conformance/salsa/test"); }
 >exports : typeof import("tests/cases/conformance/salsa/test")
->y : { status: "done"; m(n: number): void; }
+>y : DoneStatus
 
 // prototype-property assignment
 /** @type {DoneStatus} */
 Thing.prototype.x = {
 >Thing.prototype.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->Thing.prototype.x : { status: "done"; m(n: number): void; }
+>Thing.prototype.x : DoneStatus
 >Thing.prototype : Thing
 >Thing : typeof Thing
 >prototype : Thing
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: 'done',
@@ -159,11 +159,11 @@ Thing.prototype.x = {
 >n : number
 }
 Thing.prototype.x
->Thing.prototype.x : { status: "done"; m(n: number): void; }
+>Thing.prototype.x : DoneStatus
 >Thing.prototype : Thing
 >Thing : typeof Thing
 >prototype : Thing
->x : { status: "done"; m(n: number): void; }
+>x : DoneStatus
 
 // prototype assignment
 function F() {
@@ -172,9 +172,9 @@ function F() {
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->F.prototype : { status: "done"; m(n: number): void; }
+>F.prototype : DoneStatus
 >F : typeof F
->prototype : { status: "done"; m(n: number): void; }
+>prototype : DoneStatus
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: "done",

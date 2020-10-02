@@ -43,10 +43,29 @@ interface Person {
 
 type LazyPerson = Lazyify<Person>;
 
+// Repro from #40833
+
+type Example = {foo: string, bar: number};
+
+type PickByValueType<T, U> = {
+  [K in keyof T as T[K] extends U ? K : never]: T[K]
+};
+
+type T1 = PickByValueType<Example, string>;
+const e1: T1 = {
+    foo: "hello"
+};
+type T2 = keyof T1;
+const e2: T2 = "foo";
+
 
 //// [mappedTypeAsClauses.js]
 "use strict";
 // Mapped type 'as N' clauses
+var e1 = {
+    foo: "hello"
+};
+var e2 = "foo";
 
 
 //// [mappedTypeAsClauses.d.ts]
@@ -105,3 +124,14 @@ interface Person {
     location?: string;
 }
 declare type LazyPerson = Lazyify<Person>;
+declare type Example = {
+    foo: string;
+    bar: number;
+};
+declare type PickByValueType<T, U> = {
+    [K in keyof T as T[K] extends U ? K : never]: T[K];
+};
+declare type T1 = PickByValueType<Example, string>;
+declare const e1: T1;
+declare type T2 = keyof T1;
+declare const e2: T2;

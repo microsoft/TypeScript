@@ -544,13 +544,12 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash, exportedModulesMapCache)) { // TODO: GH#18217
+                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash, exportedModulesMapCache)) {
                         queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
                 }
             }
 
-            // Return array of values that needs emit
             // Return array of values that needs emit
             return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
         }

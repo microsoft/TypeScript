@@ -100,28 +100,6 @@ namespace ts {
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
-    /**
-     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
-     * At that point findAncestor returns undefined.
-     */
-    export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
-    export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined {
-        while (node) {
-            const result = callback(node);
-            if (result === "quit") {
-                return undefined;
-            }
-            else if (result) {
-                return node;
-            }
-            node = node.parent;
-        }
-        return undefined;
-    }
-
     export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
         while (true) {
             const res = callback(node);
@@ -1959,48 +1937,6 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    export function getDeclarationOfExpando(node: Node): Node | undefined {
-        if (!node.parent) {
-            return undefined;
-        }
-        let name: Expression | BindingName | undefined;
-        let decl: Node | undefined;
-        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJSFile(node) && !isVarConst(node.parent)) {
-                return undefined;
-            }
-            name = node.parent.name;
-            decl = node.parent;
-        }
-        else if (isBinaryExpression(node.parent)) {
-            const parentNode = node.parent;
-            const parentNodeOperator = node.parent.operatorToken.kind;
-            if (parentNodeOperator === SyntaxKind.EqualsToken && parentNode.right === node) {
-                name = parentNode.left;
-                decl = name;
-            }
-            else if (parentNodeOperator === SyntaxKind.BarBarToken || parentNodeOperator === SyntaxKind.QuestionQuestionToken) {
-                if (isVariableDeclaration(parentNode.parent) && parentNode.parent.initializer === parentNode) {
-                    name = parentNode.parent.name;
-                    decl = parentNode.parent;
-                }
-                else if (isBinaryExpression(parentNode.parent) && parentNode.parent.operatorToken.kind === SyntaxKind.EqualsToken && parentNode.parent.right === parentNode) {
-                    name = parentNode.parent.left;
-                    decl = name;
-                }
-
-                if (!name || !isBindableStaticNameExpression(name) || !isSameEntityName(name, parentNode.left)) {
-                    return undefined;
-                }
-            }
-        }
-
-        if (!name || !getExpandoInitializer(node, isPrototypeAccess(name))) {
-            return undefined;
-        }
-        return decl;
-    }
-
     export function isAssignmentDeclaration(decl: Declaration) {
         return isBinaryExpression(decl) || isAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
@@ -2120,7 +2056,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: Expression, initializer: Expression): boolean {
+    export function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
             return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
@@ -2728,6 +2664,20 @@ namespace ts {
 
     export function walkUpParenthesizedExpressions(node: Node) {
         return walkUp(node, SyntaxKind.ParenthesizedExpression);
+    }
+
+    /**
+     * Walks up parenthesized types.
+     * It returns both the outermost parenthesized type and its parent.
+     * If given node is not a parenthesiezd type, undefined is return as the former.
+     */
+    export function walkUpParenthesizedTypesAndGetParentAndChild(node: Node): [ParenthesizedTypeNode | undefined, Node] {
+        let child: ParenthesizedTypeNode | undefined;
+        while (node && node.kind === SyntaxKind.ParenthesizedType) {
+            child = <ParenthesizedTypeNode>node;
+            node = node.parent;
+        }
+        return [child, node];
     }
 
     export function skipParentheses(node: Expression): Expression;

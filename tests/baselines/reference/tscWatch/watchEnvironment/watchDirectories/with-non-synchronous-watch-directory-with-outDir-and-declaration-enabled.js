@@ -27,7 +27,6 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -162,7 +161,6 @@ Input::
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:45 AM[0m] Found 0 errors. Watching for file changes.
 

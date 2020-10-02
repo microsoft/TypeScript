@@ -62,21 +62,13 @@ Output::
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-
 /a/lib/lib.d.ts
-
 /user/username/projects/myproject/pkg1/dist/types.d.ts
-
 /user/username/projects/myproject/pkg1/dist/index.d.ts
-
 /user/username/projects/myproject/pkg2/dist/types.d.ts
-
 /user/username/projects/myproject/pkg2/dist/index.d.ts
-
 /user/username/projects/myproject/pkg3/src/keys.ts
-
 /user/username/projects/myproject/pkg3/src/index.ts
-
 
 Found 1 error.
 
