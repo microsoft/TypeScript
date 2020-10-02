@@ -107,6 +107,8 @@ node_modules/npm/lib/config.js(84,19): error TS2339: Property 'config' does not 
 node_modules/npm/lib/config.js(85,15): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config.js(87,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config.js(93,25): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config.js(118,31): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/config.js(135,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config.js(136,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config.js(137,7): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -168,6 +170,8 @@ node_modules/npm/lib/config/core.js(208,24): error TS2339: Property 'list' does 
 node_modules/npm/lib/config/core.js(237,21): error TS2339: Property 'sources' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(245,17): error TS2339: Property 'emit' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(279,8): error TS2339: Property '_saving' does not exist on type 'Conf'.
+node_modules/npm/lib/config/core.js(288,39): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/config/core.js(307,8): error TS2339: Property 'sources' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(308,8): error TS2339: Property 'push' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(309,8): error TS2339: Property '_await' does not exist on type 'Conf'.
@@ -243,6 +247,8 @@ node_modules/npm/lib/config/pacote.js(84,31): error TS2339: Property 'config' do
 node_modules/npm/lib/config/pacote.js(89,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(90,38): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/pacote.js(110,60): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/config/set-user.js(22,18): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/dedupe.js(35,32): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(37,11): error TS2339: Property 'command' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/dedupe.js(38,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
@@ -405,6 +411,8 @@ node_modules/npm/lib/install/action/global-link.js(7,7): error TS2339: Property 
 node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/remove.js(25,37): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/action/remove.js(25,51): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/install/action/remove.js(55,49): error TS2345: Argument of type '(mkdirEr: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(mkdirEr: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/lib/install/actions.js(126,24): error TS2339: Property 'limit' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/install/actions.js(168,16): error TS2769: No overload matches this call.
   The last overload gave the following error.
@@ -717,6 +725,8 @@ node_modules/npm/lib/search/all-package-metadata.js(33,30): error TS2339: Proper
 node_modules/npm/lib/search/all-package-metadata.js(36,35): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search/all-package-metadata.js(146,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search/all-package-metadata.js(239,20): error TS2339: Property 'cache' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/search/all-package-metadata.js(241,22): error TS2345: Argument of type '(er: any, made: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any, made: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
@@ -784,6 +794,8 @@ node_modules/npm/lib/unpublish.js(97,70): error TS2339: Property 'registry' does
 node_modules/npm/lib/update.js(10,41): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/update.js(17,25): error TS2339: Property 'commands' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/update.js(25,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/utils/completion/file-completion.js(11,15): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/utils/completion/installed-deep.js(9,19): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/completion/installed-deep.js(12,11): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/completion/installed-deep.js(16,23): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
@@ -795,6 +807,12 @@ node_modules/npm/lib/utils/completion/installed-shallow.js(22,11): error TS2339:
 node_modules/npm/lib/utils/completion/installed-shallow.js(57,28): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/completion/installed-shallow.js(66,23): error TS2339: Property 'globalDir' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/completion/installed-shallow.js(79,14): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
+node_modules/npm/lib/utils/correct-mkdir.js(74,25): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
+node_modules/npm/lib/utils/correct-mkdir.js(89,18): error TS2345: Argument of type '(er: any, made: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any, made: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
+node_modules/npm/lib/utils/correct-mkdir.js(103,20): error TS2345: Argument of type '(er: any, made: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Value of type '(er: any, made: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/utils/error-handler.js(12,21): error TS2339: Property 'rollbacks' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(23,36): error TS2339: Property 'config' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(29,16): error TS2339: Property 'version' does not exist on type 'EventEmitter'.
@@ -1051,6 +1069,8 @@ node_modules/npm/test/tap/404-private-registry.js(1,20): error TS2307: Cannot fi
 node_modules/npm/test/tap/404-private-registry.js(6,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/access.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/access.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/access.js(19,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/add-named-update-protocol-port.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/add-named-update-protocol-port.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/add-remote-git-file.js(10,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
@@ -1072,6 +1092,8 @@ node_modules/npm/test/tap/adduser-always-auth.js(4,18): error TS2307: Cannot fin
 node_modules/npm/test/tap/adduser-always-auth.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/adduser-legacy-auth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/adduser-legacy-auth.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/adduser-legacy-auth.js(45,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/adduser-oauth.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/adduser-oauth.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/adduser-saml.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
@@ -1162,6 +1184,7 @@ node_modules/npm/test/tap/config-builtin.js(61,13): error TS2531: Object is poss
 node_modules/npm/test/tap/config-certfile.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-credentials.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-edit.js(6,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/config-edit.js(27,25): error TS2554: Expected 1-2 arguments, but got 3.
 node_modules/npm/test/tap/config-envReplace.js(6,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-list.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/config-malformed.js(1,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
@@ -1198,6 +1221,8 @@ node_modules/npm/test/tap/deprecate.js(1,18): error TS2307: Cannot find module '
 node_modules/npm/test/tap/deprecate.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/dist-tag.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/dist-tag.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/dist-tag.js(49,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/do-not-remove-other-bins.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/doctor.js(5,20): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/doctor.js(9,23): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
@@ -1485,6 +1510,12 @@ node_modules/npm/test/tap/owner.js(2,20): error TS2307: Cannot find module 'tap'
 node_modules/npm/test/tap/pack-files-and-ignores.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/pack-files-and-ignores.js(12,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/pack-scoped.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/pack-scoped.js(24,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
+node_modules/npm/test/tap/pack-scoped.js(25,17): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
+node_modules/npm/test/tap/pack-scoped.js(26,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/pack.js(5,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/peer-deps.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/peer-deps.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
@@ -1508,10 +1539,22 @@ node_modules/npm/test/tap/pick-manifest-from-registry-metadata.js(137,11): error
 node_modules/npm/test/tap/ping.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/ping.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/prepare.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prepare.js(16,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
+node_modules/npm/test/tap/prepare.js(17,17): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
+node_modules/npm/test/tap/prepare.js(18,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/prepublish-only.js(4,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
 node_modules/npm/test/tap/prepublish-only.js(5,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find module 'tacks' or its corresponding type declarations.
 node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
+node_modules/npm/test/tap/prepublish.js(16,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
+node_modules/npm/test/tap/prepublish.js(17,17): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
+node_modules/npm/test/tap/prepublish.js(18,15): error TS2345: Argument of type '(er: any) => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '(er: any) => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/process-logger.js(7,61): error TS2554: Expected 1-3 arguments, but got 4.
 node_modules/npm/test/tap/process-logger.js(8,37): error TS2769: No overload matches this call.
@@ -1537,9 +1580,13 @@ node_modules/npm/test/tap/prune.js(5,18): error TS2307: Cannot find module 'npm-
 node_modules/npm/test/tap/prune.js(8,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-access-scoped.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-access-scoped.js(7,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-access-scoped.js(31,35): error TS2345: Argument of type '() => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '() => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/publish-access-unscoped-restricted-fails.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-access-unscoped.js(4,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-access-unscoped.js(7,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
+node_modules/npm/test/tap/publish-access-unscoped.js(31,35): error TS2345: Argument of type '() => void' is not assignable to parameter of type 'string | number | Options | undefined'.
+  Type '() => void' has no properties in common with type 'Options'.
 node_modules/npm/test/tap/publish-config.js(4,22): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/publish-invalid-semver-tag.js(8,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.
