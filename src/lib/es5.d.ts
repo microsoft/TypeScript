@@ -4330,6 +4330,7 @@ declare namespace Intl {
         formatMatcher?: string;
         hour12?: boolean;
         timeZone?: string;
+        dateStyle?: string;
     }
 
     interface ResolvedDateTimeFormatOptions {
