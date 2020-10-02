@@ -515,3 +515,24 @@ type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
 >T100000 : any
 
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+>IsNegative : IsNegative<T>
+>true : true
+>false : false
+
+type AA<T extends number, Q extends number> =
+>AA : AA<T, Q>
+
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+>true : true
+>true : true
+
+type BB = AA<-2, -2>;
+>BB : "Every thing is ok!"
+>-2 : -2
+>2 : 2
+>-2 : -2
+>2 : 2
+

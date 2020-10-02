@@ -233,3 +233,12 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2590: Expression produces a union type that is too complex to represent.
     
+    // Repro from #40863
+    
+    type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+    
+    type AA<T extends number, Q extends number> =
+        [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+    
+    type BB = AA<-2, -2>;
+    

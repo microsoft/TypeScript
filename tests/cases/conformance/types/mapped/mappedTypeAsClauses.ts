@@ -44,3 +44,18 @@ interface Person {
 }
 
 type LazyPerson = Lazyify<Person>;
+
+// Repro from #40833
+
+type Example = {foo: string, bar: number};
+
+type PickByValueType<T, U> = {
+  [K in keyof T as T[K] extends U ? K : never]: T[K]
+};
+
+type T1 = PickByValueType<Example, string>;
+const e1: T1 = {
+    foo: "hello"
+};
+type T2 = keyof T1;
+const e2: T2 = "foo";

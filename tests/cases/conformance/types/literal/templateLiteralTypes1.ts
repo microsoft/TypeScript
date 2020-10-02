@@ -206,3 +206,12 @@ type D100000 = `${Digits}${Digits}${Digits}${Digits}${Digits}`;  // Error
 type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 
 type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
+
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+
+type AA<T extends number, Q extends number> =
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+
+type BB = AA<-2, -2>;
