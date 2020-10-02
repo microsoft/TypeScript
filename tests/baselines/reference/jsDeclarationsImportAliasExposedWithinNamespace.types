@@ -70,6 +70,6 @@ function testFn(input) {
 }
 
 export {testFn, testFnTypes};
->testFn : (input: boolean | Function | myTypes.typeB) => number
+>testFn : (input: testFnTypes.input) => number
 >testFnTypes : { [x: string]: any; }
 

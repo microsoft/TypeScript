@@ -68,7 +68,7 @@ export namespace myTypes {
         /**
          * - Prop 1.
          */
-        prop1: string | RegExp | (string | RegExp)[];
+        prop1: typeA;
         /**
          * - Prop 2.
          */
@@ -84,7 +84,7 @@ export namespace myTypes {
  * @param {testFnTypes.input} input - Input.
  * @returns {number|null} Result.
  */
-export function testFn(input: boolean | Function | myTypes.typeB): number | null;
+export function testFn(input: testFnTypes.input): number | null;
 /**
  * @namespace testFnTypes
  * @global
