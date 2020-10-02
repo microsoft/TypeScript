@@ -3048,6 +3048,10 @@
         "category": "Error",
         "code": 2795
     },
+    "It is likely that you are missing a comma to separate these two template expressions. They form form a tagged template expression which is invalid.": {
+        "category": "Error",
+        "code": 2796
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

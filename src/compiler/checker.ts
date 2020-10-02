@@ -27872,6 +27872,12 @@ namespace ts {
                 return resolveUntypedCall(node);
             }
 
+            if (isArrayLiteralExpression(node.parent)) {
+                const diagnostic = createDiagnosticForNode(node.tag, Diagnostics.It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_form_a_tagged_template_expression_which_is_invalid);
+                diagnostics.add(diagnostic);
+                return resolveErrorCall(node);
+            }
+
             if (!callSignatures.length) {
                 invocationError(node.tag, apparentType, SignatureKind.Call);
                 return resolveErrorCall(node);
