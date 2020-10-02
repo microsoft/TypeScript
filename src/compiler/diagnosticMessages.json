@@ -3048,7 +3048,7 @@
         "category": "Error",
         "code": 2795
     },
-    "It is likely that you are missing a comma to separate these two template expressions. They form form a tagged template expression which is invalid.": {
+    "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
         "category": "Error",
         "code": 2796
     },
