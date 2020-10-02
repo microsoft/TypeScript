@@ -48,9 +48,9 @@ class Wrap {
         /** @type {import("./conn").Whatever} */
         this.another = "";
 >this.another = "" : ""
->this.another : string | number
+>this.another : import("tests/cases/conformance/jsdoc/declarations/conn").Whatever
 >this : this
->another : string | number
+>another : import("tests/cases/conformance/jsdoc/declarations/conn").Whatever
 >"" : ""
     }
 }

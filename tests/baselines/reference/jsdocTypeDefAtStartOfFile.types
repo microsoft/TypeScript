@@ -4,7 +4,7 @@ No type information for this code./** @typedef {number} Third */
 No type information for this code.=== tests/cases/conformance/jsdoc/index.js ===
 /** @type {AnyEffect} */
 let b;
->b : { [k: string]: any; }
+>b : AnyEffect
 
 /** @type {Third} */
 let c;
