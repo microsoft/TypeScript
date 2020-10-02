@@ -900,7 +900,7 @@ namespace ts {
         /**
          * Computing hash to for signature verification
          */
-        const computeHash = host.createHash || generateDjb2Hash;
+        const computeHash = maybeBind(host, host.createHash);
         let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
         let backupState: BuilderProgramState | undefined;
         newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
