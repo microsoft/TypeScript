@@ -5364,7 +5364,7 @@ namespace ts {
                 if (lastError && lastError.code === Diagnostics._0_expected.code) {
                     addRelatedInfo(
                         lastError,
-                        createDetachedDiagnostic(fileName, openBracketPosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        createDetachedDiagnostic(fileName, openBracketPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenBracketToken), tokenToString(SyntaxKind.CloseBracketToken))
                     );
                 }
             }
@@ -5441,7 +5441,7 @@ namespace ts {
                 if (lastError && lastError.code === Diagnostics._0_expected.code) {
                     addRelatedInfo(
                         lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenBraceToken), tokenToString(SyntaxKind.CloseBraceToken))
                     );
                 }
             }
@@ -5534,7 +5534,7 @@ namespace ts {
                     if (lastError && lastError.code === Diagnostics._0_expected.code) {
                         addRelatedInfo(
                             lastError,
-                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenBraceToken), tokenToString(SyntaxKind.CloseBraceToken))
                         );
                     }
                 }
@@ -5585,9 +5585,18 @@ namespace ts {
         function parseIfStatement(): IfStatement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.IfKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            if (!parseExpected(SyntaxKind.CloseParenToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
+                    );
+                }
+            }
             const thenStatement = parseStatement();
             const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
             return finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos);
@@ -5598,9 +5607,18 @@ namespace ts {
             parseExpected(SyntaxKind.DoKeyword);
             const statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            if (!parseExpected(SyntaxKind.CloseParenToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
+                    );
+                }
+            }
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
             // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in
@@ -5613,9 +5631,18 @@ namespace ts {
         function parseWhileStatement(): WhileStatement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.WhileKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            if (!parseExpected(SyntaxKind.CloseParenToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
+                    );
+                }
+            }
             const statement = parseStatement();
             return finishNode(factory.createWhileStatement(expression, statement), pos);
         }
@@ -5687,9 +5714,18 @@ namespace ts {
         function parseWithStatement(): WithStatement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.WithKeyword);
+            const openParenPosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpected(SyntaxKind.CloseParenToken);
+            if (!parseExpected(SyntaxKind.CloseParenToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openParenPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenParenToken), tokenToString(SyntaxKind.CloseParenToken))
+                    );
+                }
+            }
             const statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
             return finishNode(factory.createWithStatement(expression, statement), pos);
         }
