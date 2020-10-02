@@ -729,6 +729,7 @@ namespace ts {
         let scriptKind: ScriptKind;
         let languageVariant: LanguageVariant;
         let parseDiagnostics: DiagnosticWithDetachedLocation[];
+        let currentDiagnostic: DiagnosticWithDetachedLocation | undefined;
         let jsDocDiagnostics: DiagnosticWithDetachedLocation[];
         let syntaxCursor: IncrementalParser.SyntaxCursor | undefined;
 
@@ -1315,7 +1316,8 @@ namespace ts {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
             if (!lastError || start !== lastError.start) {
-                parseDiagnostics.push(createDetachedDiagnostic(fileName, start, length, message, arg0));
+                currentDiagnostic = createDetachedDiagnostic(fileName, start, length, message, arg0);
+                parseDiagnostics.push(currentDiagnostic);
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
@@ -1485,6 +1487,23 @@ namespace ts {
             }
 
             return token() > SyntaxKind.LastReservedWord;
+        }
+
+        function parseCloseToken(closeTokenKind: SyntaxKind, openTokenKind: SyntaxKind): boolean {
+            if (!parseExpected(closeTokenKind)) {
+                if (currentDiagnostic && currentDiagnostic.code === Diagnostics._0_expected.code) {
+                    const openBracePosition = scanner.getTokenPos();
+                    const openTokenStr = tokenToString(openTokenKind)!;
+                    const closeTokenStr = tokenToString(closeTokenKind)!;
+                    addRelatedInfo(
+                        currentDiagnostic,
+                        createDetachedDiagnostic(fileName, openBracePosition, 1,
+                                             Diagnostics.The_parser_expected_to_find_a_0_to_match_the_1_token_here, closeTokenStr, openTokenStr)
+                    );
+                }
+                return false;
+            }
+            return true;
         }
 
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
@@ -5423,19 +5442,10 @@ namespace ts {
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
             const pos = getNodePos();
-            const openBracePosition = scanner.getTokenPos();
             parseExpected(SyntaxKind.OpenBraceToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                    );
-                }
-            }
+            parseCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken);
             return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
         }
 
@@ -5516,19 +5526,10 @@ namespace ts {
         // STATEMENTS
         function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             const pos = getNodePos();
-            const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 const multiLine = scanner.hasPrecedingLineBreak();
                 const statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                    const lastError = lastOrUndefined(parseDiagnostics);
-                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                        addRelatedInfo(
-                            lastError,
-                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                        );
-                    }
-                }
+                parseCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken);
                 return finishNode(factory.createBlock(statements, multiLine), pos);
             }
             else {
@@ -6660,7 +6661,7 @@ namespace ts {
                 // ClassTail[Yield,Await] : (Modified) See 14.5
                 //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
                 members = parseClassMembers();
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken);
             }
             else {
                 members = createMissingList<ClassElement>();
@@ -6766,7 +6767,7 @@ namespace ts {
             let members;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
-                parseExpected(SyntaxKind.CloseBraceToken);
+                parseCloseToken(SyntaxKind.CloseBraceToken, SyntaxKind.OpenBraceToken);
             }
             else {
                 members = createMissingList<EnumMember>();
