@@ -26,12 +26,12 @@ namespace ts {
             return currentFileState.filenameDeclaration.name;
         }
 
-        function getJsxFactoryCalleePrimitive(children: readonly JsxChild[] | undefined): "jsx" | "jsxs" | "jsxDEV" {
-            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : children && children.length > 1 ? "jsxs" : "jsx";
+        function getJsxFactoryCalleePrimitive(childrenLength: number): "jsx" | "jsxs" | "jsxDEV" {
+            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : childrenLength > 1 ? "jsxs" : "jsx";
         }
 
-        function getJsxFactoryCallee(children: readonly JsxChild[] | undefined) {
-            const type = getJsxFactoryCalleePrimitive(children);
+        function getJsxFactoryCallee(childrenLength: number) {
+            const type = getJsxFactoryCalleePrimitive(childrenLength);
             return getImplicitImportForName(type);
         }
 
@@ -74,7 +74,7 @@ namespace ts {
                 statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
             }
             if (currentFileState.utilizedImplicitRuntimeImports && currentFileState.utilizedImplicitRuntimeImports.size && currentFileState.importSpecifier !== undefined) {
-                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}`;
+                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime.js" : "jsx-runtime.js"}`;
                 if (isExternalModule(node)) {
                     // Add `import` statement
                     const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(currentFileState.utilizedImplicitRuntimeImports.values()))), factory.createStringLiteral(specifier));
@@ -191,8 +191,9 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
-            if (children.length === 1) {
-                const result = transformJsxChildToExpression(children[0]);
+            const nonWhitespaceChildren = filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
+            if (length(nonWhitespaceChildren) === 1) {
+                const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createObjectLiteralExpression([
                     factory.createPropertyAssignment("children", result)
                 ]);
@@ -243,16 +244,16 @@ namespace ts {
                 objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
             }
 
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, children, isChild, location);
+            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)), isChild, location);
         }
 
-        function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
             const args: Expression[] = [tagName, objectProperties, !keyAttr ? factory.createVoidZero() : transformJsxAttributeInitializer(keyAttr.initializer)];
             if (compilerOptions.jsx === JsxEmit.ReactJSXDev) {
                 const originalFile = getOriginalNode(currentSourceFile);
                 if (originalFile && isSourceFile(originalFile)) {
                     // isStaticChildren development flag
-                    args.push(children && children.length > 1 ? factory.createTrue() : factory.createFalse());
+                    args.push(childrenLength > 1 ? factory.createTrue() : factory.createFalse());
                     // __source development flag
                     const lineCol = getLineAndCharacterOfPosition(originalFile, location.pos);
                     args.push(factory.createObjectLiteralExpression([
@@ -264,7 +265,7 @@ namespace ts {
                     args.push(factory.createThis());
                 }
             }
-            const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(children), /*typeArguments*/ undefined, args), location);
+            const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(childrenLength), /*typeArguments*/ undefined, args), location);
 
             if (isChild) {
                 startOnNewLine(element);
@@ -335,7 +336,7 @@ namespace ts {
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                children,
+                length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)),
                 isChild,
                 location
             );

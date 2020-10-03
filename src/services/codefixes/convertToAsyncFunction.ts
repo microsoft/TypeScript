@@ -302,7 +302,6 @@ namespace ts.codefix {
         const [onFulfilled, onRejected] = node.arguments;
         const onFulfilledArgumentName = getArgBindingName(onFulfilled, transformer);
         const transformationBody = getTransformationBody(onFulfilled, prevArgName, onFulfilledArgumentName, node, transformer);
-
         if (onRejected) {
             const onRejectedArgumentName = getArgBindingName(onRejected, transformer);
             const tryBlock = factory.createBlock(transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody));
@@ -310,10 +309,8 @@ namespace ts.codefix {
             const catchArg = onRejectedArgumentName ? isSynthIdentifier(onRejectedArgumentName) ? onRejectedArgumentName.identifier.text : onRejectedArgumentName.bindingPattern : "e";
             const catchVariableDeclaration = factory.createVariableDeclaration(catchArg);
             const catchClause = factory.createCatchClause(catchVariableDeclaration, factory.createBlock(transformationBody2));
-
             return [factory.createTryStatement(tryBlock, catchClause, /* finallyBlock */ undefined)];
         }
-
         return transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody);
     }
 
@@ -395,11 +392,12 @@ namespace ts.codefix {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction: {
                 const funcBody = (func as FunctionExpression | ArrowFunction).body;
+                const returnType = getLastCallSignature(transformer.checker.getTypeAtLocation(func), transformer.checker)?.getReturnType();
+
                 // Arrow functions with block bodies { } will enter this control flow
                 if (isBlock(funcBody)) {
                     let refactoredStmts: Statement[] = [];
                     let seenReturnStatement = false;
-
                     for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
@@ -407,7 +405,8 @@ namespace ts.codefix {
                                 refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                             }
                             else {
-                                refactoredStmts.push(...maybeAnnotateAndReturn(statement.expression, parent.typeArguments?.[0]));
+                                const possiblyAwaitedRightHandSide = returnType && statement.expression ? getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression) : statement.expression;
+                                refactoredStmts.push(...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, parent.typeArguments?.[0]));
                             }
                         }
                         else {
@@ -431,19 +430,21 @@ namespace ts.codefix {
                         return innerCbBody;
                     }
 
-                    const type = transformer.checker.getTypeAtLocation(func);
-                    const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
-                    const rightHandSide = getSynthesizedDeepClone(funcBody);
-                    const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
-                    if (!shouldReturn(parent, transformer)) {
-                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
-                        if (prevArgName) {
-                            prevArgName.types.push(returnType);
+                    if (returnType) {
+                        const possiblyAwaitedRightHandSide = getPossiblyAwaitedRightHandSide(transformer.checker, returnType, funcBody);
+                        if (!shouldReturn(parent, transformer)) {
+                            const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
+                            if (prevArgName) {
+                                prevArgName.types.push(returnType);
+                            }
+                            return transformedStatement;
                         }
-                        return transformedStatement;
+                        else {
+                            return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, parent.typeArguments?.[0]);
+                        }
                     }
                     else {
-                        return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, parent.typeArguments?.[0]);
+                        return silentFail();
                     }
                 }
             }
@@ -454,11 +455,15 @@ namespace ts.codefix {
         return emptyArray;
     }
 
+    function getPossiblyAwaitedRightHandSide(checker: TypeChecker, type: Type, expr: Expression): AwaitExpression | Expression {
+        const rightHandSide = getSynthesizedDeepClone(expr);
+        return !!checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
+    }
+
     function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
         const callSignatures = checker.getSignaturesOfType(type, SignatureKind.Call);
         return lastOrUndefined(callSignatures);
     }
-
 
     function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingName | undefined, transformer: Transformer, seenReturnStatement: boolean): readonly Statement[] {
         const ret: Statement[] = [];

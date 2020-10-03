@@ -3,7 +3,7 @@
 
 // Mapped type 'as N' clauses
 
-type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 
 // Mapped type with 'as N' clause has no constraint on 'in T' clause
@@ -34,7 +34,7 @@ type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & str
 // Repro from #40619
 
 type Lazyify<T> = {
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 };
 
 interface Person {
@@ -44,3 +44,18 @@ interface Person {
 }
 
 type LazyPerson = Lazyify<Person>;
+
+// Repro from #40833
+
+type Example = {foo: string, bar: number};
+
+type PickByValueType<T, U> = {
+  [K in keyof T as T[K] extends U ? K : never]: T[K]
+};
+
+type T1 = PickByValueType<Example, string>;
+const e1: T1 = {
+    foo: "hello"
+};
+type T2 = keyof T1;
+const e2: T2 = "foo";

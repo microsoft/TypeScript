@@ -1409,6 +1409,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_void_to_Promise_resolved_without_a_value_95143" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Adicionar 'void' à Promessa resolvida sem um valor]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_void_to_all_Promises_resolved_without_a_value_95144" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Adicionar 'void' a todas as Promessas resolvidas sem um valor]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
@@ -3932,6 +3950,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declarations_with_definite_assignment_assertions_must_also_have_type_annotations_1264" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with definite assignment assertions must also have type annotations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[As declarações com asserções de atribuição definitiva também precisam ter anotações de tipo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declarations_with_initializers_cannot_also_have_definite_assignment_assertions_1263" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with initializers cannot also have definite assignment assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[As declarações com inicializadores também não podem ter asserções de atribuição definitiva.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declare_a_private_field_named_0_90053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare a private field named '{0}'.]]></Val>
@@ -4030,15 +4066,6 @@
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[A exportação padrão do módulo tem ou está usando o nome particular '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation_1258" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[As declarações de atribuição definitivas só podem ser usadas juntamente com uma anotação de tipo.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4870,6 +4897,15 @@
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[{0} argumentos eram esperados, mas {1} foram obtidos.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise_2794" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} argumentos eram esperados, mas foram obtidos {1}. Você esqueceu de incluir 'void' no argumento de tipo para 'Promise'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10511,6 +10547,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_ty_7056" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo inferido deste nó excede o tamanho máximo que o compilador serializará. Uma anotação de tipo explícita é necessária.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_pr_18032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.]]></Val>
@@ -10525,6 +10570,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[A interseção '{0}' foi reduzida para 'never' porque a propriedade '{1}' tem tipos conflitantes em alguns constituintes.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types_2795" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A palavra-chave 'intrinsic' só pode ser usada para declarar tipos intrínsecos fornecidos pelo compilador.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

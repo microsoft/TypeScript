@@ -42,7 +42,6 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -169,7 +168,6 @@ Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96mApp/app.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS2551: [0mProperty 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
 
 [7m2[0m createSomeObject().message;
@@ -179,7 +177,6 @@ Output::
     [7m2[0m     message2: string;
     [7m [0m [96m    ~~~~~~~~[0m
     'message2' is declared here.
-
 
 [[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
 
@@ -297,7 +294,6 @@ export function createSomeObject(): SomeObject
 Output::
 >> Screen clear
 [[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
 

@@ -1425,6 +1425,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_void_to_Promise_resolved_without_a_value_95143" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat void k objektu Promise vyřešenému bez hodnoty]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_void_to_all_Promises_resolved_without_a_value_95144" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přidat void ke všem objektům Promise vyřešeným bez hodnoty]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Adding_a_tsconfig_json_file_will_help_organize_projects_that_contain_both_TypeScript_and_JavaScript__5068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.]]></Val>
@@ -2703,56 +2721,56 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_types_Slashje_2582" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2582" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro spouštěč testů? Zkuste npm i @types/jest nebo npm i @types/mocha.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro spouštěč testů? Zkuste npm i --save-dev @types/jest nebo npm i --save-dev @types/mocha.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_types_Slashje_2593" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2593" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro spouštěč testů? Zkuste npm i @types/jest nebo npm i @types/mocha a pak do polí typů v tsconfig přidejte jest nebo mocha.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro spouštěč testů? Zkuste npm i --save-dev @types/jest nebo npm i --save-dev @types/mocha a pak do polí typů v tsconfig přidejte jest nebo mocha.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_types_Slashjquery_2581" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2581" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro jQuery? Zkuste npm i @types/jquery.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro jQuery? Zkuste npm i --save-dev @types/jquery.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_types_Slashjquery_an_2592" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro jQuery? Zkuste npm i @types/jquery a pak pro pole typů v tsconfig přidejte jquery.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro jQuery? Zkuste npm i --save-dev @types/jquery a pak pro pole typů v tsconfig přidejte jquery.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_types_Slashnode_2580" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2580" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro Node? Zkuste npm i @types/node.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro Node? Zkuste npm i --save-dev @types/node.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_types_Slashnode_and_th_2591" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro Node? Zkuste npm i @types/node a pak do pole typů v tsconfig přidejte node.]]></Val>
+            <Val><![CDATA[Nepovedlo se najít název {0}. Potřebujete nainstalovat definice typů pro Node? Zkuste npm i --save-dev @types/node a pak do pole typů v tsconfig přidejte node.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3948,6 +3966,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declarations_with_definite_assignment_assertions_must_also_have_type_annotations_1264" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with definite assignment assertions must also have type annotations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarace s kontrolními výrazy jednoznačného přiřazení musí mít také anotace typu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declarations_with_initializers_cannot_also_have_definite_assignment_assertions_1263" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with initializers cannot also have definite assignment assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarace s inicializátory nemůžou mít také kontrolní výrazy jednoznačného přiřazení.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declare_a_private_field_named_0_90053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare a private field named '{0}'.]]></Val>
@@ -4046,15 +4082,6 @@
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Výchozí export modulu má nebo používá privátní název {0}.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation_1258" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jednoznačné kontrolní výrazy přiřazení se dají použít jen spolu s anotací typu.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4886,6 +4913,15 @@
           <Val><![CDATA[Expected {0} arguments, but got {1}.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Očekával se tento počet argumentů: {0}. Počet předaných argumentů: {1}]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_0_arguments_but_got_1_Did_you_forget_to_include_void_in_your_type_argument_to_Promise_2794" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Očekával se tento počet argumentů: {0}, ale byl přijat tento počet: {1}. Nezapomněli jste zahrnout void do argumentu typu pro objekt Promise?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10266,15 +10302,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Argument typu literálu šablony {0} není literálového ani generického typu.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_0_modifier_can_only_be_used_in_TypeScript_files_8009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' modifier can only be used in TypeScript files.]]></Val>
@@ -10530,6 +10557,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_ty_7056" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odvozený typ tohoto uzlu přesahuje maximální délku, kterou kompilátor může serializovat. Je potřeba zadat explicitní anotaci typu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_pr_18032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.]]></Val>
@@ -10544,6 +10580,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Průnik {0} se omezil na never, protože vlastnost {1} má v některých konstituentech konfliktní typy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types_2795" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Klíčové slovo intrinsic se dá použít jenom k deklaraci vnitřních typů poskytovaných kompilátorem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11247,11 +11292,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Try_npm_install_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_mod_7035" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare__7035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
+          <Val><![CDATA[Try `npm i --save-dev @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Vyzkoušejte deklaraci npm install @types/{1}, pokud existuje, nebo přidejte nový soubor deklarací (.d.ts) s deklarací declare module '{0}';.]]></Val>
+            <Val><![CDATA[Vyzkoušejte deklaraci npm i --save-dev @types/{1}, pokud existuje, nebo přidejte nový soubor deklarací (.d.ts) s deklarací declare module '{0}';.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
