@@ -8940,6 +8940,24 @@ declare var HTMLUnknownElement: {
     new(): HTMLUnknownElement;
 };
 
+interface VideoFrameMetadata {
+    presentationTime: DOMHighResTimeStamp;
+    expectedDisplayTime: DOMHighResTimeStamp;
+  
+    width: number;
+    height: number;
+    mediaTime: number;
+  
+    presentedFrames: number;
+    processingDuration?: number;
+  
+    captureTime?: DOMHighResTimeStamp;
+    receiveTime?: DOMHighResTimeStamp;
+    rtpTimestamp?: number;
+  };
+
+type VideoFrameRequestCallbackId = number;
+
 /** Provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement. */
 interface HTMLVideoElement extends HTMLMediaElement {
     /**
@@ -8967,6 +8985,9 @@ interface HTMLVideoElement extends HTMLMediaElement {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLMediaElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    
+    requestVideoFrameCallback(callback: (now: DOMHighResTimeStamp, metadata: VideoFrameMetadata) => any): VideoFrameRequestCallbackId;
+    cancelVideoFrameCallback(handle: VideoFrameRequestCallbackId): void;
 }
 
 declare var HTMLVideoElement: {
