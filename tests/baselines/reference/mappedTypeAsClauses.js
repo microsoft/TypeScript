@@ -1,7 +1,7 @@
 //// [mappedTypeAsClauses.ts]
 // Mapped type 'as N' clauses
 
-type Getters<T> = { [P in keyof T & string as `get${capitalize P}`]: () => T[P] };
+type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P] };
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
 
 // Mapped type with 'as N' clause has no constraint on 'in T' clause
@@ -32,7 +32,7 @@ type TD3<U> = keyof DoubleProp<U>;  // `${keyof U & string}1` | `${keyof U & str
 // Repro from #40619
 
 type Lazyify<T> = {
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K]
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 };
 
 interface Person {
@@ -43,15 +43,34 @@ interface Person {
 
 type LazyPerson = Lazyify<Person>;
 
+// Repro from #40833
+
+type Example = {foo: string, bar: number};
+
+type PickByValueType<T, U> = {
+  [K in keyof T as T[K] extends U ? K : never]: T[K]
+};
+
+type T1 = PickByValueType<Example, string>;
+const e1: T1 = {
+    foo: "hello"
+};
+type T2 = keyof T1;
+const e2: T2 = "foo";
+
 
 //// [mappedTypeAsClauses.js]
 "use strict";
 // Mapped type 'as N' clauses
+var e1 = {
+    foo: "hello"
+};
+var e2 = "foo";
 
 
 //// [mappedTypeAsClauses.d.ts]
 declare type Getters<T> = {
-    [P in keyof T & string as `get${capitalize P}`]: () => T[P];
+    [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P];
 };
 declare type TG1 = Getters<{
     foo: string;
@@ -97,7 +116,7 @@ declare type TD1 = DoubleProp<{
 declare type TD2 = keyof TD1;
 declare type TD3<U> = keyof DoubleProp<U>;
 declare type Lazyify<T> = {
-    [K in keyof T as `get${capitalize string & K}`]: () => T[K];
+    [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K];
 };
 interface Person {
     readonly name: string;
@@ -105,3 +124,14 @@ interface Person {
     location?: string;
 }
 declare type LazyPerson = Lazyify<Person>;
+declare type Example = {
+    foo: string;
+    bar: number;
+};
+declare type PickByValueType<T, U> = {
+    [K in keyof T as T[K] extends U ? K : never]: T[K];
+};
+declare type T1 = PickByValueType<Example, string>;
+declare const e1: T1;
+declare type T2 = keyof T1;
+declare const e2: T2;

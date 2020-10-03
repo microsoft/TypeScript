@@ -1,0 +1,10 @@
+tests/cases/compiler/missingCommaInTemplateStringsArray.ts(2,5): error TS2796: It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.
+
+
+==== tests/cases/compiler/missingCommaInTemplateStringsArray.ts (1 errors) ====
+    var array = [
+        `template string 1`
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2796: It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.
+        `template string 2`
+      ];
