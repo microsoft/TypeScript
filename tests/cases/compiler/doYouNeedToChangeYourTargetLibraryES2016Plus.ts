@@ -35,12 +35,12 @@ const testStringTrimRight = "".trimRight();
 const testSymbolDescription = Symbol("foo").description;
 
 // es2020
-const testPromiseAllSettled = new Promise(() => {}).allSettled();
+const testPromiseAllSettled = Promise.allSettled([]);
 const testStringMatchAll = "".matchAll();
 const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 const testBigInt = BigInt(123);
 
 // esnext
-const testPromiseAny = new Promise(() => {}).any();
+const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();

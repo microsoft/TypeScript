@@ -556,7 +556,8 @@ namespace ts {
                 Math: ["clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"],
                 Map: ["entries", "keys", "values"],
                 Set: ["entries", "keys", "values"],
-                Promise: ["all", "race", "reject", "resolve"],
+                Promise: emptyArray,
+                PromiseConstructor: ["all", "race", "reject", "resolve"],
                 Symbol: ["for", "keyFor"],
                 WeakMap: ["entries", "keys", "values"],
                 WeakSet: ["entries", "keys", "values"],
@@ -596,14 +597,14 @@ namespace ts {
                 BigInt: emptyArray,
                 BigInt64Array: emptyArray,
                 BigUint64Array: emptyArray,
-                Promise: ["allSettled"],
+                PromiseConstructor: ["allSettled"],
                 SymbolConstructor: ["matchAll"],
                 String: ["matchAll"],
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
             esnext: {
-                Promise: ["any"],
+                PromiseConstructor: ["any"],
                 String: ["replaceAll"],
                 NumberFormat: ["formatToParts"]
             }

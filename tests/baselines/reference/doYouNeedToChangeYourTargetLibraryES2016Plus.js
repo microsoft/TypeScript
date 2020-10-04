@@ -34,13 +34,13 @@ const testStringTrimRight = "".trimRight();
 const testSymbolDescription = Symbol("foo").description;
 
 // es2020
-const testPromiseAllSettled = new Promise(() => {}).allSettled();
+const testPromiseAllSettled = Promise.allSettled([]);
 const testStringMatchAll = "".matchAll();
 const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 const testBigInt = BigInt(123);
 
 // esnext
-const testPromiseAny = new Promise(() => {}).any();
+const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 
@@ -76,11 +76,11 @@ var testStringTrimLeft = "".trimLeft();
 var testStringTrimRight = "".trimRight();
 var testSymbolDescription = Symbol("foo").description;
 // es2020
-var testPromiseAllSettled = new Promise(function () { }).allSettled();
+var testPromiseAllSettled = Promise.allSettled([]);
 var testStringMatchAll = "".matchAll();
 var testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 var testBigInt = BigInt(123);
 // esnext
-var testPromiseAny = new Promise(function () { }).any();
+var testPromiseAny = Promise.any([]);
 var testStringReplaceAll = "".replaceAll();
 var testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
