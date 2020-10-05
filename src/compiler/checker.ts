@@ -28180,7 +28180,7 @@ namespace ts {
             let name: Expression | BindingName | undefined;
             let decl: Node | undefined;
             if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-                if (!isInJSFile(node) && !isVarConst(node.parent)) {
+                if (!isInJSFile(node) && !(isVarConst(node.parent) && isFunctionLikeDeclaration(node))) {
                     return undefined;
                 }
                 name = node.parent.name;
