@@ -1732,6 +1732,8 @@ namespace ts.server {
 
         private _isJsInferredProject = false;
 
+        private typeAcquisition: TypeAcquisition | undefined;
+
         toggleJsInferredProject(isJsInferredProject: boolean) {
             if (isJsInferredProject !== this._isJsInferredProject) {
                 this._isJsInferredProject = isJsInferredProject;
@@ -1770,7 +1772,8 @@ namespace ts.server {
             watchOptions: WatchOptions | undefined,
             projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined,
-            pluginConfigOverrides: ESMap<string, any> | undefined) {
+            pluginConfigOverrides: ESMap<string, any> | undefined,
+            typeAcquisition: TypeAcquisition | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -1783,6 +1786,7 @@ namespace ts.server {
                 watchOptions,
                 projectService.host,
                 currentDirectory);
+            this.typeAcquisition = typeAcquisition;
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
             if (!projectRootPath && !projectService.useSingleInferredProject) {
                 this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
@@ -1827,11 +1831,16 @@ namespace ts.server {
             super.close();
         }
 
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
+            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
+        }
+
         getTypeAcquisition(): TypeAcquisition {
             return {
                 enable: allRootFilesAreJsOrDts(this),
                 include: ts.emptyArray,
-                exclude: ts.emptyArray
+                exclude: ts.emptyArray,
+                inferTypings: this.typeAcquisition?.inferTypings
             };
         }
     }

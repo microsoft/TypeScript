@@ -294,6 +294,7 @@ namespace ts.server {
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
         watchOptions?: WatchOptions;
+        typeAcquisition?: TypeAcquisition;
     }
 
     export interface OpenConfiguredProjectResult {
@@ -1377,6 +1378,9 @@ namespace ts.server {
                 );
 
             project.addRoot(info);
+            if(this.hostConfiguration.typeAcquisition){
+                project.setTypeAcquisition(this.hostConfiguration.typeAcquisition);
+            }
             if (info.containingProjects[0] !== project) {
                 // Ensure this is first project, we could be in this scenario because info could be part of orphan project
                 info.detachFromProject(project);
@@ -2305,7 +2309,7 @@ namespace ts.server {
             if (watchOptions === undefined) {
                 watchOptions = this.watchOptionsForInferredProjects;
             }
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, this.hostConfiguration.typeAcquisition);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2763,6 +2767,10 @@ namespace ts.server {
                 if (args.watchOptions) {
                     this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions);
                     this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
+                }
+
+                if(args.typeAcquisition) {
+                    this.hostConfiguration.typeAcquisition = { ...this.hostConfiguration.typeAcquisition, ...args.typeAcquisition };
                 }
             }
         }
@@ -3515,7 +3523,7 @@ namespace ts.server {
             const typeAcquisition = proj.typeAcquisition!;
             Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
             // If type acquisition has been explicitly disabled, do not exclude anything from the project
-            if (typeAcquisition.enable === false) {
+            if (typeAcquisition.enable === false || typeAcquisition.inferTypings === false) {
                 return [];
             }
 
@@ -3632,6 +3640,7 @@ namespace ts.server {
             if (proj.typeAcquisition.enable === undefined) {
                 proj.typeAcquisition.enable = hasNoTypeScriptSource(proj.rootFiles.map(f => f.fileName));
             }
+            proj.typeAcquisition.inferTypings = this.hostConfiguration.typeAcquisition?.inferTypings ?? true;
 
             const excludedFiles = this.applySafeList(proj);
 

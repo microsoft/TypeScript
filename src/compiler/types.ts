@@ -5845,6 +5845,7 @@ namespace ts {
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
+        inferTypings?: boolean;
     }
 
     export enum ModuleKind {
@@ -8147,6 +8148,7 @@ namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
+        readonly automaticallyAcquireTypesBasedOnFilenames?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

@@ -1482,6 +1482,8 @@ namespace ts.server.protocol {
         extraFileExtensions?: FileExtensionInfo[];
 
         watchOptions?: WatchOptions;
+
+        typeAcquisition?: TypeAcquisition;
     }
 
     export const enum WatchFileKind {

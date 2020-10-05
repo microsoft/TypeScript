@@ -2892,6 +2892,7 @@ declare namespace ts {
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
+        inferTypings?: boolean;
     }
     export enum ModuleKind {
         None = 0,
@@ -3869,6 +3870,7 @@ declare namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
+        readonly automaticallyAcquireTypesBasedOnFilenames?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -7557,6 +7559,7 @@ declare namespace ts.server.protocol {
          */
         extraFileExtensions?: FileExtensionInfo[];
         watchOptions?: WatchOptions;
+        typeAcquisition?: TypeAcquisition;
     }
     enum WatchFileKind {
         FixedPollingInterval = "FixedPollingInterval",
@@ -9353,6 +9356,7 @@ declare namespace ts.server {
     class InferredProject extends Project {
         private static readonly newName;
         private _isJsInferredProject;
+        private typeAcquisition;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
         /** this is canonical project root path */
@@ -9361,6 +9365,7 @@ declare namespace ts.server {
         removeRoot(info: ScriptInfo): void;
         isProjectWithSingleRoot(): boolean;
         close(): void;
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
     }
     class AutoImportProviderProject extends Project {
@@ -9567,6 +9572,7 @@ declare namespace ts.server {
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
         watchOptions?: WatchOptions;
+        typeAcquisition?: TypeAcquisition;
     }
     export interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;

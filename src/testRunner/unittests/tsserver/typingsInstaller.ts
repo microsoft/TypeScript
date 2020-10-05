@@ -1375,6 +1375,33 @@ namespace ts.projectSystem {
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
         });
 
+        it("should not infer typings from filenames with inferTypings:false ", () => {
+            const app = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const jquery = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+            const chroma = {
+                path: "/a/b/chroma.min.js",
+                content: ""
+            };
+
+            const safeList = new Map(getEntries({ jquery: "jquery", chroma: "chroma-js" }));
+
+            const host = createServerHost([app, jquery, chroma]);
+            const logger = trackingLogger();
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true, inferTypings: false }, emptyArray, emptyMap);
+            const finish = logger.finish();
+            assert.deepEqual(finish, [
+                "Inferred typings from unresolved imports: []",
+                'Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
+            ], finish.join("\r\n"));
+            assert.deepEqual(result.newTypingNames, []);
+        });
+
         it("should return node for core modules", () => {
             const f = {
                 path: "/a/b/app.js",
