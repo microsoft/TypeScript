@@ -1,7 +1,6 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
-src/Launcher.js(181,17): error TS1003: Identifier expected.
-src/Launcher.js(359,17): error TS1003: Identifier expected.
+src/common/Target.ts(95,21): error TS2322: Type '(value: boolean | PromiseLike<boolean>) => void' is not assignable to type '() => void'.
 
 
 

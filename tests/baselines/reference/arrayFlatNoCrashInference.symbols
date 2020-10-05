@@ -1,0 +1,14 @@
+=== tests/cases/compiler/arrayFlatNoCrashInference.ts ===
+function foo<T>(arr: T[], depth: number) {
+>foo : Symbol(foo, Decl(arrayFlatNoCrashInference.ts, 0, 0))
+>T : Symbol(T, Decl(arrayFlatNoCrashInference.ts, 0, 13))
+>arr : Symbol(arr, Decl(arrayFlatNoCrashInference.ts, 0, 16))
+>T : Symbol(T, Decl(arrayFlatNoCrashInference.ts, 0, 13))
+>depth : Symbol(depth, Decl(arrayFlatNoCrashInference.ts, 0, 25))
+
+    return arr.flat(depth);
+>arr.flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
+>arr : Symbol(arr, Decl(arrayFlatNoCrashInference.ts, 0, 16))
+>flat : Symbol(Array.flat, Decl(lib.es2019.array.d.ts, --, --))
+>depth : Symbol(depth, Decl(arrayFlatNoCrashInference.ts, 0, 25))
+}

@@ -6,7 +6,7 @@ function Installer () {
     this.arg = 0
 >this.arg = 0 : 0
 >this.arg : any
->this : any
+>this : this
 >arg : any
 >0 : 0
 
@@ -14,7 +14,7 @@ function Installer () {
     this.unknown = null
 >this.unknown = null : null
 >this.unknown : any
->this : any
+>this : this
 >unknown : any
 >null : null
 
@@ -22,14 +22,14 @@ function Installer () {
     this.twice = undefined
 >this.twice = undefined : undefined
 >this.twice : any
->this : any
+>this : this
 >twice : any
 >undefined : undefined
 
     this.twice = 'hi'
 >this.twice = 'hi' : "hi"
 >this.twice : any
->this : any
+>this : this
 >twice : any
 >'hi' : "hi"
 
@@ -37,14 +37,14 @@ function Installer () {
     this.twices = []
 >this.twices = [] : never[]
 >this.twices : any
->this : any
+>this : this
 >twices : any
 >[] : never[]
 
     this.twices = null
 >this.twices = null : null
 >this.twices : any
->this : any
+>this : this
 >twices : any
 >null : null
 }
@@ -80,16 +80,16 @@ Installer.prototype.first = function () {
 
     this.twice = undefined // ok
 >this.twice = undefined : undefined
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >undefined : undefined
 
     this.twice = 'hi' // ok
 >this.twice = 'hi' : "hi"
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >'hi' : "hi"
 }
 Installer.prototype.second = function () {
@@ -124,16 +124,16 @@ Installer.prototype.second = function () {
 
     this.twice = null // error
 >this.twice = null : null
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >null : null
 
     this.twice = false // error
 >this.twice = false : false
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >false : false
 
     this.twices.push(1) // error: Object is possibly null

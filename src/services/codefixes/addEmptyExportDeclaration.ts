@@ -5,12 +5,12 @@ namespace ts.codefix {
         getCodeActions: context => {
             const { sourceFile } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const exportDeclaration = createExportDeclaration(
+                const exportDeclaration = factory.createExportDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    createNamedExports([]),
-                    /*moduleSpecifier*/ undefined,
-                    /*isTypeOnly*/ false
+                    /*isTypeOnly*/ false,
+                    factory.createNamedExports([]),
+                    /*moduleSpecifier*/ undefined
                 );
                 changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
             });

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /user/someone/projects/myproject/file3.ts
+Input::
 //// [/user/someone/projects/myproject/file1.ts]
 export const enum E1 { V = 1 }
 
@@ -21,27 +21,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/someone/projects/myproject/file1.js]
-"use strict";
-exports.__esModule = true;
 
-
-//// [/user/someone/projects/myproject/file2.js]
-"use strict";
-exports.__esModule = true;
-
-
-//// [/user/someone/projects/myproject/file3.js]
-"use strict";
-exports.__esModule = true;
-var v = 1 /* V */;
-
-
-
+/a/lib/tsc.js -w /user/someone/projects/myproject/file3.ts
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -77,23 +61,33 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Append content to file3
+//// [/user/someone/projects/myproject/file1.js]
+"use strict";
+exports.__esModule = true;
 
-//// [/user/someone/projects/myproject/file3.ts]
-import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
+
+//// [/user/someone/projects/myproject/file2.js]
+"use strict";
+exports.__esModule = true;
+
 
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
 var v = 1 /* V */;
-function foo2() { return 2; }
 
+
+
+Change:: Append content to file3
+
+Input::
+//// [/user/someone/projects/myproject/file3.ts]
+import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
 
 
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -125,3 +119,11 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/someone/projects/myproject/file3.js]
+"use strict";
+exports.__esModule = true;
+var v = 1 /* V */;
+function foo2() { return 2; }
+
+

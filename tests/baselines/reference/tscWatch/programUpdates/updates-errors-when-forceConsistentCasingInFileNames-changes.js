@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a.ts]
 export class C {}
 
@@ -21,28 +21,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a.js]
-"use strict";
-exports.__esModule = true;
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
 
-
-//// [/b.js]
-"use strict";
-exports.__esModule = true;
-
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:20 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -78,8 +61,27 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a.js]
+"use strict";
+exports.__esModule = true;
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/b.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Enable forceConsistentCasingInFileNames
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
@@ -88,12 +90,10 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96mb.ts[0m:[93m1[0m:[93m43[0m - [91merror[0m[90m TS1149: [0mFile name '/A.ts' differs from already included file name '/a.ts' only in casing.
 
 [7m1[0m import {C} from './a'; import * as A from './A';
 [7m [0m [91m                                          ~~~~~[0m
-
 
 [[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
 
@@ -125,3 +125,4 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

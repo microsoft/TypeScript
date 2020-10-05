@@ -109,6 +109,6 @@ function fn() {}
  * @param {fn<T>} somebody
  */
 function sayHello8(somebody) { }
->sayHello8 : (somebody: fn<T>) => void
+>sayHello8 : (somebody: () => void) => void
 >somebody : () => void
 

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/file.ts --noUnusedLocals
+Input::
 //// [/a/b/file.ts]
 function one() {}
 function two() {
@@ -20,20 +20,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/file.js]
-function one() { }
-function two() {
-    return function three() {
-        one();
-    };
-}
 
-
-
+/a/lib/tsc.js -w /a/b/file.ts --noUnusedLocals
 Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -61,8 +52,19 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/file.js]
+function one() { }
+function two() {
+    return function three() {
+        one();
+    };
+}
+
+
+
 Change:: Change file to module
 
+Input::
 //// [/a/b/file.ts]
 function one() {}
 export function two() {
@@ -71,24 +73,10 @@ export function two() {
     }
 }
 
-//// [/a/b/file.js]
-"use strict";
-exports.__esModule = true;
-exports.two = void 0;
-function one() { }
-function two() {
-    return function three() {
-        one();
-    };
-}
-exports.two = two;
-
-
 
 Output::
 >> Screen clear
 [[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -114,3 +102,17 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/file.js]
+"use strict";
+exports.__esModule = true;
+exports.two = void 0;
+function one() { }
+function two() {
+    return function three() {
+        one();
+    };
+}
+exports.two = two;
+
+

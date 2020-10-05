@@ -635,3 +635,34 @@ class SuperThrowable extends MyThrowable {
     }
 }
 
+// Repro from #40346
+
+interface Services {
+>Services : Symbol(Services, Decl(neverReturningFunctions1.ts, 247, 1))
+
+    panic(message: string): never;
+>panic : Symbol(Services.panic, Decl(neverReturningFunctions1.ts, 251, 20))
+>message : Symbol(message, Decl(neverReturningFunctions1.ts, 252, 10))
+}
+
+function foo(services: Readonly<Services>, s: string | null): string {
+>foo : Symbol(foo, Decl(neverReturningFunctions1.ts, 253, 1))
+>services : Symbol(services, Decl(neverReturningFunctions1.ts, 255, 13))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Services : Symbol(Services, Decl(neverReturningFunctions1.ts, 247, 1))
+>s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
+
+    if (s === null) {
+>s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
+
+        services.panic("ouch");
+>services.panic : Symbol(panic, Decl(neverReturningFunctions1.ts, 251, 20))
+>services : Symbol(services, Decl(neverReturningFunctions1.ts, 255, 13))
+>panic : Symbol(panic, Decl(neverReturningFunctions1.ts, 251, 20))
+
+    } else {
+        return s;
+>s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
+    }
+}
+

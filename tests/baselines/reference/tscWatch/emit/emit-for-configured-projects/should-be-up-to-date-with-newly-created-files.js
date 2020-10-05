@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -30,43 +30,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
 
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/a/b/file1Consumer2.js]
-"use strict";
-exports.__esModule = true;
-var z = 10;
-
-
-//// [/a/b/globalFile3.js]
-
-
-//// [/a/b/moduleFile2.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -116,37 +84,52 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: change moduleFile1 shape and create file1Consumer3
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
-
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.Foo = exports.T = void 0;
+exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
 
 
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
-//// [/a/b/file1Consumer3.ts]
-import {Foo} from "./moduleFile1"; let y = Foo();
-
-//// [/a/b/file1Consumer3.js]
+//// [/a/b/file1Consumer1.js]
 "use strict";
 exports.__esModule = true;
-var moduleFile1_1 = require("./moduleFile1");
-var y = moduleFile1_1.Foo();
+exports.y = void 0;
+exports.y = 10;
 
+
+//// [/a/b/file1Consumer2.js]
+"use strict";
+exports.__esModule = true;
+var z = 10;
+
+
+//// [/a/b/globalFile3.js]
+
+
+//// [/a/b/moduleFile2.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+
+
+Change:: change moduleFile1 shape and create file1Consumer3
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
+//// [/a/b/file1Consumer3.ts]
+import {Foo} from "./moduleFile1"; let y = Foo();
 
 
 Output::
 >> Screen clear
 [[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -196,3 +179,22 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents
+//// [/a/b/file1Consumer3.js]
+"use strict";
+exports.__esModule = true;
+var moduleFile1_1 = require("./moduleFile1");
+var y = moduleFile1_1.Foo();
+
+

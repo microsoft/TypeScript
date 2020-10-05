@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 declare module 'a' {
   type foo = number;
@@ -20,14 +20,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/a.js]
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -61,22 +58,22 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+
+
+
 Change:: Create b.ts with same content
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
+Input::
 //// [/user/username/projects/myproject/b.ts]
 declare module 'a' {
   type foo = number;
 }
 
-//// [/user/username/projects/myproject/b.js]
-
-
 
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
-
 
 [96ma.ts[0m:[93m2[0m:[93m8[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'foo'.
 
@@ -88,7 +85,6 @@ Output::
     [7m [0m [96m       ~~~[0m
     'foo' was also declared here.
 
-
 [96mb.ts[0m:[93m2[0m:[93m8[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'foo'.
 
 [7m2[0m   type foo = number;
@@ -98,7 +94,6 @@ Output::
     [7m2[0m   type foo = number;
     [7m [0m [96m       ~~~[0m
     'foo' was also declared here.
-
 
 [[90m12:00:33 AM[0m] Found 2 errors. Watching for file changes.
 
@@ -136,15 +131,19 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js]
+
+
+
 Change:: Delete b.ts
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
+Input::
 //// [/user/username/projects/myproject/b.ts] deleted
 
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -177,3 +176,5 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/a.js] file written with same contents

@@ -1,5 +1,4 @@
 // @checkJs: true
-// @allowJS: true
 // @noEmit: true
 // @Filename: bug24024.js
 // #24024

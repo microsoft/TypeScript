@@ -89,17 +89,14 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment: SymbolDisplayPart[] = [];
+        const documentationComment: string[] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                if (documentationComment.length) {
-                    documentationComment.push(lineBreakPart());
-                }
-                documentationComment.push(textPart(comment));
+                pushIfUnique(documentationComment, comment);
             }
         });
-        return documentationComment;
+        return intersperse(map(documentationComment, textPart), lineBreakPart());
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -141,7 +138,8 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
-                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
+            case SyntaxKind.JSDocSeeTag:
+                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
                 return name ? withNode(name) : comment;
             default:
                 return comment;
@@ -166,7 +164,7 @@ namespace ts.JsDoc {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0",
+                sortText: Completions.SortText.LocationPriority,
             };
         }));
     }
@@ -179,7 +177,7 @@ namespace ts.JsDoc {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0"
+                sortText: Completions.SortText.LocationPriority
             };
         }));
     }
@@ -214,7 +212,7 @@ namespace ts.JsDoc {
                 return undefined;
             }
 
-            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
         });
     }
 

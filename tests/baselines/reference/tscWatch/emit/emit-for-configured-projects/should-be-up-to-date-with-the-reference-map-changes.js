@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -30,43 +30,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
 
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/a/b/file1Consumer2.js]
-"use strict";
-exports.__esModule = true;
-var z = 10;
-
-
-//// [/a/b/globalFile3.js]
-
-
-//// [/a/b/moduleFile2.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -116,29 +84,54 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Change file1Consumer1 content to `export let y = Foo();`
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
 
-//// [/a/b/file1Consumer1.ts]
-export let y = Foo();
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
 exports.__esModule = true;
 exports.y = void 0;
-exports.y = Foo();
+exports.y = 10;
 
+
+//// [/a/b/file1Consumer2.js]
+"use strict";
+exports.__esModule = true;
+var z = 10;
+
+
+//// [/a/b/globalFile3.js]
+
+
+//// [/a/b/moduleFile2.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+
+
+Change:: Change file1Consumer1 content to `export let y = Foo();`
+
+Input::
+//// [/a/b/file1Consumer1.ts]
+export let y = Foo();
 
 
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -183,32 +176,29 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.y = void 0;
+exports.y = Foo();
+
+
+
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
+Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer2.js] file written with same contents
 
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
 
@@ -254,23 +244,27 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Add the import statements back to file1Consumer1
-
-//// [/a/b/file1Consumer1.ts]
-import {Foo} from "./moduleFile1";let y = Foo();
-
-//// [/a/b/file1Consumer1.js]
+//// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-var moduleFile1_1 = require("./moduleFile1");
-var y = moduleFile1_1.Foo();
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
 
+
+//// [/a/b/file1Consumer2.js] file written with same contents
+
+Change:: Add the import statements back to file1Consumer1
+
+Input::
+//// [/a/b/file1Consumer1.ts]
+import {Foo} from "./moduleFile1";let y = Foo();
 
 
 Output::
 >> Screen clear
 [[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -315,43 +309,39 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+var moduleFile1_1 = require("./moduleFile1");
+var y = moduleFile1_1.Foo();
+
+
+
 Change:: Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
 
+Input::
 //// [/a/b/moduleFile1.ts]
 export let y = Foo();
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = Foo();
-
-
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
 
 Output::
 >> Screen clear
 [[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
-
 
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
 [7m1[0m import {Foo} from "./moduleFile1";let y = Foo();
 [7m [0m [91m        ~~~[0m
 
-
 [96ma/b/file1Consumer2.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
 [7m1[0m import {Foo} from "./moduleFile1"; let z = 10;
 [7m [0m [91m        ~~~[0m
 
-
 [96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:01:15 AM[0m] Found 3 errors. Watching for file changes.
 
@@ -398,28 +388,27 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Multiple file edits in one go
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
-
-//// [/a/b/file1Consumer1.ts] file written with same contents
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
+exports.y = void 0;
+exports.y = Foo();
 
 
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
+Change:: Multiple file edits in one go
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
+//// [/a/b/file1Consumer1.ts] file written with same contents
+
 Output::
 >> Screen clear
 [[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -465,3 +454,15 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents

@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w --p /a/rootFolder/project/tsconfig.json
+Input::
 //// [/a/rootFolder/project/tsconfig.json]
 {"compilerOptions":{"module":"none","allowJs":true,"outDir":"Static/scripts/"},"include":["Scripts/**/*"]}
 
@@ -21,19 +21,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/rootFolder/project/Static/scripts/Javascript.js]
-var zz = 10;
 
-
-//// [/a/rootFolder/project/Static/scripts/TypeScript.js]
-var z = 10;
-
-
-
+/a/lib/tsc.js --w --p /a/rootFolder/project/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -71,21 +63,25 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/rootFolder/project/Static/scripts/Javascript.js]
+var zz = 10;
+
+
+//// [/a/rootFolder/project/Static/scripts/TypeScript.js]
+var z = 10;
+
+
+
 Change:: Modify typescript file
 
+Input::
 //// [/a/rootFolder/project/Scripts/TypeScript.ts]
 var zz30 = 100;
-
-//// [/a/rootFolder/project/Static/scripts/Javascript.js] file written with same contents
-//// [/a/rootFolder/project/Static/scripts/TypeScript.js]
-var zz30 = 100;
-
 
 
 Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -122,3 +118,9 @@ FsWatchesRecursive::
   {"directoryName":"/a/rootfolder/project/scripts","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/rootFolder/project/Static/scripts/Javascript.js] file written with same contents
+//// [/a/rootFolder/project/Static/scripts/TypeScript.js]
+var zz30 = 100;
+
+

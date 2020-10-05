@@ -40,7 +40,7 @@ lf.Transaction = function() {};
  * @return {!IThenable}
  */
 lf.Transaction.prototype.begin = function(scope) {};
->lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<lf.schema.Table>) => any
+>lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<any>) => any
 >lf.Transaction.prototype.begin : any
 >lf.Transaction.prototype : any
 >lf.Transaction : typeof Transaction
@@ -48,6 +48,6 @@ lf.Transaction.prototype.begin = function(scope) {};
 >Transaction : typeof Transaction
 >prototype : any
 >begin : any
->function(scope) {} : (scope: Array<lf.schema.Table>) => any
+>function(scope) {} : (scope: Array<any>) => any
 >scope : any[]
 

@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNamesFragment.tsx ===
+/// <reference path="react16.d.ts" />
+const a = <>
+>a : JSX.Element
+><>  <p></p>  text  <div></div></> : JSX.Element
+
+  <p></p>
+><p></p> : JSX.Element
+>p : any
+>p : any
+
+  text
+  <div></div>
+><div></div> : JSX.Element
+>div : any
+>div : any
+
+</>
+
+export {};

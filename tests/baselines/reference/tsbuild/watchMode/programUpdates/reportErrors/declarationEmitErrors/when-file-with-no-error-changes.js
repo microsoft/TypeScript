@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w app
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -25,16 +25,15 @@ export class myClass { }
 {"compilerOptions":{"composite":true}}
 
 
+/a/lib/tsc.js -b -w app
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
-
 
 [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
-
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
@@ -68,8 +67,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Change fileWithoutError
 
+Input::
 //// [/user/username/projects/solution/app/fileWithoutError.ts]
 export class myClass2 { }
 
@@ -78,12 +79,10 @@ Output::
 >> Screen clear
 [[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
-
 
 [[90m12:00:31 AM[0m] Found 1 error. Watching for file changes.
 
@@ -114,3 +113,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

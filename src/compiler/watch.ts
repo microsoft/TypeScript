@@ -127,6 +127,7 @@ namespace ts {
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
@@ -233,13 +234,14 @@ namespace ts {
     }
 
     export const noopFileWatcher: FileWatcher = { close: noop };
+    export const returnNoopFileWatcher = () => noopFileWatcher;
 
     export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
         const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
         return {
             onWatchStatusChange,
-            watchFile: maybeBind(system, system.watchFile) || (() => noopFileWatcher),
-            watchDirectory: maybeBind(system, system.watchDirectory) || (() => noopFileWatcher),
+            watchFile: maybeBind(system, system.watchFile) || returnNoopFileWatcher,
+            watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
             setTimeout: maybeBind(system, system.setTimeout) || noop,
             clearTimeout: maybeBind(system, system.clearTimeout) || noop
         };
@@ -343,11 +345,11 @@ namespace ts {
 
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = host.createHash || generateDjb2Hash;
+        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {
-                result.version = computeHash.call(host, result.text);
+                result.version = computeHash(result.text);
             }
             return result;
         };

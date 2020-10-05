@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
 export interface ITest {
     title: string;
@@ -54,108 +54,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
-"use strict";
-exports.__esModule = true;
 
-
-//// [/user/username/projects/myproject/lib1/tools/public.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
-exports.__esModule = true;
-__exportStar(require("./tools.interface"), exports);
-
-
-//// [/user/username/projects/myproject/lib1/public.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
-exports.__esModule = true;
-__exportStar(require("./tools/public"), exports);
-
-
-//// [/user/username/projects/myproject/lib2/data2.js]
-"use strict";
-exports.__esModule = true;
-exports.Data2 = void 0;
-var Data2 = /** @class */ (function () {
-    function Data2() {
-    }
-    return Data2;
-}());
-exports.Data2 = Data2;
-
-
-//// [/user/username/projects/myproject/lib2/data.js]
-"use strict";
-exports.__esModule = true;
-exports.Data = void 0;
-var Data = /** @class */ (function () {
-    function Data() {
-    }
-    Data.prototype.test = function () {
-        var result = {
-            title: "title"
-        };
-        return result;
-    };
-    return Data;
-}());
-exports.Data = Data;
-
-
-//// [/user/username/projects/myproject/lib2/public.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
-exports.__esModule = true;
-__exportStar(require("./data"), exports);
-
-
-//// [/user/username/projects/myproject/app.js]
-"use strict";
-exports.__esModule = true;
-exports.App = void 0;
-var public_1 = require("lib2/public");
-var App = /** @class */ (function () {
-    function App() {
-        new public_1.Data().test();
-    }
-    return App;
-}());
-exports.App = App;
-
-
-
+/a/lib/tsc.js --w
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -211,20 +114,116 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
+"use strict";
+exports.__esModule = true;
+
+
+//// [/user/username/projects/myproject/lib1/tools/public.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+exports.__esModule = true;
+__exportStar(require("./tools.interface"), exports);
+
+
+//// [/user/username/projects/myproject/lib1/public.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+exports.__esModule = true;
+__exportStar(require("./tools/public"), exports);
+
+
+//// [/user/username/projects/myproject/lib2/data2.js]
+"use strict";
+exports.__esModule = true;
+exports.Data2 = void 0;
+var Data2 = /** @class */ (function () {
+    function Data2() {
+    }
+    return Data2;
+}());
+exports.Data2 = Data2;
+
+
+//// [/user/username/projects/myproject/lib2/data.js]
+"use strict";
+exports.__esModule = true;
+exports.Data = void 0;
+var Data = /** @class */ (function () {
+    function Data() {
+    }
+    Data.prototype.test = function () {
+        var result = {
+            title: "title"
+        };
+        return result;
+    };
+    return Data;
+}());
+exports.Data = Data;
+
+
+//// [/user/username/projects/myproject/lib2/public.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+exports.__esModule = true;
+__exportStar(require("./data"), exports);
+
+
+//// [/user/username/projects/myproject/app.js]
+"use strict";
+exports.__esModule = true;
+exports.App = void 0;
+var public_1 = require("lib2/public");
+var App = /** @class */ (function () {
+    function App() {
+        new public_1.Data().test();
+    }
+    return App;
+}());
+exports.App = App;
+
+
+
 Change:: Rename property title to title2 of interface ITest
 
+Input::
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
 export interface ITest {
     title2: string;
 }
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
 
 Output::
 >> Screen clear
 [[90m12:00:58 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -273,3 +272,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents

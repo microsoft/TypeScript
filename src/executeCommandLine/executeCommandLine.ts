@@ -75,7 +75,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new Map<string, string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (const option of optionsList) {
             // If an option lacks a description,
@@ -100,7 +100,7 @@ namespace ts {
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
                 const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <Map<number | string>>element.type;
+                const typeMap = <ESMap<string, number | string>>element.type;
                 optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
             }
             else {
@@ -456,6 +456,7 @@ namespace ts {
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
+        tracing.dumpLegend();
         return sys.exit(exitStatus);
     }
 
@@ -476,7 +477,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        enableStatistics(sys, options);
+        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
 
         const programOptions: CreateProgramOptions = {
             rootNames: fileNames,
@@ -504,7 +505,7 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
-        enableStatistics(sys, options);
+        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
         const host = createIncrementalCompilerHost(options, sys);
         const exitStatus = ts.performIncrementalCompilation({
             host,
@@ -541,7 +542,7 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatistics(sys, options);
+                enableStatisticsAndTracing(sys, options, /*isBuildMode*/ true);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
@@ -610,15 +611,28 @@ namespace ts {
         return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
     }
 
-    function enableStatistics(sys: System, compilerOptions: CompilerOptions) {
-        if (canReportDiagnostics(sys, compilerOptions)) {
+    function canTrace(system: System, compilerOptions: CompilerOptions) {
+        return system === sys && compilerOptions.generateTrace;
+    }
+
+    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
+        if (canReportDiagnostics(system, compilerOptions)) {
             performance.enable();
+        }
+
+        if (canTrace(system, compilerOptions)) {
+            tracing.startTracing(compilerOptions.configFilePath, compilerOptions.generateTrace!, isBuildMode);
         }
     }
 
     function reportStatistics(sys: System, program: Program) {
-        let statistics: Statistic[];
         const compilerOptions = program.getCompilerOptions();
+
+        if (canTrace(sys, compilerOptions)) {
+            tracing.stopTracing(program.getTypeCatalog());
+        }
+
+        let statistics: Statistic[];
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;

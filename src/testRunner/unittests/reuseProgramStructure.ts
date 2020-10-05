@@ -175,7 +175,7 @@ namespace ts {
         return true;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T> | undefined, getCache: (f: SourceFile) => Map<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ESMap<string, T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file!);
@@ -189,7 +189,7 @@ namespace ts {
     }
 
     /** True if the maps have the same keys and values. */
-    function mapsAreEqual<T>(left: Map<T>, right: Map<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+    function mapsAreEqual<T>(left: ESMap<string, T>, right: ESMap<string, T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
         if (left === right) return true;
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
@@ -202,11 +202,11 @@ namespace ts {
         return !someInRightHasNoMatch;
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule | undefined> | undefined): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedModule | undefined> | undefined): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective> | undefined): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedTypeReferenceDirective> | undefined): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
@@ -344,7 +344,7 @@ namespace ts {
             const options: CompilerOptions = { target };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program1, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts") }));
+            checkResolvedModulesCache(program1, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts") })));
             checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
             const program2 = updateProgram(program1, ["a.ts"], options, files => {
@@ -353,7 +353,7 @@ namespace ts {
             assert.equal(program1.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program1, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts") }));
+            checkResolvedModulesCache(program1, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts") })));
             checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
             // imports has changed - program is not reused
@@ -370,7 +370,7 @@ namespace ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
-            checkResolvedModulesCache(program4, "a.ts", createMapFromTemplate({ b: createResolvedModule("b.ts"), c: undefined }));
+            checkResolvedModulesCache(program4, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts"), c: undefined })));
         });
 
         it("set the resolvedImports after re-using an ambient external module declaration", () => {
@@ -418,7 +418,7 @@ namespace ts {
             const options: CompilerOptions = { target, typeRoots: ["/types"] };
 
             const program1 = newProgram(files, ["/a.ts"], options);
-            checkResolvedTypeDirectivesCache(program1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
             checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
             const program2 = updateProgram(program1, ["/a.ts"], options, files => {
@@ -427,7 +427,7 @@ namespace ts {
             assert.equal(program1.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
-            checkResolvedTypeDirectivesCache(program1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
             checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
             // type reference directives has changed - program is not reused
@@ -445,7 +445,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
             assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
-            checkResolvedTypeDirectivesCache(program1, "/a.ts", createMapFromTemplate({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+            checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         });
 
         it("fetches imports after npm install", () => {
@@ -915,7 +915,7 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
                 /*projectReferences*/ undefined
             );
         }

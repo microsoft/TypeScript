@@ -37,7 +37,6 @@ namespace ts {
     function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
         if (emitOnlyDtsFiles) return emptyArray;
 
-        const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
@@ -47,7 +46,7 @@ namespace ts {
         transformers.push(transformTypeScript);
         transformers.push(transformClassFields);
 
-        if (jsx === JsxEmit.React) {
+        if (getJSXTransformEnabled(compilerOptions)) {
             transformers.push(transformJsx);
         }
 
@@ -109,11 +108,11 @@ namespace ts {
     /**
      * Wrap a transformer factory that may return a custom script or declaration transformer object.
      */
-    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (node: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
+    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (context: TransformationContext, tx: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
         return context => {
             const customTransformer = transformer(context);
             return typeof customTransformer === "function"
-                ? handleDefault(customTransformer)
+                ? handleDefault(context, customTransformer)
                 : wrapCustomTransformer(customTransformer);
         };
     }
@@ -123,7 +122,7 @@ namespace ts {
     }
 
     function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
-        return wrapCustomTransformerFactory(transformer, identity);
+        return wrapCustomTransformerFactory(transformer, (_, node) => node);
     }
 
     export function noEmitSubstitution(_hint: EmitHint, node: Node) {
@@ -144,7 +143,7 @@ namespace ts {
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
@@ -165,9 +164,11 @@ namespace ts {
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
+            factory,
             getCompilerOptions: () => options,
             getEmitResolver: () => resolver!, // TODO: GH#18217
             getEmitHost: () => host!, // TODO: GH#18217
+            getEmitHelperFactory: memoize(() => createEmitHelperFactory(context)),
             startLexicalEnvironment,
             suspendLexicalEnvironment,
             resumeLexicalEnvironment,
@@ -220,7 +221,12 @@ namespace ts {
         state = TransformationState.Initialized;
 
         // Transform each node.
-        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
+        const transformed: T[] = [];
+        for (const node of nodes) {
+            tracing.begin(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
+            transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
+            tracing.end();
+        }
 
         // prevent modification of the lexical environment.
         state = TransformationState.Completed;
@@ -313,7 +319,7 @@ namespace ts {
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
-            const decl = setEmitFlags(createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
+            const decl = setEmitFlags(factory.createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
             if (!lexicalEnvironmentVariableDeclarations) {
                 lexicalEnvironmentVariableDeclarations = [decl];
             }
@@ -413,9 +419,9 @@ namespace ts {
                 }
 
                 if (lexicalEnvironmentVariableDeclarations) {
-                    const statement = createVariableStatement(
+                    const statement = factory.createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
+                        factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
                     setEmitFlags(statement, EmitFlags.CustomPrologue);
@@ -504,4 +510,30 @@ namespace ts {
             }
         }
     }
+
+    export const nullTransformationContext: TransformationContext = {
+        get factory() { return factory; },
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: returnUndefined,
+        getCompilerOptions: () => ({}),
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        getEmitHelperFactory: notImplemented,
+        setLexicalEnvironmentFlags: noop,
+        getLexicalEnvironmentFlags: () => 0,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        addInitializationStatement: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop,
+        addDiagnostic: noop,
+    };
 }

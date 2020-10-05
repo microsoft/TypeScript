@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts(2,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts(2,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts(9,27): error TS18014: The property '#x' cannot be accessed on type 'typeof A' within this class because it is shadowed by another private identifier with the same spelling.
 
 
@@ -6,7 +6,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses
     class A {
         static #x = 5;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         constructor () {
             class B {
                 #x = 5;

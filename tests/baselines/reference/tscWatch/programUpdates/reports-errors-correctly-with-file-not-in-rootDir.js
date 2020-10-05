@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 import { x } from "../b";
 
@@ -21,29 +21,16 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/lib/b.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-exports.x = 10;
 
-
-//// [/user/username/projects/myproject/lib/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
-
 
 [96ma.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m1[0m import { x } from "../b";
 [7m [0m [91m                  ~~~~~~[0m
-
 
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
@@ -81,25 +68,36 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/lib/b.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/user/username/projects/myproject/lib/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Make changes to file a
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 
 
 import { x } from "../b";
 
-//// [/user/username/projects/myproject/lib/myproject/a.js] file written with same contents
 
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma.ts[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m3[0m import { x } from "../b";
 [7m [0m [91m                  ~~~~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -134,3 +132,5 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/lib/myproject/a.js] file written with same contents

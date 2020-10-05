@@ -80,7 +80,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-        const map = createMap<T>();
+        const map = new Map<string, T>();
         return {
             get(path) {
                 return map.get(path);
@@ -115,6 +115,11 @@ namespace ts.server {
 
     export function makeInferredProjectName(counter: number) {
         return `/dev/null/inferredProject${counter}*`;
+    }
+
+    /*@internal*/
+    export function makeAutoImportProviderProjectName(counter: number) {
+        return `/dev/null/autoImportProviderProject${counter}*`;
     }
 
     export function createSortedArray<T>(): SortedArray<T> {

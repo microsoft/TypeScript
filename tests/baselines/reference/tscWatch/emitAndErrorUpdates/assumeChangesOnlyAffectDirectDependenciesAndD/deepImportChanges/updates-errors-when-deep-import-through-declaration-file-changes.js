@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
 declare var console: any;
@@ -34,23 +34,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-var b_1 = require("./b");
-var b = new b_1.B();
-console.log(b.c.d);
 
-
-//// [/user/username/projects/myproject/a.d.ts]
-export {};
-
-
-
+/a/lib/tsc.js --w
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -94,8 +82,22 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+var b_1 = require("./b");
+var b = new b_1.B();
+console.log(b.c.d);
+
+
+//// [/user/username/projects/myproject/a.d.ts]
+export {};
+
+
+
 Change:: Rename property d to d2 of class C
 
+Input::
 //// [/user/username/projects/myproject/c.d.ts]
 export class C
 {
@@ -106,7 +108,6 @@ export class C
 Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:35 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -147,3 +148,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

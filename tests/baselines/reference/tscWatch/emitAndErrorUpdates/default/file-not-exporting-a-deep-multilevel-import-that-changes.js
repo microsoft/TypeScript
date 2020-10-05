@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export interface Point {
     name: string;
@@ -49,51 +49,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
 
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-exports.__esModule = true;
-
-
-//// [/user/username/projects/myproject/c.js]
-"use strict";
-exports.__esModule = true;
-exports.getPoint = void 0;
-function getPoint() {
-    return {
-        name: "test",
-        c: {
-            x: 1,
-            y: 2
-        }
-    };
-}
-exports.getPoint = getPoint;
-;
-
-
-//// [/user/username/projects/myproject/d.js]
-"use strict";
-exports.__esModule = true;
-var c_1 = require("./c");
-c_1.getPoint().c.x;
-
-
-//// [/user/username/projects/myproject/e.js]
-"use strict";
-exports.__esModule = true;
-require("./d");
-
-
-
+/a/lib/tsc.js --w
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
-
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '{ x: number; y: number; }' is not assignable to type 'Coords'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
@@ -106,12 +66,10 @@ Output::
     [7m [0m [96m    ~[0m
     The expected type comes from property 'c' which is declared here on type 'PointWrapper'
 
-
 [96md.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'x' does not exist on type 'Coords'.
 
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
-
 
 [[90m12:00:40 AM[0m] Found 2 errors. Watching for file changes.
 
@@ -161,8 +119,50 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+
+
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+exports.__esModule = true;
+
+
+//// [/user/username/projects/myproject/c.js]
+"use strict";
+exports.__esModule = true;
+exports.getPoint = void 0;
+function getPoint() {
+    return {
+        name: "test",
+        c: {
+            x: 1,
+            y: 2
+        }
+    };
+}
+exports.getPoint = getPoint;
+;
+
+
+//// [/user/username/projects/myproject/d.js]
+"use strict";
+exports.__esModule = true;
+var c_1 = require("./c");
+c_1.getPoint().c.x;
+
+
+//// [/user/username/projects/myproject/e.js]
+"use strict";
+exports.__esModule = true;
+require("./d");
+
+
+
 Change:: Rename property x2 to x of interface Coords
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export interface Point {
     name: string;
@@ -173,13 +173,10 @@ export interface Coords {
     y: number;
 }
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
 
 Output::
 >> Screen clear
 [[90m12:00:44 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:51 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -226,3 +223,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
