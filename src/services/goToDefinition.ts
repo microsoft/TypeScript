@@ -218,7 +218,7 @@ namespace ts.GoToDefinition {
                 symbol = aliased;
             }
             else if (isShorthandPropertyAssignmentOfModuleExports(symbol)) {
-                // Skip past `module.export = { Foo }` even though 'Foo' is not a real alias
+                // Skip past `module.exports = { Foo }` even though 'Foo' is not a real alias
                 const shorthandTarget = checker.resolveName(symbol.name, symbol.valueDeclaration, SymbolFlags.Value, /*excludeGlobals*/ false);
                 if (!some(shorthandTarget?.declarations)) {
                     break;
