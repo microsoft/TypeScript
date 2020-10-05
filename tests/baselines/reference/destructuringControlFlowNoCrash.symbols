@@ -22,3 +22,7 @@ const {
 date2.toISOString();
 >date2 : Symbol(date2, Decl(destructuringControlFlowNoCrash.ts, 8, 7))
 
+// It could also be an async function
+const { constructor } = async () => {};
+>constructor : Symbol(constructor, Decl(destructuringControlFlowNoCrash.ts, 15, 7))
+

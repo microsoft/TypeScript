@@ -12,3 +12,6 @@ const {
 } = (inspectedElement: any).props;
 
 date2.toISOString();
+
+// It could also be an async function
+const { constructor } = async () => {};
