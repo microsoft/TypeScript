@@ -24,11 +24,11 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(30,30): err
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(31,31): error TS2550: Property 'trimLeft' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2019' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(32,32): error TS2550: Property 'trimRight' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2019' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(33,45): error TS2550: Property 'description' does not exist on type 'symbol'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2019' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(36,53): error TS2550: Property 'allSettled' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(36,39): error TS2550: Property 'allSettled' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(37,31): error TS2550: Property 'matchAll' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(38,47): error TS2550: Property 'matchAll' does not exist on type 'SymbolConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(39,20): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(42,46): error TS2550: Property 'any' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(42,32): error TS2550: Property 'any' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(43,33): error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,70): error TS2550: Property 'formatToParts' does not exist on type 'NumberFormat'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
 
@@ -122,9 +122,9 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,70): err
 !!! error TS2550: Property 'description' does not exist on type 'symbol'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2019' or later.
     
     // es2020
-    const testPromiseAllSettled = new Promise(() => {}).allSettled();
-                                                        ~~~~~~~~~~
-!!! error TS2550: Property 'allSettled' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
+    const testPromiseAllSettled = Promise.allSettled([]);
+                                          ~~~~~~~~~~
+!!! error TS2550: Property 'allSettled' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
     const testStringMatchAll = "".matchAll();
                                   ~~~~~~~~
 !!! error TS2550: Property 'matchAll' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
@@ -136,9 +136,9 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,70): err
 !!! error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2020' or later.
     
     // esnext
-    const testPromiseAny = new Promise(() => {}).any();
-                                                 ~~~
-!!! error TS2550: Property 'any' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
+    const testPromiseAny = Promise.any([]);
+                                   ~~~
+!!! error TS2550: Property 'any' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.
     const testStringReplaceAll = "".replaceAll();
                                     ~~~~~~~~~~
 !!! error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'esnext' or later.

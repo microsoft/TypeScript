@@ -207,14 +207,13 @@ const testSymbolDescription = Symbol("foo").description;
 >description : any
 
 // es2020
-const testPromiseAllSettled = new Promise(() => {}).allSettled();
+const testPromiseAllSettled = Promise.allSettled([]);
 >testPromiseAllSettled : any
->new Promise(() => {}).allSettled() : any
->new Promise(() => {}).allSettled : any
->new Promise(() => {}) : Promise<unknown>
+>Promise.allSettled([]) : any
+>Promise.allSettled : any
 >Promise : PromiseConstructor
->() => {} : () => void
 >allSettled : any
+>[] : undefined[]
 
 const testStringMatchAll = "".matchAll();
 >testStringMatchAll : any
@@ -240,14 +239,13 @@ const testBigInt = BigInt(123);
 >123 : 123
 
 // esnext
-const testPromiseAny = new Promise(() => {}).any();
+const testPromiseAny = Promise.any([]);
 >testPromiseAny : any
->new Promise(() => {}).any() : any
->new Promise(() => {}).any : any
->new Promise(() => {}) : Promise<unknown>
+>Promise.any([]) : any
+>Promise.any : any
 >Promise : PromiseConstructor
->() => {} : () => void
 >any : any
+>[] : undefined[]
 
 const testStringReplaceAll = "".replaceAll();
 >testStringReplaceAll : any

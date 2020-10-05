@@ -97,7 +97,7 @@ const testSymbolDescription = Symbol("foo").description;
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // es2020
-const testPromiseAllSettled = new Promise(() => {}).allSettled();
+const testPromiseAllSettled = Promise.allSettled([]);
 >testPromiseAllSettled : Symbol(testPromiseAllSettled, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 35, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
@@ -112,7 +112,7 @@ const testBigInt = BigInt(123);
 >testBigInt : Symbol(testBigInt, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 38, 5))
 
 // esnext
-const testPromiseAny = new Promise(() => {}).any();
+const testPromiseAny = Promise.any([]);
 >testPromiseAny : Symbol(testPromiseAny, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 41, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
