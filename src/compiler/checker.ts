@@ -7820,9 +7820,13 @@ namespace ts {
                 const propName = getDestructuringPropertyName(node);
                 if (propName) {
                     const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), node);
-                    const result = setTextRange(parseNodeFactory.createElementAccessExpression(parentAccess, literal), node);
+                    const lhsExpr = isLeftHandSideExpression(parentAccess) ? parentAccess : parseNodeFactory.createParenthesizedExpression(parentAccess);
+                    const result = setTextRange(parseNodeFactory.createElementAccessExpression(lhsExpr, literal), node);
                     setParent(literal, result);
                     setParent(result, node);
+                    if (lhsExpr !== parentAccess) {
+                        setParent(lhsExpr, result);
+                    }
                     result.flowNode = parentAccess.flowNode;
                     return result;
                 }
