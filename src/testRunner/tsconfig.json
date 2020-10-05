@@ -120,6 +120,7 @@
         "unittests/tsbuild/inferredTypeFromTransitiveModule.ts",
         "unittests/tsbuild/javascriptProjectEmit.ts",
         "unittests/tsbuild/lateBoundSymbol.ts",
+        "unittests/tsbuild/moduleResolution.ts",
         "unittests/tsbuild/moduleSpecifiers.ts",
         "unittests/tsbuild/noEmitOnError.ts",
         "unittests/tsbuild/outFile.ts",
