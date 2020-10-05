@@ -79,36 +79,13 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does 
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exist - use it as a name resolution result.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module 'const' from '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'const' from 'node_modules' folder, target file type 'TypeScript'.
-Directory '/user/username/projects/myproject/node_modules/pkg2/build/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/myproject/node_modules/pkg2/node_modules' does not exist, skipping all lookups in it.
-File '/user/username/projects/myproject/node_modules/const.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/const.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/const.d.ts' does not exist.
-Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'const' from 'node_modules' folder, target file type 'JavaScript'.
-Directory '/user/username/projects/myproject/node_modules/pkg2/build/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/projects/myproject/node_modules/pkg2/node_modules' does not exist, skipping all lookups in it.
-File '/user/username/projects/myproject/node_modules/const.js' does not exist.
-File '/user/username/projects/myproject/node_modules/const.jsx' does not exist.
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-======== Module name 'const' was not resolved. ========
-[96mnode_modules/pkg2/build/index.d.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS2307: [0mCannot find module 'const' or its corresponding type declarations.
-
-[7m1[0m export type { TheNum } from 'const';
-[7m [0m [91m                            ~~~~~~~[0m
-
-
-Found 1 error.
-
+'baseUrl' option is set to '/user/username/projects/myproject/packages/pkg2', using this value to resolve non-relative module name 'const'.
+Resolving module name 'const' relative to base url '/user/username/projects/myproject/packages/pkg2' - '/user/username/projects/myproject/packages/pkg2/const'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file type 'TypeScript'.
+File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it as a name resolution result.
+======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
 
 
 Program root files: ["/user/username/projects/myproject/packages/pkg2/const.ts","/user/username/projects/myproject/packages/pkg2/index.ts"]
@@ -127,11 +104,13 @@ Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","preserveSymlinks":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/node_modules/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/node_modules/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
@@ -141,7 +120,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js]
 "use strict";
@@ -207,4 +186,11 @@ export type { TheNum } from 'const';
   },
   "version": "FakeTSVersion"
 }
+
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js]
+"use strict";
+exports.__esModule = true;
+exports.theNum = void 0;
+exports.theNum = 42;
+
 
