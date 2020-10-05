@@ -6772,6 +6772,12 @@ interface HTMLFormElement extends HTMLElement {
      * Sets or retrieves the window or frame at which to target content.
      */
     target: string;
+            
+    /**
+     * Creates a hyperlink or annotation depending on the value.
+     */
+    rel: string;
+            
     /**
      * Returns whether a form will validate when it is submitted, without having to submit it.
      */
