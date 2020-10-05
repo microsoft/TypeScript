@@ -759,7 +759,18 @@ namespace FourSlash {
             ts.zipWith(endMarkers, definitions, (endMarker, definition, i) => {
                 const marker = this.getMarkerByName(endMarker);
                 if (ts.comparePaths(marker.fileName, definition.fileName, /*ignoreCase*/ true) !== ts.Comparison.EqualTo || marker.position !== definition.textSpan.start) {
-                    this.raiseError(`${testName} failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}`);
+                    const filesToDisplay = ts.deduplicate([marker.fileName, definition.fileName], ts.equateValues);
+                    const markers = [{ text: "EXPECTED", fileName: marker.fileName, position: marker.position }, { text: "ACTUAL", fileName: definition.fileName, position: definition.textSpan.start }];
+                    const text = filesToDisplay.map(fileName => {
+                        const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
+                        let fileContent = this.getFileContent(fileName);
+                        for (const marker of markersToRender) {
+                            fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
+                        }
+                        return `// @Filename: ${fileName}\n${fileContent}`;
+                    }).join("\n\n");
+
+                    this.raiseError(`${testName} failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}\n\n${text}\n`);
                 }
             });
         }
@@ -777,7 +788,7 @@ namespace FourSlash {
                 const fileContent = this.getFileContent(startFile);
                 const spanContent = fileContent.slice(defs.textSpan.start, ts.textSpanEnd(defs.textSpan));
                 const spanContentWithMarker = spanContent.slice(0, marker.position - defs.textSpan.start) + `/*${startMarkerName}*/` + spanContent.slice(marker.position - defs.textSpan.start);
-                const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
+                const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[0;31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
                     .split(/\r?\n/).map(line => " ".repeat(6) + line).join(ts.sys.newLine);
                 this.raiseError(`goToDefinitionsAndBoundSpan failed. Found a starting TextSpan around '${spanContent}' in '${startFile}' (at position ${defs.textSpan.start}). `
                     + `If this is the correct input span, put a fourslash range around it: \n\n${suggestedFileContent}\n`);
