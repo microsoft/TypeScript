@@ -10917,7 +10917,7 @@ namespace ts {
                 return type.resolvedBaseConstraint;
             }
             let nonTerminating = false;
-            let stack: Type[] = [];
+            const stack: Type[] = [];
             return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type);
 
             function getImmediateBaseConstraint(t: Type): Type {
