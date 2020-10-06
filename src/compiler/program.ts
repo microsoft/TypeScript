@@ -989,20 +989,58 @@ namespace ts {
 
         return program;
 
-        function resolveModuleNamesWorker(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) {
+        function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, reusedNames: string[] | undefined): readonly ResolvedModuleFull[] {
+            if (!moduleNames.length) return emptyArray;
+            const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
+            const redirectedReference = getRedirectReferenceForResolution(containingFile);
             performance.mark("beforeResolveModule");
-            const result = actualResolveModuleNamesWorker(moduleNames, containingFile, reusedNames, redirectedReference);
+            const result = actualResolveModuleNamesWorker(moduleNames, containingFileName, reusedNames, redirectedReference);
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
             return result;
         }
 
-        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) {
+        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
+            if (!typeDirectiveNames.length) return [];
             performance.mark("beforeResolveTypeReference");
-            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, redirectedReference);
+            const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
+            const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
+            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference);
             performance.mark("afterResolveTypeReference");
             performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
             return result;
+        }
+
+        function getRedirectReferenceForResolution(file: SourceFile) {
+            const redirect = getResolvedProjectReferenceToRedirect(file.originalFileName);
+            if (redirect || !fileExtensionIs(file.originalFileName, Extension.Dts)) return redirect;
+
+            // The originalFileName could not be actual source file name if file found was d.ts from referecned project
+            // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
+            const resultFromDts = getRedirectReferenceForResolutionFromSourceOfProject(file.originalFileName, file.path);
+            if (resultFromDts) return resultFromDts;
+
+            // If preserveSymlinks is true, module resolution wont jump the symlink
+            // but the resolved real path may be the .d.ts from project reference
+            // Note:: Currently we try the real path only if the
+            // file is from node_modules to avoid having to run real path on all file paths
+            if (!host.realpath || !options.preserveSymlinks || !stringContains(file.originalFileName, nodeModulesPathPart)) return undefined;
+            const realDeclarationFileName = host.realpath(file.originalFileName);
+            const realDeclarationPath = toPath(realDeclarationFileName);
+            return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationFileName, realDeclarationPath);
+        }
+
+        function getRedirectReferenceForResolutionFromSourceOfProject(fileName: string, filePath: Path) {
+            const source = getSourceOfProjectReferenceRedirect(fileName);
+            if (isString(source)) return getResolvedProjectReferenceToRedirect(source);
+            if (!source) return undefined;
+            // Output of .d.ts file so return resolved ref that matches the out file name
+            return forEachResolvedProjectReference(resolvedRef => {
+                if (!resolvedRef) return undefined;
+                const out = outFile(resolvedRef.commandLine.options);
+                if (!out) return undefined;
+                return toPath(out) === filePath ? resolvedRef : undefined;
+            });
         }
 
         function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
@@ -1068,14 +1106,14 @@ namespace ts {
             return classifiableNames;
         }
 
-        function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile) {
+        function resolveModuleNamesReusingOldState(moduleNames: string[], file: SourceFile): readonly ResolvedModuleFull[] {
             if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
-                return resolveModuleNamesWorker(moduleNames, containingFile, /*reusedNames*/ undefined, getResolvedProjectReferenceToRedirect(file.originalFileName));
+                return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
             }
 
-            const oldSourceFile = oldProgram && oldProgram.getSourceFile(containingFile);
+            const oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
             if (oldSourceFile !== file && file.resolvedModules) {
                 // `file` was created for the new program.
                 //
@@ -1120,7 +1158,7 @@ namespace ts {
                     const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
-                            trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
+                            trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
                         }
                         (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
                         (reusedNames || (reusedNames = [])).push(moduleName);
@@ -1135,7 +1173,7 @@ namespace ts {
                 if (contains(file.ambientModuleNames, moduleName)) {
                     resolvesToAmbientModuleInNonModifiedFile = true;
                     if (isTraceEnabled(options, host)) {
-                        trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
+                        trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
                     }
                 }
                 else {
@@ -1152,7 +1190,7 @@ namespace ts {
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames, getResolvedProjectReferenceToRedirect(file.originalFileName))
+                ? resolveModuleNamesWorker(unknownModuleNames, file, reusedNames)
                 : emptyArray;
 
             // Combine results of resolutions and predicted results
@@ -1397,9 +1435,8 @@ namespace ts {
             }
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
-                const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.originalFileName, currentDirectory);
                 const moduleNames = getModuleNames(newSourceFile);
-                const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile);
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
                 // ensure that module resolution results are still correct
                 const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
                 if (resolutionsChanged) {
@@ -1409,19 +1446,17 @@ namespace ts {
                 else {
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                 }
-                if (resolveTypeReferenceDirectiveNamesWorker) {
-                    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
-                    const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath, getResolvedProjectReferenceToRedirect(newSourceFile.originalFileName));
-                    // ensure that types resolutions are still correct
-                    const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
-                    if (resolutionsChanged) {
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                        newSourceFile.resolvedTypeReferenceDirectiveNames = zipToMap(typesReferenceDirectives, resolutions);
-                    }
-                    else {
-                        newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
-                    }
+                // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+                const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => toFileNameLowerCase(ref.fileName));
+                const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFile);
+                // ensure that types resolutions are still correct
+                const typeReferenceEesolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
+                if (typeReferenceEesolutionsChanged) {
+                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    newSourceFile.resolvedTypeReferenceDirectiveNames = zipToMap(typesReferenceDirectives, typeReferenceResolutions);
+                }
+                else {
+                    newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
                 }
             }
 
@@ -2685,7 +2720,7 @@ namespace ts {
                 return;
             }
 
-            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName, getResolvedProjectReferenceToRedirect(file.originalFileName));
+            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file);
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];
@@ -2823,7 +2858,7 @@ namespace ts {
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
-                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.originalFileName, currentDirectory), file);
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
