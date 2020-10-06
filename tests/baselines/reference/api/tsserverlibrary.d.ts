@@ -9632,6 +9632,8 @@ declare namespace ts.server {
         private compilerOptionsForInferredProjectsPerProjectRoot;
         private watchOptionsForInferredProjects;
         private watchOptionsForInferredProjectsPerProjectRoot;
+        private typeAcquisitionForInferredProjects;
+        private typeAcquisitionForInferredProjectsPerProjectRoot;
         /**
          * Project size for configured or external projects
          */

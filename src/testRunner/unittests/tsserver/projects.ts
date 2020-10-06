@@ -402,7 +402,7 @@ namespace ts.projectSystem {
                 projectName,
                 fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
                 compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
-                typeAcquisition: { include: ["blissfuljs"], exclude: [], enable: true, inferTypingsFromFilenames: true },
+                typeAcquisition: { include: ["blissfuljs"], exclude: [], enable: true },
                 unresolvedImports: ["s"],
                 projectRootPath: "/",
                 cachePath,
