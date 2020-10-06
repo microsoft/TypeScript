@@ -1159,35 +1159,6 @@ namespace ts {
     }
 
     /**
-     * Psuedo-binary searches the list of children for the first element whose end position exceeds the input position
-     * Returns `undefined` if no element satisfies the condition, or the index of the satisfying element otherwise.
-     * This could probably be written using our `binarySeach` helper, but the `keyComparator` would be hairy enough
-     * that it's probably worth just writing out the algorithm in full.
-     * @param {number} start - Start search index, inclusive
-     * @param {number} end - End search index, inclusive
-     */
-    function searchChildrenSlice(position: number, children: Node[], start = 0, end = children.length - 1): number | undefined {
-        const pivot = Math.floor((end - start)/2) + start;
-        if (!children[pivot]) {
-            return undefined;
-        }
-        if (position < children[pivot].end) {
-            // first element whose end position is greater than the input position
-            if (!children[pivot - 1] || position >= children[pivot - 1].end) {
-                return pivot;
-            }
-            if (pivot === start) {
-                return undefined;
-            }
-            return searchChildrenSlice(position, children, start, pivot - 1);
-        }
-        if (pivot === end) {
-            return undefined;
-        }
-        return searchChildrenSlice(position, children, pivot + 1, end);
-    }
-
-    /**
      * Finds the rightmost token satisfying `token.end <= position`,
      * excluding `JsxText` tokens containing only whitespace.
      */
@@ -1202,8 +1173,17 @@ namespace ts {
             }
 
             const children = n.getChildren(sourceFile);
-            const i = searchChildrenSlice(position, children);
-            if (typeof i !== "undefined") {
+            const i = binarySearchKey(children, position, (_, i) => i, (middle, _) => {
+                if (position < children[middle].end) {
+                    // first element whose end position is greater than the input position
+                    if (!children[middle - 1] || position >= children[middle - 1].end) {
+                        return Comparison.EqualTo;
+                    }
+                    return Comparison.GreaterThan;
+                }
+                return Comparison.LessThan;
+            });
+            if (i >= 0 && children[i]) {
                 const child = children[i];
                 // Note that the span of a node's tokens is [node.getStart(...), node.end).
                 // Given that `position < child.end` and child has constituent tokens, we distinguish these cases:
