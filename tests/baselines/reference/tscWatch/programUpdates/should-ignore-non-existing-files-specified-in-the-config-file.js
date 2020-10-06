@@ -33,9 +33,7 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-
 [91merror[0m[90m TS6053: [0mFile '/a/b/commonFile3.ts' not found.
-
 
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 

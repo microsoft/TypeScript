@@ -30,22 +30,6 @@ import { something } from "something";
             return { host, session, file1, file2, file3, something, configFile };
         }
 
-        it("adds '(approximation)' to the description of quick info", () => {
-            const file: File = {
-                path: `${tscWatch.projectRoot}/foo.ts`,
-                content: "export const foo = 100;"
-            };
-            const host = createServerHost([file]);
-            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
-            openFilesForSession([file], session);
-            const response = session.executeCommandSeq<protocol.QuickInfoRequest>({
-                command: protocol.CommandTypes.Quickinfo,
-                arguments: protocolFileLocationFromSubstring(file, "foo"),
-            }).response as protocol.QuickInfoResponseBody;
-
-            assert(stringContainsAt(response.displayString, "(approximation)", 0));
-        });
-
         it("open files are added to inferred project even if config file is present and semantic operations succeed", () => {
             const { host, session, file1, file2 } = setup();
             const service = session.getProjectService();
@@ -187,6 +171,37 @@ function fooB() { }`
             // Open file with non relative external module name
             openFilesForSession([file2], session);
             checkProjectActualFiles(project, [libFile.path, file2.path, file3.path]);
+        });
+
+        it("should not create autoImportProvider or handle package jsons", () => {
+            const angularFormsDts: File = {
+                path: "/node_modules/@angular/forms/forms.d.ts",
+                content: "export declare class PatternValidator {}",
+            };
+            const angularFormsPackageJson: File = {
+                path: "/node_modules/@angular/forms/package.json",
+                content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: `{ "compilerOptions": { "module": "commonjs" } }`,
+            };
+            const packageJson: File = {
+                path: "/package.json",
+                content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`
+            };
+            const indexTs: File = {
+                path: "/index.ts",
+                content: ""
+            };
+            const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+            const service = session.getProjectService();
+            openFilesForSession([indexTs], session);
+            const project = service.inferredProjects[0];
+            assert.isFalse(project.autoImportProviderHost);
+            assert.isUndefined(project.getPackageJsonAutoImportProvider());
+            assert.deepEqual(project.getPackageJsonsForAutoImport(), emptyArray);
         });
     });
 }

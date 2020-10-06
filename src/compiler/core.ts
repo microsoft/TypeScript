@@ -1304,14 +1304,14 @@ namespace ts {
         return values;
     }
 
-    const _entries = Object.entries ? Object.entries : <T>(obj: MapLike<T>) => {
+    const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
         const keys = getOwnKeys(obj);
         const result: [string, T][] = Array(keys.length);
-        for (const key of keys) {
-            result.push([key, obj[key]]);
+        for (let i = 0; i < keys.length; i++) {
+            result[i] = [keys[i], obj[keys[i]]];
         }
         return result;
-    };
+    });
 
     export function getEntries<T>(obj: MapLike<T>): [string, T][] {
         return obj ? _entries(obj) : [];
@@ -2250,18 +2250,36 @@ namespace ts {
         }
     }
 
-    export function padLeft(s: string, length: number) {
-        while (s.length < length) {
-            s = " " + s;
-        }
-        return s;
+
+    /**
+     * Returns string left-padded with spaces or zeros until it reaches the given length.
+     *
+     * @param s String to pad.
+     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString Character to use as padding (default " ").
+     */
+    export function padLeft(s: string, length: number, padString: " " | "0" = " ") {
+        return length <= s.length ? s : padString.repeat(length - s.length) + s;
     }
 
-    export function padRight(s: string, length: number) {
-        while (s.length < length) {
-            s = s + " ";
-        }
+    /**
+     * Returns string right-padded with spaces until it reaches the given length.
+     *
+     * @param s String to pad.
+     * @param length Final padded length. If less than or equal to 's.length', returns 's' unchanged.
+     * @param padString Character to use as padding (default " ").
+     */
+    export function padRight(s: string, length: number, padString: " " = " ") {
+        return length <= s.length ? s : s + padString.repeat(length - s.length);
+    }
 
-        return s;
+    export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
+    export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
+        const len = array.length;
+        let index = 0;
+        while (index < len && predicate(array[index])) {
+            index++;
+        }
+        return array.slice(0, index);
     }
 }

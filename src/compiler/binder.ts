@@ -174,12 +174,14 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
+        tracing.begin(tracing.Phase.Bind, "bindSourceFile", { path: file.path });
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
+        tracing.end();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -831,6 +833,7 @@ namespace ts {
         function isNarrowingExpression(expr: Expression): boolean {
             switch (expr.kind) {
                 case SyntaxKind.Identifier:
+                case SyntaxKind.PrivateIdentifier:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
@@ -850,7 +853,7 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
+            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PrivateIdentifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
                 isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression) ||
                 isAssignmentExpression(expr) && isNarrowableReference(expr.left);
@@ -2805,9 +2808,9 @@ namespace ts {
                 return symbol;
             });
             if (symbol) {
-                const flags = isClassExpression(node.right) ?
-                    SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.Class :
-                    SymbolFlags.Property | SymbolFlags.ExportValue;
+                const isAlias = isAliasableExpression(node.right) && (isExportsIdentifier(node.left.expression) || isModuleExportsAccessExpression(node.left.expression));
+                const flags = isAlias ? SymbolFlags.Alias : SymbolFlags.Property | SymbolFlags.ExportValue;
+                setParent(node.left, node);
                 declareSymbol(symbol.exports!, symbol, node.left, flags, SymbolFlags.None);
             }
         }
@@ -2972,6 +2975,10 @@ namespace ts {
             // Class declarations in Typescript do not allow property declarations
             const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
+                return;
+            }
+            const rootExpr = getLeftmostAccessExpression(node.left);
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
@@ -3209,7 +3216,10 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isBlockOrCatchScoped(node)) {
+                if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && !getJSDocTypeTag(node)) {
+                    declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                }
+                else if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
                 else if (isParameterDeclaration(node)) {

@@ -11,3 +11,4 @@ namespace Test {
     export var x: JQuery;
 >x : JQuery
 }
+

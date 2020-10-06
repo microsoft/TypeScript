@@ -44,6 +44,7 @@ namespace ts.codefix {
         const mappedIntersectionType = factory.createMappedTypeNode(
             hasEffectiveReadonlyModifier(indexSignature) ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
             mappedTypeParameter,
+            /*nameType*/ undefined,
             indexSignature.questionToken,
             indexSignature.type);
         const intersectionType = factory.createIntersectionTypeNode([

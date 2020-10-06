@@ -60,6 +60,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "noUnusedParameters": true,            /* Report errors on unused parameters. */
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
+    // "noUncheckedIndexedAccess": true,      /* Include 'undefined' in index signature results */
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
@@ -95,7 +96,6 @@ interface Array<T> { length: number; [n: number]: T; }
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -201,7 +201,6 @@ export const y = 10;
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 

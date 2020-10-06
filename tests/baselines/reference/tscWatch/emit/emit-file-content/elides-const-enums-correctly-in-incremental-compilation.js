@@ -27,7 +27,6 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -89,7 +88,6 @@ import { E2 } from "./file2"; const v: E2 = E2.V;function foo2() { return 2; }
 Output::
 >> Screen clear
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
 

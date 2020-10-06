@@ -1587,9 +1587,7 @@ namespace ts {
                     kind: ScriptElementKind.unknown,
                     kindModifiers: ScriptElementKindModifier.none,
                     textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                    displayParts: prefixWithApproximation(
-                        typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo)))
-                    ),
+                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                     tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                 };
@@ -1602,7 +1600,7 @@ namespace ts {
                 kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts: prefixWithApproximation(displayParts),
+                displayParts,
                 documentation,
                 tags,
             };
@@ -1630,13 +1628,6 @@ namespace ts {
                 default:
                     return false;
             }
-        }
-
-        function prefixWithApproximation(displayParts: SymbolDisplayPart[]): SymbolDisplayPart[] {
-            if (languageServiceMode === LanguageServiceMode.Semantic) {
-                return displayParts;
-            }
-            return [textPart("(approximation)"), spacePart(), ...displayParts];
         }
 
         /// Goto definition
@@ -1836,22 +1827,37 @@ namespace ts {
             return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
             }
             synchronizeHostData();
-            return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
+                return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            }
+            else {
+                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            }
         }
 
-        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return { spans: [], endOfLineState: EndOfLineState.None };
             }
             synchronizeHostData();
-            return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.Original) {
+                return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            }
+            else {
+                return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            }
         }
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -2071,6 +2077,11 @@ namespace ts {
 
             // Push all text changes.
             for (let i = firstLine; i <= lastLine; i++) {
+                // If the range is multiline and ends on a beginning of a line, don't comment/uncomment.
+                if (firstLine !== lastLine && lineStarts[i] === textRange.end) {
+                    continue;
+                }
+
                 const lineTextStart = lineTextStarts.get(i.toString());
 
                 // If the line is not an empty line; otherwise no-op.

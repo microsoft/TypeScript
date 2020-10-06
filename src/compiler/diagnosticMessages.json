@@ -99,7 +99,7 @@
         "category": "Error",
         "code": 1030
     },
-    "'{0}' modifier cannot appear on a class element.": {
+    "'{0}' modifier cannot appear on class elements of this kind.": {
         "category": "Error",
         "code": 1031
     },
@@ -851,10 +851,6 @@
         "category": "Error",
         "code": 1257
     },
-    "Definite assignment assertions can only be used along with a type annotation.": {
-        "category": "Error",
-        "code": 1258
-    },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",
         "code": 1259
@@ -870,6 +866,14 @@
     "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
         "category": "Error",
         "code": 1262
+    },
+    "Declarations with initializers cannot also have definite assignment assertions.": {
+        "category": "Error",
+        "code": 1263
+    },
+    "Declarations with definite assignment assertions must also have type annotations.": {
+        "category": "Error",
+        "code": 1264
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -936,7 +940,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments": {
+    "Dynamic import cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -1008,7 +1012,7 @@
         "category": "Error",
         "code": 1344
     },
-    "An expression of type 'void' cannot be tested for truthiness": {
+    "An expression of type 'void' cannot be tested for truthiness.": {
         "category": "Error",
         "code": 1345
     },
@@ -1180,7 +1184,18 @@
         "category": "Error",
         "code": 1388
     },
-
+    "'{0}' is not allowed as a variable declaration name.": {
+        "category": "Error",
+        "code": 1389
+    },
+    "Provides a root package name when using outFile with declarations.": {
+        "category": "Message",
+        "code": 1390
+    },
+    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
+        "category": "Error",
+        "code": 1391
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1686,6 +1701,10 @@
         "category": "Error",
         "code": 2418
     },
+    "Types of construct signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
+    },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420
@@ -2178,6 +2197,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.": {
+        "category": "Error",
+        "code": 2550
+    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2270,7 +2293,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'": {
+    "Property '{0}' is a static member of type '{1}'.": {
         "category": "Error",
         "code": 2576
     },
@@ -2282,19 +2305,19 @@
         "category": "Error",
         "code": 2578
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.": {
         "category": "Error",
         "code": 2582
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.": {
         "category": "Error",
         "code": 2583
     },
@@ -2326,15 +2349,15 @@
         "category": "Error",
         "code": 2590
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2591
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2592
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2593
     },
@@ -2607,6 +2630,10 @@
         "category": "Error",
         "code": 2689
     },
+    "'{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?": {
+        "category": "Error",
+        "code": 2690
+    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691
@@ -2740,7 +2767,7 @@
         "category": "Error",
         "code": 2723
     },
-    "Module '{0}' has no exported member '{1}'. Did you mean '{2}'?": {
+    "'{0}' has no exported member named '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2724
     },
@@ -2772,7 +2799,7 @@
         "category": "Error",
         "code": 2731
     },
-    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension.": {
         "category": "Error",
         "code": 2732
     },
@@ -3017,6 +3044,18 @@
         "code": 2792
     },
 
+    "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
+        "category": "Error",
+        "code": 2794
+    },
+    "The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.": {
+        "category": "Error",
+        "code": 2795
+    },
+    "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
+        "category": "Error",
+        "code": 2796
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3471,10 +3510,6 @@
         "category": "Error",
         "code": 5059
     },
-    "Option 'paths' cannot be used without specifying '--baseUrl' option.": {
-        "category": "Error",
-        "code": 5060
-    },
     "Pattern '{0}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5061
@@ -3586,6 +3621,14 @@
     "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
         "category": "Error",
         "code": 5088
+    },
+    "Option '{0}' cannot be specified when option 'jsx' is '{1}'.": {
+        "category": "Error",
+        "code": 5089
+    },
+    "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
+        "category": "Error",
+        "code": 5090
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4354,7 +4397,7 @@
         "category": "Message",
         "code": 6204
     },
-    "All type parameters are unused": {
+    "All type parameters are unused.": {
         "category": "Error",
         "code": 6205
     },
@@ -4481,6 +4524,14 @@
     "Arguments for the rest parameter '{0}' were not provided.": {
         "category": "Error",
         "code": 6236
+    },
+    "Generates an event trace and a list of types.": {
+        "category": "Message",
+        "code": 6237
+    },
+    "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
+        "category": "Error",
+        "code": 6238
     },
 
     "Projects to reference": {
@@ -4687,6 +4738,11 @@
         "code": 6504
     },
 
+    "Include 'undefined' in index signature results": {
+        "category": "Message",
+        "code": 6800
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -4797,7 +4853,7 @@
         "category": "Error",
         "code": 7034
     },
-    "Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "Try `npm i --save-dev @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
     },
@@ -4880,6 +4936,10 @@
     "'{0}', which lacks return-type annotation, implicitly has an '{1}' yield type.": {
         "category": "Error",
         "code": 7055
+    },
+    "The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.": {
+        "category": "Error",
+        "code": 7056
     },
 
     "You cannot rename this element.": {
@@ -5324,6 +5384,10 @@
         "category": "Message",
         "code": 95002
     },
+    "Convert '{0}' to '{1} in {0}'": {
+        "category": "Message",
+        "code": 95003
+    },
     "Extract to {0} in {1}": {
         "category": "Message",
         "code": 95004
@@ -5391,6 +5455,10 @@
     "Add definite assignment assertion to property '{0}'": {
         "category": "Message",
         "code": 95020
+    },
+    "Convert all type literals to mapped type": {
+        "category": "Message",
+        "code": 95021
     },
     "Add all missing members": {
         "category": "Message",
@@ -5876,6 +5944,14 @@
         "category": "Message",
         "code": 95142
     },
+    "Add 'void' to Promise resolved without a value": {
+        "category": "Message",
+        "code": 95143
+    },
+    "Add 'void' to all Promises resolved without a value": {
+        "category": "Message",
+        "code": 95144
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5889,7 +5965,7 @@
         "category": "Error",
         "code": 18007
     },
-    "Private identifiers cannot be used as parameters": {
+    "Private identifiers cannot be used as parameters.": {
         "category": "Error",
         "code": 18009
     },
@@ -5929,7 +6005,7 @@
         "category": "Error",
         "code": 18018
     },
-    "'{0}' modifier cannot be used with a private identifier": {
+    "'{0}' modifier cannot be used with a private identifier.": {
         "category": "Error",
         "code": 18019
     },

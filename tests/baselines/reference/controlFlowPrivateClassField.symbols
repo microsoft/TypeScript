@@ -1,0 +1,54 @@
+=== tests/cases/compiler/controlFlowPrivateClassField.ts ===
+class Example {
+>Example : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
+
+    #test;
+>#test : Symbol(Example.#test, Decl(controlFlowPrivateClassField.ts, 0, 15))
+
+    constructor(test: number) {
+>test : Symbol(test, Decl(controlFlowPrivateClassField.ts, 3, 16))
+
+        this.#test = test;
+>this.#test : Symbol(Example.#test, Decl(controlFlowPrivateClassField.ts, 0, 15))
+>this : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
+>test : Symbol(test, Decl(controlFlowPrivateClassField.ts, 3, 16))
+    }
+
+    get test() {
+>test : Symbol(Example.test, Decl(controlFlowPrivateClassField.ts, 5, 5))
+
+        return this.#test
+>this.#test : Symbol(Example.#test, Decl(controlFlowPrivateClassField.ts, 0, 15))
+>this : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
+    }
+}
+
+class Example2 {
+>Example2 : Symbol(Example2, Decl(controlFlowPrivateClassField.ts, 10, 1))
+
+    #test;
+>#test : Symbol(Example2.#test, Decl(controlFlowPrivateClassField.ts, 12, 16))
+
+    constructor(test: number | undefined) {
+>test : Symbol(test, Decl(controlFlowPrivateClassField.ts, 15, 16))
+
+        this.#test = test;
+>this.#test : Symbol(Example2.#test, Decl(controlFlowPrivateClassField.ts, 12, 16))
+>this : Symbol(Example2, Decl(controlFlowPrivateClassField.ts, 10, 1))
+>test : Symbol(test, Decl(controlFlowPrivateClassField.ts, 15, 16))
+    }
+
+    get test() {
+>test : Symbol(Example2.test, Decl(controlFlowPrivateClassField.ts, 17, 5))
+
+        if (this.#test) {
+>this.#test : Symbol(Example2.#test, Decl(controlFlowPrivateClassField.ts, 12, 16))
+>this : Symbol(Example2, Decl(controlFlowPrivateClassField.ts, 10, 1))
+
+            return this.#test
+>this.#test : Symbol(Example2.#test, Decl(controlFlowPrivateClassField.ts, 12, 16))
+>this : Symbol(Example2, Decl(controlFlowPrivateClassField.ts, 10, 1))
+        }
+        return 0;
+    }
+}

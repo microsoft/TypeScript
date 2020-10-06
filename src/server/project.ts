@@ -274,7 +274,7 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
-            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs || this.projectService.hasDeferredExtension()) {
+            else if (hasExplicitListOfFiles || getAllowJSCompilerOption(this.compilerOptions) || this.projectService.hasDeferredExtension()) {
                 // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
@@ -631,8 +631,16 @@ namespace ts.server {
             }
             updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
-            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
-                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined);
+            return mapDefined(
+                BuilderState.getFilesAffectedBy(
+                    this.builderState,
+                    this.program!,
+                    scriptInfo.path,
+                    this.cancellationToken,
+                    maybeBind(this.projectService.host, this.projectService.host.createHash)
+                ),
+                sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined
+            );
         }
 
         /**
@@ -654,7 +662,10 @@ namespace ts.server {
                     const dtsFiles = outputFiles.filter(f => fileExtensionIs(f.name, Extension.Dts));
                     if (dtsFiles.length === 1) {
                         const sourceFile = this.program!.getSourceFile(scriptInfo.fileName)!;
-                        BuilderState.updateSignatureOfFile(this.builderState, this.projectService.host.createHash!(dtsFiles[0].text), sourceFile.resolvedPath);
+                        const signature = this.projectService.host.createHash ?
+                            this.projectService.host.createHash(dtsFiles[0].text) :
+                            generateDjb2Hash(dtsFiles[0].text);
+                        BuilderState.updateSignatureOfFile(this.builderState, signature, sourceFile.resolvedPath);
                     }
                 }
             }
@@ -1622,6 +1633,7 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
 
@@ -1669,9 +1681,13 @@ namespace ts.server {
             if (this.autoImportProviderHost === false) {
                 return undefined;
             }
+            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                this.autoImportProviderHost = false;
+                return undefined;
+            }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
-                if (!this.autoImportProviderHost.hasRoots()) {
+                if (this.autoImportProviderHost.isEmpty()) {
                     this.autoImportProviderHost.close();
                     this.autoImportProviderHost = undefined;
                     return undefined;
@@ -1933,6 +1949,11 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
+        }
+
+        /*@internal*/
+        isEmpty() {
+            return !some(this.rootFileNames);
         }
 
         isOrphan() {

@@ -105,6 +105,9 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
+        else if (isEntityName(node) && isJSDocNameReference(node.parent)) {
+            return SemanticMeaning.All;
+        }
         else if (isTypeReference(node)) {
             return SemanticMeaning.Type;
         }
@@ -1770,6 +1773,7 @@ namespace ts {
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
+            getCompilerOptions: () => program.getCompilerOptions()
         };
     }
 
@@ -2524,7 +2528,7 @@ namespace ts {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
         const notAccessible = () => { typeIsAccessible = false; };
-        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
+        const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
             trackSymbol: (symbol, declaration, meaning) => {
                 typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
             },
