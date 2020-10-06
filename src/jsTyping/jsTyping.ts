@@ -150,7 +150,7 @@ namespace ts.JsTyping {
             getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
         });
         // filename-based ATA must be explicitly disabled
-        if(typeAcquisition.inferTypings !== false) {
+        if(typeAcquisition.inferTypingsFromFilenames !== false) {
             getTypingNamesFromSourceFileNames(fileNames);
         }
         // add typings for unresolved imports
