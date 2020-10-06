@@ -1107,7 +1107,7 @@ namespace ts {
         }
 
         function resolveModuleNamesReusingOldState(moduleNames: string[], file: SourceFile): readonly ResolvedModuleFull[] {
-            if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
+            if (!doesStructuralPermitResolutionsReuse() && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
                 return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
@@ -1217,6 +1217,28 @@ namespace ts {
             Debug.assert(j === resolutions.length);
 
             return result;
+
+            function doesStructuralPermitResolutionsReuse(): boolean {
+                switch (structuralIsReused) {
+                    case StructureIsReused.Not: return false;
+                    case StructureIsReused.SafeModules: return true;
+                    case StructureIsReused.Completely: return true;
+
+                    // It's possible for resolveModuleNamesReusingOldState to be called by
+                    // tryReuseStructureFromOldProgram before structuralIsReused has been defined.
+                    // In this case, the caller (tryReuseStructureFromOldProgram) expects this
+                    // function to reuse resolutions for its checks. Returning true to accommodate
+                    // for that specific scenario.
+                    //
+                    // TODO: Clean this because the above scenario is a bit unexpected. This case
+                    // should ideally return false or throw.
+                    case undefined: return true;
+
+                    // The above cases should exhaustively cover all branches. Defaulting to false
+                    // since that's safer in unexpected situations.
+                    default: return false;
+                }
+            }
 
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
