@@ -1221,6 +1221,9 @@ namespace ts {
             function doesStructuralPermitResolutionsReuse(): boolean {
                 switch (structuralIsReused) {
                     case StructureIsReused.Not: return false;
+                    case StructureIsReused.SafeProjectReferenceModules:
+                        return file.resolvedModules !== undefined &&
+                            isSourceOfProjectReferenceRedirect(file.originalFileName);
                     case StructureIsReused.SafeModules: return true;
                     case StructureIsReused.Completely: return true;
 
@@ -1293,7 +1296,10 @@ namespace ts {
 
         function tryReuseStructureFromOldProgram(): StructureIsReused {
             if (!oldProgram) {
-                return StructureIsReused.Not;
+                // During initial program creation, root files may import files from project
+                // references that were previously loaded. Those resolutions are safe to reuse
+                // since another program instance kept them up to date.
+                return StructureIsReused.SafeProjectReferenceModules;
             }
 
             // check properties that can affect structure of the program or module resolution strategy

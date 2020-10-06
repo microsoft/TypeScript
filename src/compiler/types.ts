@@ -3824,9 +3824,10 @@ namespace ts {
     /* @internal */
     /** "Structure" refers to the SourceFile graph of a Program linked by module resolutions. */
     export const enum StructureIsReused {
-        Not         = 0,      // The entire Program must be (re)created.
-        SafeModules = 1 << 0, // SourceFile objects need to be rediscovered, but module resolutions can be reused.
-        Completely  = 1 << 1, // SourceFile objects and module resolutions can be reused from an old Program.
+        Not                         = 0,      // The entire Program must be (re)created.
+        SafeProjectReferenceModules = 1 << 0, // SourceFile objects need to be rediscovered, but module resolutions within project reference sources may be reused.
+        SafeModules                 = 1 << 1, // SourceFile objects need to be rediscovered, but module resolutions can be reused.
+        Completely                  = 1 << 2, // SourceFile objects and module resolutions can be reused from an old Program.
     }
 
     export type CustomTransformerFactory = (context: TransformationContext) => CustomTransformer;
