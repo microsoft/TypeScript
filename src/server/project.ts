@@ -1836,11 +1836,11 @@ namespace ts.server {
         }
 
         getTypeAcquisition(): TypeAcquisition {
-            return {
+            return this.typeAcquisition || {
                 enable: allRootFilesAreJsOrDts(this),
                 include: ts.emptyArray,
                 exclude: ts.emptyArray,
-                inferTypings: this.typeAcquisition?.inferTypings
+                inferTypingsFromFilenames: true
             };
         }
     }

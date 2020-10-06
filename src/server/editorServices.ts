@@ -643,6 +643,8 @@ namespace ts.server {
         private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
         private watchOptionsForInferredProjects: WatchOptions | undefined;
         private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
+        private typeAcquisitionForInferredProjects: TypeAcquisition | undefined;
+        private typeAcquisitionForInferredProjectsPerProjectRoot = new Map<string, TypeAcquisition | undefined>();
         /**
          * Project size for configured or external projects
          */
@@ -989,6 +991,7 @@ namespace ts.server {
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
             const watchOptions = convertWatchOptions(projectCompilerOptions);
+            const typeAcquisition = this.hostConfiguration.typeAcquisition;
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
@@ -997,10 +1000,12 @@ namespace ts.server {
             if (canonicalProjectRootPath) {
                 this.compilerOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, compilerOptions);
                 this.watchOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, watchOptions || false);
+                this.typeAcquisitionForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, typeAcquisition);
             }
             else {
                 this.compilerOptionsForInferredProjects = compilerOptions;
                 this.watchOptionsForInferredProjects = watchOptions;
+                this.typeAcquisitionForInferredProjects = typeAcquisition;
             }
 
             for (const project of this.inferredProjects) {
@@ -1378,9 +1383,6 @@ namespace ts.server {
                 );
 
             project.addRoot(info);
-            if(this.hostConfiguration.typeAcquisition){
-                project.setTypeAcquisition(this.hostConfiguration.typeAcquisition);
-            }
             if (info.containingProjects[0] !== project) {
                 // Ensure this is first project, we could be in this scenario because info could be part of orphan project
                 info.detachFromProject(project);
@@ -2303,13 +2305,18 @@ namespace ts.server {
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
             let watchOptions: WatchOptions | false | undefined;
+            let typeAcquisition: TypeAcquisition | undefined;
             if (projectRootPath) {
                 watchOptions = this.watchOptionsForInferredProjectsPerProjectRoot.get(projectRootPath);
+                typeAcquisition = this.typeAcquisitionForInferredProjectsPerProjectRoot.get(projectRootPath);
             }
             if (watchOptions === undefined) {
                 watchOptions = this.watchOptionsForInferredProjects;
             }
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, this.hostConfiguration.typeAcquisition);
+            if (typeAcquisition === undefined) {
+                typeAcquisition = this.typeAcquisitionForInferredProjects;
+            }
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2770,7 +2777,7 @@ namespace ts.server {
                 }
 
                 if(args.typeAcquisition) {
-                    this.hostConfiguration.typeAcquisition = { ...this.hostConfiguration.typeAcquisition, ...args.typeAcquisition };
+                    this.hostConfiguration.typeAcquisition = args.typeAcquisition;
                 }
             }
         }
@@ -3523,7 +3530,7 @@ namespace ts.server {
             const typeAcquisition = proj.typeAcquisition!;
             Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
             // If type acquisition has been explicitly disabled, do not exclude anything from the project
-            if (typeAcquisition.enable === false || typeAcquisition.inferTypings === false) {
+            if (typeAcquisition.enable === false || typeAcquisition.inferTypingsFromFilenames === false) {
                 return [];
             }
 
@@ -3634,13 +3641,12 @@ namespace ts.server {
                 const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
                 proj.typeAcquisition = typeAcquisition;
             }
-            proj.typeAcquisition = proj.typeAcquisition || {};
+            proj.typeAcquisition = proj.typeAcquisition || this.hostConfiguration.typeAcquisition || {};
             proj.typeAcquisition.include = proj.typeAcquisition.include || [];
             proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
             if (proj.typeAcquisition.enable === undefined) {
                 proj.typeAcquisition.enable = hasNoTypeScriptSource(proj.rootFiles.map(f => f.fileName));
             }
-            proj.typeAcquisition.inferTypings = this.hostConfiguration.typeAcquisition?.inferTypings ?? true;
 
             const excludedFiles = this.applySafeList(proj);
 

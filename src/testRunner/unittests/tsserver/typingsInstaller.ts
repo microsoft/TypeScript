@@ -1375,7 +1375,7 @@ namespace ts.projectSystem {
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
         });
 
-        it("should not infer typings from filenames with inferTypings:false ", () => {
+        it("should not infer typings from filenames with inferTypingsFromFilenames:false ", () => {
             const app = {
                 path: "/a/b/app.js",
                 content: ""
@@ -1393,7 +1393,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true, inferTypings: false }, emptyArray, emptyMap);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true, inferTypingsFromFilenames: false }, emptyArray, emptyMap);
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 "Inferred typings from unresolved imports: []",

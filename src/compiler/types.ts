@@ -5845,7 +5845,7 @@ namespace ts {
         include?: string[];
         exclude?: string[];
         [option: string]: string[] | boolean | undefined;
-        inferTypings?: boolean;
+        inferTypingsFromFilenames?: boolean;
     }
 
     export enum ModuleKind {
