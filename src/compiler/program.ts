@@ -1026,8 +1026,8 @@ namespace ts {
             // file is from node_modules to avoid having to run real path on all file paths
             if (!host.realpath || !options.preserveSymlinks || !stringContains(file.originalFileName, nodeModulesPathPart)) return undefined;
             const realDeclarationFileName = host.realpath(file.originalFileName);
-            const readlDeclarationPath = toPath(realDeclarationFileName);
-            return readlDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationFileName, readlDeclarationPath);
+            const realDeclarationPath = toPath(realDeclarationFileName);
+            return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationFileName, realDeclarationPath);
         }
 
         function getRedirectReferenceForResolutionFromSourceOfProject(fileName: string, filePath: Path) {
