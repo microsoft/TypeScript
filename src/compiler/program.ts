@@ -2372,7 +2372,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: RefFile | undefined, packageId: PackageId | undefined): SourceFile | undefined {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: RefFile | undefined, packageId: PackageId | undefined, identifersToImport?: ReadonlySet<__String>): SourceFile | undefined {
             if (useSourceOfProjectReferenceRedirect) {
                 let source = getSourceOfProjectReferenceRedirect(fileName);
                 // If preserveSymlinks is true, module resolution wont jump the symlink
@@ -2389,7 +2389,7 @@ namespace ts {
                 }
                 if (source) {
                     const file = isString(source) ?
-                        findSourceFile(source, toPath(source), isDefaultLib, ignoreNoDefaultLib, refFile, packageId) :
+                        findSourceFile(source, toPath(source), isDefaultLib, ignoreNoDefaultLib, refFile, packageId, identifersToImport) :
                         undefined;
                     if (file) addFileToFilesByName(file, path, /*redirectedPath*/ undefined);
                     return file;
@@ -2526,7 +2526,7 @@ namespace ts {
 
 
                 // always process imported modules to record module name resolutions
-                processImportedModules(file);
+                processImportedModules(file, identifersToImport);
 
                 if (isDefaultLib) {
                     processingDefaultLibFiles!.push(file);
@@ -2853,13 +2853,15 @@ namespace ts {
             return host.getCanonicalFileName(fileName);
         }
 
-        function processImportedModules(file: SourceFile) {
+        function processImportedModules(file: SourceFile, identifiersToImport?: ReadonlySet<__String>) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
+                const unusedModuleNames = getUnusedModuleNames(file, identifiersToImport);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
+                const moduleNamesToImportSymbols = mapModuleNamesToImportSymbols(file);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
@@ -2877,6 +2879,8 @@ namespace ts {
                         currentNodeModulesDepth++;
                     }
 
+                    const isModuleUnused = unusedModuleNames.has(moduleNames[i]);
+
                     // add file to program only if:
                     // - resolution was successful
                     // - noResolve is falsy
@@ -2890,6 +2894,7 @@ namespace ts {
                         && !options.noResolve
                         && i < file.imports.length
                         && !elideImport
+                        && !isModuleUnused
                         && !(isJsFile && !getAllowJSCompilerOption(options))
                         && (isInJSFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
@@ -2899,6 +2904,7 @@ namespace ts {
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
+                        const importSymbols = moduleNamesToImportSymbols.get(moduleNames[i]);
                         findSourceFile(
                             resolvedFileName,
                             path,
@@ -2911,7 +2917,10 @@ namespace ts {
                                 pos,
                                 end: file.imports[i].end
                             },
-                            resolution.packageId
+                            resolution.packageId,
+                            importSymbols && identifiersToImport
+                                ? intersect(importSymbols, identifiersToImport)
+                                : (importSymbols || identifiersToImport)
                         );
                     }
 
@@ -3856,5 +3865,80 @@ namespace ts {
             // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
         }
         return res;
+    }
+
+    function getUnusedModuleNames(file: SourceFile, identifiersToImport?: ReadonlySet<__String>): Set<string> {
+        if (identifiersToImport === undefined) {
+            return new Set();
+        }
+
+        const unusedModuleNames: Set<string> = new Set();
+
+        for (const statement of file.statements) {
+            if (!isExportDeclaration(statement)) {
+                break;
+            }
+
+            if (statement.moduleSpecifier?.kind !== SyntaxKind.StringLiteral) {
+                break;
+            }
+            const moduleSpecifier = statement.moduleSpecifier as StringLiteral;
+
+            const exportClause = statement.exportClause;
+            if (!exportClause) {
+                break;
+            }
+
+            if (!isNamedExports(exportClause)) {
+                break;
+            }
+
+            const isExportClauseUsed = exportClause.elements.some(element => {
+                const identifier = element.propertyName ?? element.name;
+                return identifiersToImport.has(identifier.escapedText);
+            });
+
+            if (!isExportClauseUsed) {
+                unusedModuleNames.add(moduleSpecifier.text);
+            }
+        }
+
+        return unusedModuleNames;
+    }
+
+    function mapModuleNamesToImportSymbols(file: SourceFile): Map<Set<__String>> {
+        const moduleNamesToImportSymbols = new Map<string, Set<__String>>();
+        for (const statement of file.statements) {
+            if (statement.kind !== SyntaxKind.ImportDeclaration) {
+                break;
+            }
+
+            const importDeclaration = statement as ImportDeclaration;
+            if (importDeclaration.moduleSpecifier.kind !== SyntaxKind.StringLiteral) {
+                break;
+            }
+            const moduleSpecifier = importDeclaration.moduleSpecifier as StringLiteral;
+
+            const importSymbols = moduleNamesToImportSymbols.get(moduleSpecifier.text) ?? new Set();
+            const namedBindings = importDeclaration.importClause?.namedBindings;
+
+            if (namedBindings?.kind !== SyntaxKind.NamedImports) {
+                break;
+            }
+            const namedImports = namedBindings.elements;
+
+            for (const binding of namedImports) {
+                const identifier = binding.propertyName ?? binding.name;
+                importSymbols.add(identifier.escapedText);
+            }
+
+            moduleNamesToImportSymbols.set(moduleSpecifier.text, importSymbols);
+        }
+
+        return moduleNamesToImportSymbols;
+    }
+
+    function intersect<T>(a: ReadonlySet<T>, b: ReadonlySet<T>): ReadonlySet<T> {
+        return new Set(Array.from(a as unknown as Iterable<T>).filter(el => b.has(el)));
     }
 }
