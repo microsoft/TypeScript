@@ -793,6 +793,92 @@ namespace ts {
             }
         });
 
+        it("can reuse module resolutions within project references", () => {
+            const commonOptions = {
+                composite: true,
+                declaration: true,
+                target: ScriptTarget.ES2015,
+                traceResolution: true,
+                moduleResolution: ModuleResolutionKind.Classic,
+            };
+            const tsconfigA = {
+                compilerOptions: commonOptions,
+                include: ["src"]
+            };
+            const tsconfigB = {
+                compilerOptions: {
+                    ...commonOptions,
+                    paths: {
+                        a: ["/a/src/index.ts"]
+                    }
+                },
+                projectReferences: [
+                    { path: "/a" }
+                ]
+            };
+
+            const files = [
+                { name: "/a/src/x.ts", text: SourceText.New("", "export const x = 1;", "") },
+                { name: "/a/src/index.ts", text: SourceText.New("", "export { x } from './x';", "") },
+                { name: "/a/tsconfig.json", text: SourceText.New("", "", JSON.stringify(tsconfigA)) },
+                { name: "/b/src/b.ts", text: SourceText.New("", "import { x } from 'a';", "") },
+            ];
+            const rootNamesA = ["/a/src/index.ts", "/a/src/x.ts"];
+            const rootNamesB = ["/b/src/b.ts"];
+
+            const host = createTestCompilerHost(files, commonOptions.target);
+
+            // Instead of hard-coding file system entries for this test, we could also write a function that more
+            // generally transforms a list of files into a tree of FileSystemEntries.
+            function getFileSystemEntries(path: string) {
+                const mapPathToFileSystemEntries: { [path: string]: FileSystemEntries | undefined } = {
+                    "/a": { files: [], directories: ["src"] },
+                    "/a/src": { files: ["index.ts", "x.ts"], directories: [] }
+                };
+
+                const entries = mapPathToFileSystemEntries[path];
+                if (!entries) {
+                    throw new Error(`Unexpected path "${path}" requested from readDirectory. Test is broken.`);
+                }
+                return entries;
+            }
+
+            host.readDirectory = (rootDir, extensions, excludes, includes, depth) =>
+                matchFiles(
+                    rootDir,
+                    extensions,
+                    excludes,
+                    includes,
+                    /*useCaseSensitiveFileNames*/ true,
+                    /*currentDirectory*/ "/",
+                    depth,
+                    getFileSystemEntries,
+                    /*realpath*/ path => path);
+
+            createProgram(rootNamesA, tsconfigA.compilerOptions, host);
+            createProgram({
+                rootNames: rootNamesB,
+                options: tsconfigB.compilerOptions,
+                host,
+                projectReferences: tsconfigB.projectReferences
+            });
+
+            // Resolution should not be performed for "./x" from "/a/src/index.ts" multiple times.
+            assert.deepEqual(host.getTrace(), [
+                "======== Resolving module './x' from '/a/src/index.ts'. ========",
+                "Explicitly specified module resolution kind: 'Classic'.",
+                "File '/a/src/x.ts' exist - use it as a name resolution result.",
+                "======== Module name './x' was successfully resolved to '/a/src/x.ts'. ========",
+                "======== Resolving module 'a' from '/b/src/b.ts'. ========",
+                "Explicitly specified module resolution kind: 'Classic'.",
+                "'paths' option is specified, looking for a pattern to match module name 'a'.",
+                "Module name 'a', matched pattern 'a'.",
+                "Trying substitution '/a/src/index.ts', candidate module location: '/a/src/index.ts'.",
+                "File '/a/src/index.ts' exist - use it as a name resolution result.",
+                "======== Module name 'a' was successfully resolved to '/a/src/index.ts'. ========",
+            ], "should reuse resolution to /a/src/x.ts");
+        });
+
         describe("redirects", () => {
             const axIndex = "/node_modules/a/node_modules/x/index.d.ts";
             const axPackage = "/node_modules/a/node_modules/x/package.json";
