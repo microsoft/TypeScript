@@ -239,7 +239,7 @@ namespace ts.codefix {
             }
 
             const defaultInfo = getDefaultLikeExportInfo(importingFile, moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && defaultInfo.name === symbolName && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
                 result.push({ moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(defaultInfo.symbol, checker) });
             }
 
@@ -556,8 +556,9 @@ namespace ts.codefix {
             const checker = program.getTypeChecker();
             cancellationToken.throwIfCancellationRequested();
 
-            const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
-            if (defaultInfo && defaultInfo.name === symbolName && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
+            const compilerOptions = program.getCompilerOptions();
+            const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, compilerOptions);
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
                 addSymbol(moduleSymbol, defaultInfo.symbol, defaultInfo.kind, checker);
             }
 
@@ -628,7 +629,7 @@ namespace ts.codefix {
             defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
             return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
         }
-        return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target!) };
+        return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) };
     }
 
     function getNameForExportDefault(symbol: Symbol): string | undefined {
@@ -937,11 +938,11 @@ namespace ts.codefix {
             || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
     }
 
-    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget): string {
+    export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined): string {
         return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target);
     }
 
-    export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget): string {
+    export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined): string {
         const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
         let res = "";
         let lastCharWasValid = true;
