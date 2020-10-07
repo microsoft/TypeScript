@@ -2697,8 +2697,8 @@
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2583" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[找不到名称 "{0}"。是否需要更改目标库? 请尝试将 `lib` 编译器选项更改为 es2015 或更高版本。]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到名称“{0}”。是否需要更改目标库? 请尝试将 `lib` 编译器选项更改为 {1} 或更高版本。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
@@ -6420,6 +6420,9 @@
       <Item ItemId=";It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[很可能缺少了分隔这两个模板表达式的逗号。它们构成了无法调用的带标记的模板表达式。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8511,6 +8514,9 @@
       <Item ItemId=";Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[在“{1}”上没有“{0}”属性。是否需要更改目标库? 请尝试将 `lib` 编译器选项更改为 {2} 或更高版本。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12942,6 +12948,9 @@
       <Item ItemId=";_0_modifier_cannot_appear_on_class_elements_of_this_kind_1031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on class elements of this kind.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[“{0}”修饰符不能出现在此类型的类元素上。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

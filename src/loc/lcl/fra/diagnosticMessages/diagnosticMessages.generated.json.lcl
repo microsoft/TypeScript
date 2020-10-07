@@ -2708,10 +2708,13 @@
       </Item>
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2583" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous changer votre bibliothèque cible ? Essayez de remplacer l'option de compilateur 'lib' par es2015 ou une version ultérieure.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous changer votre bibliothèque cible ? Essayez de changer l'option de compilateur 'lib' en '{1}' ou une version ultérieure.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2724,56 +2727,56 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_types_Slashje_2582" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2582" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour un exécuteur de tests ? Essayez 'npm i @types/jest' ou 'npm i @types/mocha'.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour un exécuteur de tests ? Essayez 'npm i --save-dev @types/jest' ou 'npm i --save-dev @types/mocha'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_types_Slashje_2593" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2593" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour un exécuteur de tests ? Essayez 'npm i @types/jest' ou 'npm i @types/mocha', puis ajoutez 'jest' ou 'mocha' au champ types de votre fichier tsconfig.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour un exécuteur de tests ? Essayez 'npm i --save-dev @types/jest' ou 'npm i --save-dev @types/mocha', puis ajoutez 'jest' ou 'mocha' au champ types de votre fichier tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_types_Slashjquery_2581" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2581" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour jQuery ? Essayez 'npm i @types/jquery'.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour jQuery ? Essayez 'npm i --save-dev @types/jquery'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_types_Slashjquery_an_2592" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour jQuery ? Essayez 'npm i @types/jquery', puis ajoutez 'jquery' au champ types de votre fichier tsconfig.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour jQuery ? Essayez 'npm i --save-dev @types/jquery', puis ajoutez 'jquery' au champ types de votre fichier tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_types_Slashnode_2580" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2580" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour node ? Essayez 'npm i @types/node'.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour node ? Essayez 'npm i --save-dev @types/node'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_types_Slashnode_and_th_2591" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour node ? Essayez 'npm i @types/node', puis ajoutez 'node' au champ types de votre fichier tsconfig.]]></Val>
+            <Val><![CDATA[Le nom '{0}' est introuvable. Devez-vous installer des définitions de type pour node ? Essayez 'npm i --save-dev @types/node', puis ajoutez 'node' au champ types de votre fichier tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6426,6 +6429,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il manque probablement une virgule pour séparer ces deux expressions de modèle. Elles forment une expression de modèle étiquetée qui ne peut pas être appelée.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Its_element_type_0_is_not_a_valid_JSX_element_2789" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Its element type '{0}' is not a valid JSX element.]]></Val>
@@ -8507,6 +8519,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La propriété '{0}' n'existe pas sur le type '{1}'. Est-ce qu'il ne s'agit pas plutôt de '{2}' ?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La propriété '{0}' n'existe pas sur le type '{1}'. Devez-vous changer votre bibliothèque cible ? Essayez de changer l'option de compilateur 'lib' en '{2}' ou une version ultérieure.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11295,11 +11316,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Try_npm_install_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_mod_7035" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare__7035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
+          <Val><![CDATA[Try `npm i --save-dev @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Essayez 'npm install @types/{1}' s'il existe, ou ajoutez un nouveau fichier de déclaration (.d.ts) contenant 'declare module '{0}';']]></Val>
+            <Val><![CDATA[Essayez 'npm i --save-dev @types/{1}' s'il existe, ou ajoutez un nouveau fichier de déclaration (.d.ts) contenant 'declare module '{0}';']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12882,15 +12903,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_modifier_cannot_appear_on_a_class_element_1031" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot appear on a class element.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le modificateur '{0}' ne peut pas apparaître dans un élément de classe.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";_0_modifier_cannot_appear_on_a_constructor_declaration_1089" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on a constructor declaration.]]></Val>
@@ -12941,6 +12953,15 @@
           <Val><![CDATA['{0}' modifier cannot appear on an index signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le modificateur '{0}' ne peut pas apparaître dans une signature d'index.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_modifier_cannot_appear_on_class_elements_of_this_kind_1031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' modifier cannot appear on class elements of this kind.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le modificateur '{0}' ne peut pas apparaître sur les éléments de classe de ce genre.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

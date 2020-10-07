@@ -2744,6 +2744,9 @@
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удается найти имя "{0}". Вы хотите установить определения типов для jQuery? Попробуйте использовать команду "npm i --save-dev @types/jquery", а затем добавить "jquery" в поле типов в файле tsconfig.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2759,6 +2762,9 @@
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удается найти имя "{0}". Вы хотите установить определения типов для узла? Попробуйте использовать команду "npm i --save-dev @types/node", а затем добавить "node" в поле типов в файле tsconfig.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
