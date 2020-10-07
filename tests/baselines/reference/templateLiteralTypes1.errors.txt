@@ -242,3 +242,25 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
     
     type BB = AA<-2, -2>;
     
+    // Repro from #40970
+    
+    type PathKeys<T> =
+        T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+        T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+        never;
+    
+    type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+    
+    declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+    
+    const obj2 = {
+        name: 'John',
+        age: 42,
+        cars: [
+            { make: 'Ford', age: 10 },
+            { make: 'Trabant', age: 35 }
+        ]
+    } as const;
+    
+    let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+    

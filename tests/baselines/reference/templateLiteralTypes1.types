@@ -536,3 +536,61 @@ type BB = AA<-2, -2>;
 >-2 : -2
 >2 : 2
 
+// Repro from #40970
+
+type PathKeys<T> =
+>PathKeys : PathKeys<T>
+
+    T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+    T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+    never;
+
+type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+>SubKeys : SubKeys<T, K>
+
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+>getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
+>obj : T
+>path : P
+
+const obj2 = {
+>obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>{    name: 'John',    age: 42,    cars: [        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ]} as const : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>{    name: 'John',    age: 42,    cars: [        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ]} : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+
+    name: 'John',
+>name : "John"
+>'John' : "John"
+
+    age: 42,
+>age : 42
+>42 : 42
+
+    cars: [
+>cars : readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]
+>[        { make: 'Ford', age: 10 },        { make: 'Trabant', age: 35 }    ] : readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]
+
+        { make: 'Ford', age: 10 },
+>{ make: 'Ford', age: 10 } : { readonly make: "Ford"; readonly age: 10; }
+>make : "Ford"
+>'Ford' : "Ford"
+>age : 10
+>10 : 10
+
+        { make: 'Trabant', age: 35 }
+>{ make: 'Trabant', age: 35 } : { readonly make: "Trabant"; readonly age: 35; }
+>make : "Trabant"
+>'Trabant' : "Trabant"
+>age : 35
+>35 : 35
+
+    ]
+} as const;
+
+let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+>make : "Trabant"
+>getProp2(obj2, 'cars.1.make') : "Trabant"
+>getProp2 : <T, P extends PathKeys<T>>(obj: T, path: P) => PropType<T, P>
+>obj2 : { readonly name: "John"; readonly age: 42; readonly cars: readonly [{ readonly make: "Ford"; readonly age: 10; }, { readonly make: "Trabant"; readonly age: 35; }]; }
+>'cars.1.make' : "cars.1.make"
+
