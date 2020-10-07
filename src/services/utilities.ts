@@ -1173,7 +1173,21 @@ namespace ts {
             }
 
             const children = n.getChildren(sourceFile);
-            for (let i = 0; i < children.length; i++) {
+            const i = binarySearchKey(children, position, (_, i) => i, (middle, _) => {
+                // This last callback is more of a selector than a comparator -
+                // `EqualTo` causes the `middle` result to be returned
+                // `GreaterThan` causes recursion on the left of the middle
+                // `LessThan` causes recursion on the right of the middle
+                if (position < children[middle].end) {
+                    // first element whose end position is greater than the input position
+                    if (!children[middle - 1] || position >= children[middle - 1].end) {
+                        return Comparison.EqualTo;
+                    }
+                    return Comparison.GreaterThan;
+                }
+                return Comparison.LessThan;
+            });
+            if (i >= 0 && children[i]) {
                 const child = children[i];
                 // Note that the span of a node's tokens is [node.getStart(...), node.end).
                 // Given that `position < child.end` and child has constituent tokens, we distinguish these cases:
