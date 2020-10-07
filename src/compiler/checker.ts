@@ -30006,9 +30006,6 @@ namespace ts {
                         workStacks.leftType[stackIndex] = leftType;
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
-                            if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                                checkTestingKnownTruthyCallableType(node.left, leftType);
-                            }
                             checkTruthinessOfType(leftType, node.left);
                         }
                         advanceState(CheckBinaryExpressionState.FinishCheck);
@@ -30542,7 +30539,7 @@ namespace ts {
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
             const type = checkTruthinessExpression(node.condition);
-            checkTestingKnownTruthyCallableType(node.condition, type, node.whenTrue);
+            checkTestingKnownTruthyCallableType(node.condition, node.whenTrue, type);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -33778,7 +33775,7 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
             const type = checkTruthinessExpression(node.expression);
-            checkTestingKnownTruthyCallableType(node.expression, type, node.thenStatement);
+            checkTestingKnownTruthyCallableType(node.expression, node.thenStatement, type);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -33788,16 +33785,16 @@ namespace ts {
             checkSourceElement(node.elseStatement);
         }
 
-        function checkTestingKnownTruthyCallableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
+        function checkTestingKnownTruthyCallableType(condExpr: Expression, body: Statement | Expression, type: Type) {
             if (!strictNullChecks) {
                 return;
             }
 
-            const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
-            const testedNode = isIdentifier(location) ? location
-                : isPropertyAccessExpression(location) ? location.name
-                : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
-                : undefined;
+            const testedNode = isIdentifier(condExpr)
+                ? condExpr
+                : isPropertyAccessExpression(condExpr)
+                    ? condExpr.name
+                    : undefined;
 
             if (!testedNode) {
                 return;
@@ -33818,34 +33815,27 @@ namespace ts {
                 return;
             }
 
-            const testedSymbol = getSymbolAtLocation(testedNode);
-            if (!testedSymbol) {
+            const testedFunctionSymbol = getSymbolAtLocation(testedNode);
+            if (!testedFunctionSymbol) {
                 return;
             }
 
-            const isUsed = isBinaryExpression(condExpr.parent) ? isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                : body ? isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol)
-                : false;
-            if (!isUsed) {
-                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
-            }
-        }
-
-        function isFunctionUsedInConditionBody(expr: Expression, body: Statement | Expression, testedNode: Node, testedSymbol: Symbol): boolean {
-            return !!forEachChild(body, function check(childNode): boolean | undefined {
+            const functionIsUsedInBody = forEachChild(body, function check(childNode): boolean | undefined {
                 if (isIdentifier(childNode)) {
                     const childSymbol = getSymbolAtLocation(childNode);
-                    if (childSymbol && childSymbol === testedSymbol) {
+                    if (childSymbol && childSymbol === testedFunctionSymbol) {
                         // If the test was a simple identifier, the above check is sufficient
-                        if (isIdentifier(expr)) {
+                        if (isIdentifier(condExpr)) {
                             return true;
                         }
                         // Otherwise we need to ensure the symbol is called on the same target
                         let testedExpression = testedNode.parent;
                         let childExpression = childNode.parent;
                         while (testedExpression && childExpression) {
+
                             if (isIdentifier(testedExpression) && isIdentifier(childExpression) ||
-                                testedExpression.kind === SyntaxKind.ThisKeyword && childExpression.kind === SyntaxKind.ThisKeyword) {
+                                testedExpression.kind === SyntaxKind.ThisKeyword && childExpression.kind === SyntaxKind.ThisKeyword
+                            ) {
                                 return getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
                             }
 
@@ -33862,18 +33852,13 @@ namespace ts {
                         }
                     }
                 }
+
                 return forEachChild(childNode, check);
             });
-        }
 
-        function isFunctionUsedInBinaryExpressionChain(node: Node, testedSymbol: Symbol): boolean {
-            while (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                if (isCallExpression(node.right) && testedSymbol === getSymbolAtLocation(node.right.expression)) {
-                    return true;
-                }
-                node = node.parent;
+            if (!functionIsUsedInBody) {
+                error(condExpr, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
             }
-            return false;
         }
 
         function checkDoStatement(node: DoStatement) {
