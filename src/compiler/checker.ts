@@ -18400,7 +18400,7 @@ namespace ts {
                 findBestTypeForInvokable(source, target) ||
                 findMostOverlappyType(source, target);
         }
-        
+
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: undefined, skipPartial?: boolean): Type | undefined;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type, skipPartial?: boolean): Type;
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type, skipPartial?: boolean) {
