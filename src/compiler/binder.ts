@@ -586,6 +586,9 @@ namespace ts {
         }
 
         function jsdocTreatAsExported(node: Node) {
+            if (node.parent && isModuleDeclaration(node)) {
+                node = node.parent;
+            }
             if (!isJSDocTypeAlias(node)) return false;
             // jsdoc typedef handling is a bit of a doozy, but to summarize, treat the typedef as exported if:
             // 1. It has an explicit name (since by default typedefs are always directly exported, either at the top level or in a container), or
