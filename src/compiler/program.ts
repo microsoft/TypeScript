@@ -733,10 +733,13 @@ namespace ts {
                 if (!newParsedCommandLine) return false;
 
                 // If change in source file
-                if (oldResolvedRef.commandLine.options.configFile !== newParsedCommandLine.options.configFile) return false;
+                if (oldResolvedRef.commandLine.options.configFile?.version !== newParsedCommandLine.options.configFile?.version) return false;
 
                 // check file names
                 if (!arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newParsedCommandLine.fileNames)) return false;
+
+                // Check options
+                if (!compareDataObjects(oldResolvedRef.commandLine.options, newParsedCommandLine.options)) return false;
 
                 // Add to seen before checking the referenced paths of this config file
                 (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
@@ -1270,8 +1273,8 @@ namespace ts {
                 return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
             }
 
-            const oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
-            if (oldSourceFile !== file && file.resolvedModules) {
+            const oldSourceFile = oldProgram?.getSourceFileByPath(file.resolvedPath);
+            if (oldSourceFile?.version !== file.version && file.resolvedModules) {
                 // `file` was created for the new program.
                 //
                 // We only set `file.resolvedModules` via work from the current function,
@@ -1307,7 +1310,6 @@ namespace ts {
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker = true;
             let result: (ResolvedModuleWithFailedLookupLocations | typeof predictedToResolveToAmbientModuleMarker)[] | undefined;
-
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
@@ -1386,7 +1388,7 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string): boolean {
-                const resolutionToFile = getResolvedModule(oldSourceFile, moduleName);
+                const resolutionToFile = oldSourceFile?.resolvedModules?.get(moduleName)?.resolvedModule;
                 const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile) {
                     // In the old program, we resolved to an ambient module that was in the same
@@ -1420,8 +1422,9 @@ namespace ts {
                     if (oldResolvedRef) {
                         // Resolved project reference has gone missing or changed
                         return !newResolvedRef ||
-                            newResolvedRef.sourceFile !== oldResolvedRef.sourceFile ||
-                            !arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames);
+                            newResolvedRef.sourceFile.version !== oldResolvedRef.sourceFile.version ||
+                            !arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames) ||
+                            !compareDataObjects(oldResolvedRef.commandLine.options, newResolvedRef.commandLine.options);
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
@@ -1464,7 +1467,7 @@ namespace ts {
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
-            const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
+            const modifiedSourceFileIndices: number[] = [];
             structureIsReused = StructureIsReused.Completely;
 
             // If the missing file paths are now present, it can change the progam structure,
@@ -1478,7 +1481,8 @@ namespace ts {
             const enum SeenPackageName { Exists, Modified }
             const seenPackageNames = new Map<string, SeenPackageName>();
 
-            for (const oldSourceFile of oldSourceFiles) {
+            for (let index = 0; index < oldSourceFiles.length; index++) {
+                const oldSourceFile = oldSourceFiles[index];
                 let newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
@@ -1493,7 +1497,7 @@ namespace ts {
                 if (oldSourceFile.redirectInfo) {
                     // We got `newSourceFile` by path, so it is actually for the unredirected file.
                     // This lets us know if the unredirected file has changed. If it has we should break the redirect.
-                    if (newSourceFile !== oldSourceFile.redirectInfo.unredirected) {
+                    if (newSourceFile.version !== oldSourceFile.redirectInfo.unredirected.version) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return StructureIsReused.Not;
                     }
@@ -1508,7 +1512,7 @@ namespace ts {
                     fileChanged = false;
                 }
                 else {
-                    fileChanged = newSourceFile !== oldSourceFile;
+                    fileChanged = newSourceFile.version !== oldSourceFile.version;
                 }
 
                 // Since the project references havent changed, its right to set originalFileName and resolvedPath here
@@ -1570,14 +1574,14 @@ namespace ts {
                     }
 
                     // tentatively approve the file
-                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                    modifiedSourceFileIndices.push(index);
                 }
                 else if (hasInvalidatedResolution(oldSourceFile.path)) {
                     // 'module/types' references could have changed
                     structureIsReused = StructureIsReused.SafeModules;
 
                     // add file to the modified list so that we will resolve it later
-                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                    modifiedSourceFileIndices.push(index);
                 }
 
                 // if file has passed all checks it should be safe to reuse it
@@ -1588,16 +1592,19 @@ namespace ts {
                 return structureIsReused;
             }
 
-            const modifiedFiles = modifiedSourceFiles.map(f => f.oldFile);
-            for (const oldFile of oldSourceFiles) {
-                if (!contains(modifiedFiles, oldFile)) {
-                    for (const moduleName of oldFile.ambientModuleNames) {
-                        ambientModuleNameToUnmodifiedFileName.set(moduleName, oldFile.fileName);
+            Debug.assert(newSourceFiles.length === oldSourceFiles.length);
+            const modifiedFiles = new Set(modifiedSourceFileIndices);
+            for (let index = 0; index < oldSourceFiles.length; index++) {
+                if (!modifiedFiles.has(index)) {
+                    for (const moduleName of oldSourceFiles[index].ambientModuleNames) {
+                        ambientModuleNameToUnmodifiedFileName.set(moduleName, oldSourceFiles[index].fileName);
                     }
                 }
             }
             // try to verify results of module resolution
-            for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
+            for (const index of modifiedSourceFileIndices) {
+                const oldSourceFile = oldSourceFiles[index];
+                const newSourceFile = newSourceFiles[index];
                 const moduleNames = getModuleNames(newSourceFile);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
                 // ensure that module resolution results are still correct
@@ -1634,9 +1641,13 @@ namespace ts {
             missingFilePaths = oldProgram.getMissingFilePaths();
 
             // update fileName -> file mapping
-            Debug.assert(newSourceFiles.length === oldProgram.getSourceFiles().length);
-            for (const newSourceFile of newSourceFiles) {
+            for (let index = 0; index < newSourceFiles.length; index++) {
+                const newSourceFile = newSourceFiles[index];
                 filesByName.set(newSourceFile.path, newSourceFile);
+                // Ensure imports are calculated and resolutions are updated if the file version didnt change but its different instance of file
+                collectExternalModuleReferences(newSourceFile);
+                newSourceFile.resolvedModules = oldSourceFiles[index].resolvedModules;
+                newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFiles[index].resolvedTypeReferenceDirectiveNames;
             }
             const oldFilesByNameMap = oldProgram.getFilesByNameMap();
             oldFilesByNameMap.forEach((oldFile, path) => {
