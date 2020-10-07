@@ -20,9 +20,9 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(25,30): error T
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(26,40): error TS2550: Property 'from' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(27,38): error TS2550: Property 'of' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(28,44): error TS2550: Property 'assign' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(29,59): error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(29,59): error TS2550: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(31,40): error TS2550: Property 'is' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(32,52): error TS2551: Property 'setPrototypeOf' does not exist on type 'ObjectConstructor'. Did you mean 'getPrototypeOf'?
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(32,52): error TS2550: Property 'setPrototypeOf' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(33,46): error TS2550: Property 'isFinite' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(34,47): error TS2550: Property 'isInteger' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(35,43): error TS2550: Property 'isNaN' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
@@ -31,20 +31,20 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(37,48): error T
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(38,46): error TS2550: Property 'parseInt' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(39,28): error TS2550: Property 'clz32' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(40,27): error TS2550: Property 'imul' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(41,27): error TS2551: Property 'sign' does not exist on type 'Math'. Did you mean 'sin'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(42,28): error TS2551: Property 'log10' does not exist on type 'Math'. Did you mean 'LOG10E'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(43,27): error TS2551: Property 'log2' does not exist on type 'Math'. Did you mean 'LOG2E'?
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(41,27): error TS2550: Property 'sign' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(42,28): error TS2550: Property 'log10' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(43,27): error TS2550: Property 'log2' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(44,28): error TS2550: Property 'log1p' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(45,28): error TS2550: Property 'expm1' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(46,27): error TS2551: Property 'cosh' does not exist on type 'Math'. Did you mean 'cos'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(47,27): error TS2551: Property 'sinh' does not exist on type 'Math'. Did you mean 'sin'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(48,27): error TS2551: Property 'tanh' does not exist on type 'Math'. Did you mean 'tan'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(49,28): error TS2551: Property 'acosh' does not exist on type 'Math'. Did you mean 'acos'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(50,28): error TS2551: Property 'asinh' does not exist on type 'Math'. Did you mean 'asin'?
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(51,28): error TS2551: Property 'atanh' does not exist on type 'Math'. Did you mean 'atan'?
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(46,27): error TS2550: Property 'cosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(47,27): error TS2550: Property 'sinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(48,27): error TS2550: Property 'tanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(49,28): error TS2550: Property 'acosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(50,28): error TS2550: Property 'asinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(51,28): error TS2550: Property 'atanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(52,28): error TS2550: Property 'hypot' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(53,28): error TS2550: Property 'trunc' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(54,29): error TS2551: Property 'fround' does not exist on type 'Math'. Did you mean 'round'?
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(54,29): error TS2550: Property 'fround' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(55,27): error TS2550: Property 'cbrt' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(56,16): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(57,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
@@ -159,16 +159,14 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error T
 !!! error TS2550: Property 'assign' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testObjectConstructorGetOwnPropertySymbols = Object.getOwnPropertySymbols({});
                                                               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2551: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
-!!! related TS2728 /.ts/lib.es5.d.ts:179:5: 'getOwnPropertyNames' is declared here.
+!!! error TS2550: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testObjectConstructorKeys = Object.keys({});
     const testObjectConstructorIs = Object.is({}, {});
                                            ~~
 !!! error TS2550: Property 'is' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testObjectConstructorSetPrototypeOf = Object.setPrototypeOf({}, {});
                                                        ~~~~~~~~~~~~~~
-!!! error TS2551: Property 'setPrototypeOf' does not exist on type 'ObjectConstructor'. Did you mean 'getPrototypeOf'?
-!!! related TS2728 /.ts/lib.es5.d.ts:164:5: 'getPrototypeOf' is declared here.
+!!! error TS2550: Property 'setPrototypeOf' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testNumberConstructorIsFinite = Number.isFinite(0);
                                                  ~~~~~~~~
 !!! error TS2550: Property 'isFinite' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
@@ -195,16 +193,13 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error T
 !!! error TS2550: Property 'imul' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathSign = Math.sign(0);
                               ~~~~
-!!! error TS2551: Property 'sign' does not exist on type 'Math'. Did you mean 'sin'?
-!!! related TS2728 /.ts/lib.es5.d.ts:713:5: 'sin' is declared here.
+!!! error TS2550: Property 'sign' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathLog10 = Math.log10(0);
                                ~~~~~
-!!! error TS2551: Property 'log10' does not exist on type 'Math'. Did you mean 'LOG10E'?
-!!! related TS2728 /.ts/lib.es5.d.ts:627:14: 'LOG10E' is declared here.
+!!! error TS2550: Property 'log10' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathLog2 = Math.log2(0);
                               ~~~~
-!!! error TS2551: Property 'log2' does not exist on type 'Math'. Did you mean 'LOG2E'?
-!!! related TS2728 /.ts/lib.es5.d.ts:625:14: 'LOG2E' is declared here.
+!!! error TS2550: Property 'log2' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathLog1p = Math.log1p(0);
                                ~~~~~
 !!! error TS2550: Property 'log1p' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
@@ -213,28 +208,22 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error T
 !!! error TS2550: Property 'expm1' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathCosh = Math.cosh(0);
                               ~~~~
-!!! error TS2551: Property 'cosh' does not exist on type 'Math'. Did you mean 'cos'?
-!!! related TS2728 /.ts/lib.es5.d.ts:670:5: 'cos' is declared here.
+!!! error TS2550: Property 'cosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathSinh = Math.sinh(0);
                               ~~~~
-!!! error TS2551: Property 'sinh' does not exist on type 'Math'. Did you mean 'sin'?
-!!! related TS2728 /.ts/lib.es5.d.ts:713:5: 'sin' is declared here.
+!!! error TS2550: Property 'sinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathTanh = Math.tanh(0);
                               ~~~~
-!!! error TS2551: Property 'tanh' does not exist on type 'Math'. Did you mean 'tan'?
-!!! related TS2728 /.ts/lib.es5.d.ts:723:5: 'tan' is declared here.
+!!! error TS2550: Property 'tanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathAcosh = Math.acosh(0);
                                ~~~~~
-!!! error TS2551: Property 'acosh' does not exist on type 'Math'. Did you mean 'acos'?
-!!! related TS2728 /.ts/lib.es5.d.ts:644:5: 'acos' is declared here.
+!!! error TS2550: Property 'acosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathAsinh = Math.asinh(0);
                                ~~~~~
-!!! error TS2551: Property 'asinh' does not exist on type 'Math'. Did you mean 'asin'?
-!!! related TS2728 /.ts/lib.es5.d.ts:649:5: 'asin' is declared here.
+!!! error TS2550: Property 'asinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathAtanh = Math.atanh(0);
                                ~~~~~
-!!! error TS2551: Property 'atanh' does not exist on type 'Math'. Did you mean 'atan'?
-!!! related TS2728 /.ts/lib.es5.d.ts:654:5: 'atan' is declared here.
+!!! error TS2550: Property 'atanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathHypot = Math.hypot(0,0);
                                ~~~~~
 !!! error TS2550: Property 'hypot' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
@@ -243,8 +232,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error T
 !!! error TS2550: Property 'trunc' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathFround = Math.fround(0);
                                 ~~~~~~
-!!! error TS2551: Property 'fround' does not exist on type 'Math'. Did you mean 'round'?
-!!! related TS2728 /.ts/lib.es5.d.ts:708:5: 'round' is declared here.
+!!! error TS2550: Property 'fround' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
     const testMathCbrt = Math.cbrt(0);
                               ~~~~
 !!! error TS2550: Property 'cbrt' does not exist on type 'Math'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2015' or later.
