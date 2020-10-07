@@ -6788,16 +6788,16 @@ namespace ts {
                             if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
                                 // const x = require('y').z
                                 const initializer = (node as VariableDeclaration).initializer! as PropertyAccessExpression; // require('y').z
-                                const uniqueName = factory.createUniqueName((getExternalModuleRequireArgument(node) as StringLiteral).text); // _y
+                                const uniqueName = factory.createUniqueName(localName); // _x
                                 const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // 'y'
-                                // import _y = require('y');
+                                // import _x = require('y');
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     uniqueName,
                                     factory.createExternalModuleReference(factory.createStringLiteral(specifier))
                                 ), ModifierFlags.None);
-                                // import x = _y.z
+                                // import x = _x.z
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
