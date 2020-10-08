@@ -380,6 +380,9 @@ namespace ts {
             case SyntaxKind.EnumMember:
                 return visitNode(cbNode, (<EnumMember>node).name) ||
                     visitNode(cbNode, (<EnumMember>node).initializer);
+            case SyntaxKind.SpreadEnumMember:
+                return visitNode(cbNode, (<SpreadEnumMember>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<EnumMemberLike>node).name);
             case SyntaxKind.ModuleDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -1839,7 +1842,7 @@ namespace ts {
                 case ParsingContext.EnumMembers:
                     // Include open bracket computed properties. This technically also lets in indexers,
                     // which would be a candidate for improved error reporting.
-                    return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
+                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
                     switch (token()) {
                         case SyntaxKind.OpenBracketToken:
@@ -6752,9 +6755,15 @@ namespace ts {
         // In a non-ambient declaration, the grammar allows uninitialized members only in a
         // ConstantEnumMemberSection, which starts at the beginning of an enum declaration
         // or any time an integer literal initializer is encountered.
-        function parseEnumMember(): EnumMember {
+        function parseEnumMember(): EnumMemberLike {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
+            const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+            if (dotDotDotToken) {
+                const name = parseEntityName(/*allowReservedWords*/ false);
+                return withJSDoc(finishNode(factory.createSpreadEnumMember(dotDotDotToken, name), pos), hasJSDoc);
+            }
+
             const name = parsePropertyName();
             const initializer = allowInAnd(parseInitializer);
             return withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
@@ -6763,13 +6772,13 @@ namespace ts {
         function parseEnumDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): EnumDeclaration {
             parseExpected(SyntaxKind.EnumKeyword);
             const name = parseIdentifier();
-            let members;
+            let members: NodeArray<EnumMemberLike> | undefined;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                members = createMissingList<EnumMember>();
+                members = createMissingList<EnumMemberLike>();
             }
             const node = factory.createEnumDeclaration(decorators, modifiers, name, members);
             return withJSDoc(finishNode(node, pos), hasJSDoc);

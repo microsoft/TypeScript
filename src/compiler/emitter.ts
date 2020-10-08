@@ -1534,6 +1534,8 @@ namespace ts {
                     // Enum
                     case SyntaxKind.EnumMember:
                         return emitEnumMember(<EnumMember>node);
+                    case SyntaxKind.SpreadEnumMember:
+                        return emitSpreadEnumMember(<SpreadEnumMember>node);
 
                     // JSDoc nodes (only used in codefixes currently)
                     case SyntaxKind.JSDocParameterTag:
@@ -3499,6 +3501,11 @@ namespace ts {
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
             emitInitializer(node.initializer, node.name.end, node);
+        }
+
+        function emitSpreadEnumMember(node: SpreadEnumMember) {
+            emit(node.dotDotDotToken);
+            emitEntityName(node.name);
         }
 
         //

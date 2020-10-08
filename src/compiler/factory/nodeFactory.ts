@@ -410,6 +410,8 @@ namespace ts {
             updateSpreadAssignment,
             createEnumMember,
             updateEnumMember,
+            createSpreadEnumMember,
+            updateSpreadEnumMember,
             createSourceFile,
             updateSourceFile,
             createBundle,
@@ -3624,7 +3626,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
-            members: readonly EnumMember[]
+            members: readonly EnumMemberLike[]
         ) {
             const node = createBaseNamedDeclaration<EnumDeclaration>(
                 SyntaxKind.EnumDeclaration,
@@ -3646,7 +3648,7 @@ namespace ts {
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
-            members: readonly EnumMember[]) {
+            members: readonly EnumMemberLike[]) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
                 || node.name !== name
@@ -4845,6 +4847,26 @@ namespace ts {
             return node.name !== name
                 || node.initializer !== initializer
                 ? update(createEnumMember(name, initializer), node)
+                : node;
+        }
+
+        // @api
+        function createSpreadEnumMember(dotDotDotToken: DotDotDotToken, name: EntityName) {
+            const node = createBaseNode<SpreadEnumMember>(SyntaxKind.SpreadEnumMember);
+            node.dotDotDotToken = dotDotDotToken;
+            node.name = name;
+            node.transformFlags |=
+                propagateChildFlags(node.dotDotDotToken) |
+                propagateChildFlags(node.name) |
+                TransformFlags.ContainsTypeScript;
+            return node;
+        }
+
+        // @api
+        function updateSpreadEnumMember(node: SpreadEnumMember, dotDotDotToken: DotDotDotToken, name: EntityName) {
+            return node.dotDotDotToken !== dotDotDotToken
+                || node.name !== name
+                ? update(createSpreadEnumMember(dotDotDotToken, name), node)
                 : node;
         }
 

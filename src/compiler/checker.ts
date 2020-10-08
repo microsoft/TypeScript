@@ -9432,7 +9432,7 @@ namespace ts {
             for (const declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.EnumDeclaration) {
                     for (const member of (<EnumDeclaration>declaration).members) {
-                        if (member.initializer && isStringLiteralLike(member.initializer)) {
+                        if (isSpreadEnumMember(member) || member.initializer && isStringLiteralLike(member.initializer)) {
                             return links.enumKind = EnumKind.Literal;
                         }
                         if (!isLiteralEnumMember(member)) {
@@ -9448,6 +9448,31 @@ namespace ts {
             return type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union) ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)!) : type;
         }
 
+        function getEnumMemberTypeList(symbol: Symbol): Type[] {
+            const memberTypeList: Type[] = [];
+            for (const declaration of symbol.declarations) {
+                if (declaration.kind === SyntaxKind.EnumDeclaration) {
+                    for (const member of (<EnumDeclaration>declaration).members) {
+                        if (isEnumMember(member)) {
+                            const value = getEnumMemberValue(member);
+                            const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
+                            getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
+                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
+                        }
+                        else {
+                            const referencedEnumDeclaration = getSymbolOfNode(member.name);
+                            if (referencedEnumDeclaration) {
+                                const declaredType = getDeclaredTypeOfEnum(referencedEnumDeclaration);
+                                const types = declaredType.flags & TypeFlags.Union ? (<UnionType>declaredType).types : [declaredType];
+                                memberTypeList.push(...types);
+                            }
+                        }
+                    }
+                }
+            }
+            return memberTypeList
+        }
+
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (links.declaredType) {
@@ -9455,17 +9480,7 @@ namespace ts {
             }
             if (getEnumKind(symbol) === EnumKind.Literal) {
                 enumCount++;
-                const memberTypeList: Type[] = [];
-                for (const declaration of symbol.declarations) {
-                    if (declaration.kind === SyntaxKind.EnumDeclaration) {
-                        for (const member of (<EnumDeclaration>declaration).members) {
-                            const value = getEnumMemberValue(member);
-                            const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
-                            getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
-                        }
-                    }
-                }
+                const memberTypeList = getEnumMemberTypeList(symbol);
                 if (memberTypeList.length) {
                     const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
                     if (enumType.flags & TypeFlags.Union) {
@@ -35674,9 +35689,11 @@ namespace ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
                 let autoValue: number | undefined = 0;
                 for (const member of node.members) {
-                    const value = computeMemberValue(member, autoValue);
-                    getNodeLinks(member).enumMemberValue = value;
-                    autoValue = typeof value === "number" ? value + 1 : undefined;
+                    if (isEnumMember(member)) {
+                        const value = computeMemberValue(member, autoValue);
+                        getNodeLinks(member).enumMemberValue = value;
+                        autoValue = typeof value === "number" ? value + 1 : undefined;
+                    }
                 }
             }
         }
@@ -35888,7 +35905,7 @@ namespace ts {
                     }
 
                     const firstEnumMember = enumDeclaration.members[0];
-                    if (!firstEnumMember.initializer) {
+                    if (!isSpreadEnumMember(firstEnumMember) && !firstEnumMember.initializer) {
                         if (seenEnumMissingInitialInitializer) {
                             error(firstEnumMember.name, Diagnostics.In_an_enum_with_multiple_declarations_only_one_declaration_can_omit_an_initializer_for_its_first_enum_element);
                         }

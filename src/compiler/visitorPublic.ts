@@ -1083,6 +1083,11 @@ namespace ts {
                 return factory.updateEnumMember(<EnumMember>node,
                     nodeVisitor((<EnumMember>node).name, visitor, isPropertyName),
                     nodeVisitor((<EnumMember>node).initializer, visitor, isExpression));
+            case SyntaxKind.SpreadEnumMember:
+                return factory.updateSpreadEnumMember(<SpreadEnumMember>node,
+                    nodeVisitor((<SpreadEnumMember>node).dotDotDotToken, tokenVisitor, isToken),
+                    nodeVisitor((<SpreadEnumMember>node).name, visitor, isEntityName)
+                );
 
             // Top-level nodes
             case SyntaxKind.SourceFile:

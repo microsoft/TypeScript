@@ -666,6 +666,10 @@ namespace ts {
         return node.kind === SyntaxKind.EnumMember;
     }
 
+    export function isSpreadEnumMember(node: Node): node is SpreadEnumMember {
+        return node.kind === SyntaxKind.SpreadEnumMember;
+    }
+
     // Unparsed
 
     // TODO(rbuckton): isUnparsedPrologue

@@ -345,6 +345,7 @@ namespace ts {
 
         // Enum
         EnumMember,
+        SpreadEnumMember,
         // Unparsed
         UnparsedPrologue,
         UnparsedPrepend,
@@ -883,6 +884,7 @@ namespace ts {
         | InterfaceDeclaration
         | TypeAliasDeclaration
         | EnumMember
+        | SpreadEnumMember
         | EnumDeclaration
         | ModuleDeclaration
         | ImportEqualsDeclaration
@@ -1355,6 +1357,7 @@ namespace ts {
         | JsxAttribute
         | ShorthandPropertyAssignment
         | EnumMember
+        | SpreadEnumMember
         | JSDocPropertyTag
         | JSDocParameterTag;
 
@@ -2857,10 +2860,19 @@ namespace ts {
         readonly initializer?: Expression;
     }
 
+    export interface SpreadEnumMember extends Declaration, JSDocContainer {
+        readonly kind: SyntaxKind.SpreadEnumMember;
+        readonly parent: EnumDeclaration;
+        readonly dotDotDotToken: DotDotDotToken;
+        readonly name: EntityName;
+    }
+
+    export type EnumMemberLike = EnumMember | SpreadEnumMember;
+
     export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.EnumDeclaration;
         readonly name: Identifier;
-        readonly members: NodeArray<EnumMember>;
+        readonly members: NodeArray<EnumMemberLike>;
     }
 
     export type ModuleName =
@@ -6977,8 +6989,8 @@ namespace ts {
         updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
         createTypeAliasDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
         updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMemberLike[]): EnumDeclaration;
+        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMemberLike[]): EnumDeclaration;
         createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
         updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
         createModuleBlock(statements: readonly Statement[]): ModuleBlock;
@@ -7144,6 +7156,8 @@ namespace ts {
 
         createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
         updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
+        createSpreadEnumMember(dotDotDotToken: DotDotDotToken, name: EntityName): SpreadEnumMember;
+        updateSpreadEnumMember(node: SpreadEnumMember, dotDotDotToken: DotDotDotToken, name: EntityName): SpreadEnumMember;
 
         //
         // Top-level nodes
