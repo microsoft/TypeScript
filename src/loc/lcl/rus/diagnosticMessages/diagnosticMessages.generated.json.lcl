@@ -2696,8 +2696,8 @@
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2583" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Не удается найти имя "{0}". Вы хотите изменить целевую библиотеку? Попробуйте изменить параметр компилятора "lib" на es2015 или более поздней версии.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Не удается найти имя "{0}". Вы хотите изменить целевую библиотеку? Попробуйте изменить параметр компилятора "lib" на "{1}" или более поздней версии.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
@@ -6419,6 +6419,9 @@
       <Item ItemId=";It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Вероятно, не хватает запятой, разделяющей эти два выражения шаблона. Они формируют выражение шаблона с тегами, которое не может быть вызвано.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8510,6 +8513,9 @@
       <Item ItemId=";Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Свойство "{0}" не существует в типе "{1}". Вы хотите изменить целевую библиотеку? Попробуйте изменить параметр компилятора "lib" на "{2}" или более поздней версии.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12941,6 +12947,9 @@
       <Item ItemId=";_0_modifier_cannot_appear_on_class_elements_of_this_kind_1031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on class elements of this kind.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Модификатор "{0}" не может использоваться для элементов класса этого типа.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
