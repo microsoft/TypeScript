@@ -1483,7 +1483,7 @@ namespace ts {
 
             for (let index = 0; index < oldSourceFiles.length; index++) {
                 const oldSourceFile = oldSourceFiles[index];
-                let newSourceFile = host.getSourceFileByPath
+                const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
@@ -1501,12 +1501,15 @@ namespace ts {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return StructureIsReused.Not;
                     }
-                    fileChanged = false;
-                    newSourceFile = oldSourceFile; // Use the redirect.
+                    // redirect target should already be present
+                    Debug.checkDefined(find(newSourceFiles, f => f.path === oldSourceFile.redirectInfo?.redirectTarget.path));
+                    // Add to the newSourceFiles for now and handle redirect if program is used completely
+                    newSourceFiles.push(newSourceFile);
+                    continue;
                 }
                 else if (oldProgram.redirectTargetsMap.has(oldSourceFile.path)) {
                     // If a redirected-to source file changes, the redirect may be broken.
-                    if (newSourceFile !== oldSourceFile) {
+                    if (newSourceFile.version !== oldSourceFile.version) {
                         return StructureIsReused.Not;
                     }
                     fileChanged = false;
@@ -1643,11 +1646,24 @@ namespace ts {
             // update fileName -> file mapping
             for (let index = 0; index < newSourceFiles.length; index++) {
                 const newSourceFile = newSourceFiles[index];
-                filesByName.set(newSourceFile.path, newSourceFile);
-                // Ensure imports are calculated and resolutions are updated if the file version didnt change but its different instance of file
-                collectExternalModuleReferences(newSourceFile);
-                newSourceFile.resolvedModules = oldSourceFiles[index].resolvedModules;
-                newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFiles[index].resolvedTypeReferenceDirectiveNames;
+                const oldSourceFile = oldSourceFiles[index];
+                // Update file if its redirecting to different file
+                if (oldSourceFile.redirectInfo) {
+                    const newRedirectTarget = filesByName.get(oldSourceFile.redirectInfo.redirectTarget.path) as SourceFile;
+                    const newRedirectSourceFile = newRedirectTarget === oldSourceFile.redirectInfo.redirectTarget ?
+                        oldSourceFile :
+                        // Create new redirect file
+                        createRedirectSourceFile(newRedirectTarget, newSourceFile, oldSourceFile.fileName, oldSourceFile.path, oldSourceFile.resolvedPath, oldSourceFile.originalFileName);
+                    newSourceFiles[index] = newRedirectSourceFile;
+                    filesByName.set(newRedirectSourceFile.path, newRedirectSourceFile);
+                }
+                else {
+                    filesByName.set(newSourceFile.path, newSourceFile);
+                    // Ensure imports are calculated and resolutions are updated if the file version didnt change but its different instance of file
+                    collectExternalModuleReferences(newSourceFile);
+                    newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
+                    newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
+                }
             }
             const oldFilesByNameMap = oldProgram.getFilesByNameMap();
             oldFilesByNameMap.forEach((oldFile, path) => {
@@ -2530,7 +2546,6 @@ namespace ts {
             redirect.resolvedPath = resolvedPath;
             redirect.originalFileName = originalFileName;
             redirect.redirectInfo = { redirectTarget, unredirected };
-            sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
             Object.defineProperties(redirect, {
                 id: {
                     get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
@@ -2662,7 +2677,7 @@ namespace ts {
                     redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     addFileToFilesByName(dupFile, path, redirectedPath);
                     addFileIncludeReason(dupFile, reason);
-                    sourceFileToPackageName.set(path, packageId.name);
+                    sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                     processingOtherFiles!.push(dupFile);
                     return dupFile;
                 }
