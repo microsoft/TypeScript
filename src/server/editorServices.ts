@@ -263,6 +263,16 @@ namespace ts.server {
         return result;
     }
 
+    export function convertTypeAcquisition(protocolOptions: protocol.ExternalProjectCompilerOptions): TypeAcquisition | undefined {
+        let result: TypeAcquisition | undefined;
+        typeAcquisitionDeclarations.forEach((option) => {
+            const propertyValue = protocolOptions[option.name];
+            if (propertyValue === undefined) return;
+            (result || (result = {}))[option.name] = propertyValue;
+        });
+        return result;
+    }
+
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
         return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
     }
@@ -991,7 +1001,7 @@ namespace ts.server {
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
             const watchOptions = convertWatchOptions(projectCompilerOptions);
-            const typeAcquisition = this.hostConfiguration.typeAcquisition;
+            const typeAcquisition = convertTypeAcquisition(projectCompilerOptions);
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
@@ -2774,10 +2784,6 @@ namespace ts.server {
                 if (args.watchOptions) {
                     this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions);
                     this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
-                }
-
-                if(args.typeAcquisition) {
-                    this.hostConfiguration.typeAcquisition = args.typeAcquisition;
                 }
             }
         }

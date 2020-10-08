@@ -1133,7 +1133,11 @@ namespace ts {
                 name: "exclude",
                 type: "string"
             }
-        }
+        },
+        {
+            name: "inferTypingsFromFilenames",
+            type: "boolean",
+        },
     ];
 
     /* @internal */

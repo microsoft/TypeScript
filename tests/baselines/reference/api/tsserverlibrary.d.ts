@@ -2891,8 +2891,8 @@ declare namespace ts {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean | undefined;
         inferTypingsFromFilenames?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
     export enum ModuleKind {
         None = 0,
@@ -7502,7 +7502,7 @@ declare namespace ts.server.protocol {
      * For external projects, some of the project settings are sent together with
      * compiler settings.
      */
-    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
+    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions & TypeAcquisition;
     interface FileWithProjectReferenceRedirectInfo {
         /**
          * Name of file
@@ -7558,7 +7558,6 @@ declare namespace ts.server.protocol {
          */
         extraFileExtensions?: FileExtensionInfo[];
         watchOptions?: WatchOptions;
-        typeAcquisition?: TypeAcquisition;
     }
     enum WatchFileKind {
         FixedPollingInterval = "FixedPollingInterval",
@@ -9563,6 +9562,7 @@ declare namespace ts.server {
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
     export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined;
+    export function convertTypeAcquisition(protocolOptions: protocol.ExternalProjectCompilerOptions): TypeAcquisition | undefined;
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     export interface HostConfiguration {

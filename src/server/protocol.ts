@@ -1333,7 +1333,7 @@ namespace ts.server.protocol {
      * For external projects, some of the project settings are sent together with
      * compiler settings.
      */
-    export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
+    export type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions & TypeAcquisition;
 
     /**
      * Contains information about current project version
@@ -1482,8 +1482,6 @@ namespace ts.server.protocol {
         extraFileExtensions?: FileExtensionInfo[];
 
         watchOptions?: WatchOptions;
-
-        typeAcquisition?: TypeAcquisition;
     }
 
     export const enum WatchFileKind {
