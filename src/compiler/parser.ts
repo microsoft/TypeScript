@@ -21,7 +21,7 @@ namespace ts {
     let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
 
     /**
-     * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/compat/deprecations.ts`.
+     * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
      */
     /* @internal */
     export const parseBaseNodeFactory: BaseNodeFactory = {
