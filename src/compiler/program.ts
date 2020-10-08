@@ -826,7 +826,7 @@ namespace ts {
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
-        let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
+        let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         let fileProcessingDiagnostics: FilePreprocessingDiagnostics[] | undefined;
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -2865,26 +2865,27 @@ namespace ts {
 
         function processTypeReferenceDirective(
             typeReferenceDirective: string,
-            { resolvedTypeReferenceDirective }: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+            resolved: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
             reason: FileIncludeReason
         ): void {
             tracing?.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolveModuleNamesReusingOldState, refKind: reason.kind, refPath: isReferencedFile(reason) ? reason.file : undefined });
-            processTypeReferenceDirectiveWorker(typeReferenceDirective, resolvedTypeReferenceDirective, reason);
+            processTypeReferenceDirectiveWorker(typeReferenceDirective, resolved, reason);
             tracing?.pop();
         }
 
         function processTypeReferenceDirectiveWorker(
             typeReferenceDirective: string,
-            resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
+            resolved: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
             reason: FileIncludeReason
         ): void {
 
             // If we already found this library as a primary reference - nothing to do
             const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective);
-            if (previousResolution && previousResolution.primary) {
+            if (previousResolution?.resolvedTypeReferenceDirective?.primary) {
                 return;
             }
             let saveResolution = true;
+            const { resolvedTypeReferenceDirective } = resolved;
             if (resolvedTypeReferenceDirective) {
                 if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth++;
 
@@ -2895,17 +2896,17 @@ namespace ts {
                 else {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
                     // for sameness and possibly issue an error
-                    if (previousResolution) {
+                    if (previousResolution?.resolvedTypeReferenceDirective) {
                         // Don't bother reading the file again if it's the same file.
-                        if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
+                        if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedTypeReferenceDirective.resolvedFileName) {
                             const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName!);
-                            const existingFile = getSourceFile(previousResolution.resolvedFileName!)!;
+                            const existingFile = getSourceFile(previousResolution.resolvedTypeReferenceDirective.resolvedFileName!)!;
                             if (otherFileText !== existingFile.text) {
                                 addFilePreprocessingFileExplainingDiagnostic(
                                     existingFile,
                                     reason,
                                     Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                    [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName, previousResolution.resolvedFileName]
+                                    [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName, previousResolution.resolvedTypeReferenceDirective.resolvedFileName]
                                 );
                             }
                         }
@@ -2925,7 +2926,7 @@ namespace ts {
             }
 
             if (saveResolution) {
-                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
+                resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolved);
             }
         }
 

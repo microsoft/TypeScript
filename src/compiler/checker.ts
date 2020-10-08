@@ -40328,11 +40328,11 @@ namespace ts {
             if (resolvedTypeReferenceDirectives) {
                 // populate reverse mapping: file path -> type reference directive that was resolved to this file
                 fileToDirective = new Map<string, string>();
-                resolvedTypeReferenceDirectives.forEach((resolvedDirective, key) => {
-                    if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
+                resolvedTypeReferenceDirectives.forEach(({ resolvedTypeReferenceDirective }, key) => {
+                    if (!resolvedTypeReferenceDirective || !resolvedTypeReferenceDirective.resolvedFileName) {
                         return;
                     }
-                    const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                    const file = host.getSourceFile(resolvedTypeReferenceDirective.resolvedFileName);
                     if (file) {
                         // Add the transitive closure of path references loaded by this file (as long as they are not)
                         // part of an existing type reference.

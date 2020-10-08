@@ -123,7 +123,7 @@ namespace ts.GoToDefinition {
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
-            const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
+            const file = reference?.resolvedTypeReferenceDirective && program.getSourceFile(reference.resolvedTypeReferenceDirective.resolvedFileName!); // TODO:GH#18217
             return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
         }
 

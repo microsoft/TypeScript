@@ -368,7 +368,7 @@ namespace ts.FindAllReferences {
                 }
                 for (const ref of referencingFile.typeReferenceDirectives) {
                     const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName);
-                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
+                    if (referenced?.resolvedTypeReferenceDirective?.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                         refs.push({ kind: "reference", referencingFile, ref });
                     }
                 }
