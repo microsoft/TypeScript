@@ -27328,7 +27328,7 @@ namespace ts {
 
             return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
-            function addImplementationSuccessElaboration(failed: Signature, d: Diagnostic) {
+            function addImplementationSuccessElaboration(failed: Signature, diagnostic : Diagnostic) {
                 const oldCandidatesForArgumentError = candidatesForArgumentError;
                 const oldCandidateForArgumentArityError = candidateForArgumentArityError;
                 const oldCandidateForTypeArgumentError = candidateForTypeArgumentError;
@@ -27342,7 +27342,7 @@ namespace ts {
                     const candidate = getSignatureFromDeclaration(implDecl as FunctionLikeDeclaration);
                     const isSingleNonGenericCandidate = !candidate.typeParameters;
                     if (!!chooseOverload([candidate], assignableRelation, isSingleNonGenericCandidate)) {
-                        addRelatedInfo(d, createDiagnosticForNode(implDecl, Diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible));
+                        addRelatedInfo(diagnostic , createDiagnosticForNode(implDecl, Diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible));
                     }
                 }
 
