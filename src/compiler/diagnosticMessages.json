@@ -3043,7 +3043,10 @@
         "category": "Error",
         "code": 2792
     },
-
+    "The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.": {
+        "category": "Error",
+        "code": 2793
+    },
     "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
         "category": "Error",
         "code": 2794

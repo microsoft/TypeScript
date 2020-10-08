@@ -274,7 +274,7 @@ namespace ts {
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
                     relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath)) :
-                    emptyArray :
+                    [] :
                 undefined;
             return result;
         });
@@ -824,7 +824,7 @@ namespace ts {
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
                     relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r, relativeToBuildInfo)) :
-                    emptyArray :
+                    [] :
                 undefined;
             return result;
         });
