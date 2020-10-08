@@ -395,7 +395,7 @@ namespace ts {
                 name: "lib",
                 type: libMap
             },
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation,
@@ -755,7 +755,7 @@ namespace ts {
                 name: "types",
                 type: "string"
             },
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Type_declaration_files_to_be_included_in_compilation,
@@ -928,7 +928,7 @@ namespace ts {
         {
             name: "noLib",
             type: "boolean",
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts,
             // We are not returning a sourceFile for lib file when asked by the program,
@@ -955,7 +955,7 @@ namespace ts {
         {
             name: "disableSizeLimit",
             type: "boolean",
-            affectsSourceFile: true,
+            affectsProgramStructure: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_size_limitations_on_JavaScript_projects
         },
@@ -1125,6 +1125,10 @@ namespace ts {
     /* @internal */
     export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+
+    /* @internal */
+    export const optionsAffectingProgramStructure: readonly CommandLineOption[] =
+        optionDeclarations.filter(option => !!option.affectsProgramStructure);
 
     /* @internal */
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
