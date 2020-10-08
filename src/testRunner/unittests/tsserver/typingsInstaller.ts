@@ -207,6 +207,50 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
+        it("inferred project - type acquisition with inferTypingsFromFile:false", () => {
+            // Tests:
+            // Exclude file from filename-based type acquisition with inferTypingsFromFile:false
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+
+            const messages: string[] = [];
+            const host = createServerHost([jqueryJs]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: File[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                enable: true,
+                inferTypingsFromFilenames: false
+            });
+            projectService.openClientFile(jqueryJs.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const p = projectService.inferredProjects[0];
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.installAll(/*expectedCount*/ 0);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            // files should not be removed from project if ATA is skipped
+            checkProjectActualFiles(p, [jqueryJs.path]);
+            assert.isTrue(messages.indexOf("No new typings were requested as a result of typings discovery") > 0, "Should not request filename-based typings");
+        });
+
         it("external project - no type acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -434,6 +478,51 @@ namespace ts.projectSystem {
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
         });
+
+        it("external project - type acquisition with inferTypingsFromFilenames: false", () => {
+            // Tests:
+            // Exclude file from filename-based type acquisition with inferTypingsFromFile:false
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+
+            const messages: string[] = [];
+            const host = createServerHost([jqueryJs]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: File[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
+                rootFiles: [toExternalFile(jqueryJs.path)],
+                typeAcquisition: { enable: true, inferTypingsFromFilenames: false }
+            });
+
+            const p = projectService.externalProjects[0];
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.installAll(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            // files should not be removed from project if ATA is skipped
+            checkProjectActualFiles(p, [jqueryJs.path]);
+            assert.isTrue(messages.indexOf("No new typings were requested as a result of typings discovery") > 0, "Should not request filename-based typings");
+        });
+
         it("external project - no type acquisition, with js & ts files", () => {
             // Tests:
             // 1. No typings are included for JS projects when the project contains ts files
@@ -1373,33 +1462,6 @@ namespace ts.projectSystem {
                 'Result: {"cachedTypingPaths":[],"newTypingNames":["jquery","chroma-js"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
             ], finish.join("\r\n"));
             assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
-        });
-
-        it("should not infer typings from filenames with inferTypingsFromFilenames:false ", () => {
-            const app = {
-                path: "/a/b/app.js",
-                content: ""
-            };
-            const jquery = {
-                path: "/a/b/jquery.js",
-                content: ""
-            };
-            const chroma = {
-                path: "/a/b/chroma.min.js",
-                content: ""
-            };
-
-            const safeList = new Map(getEntries({ jquery: "jquery", chroma: "chroma-js" }));
-
-            const host = createServerHost([app, jquery, chroma]);
-            const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), safeList, emptyMap, { enable: true, inferTypingsFromFilenames: false }, emptyArray, emptyMap);
-            const finish = logger.finish();
-            assert.deepEqual(finish, [
-                "Inferred typings from unresolved imports: []",
-                'Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}',
-            ], finish.join("\r\n"));
-            assert.deepEqual(result.newTypingNames, []);
         });
 
         it("should return node for core modules", () => {
