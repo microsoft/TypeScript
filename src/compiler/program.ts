@@ -821,7 +821,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Set<__String>;
-        const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
+        let ambientModuleNameToUnmodifiedFileName: ESMap<string, string> | undefined;
         let fileReasons = createMultiMap<Path, FileIncludeReason>();
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
@@ -955,7 +955,7 @@ namespace ts {
         tracing?.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         tracing?.pop();
-        // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
+        // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `resolveModuleNamesReusingOldState` which checks
         // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
         let structureIsReused: StructureIsReused;
         tracing?.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
@@ -1313,7 +1313,7 @@ namespace ts {
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
-                if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
+                if (oldSourceFile && file.version === oldSourceFile.version && !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile.resolvedModules?.get(moduleName);
                     if (oldResolvedModule?.resolvedModule) {
                         if (isTraceEnabled(options, host)) {
@@ -1399,7 +1399,7 @@ namespace ts {
                 }
 
                 // at least one of declarations should come from non-modified source file
-                const unmodifiedFile = ambientModuleNameToUnmodifiedFileName.get(moduleName);
+                const unmodifiedFile = ambientModuleNameToUnmodifiedFileName?.get(moduleName);
 
                 if (!unmodifiedFile) {
                     return false;
@@ -1480,6 +1480,7 @@ namespace ts {
             const oldSourceFiles = oldProgram.getSourceFiles();
             const enum SeenPackageName { Exists, Modified }
             const seenPackageNames = new Map<string, SeenPackageName>();
+            let ambientModuleToUnmodifiedFile: ESMap<string, string> | undefined;
 
             for (let index = 0; index < oldSourceFiles.length; index++) {
                 const oldSourceFile = oldSourceFiles[index];
@@ -1586,6 +1587,13 @@ namespace ts {
                     // add file to the modified list so that we will resolve it later
                     modifiedSourceFileIndices.push(index);
                 }
+                else {
+                    // Ensure imports are calculated if the file version didnt change but its different instance of file
+                    collectExternalModuleReferences(newSourceFile);
+                    for (const moduleName of newSourceFile.ambientModuleNames) {
+                        (ambientModuleToUnmodifiedFile ||= new Map()).set(moduleName, oldSourceFiles[index].fileName);
+                    }
+                }
 
                 // if file has passed all checks it should be safe to reuse it
                 newSourceFiles.push(newSourceFile);
@@ -1596,14 +1604,7 @@ namespace ts {
             }
 
             Debug.assert(newSourceFiles.length === oldSourceFiles.length);
-            const modifiedFiles = new Set(modifiedSourceFileIndices);
-            for (let index = 0; index < oldSourceFiles.length; index++) {
-                if (!modifiedFiles.has(index)) {
-                    for (const moduleName of oldSourceFiles[index].ambientModuleNames) {
-                        ambientModuleNameToUnmodifiedFileName.set(moduleName, oldSourceFiles[index].fileName);
-                    }
-                }
-            }
+            ambientModuleNameToUnmodifiedFileName = ambientModuleToUnmodifiedFile;
             // try to verify results of module resolution
             for (const index of modifiedSourceFileIndices) {
                 const oldSourceFile = oldSourceFiles[index];
@@ -1659,8 +1660,7 @@ namespace ts {
                 }
                 else {
                     filesByName.set(newSourceFile.path, newSourceFile);
-                    // Ensure imports are calculated and resolutions are updated if the file version didnt change but its different instance of file
-                    collectExternalModuleReferences(newSourceFile);
+                    // Ensure resolutions are updated if the file version didnt change but its different instance of file
                     newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                     newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
                 }
