@@ -31,6 +31,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/index.tsx"]
 Program options: {"jsx":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/index.tsx
@@ -79,6 +80,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/index.tsx"]
 Program options: {"jsx":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/index.tsx

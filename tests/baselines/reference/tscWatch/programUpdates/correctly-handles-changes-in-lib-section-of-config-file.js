@@ -39,6 +39,7 @@ Output::
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /compiler/lib.es5.d.ts
 /src/app.ts
@@ -87,6 +88,7 @@ Output::
 
 Program root files: ["/src/app.ts"]
 Program options: {"module":1,"target":1,"noImplicitAny":true,"sourceMap":false,"lib":["lib.es5.d.ts","lib.es2015.promise.d.ts"],"watch":true,"project":"/src/tsconfig.json","configFilePath":"/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /compiler/lib.es5.d.ts
 /compiler/lib.es2015.promise.d.ts

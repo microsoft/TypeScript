@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"watch":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a.ts
 /b.ts
@@ -101,6 +102,7 @@ Output::
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a.ts
 /b.ts

@@ -38,6 +38,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"watch":true,"skipLibCheck":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -83,6 +84,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"watch":true,"skipLibCheck":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
@@ -135,6 +137,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"watch":true,"skipLibCheck":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
