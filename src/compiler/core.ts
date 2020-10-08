@@ -848,7 +848,9 @@ namespace ts {
         return true;
     }
 
-    export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
+    export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer?: (a: T, b: T, index: number) => boolean): boolean;
+    export function arrayIsEqualTo<T, U>(array1: readonly T[] | undefined, array2: readonly U[] | undefined, equalityComparer: (a: T, b: U, index: number) => boolean): boolean;
+    export function arrayIsEqualTo<T, U = T>(array1: readonly T[] | undefined, array2: readonly U[] | undefined, equalityComparer: (a: T, b: U, index: number) => boolean = equateValues as any): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }

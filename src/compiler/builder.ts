@@ -261,9 +261,14 @@ namespace ts {
         return state;
     }
 
+    export function getToPathForBuildInfoFilePath(options: CompilerOptions, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName) {
+        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(options)!, currentDirectory));
+        return (path: string) => toPath(path, buildInfoDirectory, getCanonicalFileName);
+    }
+
     function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program, getCanonicalFileName: GetCanonicalFileName): readonly Diagnostic[] {
         if (!diagnostics.length) return emptyArray;
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
+        const toPath = getToPathForBuildInfoFilePath(newProgram.getCompilerOptions(), newProgram.getCurrentDirectory(), getCanonicalFileName);
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -278,10 +283,6 @@ namespace ts {
                 undefined;
             return result;
         });
-
-        function toPath(path: string) {
-            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
-        }
     }
 
     function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {

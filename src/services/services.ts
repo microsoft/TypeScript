@@ -1357,14 +1357,13 @@ namespace ts {
             host.setCompilerHost?.(compilerHost);
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const options: CreateProgramOptions = {
+            program = createProgram({
                 rootNames: rootFileNames,
                 options: newSettings,
                 host: compilerHost,
                 oldProgram: program,
                 projectReferences
-            };
-            program = createProgram(options);
+            });
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released

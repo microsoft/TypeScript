@@ -526,14 +526,13 @@ namespace ts {
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
 
-        const programOptions: CreateProgramOptions = {
+        const program = createProgram({
             rootNames: fileNames,
             options,
             projectReferences,
             host,
             configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config)
-        };
-        const program = createProgram(programOptions);
+        });
         const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
             program,
             reportDiagnostic,
