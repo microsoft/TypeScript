@@ -25522,6 +25522,10 @@ namespace ts {
             return checkNonNullType(checkExpression(node), node);
         }
 
+        function checkNonNullNonVoidExpression(node: Expression | QualifiedName) {
+            return checkNonNullNonVoidType(checkExpression(node), node);
+        }
+
         function isNullableType(type: Type) {
             return !!((strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable);
         }
@@ -25578,7 +25582,7 @@ namespace ts {
 
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
             return node.flags & NodeFlags.OptionalChain ? checkPropertyAccessChain(node as PropertyAccessChain) :
-                checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullExpression(node.expression), node.name);
+                checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullNonVoidExpression(node.expression), node.name);
         }
 
         function checkPropertyAccessChain(node: PropertyAccessChain) {
@@ -25588,7 +25592,7 @@ namespace ts {
         }
 
         function checkQualifiedName(node: QualifiedName) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, checkNonNullExpression(node.left), node.right);
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, checkNonNullNonVoidExpression(node.left), node.right);
         }
 
         function isMethodAccessForCall(node: Node) {
@@ -26194,13 +26198,13 @@ namespace ts {
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain) :
-                checkElementAccessExpression(node, checkNonNullExpression(node.expression));
+                checkElementAccessExpression(node, checkNonNullNonVoidExpression(node.expression));
         }
 
         function checkElementAccessChain(node: ElementAccessChain) {
             const exprType = checkExpression(node.expression);
             const nonOptionalType = getOptionalExpressionType(exprType, node.expression);
-            return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression)), node, nonOptionalType !== exprType);
+            return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullNonVoidType(nonOptionalType, node.expression)), node, nonOptionalType !== exprType);
         }
 
         function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type): Type {
