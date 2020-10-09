@@ -7,6 +7,6 @@ export {};
 //// [jsxJsxsCjsTransformSubstitutesNames.js]
 "use strict";
 exports.__esModule = true;
-var jsx_runtime_1 = require("react/jsx-runtime");
+var jsx_runtime_js_1 = require("react/jsx-runtime.js");
 /// <reference path="react16.d.ts" />
-var a = jsx_runtime_1.jsx("div", {}, void 0);
+var a = jsx_runtime_js_1.jsx("div", {}, void 0);

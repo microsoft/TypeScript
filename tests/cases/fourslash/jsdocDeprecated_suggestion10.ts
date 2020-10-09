@@ -1,45 +1,33 @@
 ///<reference path="fourslash.ts" />
 
-// @warningOnDeprecated: true
-//// /**
-////  * @deprecated
-////  */
-//// interface I {
-////     /**
-////      * @deprecated
-////      */
-////     f: string
-//// }
-//// /**
-////  * @deprecated
-////  */
-//// const a = "foo"
-//// declare const b: [|I|]
-//// [|a|].toLocaleLowerCase();
-//// b.[|f|].toLocaleLowerCase();
+// @filename: foo.ts
+////export namespace foo {
+////    /** @deprecated */
+////    export const bar = 1;
+////    [|bar|];
+////}
+////foo.[|bar|];
+////foo[[|"bar"|]];
 
+goTo.file('foo.ts');
 const ranges = test.ranges();
-
-verify.getWarningDiagnostics([
+verify.getSuggestionDiagnostics([
     {
-        message: "'I' is deprecated",
-        code: 6385,
-        range: ranges[0],
-        category: "warning",
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'bar' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[0]
     },
     {
-        message: "'a' is deprecated",
-        code: 6385,
-        range: ranges[1],
-        category: "warning",
-        reportsDeprecated: true
+        "code": 6385,
+        "message": "'bar' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[1]
     },
     {
-        message: "'f' is deprecated",
-        code: 6385,
-        range: ranges[2],
-        category: "warning",
-        reportsDeprecated: true,
-    }
-])
+        "code": 6385,
+        "message": "'bar' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[2]
+    },
+]);

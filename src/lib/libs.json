@@ -50,6 +50,7 @@
         "esnext.intl",
         "esnext.string",
         "esnext.promise",
+        "esnext.weakref",
         // Default libraries
         "es5.full",
         "es2015.full",

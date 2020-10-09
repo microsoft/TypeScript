@@ -26,12 +26,12 @@ namespace ts {
             return currentFileState.filenameDeclaration.name;
         }
 
-        function getJsxFactoryCalleePrimitive(children: readonly JsxChild[] | undefined): "jsx" | "jsxs" | "jsxDEV" {
-            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : children && children.length > 1 ? "jsxs" : "jsx";
+        function getJsxFactoryCalleePrimitive(childrenLength: number): "jsx" | "jsxs" | "jsxDEV" {
+            return compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsxDEV" : childrenLength > 1 ? "jsxs" : "jsx";
         }
 
-        function getJsxFactoryCallee(children: readonly JsxChild[] | undefined) {
-            const type = getJsxFactoryCalleePrimitive(children);
+        function getJsxFactoryCallee(childrenLength: number) {
+            const type = getJsxFactoryCalleePrimitive(childrenLength);
             return getImplicitImportForName(type);
         }
 
@@ -74,7 +74,7 @@ namespace ts {
                 statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
             }
             if (currentFileState.utilizedImplicitRuntimeImports && currentFileState.utilizedImplicitRuntimeImports.size && currentFileState.importSpecifier !== undefined) {
-                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}`;
+                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime.js" : "jsx-runtime.js"}`;
                 if (isExternalModule(node)) {
                     // Add `import` statement
                     const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(currentFileState.utilizedImplicitRuntimeImports.values()))), factory.createStringLiteral(specifier));
@@ -191,8 +191,9 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
-            if (children.length === 1) {
-                const result = transformJsxChildToExpression(children[0]);
+            const nonWhitespaceChildren = filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
+            if (length(nonWhitespaceChildren) === 1) {
+                const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createObjectLiteralExpression([
                     factory.createPropertyAssignment("children", result)
                 ]);
@@ -208,48 +209,51 @@ namespace ts {
             let objectProperties: Expression;
             const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
-            if (attrs.length === 0) {
-                objectProperties = factory.createObjectLiteralExpression([]);
-                // When there are no attributes, React wants {}
-            }
-            else {
+
+            let segments: Expression[] = [];
+            if (attrs.length) {
                 // Map spans of JsxAttribute nodes into object literals and spans
                 // of JsxSpreadAttribute nodes into expressions.
-                const segments = flatten<Expression | ObjectLiteralExpression>(
+                segments = flatten(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
                         : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
                     )
                 );
 
-                if (children && children.length) {
-                    const result = convertJsxChildrenToChildrenPropObject(children);
-                    if (result) {
-                        segments.push(result);
-                    }
-                }
-
                 if (isJsxSpreadAttribute(attrs[0])) {
                     // We must always emit at least one object literal before a spread
                     // argument.factory.createObjectLiteral
                     segments.unshift(factory.createObjectLiteralExpression());
                 }
+            }
+            if (children && children.length) {
+                const result = convertJsxChildrenToChildrenPropObject(children);
+                if (result) {
+                    segments.push(result);
+                }
+            }
 
+            if (segments.length === 0) {
+                objectProperties = factory.createObjectLiteralExpression([]);
+                // When there are no attributes, React wants {}
+            }
+            else {
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
             }
 
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, children, isChild, location);
+            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)), isChild, location);
         }
 
-        function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
             const args: Expression[] = [tagName, objectProperties, !keyAttr ? factory.createVoidZero() : transformJsxAttributeInitializer(keyAttr.initializer)];
             if (compilerOptions.jsx === JsxEmit.ReactJSXDev) {
                 const originalFile = getOriginalNode(currentSourceFile);
                 if (originalFile && isSourceFile(originalFile)) {
                     // isStaticChildren development flag
-                    args.push(children && children.length > 1 ? factory.createTrue() : factory.createFalse());
+                    args.push(childrenLength > 1 ? factory.createTrue() : factory.createFalse());
                     // __source development flag
                     const lineCol = getLineAndCharacterOfPosition(originalFile, location.pos);
                     args.push(factory.createObjectLiteralExpression([
@@ -261,7 +265,7 @@ namespace ts {
                     args.push(factory.createThis());
                 }
             }
-            const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(children), /*typeArguments*/ undefined, args), location);
+            const element = setTextRange(factory.createCallExpression(getJsxFactoryCallee(childrenLength), /*typeArguments*/ undefined, args), location);
 
             if (isChild) {
                 startOnNewLine(element);
@@ -332,7 +336,7 @@ namespace ts {
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                children,
+                length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)),
                 isChild,
                 location
             );

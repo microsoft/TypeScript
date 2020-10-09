@@ -22,7 +22,7 @@ jobs:
     - name: Setup and publish nightly
       run: |
         npm whoami
-        npm i
+        npm ci
         gulp configure-nightly
         gulp LKG
         gulp runtests-parallel

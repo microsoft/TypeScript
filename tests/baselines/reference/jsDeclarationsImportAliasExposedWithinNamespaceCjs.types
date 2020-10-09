@@ -47,12 +47,12 @@ function testFn(input) {
 }
 
 module.exports = {testFn, testFnTypes};
->module.exports = {testFn, testFnTypes} : { testFn: (input: boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }) => number; testFnTypes: { [x: string]: any; }; }
->module.exports : { testFn: (input: boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }) => number; testFnTypes: { [x: string]: any; }; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/file2\"": { testFn: (input: boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }) => number; testFnTypes: { [x: string]: any; }; }; }
->exports : { testFn: (input: boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }) => number; testFnTypes: { [x: string]: any; }; }
->{testFn, testFnTypes} : { testFn: (input: boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }) => number; testFnTypes: { [x: string]: any; }; }
->testFn : (input: boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }) => number
+>module.exports = {testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
+>module.exports : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/file2\"": { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }; }
+>exports : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
+>{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
+>testFn : (input: testFnTypes.input) => number
 >testFnTypes : { [x: string]: any; }
 
 === tests/cases/conformance/jsdoc/declarations/file.js ===

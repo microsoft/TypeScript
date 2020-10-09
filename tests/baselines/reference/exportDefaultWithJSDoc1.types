@@ -5,15 +5,15 @@
  */
 
 /** @type {NumberLike[]} */export default ([ ]);
->([ ]) : (string | number)[]
+>([ ]) : NumberLike[]
 >[ ] : undefined[]
 
 === tests/cases/compiler/b.ts ===
 import A from './a'
->A : (string | number)[]
+>A : import("tests/cases/compiler/a").NumberLike[]
 
 A[0]
->A[0] : string | number
->A : (string | number)[]
+>A[0] : import("tests/cases/compiler/a").NumberLike
+>A : import("tests/cases/compiler/a").NumberLike[]
 >0 : 0
 

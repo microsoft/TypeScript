@@ -1891,10 +1891,12 @@ namespace ts.Completions {
             let existingMembers: readonly Declaration[] | undefined;
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
-                const instantiatedType = typeChecker.getContextualType(objectLikeContainer);
-                const completionsType = instantiatedType && typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
-                if (!instantiatedType || !completionsType) return GlobalsSearch.Fail;
-                isNewIdentifierLocation = hasIndexSignature(instantiatedType || completionsType);
+                const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
+                if (instantiatedType === undefined) {
+                    return GlobalsSearch.Fail;
+                }
+                const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
+                isNewIdentifierLocation = hasIndexSignature(completionsType || instantiatedType);
                 typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
             }
@@ -2585,7 +2587,6 @@ namespace ts.Completions {
                         || kind === SyntaxKind.ModuleKeyword
                         || kind === SyntaxKind.TypeKeyword
                         || kind === SyntaxKind.NamespaceKeyword
-                        || kind === SyntaxKind.AsKeyword
                         || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);
@@ -2660,6 +2661,7 @@ namespace ts.Completions {
     function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
         return kind === SyntaxKind.AsyncKeyword
             || kind === SyntaxKind.AwaitKeyword
+            || kind === SyntaxKind.AsKeyword
             || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }
 
@@ -2829,5 +2831,16 @@ namespace ts.Completions {
 
     function isStaticProperty(symbol: Symbol) {
         return !!(symbol.valueDeclaration && getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Static && isClassLike(symbol.valueDeclaration.parent));
+    }
+
+    function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeChecker: TypeChecker) {
+        const type = typeChecker.getContextualType(node);
+        if (type) {
+            return type;
+        }
+        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            return typeChecker.getTypeAtLocation(node.parent);
+        }
+        return undefined;
     }
 }
