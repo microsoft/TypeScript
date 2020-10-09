@@ -9460,7 +9460,7 @@ namespace ts {
                             memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                         }
                         else {
-                            const referencedEnumDeclaration = getSymbolOfNode(member.name);
+                            const referencedEnumDeclaration = resolveEntityName(member.name, SymbolFlags.Enum);
                             if (referencedEnumDeclaration) {
                                 const declaredType = getDeclaredTypeOfEnum(referencedEnumDeclaration);
                                 const types = declaredType.flags & TypeFlags.Union ? (<UnionType>declaredType).types : [declaredType];
