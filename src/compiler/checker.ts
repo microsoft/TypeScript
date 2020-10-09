@@ -27335,7 +27335,7 @@ namespace ts {
 
                 const declCount = length(failed.declaration?.symbol.declarations);
                 const isOverload = declCount > 1;
-                const implDecl = isOverload ? find(failed.declaration?.symbol.declarations || emptyArray, d => nodeIsPresent((d as FunctionLikeDeclaration).body)) : undefined;
+                const implDecl = isOverload ? find(failed.declaration?.symbol.declarations || emptyArray, d => isFunctionLikeDeclaration(d) && nodeIsPresent(d.body)) : undefined;
                 if (implDecl) {
                     const candidate = getSignatureFromDeclaration(implDecl as FunctionLikeDeclaration);
                     const isSingleNonGenericCandidate = !candidate.typeParameters;
