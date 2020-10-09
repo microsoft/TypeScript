@@ -3779,7 +3779,8 @@ namespace ts {
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
-        /* @internal */ structureIsReused?: StructureIsReused;
+        // This is set on created program to let us know how the program was created using old program
+        /* @internal */ readonly structureIsReused: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;

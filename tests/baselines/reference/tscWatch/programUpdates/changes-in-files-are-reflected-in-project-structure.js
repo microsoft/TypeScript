@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/a/b/f1.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f2.ts
@@ -98,6 +99,7 @@ Output::
 
 Program root files: ["/a/b/f1.ts"]
 Program options: {"watch":true}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /a/c/f3.ts
