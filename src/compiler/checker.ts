@@ -8603,7 +8603,7 @@ namespace ts {
             const declaration = symbol.valueDeclaration;
             if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
                 const decl = declaration as VariableDeclaration;
-                if (!decl.type) return anyType;
+                if (!decl.type) return compilerOptions.useUnknownInCatchVariables ? unknownType : anyType;
                 const type = getTypeOfNode(decl.type);
                 // an errorType will make `checkTryStatement` issue an error
                 return isTypeAny(type) || type === unknownType ? type : errorType;

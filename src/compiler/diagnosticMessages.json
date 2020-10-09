@@ -4757,6 +4757,10 @@
         "category": "Message",
         "code": 6800
     },
+    "Type catch clause variables as 'unknown' instead of 'any'.": {
+        "category": "Message",
+        "code": 6801
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

@@ -668,6 +668,14 @@ namespace ts {
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses
         },
+        {
+            name: "useUnknownInCatchVariables",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
+        },
 
         // Module Resolution
         {
