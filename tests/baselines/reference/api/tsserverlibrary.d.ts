@@ -396,56 +396,57 @@ declare namespace ts {
         ShorthandPropertyAssignment = 289,
         SpreadAssignment = 290,
         EnumMember = 291,
-        UnparsedPrologue = 292,
-        UnparsedPrepend = 293,
-        UnparsedText = 294,
-        UnparsedInternalText = 295,
-        UnparsedSyntheticReference = 296,
-        SourceFile = 297,
-        Bundle = 298,
-        UnparsedSource = 299,
-        InputFiles = 300,
-        JSDocTypeExpression = 301,
-        JSDocNameReference = 302,
-        JSDocAllType = 303,
-        JSDocUnknownType = 304,
-        JSDocNullableType = 305,
-        JSDocNonNullableType = 306,
-        JSDocOptionalType = 307,
-        JSDocFunctionType = 308,
-        JSDocVariadicType = 309,
-        JSDocNamepathType = 310,
-        JSDocComment = 311,
-        JSDocTypeLiteral = 312,
-        JSDocSignature = 313,
-        JSDocTag = 314,
-        JSDocAugmentsTag = 315,
-        JSDocImplementsTag = 316,
-        JSDocAuthorTag = 317,
-        JSDocDeprecatedTag = 318,
-        JSDocClassTag = 319,
-        JSDocPublicTag = 320,
-        JSDocPrivateTag = 321,
-        JSDocProtectedTag = 322,
-        JSDocReadonlyTag = 323,
-        JSDocCallbackTag = 324,
-        JSDocEnumTag = 325,
-        JSDocParameterTag = 326,
-        JSDocReturnTag = 327,
-        JSDocThisTag = 328,
-        JSDocTypeTag = 329,
-        JSDocTemplateTag = 330,
-        JSDocTypedefTag = 331,
-        JSDocSeeTag = 332,
-        JSDocPropertyTag = 333,
-        SyntaxList = 334,
-        NotEmittedStatement = 335,
-        PartiallyEmittedExpression = 336,
-        CommaListExpression = 337,
-        MergeDeclarationMarker = 338,
-        EndOfDeclarationMarker = 339,
-        SyntheticReferenceExpression = 340,
-        Count = 341,
+        SpreadEnumMember = 292,
+        UnparsedPrologue = 293,
+        UnparsedPrepend = 294,
+        UnparsedText = 295,
+        UnparsedInternalText = 296,
+        UnparsedSyntheticReference = 297,
+        SourceFile = 298,
+        Bundle = 299,
+        UnparsedSource = 300,
+        InputFiles = 301,
+        JSDocTypeExpression = 302,
+        JSDocNameReference = 303,
+        JSDocAllType = 304,
+        JSDocUnknownType = 305,
+        JSDocNullableType = 306,
+        JSDocNonNullableType = 307,
+        JSDocOptionalType = 308,
+        JSDocFunctionType = 309,
+        JSDocVariadicType = 310,
+        JSDocNamepathType = 311,
+        JSDocComment = 312,
+        JSDocTypeLiteral = 313,
+        JSDocSignature = 314,
+        JSDocTag = 315,
+        JSDocAugmentsTag = 316,
+        JSDocImplementsTag = 317,
+        JSDocAuthorTag = 318,
+        JSDocDeprecatedTag = 319,
+        JSDocClassTag = 320,
+        JSDocPublicTag = 321,
+        JSDocPrivateTag = 322,
+        JSDocProtectedTag = 323,
+        JSDocReadonlyTag = 324,
+        JSDocCallbackTag = 325,
+        JSDocEnumTag = 326,
+        JSDocParameterTag = 327,
+        JSDocReturnTag = 328,
+        JSDocThisTag = 329,
+        JSDocTypeTag = 330,
+        JSDocTemplateTag = 331,
+        JSDocTypedefTag = 332,
+        JSDocSeeTag = 333,
+        JSDocPropertyTag = 334,
+        SyntaxList = 335,
+        NotEmittedStatement = 336,
+        PartiallyEmittedExpression = 337,
+        CommaListExpression = 338,
+        MergeDeclarationMarker = 339,
+        EndOfDeclarationMarker = 340,
+        SyntheticReferenceExpression = 341,
+        Count = 342,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -473,10 +474,10 @@ declare namespace ts {
         FirstStatement = 232,
         LastStatement = 248,
         FirstNode = 157,
-        FirstJSDocNode = 301,
-        LastJSDocNode = 333,
-        FirstJSDocTagNode = 314,
-        LastJSDocTagNode = 333,
+        FirstJSDocNode = 302,
+        LastJSDocNode = 334,
+        FirstJSDocTagNode = 315,
+        LastJSDocTagNode = 334,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -558,7 +559,7 @@ declare namespace ts {
     }
     export interface JSDocContainer {
     }
-    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
+    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | LabeledStatement | ExpressionStatement | VariableStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | SpreadEnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -760,7 +761,7 @@ declare namespace ts {
         readonly parent: ObjectLiteralExpression;
         readonly expression: Expression;
     }
-    export type VariableLikeDeclaration = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | JsxAttribute | ShorthandPropertyAssignment | EnumMember | JSDocPropertyTag | JSDocParameterTag;
+    export type VariableLikeDeclaration = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | JsxAttribute | ShorthandPropertyAssignment | EnumMember | SpreadEnumMember | JSDocPropertyTag | JSDocParameterTag;
     export interface PropertyLikeDeclaration extends NamedDeclaration {
         readonly name: PropertyName;
     }
@@ -1560,10 +1561,17 @@ declare namespace ts {
         readonly name: PropertyName;
         readonly initializer?: Expression;
     }
+    export interface SpreadEnumMember extends Declaration, JSDocContainer {
+        readonly kind: SyntaxKind.SpreadEnumMember;
+        readonly parent: EnumDeclaration;
+        readonly dotDotDotToken: DotDotDotToken;
+        readonly name: EntityName;
+    }
+    export type EnumMemberLike = EnumMember | SpreadEnumMember;
     export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.EnumDeclaration;
         readonly name: Identifier;
-        readonly members: NodeArray<EnumMember>;
+        readonly members: NodeArray<EnumMemberLike>;
     }
     export type ModuleName = Identifier | StringLiteral;
     export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
@@ -3396,8 +3404,8 @@ declare namespace ts {
         updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
         createTypeAliasDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
         updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMemberLike[]): EnumDeclaration;
+        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMemberLike[]): EnumDeclaration;
         createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
         updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
         createModuleBlock(statements: readonly Statement[]): ModuleBlock;
@@ -3532,6 +3540,8 @@ declare namespace ts {
         updateSpreadAssignment(node: SpreadAssignment, expression: Expression): SpreadAssignment;
         createEnumMember(name: string | PropertyName, initializer?: Expression): EnumMember;
         updateEnumMember(node: EnumMember, name: PropertyName, initializer: Expression | undefined): EnumMember;
+        createSpreadEnumMember(dotDotDotToken: DotDotDotToken, name: EntityName): SpreadEnumMember;
+        updateSpreadEnumMember(node: SpreadEnumMember, dotDotDotToken: DotDotDotToken, name: EntityName): SpreadEnumMember;
         createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile;
         updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
         createNotEmittedStatement(original: Node): NotEmittedStatement;
@@ -4477,6 +4487,7 @@ declare namespace ts {
     function isShorthandPropertyAssignment(node: Node): node is ShorthandPropertyAssignment;
     function isSpreadAssignment(node: Node): node is SpreadAssignment;
     function isEnumMember(node: Node): node is EnumMember;
+    function isSpreadEnumMember(node: Node): node is SpreadEnumMember;
     function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
@@ -10466,9 +10477,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateTypeAliasDeclaration` or the factory supplied by your transformation context instead. */
     const updateTypeAliasDeclaration: (node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode) => TypeAliasDeclaration;
     /** @deprecated Use `factory.createEnumDeclaration` or the factory supplied by your transformation context instead. */
-    const createEnumDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]) => EnumDeclaration;
+    const createEnumDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMemberLike[]) => EnumDeclaration;
     /** @deprecated Use `factory.updateEnumDeclaration` or the factory supplied by your transformation context instead. */
-    const updateEnumDeclaration: (node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]) => EnumDeclaration;
+    const updateEnumDeclaration: (node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMemberLike[]) => EnumDeclaration;
     /** @deprecated Use `factory.createModuleDeclaration` or the factory supplied by your transformation context instead. */
     const createModuleDeclaration: (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: Identifier | ModuleBlock | NamespaceDeclaration | JSDocNamespaceDeclaration | undefined, flags?: NodeFlags | undefined) => ModuleDeclaration;
     /** @deprecated Use `factory.updateModuleDeclaration` or the factory supplied by your transformation context instead. */
