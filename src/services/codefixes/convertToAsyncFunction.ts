@@ -431,7 +431,7 @@ namespace ts.codefix {
                                 ) : factory.updateFunctionExpression(
                                     funcExpr,
                                     funcExpr.modifiers,
-                                    undefined,
+                                    funcExpr.asteriskToken,
                                     funcExpr.name,
                                     funcExpr.typeParameters,
                                     [],

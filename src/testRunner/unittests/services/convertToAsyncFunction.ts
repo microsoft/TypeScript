@@ -1510,5 +1510,30 @@ function [#|f|]() {
 }
 `);
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_nestedReturn", `
+function [#|getTheNumber2|](): Promise<number> {
+    return Promise.resolve()
+        .then(() => {
+            if (true) {
+                return 1;
+            }
+        })
+        .then(function name(foo) {
+            while (true) {
+                return Promise.resolve(3);
+            }
+        })
+        .then(() => {
+            if (true) {
+                return Promise.resolve(123)
+            }
+        })
+        .then((bar) => {
+            if (true) {
+                return 2;
+            }
+        });
+    }
+`);
     });
 }
