@@ -936,7 +936,7 @@ namespace ts {
                 rootNames: newProgramOrRootNames,
                 options: hostOrOptions as CompilerOptions,
                 host: oldProgramOrHost as CompilerHost,
-                oldProgram: oldProgram && oldProgram.getProgramOrUndefined(),
+                oldProgram: oldProgram?.getProgramOrProgramFromBuildInfoOrUndefined(),
                 configFileParsingDiagnostics,
                 projectReferences
             });
@@ -1270,6 +1270,8 @@ namespace ts {
             restoreState: noop,
             getProgram: notImplemented,
             getProgramOrUndefined: returnUndefined,
+            // TODO::
+            getProgramOrProgramFromBuildInfoOrUndefined: returnUndefined,
             releaseProgram: noop,
             getCompilerOptions: () => state.compilerOptions,
             getSourceFile: notImplemented,
@@ -1317,6 +1319,8 @@ namespace ts {
             restoreState: noop,
             getProgram,
             getProgramOrUndefined: () => getState().program,
+            // TODO::
+            getProgramOrProgramFromBuildInfoOrUndefined: () => getState().program,
             releaseProgram: () => getState().program = undefined,
             getCompilerOptions: () => getState().compilerOptions,
             getSourceFile: fileName => getProgram().getSourceFile(fileName),

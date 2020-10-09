@@ -378,6 +378,7 @@ namespace ts {
 
             // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect
             const program = resolutionHost.getCurrentProgram();
+            // TODO later to see if we need to hydrate resolution cache and if we need to be able to answer this
             const oldRedirect = program && program.getResolvedProjectReferenceToRedirect(containingFile);
             const unmatchedRedirects = oldRedirect ?
                 !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :

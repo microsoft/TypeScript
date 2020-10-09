@@ -42,6 +42,11 @@ namespace ts {
         /*@internal*/
         getProgramOrUndefined(): Program | undefined;
         /**
+         * Returns current program that could be undefined if the program was released
+         */
+        /*@internal*/
+        getProgramOrProgramFromBuildInfoOrUndefined(): Program | ProgramFromBuildInfo | undefined;
+        /**
          * Releases reference to the program, making all the other operations that need program to fail.
          */
         /*@internal*/

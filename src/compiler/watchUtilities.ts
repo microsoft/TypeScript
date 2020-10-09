@@ -486,7 +486,7 @@ namespace ts {
 
         // just check if sourceFile with the name exists
         const filePathWithoutExtension = removeFileExtension(fileOrDirectoryPath);
-        const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+        const realProgram = isArray(program) ? undefined : isBuilderProgram(program) ? program.getProgramOrProgramFromBuildInfoOrUndefined() : program;
         const builderProgram = !realProgram && !isArray(program) ? program as BuilderProgram : undefined;
         if (hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
             hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)) {
