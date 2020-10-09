@@ -4745,7 +4745,7 @@
         "category": "Message",
         "code": 6800
     },
-    "Issue an warning if declaration is deprecated": {
+    "Issue a error if declaration is deprecated": {
         "category": "Message",
         "code": 6801
     },

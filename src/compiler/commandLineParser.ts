@@ -635,12 +635,12 @@ namespace ts {
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
         {
-            name: "warningOnDeprecated",
+            name: "noDeprecated",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
-            description: Diagnostics.Issue_an_warning_if_declaration_is_deprecated
+            description: Diagnostics.Issue_a_error_if_declaration_is_deprecated
         },
 
         // Module Resolution

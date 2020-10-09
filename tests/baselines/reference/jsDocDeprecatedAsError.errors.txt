@@ -1,0 +1,29 @@
+tests/cases/conformance/jsdoc/jsDocDeprecatedAsError.ts(14,18): error TS6385: 'I' is deprecated
+tests/cases/conformance/jsdoc/jsDocDeprecatedAsError.ts(15,1): error TS6385: 'a' is deprecated
+tests/cases/conformance/jsdoc/jsDocDeprecatedAsError.ts(16,3): error TS6385: 'f' is deprecated
+
+
+==== tests/cases/conformance/jsdoc/jsDocDeprecatedAsError.ts (3 errors) ====
+    /**
+     * @deprecated
+     */
+    interface I {
+        /**
+         * @deprecated
+         */
+        f: string
+    }
+    /**
+     * @deprecated
+     */
+    const a = "foo"
+    declare const b: I
+                     ~
+!!! error TS6385: 'I' is deprecated
+    a.toLocaleLowerCase();
+    ~
+!!! error TS6385: 'a' is deprecated
+    b.f.toLocaleLowerCase();
+      ~
+!!! error TS6385: 'f' is deprecated
+    

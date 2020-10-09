@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/jsDocDeprecatedAsError.ts ===
+/**
+ * @deprecated
+ */
+interface I {
+    /**
+     * @deprecated
+     */
+    f: string
+>f : string
+}
+/**
+ * @deprecated
+ */
+const a = "foo"
+>a : "foo"
+>"foo" : "foo"
+
+declare const b: I
+>b : I
+
+a.toLocaleLowerCase();
+>a.toLocaleLowerCase() : string
+>a.toLocaleLowerCase : (locales?: string | string[]) => string
+>a : "foo"
+>toLocaleLowerCase : (locales?: string | string[]) => string
+
+b.f.toLocaleLowerCase();
+>b.f.toLocaleLowerCase() : string
+>b.f.toLocaleLowerCase : (locales?: string | string[]) => string
+>b.f : string
+>b : I
+>f : string
+>toLocaleLowerCase : (locales?: string | string[]) => string
+

@@ -565,10 +565,6 @@ namespace FourSlashInterface {
             this.state.getSuggestionDiagnostics(expected);
         }
 
-        public getWarningDiagnostics(expected: readonly Diagnostic[]) {
-            this.state.getWarningDiagnostics(expected);
-        }
-
         public ProjectInfo(expected: string[]) {
             this.state.verifyProjectInfo(expected);
         }

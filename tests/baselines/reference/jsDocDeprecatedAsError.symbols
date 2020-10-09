@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/jsDocDeprecatedAsError.ts ===
+/**
+ * @deprecated
+ */
+interface I {
+>I : Symbol(I, Decl(jsDocDeprecatedAsError.ts, 0, 0))
+
+    /**
+     * @deprecated
+     */
+    f: string
+>f : Symbol(I.f, Decl(jsDocDeprecatedAsError.ts, 3, 13))
+}
+/**
+ * @deprecated
+ */
+const a = "foo"
+>a : Symbol(a, Decl(jsDocDeprecatedAsError.ts, 12, 5))
+
+declare const b: I
+>b : Symbol(b, Decl(jsDocDeprecatedAsError.ts, 13, 13))
+>I : Symbol(I, Decl(jsDocDeprecatedAsError.ts, 0, 0))
+
+a.toLocaleLowerCase();
+>a.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(jsDocDeprecatedAsError.ts, 12, 5))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+
+b.f.toLocaleLowerCase();
+>b.f.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>b.f : Symbol(I.f, Decl(jsDocDeprecatedAsError.ts, 3, 13))
+>b : Symbol(b, Decl(jsDocDeprecatedAsError.ts, 13, 13))
+>f : Symbol(I.f, Decl(jsDocDeprecatedAsError.ts, 3, 13))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+
