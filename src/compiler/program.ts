@@ -1498,7 +1498,7 @@ namespace ts {
                 if (oldSourceFile.redirectInfo) {
                     // We got `newSourceFile` by path, so it is actually for the unredirected file.
                     // This lets us know if the unredirected file has changed. If it has we should break the redirect.
-                    if (newSourceFile.version !== oldSourceFile.redirectInfo.unredirected.version) {
+                    if (newSourceFile.version !== oldSourceFile.version) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return StructureIsReused.Not;
                     }
