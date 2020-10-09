@@ -5,9 +5,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     registerRefactor(actionName, {
         getEditsForAction(context, actionName) {
             if (!context.endPosition) return undefined;
-            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition);
+            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
             if (!info || !info.info) return undefined;
-            const edits = codefix.generateAccessorFromProperty(context.file, context.startPosition, context.endPosition, context, actionName);
+            const edits = codefix.generateAccessorFromProperty(context.file, context.program, context.startPosition, context.endPosition, context, actionName);
             if (!edits) return undefined;
 
             const renameFilename = context.file.fileName;
@@ -19,7 +19,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         },
         getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
             if (!context.endPosition) return emptyArray;
-            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition, context.triggerReason === "invoked");
+            const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
             if (!info.error) {
