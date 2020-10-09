@@ -925,10 +925,10 @@ namespace ts {
         /**
          * map with
          * - SourceFile if present
-         * - false if sourceFile missing for source of project reference redirect
-         * - undefined otherwise
+         * - missingSourceOfProjectReferenceRedirect = false if sourceFile missing for source of project reference redirect
+         * - missingFile = 0 otherwise
          */
-        const filesByName = new Map<string, SourceFile | false | undefined>();
+        const filesByName = new Map<string, SourceFile | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>();
         let missingFilePaths: readonly Path[] | undefined;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
@@ -1034,7 +1034,7 @@ namespace ts {
                 }
             }
 
-            missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
+            missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === missingFile ? path as Path : undefined));
             files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
             processingDefaultLibFiles = undefined;
             processingOtherFiles = undefined;
@@ -1678,7 +1678,7 @@ namespace ts {
                     }
                     return;
                 }
-                filesByName.set(path, filesByName.get(oldFile.path));
+                filesByName.set(path, filesByName.get(oldFile.path)!);
             });
 
             files = newSourceFiles;
@@ -1762,8 +1762,8 @@ namespace ts {
                 (_ref, index) => resolvedProjectReferences![index]?.commandLine,
                 fileName => {
                     const path = toPath(fileName);
-                    const sourceFile = getSourceFileByPath(path);
-                    return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
+                    const sourceFile = filesByName.get(path);
+                    return sourceFile ? sourceFile.text : sourceFile !== undefined ? undefined : host.readFile(path);
                 }
             );
         }
@@ -2595,13 +2595,13 @@ namespace ts {
                 }
             }
             const originalFileName = fileName;
-            if (filesByName.has(path)) {
-                const file = filesByName.get(path);
-                addFileIncludeReason(file || undefined, reason);
+            const cachedFile = filesByName.get(path);
+            if (cachedFile !== undefined) {
+                addFileIncludeReason(cachedFile || undefined, reason);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
-                if (file && options.forceConsistentCasingInFileNames) {
-                    const checkedName = file.fileName;
+                if (cachedFile && options.forceConsistentCasingInFileNames) {
+                    const checkedName = cachedFile.fileName;
                     const isRedirect = toPath(checkedName) !== toPath(fileName);
                     if (isRedirect) {
                         fileName = getProjectReferenceRedirect(fileName) || fileName;
@@ -2610,34 +2610,34 @@ namespace ts {
                     const checkedAbsolutePath = getNormalizedAbsolutePathWithoutRoot(checkedName, currentDirectory);
                     const inputAbsolutePath = getNormalizedAbsolutePathWithoutRoot(fileName, currentDirectory);
                     if (checkedAbsolutePath !== inputAbsolutePath) {
-                        reportFileNamesDifferOnlyInCasingError(fileName, file, reason);
+                        reportFileNamesDifferOnlyInCasingError(fileName, cachedFile, reason);
                     }
                 }
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth === 0) {
-                    sourceFilesFoundSearchingNodeModules.set(file.path, false);
+                if (cachedFile && sourceFilesFoundSearchingNodeModules.get(cachedFile.path) && currentNodeModulesDepth === 0) {
+                    sourceFilesFoundSearchingNodeModules.set(cachedFile.path, false);
                     if (!options.noResolve) {
-                        processReferencedFiles(file, isDefaultLib);
-                        processTypeReferenceDirectives(file);
+                        processReferencedFiles(cachedFile, isDefaultLib);
+                        processTypeReferenceDirectives(cachedFile);
                     }
                     if (!options.noLib) {
-                        processLibReferenceDirectives(file);
+                        processLibReferenceDirectives(cachedFile);
                     }
 
-                    modulesWithElidedImports.set(file.path, false);
-                    processImportedModules(file);
+                    modulesWithElidedImports.set(cachedFile.path, false);
+                    processImportedModules(cachedFile);
                 }
                 // See if we need to reprocess the imports due to prior skipped imports
-                else if (file && modulesWithElidedImports.get(file.path)) {
+                else if (cachedFile && modulesWithElidedImports.get(cachedFile.path)) {
                     if (currentNodeModulesDepth < maxNodeModuleJsDepth) {
-                        modulesWithElidedImports.set(file.path, false);
-                        processImportedModules(file);
+                        modulesWithElidedImports.set(cachedFile.path, false);
+                        processImportedModules(cachedFile);
                     }
                 }
 
-                return file || undefined;
+                return cachedFile || undefined;
             }
 
             let redirectedPath: Path | undefined;
@@ -2739,11 +2739,11 @@ namespace ts {
 
         function addFileToFilesByName(file: SourceFile | undefined, path: Path, redirectedPath: Path | undefined) {
             if (redirectedPath) {
-                filesByName.set(redirectedPath, file);
-                filesByName.set(path, file || false);
+                filesByName.set(redirectedPath, file || missingFile);
+                filesByName.set(path, file || missingSourceOfProjectReferenceRedirect);
             }
             else {
-                filesByName.set(path, file);
+                filesByName.set(path, file || missingFile);
             }
         }
 
