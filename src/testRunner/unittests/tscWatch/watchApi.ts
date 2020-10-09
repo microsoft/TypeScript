@@ -121,6 +121,11 @@ namespace ts.tscWatch {
             );
             const watch = createWatchProgram(watchCompilerHost);
             checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
+
+            const other2 = `${projectRoot}/other2.vue`;
+            sys.writeFile(other2, otherFile.content);
+            checkSingleTimeoutQueueLengthAndRun(sys);
+            checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path, other2]);
         });
     });
 }
