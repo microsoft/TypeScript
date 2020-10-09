@@ -112,7 +112,17 @@ namespace ts.codefix {
     /** Whether `module.exports =` was changed to `export default` */
     type ModuleExportsChanged = boolean;
 
-    function convertStatement(sourceFile: SourceFile, statement: Statement, checker: TypeChecker, changes: textChanges.ChangeTracker, identifiers: Identifiers, target: ScriptTarget, exports: ExportRenames, useSitesToUnqualify: ESMap<Node, Node> | undefined, quotePreference: QuotePreference): ModuleExportsChanged {
+    function convertStatement(
+        sourceFile: SourceFile,
+        statement: Statement,
+        checker: TypeChecker,
+        changes: textChanges.ChangeTracker,
+        identifiers: Identifiers,
+        target: ScriptTarget,
+        exports: ExportRenames,
+        useSitesToUnqualify: ESMap<Node, Node> | undefined,
+        quotePreference: QuotePreference
+    ): ModuleExportsChanged {
         switch (statement.kind) {
             case SyntaxKind.VariableStatement:
                 convertVariableStatement(sourceFile, statement as VariableStatement, changes, checker, identifiers, target, quotePreference);
