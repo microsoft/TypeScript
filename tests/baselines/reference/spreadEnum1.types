@@ -1,0 +1,81 @@
+=== tests/cases/conformance/enums/spreadEnum1.ts ===
+enum BasicEvents {
+>BasicEvents : BasicEvents
+
+    Start = "Start",
+>Start : BasicEvents.Start
+>"Start" : "Start"
+
+    Finish = "Finish"
+>Finish : BasicEvents.Finish
+>"Finish" : "Finish"
+}
+
+enum AdvEvents {
+>AdvEvents : AdvEvents
+
+    ...BasicEvents,
+>BasicEvents : error
+
+    Pause = "Pause",
+>Pause : AdvEvents.Pause
+>"Pause" : "Pause"
+
+    Resume = "Resume"
+>Resume : AdvEvents.Resume
+>"Resume" : "Resume"
+}
+
+declare let basic: BasicEvents;
+>basic : BasicEvents
+
+declare let adv: AdvEvents;
+>adv : AdvEvents
+
+// adv = basic;
+
+// basic = BasicEvents.Start;
+// basic = BasicEvents.Finish;
+
+adv = AdvEvents.Start;
+>adv = AdvEvents.Start : BasicEvents.Start
+>adv : AdvEvents
+>AdvEvents.Start : BasicEvents.Start
+>AdvEvents : typeof AdvEvents
+>Start : BasicEvents.Start
+
+adv = AdvEvents.Finish;
+>adv = AdvEvents.Finish : BasicEvents.Finish
+>adv : AdvEvents
+>AdvEvents.Finish : BasicEvents.Finish
+>AdvEvents : typeof AdvEvents
+>Finish : BasicEvents.Finish
+
+adv = AdvEvents.Pause;
+>adv = AdvEvents.Pause : AdvEvents.Pause
+>adv : AdvEvents
+>AdvEvents.Pause : AdvEvents.Pause
+>AdvEvents : typeof AdvEvents
+>Pause : AdvEvents.Pause
+
+adv = AdvEvents.Resume;
+>adv = AdvEvents.Resume : AdvEvents.Resume
+>adv : AdvEvents
+>AdvEvents.Resume : AdvEvents.Resume
+>AdvEvents : typeof AdvEvents
+>Resume : AdvEvents.Resume
+
+adv = BasicEvents.Start;
+>adv = BasicEvents.Start : BasicEvents.Start
+>adv : AdvEvents
+>BasicEvents.Start : BasicEvents.Start
+>BasicEvents : typeof BasicEvents
+>Start : BasicEvents.Start
+
+adv = BasicEvents.Finish;
+>adv = BasicEvents.Finish : BasicEvents.Finish
+>adv : AdvEvents
+>BasicEvents.Finish : BasicEvents.Finish
+>BasicEvents : typeof BasicEvents
+>Finish : BasicEvents.Finish
+

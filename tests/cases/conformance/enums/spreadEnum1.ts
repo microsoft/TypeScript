@@ -15,10 +15,10 @@ declare let basic: BasicEvents;
 
 declare let adv: AdvEvents;
 
-adv = basic;
+// adv = basic;
 
-basic = BasicEvents.Start;
-basic = BasicEvents.Finish;
+// basic = BasicEvents.Start;
+// basic = BasicEvents.Finish;
 
 adv = AdvEvents.Start;
 adv = AdvEvents.Finish;
