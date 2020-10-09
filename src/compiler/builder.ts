@@ -1037,8 +1037,9 @@ namespace ts {
                 savedAffectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
             }
 
-            if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram)
+            if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
+            }
             const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
             if (result) return result;
 
