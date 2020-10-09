@@ -1,8 +1,11 @@
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(16,10): error TS2797: Object is possibly 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(16,15): error TS2339: Property 'n' does not exist on type 'void'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(39,16): error TS2797: Object is possibly 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(39,21): error TS2339: Property 'a' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(49,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(51,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(56,21): error TS2339: Property 'notFound' does not exist on type '{ y: number; }'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(59,16): error TS2797: Object is possibly 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(59,21): error TS2339: Property 'notSpecified' does not exist on type 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(61,79): error TS2322: Type '{ y: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
@@ -95,7 +98,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(177,19): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (65 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (68 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -112,6 +115,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
         }
         explicitVoid(this: void, m: number): number {
     		return this.n + m; // 'n' doesn't exist on type 'void'.
+    		       ~~~~
+!!! error TS2797: Object is possibly 'void'.
     		            ~
 !!! error TS2339: Property 'n' does not exist on type 'void'.
         }
@@ -137,6 +142,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
         a: 12,
         explicitVoid1() {
             return this.a; // error, no 'a' in 'void'
+                   ~~~~
+!!! error TS2797: Object is possibly 'void'.
                         ~
 !!! error TS2339: Property 'a' does not exist on type 'void'.
         },
@@ -165,6 +172,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     }
     function voidThisSpecified(this: void, x: number): number {
         return x + this.notSpecified;
+                   ~~~~
+!!! error TS2797: Object is possibly 'void'.
                         ~~~~~~~~~~~~
 !!! error TS2339: Property 'notSpecified' does not exist on type 'void'.
     }
