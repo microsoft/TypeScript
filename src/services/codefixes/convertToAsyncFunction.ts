@@ -391,11 +391,64 @@ namespace ts.codefix {
 
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction: {
-                const funcBody = (func as FunctionExpression | ArrowFunction).body;
+                const funcExpr = func as FunctionExpression | ArrowFunction;
+                const funcBody = funcExpr.body;
                 const returnType = getLastCallSignature(transformer.checker.getTypeAtLocation(func), transformer.checker)?.getReturnType();
 
                 // Arrow functions with block bodies { } will enter this control flow
                 if (isBlock(funcBody)) {
+                    if (!shouldReturn(parent, transformer)) {
+                        const hasNestedReturnStatement = forEachChildRecursively(
+                            funcBody,
+                            (node, parent) => {
+                                if (!isStatement(node)) {
+                                    return "skip";
+                                }
+                                if (isReturnStatement(node) && parent !== funcBody) {
+                                    return true;
+                                }
+                            }
+                        );
+                        if (hasNestedReturnStatement) {
+                            // Get return type of the function
+                            const type = transformer.checker.getTypeAtLocation(func);
+                            const callSignatures = transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
+                            if (!callSignatures.length) {
+                                // if identifier in handler has no call signatures, it's invalid
+                                return silentFail();
+                            }
+                            const returnType = callSignatures[0].getReturnType();
+                            // Convert to an IIFE
+                            const callExpression = factory.createCallExpression(
+                                isArrowFunction(funcExpr) ? factory.updateArrowFunction(
+                                    funcExpr,
+                                    funcExpr.modifiers,
+                                    funcExpr.typeParameters,
+                                    [],
+                                    funcExpr.type,
+                                    funcExpr.equalsGreaterThanToken,
+                                    funcExpr.body
+                                ) : factory.updateFunctionExpression(
+                                    funcExpr,
+                                    funcExpr.modifiers,
+                                    undefined,
+                                    funcExpr.name,
+                                    funcExpr.typeParameters,
+                                    [],
+                                    funcExpr.type,
+                                    funcExpr.body
+                                ),
+                                /* typeArguments */ undefined,
+                                []
+                            );
+                            const possiblyAwaitedExpression = transformer.checker.getPromisedTypeOfPromise(returnType) ?
+                              factory.createAwaitExpression(callExpression) : callExpression;
+                            return [
+                                convertReturnedExpression(possiblyAwaitedExpression, prevArgName)
+                            ];
+                        }
+                    }
+
                     let refactoredStmts: Statement[] = [];
                     let seenReturnStatement = false;
                     for (const statement of funcBody.statements) {
@@ -471,13 +524,7 @@ namespace ts.codefix {
             if (isReturnStatement(stmt)) {
                 if (stmt.expression) {
                     const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwaitExpression(stmt.expression) : stmt.expression;
-                    if (prevArgName === undefined) {
-                        ret.push(factory.createExpressionStatement(possiblyAwaitedExpression));
-                    }
-                    else {
-                        ret.push(factory.createVariableStatement(/*modifiers*/ undefined,
-                            (factory.createVariableDeclarationList([factory.createVariableDeclaration(getNode(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, possiblyAwaitedExpression)], NodeFlags.Const))));
-                    }
+                    ret.push(convertReturnedExpression(possiblyAwaitedExpression, prevArgName));
                 }
             }
             else {
@@ -492,6 +539,16 @@ namespace ts.codefix {
         }
 
         return ret;
+    }
+
+    function convertReturnedExpression(expression: Expression, prevArgName: SynthBindingName | undefined): Statement {
+        if (prevArgName === undefined) {
+            return factory.createExpressionStatement(expression);
+        }
+        else {
+            return factory.createVariableStatement(/*modifiers*/ undefined,
+                factory.createVariableDeclarationList([factory.createVariableDeclaration(getNode(prevArgName), /*exclamationToken*/ undefined, /*type*/ undefined, expression)], NodeFlags.Const));
+        }
     }
 
 
