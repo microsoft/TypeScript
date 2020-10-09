@@ -27335,14 +27335,12 @@ namespace ts {
 
                 const declCount = length(failed.declaration?.symbol.declarations);
                 const isOverload = declCount > 1;
-                const implDecl = isOverload ? failed.declaration?.symbol.declarations[declCount - 1] : undefined;
-
-
-                if (isOverload && implDecl && nodeIsPresent((implDecl as FunctionLikeDeclaration).body)) {
+                const implDecl = isOverload ? find(failed.declaration?.symbol.declarations || emptyArray, d => nodeIsPresent((d as FunctionLikeDeclaration).body)) : undefined;
+                if (implDecl) {
                     const candidate = getSignatureFromDeclaration(implDecl as FunctionLikeDeclaration);
                     const isSingleNonGenericCandidate = !candidate.typeParameters;
-                    if (!!chooseOverload([candidate], assignableRelation, isSingleNonGenericCandidate)) {
-                        addRelatedInfo(diagnostic , createDiagnosticForNode(implDecl, Diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible));
+                    if (chooseOverload([candidate], assignableRelation, isSingleNonGenericCandidate)) {
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(implDecl, Diagnostics.The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_are_not_externally_visible));
                     }
                 }
 
