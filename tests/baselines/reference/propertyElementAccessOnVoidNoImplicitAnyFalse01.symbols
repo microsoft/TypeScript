@@ -1,0 +1,39 @@
+=== tests/cases/compiler/propertyElementAccessOnVoidNoImplicitAnyFalse01.ts ===
+let result = [1, 2, 3, 4].forEach(x => {
+>result : Symbol(result, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 3))
+>[1, 2, 3, 4].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 34))
+
+    console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 34))
+
+});
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    result["hello"] = "foo";
+>result : Symbol(result, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 3))
+
+    result.world = "foo";
+>result : Symbol(result, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 3))
+}
+else {
+    console.log(result["hello"]);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>result : Symbol(result, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 3))
+
+    console.log(result.world);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>result : Symbol(result, Decl(propertyElementAccessOnVoidNoImplicitAnyFalse01.ts, 0, 3))
+}

@@ -1,0 +1,21 @@
+tests/cases/compiler/propertyElementAccessOnVoidNoImplicitAnyFalse01.ts(7,12): error TS2339: Property 'world' does not exist on type 'void'.
+tests/cases/compiler/propertyElementAccessOnVoidNoImplicitAnyFalse01.ts(11,24): error TS2339: Property 'world' does not exist on type 'void'.
+
+
+==== tests/cases/compiler/propertyElementAccessOnVoidNoImplicitAnyFalse01.ts (2 errors) ====
+    let result = [1, 2, 3, 4].forEach(x => {
+        console.log(x);
+    });
+    
+    if (Math.random()) {
+        result["hello"] = "foo";
+        result.world = "foo";
+               ~~~~~
+!!! error TS2339: Property 'world' does not exist on type 'void'.
+    }
+    else {
+        console.log(result["hello"]);
+        console.log(result.world);
+                           ~~~~~
+!!! error TS2339: Property 'world' does not exist on type 'void'.
+    }

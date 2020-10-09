@@ -1,0 +1,62 @@
+=== tests/cases/compiler/propertyElementAccessOnVoidNoImplicitAnyFalse01.ts ===
+let result = [1, 2, 3, 4].forEach(x => {
+>result : void
+>[1, 2, 3, 4].forEach(x => {    console.log(x);}) : void
+>[1, 2, 3, 4].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>[1, 2, 3, 4] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>x => {    console.log(x);} : (x: number) => void
+>x : number
+
+    console.log(x);
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : number
+
+});
+
+if (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+    result["hello"] = "foo";
+>result["hello"] = "foo" : "foo"
+>result["hello"] : any
+>result : void
+>"hello" : "hello"
+>"foo" : "foo"
+
+    result.world = "foo";
+>result.world = "foo" : "foo"
+>result.world : any
+>result : void
+>world : any
+>"foo" : "foo"
+}
+else {
+    console.log(result["hello"]);
+>console.log(result["hello"]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>result["hello"] : any
+>result : void
+>"hello" : "hello"
+
+    console.log(result.world);
+>console.log(result.world) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>result.world : any
+>result : void
+>world : any
+}
