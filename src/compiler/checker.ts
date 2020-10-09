@@ -27328,7 +27328,7 @@ namespace ts {
 
             return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
 
-            function addImplementationSuccessElaboration(failed: Signature, diagnostic : Diagnostic) {
+            function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
                 const oldCandidatesForArgumentError = candidatesForArgumentError;
                 const oldCandidateForArgumentArityError = candidateForArgumentArityError;
                 const oldCandidateForTypeArgumentError = candidateForTypeArgumentError;
