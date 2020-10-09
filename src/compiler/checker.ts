@@ -25571,7 +25571,7 @@ namespace ts {
         function checkNonNullNonVoidType(type: Type, node: Node): Type {
             const nonNullType = checkNonNullType(type, node);
             if (nonNullType !== errorType && nonNullType.flags & TypeFlags.Void) {
-                error(node, Diagnostics.Object_is_possibly_undefined);
+                error(node, Diagnostics.Object_is_possibly_void);
             }
             return nonNullType;
         }
