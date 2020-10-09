@@ -32,10 +32,24 @@ declare let basic: BasicEvents;
 declare let adv: AdvEvents;
 >adv : AdvEvents
 
-// adv = basic;
+adv = basic;
+>adv = basic : BasicEvents
+>adv : AdvEvents
+>basic : BasicEvents
 
-// basic = BasicEvents.Start;
-// basic = BasicEvents.Finish;
+basic = BasicEvents.Start;
+>basic = BasicEvents.Start : BasicEvents.Start
+>basic : BasicEvents
+>BasicEvents.Start : BasicEvents.Start
+>BasicEvents : typeof BasicEvents
+>Start : BasicEvents.Start
+
+basic = BasicEvents.Finish;
+>basic = BasicEvents.Finish : BasicEvents.Finish
+>basic : BasicEvents
+>BasicEvents.Finish : BasicEvents.Finish
+>BasicEvents : typeof BasicEvents
+>Finish : BasicEvents.Finish
 
 adv = AdvEvents.Start;
 >adv = AdvEvents.Start : BasicEvents.Start

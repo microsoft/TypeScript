@@ -2426,7 +2426,7 @@ namespace ts {
 
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            const members = map(node.members, transformEnumMember);
+            const members = map(node.members, transformEnumMemberLike);
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             addRange(statements, members);
 
@@ -2442,37 +2442,50 @@ namespace ts {
          *
          * @param member The enum member node.
          */
-        function transformEnumMember(member: EnumMember): Statement {
-            // enums don't support computed properties
-            // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
-            // old emitter always generate 'expression' part of the name as-is.
-            const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
-            const valueExpression = transformEnumMemberDeclarationValue(member);
-            const innerAssignment = factory.createAssignment(
-                factory.createElementAccessExpression(
-                    currentNamespaceContainerName,
-                    name
-                ),
-                valueExpression
-            );
-            const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
-                innerAssignment :
-                factory.createAssignment(
+        function transformEnumMemberLike(member: EnumMemberLike): Statement {
+            if (isEnumMember(member)) {
+                // enums don't support computed properties
+                // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
+                // old emitter always generate 'expression' part of the name as-is.
+                const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
+                const valueExpression = transformEnumMemberDeclarationValue(member);
+                const innerAssignment = factory.createAssignment(
                     factory.createElementAccessExpression(
                         currentNamespaceContainerName,
-                        innerAssignment
+                        name
                     ),
-                    name
+                    valueExpression
                 );
-            return setTextRange(
-                factory.createExpressionStatement(
-                    setTextRange(
-                        outerAssignment,
-                        member
-                    )
-                ),
-                member
-            );
+                const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+                    innerAssignment :
+                    factory.createAssignment(
+                        factory.createElementAccessExpression(
+                            currentNamespaceContainerName,
+                            innerAssignment
+                        ),
+                        name
+                    );
+                return setTextRange(
+                    factory.createExpressionStatement(
+                        setTextRange(
+                            outerAssignment,
+                            member
+                        )
+                    ),
+                    member
+                );
+            }
+            else {
+                return setTextRange(
+                    factory.createExpressionStatement(
+                        setTextRange(
+                            emitHelpers().createAssignHelper([currentNamespaceContainerName, member.name as Identifier]),
+                            member
+                        )
+                    ),
+                    member
+                );
+            }
         }
 
         /**

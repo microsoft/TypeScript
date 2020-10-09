@@ -1262,7 +1262,7 @@ namespace ts {
         }
 
         function combineSymbolTables(first: SymbolTable, second: SymbolTable): SymbolTable;
-        function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined;        
+        function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined;
         function combineSymbolTables(first: SymbolTable | undefined, second: SymbolTable | undefined): SymbolTable | undefined {
             if (!first?.size) return second;
             if (!second?.size) return first;
@@ -9472,7 +9472,7 @@ namespace ts {
                     }
                 }
             }
-            return memberTypeList
+            return memberTypeList;
         }
 
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
@@ -10401,25 +10401,25 @@ namespace ts {
                 }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
                 if (symbol.flags & SymbolFlags.Enum) {
-                    const spreadEnumMembers: SpreadEnumMember[] = []
+                    const spreadEnumMembers: SpreadEnumMember[] = [];
                     symbol.declarations.forEach(decl => {
                         if (isEnumDeclaration(decl)) {
                             decl.members.forEach(member => {
                                 if (isSpreadEnumMember(member)) {
-                                    spreadEnumMembers.push(member)
+                                    spreadEnumMembers.push(member);
                                 }
-                            })
+                            });
                         }
-                    })
+                    });
                     if (spreadEnumMembers.length) {
                         spreadEnumMembers.forEach(member => {
                             if (isIdentifier(member.name)) {
-                                const sym = getResolvedSymbol(member.name)
+                                const sym = getResolvedSymbol(member.name);
                                 if (sym.flags & SymbolFlags.Enum) {
                                     members = combineSymbolTables(members, getExportsOfSymbol(sym));
                                 }
                             }
-                        })
+                        });
                         setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
                     }
                 }

@@ -28,10 +28,21 @@ declare let adv: AdvEvents;
 >adv : Symbol(adv, Decl(spreadEnum1.ts, 13, 11))
 >AdvEvents : Symbol(AdvEvents, Decl(spreadEnum1.ts, 3, 1))
 
-// adv = basic;
+adv = basic;
+>adv : Symbol(adv, Decl(spreadEnum1.ts, 13, 11))
+>basic : Symbol(basic, Decl(spreadEnum1.ts, 11, 11))
 
-// basic = BasicEvents.Start;
-// basic = BasicEvents.Finish;
+basic = BasicEvents.Start;
+>basic : Symbol(basic, Decl(spreadEnum1.ts, 11, 11))
+>BasicEvents.Start : Symbol(BasicEvents.Start, Decl(spreadEnum1.ts, 0, 18))
+>BasicEvents : Symbol(BasicEvents, Decl(spreadEnum1.ts, 0, 0))
+>Start : Symbol(BasicEvents.Start, Decl(spreadEnum1.ts, 0, 18))
+
+basic = BasicEvents.Finish;
+>basic : Symbol(basic, Decl(spreadEnum1.ts, 11, 11))
+>BasicEvents.Finish : Symbol(BasicEvents.Finish, Decl(spreadEnum1.ts, 1, 20))
+>BasicEvents : Symbol(BasicEvents, Decl(spreadEnum1.ts, 0, 0))
+>Finish : Symbol(BasicEvents.Finish, Decl(spreadEnum1.ts, 1, 20))
 
 adv = AdvEvents.Start;
 >adv : Symbol(adv, Decl(spreadEnum1.ts, 13, 11))
