@@ -36,7 +36,7 @@ namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
-        reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate: boolean): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate?: boolean): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
@@ -2235,9 +2235,9 @@ namespace ts {
             return token = scanTemplateAndSetTokenValue(isTaggedTemplate, true);
         }
 
-        function reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate: boolean): SyntaxKind {
+        function reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate?: boolean): SyntaxKind {
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(isTaggedTemplate, true);
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate || false, true);
         }
 
         function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {

@@ -4011,7 +4011,7 @@ declare namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
-        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate: boolean): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
