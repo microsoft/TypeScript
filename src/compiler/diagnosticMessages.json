@@ -4715,7 +4715,7 @@
         "code": 6384
     },
     "'{0}' is deprecated": {
-        "category": "Suggestion",
+        "category": "Error",
         "code": 6385,
         "reportsDeprecated": true
     },
