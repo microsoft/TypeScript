@@ -9467,7 +9467,7 @@ namespace ts {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (<EnumDeclaration>declaration).members) {
                             if (isEnumMember(member)) {
-                                appendEnumMemberIntoTypeList(member, memberTypeList)
+                                appendEnumMemberIntoTypeList(member, memberTypeList);
                             }
                             else {
                                 const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
@@ -9477,7 +9477,7 @@ namespace ts {
                                         if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
                                             appendEnumMemberIntoTypeList(enumExport.valueDeclaration, memberTypeList);
                                         }
-                                    })
+                                    });
                                 }
                             }
                         }
@@ -9862,7 +9862,7 @@ namespace ts {
                                             const enumSymbol = cloneSymbol(enumExport);
                                             spreadEnumMemberExports.set(enumExport.escapedName, enumSymbol);
                                         }
-                                    })
+                                    });
                                     addToSymbolTable(lateSymbols, spreadEnumMemberExports, Diagnostics.Expression_expected);
                                 }
                             }
