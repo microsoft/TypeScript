@@ -1182,7 +1182,7 @@ namespace ts.Completions {
                     symbol = skipAlias(symbol, typeChecker);
                     if (symbol.flags & (SymbolFlags.Module | SymbolFlags.Enum)) {
                         // Extract module or enum members
-                        const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                        const exportedSymbols = symbol.flags & SymbolFlags.Enum ? typeChecker.getExportsOfSymbol(symbol) : typeChecker.getExportsOfModule(symbol);
                         Debug.assertEachIsDefined(exportedSymbols, "getExportsOfModule() should all be defined");
                         const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);

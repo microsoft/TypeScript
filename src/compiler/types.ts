@@ -2777,6 +2777,7 @@ namespace ts {
     export type ObjectTypeDeclaration =
         | ClassLikeDeclaration
         | InterfaceDeclaration
+        | EnumDeclaration
         | TypeLiteralNode
         ;
 
@@ -4049,6 +4050,7 @@ namespace ts {
         /** Follow a *single* alias to get the immediately aliased symbol. */
         /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+        getExportsOfSymbol(symbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
@@ -4640,7 +4642,7 @@ namespace ts {
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
 
         /* @internal */
-        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
+        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function | Enum,
     }
 
     /* @internal */

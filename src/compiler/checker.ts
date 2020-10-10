@@ -578,6 +578,7 @@ namespace ts {
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
+            getExportsOfSymbol: getExportsOfSymbolAsArray,
             getExportsAndPropertiesOfModule,
             getSymbolWalker: createGetSymbolWalker(
                 getRestTypeOfSignature,
@@ -3424,6 +3425,10 @@ namespace ts {
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
             return symbolsToArray(getExportsOfModule(moduleSymbol));
+        }
+
+        function getExportsOfSymbolAsArray(symbol: Symbol): Symbol[] {
+            return symbolsToArray(getExportsOfSymbol(symbol));
         }
 
         function getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[] {
@@ -9450,31 +9455,6 @@ namespace ts {
             return type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union) ? getDeclaredTypeOfSymbol(getParentOfSymbol(type.symbol)!) : type;
         }
 
-        function getEnumMemberTypeList(symbol: Symbol): Type[] {
-            const memberTypeList: Type[] = [];
-            for (const declaration of symbol.declarations) {
-                if (declaration.kind === SyntaxKind.EnumDeclaration) {
-                    for (const member of (<EnumDeclaration>declaration).members) {
-                        if (isEnumMember(member)) {
-                            const value = getEnumMemberValue(member);
-                            const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
-                            getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
-                        }
-                        else {
-                            const referencedEnumDeclaration = resolveEntityName(member.name, SymbolFlags.Enum);
-                            if (referencedEnumDeclaration) {
-                                const declaredType = getDeclaredTypeOfEnum(referencedEnumDeclaration);
-                                const types = declaredType.flags & TypeFlags.Union ? (<UnionType>declaredType).types : [declaredType];
-                                memberTypeList.push(...types);
-                            }
-                        }
-                    }
-                }
-            }
-            return memberTypeList;
-        }
-
         function getDeclaredTypeOfEnum(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (links.declaredType) {
@@ -9482,7 +9462,16 @@ namespace ts {
             }
             if (getEnumKind(symbol) === EnumKind.Literal) {
                 enumCount++;
-                const memberTypeList = getEnumMemberTypeList(symbol);
+                const memberTypeList: Type[] = [];
+                const enumExports = getExportsOfSymbol(symbol);
+                enumExports.forEach(enumExport => {
+                    if (isEnumMember(enumExport.valueDeclaration)) {
+                        const value = getEnumMemberValue(enumExport.valueDeclaration);
+                        const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, enumExport));
+                        getSymbolLinks(enumExport).declaredType = memberType;
+                        memberTypeList.push(getRegularTypeOfLiteralType(memberType));
+                    }
+                })
                 if (memberTypeList.length) {
                     const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
                     if (enumType.flags & TypeFlags.Union) {
@@ -9736,7 +9725,7 @@ namespace ts {
          * late-bound members that `addDeclarationToSymbol` in binder.ts performs for early-bound
          * members.
          */
-        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration | BinaryExpression, symbolFlags: SymbolFlags) {
+        function addDeclarationToLateBoundSymbol(symbol: Symbol, member: LateBoundDeclaration | BinaryExpression | EnumMember, symbolFlags: SymbolFlags) {
             Debug.assert(!!(getCheckFlags(symbol) & CheckFlags.Late), "Expected a late-bound symbol.");
             symbol.flags |= symbolFlags;
             getSymbolLinks(member.symbol).lateSymbol = symbol;
@@ -9781,7 +9770,7 @@ namespace ts {
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: UnderscoreEscapedMap<TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration) {
+        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: UnderscoreEscapedMap<TransientSymbol>, decl: LateBoundDeclaration | LateBoundBinaryExpressionDeclaration | EnumMember) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
@@ -9789,7 +9778,7 @@ namespace ts {
                 // fall back to the early-bound name of this member.
                 links.resolvedSymbol = decl.symbol;
                 const declName = isBinaryExpression(decl) ? decl.left : decl.name;
-                const type = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : checkComputedPropertyName(declName);
+                const type = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : isEnumMember(decl) ? getTypeOfNode(decl) : checkComputedPropertyName(cast(declName, isComputedPropertyName));
                 if (isTypeUsableAsPropertyName(type)) {
                     const memberName = getPropertyNameFromType(type);
                     const symbolFlags = decl.symbol.flags;
@@ -9844,8 +9833,20 @@ namespace ts {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
                         for (const member of members) {
-                            if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
+                            if (isSpreadEnumMember(member)) {
+                                const symbol = resolveEntityName(member.name, SymbolFlags.Enum);
+                                if (symbol) {
+                                    const enumExports = getExportsOfSymbol(symbol);
+                                    enumExports.forEach(enumExport => {
+                                        if (isEnumMember(enumExport.valueDeclaration)) {
+                                            lateBindMember(symbol, earlySymbols, lateSymbols, enumExport.valueDeclaration);
+                                        }
+                                    })
+                                }
+                            }
+                            else if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
+
                             }
                         }
                     }
@@ -35942,9 +35943,11 @@ namespace ts {
             }
         }
 
-        function checkEnumMember(node: EnumMember) {
-            if (isPrivateIdentifier(node.name)) {
-                error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
+        function checkEnumMember(node: EnumMemberLike) {
+            if (isEnumMember(node)) {
+                if (isPrivateIdentifier(node.name)) {
+                    error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
+                }
             }
         }
 

@@ -243,6 +243,7 @@ namespace ts {
 
                 // Syntactically invalid positions that the parser might produce anyway
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.EnumDeclaration:
                     return undefined;
 
                 default:

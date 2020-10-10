@@ -1372,12 +1372,13 @@ namespace ts {
         }
     }
 
-    export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassElement | TypeElement | ObjectLiteralElement> | undefined {
+    export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassElement | TypeElement | ObjectLiteralElement | EnumMemberLike> | undefined {
         switch (node.kind) {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.TypeLiteral:
+            case SyntaxKind.EnumDeclaration:
                 return (<ObjectTypeDeclaration>node).members;
             case SyntaxKind.ObjectLiteralExpression:
                 return (<ObjectLiteralExpression>node).properties;
