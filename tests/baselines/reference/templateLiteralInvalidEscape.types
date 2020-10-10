@@ -1,0 +1,102 @@
+=== tests/cases/compiler/templateLiteralInvalidEscape.ts ===
+function raw(arr: TemplateStringsArray, ...args: unknown[]) {
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>arr : TemplateStringsArray
+>args : unknown[]
+
+  return arr.raw;
+>arr.raw : readonly string[]
+>arr : TemplateStringsArray
+>raw : readonly string[]
+}
+
+raw`\x`;
+>raw`\x` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`\x` : "\\x"
+
+raw`\x0`;
+>raw`\x0` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`\x0` : "\\x0"
+
+raw`\u11`;
+>raw`\u11` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`\u11` : "\\u11"
+
+raw`\u{}`;
+>raw`\u{}` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`\u{}` : "\\u{}"
+
+raw`\0123`;
+>raw`\0123` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`\0123` : "\\0123"
+
+`\x`;
+>`\x` : ""
+
+`\x0`;
+>`\x0` : ""
+
+`\u11`;
+>`\u11` : ""
+
+`\u{}`;
+>`\u{}` : ""
+
+`\0123`;
+>`\0123` : "\x00123"
+
+raw`${0}\x`;
+>raw`${0}\x` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`${0}\x` : string
+>0 : 0
+
+raw`${0}\x0`;
+>raw`${0}\x0` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`${0}\x0` : string
+>0 : 0
+
+raw`${0}\u11`;
+>raw`${0}\u11` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`${0}\u11` : string
+>0 : 0
+
+raw`${0}\u{}`;
+>raw`${0}\u{}` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`${0}\u{}` : string
+>0 : 0
+
+raw`${0}\0123`;
+>raw`${0}\0123` : readonly string[]
+>raw : (arr: TemplateStringsArray, ...args: unknown[]) => readonly string[]
+>`${0}\0123` : string
+>0 : 0
+
+`${0}\x`;
+>`${0}\x` : string
+>0 : 0
+
+`${0}\x0`;
+>`${0}\x0` : string
+>0 : 0
+
+`${0}\u11`;
+>`${0}\u11` : string
+>0 : 0
+
+`${0}\u{}`;
+>`${0}\u{}` : string
+>0 : 0
+
+`${0}\0123`;
+>`${0}\0123` : string
+>0 : 0
+

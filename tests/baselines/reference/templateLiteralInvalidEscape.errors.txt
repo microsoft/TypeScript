@@ -1,0 +1,55 @@
+tests/cases/compiler/templateLiteralInvalidEscape.ts(11,4): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(12,5): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(13,6): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(14,5): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(23,8): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(24,9): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(25,10): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(26,9): error TS1125: Hexadecimal digit expected.
+
+
+==== tests/cases/compiler/templateLiteralInvalidEscape.ts (8 errors) ====
+    function raw(arr: TemplateStringsArray, ...args: unknown[]) {
+      return arr.raw;
+    }
+    
+    raw`\x`;
+    raw`\x0`;
+    raw`\u11`;
+    raw`\u{}`;
+    raw`\0123`;
+    
+    `\x`;
+       
+!!! error TS1125: Hexadecimal digit expected.
+    `\x0`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\u11`;
+         
+!!! error TS1125: Hexadecimal digit expected.
+    `\u{}`;
+        
+!!! error TS1125: Hexadecimal digit expected.
+    `\0123`;
+    
+    raw`${0}\x`;
+    raw`${0}\x0`;
+    raw`${0}\u11`;
+    raw`${0}\u{}`;
+    raw`${0}\0123`;
+    
+    `${0}\x`;
+           
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\x0`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u11`;
+             
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\u{}`;
+            
+!!! error TS1125: Hexadecimal digit expected.
+    `${0}\0123`;
+    

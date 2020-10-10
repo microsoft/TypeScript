@@ -1,0 +1,55 @@
+=== tests/cases/compiler/templateLiteralInvalidEscape.ts ===
+function raw(arr: TemplateStringsArray, ...args: unknown[]) {
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+>arr : Symbol(arr, Decl(templateLiteralInvalidEscape.ts, 0, 13))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(templateLiteralInvalidEscape.ts, 0, 39))
+
+  return arr.raw;
+>arr.raw : Symbol(TemplateStringsArray.raw, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(templateLiteralInvalidEscape.ts, 0, 13))
+>raw : Symbol(TemplateStringsArray.raw, Decl(lib.es5.d.ts, --, --))
+}
+
+raw`\x`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`\x0`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`\u11`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`\u{}`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`\0123`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+`\x`;
+`\x0`;
+`\u11`;
+`\u{}`;
+`\0123`;
+
+raw`${0}\x`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`${0}\x0`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`${0}\u11`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`${0}\u{}`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+raw`${0}\0123`;
+>raw : Symbol(raw, Decl(templateLiteralInvalidEscape.ts, 0, 0))
+
+`${0}\x`;
+`${0}\x0`;
+`${0}\u11`;
+`${0}\u{}`;
+`${0}\0123`;
+
