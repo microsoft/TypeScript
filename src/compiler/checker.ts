@@ -1084,7 +1084,7 @@ namespace ts {
 
         function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
             if (isError) {
-                diagnostics.add({ ...diagnostic });
+                diagnostics.add(diagnostic);
             }
             else {
                 suggestionDiagnostics.add({ ...diagnostic, category: DiagnosticCategory.Suggestion });
