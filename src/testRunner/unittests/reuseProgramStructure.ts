@@ -677,8 +677,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'."
                 ], "program2: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -701,8 +701,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'."
                 ], "program3: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -726,8 +726,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_4: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -767,8 +767,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_6: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -787,8 +787,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_7 should reuse module resolutions in f2 since it is unchanged");
             }
         });
