@@ -1,7 +1,8 @@
 // @declaration: true
 
 enum A {
-    AA = 'A'
+    AA = 'A',
+    AAA = 'AAA'
 }
 
 enum B {

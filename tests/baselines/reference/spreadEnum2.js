@@ -1,6 +1,7 @@
 //// [spreadEnum2.ts]
 enum A {
-    AA = 'A'
+    AA = 'A',
+    AAA = 'AAA'
 }
 
 enum B {
@@ -58,6 +59,7 @@ var __assign = (this && this.__assign) || function () {
 var A;
 (function (A) {
     A["AA"] = "A";
+    A["AAA"] = "AAA";
 })(A || (A = {}));
 var B;
 (function (B) {
@@ -98,7 +100,8 @@ E.EE;
 
 //// [spreadEnum2.d.ts]
 declare enum A {
-    AA = "A"
+    AA = "A",
+    AAA = "AAA"
 }
 declare enum B {
     ...A,

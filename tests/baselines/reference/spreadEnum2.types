@@ -2,9 +2,13 @@
 enum A {
 >A : A
 
-    AA = 'A'
+    AA = 'A',
 >AA : A.AA
 >'A' : "A"
+
+    AAA = 'AAA'
+>AAA : A.AAA
+>'AAA' : "AAA"
 }
 
 enum B {
@@ -52,9 +56,9 @@ enum E {
 }
 
 A.AA;
->A.AA : A
+>A.AA : A.AA
 >A : typeof A
->AA : A
+>AA : A.AA
 
 B.AA;
 >B.AA : A.AA
@@ -67,9 +71,9 @@ B.BB;
 >BB : B.BB
 
 C.AA;
->C.AA : A.AA
+>C.AA : A
 >C : typeof C
->AA : A.AA
+>AA : A
 
 C.BB;
 >C.BB : B.BB
@@ -82,14 +86,14 @@ C.CC;
 >CC : C.CC
 
 D.AA;
->D.AA : A.AA
+>D.AA : A
 >D : typeof D
->AA : A.AA
+>AA : A
 
 D.BB;
->D.BB : B.BB
+>D.BB : B
 >D : typeof D
->BB : B.BB
+>BB : B
 
 D.CC;
 >D.CC : C.CC
@@ -102,19 +106,19 @@ D.DD;
 >DD : D.DD
 
 E.AA;
->E.AA : A.AA
+>E.AA : A
 >E : typeof E
->AA : A.AA
+>AA : A
 
 E.BB;
->E.BB : B.BB
+>E.BB : B
 >E : typeof E
->BB : B.BB
+>BB : B
 
 E.CC;
->E.CC : C.CC
+>E.CC : C
 >E : typeof E
->CC : C.CC
+>CC : C
 
 E.DD;
 >E.DD : D.DD

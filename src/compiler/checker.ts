@@ -9463,15 +9463,27 @@ namespace ts {
             if (getEnumKind(symbol) === EnumKind.Literal) {
                 enumCount++;
                 const memberTypeList: Type[] = [];
-                const enumExports = getExportsOfSymbol(symbol);
-                enumExports.forEach(enumExport => {
-                    if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
-                        const value = getEnumMemberValue(enumExport.valueDeclaration);
-                        const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, enumExport));
-                        getSymbolLinks(enumExport).declaredType = memberType;
-                        memberTypeList.push(getRegularTypeOfLiteralType(memberType));
+                for (const declaration of symbol.declarations) {
+                    if (declaration.kind === SyntaxKind.EnumDeclaration) {
+                        for (const member of (<EnumDeclaration>declaration).members) {
+                            if (isEnumMember(member)) {
+                                appendEnumMemberIntoTypeList(member, memberTypeList)
+                            }
+                            else {
+                                const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
+                                if (enumSymbol) {
+                                    const enumExports = getExportsOfSymbol(symbol);
+                                    enumExports.forEach(enumExport => {
+                                        if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
+                                            appendEnumMemberIntoTypeList(enumExport.valueDeclaration, memberTypeList);
+                                        }
+                                    })
+                                }
+                            }
+                        }
                     }
-                })
+                }
+
                 if (memberTypeList.length) {
                     const enumType = getUnionType(memberTypeList, UnionReduction.Literal, symbol, /*aliasTypeArguments*/ undefined);
                     if (enumType.flags & TypeFlags.Union) {
@@ -9484,6 +9496,13 @@ namespace ts {
             const enumType = createType(TypeFlags.Enum);
             enumType.symbol = symbol;
             return links.declaredType = enumType;
+
+            function appendEnumMemberIntoTypeList(member: EnumMember, memberTypeList: Type[]) {
+                const value = getEnumMemberValue(member);
+                const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, getSymbolOfNode(member)));
+                getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
+                memberTypeList.push(getRegularTypeOfLiteralType(memberType));
+            }
         }
 
         function getDeclaredTypeOfEnumMember(symbol: Symbol): Type {
