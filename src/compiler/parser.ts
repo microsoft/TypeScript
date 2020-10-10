@@ -1418,8 +1418,8 @@ namespace ts {
             return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
         }
 
-        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-            return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
+        function reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate: boolean): SyntaxKind {
+            return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate);
         }
 
         function reScanLessThanToken(): SyntaxKind {
@@ -2631,11 +2631,12 @@ namespace ts {
             return createNodeArray(list, pos);
         }
 
-        function parseTemplateExpression(isTaggedTemplate: boolean): TemplateExpression {
+        function parseTemplateExpression(isTaggedTemplate: boolean, containsInvalidEscape: boolean): TemplateExpression {
             const pos = getNodePos();
+            console.log({ isTaggedTemplate, containsInvalidEscape });
             return finishNode(
                 factory.createTemplateExpression(
-                    parseTemplateHead(isTaggedTemplate),
+                    parseTemplateHead(isTaggedTemplate, containsInvalidEscape),
                     parseTemplateSpans(isTaggedTemplate)
                 ),
                 pos
@@ -2646,7 +2647,7 @@ namespace ts {
             const pos = getNodePos();
             return finishNode(
                 factory.createTemplateLiteralType(
-                    parseTemplateHead(/*isTaggedTemplate*/ false),
+                    parseTemplateHead(/*isTaggedTemplate*/ false, /* containsInvalidEscape */ false),
                     parseTemplateTypeSpans()
                 ),
                 pos
@@ -2702,9 +2703,9 @@ namespace ts {
             return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
-        function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
-            if (isTaggedTemplate) {
-                reScanTemplateHeadOrNoSubstitutionTemplate();
+        function parseTemplateHead(isTaggedTemplate: boolean, containsInvalidEscape: boolean): TemplateHead {
+            if (isTaggedTemplate || containsInvalidEscape) {
+                reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate);
             }
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
@@ -5239,8 +5240,8 @@ namespace ts {
                 tag,
                 typeArguments,
                 token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
-                    (reScanTemplateHeadOrNoSubstitutionTemplate(), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
-                    parseTemplateExpression(/*isTaggedTemplate*/ true)
+                    (reScanTemplateHeadOrNoSubstitutionTemplate(true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
+                    parseTemplateExpression(/*isTaggedTemplate*/ true, !!(scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape))
             );
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
                 (tagExpression as Mutable<Node>).flags |= NodeFlags.OptionalChain;
@@ -5372,7 +5373,11 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.StringLiteral:
+                    return parseLiteralNode();
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    if (scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape) {
+                        reScanTemplateHeadOrNoSubstitutionTemplate(/* isTaggedTemplate */ false)
+                    }
                     return parseLiteralNode();
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
@@ -5408,7 +5413,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.TemplateHead:
-                    return parseTemplateExpression(/* isTaggedTemplate */ false);
+                    return parseTemplateExpression(/* isTaggedTemplate */ false, !!(scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape));
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);

@@ -36,7 +36,7 @@ namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
-        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
+        reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate: boolean): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;
@@ -1208,7 +1208,7 @@ namespace ts {
                 }
                 if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                     result += text.substring(start, pos);
-                    result += scanEscapeSequence();
+                    result += scanEscapeSequence(false, true);
                     start = pos;
                     continue;
                 }
@@ -1227,7 +1227,7 @@ namespace ts {
          * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
          * a literal component of a TemplateExpression.
          */
-        function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean): SyntaxKind {
+        function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean, shouldEmitInvalidEscapeError: boolean): SyntaxKind {
             const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
             pos++;
@@ -1265,7 +1265,7 @@ namespace ts {
                 // Escape character
                 if (currChar === CharacterCodes.backslash) {
                     contents += text.substring(start, pos);
-                    contents += scanEscapeSequence(isTaggedTemplate);
+                    contents += scanEscapeSequence(isTaggedTemplate, shouldEmitInvalidEscapeError);
                     start = pos;
                     continue;
                 }
@@ -1294,7 +1294,7 @@ namespace ts {
             return resultingToken;
         }
 
-        function scanEscapeSequence(isTaggedTemplate?: boolean): string {
+        function scanEscapeSequence(isTaggedTemplate: boolean, shouldEmitInvalidEscapeError: boolean): string {
             const start = pos;
             pos++;
             if (pos >= end) {
@@ -1306,10 +1306,12 @@ namespace ts {
             switch (ch) {
                 case CharacterCodes._0:
                     // '\01'
-                    if (isTaggedTemplate && pos < end && isDigit(text.charCodeAt(pos))) {
-                        pos++;
+                    if (pos < end && isDigit(text.charCodeAt(pos))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        return text.substring(start, pos);
+                        if (isTaggedTemplate) {
+                            pos++;
+                            return text.substring(start, pos);
+                        }
                     }
                     return "\0";
                 case CharacterCodes.b:
@@ -1329,14 +1331,15 @@ namespace ts {
                 case CharacterCodes.doubleQuote:
                     return "\"";
                 case CharacterCodes.u:
-                    if (isTaggedTemplate) {
-                        // '\u' or '\u0' or '\u00' or '\u000'
-                        for (let escapePos = pos; escapePos < pos + 4; escapePos++) {
-                            if (escapePos < end && !isHexDigit(text.charCodeAt(escapePos)) && text.charCodeAt(escapePos) !== CharacterCodes.openBrace) {
+                    // '\u' or '\u0' or '\u00' or '\u000'
+                    for (let escapePos = pos; escapePos < pos + 4; escapePos++) {
+                        if (escapePos < end && !isHexDigit(text.charCodeAt(escapePos)) && text.charCodeAt(escapePos) !== CharacterCodes.openBrace) {
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                            if (isTaggedTemplate) {
                                 pos = escapePos;
-                                tokenFlags |= TokenFlags.ContainsInvalidEscape;
                                 return text.substring(start, pos);
                             }
+                            break;
                         }
                     }
                     // '\u{DDDDDDDD}'
@@ -1344,47 +1347,49 @@ namespace ts {
                         pos++;
 
                         // '\u{'
-                        if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
+                        if (!isHexDigit(text.charCodeAt(pos))) {
                             tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                            return text.substring(start, pos);
-                        }
-
-                        if (isTaggedTemplate) {
-                            const savePos = pos;
-                            const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
-                            const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
-
-                            // '\u{Not Code Point' or '\u{CodePoint'
-                            if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
-                                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                            if (isTaggedTemplate) {
                                 return text.substring(start, pos);
                             }
-                            else {
-                                pos = savePos;
+                        }
+
+                        const savePos = pos;
+                        const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                        const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+
+                        // '\u{Not Code Point' or '\u{CodePoint'
+                        if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                            if (isTaggedTemplate) {
+                                return text.substring(start, pos);
                             }
                         }
+                        pos = savePos;
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        return scanExtendedUnicodeEscape();
+                        return scanExtendedUnicodeEscape(shouldEmitInvalidEscapeError);
                     }
 
                     tokenFlags |= TokenFlags.UnicodeEscape;
                     // '\uDDDD'
-                    return scanHexadecimalEscape(/*numDigits*/ 4);
+                    return scanHexadecimalEscape(/*numDigits*/ 4, shouldEmitInvalidEscapeError);
 
                 case CharacterCodes.x:
-                    if (isTaggedTemplate) {
-                        if (!isHexDigit(text.charCodeAt(pos))) {
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                    if (!isHexDigit(text.charCodeAt(pos))) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (isTaggedTemplate) {
                             return text.substring(start, pos);
                         }
-                        else if (!isHexDigit(text.charCodeAt(pos + 1))) {
+                    }
+                    else if (!isHexDigit(text.charCodeAt(pos + 1))) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (isTaggedTemplate) {
                             pos++;
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
                             return text.substring(start, pos);
                         }
                     }
                     // '\xDD'
-                    return scanHexadecimalEscape(/*numDigits*/ 2);
+                    return scanHexadecimalEscape(/*numDigits*/ 2, shouldEmitInvalidEscapeError);
 
                 // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
                 // the line terminator is interpreted to be "the empty code unit sequence".
@@ -1402,30 +1407,36 @@ namespace ts {
             }
         }
 
-        function scanHexadecimalEscape(numDigits: number): string {
+        function scanHexadecimalEscape(numDigits: number, shouldEmitInvalidEscapeError: boolean): string {
             const escapedValue = scanExactNumberOfHexDigits(numDigits, /*canHaveSeparators*/ false);
 
             if (escapedValue >= 0) {
                 return String.fromCharCode(escapedValue);
             }
             else {
-                error(Diagnostics.Hexadecimal_digit_expected);
+                if (shouldEmitInvalidEscapeError) {
+                    error(Diagnostics.Hexadecimal_digit_expected);
+                }
                 return "";
             }
         }
 
-        function scanExtendedUnicodeEscape(): string {
+        function scanExtendedUnicodeEscape(shouldEmitInvalidEscapeError: boolean): string {
             const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
             const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
             if (escapedValue < 0) {
-                error(Diagnostics.Hexadecimal_digit_expected);
+                if (shouldEmitInvalidEscapeError) {
+                    error(Diagnostics.Hexadecimal_digit_expected);
+                }
                 isInvalidExtendedEscape = true;
             }
             else if (escapedValue > 0x10FFFF) {
-                error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
+                if (shouldEmitInvalidEscapeError) {
+                    error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
+                }
                 isInvalidExtendedEscape = true;
             }
 
@@ -1438,7 +1449,9 @@ namespace ts {
                 pos++;
             }
             else {
-                error(Diagnostics.Unterminated_Unicode_escape_sequence);
+                if (shouldEmitInvalidEscapeError) {
+                    error(Diagnostics.Unterminated_Unicode_escape_sequence);
+                }
                 isInvalidExtendedEscape = true;
             }
 
@@ -1488,7 +1501,7 @@ namespace ts {
                     if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
                         pos += 3;
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        result += scanExtendedUnicodeEscape();
+                        result += scanExtendedUnicodeEscape(true);
                         start = pos;
                         continue;
                     }
@@ -1673,7 +1686,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
+                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false, false);
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -2008,7 +2021,7 @@ namespace ts {
                         if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
                             pos += 3;
                             tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                            tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                            tokenValue = scanExtendedUnicodeEscape(true) + scanIdentifierParts();
                             return token = getIdentifierToken();
                         }
 
@@ -2216,12 +2229,12 @@ namespace ts {
         function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate, true);
         }
 
-        function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+        function reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate: boolean): SyntaxKind {
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate, true);
         }
 
         function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
@@ -2429,7 +2442,7 @@ namespace ts {
                     if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
                         pos += 3;
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                        tokenValue = scanExtendedUnicodeEscape(true) + scanIdentifierParts();
                         return token = getIdentifierToken();
                     }
 
