@@ -9465,7 +9465,7 @@ namespace ts {
                 const memberTypeList: Type[] = [];
                 const enumExports = getExportsOfSymbol(symbol);
                 enumExports.forEach(enumExport => {
-                    if (isEnumMember(enumExport.valueDeclaration)) {
+                    if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
                         const value = getEnumMemberValue(enumExport.valueDeclaration);
                         const memberType = getFreshTypeOfLiteralType(getLiteralType(value !== undefined ? value : 0, enumCount, enumExport));
                         getSymbolLinks(enumExport).declaredType = memberType;
@@ -9780,7 +9780,7 @@ namespace ts {
                 const declName = isBinaryExpression(decl) ? decl.left : decl.name;
                 const type = isElementAccessExpression(declName) ? checkExpressionCached(declName.argumentExpression) : isEnumMember(decl) ? getTypeOfNode(decl) : checkComputedPropertyName(cast(declName, isComputedPropertyName));
                 if (isTypeUsableAsPropertyName(type)) {
-                    const memberName = getPropertyNameFromType(type);
+                    const memberName = isEnumMember(decl) ? getTextOfPropertyName(decl.name) : getPropertyNameFromType(type);
                     const symbolFlags = decl.symbol.flags;
 
                     // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
@@ -9834,19 +9834,25 @@ namespace ts {
                     if (members) {
                         for (const member of members) {
                             if (isSpreadEnumMember(member)) {
-                                const symbol = resolveEntityName(member.name, SymbolFlags.Enum);
-                                if (symbol) {
-                                    const enumExports = getExportsOfSymbol(symbol);
+                                const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
+                                if (enumSymbol) {
+                                    const enumExports = getExportsOfSymbol(enumSymbol);
+                                    const spreadEnumMemberExports = createSymbolTable();
                                     enumExports.forEach(enumExport => {
-                                        if (isEnumMember(enumExport.valueDeclaration)) {
-                                            lateBindMember(symbol, earlySymbols, lateSymbols, enumExport.valueDeclaration);
+                                        if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
+                                            const memberName = getTextOfPropertyName(enumExport.valueDeclaration.name);
+                                            const enumSymbol = createSymbol(SymbolFlags.Alias | SymbolFlags.EnumMember, memberName);
+                                            enumSymbol.target = enumExport;
+                                            enumSymbol.declarations = enumExport.declarations;
+                                            enumSymbol.valueDeclaration = enumExport.valueDeclaration;
+                                            spreadEnumMemberExports.set(memberName, enumSymbol);
                                         }
                                     })
+                                    addToSymbolTable(lateSymbols, spreadEnumMemberExports, Diagnostics.Expression_expected);
                                 }
                             }
                             else if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
-
                             }
                         }
                     }
@@ -10401,29 +10407,6 @@ namespace ts {
                     }
                 }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
-                if (symbol.flags & SymbolFlags.Enum) {
-                    const spreadEnumMembers: SpreadEnumMember[] = [];
-                    symbol.declarations.forEach(decl => {
-                        if (isEnumDeclaration(decl)) {
-                            decl.members.forEach(member => {
-                                if (isSpreadEnumMember(member)) {
-                                    spreadEnumMembers.push(member);
-                                }
-                            });
-                        }
-                    });
-                    if (spreadEnumMembers.length) {
-                        spreadEnumMembers.forEach(member => {
-                            if (isIdentifier(member.name)) {
-                                const sym = getResolvedSymbol(member.name);
-                                if (sym.flags & SymbolFlags.Enum) {
-                                    members = combineSymbolTables(members, getExportsOfSymbol(sym));
-                                }
-                            }
-                        });
-                        setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
-                    }
-                }
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
@@ -16741,7 +16724,7 @@ namespace ts {
              * * Ternary.Maybe if they are related with assumptions of other relationships, or
              * * Ternary.False if they are not related.
              */
-            function isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+            function  isRelatedTo(originalSource: Type, originalTarget: Type, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
                 // Before normalization: if `source` is type an object type, and `target` is primitive,
                 // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
                 if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {

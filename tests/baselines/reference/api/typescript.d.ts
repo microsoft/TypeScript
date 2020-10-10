@@ -1508,7 +1508,7 @@ declare namespace ts {
         readonly variableDeclaration?: VariableDeclaration;
         readonly block: Block;
     }
-    export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
+    export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | EnumDeclaration | TypeLiteralNode;
     export type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
     export type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
@@ -2233,6 +2233,7 @@ declare namespace ts {
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
+        getExportsOfSymbol(symbol: Symbol): Symbol[];
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];

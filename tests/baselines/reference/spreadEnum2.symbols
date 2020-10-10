@@ -1,0 +1,115 @@
+=== tests/cases/conformance/enums/spreadEnum2.ts ===
+enum A {
+>A : Symbol(A, Decl(spreadEnum2.ts, 0, 0))
+
+    AA = 'A'
+>AA : Symbol(A.AA, Decl(spreadEnum2.ts, 0, 8))
+}
+
+enum B {
+>B : Symbol(B, Decl(spreadEnum2.ts, 2, 1))
+
+    ...A,
+    BB = 'B'
+>BB : Symbol(B.BB, Decl(spreadEnum2.ts, 5, 9))
+}
+
+enum C {
+>C : Symbol(C, Decl(spreadEnum2.ts, 7, 1))
+
+    ...B,
+    CC = 'C'
+>CC : Symbol(C.CC, Decl(spreadEnum2.ts, 10, 9))
+}
+
+enum D {
+>D : Symbol(D, Decl(spreadEnum2.ts, 12, 1))
+
+    ...C,
+    DD = 'D'
+>DD : Symbol(D.DD, Decl(spreadEnum2.ts, 15, 9))
+}
+
+enum E {
+>E : Symbol(E, Decl(spreadEnum2.ts, 17, 1))
+
+    ...D,
+    EE = 'E'
+>EE : Symbol(E.EE, Decl(spreadEnum2.ts, 20, 9))
+}
+
+A.AA;
+>A.AA : Symbol(A.AA, Decl(spreadEnum2.ts, 0, 8))
+>A : Symbol(A, Decl(spreadEnum2.ts, 0, 0))
+>AA : Symbol(A.AA, Decl(spreadEnum2.ts, 0, 8))
+
+B.AA;
+>B.AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+>B : Symbol(B, Decl(spreadEnum2.ts, 2, 1))
+>AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+
+B.BB;
+>B.BB : Symbol(B.BB, Decl(spreadEnum2.ts, 5, 9))
+>B : Symbol(B, Decl(spreadEnum2.ts, 2, 1))
+>BB : Symbol(B.BB, Decl(spreadEnum2.ts, 5, 9))
+
+C.AA;
+>C.AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+>C : Symbol(C, Decl(spreadEnum2.ts, 7, 1))
+>AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+
+C.BB;
+>C.BB : Symbol(BB, Decl(spreadEnum2.ts, 5, 9))
+>C : Symbol(C, Decl(spreadEnum2.ts, 7, 1))
+>BB : Symbol(BB, Decl(spreadEnum2.ts, 5, 9))
+
+C.CC;
+>C.CC : Symbol(C.CC, Decl(spreadEnum2.ts, 10, 9))
+>C : Symbol(C, Decl(spreadEnum2.ts, 7, 1))
+>CC : Symbol(C.CC, Decl(spreadEnum2.ts, 10, 9))
+
+D.AA;
+>D.AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+>D : Symbol(D, Decl(spreadEnum2.ts, 12, 1))
+>AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+
+D.BB;
+>D.BB : Symbol(BB, Decl(spreadEnum2.ts, 5, 9))
+>D : Symbol(D, Decl(spreadEnum2.ts, 12, 1))
+>BB : Symbol(BB, Decl(spreadEnum2.ts, 5, 9))
+
+D.CC;
+>D.CC : Symbol(CC, Decl(spreadEnum2.ts, 10, 9))
+>D : Symbol(D, Decl(spreadEnum2.ts, 12, 1))
+>CC : Symbol(CC, Decl(spreadEnum2.ts, 10, 9))
+
+D.DD;
+>D.DD : Symbol(D.DD, Decl(spreadEnum2.ts, 15, 9))
+>D : Symbol(D, Decl(spreadEnum2.ts, 12, 1))
+>DD : Symbol(D.DD, Decl(spreadEnum2.ts, 15, 9))
+
+E.AA;
+>E.AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+>E : Symbol(E, Decl(spreadEnum2.ts, 17, 1))
+>AA : Symbol(AA, Decl(spreadEnum2.ts, 0, 8))
+
+E.BB;
+>E.BB : Symbol(BB, Decl(spreadEnum2.ts, 5, 9))
+>E : Symbol(E, Decl(spreadEnum2.ts, 17, 1))
+>BB : Symbol(BB, Decl(spreadEnum2.ts, 5, 9))
+
+E.CC;
+>E.CC : Symbol(CC, Decl(spreadEnum2.ts, 10, 9))
+>E : Symbol(E, Decl(spreadEnum2.ts, 17, 1))
+>CC : Symbol(CC, Decl(spreadEnum2.ts, 10, 9))
+
+E.DD;
+>E.DD : Symbol(DD, Decl(spreadEnum2.ts, 15, 9))
+>E : Symbol(E, Decl(spreadEnum2.ts, 17, 1))
+>DD : Symbol(DD, Decl(spreadEnum2.ts, 15, 9))
+
+E.EE;
+>E.EE : Symbol(E.EE, Decl(spreadEnum2.ts, 20, 9))
+>E : Symbol(E, Decl(spreadEnum2.ts, 17, 1))
+>EE : Symbol(E.EE, Decl(spreadEnum2.ts, 20, 9))
+
