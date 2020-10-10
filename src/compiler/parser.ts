@@ -5239,7 +5239,7 @@ namespace ts {
                 tag,
                 typeArguments,
                 token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
-                    (reScanTemplateHeadOrNoSubstitutionTemplate(true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
+                    (reScanTemplateHeadOrNoSubstitutionTemplate(/*isTaggedTemplate*/ true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
                     parseTemplateExpression(/*isTaggedTemplate*/ true, !!(scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape))
             );
             if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
@@ -5375,7 +5375,7 @@ namespace ts {
                     return parseLiteralNode();
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     if (scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape) {
-                        reScanTemplateHeadOrNoSubstitutionTemplate(/* isTaggedTemplate */ false)
+                        reScanTemplateHeadOrNoSubstitutionTemplate(/* isTaggedTemplate */ false);
                     }
                     return parseLiteralNode();
                 case SyntaxKind.ThisKeyword:

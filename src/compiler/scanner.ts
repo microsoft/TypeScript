@@ -1208,7 +1208,7 @@ namespace ts {
                 }
                 if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                     result += text.substring(start, pos);
-                    result += scanEscapeSequence(false, true);
+                    result += scanEscapeSequence(/* isTaggedTemplate */ false, /* shouldEmitInvalidEscapeError */ true);
                     start = pos;
                     continue;
                 }
@@ -1504,7 +1504,7 @@ namespace ts {
                     if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
                         pos += 3;
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        result += scanExtendedUnicodeEscape(true);
+                        result += scanExtendedUnicodeEscape(/* shouldEmitInvalidEscapeError */ true);
                         start = pos;
                         continue;
                     }
@@ -1689,7 +1689,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false, false);
+                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false, /* shouldEmitInvalidEscapeError */ false);
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -2024,7 +2024,7 @@ namespace ts {
                         if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
                             pos += 3;
                             tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                            tokenValue = scanExtendedUnicodeEscape(true) + scanIdentifierParts();
+                            tokenValue = scanExtendedUnicodeEscape(/* shouldEmitInvalidEscapeError */ true) + scanIdentifierParts();
                             return token = getIdentifierToken();
                         }
 
@@ -2232,12 +2232,12 @@ namespace ts {
         function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(isTaggedTemplate, true);
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate, /* shouldEmitInvalidEscapeError */ true);
         }
 
         function reScanTemplateHeadOrNoSubstitutionTemplate(isTaggedTemplate?: boolean): SyntaxKind {
             pos = tokenPos;
-            return token = scanTemplateAndSetTokenValue(isTaggedTemplate || false, true);
+            return token = scanTemplateAndSetTokenValue(isTaggedTemplate || false, /* shouldEmitInvalidEscapeError */ true);
         }
 
         function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
@@ -2445,7 +2445,7 @@ namespace ts {
                     if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
                         pos += 3;
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        tokenValue = scanExtendedUnicodeEscape(true) + scanIdentifierParts();
+                        tokenValue = scanExtendedUnicodeEscape(/* shouldEmitInvalidEscapeError */ true) + scanIdentifierParts();
                         return token = getIdentifierToken();
                     }
 
