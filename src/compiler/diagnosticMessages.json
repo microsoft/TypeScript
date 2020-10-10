@@ -1360,7 +1360,10 @@
         "category": "Error",
         "code": 1432
     },
-
+    "Octal escape sequences are not allowed in template strings.": {
+        "category": "Error",
+        "code": 1433
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200

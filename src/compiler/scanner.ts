@@ -1312,6 +1312,9 @@ namespace ts {
                             pos++;
                             return text.substring(start, pos);
                         }
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Octal_escape_sequences_are_not_allowed_in_template_strings);
+                        }
                     }
                     return "\0";
                 case CharacterCodes.b:

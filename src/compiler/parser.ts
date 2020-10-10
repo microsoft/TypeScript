@@ -2633,7 +2633,6 @@ namespace ts {
 
         function parseTemplateExpression(isTaggedTemplate: boolean, containsInvalidEscape: boolean): TemplateExpression {
             const pos = getNodePos();
-            console.log({ isTaggedTemplate, containsInvalidEscape });
             return finishNode(
                 factory.createTemplateExpression(
                     parseTemplateHead(isTaggedTemplate, containsInvalidEscape),

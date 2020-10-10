@@ -2,13 +2,15 @@ tests/cases/compiler/templateLiteralInvalidEscape.ts(11,4): error TS1125: Hexade
 tests/cases/compiler/templateLiteralInvalidEscape.ts(12,5): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/templateLiteralInvalidEscape.ts(13,6): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/templateLiteralInvalidEscape.ts(14,5): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(15,4): error TS1433: Octal escape sequences are not allowed in template strings.
 tests/cases/compiler/templateLiteralInvalidEscape.ts(23,8): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/templateLiteralInvalidEscape.ts(24,9): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/templateLiteralInvalidEscape.ts(25,10): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/templateLiteralInvalidEscape.ts(26,9): error TS1125: Hexadecimal digit expected.
+tests/cases/compiler/templateLiteralInvalidEscape.ts(27,8): error TS1433: Octal escape sequences are not allowed in template strings.
 
 
-==== tests/cases/compiler/templateLiteralInvalidEscape.ts (8 errors) ====
+==== tests/cases/compiler/templateLiteralInvalidEscape.ts (10 errors) ====
     function raw(arr: TemplateStringsArray, ...args: unknown[]) {
       return arr.raw;
     }
@@ -32,6 +34,8 @@ tests/cases/compiler/templateLiteralInvalidEscape.ts(26,9): error TS1125: Hexade
         
 !!! error TS1125: Hexadecimal digit expected.
     `\0123`;
+       
+!!! error TS1433: Octal escape sequences are not allowed in template strings.
     
     raw`${0}\x`;
     raw`${0}\x0`;
@@ -52,4 +56,6 @@ tests/cases/compiler/templateLiteralInvalidEscape.ts(26,9): error TS1125: Hexade
             
 !!! error TS1125: Hexadecimal digit expected.
     `${0}\0123`;
+           
+!!! error TS1433: Octal escape sequences are not allowed in template strings.
     
