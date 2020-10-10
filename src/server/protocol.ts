@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 
 /**
- * Declaration module describing the TypeScript Server protocol
+ * Declaration module describing the TypeScript Server protocol.
  */
 namespace ts.server.protocol {
     // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
