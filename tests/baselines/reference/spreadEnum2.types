@@ -1,0 +1,128 @@
+=== tests/cases/conformance/enums/spreadEnum2.ts ===
+enum A {
+>A : A
+
+    AA = 'A'
+>AA : A.AA
+>'A' : "A"
+}
+
+enum B {
+>B : B
+
+    ...A,
+>A : error
+
+    BB = 'B'
+>BB : B.BB
+>'B' : "B"
+}
+
+enum C {
+>C : C
+
+    ...B,
+>B : error
+
+    CC = 'C'
+>CC : C.CC
+>'C' : "C"
+}
+
+enum D {
+>D : D
+
+    ...C,
+>C : error
+
+    DD = 'D'
+>DD : D.DD
+>'D' : "D"
+}
+
+enum E {
+>E : E
+
+    ...D,
+>D : error
+
+    EE = 'E'
+>EE : E.EE
+>'E' : "E"
+}
+
+A.AA;
+>A.AA : A
+>A : typeof A
+>AA : A
+
+B.AA;
+>B.AA : A.AA
+>B : typeof B
+>AA : A.AA
+
+B.BB;
+>B.BB : B.BB
+>B : typeof B
+>BB : B.BB
+
+C.AA;
+>C.AA : A.AA
+>C : typeof C
+>AA : A.AA
+
+C.BB;
+>C.BB : B.BB
+>C : typeof C
+>BB : B.BB
+
+C.CC;
+>C.CC : C.CC
+>C : typeof C
+>CC : C.CC
+
+D.AA;
+>D.AA : A.AA
+>D : typeof D
+>AA : A.AA
+
+D.BB;
+>D.BB : B.BB
+>D : typeof D
+>BB : B.BB
+
+D.CC;
+>D.CC : C.CC
+>D : typeof D
+>CC : C.CC
+
+D.DD;
+>D.DD : D.DD
+>D : typeof D
+>DD : D.DD
+
+E.AA;
+>E.AA : A.AA
+>E : typeof E
+>AA : A.AA
+
+E.BB;
+>E.BB : B.BB
+>E : typeof E
+>BB : B.BB
+
+E.CC;
+>E.CC : C.CC
+>E : typeof E
+>CC : C.CC
+
+E.DD;
+>E.DD : D.DD
+>E : typeof E
+>DD : D.DD
+
+E.EE;
+>E.EE : E.EE
+>E : typeof E
+>EE : E.EE
+

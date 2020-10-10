@@ -9840,12 +9840,8 @@ namespace ts {
                                     const spreadEnumMemberExports = createSymbolTable();
                                     enumExports.forEach(enumExport => {
                                         if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
-                                            const memberName = getTextOfPropertyName(enumExport.valueDeclaration.name);
-                                            const enumSymbol = createSymbol(SymbolFlags.Alias | SymbolFlags.EnumMember, memberName);
-                                            enumSymbol.target = enumExport;
-                                            enumSymbol.declarations = enumExport.declarations;
-                                            enumSymbol.valueDeclaration = enumExport.valueDeclaration;
-                                            spreadEnumMemberExports.set(memberName, enumSymbol);
+                                            const enumSymbol = cloneSymbol(enumExport);
+                                            spreadEnumMemberExports.set(enumExport.escapedName, enumSymbol);
                                         }
                                     })
                                     addToSymbolTable(lateSymbols, spreadEnumMemberExports, Diagnostics.Expression_expected);
