@@ -1,0 +1,30 @@
+tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,18): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts(12,28): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+
+
+==== tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts (2 errors) ====
+    interface a { a }
+    interface b { b }
+    interface c { c }
+    
+    type T1 = ([a, b, c]);
+    type F1 = ([a, b, c]) => void;
+    
+    type T2 = ({ a });
+    type F2 = ({ a }) => void;
+    
+    type T3 = ([{ a: b }, { b: a }]);
+    type F3 = ([{ a: b }, { b: a }]) => void;
+                     ~
+!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+                               ~
+!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    
+    type T4 = ([{ a: [b, c] }]);
+    type F4 = ([{ a: [b, c] }]) => void;
+    
+    type C1 = new ([{ a: [b, c] }]) => void;
+    
+    var v1 = ([a, b, c]) => "hello";
+    var v2: ([a, b, c]) => string;
+    

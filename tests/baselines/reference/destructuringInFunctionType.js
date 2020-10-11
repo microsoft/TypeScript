@@ -52,7 +52,7 @@ declare type T3 = ([{
 }, {
     b: a;
 }]);
-declare type F3 = ([{ a: b }, { b: a }]: [{
+declare type F3 = ([{ a }, { b }]: [{
     a: any;
 }, {
     b: any;

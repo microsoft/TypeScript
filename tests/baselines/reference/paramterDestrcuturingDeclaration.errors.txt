@@ -1,0 +1,14 @@
+tests/cases/compiler/paramterDestrcuturingDeclaration.ts(2,10): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/paramterDestrcuturingDeclaration.ts(3,14): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+
+
+==== tests/cases/compiler/paramterDestrcuturingDeclaration.ts (2 errors) ====
+    interface C {
+        ({p: name}): any;
+             ~~~~
+!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+        new ({p: boolean}): any;
+                 ~~~~~~~
+!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    }
+    
