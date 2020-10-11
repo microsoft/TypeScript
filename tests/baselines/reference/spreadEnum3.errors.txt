@@ -1,0 +1,96 @@
+tests/cases/conformance/enums/spreadEnum3.ts(55,8): error TS1393: Spread enum member can only reference to literal enum reference.
+tests/cases/conformance/enums/spreadEnum3.ts(60,8): error TS1393: Spread enum member can only reference to literal enum reference.
+tests/cases/conformance/enums/spreadEnum3.ts(65,8): error TS1393: Spread enum member can only reference to literal enum reference.
+tests/cases/conformance/enums/spreadEnum3.ts(70,8): error TS1392: Spread enum member cannot reference to const enum without 'preserveConstEnums' flag.
+tests/cases/conformance/enums/spreadEnum3.ts(75,8): error TS1396: Spread enum member cannot reference to non-const enum inside const enum declaration without 'preserveConstEnums' flag.
+
+
+==== tests/cases/conformance/enums/spreadEnum3.ts (5 errors) ====
+    enum LiteralEnum1 {
+        A,
+        B,
+        C
+    }
+    
+    enum LiteralEnum2 {
+        A = 1,
+        B = 2,
+        C = 3
+    }
+    
+    enum LiteralEnum3 {
+        A = 'A' + 'A',
+        B = 'B' + 'B'
+    }
+    
+    enum NumericEnum1 {
+        A = 1 + 1,
+        B = 2 + 1,
+        C = 3 + 1
+    }
+    
+    enum NumericEnum2 {
+        A = LiteralEnum1.A,
+        B = LiteralEnum2.B
+    }
+    
+    enum NumericEnum3 {
+        ['A'] = LiteralEnum1.A,
+        ['B'] = LiteralEnum2.B
+    }
+    
+    const enum ConstEnum {
+        A = 'A',
+        B = 'B'
+    }
+    
+    enum R1 {
+        ...LiteralEnum1,
+        R1 = 'R1'
+    }
+    
+    enum R2 {
+        ...LiteralEnum2,
+        R2 = 'R2'
+    }
+    
+    enum R3 {
+        ...LiteralEnum3,
+        R3 = 'R3'
+    }
+    
+    enum R4 {
+        ...NumericEnum1,
+           ~~~~~~~~~~~~
+!!! error TS1393: Spread enum member can only reference to literal enum reference.
+        R4 = 'R4'
+    }
+    
+    enum R5 {
+        ...NumericEnum2,
+           ~~~~~~~~~~~~
+!!! error TS1393: Spread enum member can only reference to literal enum reference.
+        R5 = 'R5'
+    }
+    
+    enum R6 {
+        ...NumericEnum3,
+           ~~~~~~~~~~~~
+!!! error TS1393: Spread enum member can only reference to literal enum reference.
+        R6 = 'R6'
+    }
+    
+    enum R7 {
+        ...ConstEnum,
+           ~~~~~~~~~
+!!! error TS1392: Spread enum member cannot reference to const enum without 'preserveConstEnums' flag.
+        R7 = 'R7'
+    }
+    
+    const enum R8 {
+        ...LiteralEnum1,
+           ~~~~~~~~~~~~
+!!! error TS1396: Spread enum member cannot reference to non-const enum inside const enum declaration without 'preserveConstEnums' flag.
+        R8 = 'R8'
+    }
+    

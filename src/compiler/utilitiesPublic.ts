@@ -1657,7 +1657,6 @@ namespace ts {
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.EnumMember
-            || kind === SyntaxKind.SpreadEnumMember
             || kind === SyntaxKind.ExportSpecifier
             || kind === SyntaxKind.FunctionDeclaration
             || kind === SyntaxKind.FunctionExpression

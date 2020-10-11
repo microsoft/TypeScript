@@ -1,0 +1,121 @@
+=== tests/cases/conformance/enums/spreadEnum5.ts ===
+enum LiteralEnum1 {
+>LiteralEnum1 : LiteralEnum1
+
+    A,
+>A : LiteralEnum1.A
+
+    B
+>B : LiteralEnum1.B
+}
+
+const enum ConstEnum {
+>ConstEnum : ConstEnum
+
+    A = 'A',
+>A : ConstEnum.A
+>'A' : "A"
+
+    B = 'B'
+>B : ConstEnum.B
+>'B' : "B"
+}
+
+enum R1 {
+>R1 : R1
+
+    ...ConstEnum,
+>ConstEnum : typeof ConstEnum
+
+    R1 = 'R1'
+>R1 : R1.R1
+>'R1' : "R1"
+}
+
+const enum R2 {
+>R2 : R2
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R2 = 'R2'
+>R2 : R2.R2
+>'R2' : "R2"
+}
+
+const enum R3 {
+>R3 : R3
+
+    ...ConstEnum,
+>ConstEnum : typeof ConstEnum
+
+    R3 = 'R3'
+>R3 : R3.R3
+>'R3' : "R3"
+}
+
+LiteralEnum1.A;
+>LiteralEnum1.A : LiteralEnum1.A
+>LiteralEnum1 : typeof LiteralEnum1
+>A : LiteralEnum1.A
+
+LiteralEnum1.B;
+>LiteralEnum1.B : LiteralEnum1.B
+>LiteralEnum1 : typeof LiteralEnum1
+>B : LiteralEnum1.B
+
+ConstEnum.A;
+>ConstEnum.A : ConstEnum.A
+>ConstEnum : typeof ConstEnum
+>A : ConstEnum.A
+
+ConstEnum.B;
+>ConstEnum.B : ConstEnum.B
+>ConstEnum : typeof ConstEnum
+>B : ConstEnum.B
+
+R1.A;
+>R1.A : ConstEnum.A
+>R1 : typeof R1
+>A : ConstEnum.A
+
+R1.B;
+>R1.B : ConstEnum.B
+>R1 : typeof R1
+>B : ConstEnum.B
+
+R1.R1;
+>R1.R1 : R1.R1
+>R1 : typeof R1
+>R1 : R1.R1
+
+R2.A;
+>R2.A : LiteralEnum1.A
+>R2 : typeof R2
+>A : LiteralEnum1.A
+
+R2.B;
+>R2.B : LiteralEnum1.B
+>R2 : typeof R2
+>B : LiteralEnum1.B
+
+R2.R2;
+>R2.R2 : R2.R2
+>R2 : typeof R2
+>R2 : R2.R2
+
+R3.A;
+>R3.A : ConstEnum
+>R3 : typeof R3
+>A : ConstEnum
+
+R3.B;
+>R3.B : ConstEnum
+>R3 : typeof R3
+>B : ConstEnum
+
+R3.R3;
+>R3.R3 : R3.R3
+>R3 : typeof R3
+>R3 : R3.R3
+

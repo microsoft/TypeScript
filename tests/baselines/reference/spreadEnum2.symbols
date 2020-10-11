@@ -13,6 +13,8 @@ enum B {
 >B : Symbol(B, Decl(spreadEnum2.ts, 3, 1))
 
     ...A,
+>A : Symbol(A, Decl(spreadEnum2.ts, 0, 0))
+
     BB = 'B'
 >BB : Symbol(B.BB, Decl(spreadEnum2.ts, 6, 9))
 }
@@ -21,6 +23,8 @@ enum C {
 >C : Symbol(C, Decl(spreadEnum2.ts, 8, 1))
 
     ...B,
+>B : Symbol(B, Decl(spreadEnum2.ts, 3, 1))
+
     CC = 'C'
 >CC : Symbol(C.CC, Decl(spreadEnum2.ts, 11, 9))
 }
@@ -29,6 +33,8 @@ enum D {
 >D : Symbol(D, Decl(spreadEnum2.ts, 13, 1))
 
     ...C,
+>C : Symbol(C, Decl(spreadEnum2.ts, 8, 1))
+
     DD = 'D'
 >DD : Symbol(D.DD, Decl(spreadEnum2.ts, 16, 9))
 }
@@ -37,6 +43,8 @@ enum E {
 >E : Symbol(E, Decl(spreadEnum2.ts, 18, 1))
 
     ...D,
+>D : Symbol(D, Decl(spreadEnum2.ts, 13, 1))
+
     EE = 'E'
 >EE : Symbol(E.EE, Decl(spreadEnum2.ts, 21, 9))
 }

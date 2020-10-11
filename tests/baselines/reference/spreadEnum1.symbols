@@ -13,6 +13,8 @@ enum AdvEvents {
 >AdvEvents : Symbol(AdvEvents, Decl(spreadEnum1.ts, 3, 1))
 
     ...BasicEvents,
+>BasicEvents : Symbol(BasicEvents, Decl(spreadEnum1.ts, 0, 0))
+
     Pause = "Pause",
 >Pause : Symbol(AdvEvents.Pause, Decl(spreadEnum1.ts, 6, 19))
 

@@ -1,0 +1,48 @@
+=== tests/cases/conformance/enums/spreadEnum4.ts ===
+enum LiteralEnum1 {
+>LiteralEnum1 : LiteralEnum1
+
+    A,
+>A : LiteralEnum1.A
+
+    B,
+>B : LiteralEnum1.B
+
+    C
+>C : LiteralEnum1.C
+}
+
+const enum ConstEnum {
+>ConstEnum : ConstEnum
+
+    A = 'A',
+>A : ConstEnum.A
+>'A' : "A"
+
+    B = 'B'
+>B : ConstEnum.B
+>'B' : "B"
+}
+
+enum R1 {
+>R1 : R1
+
+    ...ConstEnum,
+>ConstEnum : typeof ConstEnum
+
+    R1 = 'R1'
+>R1 : R1.R1
+>'R1' : "R1"
+}
+
+const enum R2 {
+>R2 : R2
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R2 = 'R2'
+>R2 : R2.R2
+>'R2' : "R2"
+}
+

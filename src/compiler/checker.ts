@@ -9838,7 +9838,7 @@ namespace ts {
                         for (const member of members) {
                             if (isSpreadEnumMember(member)) {
                                 const spreadEnumMemberExports = createSymbolTable();
-                                const enumMembers = getExportedFromSpreadEnumMember(member);
+                                const enumMembers = getExportsFromSpreadEnumMember(member);
                                 enumMembers.forEach(enumMember => {
                                     const enumSymbol = cloneSymbol(getSymbolOfNode(enumMember));
                                     spreadEnumMemberExports.set(enumSymbol.escapedName, enumSymbol);
@@ -30988,10 +30988,11 @@ namespace ts {
                 (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
                 ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node) ||
                     (node.parent.kind === SyntaxKind.TypeQuery && (<TypeQueryNode>node.parent).exprName === node)) ||
+                (node.parent.kind === SyntaxKind.SpreadEnumMember) ||
                 (node.parent.kind === SyntaxKind.ExportSpecifier); // We allow reexporting const enums
 
             if (!ok) {
-                error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
+                error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query_or_spread_enum_member);
             }
 
             if (compilerOptions.isolatedModules) {
@@ -35873,7 +35874,7 @@ namespace ts {
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
             checkExportsOnMergedDeclarations(node);
-            node.members.forEach(checkEnumMember);
+            node.members.forEach(checkEnumMemberLike);
 
             computeEnumMemberValues(node);
 
@@ -35921,15 +35922,47 @@ namespace ts {
             }
         }
 
-        function checkEnumMember(node: EnumMemberLike) {
+        function checkEnumMemberLike(node: EnumMemberLike) {
             if (isEnumMember(node)) {
-                if (isPrivateIdentifier(node.name)) {
-                    error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
-                }
+                checkEnumMember(node);
             }
             else {
-                checkExpression(node.name);
+                checkSpreadEnumMember(node);
             }
+        }
+
+        function checkEnumMember(node: EnumMember) {
+            if (isPrivateIdentifier(node.name)) {
+                error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
+            }
+        }
+
+        function checkGrammarSpreadEnumMember(symbol: Symbol, container: Symbol, node: SpreadEnumMember) {
+            if (getEnumKind(symbol) !== EnumKind.Literal) {
+                error(node.name, Diagnostics.Spread_enum_member_can_only_reference_to_literal_enum_reference);
+            }
+
+            const symbolIsConstEnum = isConstEnumSymbol(symbol);
+            const containerIsConstEnum = isConstEnumSymbol(container);
+            if (!compilerOptions.preserveConstEnums && symbolIsConstEnum !== containerIsConstEnum) {
+                const diag = symbolIsConstEnum ?
+                    Diagnostics.Spread_enum_member_cannot_reference_to_const_enum_without_preserveConstEnums_flag :
+                    Diagnostics.Spread_enum_member_cannot_reference_to_non_const_enum_inside_const_enum_declaration_without_preserveConstEnums_flag;
+                error(node.name, diag);
+            }
+        }
+
+        function checkSpreadEnumMember(node: SpreadEnumMember) {
+            const container = node.parent;
+            const symbol = getSymbolOfNode(container);
+            const enumSymbol = getSymbolAtLocation(node.name);
+            if (!enumSymbol || !(enumSymbol.flags & SymbolFlags.Enum)) {
+                error(node.name, Diagnostics.Enum_expected);
+                return;
+            }
+
+            checkGrammarSpreadEnumMember(enumSymbol, symbol, node);
+            checkExpression(node.name);
         }
 
         function getFirstNonAmbientClassOrFunctionDeclaration(symbol: Symbol): Declaration | undefined {
@@ -38005,13 +38038,13 @@ namespace ts {
                     members.push(member);
                 }
                 else {
-                    members.push(...getExportedFromSpreadEnumMember(member));
+                    members.push(...getExportsFromSpreadEnumMember(member));
                 }
             }
             return members;
         }
 
-        function getExportedFromSpreadEnumMember(member: SpreadEnumMember): EnumMember[] {
+        function getExportsFromSpreadEnumMember(member: SpreadEnumMember): EnumMember[] {
             const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
             if (!enumSymbol) {
                 return emptyArray;

@@ -1,0 +1,44 @@
+=== tests/cases/conformance/enums/spreadEnum4.ts ===
+enum LiteralEnum1 {
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum4.ts, 0, 0))
+
+    A,
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum4.ts, 0, 19))
+
+    B,
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum4.ts, 1, 6))
+
+    C
+>C : Symbol(LiteralEnum1.C, Decl(spreadEnum4.ts, 2, 6))
+}
+
+const enum ConstEnum {
+>ConstEnum : Symbol(ConstEnum, Decl(spreadEnum4.ts, 4, 1))
+
+    A = 'A',
+>A : Symbol(ConstEnum.A, Decl(spreadEnum4.ts, 6, 22))
+
+    B = 'B'
+>B : Symbol(ConstEnum.B, Decl(spreadEnum4.ts, 7, 12))
+}
+
+enum R1 {
+>R1 : Symbol(R1, Decl(spreadEnum4.ts, 9, 1))
+
+    ...ConstEnum,
+>ConstEnum : Symbol(ConstEnum, Decl(spreadEnum4.ts, 4, 1))
+
+    R1 = 'R1'
+>R1 : Symbol(R1.R1, Decl(spreadEnum4.ts, 12, 17))
+}
+
+const enum R2 {
+>R2 : Symbol(R2, Decl(spreadEnum4.ts, 14, 1))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum4.ts, 0, 0))
+
+    R2 = 'R2'
+>R2 : Symbol(R2.R2, Decl(spreadEnum4.ts, 17, 20))
+}
+

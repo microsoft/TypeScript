@@ -1196,6 +1196,27 @@
         "category": "Error",
         "code": 1391
     },
+    "Spread enum member cannot reference to const enum without 'preserveConstEnums' flag.": {
+        "category": "Error",
+        "code": 1392
+    },
+    "Spread enum member can only reference to literal enum reference.": {
+        "category": "Error",
+        "code": 1393
+    },
+    "Enum expected.": {
+        "category": "Error",
+        "code": 1394
+    },
+    "Duplicated enum member referenced by spread enum member.": {
+        "category": "Error",
+        "code": 1395
+    },
+    "Spread enum member cannot reference to non-const enum inside const enum declaration without 'preserveConstEnums' flag.": {
+        "category": "Error",
+        "code": 1396
+    },
+
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1913,7 +1934,7 @@
         "category": "Error",
         "code": 2474
     },
-    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.": {
+    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query or spread enum member.": {
         "category": "Error",
         "code": 2475
     },
