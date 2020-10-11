@@ -3487,6 +3487,10 @@
         "category": "Error",
         "code": 2841
     },
+    "Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.": {
+        "category": "Error",
+        "code": 2842
+    }, 
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

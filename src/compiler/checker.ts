@@ -37905,6 +37905,14 @@ namespace ts {
             }
 
             if (isBindingElement(node)) {
+                if (node.propertyName && isIdentifier(node.name) && isParameterDeclaration(node) && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
+                    // type F = ({a: string}) => void;
+                    //               ^^^^^^
+                    // variable renaming in function type notation is confusing, so forbid it
+                    error(node.name, Diagnostics.Renaming_a_property_in_destructuring_assignment_is_only_allowed_in_a_function_or_constructor_implementation);
+                    return;
+                }
+
                 if (isObjectBindingPattern(node.parent) && node.dotDotDotToken && languageVersion < ScriptTarget.ES2018) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Rest);
                 }
