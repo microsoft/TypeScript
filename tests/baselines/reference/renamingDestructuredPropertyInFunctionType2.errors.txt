@@ -1,0 +1,14 @@
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType2.ts(1,15): error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+tests/cases/compiler/renamingDestructuredPropertyInFunctionType2.ts(3,16): error TS7031: Binding element 'string' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/renamingDestructuredPropertyInFunctionType2.ts (2 errors) ====
+    type F = ({a: string}) => void;
+                  ~~~~~~
+!!! error TS2797: Renaming a property in destructuring assignment is only allowed in a function or constructor implementation.
+    
+    const f = ({a: string}) => string;
+                   ~~~~~~
+!!! error TS7031: Binding element 'string' implicitly has an 'any' type.
+    
+    

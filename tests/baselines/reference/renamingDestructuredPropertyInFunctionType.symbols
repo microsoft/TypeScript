@@ -1,0 +1,12 @@
+=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
+type F = ({a: string}) => void;
+>F : Symbol(F, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 0))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 0, 11))
+
+const f = ({a: string}) => string;
+>f : Symbol(f, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 5))
+>a : Symbol(a)
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 12))
+>string : Symbol(string, Decl(renamingDestructuredPropertyInFunctionType.ts, 2, 12))
+

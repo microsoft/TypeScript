@@ -1,0 +1,14 @@
+=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType2.ts ===
+type F = ({a: string}) => void;
+>F : F
+>a : any
+>string : any
+
+const f = ({a: string}) => string;
+>f : ({ a: string }: { a: any; }) => any
+>({a: string}) => string : ({ a: string }: { a: any; }) => any
+>a : any
+>string : any
+>string : any
+
+
