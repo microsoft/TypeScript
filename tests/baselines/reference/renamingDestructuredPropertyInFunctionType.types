@@ -5,8 +5,8 @@ type F = ({a: string}) => void;
 >string : any
 
 const f = ({a: string}) => string;
->f : ({ a: string }: { a: any; }) => any
->({a: string}) => string : ({ a: string }: { a: any; }) => any
+>f : ({ a }: { a: any; }) => any
+>({a: string}) => string : ({ a }: { a: any; }) => any
 >a : any
 >string : any
 >string : any
