@@ -3,11 +3,11 @@ enum BasicEvents {
 >BasicEvents : BasicEvents
 
     Start = "Start",
->Start : BasicEvents.Start
+>Start : BasicEvents
 >"Start" : "Start"
 
     Finish = "Finish"
->Finish : BasicEvents.Finish
+>Finish : BasicEvents
 >"Finish" : "Finish"
 }
 
@@ -52,18 +52,18 @@ basic = BasicEvents.Finish;
 >Finish : BasicEvents.Finish
 
 adv = AdvEvents.Start;
->adv = AdvEvents.Start : BasicEvents.Start
+>adv = AdvEvents.Start : BasicEvents
 >adv : AdvEvents
->AdvEvents.Start : BasicEvents.Start
+>AdvEvents.Start : BasicEvents
 >AdvEvents : typeof AdvEvents
->Start : BasicEvents.Start
+>Start : BasicEvents
 
 adv = AdvEvents.Finish;
->adv = AdvEvents.Finish : BasicEvents.Finish
+>adv = AdvEvents.Finish : BasicEvents
 >adv : AdvEvents
->AdvEvents.Finish : BasicEvents.Finish
+>AdvEvents.Finish : BasicEvents
 >AdvEvents : typeof AdvEvents
->Finish : BasicEvents.Finish
+>Finish : BasicEvents
 
 adv = AdvEvents.Pause;
 >adv = AdvEvents.Pause : AdvEvents.Pause
