@@ -112,3 +112,23 @@ enum R7 {
 >A : Symbol(R7.A, Decl(spreadEnum7.ts, 52, 20))
 }
 
+enum R8 {
+>R8 : Symbol(R8, Decl(spreadEnum7.ts, 54, 1))
+
+    ...R8,
+>R8 : Symbol(R8, Decl(spreadEnum7.ts, 54, 1))
+
+    R88 = 'R88'
+>R88 : Symbol(R8.R88, Decl(spreadEnum7.ts, 57, 10))
+}
+
+enum R9 {
+>R9 : Symbol(R9, Decl(spreadEnum7.ts, 59, 1))
+
+    ...R9,
+>R9 : Symbol(R9.R9, Decl(spreadEnum7.ts, 62, 10))
+
+    R9 = 'R9'
+>R9 : Symbol(R9.R9, Decl(spreadEnum7.ts, 62, 10))
+}
+

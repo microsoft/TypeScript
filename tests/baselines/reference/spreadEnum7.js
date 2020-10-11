@@ -55,6 +55,16 @@ enum R7 {
     A = 'A'
 }
 
+enum R8 {
+    ...R8,
+    R88 = 'R88'
+}
+
+enum R9 {
+    ...R9,
+    R9 = 'R9'
+}
+
 
 //// [spreadEnum7.js]
 var __assign = (this && this.__assign) || function () {
@@ -123,6 +133,16 @@ var R7;
     __assign(R7, LiteralEnum1);
     R7["A"] = "A";
 })(R7 || (R7 = {}));
+var R8;
+(function (R8) {
+    __assign(R8, R8);
+    R8["R88"] = "R88";
+})(R8 || (R8 = {}));
+var R9;
+(function (R9) {
+    __assign(R9, R9);
+    R9["R9"] = "R9";
+})(R9 || (R9 = {}));
 
 
 //// [spreadEnum7.d.ts]
@@ -170,4 +190,12 @@ declare enum R7 {
     B = "B",
     ...LiteralEnum1,
     A = "A"
+}
+declare enum R8 {
+    ...R8,
+    R88 = "R88"
+}
+declare enum R9 {
+    ...R9,
+    R9 = "R9"
 }

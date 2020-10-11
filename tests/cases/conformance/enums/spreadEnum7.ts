@@ -55,3 +55,13 @@ enum R7 {
     ...LiteralEnum1,
     A = 'A'
 }
+
+enum R8 {
+    ...R8,
+    R88 = 'R88'
+}
+
+enum R9 {
+    ...R9,
+    R9 = 'R9'
+}

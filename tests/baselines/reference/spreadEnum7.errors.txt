@@ -1,8 +1,9 @@
 tests/cases/conformance/enums/spreadEnum7.ts(2,8): error TS2450: Enum 'LiteralEnum1' used before its declaration.
 tests/cases/conformance/enums/spreadEnum7.ts(12,8): error TS2450: Enum 'R3' used before its declaration.
+tests/cases/conformance/enums/spreadEnum7.ts(63,8): error TS1394: Enum expected.
 
 
-==== tests/cases/conformance/enums/spreadEnum7.ts (2 errors) ====
+==== tests/cases/conformance/enums/spreadEnum7.ts (3 errors) ====
     enum R1 {
         ...LiteralEnum1,
            ~~~~~~~~~~~~
@@ -63,5 +64,17 @@ tests/cases/conformance/enums/spreadEnum7.ts(12,8): error TS2450: Enum 'R3' used
         B = 'B',
         ...LiteralEnum1,
         A = 'A'
+    }
+    
+    enum R8 {
+        ...R8,
+        R88 = 'R88'
+    }
+    
+    enum R9 {
+        ...R9,
+           ~~
+!!! error TS1394: Enum expected.
+        R9 = 'R9'
     }
     
