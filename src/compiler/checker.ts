@@ -9837,18 +9837,13 @@ namespace ts {
                     if (members) {
                         for (const member of members) {
                             if (isSpreadEnumMember(member)) {
-                                const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
-                                if (enumSymbol) {
-                                    const enumExports = getExportsOfSymbol(enumSymbol);
-                                    const spreadEnumMemberExports = createSymbolTable();
-                                    enumExports.forEach(enumExport => {
-                                        if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
-                                            const enumSymbol = cloneSymbol(enumExport);
-                                            spreadEnumMemberExports.set(enumExport.escapedName, enumSymbol);
-                                        }
-                                    });
-                                    addToSymbolTable(lateSymbols, spreadEnumMemberExports, Diagnostics.Expression_expected);
-                                }
+                                const spreadEnumMemberExports = createSymbolTable();
+                                const enumMembers = getExportedFromSpreadEnumMember(member);
+                                enumMembers.forEach(enumMember => {
+                                    const enumSymbol = cloneSymbol(getSymbolOfNode(enumMember));
+                                    spreadEnumMemberExports.set(enumSymbol.escapedName, enumSymbol);
+                                });
+                                addToSymbolTable(lateSymbols, spreadEnumMemberExports, Diagnostics.Expression_expected);
                             }
                             else if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
@@ -38005,22 +38000,30 @@ namespace ts {
             }
 
             const members: EnumMember[] = [];
-            for (const member of eclaration.members) {
+            for (const member of declaration.members) {
                 if (isEnumMember(member)) {
                     members.push(member);
                 }
                 else {
-                    const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
-                    if (enumSymbol) {
-                        const enumExports = getExportsOfSymbol(enumSymbol);
-                        enumExports.forEach(enumExport => {
-                            if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
-                                members.push(enumExport.valueDeclaration);
-                            }
-                        });
-                    }
+                    members.push(...getExportedFromSpreadEnumMember(member));
                 }
             }
+            return members;
+        }
+
+        function getExportedFromSpreadEnumMember(member: SpreadEnumMember): EnumMember[] {
+            const enumSymbol = resolveEntityName(member.name, SymbolFlags.Enum);
+            if (!enumSymbol) {
+                return emptyArray;
+            }
+
+            const members: EnumMember[] = [];
+            const enumExports = getExportsOfSymbol(enumSymbol);
+            enumExports.forEach(enumExport => {
+                if (enumExport.valueDeclaration && isEnumMember(enumExport.valueDeclaration)) {
+                    members.push(enumExport.valueDeclaration);
+                }
+            });
             return members;
         }
 
