@@ -1,0 +1,39 @@
+=== tests/cases/compiler/destructuringAssignmentWithDefault2.ts ===
+const a: { x?: number; y?: number } = { };
+>a : { x?: number | undefined; y?: number | undefined; }
+>x : number | undefined
+>y : number | undefined
+>{ } : {}
+
+let x: number;
+>x : number
+
+({ x = 0 } = a);
+>({ x = 0 } = a) : { x?: number | undefined; y?: number | undefined; }
+>{ x = 0 } = a : { x?: number | undefined; y?: number | undefined; }
+>{ x = 0 } : { x?: number; }
+>x : number
+>0 : 0
+>a : { x?: number | undefined; y?: number | undefined; }
+
+({ x: x = 0} = a);
+>({ x: x = 0} = a) : { x?: number | undefined; y?: number | undefined; }
+>{ x: x = 0} = a : { x?: number | undefined; y?: number | undefined; }
+>{ x: x = 0} : { x?: number; }
+>x : number
+>x = 0 : 0
+>x : number
+>0 : 0
+>a : { x?: number | undefined; y?: number | undefined; }
+
+({ y: x = 0} = a);
+>({ y: x = 0} = a) : { x?: number | undefined; y?: number | undefined; }
+>{ y: x = 0} = a : { x?: number | undefined; y?: number | undefined; }
+>{ y: x = 0} : { y?: number; }
+>y : number
+>x = 0 : 0
+>x : number
+>0 : 0
+>a : { x?: number | undefined; y?: number | undefined; }
+
+
