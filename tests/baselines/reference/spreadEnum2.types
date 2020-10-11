@@ -15,7 +15,7 @@ enum B {
 >B : B
 
     ...A,
->A : error
+>A : typeof A
 
     BB = 'B'
 >BB : B.BB
@@ -26,7 +26,7 @@ enum C {
 >C : C
 
     ...B,
->B : error
+>B : typeof B
 
     CC = 'C'
 >CC : C.CC
@@ -37,7 +37,7 @@ enum D {
 >D : D
 
     ...C,
->C : error
+>C : typeof C
 
     DD = 'D'
 >DD : D.DD
@@ -48,7 +48,7 @@ enum E {
 >E : E
 
     ...D,
->D : error
+>D : typeof D
 
     EE = 'E'
 >EE : E.EE

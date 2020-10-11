@@ -1041,6 +1041,7 @@ namespace ts {
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.SpreadEnumMember:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.MethodDeclaration:
@@ -1860,6 +1861,8 @@ namespace ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.BindingElement:
                 return (parent as HasInitializer).initializer === node;
+            case SyntaxKind.SpreadEnumMember:
+                return (parent as SpreadEnumMember).name === node;
             case SyntaxKind.ExpressionStatement:
             case SyntaxKind.IfStatement:
             case SyntaxKind.DoStatement:
@@ -2837,6 +2840,7 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.SpreadEnumMember:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyAccessExpression:
                 // Name in member declaration or property name in property access

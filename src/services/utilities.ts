@@ -56,6 +56,7 @@ namespace ts {
                 return (node as JSDocTypedefTag).name === undefined ? SemanticMeaning.Value | SemanticMeaning.Type : SemanticMeaning.Type;
 
             case SyntaxKind.EnumMember:
+            case SyntaxKind.SpreadEnumMember:
             case SyntaxKind.ClassDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
 
@@ -410,6 +411,7 @@ namespace ts {
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
+            case SyntaxKind.SpreadEnumMember: return ScriptElementKind.enumMemberElement;
             case SyntaxKind.Parameter: return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:

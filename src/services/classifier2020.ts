@@ -232,6 +232,7 @@ namespace ts.classifier.v2020 {
         [SyntaxKind.ModuleDeclaration, TokenType.namespace],
         [SyntaxKind.EnumDeclaration, TokenType.enum],
         [SyntaxKind.EnumMember, TokenType.enumMember],
+        [SyntaxKind.SpreadAssignment, TokenType.enumMember],
         [SyntaxKind.ClassDeclaration, TokenType.class],
         [SyntaxKind.MethodDeclaration, TokenType.member],
         [SyntaxKind.FunctionDeclaration, TokenType.function],

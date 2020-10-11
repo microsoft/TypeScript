@@ -32337,6 +32337,7 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.EnumMember:
+                    case SyntaxKind.SpreadEnumMember:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue;
                     case SyntaxKind.SourceFile:
                         return DeclarationSpaces.ExportType | DeclarationSpaces.ExportValue | DeclarationSpaces.ExportNamespace;
@@ -35946,6 +35947,9 @@ namespace ts {
                 if (isPrivateIdentifier(node.name)) {
                     error(node, Diagnostics.An_enum_member_cannot_be_named_with_a_private_identifier);
                 }
+            }
+            else {
+                checkExpression(node.name);
             }
         }
 

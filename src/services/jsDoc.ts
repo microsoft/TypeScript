@@ -341,6 +341,7 @@ namespace ts.JsDoc {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.SpreadEnumMember:
             case SyntaxKind.TypeAliasDeclaration:
                 return { commentOwner };
 

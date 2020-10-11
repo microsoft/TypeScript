@@ -2560,8 +2560,6 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
-                case SyntaxKind.SpreadEnumMember:
-                    return undefined;
 
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:

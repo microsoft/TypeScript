@@ -547,6 +547,7 @@ namespace ts.FindAllReferences {
             case SyntaxKind.DefaultKeyword:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.SpreadEnumMember:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportClause: // default import
             case SyntaxKind.ImportEqualsDeclaration:

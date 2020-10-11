@@ -15,7 +15,7 @@ enum AdvEvents {
 >AdvEvents : AdvEvents
 
     ...BasicEvents,
->BasicEvents : error
+>BasicEvents : typeof BasicEvents
 
     Pause = "Pause",
 >Pause : AdvEvents.Pause

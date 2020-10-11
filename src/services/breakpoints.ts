@@ -188,6 +188,7 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.EnumMember:
+                    case SyntaxKind.SpreadEnumMember:
                     case SyntaxKind.BindingElement:
                         // span on complete node
                         return textSpan(node);
