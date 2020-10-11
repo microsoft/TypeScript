@@ -1,0 +1,283 @@
+=== tests/cases/conformance/enums/spreadEnum6.ts ===
+enum LiteralEnum1 {
+>LiteralEnum1 : LiteralEnum1
+
+    A = 0,
+>A : LiteralEnum1.A
+>0 : 0
+
+    B
+>B : LiteralEnum1.B
+}
+
+enum LiteralEnum1 {
+>LiteralEnum1 : LiteralEnum1
+
+    C,
+>C : LiteralEnum1.A
+
+    D
+>D : LiteralEnum1.B
+}
+
+enum LiteralEnum2 {
+>LiteralEnum2 : LiteralEnum2
+
+    E = 0,
+>E : LiteralEnum1.A
+>0 : 0
+
+    F
+>F : LiteralEnum1.B
+}
+
+enum LiteralEnum2 {
+>LiteralEnum2 : LiteralEnum2
+
+    G,
+>G : LiteralEnum1.A
+
+    H
+>H : LiteralEnum1.B
+}
+
+enum R1 {
+>R1 : R1
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R1 = 'R1'
+>R1 : R1.R1
+>'R1' : "R1"
+}
+
+enum R1 {
+>R1 : R1
+
+    R11 = 'R11'
+>R11 : R1.R11
+>'R11' : "R11"
+}
+
+enum R2 {
+>R2 : R2
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R2 = 'R2'
+>R2 : R2.R2
+>'R2' : "R2"
+}
+
+enum R2 {
+>R2 : R2
+
+    ...LiteralEnum2,
+>LiteralEnum2 : typeof LiteralEnum2
+
+    R22 = 'R22'
+>R22 : R2.R22
+>'R22' : "R22"
+}
+
+enum R3 {
+>R3 : R3
+
+    ...R1,
+>R1 : typeof R1
+
+    ...R2,
+>R2 : typeof R2
+
+    R3 = 'R3'
+>R3 : R3.R3
+>'R3' : "R3"
+}
+
+LiteralEnum1.A;
+>LiteralEnum1.A : LiteralEnum1.A
+>LiteralEnum1 : typeof LiteralEnum1
+>A : LiteralEnum1.A
+
+LiteralEnum1.B;
+>LiteralEnum1.B : LiteralEnum1.B
+>LiteralEnum1 : typeof LiteralEnum1
+>B : LiteralEnum1.B
+
+LiteralEnum1.C;
+>LiteralEnum1.C : LiteralEnum1.A
+>LiteralEnum1 : typeof LiteralEnum1
+>C : LiteralEnum1.A
+
+LiteralEnum1.D;
+>LiteralEnum1.D : LiteralEnum1.B
+>LiteralEnum1 : typeof LiteralEnum1
+>D : LiteralEnum1.B
+
+R1.A;
+>R1.A : LiteralEnum1.A
+>R1 : typeof R1
+>A : LiteralEnum1.A
+
+R1.B;
+>R1.B : LiteralEnum1.B
+>R1 : typeof R1
+>B : LiteralEnum1.B
+
+R1.C;
+>R1.C : LiteralEnum1.A
+>R1 : typeof R1
+>C : LiteralEnum1.A
+
+R1.D;
+>R1.D : LiteralEnum1.B
+>R1 : typeof R1
+>D : LiteralEnum1.B
+
+R1.R1;
+>R1.R1 : R1.R1
+>R1 : typeof R1
+>R1 : R1.R1
+
+R1.R11;
+>R1.R11 : R1.R11
+>R1 : typeof R1
+>R11 : R1.R11
+
+LiteralEnum2.E;
+>LiteralEnum2.E : LiteralEnum2.E
+>LiteralEnum2 : typeof LiteralEnum2
+>E : LiteralEnum2.E
+
+LiteralEnum2.F;
+>LiteralEnum2.F : LiteralEnum2.F
+>LiteralEnum2 : typeof LiteralEnum2
+>F : LiteralEnum2.F
+
+LiteralEnum2.G;
+>LiteralEnum2.G : LiteralEnum2.E
+>LiteralEnum2 : typeof LiteralEnum2
+>G : LiteralEnum2.E
+
+LiteralEnum2.H;
+>LiteralEnum2.H : LiteralEnum2.F
+>LiteralEnum2 : typeof LiteralEnum2
+>H : LiteralEnum2.F
+
+R2.A;
+>R2.A : LiteralEnum1
+>R2 : typeof R2
+>A : LiteralEnum1
+
+R2.B;
+>R2.B : LiteralEnum1
+>R2 : typeof R2
+>B : LiteralEnum1
+
+R2.C;
+>R2.C : LiteralEnum1
+>R2 : typeof R2
+>C : LiteralEnum1
+
+R2.D;
+>R2.D : LiteralEnum1
+>R2 : typeof R2
+>D : LiteralEnum1
+
+R2.E;
+>R2.E : LiteralEnum1.A
+>R2 : typeof R2
+>E : LiteralEnum1.A
+
+R2.F;
+>R2.F : LiteralEnum1.B
+>R2 : typeof R2
+>F : LiteralEnum1.B
+
+R2.G;
+>R2.G : LiteralEnum1.A
+>R2 : typeof R2
+>G : LiteralEnum1.A
+
+R2.H;
+>R2.H : LiteralEnum1.B
+>R2 : typeof R2
+>H : LiteralEnum1.B
+
+R2.R2;
+>R2.R2 : R2.R2
+>R2 : typeof R2
+>R2 : R2.R2
+
+R2.R22
+>R2.R22 : R2.R22
+>R2 : typeof R2
+>R22 : R2.R22
+
+R3.A;
+>R3.A : LiteralEnum1
+>R3 : typeof R3
+>A : LiteralEnum1
+
+R3.B;
+>R3.B : LiteralEnum1
+>R3 : typeof R3
+>B : LiteralEnum1
+
+R3.C;
+>R3.C : LiteralEnum1
+>R3 : typeof R3
+>C : LiteralEnum1
+
+R3.D;
+>R3.D : LiteralEnum1
+>R3 : typeof R3
+>D : LiteralEnum1
+
+R3.E;
+>R3.E : LiteralEnum2
+>R3 : typeof R3
+>E : LiteralEnum2
+
+R3.F;
+>R3.F : LiteralEnum2
+>R3 : typeof R3
+>F : LiteralEnum2
+
+R3.G;
+>R3.G : LiteralEnum2
+>R3 : typeof R3
+>G : LiteralEnum2
+
+R3.H;
+>R3.H : LiteralEnum2
+>R3 : typeof R3
+>H : LiteralEnum2
+
+R3.R1;
+>R3.R1 : R1.R1
+>R3 : typeof R3
+>R1 : R1.R1
+
+R3.R11;
+>R3.R11 : R1.R11
+>R3 : typeof R3
+>R11 : R1.R11
+
+R3.R2;
+>R3.R2 : R2.R2
+>R3 : typeof R3
+>R2 : R2.R2
+
+R3.R22;
+>R3.R22 : R2.R22
+>R3 : typeof R3
+>R22 : R2.R22
+
+R3.R3;
+>R3.R3 : R3.R3
+>R3 : typeof R3
+>R3 : R3.R3
+

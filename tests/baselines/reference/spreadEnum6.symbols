@@ -1,0 +1,276 @@
+=== tests/cases/conformance/enums/spreadEnum6.ts ===
+enum LiteralEnum1 {
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+
+    A = 0,
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+
+    B
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+}
+
+enum LiteralEnum1 {
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+
+    C,
+>C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+
+    D
+>D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+}
+
+enum LiteralEnum2 {
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+
+    E = 0,
+>E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+
+    F
+>F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+}
+
+enum LiteralEnum2 {
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+
+    G,
+>G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+
+    H
+>H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+}
+
+enum R1 {
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+
+    R1 = 'R1'
+>R1 : Symbol(R1.R1, Decl(spreadEnum6.ts, 21, 20))
+}
+
+enum R1 {
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+
+    R11 = 'R11'
+>R11 : Symbol(R1.R11, Decl(spreadEnum6.ts, 25, 9))
+}
+
+enum R2 {
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+
+    R2 = 'R2'
+>R2 : Symbol(R2.R2, Decl(spreadEnum6.ts, 30, 20))
+}
+
+enum R2 {
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+
+    ...LiteralEnum2,
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+
+    R22 = 'R22'
+>R22 : Symbol(R2.R22, Decl(spreadEnum6.ts, 35, 20))
+}
+
+enum R3 {
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+
+    ...R1,
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+
+    ...R2,
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+
+    R3 = 'R3'
+>R3 : Symbol(R3.R3, Decl(spreadEnum6.ts, 41, 10))
+}
+
+LiteralEnum1.A;
+>LiteralEnum1.A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+
+LiteralEnum1.B;
+>LiteralEnum1.B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+
+LiteralEnum1.C;
+>LiteralEnum1.C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+>C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+
+LiteralEnum1.D;
+>LiteralEnum1.D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum6.ts, 0, 0), Decl(spreadEnum6.ts, 3, 1))
+>D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+
+R1.A;
+>R1.A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+
+R1.B;
+>R1.B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+
+R1.C;
+>R1.C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+>C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+
+R1.D;
+>R1.D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+>D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+
+R1.R1;
+>R1.R1 : Symbol(R1.R1, Decl(spreadEnum6.ts, 21, 20))
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+>R1 : Symbol(R1.R1, Decl(spreadEnum6.ts, 21, 20))
+
+R1.R11;
+>R1.R11 : Symbol(R1.R11, Decl(spreadEnum6.ts, 25, 9))
+>R1 : Symbol(R1, Decl(spreadEnum6.ts, 18, 1), Decl(spreadEnum6.ts, 23, 1))
+>R11 : Symbol(R1.R11, Decl(spreadEnum6.ts, 25, 9))
+
+LiteralEnum2.E;
+>LiteralEnum2.E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+>E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+
+LiteralEnum2.F;
+>LiteralEnum2.F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+>F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+
+LiteralEnum2.G;
+>LiteralEnum2.G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+>G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+
+LiteralEnum2.H;
+>LiteralEnum2.H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+>LiteralEnum2 : Symbol(LiteralEnum2, Decl(spreadEnum6.ts, 8, 1), Decl(spreadEnum6.ts, 13, 1))
+>H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+
+R2.A;
+>R2.A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+
+R2.B;
+>R2.B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+
+R2.C;
+>R2.C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+
+R2.D;
+>R2.D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+
+R2.E;
+>R2.E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+
+R2.F;
+>R2.F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+
+R2.G;
+>R2.G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+
+R2.H;
+>R2.H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+
+R2.R2;
+>R2.R2 : Symbol(R2.R2, Decl(spreadEnum6.ts, 30, 20))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>R2 : Symbol(R2.R2, Decl(spreadEnum6.ts, 30, 20))
+
+R2.R22
+>R2.R22 : Symbol(R2.R22, Decl(spreadEnum6.ts, 35, 20))
+>R2 : Symbol(R2, Decl(spreadEnum6.ts, 27, 1), Decl(spreadEnum6.ts, 32, 1))
+>R22 : Symbol(R2.R22, Decl(spreadEnum6.ts, 35, 20))
+
+R3.A;
+>R3.A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum6.ts, 0, 19))
+
+R3.B;
+>R3.B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum6.ts, 1, 10))
+
+R3.C;
+>R3.C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>C : Symbol(LiteralEnum1.C, Decl(spreadEnum6.ts, 5, 19))
+
+R3.D;
+>R3.D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>D : Symbol(LiteralEnum1.D, Decl(spreadEnum6.ts, 6, 6))
+
+R3.E;
+>R3.E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>E : Symbol(LiteralEnum2.E, Decl(spreadEnum6.ts, 10, 19))
+
+R3.F;
+>R3.F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>F : Symbol(LiteralEnum2.F, Decl(spreadEnum6.ts, 11, 10))
+
+R3.G;
+>R3.G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>G : Symbol(LiteralEnum2.G, Decl(spreadEnum6.ts, 15, 19))
+
+R3.H;
+>R3.H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>H : Symbol(LiteralEnum2.H, Decl(spreadEnum6.ts, 16, 6))
+
+R3.R1;
+>R3.R1 : Symbol(R1.R1, Decl(spreadEnum6.ts, 21, 20))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>R1 : Symbol(R1.R1, Decl(spreadEnum6.ts, 21, 20))
+
+R3.R11;
+>R3.R11 : Symbol(R1.R11, Decl(spreadEnum6.ts, 25, 9))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>R11 : Symbol(R1.R11, Decl(spreadEnum6.ts, 25, 9))
+
+R3.R2;
+>R3.R2 : Symbol(R2.R2, Decl(spreadEnum6.ts, 30, 20))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>R2 : Symbol(R2.R2, Decl(spreadEnum6.ts, 30, 20))
+
+R3.R22;
+>R3.R22 : Symbol(R2.R22, Decl(spreadEnum6.ts, 35, 20))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>R22 : Symbol(R2.R22, Decl(spreadEnum6.ts, 35, 20))
+
+R3.R3;
+>R3.R3 : Symbol(R3.R3, Decl(spreadEnum6.ts, 41, 10))
+>R3 : Symbol(R3, Decl(spreadEnum6.ts, 37, 1))
+>R3 : Symbol(R3.R3, Decl(spreadEnum6.ts, 41, 10))
+

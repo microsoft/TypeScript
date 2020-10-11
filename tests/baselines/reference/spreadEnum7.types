@@ -1,0 +1,125 @@
+=== tests/cases/conformance/enums/spreadEnum7.ts ===
+enum R1 {
+>R1 : R1
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R1 = 'R1'
+>R1 : R1.R1
+>'R1' : "R1"
+}
+
+enum LiteralEnum1 {
+>LiteralEnum1 : LiteralEnum1
+
+    A,
+>A : LiteralEnum1.A
+
+    B
+>B : LiteralEnum1.B
+}
+
+enum R2 {
+>R2 : R2
+
+    ...R3,
+>R3 : typeof R3
+
+    R2 = 'R2'
+>R2 : R2.R2
+>'R2' : "R2"
+}
+
+enum R3 {
+>R3 : R3
+
+    ...R2,
+>R2 : typeof R2
+
+    R3 = 'R3'
+>R3 : R3.R3
+>'R3' : "R3"
+}
+
+enum R4 {
+>R4 : R4
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R4 = 'R4'
+>R4 : R4.R4
+>'R4' : "R4"
+}
+
+enum R5 {
+>R5 : R5
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    R5 = 'R5'
+>R5 : R5.R5
+>'R5' : "R5"
+}
+
+enum R6 {
+>R6 : R6
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    ...R4,
+>R4 : typeof R4
+
+    ...R5,
+>R5 : typeof R5
+
+    R6 = 'R6'
+>R6 : R6.R6
+>'R6' : "R6"
+}
+
+enum PartEnum1 {
+>PartEnum1 : PartEnum1
+
+    A = 'A'
+>A : PartEnum1.A
+>'A' : "A"
+}
+
+enum RefEnum1 {
+>RefEnum1 : RefEnum1
+
+    ...PartEnum1,
+>PartEnum1 : typeof PartEnum1
+
+    R = 'R'
+>R : RefEnum1.R
+>'R' : "R"
+}
+
+enum PartEnum1 {
+>PartEnum1 : PartEnum1
+
+    B = 'B'
+>B : PartEnum1.B
+>'B' : "B"
+}
+
+enum R7 {
+>R7 : R7
+
+    B = 'B',
+>B : R7.B
+>'B' : "B"
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+
+    A = 'A'
+>A : R7.A
+>'A' : "A"
+}
+

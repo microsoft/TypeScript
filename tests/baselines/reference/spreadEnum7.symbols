@@ -1,0 +1,114 @@
+=== tests/cases/conformance/enums/spreadEnum7.ts ===
+enum R1 {
+>R1 : Symbol(R1, Decl(spreadEnum7.ts, 0, 0))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+
+    R1 = 'R1'
+>R1 : Symbol(R1.R1, Decl(spreadEnum7.ts, 1, 20))
+}
+
+enum LiteralEnum1 {
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+
+    A,
+>A : Symbol(LiteralEnum1.A, Decl(spreadEnum7.ts, 5, 19))
+
+    B
+>B : Symbol(LiteralEnum1.B, Decl(spreadEnum7.ts, 6, 6))
+}
+
+enum R2 {
+>R2 : Symbol(R2, Decl(spreadEnum7.ts, 8, 1))
+
+    ...R3,
+>R3 : Symbol(R3, Decl(spreadEnum7.ts, 13, 1))
+
+    R2 = 'R2'
+>R2 : Symbol(R2.R2, Decl(spreadEnum7.ts, 11, 10))
+}
+
+enum R3 {
+>R3 : Symbol(R3, Decl(spreadEnum7.ts, 13, 1))
+
+    ...R2,
+>R2 : Symbol(R2, Decl(spreadEnum7.ts, 8, 1))
+
+    R3 = 'R3'
+>R3 : Symbol(R3.R3, Decl(spreadEnum7.ts, 16, 10))
+}
+
+enum R4 {
+>R4 : Symbol(R4, Decl(spreadEnum7.ts, 18, 1))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+
+    R4 = 'R4'
+>R4 : Symbol(R4.R4, Decl(spreadEnum7.ts, 21, 20))
+}
+
+enum R5 {
+>R5 : Symbol(R5, Decl(spreadEnum7.ts, 23, 1))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+
+    R5 = 'R5'
+>R5 : Symbol(R5.R5, Decl(spreadEnum7.ts, 26, 20))
+}
+
+enum R6 {
+>R6 : Symbol(R6, Decl(spreadEnum7.ts, 28, 1))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+
+    ...R4,
+>R4 : Symbol(R4, Decl(spreadEnum7.ts, 18, 1))
+
+    ...R5,
+>R5 : Symbol(R5, Decl(spreadEnum7.ts, 23, 1))
+
+    R6 = 'R6'
+>R6 : Symbol(R6.R6, Decl(spreadEnum7.ts, 33, 10))
+}
+
+enum PartEnum1 {
+>PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 35, 1), Decl(spreadEnum7.ts, 44, 1))
+
+    A = 'A'
+>A : Symbol(PartEnum1.A, Decl(spreadEnum7.ts, 37, 16))
+}
+
+enum RefEnum1 {
+>RefEnum1 : Symbol(RefEnum1, Decl(spreadEnum7.ts, 39, 1))
+
+    ...PartEnum1,
+>PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 35, 1), Decl(spreadEnum7.ts, 44, 1))
+
+    R = 'R'
+>R : Symbol(RefEnum1.R, Decl(spreadEnum7.ts, 42, 17))
+}
+
+enum PartEnum1 {
+>PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 35, 1), Decl(spreadEnum7.ts, 44, 1))
+
+    B = 'B'
+>B : Symbol(PartEnum1.B, Decl(spreadEnum7.ts, 46, 16))
+}
+
+enum R7 {
+>R7 : Symbol(R7, Decl(spreadEnum7.ts, 48, 1))
+
+    B = 'B',
+>B : Symbol(R7.B, Decl(spreadEnum7.ts, 50, 9))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+
+    A = 'A'
+>A : Symbol(R7.A, Decl(spreadEnum7.ts, 52, 20))
+}
+
