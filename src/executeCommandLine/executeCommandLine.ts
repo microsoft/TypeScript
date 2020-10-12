@@ -307,6 +307,10 @@ namespace ts {
                 reportDiagnostic,
                 configParseResult.options
             );
+            if (commandLineOptions.cleanResolutions) {
+                configParseResult.errors.forEach(reportDiagnostic);
+                return cleanResolutions(sys, configParseResult.options, reportDiagnostic);
+            }
             if (isWatchSet(configParseResult.options)) {
                 if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
                 return createWatchOfConfigFile(
@@ -347,6 +351,9 @@ namespace ts {
                 reportDiagnostic,
                 commandLineOptions
             );
+            if (commandLineOptions.cleanResolutions) {
+                return cleanResolutions(sys, commandLineOptions, reportDiagnostic);
+            }
             if (isWatchSet(commandLineOptions)) {
                 if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
                 return createWatchOfFilesAndCompilerOptions(
@@ -478,6 +485,19 @@ namespace ts {
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
+        if (buildOptions.cleanResolutions) {
+            const buildHost = createSolutionBuilderHost(
+                sys,
+                /*createProgram*/ undefined,
+                reportDiagnostic,
+                createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
+                createReportErrorSummary(sys, buildOptions)
+            );
+            updateSolutionBuilderHost(sys, cb, buildHost);
+            const builder = createSolutionBuilder(buildHost, projects, buildOptions);
+            return sys.exit(builder.cleanResolutions());
+        }
+
         if (buildOptions.watch) {
             if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
             const buildHost = createSolutionBuilderWithWatchHost(
@@ -511,6 +531,17 @@ namespace ts {
         return shouldBePretty(sys, options) ?
             errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
             undefined;
+    }
+
+    function cleanResolutions(sys: System, options: CompilerOptions, reportDiagnostic: DiagnosticReporter) {
+        const diagnostics = cleanResolutionsOfTsBuildInfoAndReportError(
+            options,
+            sys,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(sys, options)
+        );
+        return sys.exit(diagnostics ? ExitStatus.DiagnosticsPresent_OutputsGenerated : ExitStatus.Success);
     }
 
     function performCompilation(

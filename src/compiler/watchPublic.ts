@@ -16,6 +16,32 @@ namespace ts {
         return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
+    export interface CleanResolutionsOfTsBuildInfoHost {
+        readFile(fileName: string): string | undefined;
+        writeFile: WriteFileCallback;
+    }
+    export function cleanResolutionsOfTsBuildInfo(compilerOptions: CompilerOptions, host: CleanResolutionsOfTsBuildInfoHost): EmitResult {
+        if (outFile(compilerOptions)) return emitSkippedWithNoDiagnostics;
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
+        if (!buildInfoPath) return emitSkippedWithNoDiagnostics;
+        const content = host.readFile(buildInfoPath);
+        if (!content) return emitSkippedWithNoDiagnostics;
+        const buildInfo = getBuildInfo(content);
+        if (buildInfo.version !== version) return emitSkippedWithNoDiagnostics;
+        if (!buildInfo.program) return emitSkippedWithNoDiagnostics;
+        // TODO:: Clean the actual program
+        let newContent = content;
+
+        // Actual writeFile with new program
+        const emitDiagnostics = createDiagnosticCollection();
+        writeFile(host, emitDiagnostics, buildInfoPath, newContent, /*writeByteOrderMark*/ false);
+        return {
+            emitSkipped: false,
+            diagnostics: emitDiagnostics.getDiagnostics(),
+            emittedFiles: compilerOptions.listEmittedFiles ? [buildInfoPath] : undefined
+        };
+    }
+
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
         const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
         host.createHash = maybeBind(system, system.createHash);

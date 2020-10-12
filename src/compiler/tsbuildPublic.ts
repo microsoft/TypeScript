@@ -134,8 +134,10 @@ namespace ts {
     export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         clean(project?: string): ExitStatus;
+        cleanResolutions(project?: string): ExitStatus;
         buildReferences(project: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         cleanReferences(project?: string): ExitStatus;
+        cleanResolutionsOfReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
         // Currently used for testing but can be made public if needed:
@@ -1725,6 +1727,38 @@ namespace ts {
         return ExitStatus.Success;
     }
 
+    function cleanResolutions(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
+        const buildOrder = getBuildOrderFor(state, project, onlyReferences);
+        if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
+
+        if (isCircularBuildOrder(buildOrder)) {
+            reportErrors(state, buildOrder.circularDiagnostics);
+            state.host.reportErrorSummary?.(getErrorCountForSummary(buildOrder.circularDiagnostics));
+            return ExitStatus.ProjectReferenceCycle_OutputsSkipped;
+        }
+
+        let diagnostics = 0;
+        for (const proj of buildOrder) {
+            const resolvedPath = toResolvedConfigFilePath(state, proj);
+            const parsed = parseConfigFile(state, proj, resolvedPath);
+            if (parsed) {
+                diagnostics += cleanResolutionsOfTsBuildInfoAndReportError(
+                    parsed.options,
+                    state.compilerHost,
+                    err => state.host.reportDiagnostic(err),
+                    state.write,
+                );
+            }
+            else {
+                // File has gone missing; fine to ignore here
+                reportParseConfigFileDiagnostic(state, resolvedPath);
+            }
+        }
+
+        state.host.reportErrorSummary?.(diagnostics);
+        return diagnostics ? ExitStatus.DiagnosticsPresent_OutputsGenerated : ExitStatus.Success;
+    }
+
     function invalidateProject(state: SolutionBuilderState, resolved: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
         // If host implements getParsedCommandLine, we cant get list of files from parseConfigFileHost
         if (state.host.getParsedCommandLine && reloadLevel === ConfigFileProgramReloadLevel.Partial) {
@@ -1899,8 +1933,10 @@ namespace ts {
         return {
             build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
             clean: project => clean(state, project),
+            cleanResolutions: project => cleanResolutions(state, project),
             buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
             cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
+            cleanResolutionsOfReferences: project => cleanResolutions(state, project, /*onlyReferences*/ true),
             getNextInvalidatedProject: cancellationToken => {
                 setupInitialBuild(state, cancellationToken);
                 return getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);
