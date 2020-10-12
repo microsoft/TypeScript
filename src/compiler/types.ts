@@ -4642,7 +4642,7 @@ namespace ts {
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
 
         /* @internal */
-        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function | Enum,
+        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
     }
 
     /* @internal */
