@@ -1340,20 +1340,25 @@ namespace ts {
         }
 
         function addToSymbolTable(target: SymbolTable, source: SymbolTable, message: DiagnosticMessage) {
-            source.forEach((sourceSymbol, id) => {
-                const targetSymbol = target.get(id);
-                if (targetSymbol) {
-                    // Error on redeclarations
-                    forEach(targetSymbol.declarations, addDeclarationDiagnostic(unescapeLeadingUnderscores(id), message));
-                }
-                else {
-                    target.set(id, sourceSymbol);
-                }
+            addToSymbolTableWithDiagnostic(target, source, ({ targetSymbol, id }) => {
+                forEach(targetSymbol.declarations, addDeclarationDiagnostic(unescapeLeadingUnderscores(id), message));
             });
 
             function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
                 return (declaration: Declaration) => diagnostics.add(createDiagnosticForNode(declaration, message, id));
             }
+        }
+
+        function addToSymbolTableWithDiagnostic(target: SymbolTable, source: SymbolTable, onConflict: (args: { targetSymbol: Symbol, sourceSymbol: Symbol, id: __String }) => void) {
+            source.forEach((sourceSymbol, id) => {
+                const targetSymbol = target.get(id);
+                if (targetSymbol) {
+                    onConflict({ targetSymbol, sourceSymbol, id });
+                }
+                else {
+                    target.set(id, sourceSymbol);
+                }
+            });
         }
 
         function getSymbolLinks(symbol: Symbol): SymbolLinks {
@@ -9817,6 +9822,28 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
+        function lateBindSpreadEnumMember(earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, member: SpreadEnumMember) {
+            const spreadEnumMemberExports = createSymbolTable();
+            const enumMembers = getExportsFromSpreadEnumMember(member);
+            enumMembers.forEach(enumMember => {
+                const symbol = getSymbolOfNode(enumMember);
+                const earlySymbol = earlySymbols?.get(symbol.escapedName);
+                if (earlySymbol) {
+                    const earlySymbolText = symbolToString(earlySymbol);
+                    const diag = error(member, Diagnostics.Spread_enum_member_has_overlapped_on_0, earlySymbolText);
+                    addRelatedInfo(diag, createDiagnosticForNode(earlySymbol.valueDeclaration, Diagnostics._0_is_declared_here, earlySymbolText));
+                }
+
+                const enumSymbol = cloneSymbol(symbol);
+                spreadEnumMemberExports.set(enumSymbol.escapedName, enumSymbol);
+            });
+            addToSymbolTableWithDiagnostic(lateSymbols, spreadEnumMemberExports, ({ targetSymbol }) => {
+                const targetSymbolText = symbolToString(targetSymbol);
+                const diag = error(member, Diagnostics.Spread_enum_member_has_overlapped_on_0, targetSymbolText);
+                addRelatedInfo(diag, createDiagnosticForNode(targetSymbol.valueDeclaration, Diagnostics._0_is_declared_here, targetSymbolText));
+            });
+        }
+
         function getResolvedMembersOrExportsOfSymbol(symbol: Symbol, resolutionKind: MembersOrExportsResolutionKind): UnderscoreEscapedMap<Symbol> {
             const links = getSymbolLinks(symbol);
             if (!links[resolutionKind]) {
@@ -9837,13 +9864,7 @@ namespace ts {
                     if (members) {
                         for (const member of members) {
                             if (isSpreadEnumMember(member)) {
-                                const spreadEnumMemberExports = createSymbolTable();
-                                const enumMembers = getExportsFromSpreadEnumMember(member);
-                                enumMembers.forEach(enumMember => {
-                                    const enumSymbol = cloneSymbol(getSymbolOfNode(enumMember));
-                                    spreadEnumMemberExports.set(enumSymbol.escapedName, enumSymbol);
-                                });
-                                addToSymbolTable(lateSymbols, spreadEnumMemberExports, Diagnostics.Expression_expected);
+                                lateBindSpreadEnumMember(earlySymbols, lateSymbols, member);
                             }
                             else if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
                                 lateBindMember(symbol, earlySymbols, lateSymbols, member);
@@ -35959,6 +35980,9 @@ namespace ts {
             if (!enumSymbol || !(enumSymbol.flags & SymbolFlags.Enum)) {
                 error(node.name, Diagnostics.Enum_expected);
                 return;
+            }
+            if (symbol === enumSymbol) {
+                error(node.name, Diagnostics.Spread_enum_member_cannot_reference_to_itself);
             }
 
             checkGrammarSpreadEnumMember(enumSymbol, symbol, node);

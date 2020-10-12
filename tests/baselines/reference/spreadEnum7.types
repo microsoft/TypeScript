@@ -81,6 +81,19 @@ enum R6 {
 >'R6' : "R6"
 }
 
+enum R66 {
+>R66 : R66
+
+    A,
+>A : R66.A
+
+    B,
+>B : R66.B
+
+    ...LiteralEnum1,
+>LiteralEnum1 : typeof LiteralEnum1
+}
+
 enum PartEnum1 {
 >PartEnum1 : PartEnum1
 

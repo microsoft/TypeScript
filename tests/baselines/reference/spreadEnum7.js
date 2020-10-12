@@ -36,6 +36,12 @@ enum R6 {
     R6 = 'R6'
 }
 
+enum R66 {
+    A,
+    B,
+    ...LiteralEnum1,
+}
+
 enum PartEnum1 {
     A = 'A'
 }
@@ -115,6 +121,12 @@ var R6;
     __assign(R6, R5);
     R6["R6"] = "R6";
 })(R6 || (R6 = {}));
+var R66;
+(function (R66) {
+    R66[R66["A"] = 0] = "A";
+    R66[R66["B"] = 1] = "B";
+    __assign(R66, LiteralEnum1);
+})(R66 || (R66 = {}));
 var PartEnum1;
 (function (PartEnum1) {
     PartEnum1["A"] = "A";
@@ -175,6 +187,11 @@ declare enum R6 {
     ...R4,
     ...R5,
     R6 = "R6"
+}
+declare enum R66 {
+    A = 0,
+    B = 1,
+    ...LiteralEnum1
 }
 declare enum PartEnum1 {
     A = "A"

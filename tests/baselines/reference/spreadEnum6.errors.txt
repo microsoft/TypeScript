@@ -1,26 +1,18 @@
-tests/cases/conformance/enums/spreadEnum6.ts(2,5): error TS1109: Expression expected.
-tests/cases/conformance/enums/spreadEnum6.ts(3,5): error TS1109: Expression expected.
-tests/cases/conformance/enums/spreadEnum6.ts(7,5): error TS1109: Expression expected.
-tests/cases/conformance/enums/spreadEnum6.ts(8,5): error TS1109: Expression expected.
+tests/cases/conformance/enums/spreadEnum6.ts(42,8): error TS1397: Spread enum member has overlapped on 'A'.
+tests/cases/conformance/enums/spreadEnum6.ts(42,8): error TS1397: Spread enum member has overlapped on 'B'.
+tests/cases/conformance/enums/spreadEnum6.ts(42,8): error TS1397: Spread enum member has overlapped on 'C'.
+tests/cases/conformance/enums/spreadEnum6.ts(42,8): error TS1397: Spread enum member has overlapped on 'D'.
 
 
 ==== tests/cases/conformance/enums/spreadEnum6.ts (4 errors) ====
     enum LiteralEnum1 {
         A = 0,
-        ~
-!!! error TS1109: Expression expected.
         B
-        ~
-!!! error TS1109: Expression expected.
     }
     
     enum LiteralEnum1 {
         C,
-        ~
-!!! error TS1109: Expression expected.
         D
-        ~
-!!! error TS1109: Expression expected.
     }
     
     enum LiteralEnum2 {
@@ -55,6 +47,18 @@ tests/cases/conformance/enums/spreadEnum6.ts(8,5): error TS1109: Expression expe
     enum R3 {
         ...R1,
         ...R2,
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'A'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum6.ts:2:5: 'A' is declared here.
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'B'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum6.ts:3:5: 'B' is declared here.
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'C'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum6.ts:7:5: 'C' is declared here.
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'D'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum6.ts:8:5: 'D' is declared here.
         R3 = 'R3'
     }
     

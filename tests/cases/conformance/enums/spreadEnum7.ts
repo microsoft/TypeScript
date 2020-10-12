@@ -37,6 +37,12 @@ enum R6 {
     R6 = 'R6'
 }
 
+enum R66 {
+    A,
+    B,
+    ...LiteralEnum1,
+}
+
 enum PartEnum1 {
     A = 'A'
 }

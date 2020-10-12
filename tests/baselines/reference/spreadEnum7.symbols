@@ -75,60 +75,73 @@ enum R6 {
 >R6 : Symbol(R6.R6, Decl(spreadEnum7.ts, 33, 10))
 }
 
+enum R66 {
+>R66 : Symbol(R66, Decl(spreadEnum7.ts, 35, 1))
+
+    A,
+>A : Symbol(R66.A, Decl(spreadEnum7.ts, 37, 10))
+
+    B,
+>B : Symbol(R66.B, Decl(spreadEnum7.ts, 38, 6))
+
+    ...LiteralEnum1,
+>LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
+}
+
 enum PartEnum1 {
->PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 35, 1), Decl(spreadEnum7.ts, 44, 1))
+>PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 41, 1), Decl(spreadEnum7.ts, 50, 1))
 
     A = 'A'
->A : Symbol(PartEnum1.A, Decl(spreadEnum7.ts, 37, 16))
+>A : Symbol(PartEnum1.A, Decl(spreadEnum7.ts, 43, 16))
 }
 
 enum RefEnum1 {
->RefEnum1 : Symbol(RefEnum1, Decl(spreadEnum7.ts, 39, 1))
+>RefEnum1 : Symbol(RefEnum1, Decl(spreadEnum7.ts, 45, 1))
 
     ...PartEnum1,
->PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 35, 1), Decl(spreadEnum7.ts, 44, 1))
+>PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 41, 1), Decl(spreadEnum7.ts, 50, 1))
 
     R = 'R'
->R : Symbol(RefEnum1.R, Decl(spreadEnum7.ts, 42, 17))
+>R : Symbol(RefEnum1.R, Decl(spreadEnum7.ts, 48, 17))
 }
 
 enum PartEnum1 {
->PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 35, 1), Decl(spreadEnum7.ts, 44, 1))
+>PartEnum1 : Symbol(PartEnum1, Decl(spreadEnum7.ts, 41, 1), Decl(spreadEnum7.ts, 50, 1))
 
     B = 'B'
->B : Symbol(PartEnum1.B, Decl(spreadEnum7.ts, 46, 16))
+>B : Symbol(PartEnum1.B, Decl(spreadEnum7.ts, 52, 16))
 }
 
 enum R7 {
->R7 : Symbol(R7, Decl(spreadEnum7.ts, 48, 1))
+>R7 : Symbol(R7, Decl(spreadEnum7.ts, 54, 1))
 
     B = 'B',
->B : Symbol(R7.B, Decl(spreadEnum7.ts, 50, 9))
+>B : Symbol(R7.B, Decl(spreadEnum7.ts, 56, 9))
 
     ...LiteralEnum1,
 >LiteralEnum1 : Symbol(LiteralEnum1, Decl(spreadEnum7.ts, 3, 1))
 
     A = 'A'
->A : Symbol(R7.A, Decl(spreadEnum7.ts, 52, 20))
+>A : Symbol(R7.A, Decl(spreadEnum7.ts, 58, 20))
 }
 
 enum R8 {
->R8 : Symbol(R8, Decl(spreadEnum7.ts, 54, 1))
+>R8 : Symbol(R8, Decl(spreadEnum7.ts, 60, 1))
 
     ...R8,
->R8 : Symbol(R8, Decl(spreadEnum7.ts, 54, 1))
+>R8 : Symbol(R8, Decl(spreadEnum7.ts, 60, 1))
 
     R88 = 'R88'
->R88 : Symbol(R8.R88, Decl(spreadEnum7.ts, 57, 10))
+>R88 : Symbol(R8.R88, Decl(spreadEnum7.ts, 63, 10))
 }
 
 enum R9 {
->R9 : Symbol(R9, Decl(spreadEnum7.ts, 59, 1))
+>R9 : Symbol(R9, Decl(spreadEnum7.ts, 65, 1))
 
     ...R9,
->R9 : Symbol(R9.R9, Decl(spreadEnum7.ts, 62, 10))
+>R9 : Symbol(R9.R9, Decl(spreadEnum7.ts, 68, 10))
 
     R9 = 'R9'
->R9 : Symbol(R9.R9, Decl(spreadEnum7.ts, 62, 10))
+>R9 : Symbol(R9.R9, Decl(spreadEnum7.ts, 68, 10))
 }
 

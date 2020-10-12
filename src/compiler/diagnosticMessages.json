@@ -1216,6 +1216,14 @@
         "category": "Error",
         "code": 1396
     },
+    "Spread enum member has overlapped on '{0}'.": {
+        "category": "Error",
+        "code": 1397
+    },
+    "Spread enum member cannot reference to itself.": {
+        "category": "Error",
+        "code": 1398
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

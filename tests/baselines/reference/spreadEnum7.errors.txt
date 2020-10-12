@@ -1,9 +1,10 @@
 tests/cases/conformance/enums/spreadEnum7.ts(2,8): error TS2450: Enum 'LiteralEnum1' used before its declaration.
 tests/cases/conformance/enums/spreadEnum7.ts(12,8): error TS2450: Enum 'R3' used before its declaration.
-tests/cases/conformance/enums/spreadEnum7.ts(63,8): error TS1394: Enum expected.
+tests/cases/conformance/enums/spreadEnum7.ts(64,8): error TS1398: Spread enum member cannot reference to itself.
+tests/cases/conformance/enums/spreadEnum7.ts(69,8): error TS1394: Enum expected.
 
 
-==== tests/cases/conformance/enums/spreadEnum7.ts (3 errors) ====
+==== tests/cases/conformance/enums/spreadEnum7.ts (4 errors) ====
     enum R1 {
         ...LiteralEnum1,
            ~~~~~~~~~~~~
@@ -47,6 +48,12 @@ tests/cases/conformance/enums/spreadEnum7.ts(63,8): error TS1394: Enum expected.
         R6 = 'R6'
     }
     
+    enum R66 {
+        A,
+        B,
+        ...LiteralEnum1,
+    }
+    
     enum PartEnum1 {
         A = 'A'
     }
@@ -68,6 +75,8 @@ tests/cases/conformance/enums/spreadEnum7.ts(63,8): error TS1394: Enum expected.
     
     enum R8 {
         ...R8,
+           ~~
+!!! error TS1398: Spread enum member cannot reference to itself.
         R88 = 'R88'
     }
     
