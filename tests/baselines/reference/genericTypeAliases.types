@@ -204,17 +204,17 @@ function g<B>() {
 
 // Deeply instantiated generics
 var a = f<string>();
->a : string[] | { x: string[] | { x: string[] | any; }; }
->f<string>() : string[] | { x: string[] | { x: string[] | any; }; }
+>a : string[] | { x: string[] | any; }
+>f<string>() : string[] | { x: string[] | any; }
 >f : <A>() => A[] | { x: A[] | any; }
 
 var b = g<string>();
->b : string[] | { x: string[] | { x: string[] | any; }; }
->g<string>() : string[] | { x: string[] | { x: string[] | any; }; }
+>b : string[] | { x: string[] | any; }
+>g<string>() : string[] | { x: string[] | any; }
 >g : <B>() => B[] | { x: B[] | any; }
 
 a = b;
->a = b : string[] | { x: string[] | { x: string[] | any; }; }
->a : string[] | { x: string[] | { x: string[] | any; }; }
->b : string[] | { x: string[] | { x: string[] | any; }; }
+>a = b : string[] | { x: string[] | any; }
+>a : string[] | { x: string[] | any; }
+>b : string[] | { x: string[] | any; }
 
