@@ -47,8 +47,8 @@ lib/library/EnableLibraryPlugin.js(150,12): error TS2300: Duplicate identifier '
 lib/optimize/SplitChunksPlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Chunk'.
 lib/runtime/LoadScriptRuntimeModule.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
 lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
-lib/webpack.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Compiler'.
-lib/webpack.js(10,7): error TS2440: Import declaration conflicts with local declaration of 'MultiCompiler'.
+lib/webpack.js(10,7): error TS2440: Import declaration conflicts with local declaration of 'Compiler'.
+lib/webpack.js(11,7): error TS2440: Import declaration conflicts with local declaration of 'MultiCompiler'.
 
 
 

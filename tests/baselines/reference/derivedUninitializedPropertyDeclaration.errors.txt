@@ -1,5 +1,5 @@
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(12,21): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on a class element.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
@@ -25,7 +25,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedP
     class BOther extends A {
         declare m() { return 2 } // not allowed on methods
         ~~~~~~~
-!!! error TS1031: 'declare' modifier cannot appear on a class element.
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
                     ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         declare nonce: any; // ok, even though it's not in the base

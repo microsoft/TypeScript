@@ -2,18 +2,14 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 14.11.0 (pre-LTS)
+Node.js version is 14.12.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
-XX of XX: [@azure/logger] completed successfully in ? seconds
-SUCCESS (1)
-================================
-@azure/logger (? seconds)
-================================
-BLOCKED (49)
+BLOCKED (51)
 ================================
 @azure/abort-controller
 @azure/core-auth
+@azure/logger
 @azure/core-asynciterator-polyfill
 @azure/core-http
 @azure/communication-common
@@ -28,9 +24,11 @@ BLOCKED (49)
 @azure/event-hubs
 @azure/event-processor-host
 @azure/keyvault-secrets
+@azure/schema-registry
 @azure/storage-blob
 @azure/ai-anomaly-detector
 @azure/ai-form-recognizer
+@azure/ai-metrics-advisor
 @azure/ai-text-analytics
 @azure/app-configuration
 @azure/communication-chat
@@ -49,7 +47,6 @@ BLOCKED (49)
 @azure/keyvault-common
 @azure/keyvault-keys
 @azure/monitor-opentelemetry-exporter
-@azure/schema-registry
 @azure/schema-registry-avro
 @azure/search-documents
 @azure/service-bus
@@ -101,6 +98,7 @@ XX of XX: [@azure/service-bus] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-auth] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/ai-anomaly-detector] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/ai-form-recognizer] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/ai-metrics-advisor] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/ai-text-analytics] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-client] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-http] blocked by [@azure/eslint-plugin-azure-sdk]!
@@ -138,4 +136,5 @@ XX of XX: [@azure/cosmos] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/dev-tool] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/event-processor-host] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [testhub] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/logger] blocked by [@azure/eslint-plugin-azure-sdk]!
 [@azure/eslint-plugin-azure-sdk] Returned error code: 2

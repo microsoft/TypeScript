@@ -3762,6 +3762,8 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
+        /* @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
+
         /* @internal */ getClassifiableNames(): Set<__String>;
 
         getTypeCatalog(): readonly Type[];
@@ -3779,7 +3781,8 @@ namespace ts {
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
-        /* @internal */ structureIsReused?: StructureIsReused;
+        // This is set on created program to let us know how the program was created using old program
+        /* @internal */ readonly structureIsReused: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
@@ -4004,6 +4007,7 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
 
         getRootSymbols(symbol: Symbol): readonly Symbol[];
+        getSymbolOfExpando(node: Node, allowDeclaration: boolean): Symbol | undefined;
         getContextualType(node: Expression): Type | undefined;
         /* @internal */ getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
@@ -4507,7 +4511,7 @@ namespace ts {
         isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         isLateBound(node: Declaration): node is LateBoundDeclaration;
         collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
         isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
@@ -5322,6 +5326,12 @@ namespace ts {
     export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
+        /**
+         * @internal
+         * Indicates that --noUncheckedIndexedAccess may introduce 'undefined' into
+         * the resulting type, depending on how type variable constraints are resolved.
+         */
+        noUncheckedIndexedAccessCandidate: boolean;
         constraint?: Type;
         simplifiedForReading?: Type;
         simplifiedForWriting?: Type;

@@ -29,15 +29,15 @@ function Zet(t) {
  * @param {Id<T>} id
  */
 Zet.prototype.add = function(v, id) {
->Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: (u: T) => T) => T
+>Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
 >Zet.prototype.add : any
 >Zet.prototype : any
 >Zet : typeof Zet
 >prototype : any
 >add : any
->function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: (u: T) => T) => T
+>function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
 >v : T
->id : (u: T) => T
+>id : Id<T>
 
     this.u = v || this.t
 >this.u = v || this.t : T
@@ -52,7 +52,7 @@ Zet.prototype.add = function(v, id) {
 
     return id(this.u)
 >id(this.u) : T
->id : (u: T) => T
+>id : Id<T>
 >this.u : T
 >this : this
 >u : T
