@@ -955,6 +955,13 @@ namespace ts {
             transpileOptionValue: true
         },
         {
+            name: "persistResolutions",
+            type: "boolean",
+            affectsModuleResolution: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Save_module_and_type_reference_directive_resolution_information_in_tsbuildinfo_file,
+        },
+        {
             name: "stripInternal",
             type: "boolean",
             affectsEmit: true,

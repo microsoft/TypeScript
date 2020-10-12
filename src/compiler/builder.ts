@@ -298,6 +298,7 @@ namespace ts {
      */
     function releaseCache(state: BuilderProgramState) {
         BuilderState.releaseCache(state);
+        // TODO:: If persistResolutions, cache program
         state.program = undefined;
     }
 
@@ -984,9 +985,11 @@ namespace ts {
         builderProgram.getState = getState;
         builderProgram.backupState = () => {
             Debug.assert(backupState === undefined);
+            Debug.checkDefined(state.program);
             backupState = cloneBuilderProgramState(state);
         };
         builderProgram.restoreState = () => {
+            Debug.assert(backupState!.program === state.program);
             state = Debug.checkDefined(backupState);
             backupState = undefined;
         };

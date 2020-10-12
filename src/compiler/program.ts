@@ -3155,6 +3155,10 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
+            if (options.persistResolutions && !isIncrementalCompilation(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "persistResolutions", "incremental", "composite");
+            }
+
             verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list

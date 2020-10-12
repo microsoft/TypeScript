@@ -6104,6 +6104,7 @@ namespace ts {
         composite?: boolean;
         incremental?: boolean;
         tsBuildInfoFile?: string;
+        persistResolutions?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];

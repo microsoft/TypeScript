@@ -1,0 +1,11 @@
+error TS5069: Option 'persistResolutions' cannot be specified without specifying option 'incremental' or option 'composite'.
+
+
+!!! error TS5069: Option 'persistResolutions' cannot be specified without specifying option 'incremental' or option 'composite'.
+==== /tsconfig.json (0 errors) ====
+    { }
+    
+    
+==== /a.ts (0 errors) ====
+    const x = 10;
+    
