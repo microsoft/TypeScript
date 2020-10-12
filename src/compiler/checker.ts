@@ -22738,11 +22738,12 @@ namespace ts {
             }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-            let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
-
-            if (declaration && getCombinedNodeFlags(declaration) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
-                errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
+            const sourceSymbol = localOrExportSymbol.flags & SymbolFlags.Alias ? resolveAlias(localOrExportSymbol) : localOrExportSymbol;
+            if (getDeclarationNodeFlagsFromSymbol(sourceSymbol) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, sourceSymbol)) {
+                errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
+
+            let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
