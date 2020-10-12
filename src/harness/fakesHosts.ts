@@ -523,6 +523,17 @@ ${indentText}${text}`;
         return sys;
     }
 
+    export function withTemporaryPatchingForBuildinfoReadWrite<T extends ts.System>(sys: T, fn: (sys: T) => void) {
+        const originalReadFile = sys.readFile;
+        const originalWrite = sys.write;
+        const originalWriteFile = sys.writeFile;
+        fn(patchHostForBuildInfoReadWrite(sys));
+        sys.readFile = originalReadFile;
+        sys.write = originalWrite;
+        sys.writeFile = originalWriteFile;
+        return sys;
+    }
+
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
         createProgram: ts.CreateProgram<ts.BuilderProgram>;
 

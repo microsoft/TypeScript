@@ -533,17 +533,12 @@ namespace ts.tscWatch {
     }
 
     export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
-        const sys = createWatchedSystem(files, params);
-        const originalReadFile = sys.readFile;
-        const originalWrite = sys.write;
-        const originalWriteFile = sys.writeFile;
-        const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
-            fakes.patchHostForBuildInfoReadWrite(sys)
-        ), solutionRoots, {});
-        solutionBuilder.build();
-        sys.readFile = originalReadFile;
-        sys.write = originalWrite;
-        sys.writeFile = originalWriteFile;
-        return sys;
+        return fakes.withTemporaryPatchingForBuildinfoReadWrite(
+            createWatchedSystem(files, params),
+            sys => {
+                const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(sys), solutionRoots, {});
+                solutionBuilder.build();
+            }
+        );
     }
 }

@@ -510,6 +510,35 @@ class someClass2 { }`),
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                 }],
             });
+
+            verifyTscSerializedIncrementalEdits({
+                scenario: "sample1",
+                subScenario: "persistResolutions",
+                baselinePrograms: true,
+                fs: () => projFs,
+                modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        skipDefaultLibCheck: true,
+                        persistResolutions: true,
+                    }
+                })),
+                commandLineArgs: ["--b", "/src/tests"],
+                incrementalScenarios: [
+                    ...coreChanges,
+                    {
+                        subScenario: "Clean resolutions",
+                        buildKind: BuildKind.IncrementalDtsChange,
+                        modifyFs: noop,
+                        commandLineArgs: ["--b", "/src/tests", "--cleanResolutions"],
+                    },
+                    {
+                        subScenario: "Modify core",
+                        buildKind: BuildKind.IncrementalDtsChange,
+                        modifyFs: fs => replaceText(fs, "/src/core/index.ts", "export class someClass {", "export class someClassNew {"),
+                    }
+                ]
+            });
         });
     });
 }
