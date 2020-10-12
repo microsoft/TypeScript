@@ -278,6 +278,13 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
+        {
+            name: "cleanResolutions",
+            type: "boolean",
+            isCommandLineOnly: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Save_module_and_type_reference_directive_resolution_information_in_tsbuildinfo_file,
+        },
     ];
 
     /* @internal */

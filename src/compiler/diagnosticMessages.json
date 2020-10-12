@@ -4885,6 +4885,10 @@
         "category": "Message",
         "code": 6244
     },
+    "Clean module and type reference directive resolution information in '.tsbuildinfo' file.": {
+        "category": "Message",
+        "code": 6245
+    },
 
     "Projects to reference": {
         "category": "Message",
