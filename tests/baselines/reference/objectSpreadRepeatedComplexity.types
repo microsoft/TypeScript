@@ -1,4 +1,4 @@
-=== tests/cases/compiler/objectSpreadRepeatedComplexity.ts ===
+=== tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts ===
 function f(cnd: Record<number, boolean>){
 >f : (cnd: Record<number, boolean>) => { prop20a?: number; prop20b?: number; prop19a?: number; prop19b?: number; prop18a?: number; prop18b?: number; prop17a?: number; prop17b?: number; prop16a?: number; prop16b?: number; prop15a?: number; prop15b?: number; prop14a?: number; prop14b?: number; prop13a?: number; prop13b?: number; prop12a?: number; prop12b?: number; prop11a?: number; prop11b?: number; prop10a?: number; prop10b?: number; prop9a?: number; prop9b?: number; prop8a?: number; prop8b?: number; prop7a?: number; prop7b?: number; prop6a?: number; prop6b?: number; prop5a?: number; prop5b?: number; prop4a?: number; prop4b?: number; prop3a?: number; prop3b?: number; prop0?: number; }
 >cnd : Record<number, boolean>
