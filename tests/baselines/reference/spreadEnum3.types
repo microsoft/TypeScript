@@ -71,15 +71,15 @@ enum NumericEnum2 {
 
     A = LiteralEnum1.A,
 >A : NumericEnum2
->LiteralEnum1.A : LiteralEnum1.A
+>LiteralEnum1.A : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->A : LiteralEnum1.A
+>A : LiteralEnum1
 
     B = LiteralEnum2.B
 >B : NumericEnum2
->LiteralEnum2.B : LiteralEnum2.B
+>LiteralEnum2.B : LiteralEnum2
 >LiteralEnum2 : typeof LiteralEnum2
->B : LiteralEnum2.B
+>B : LiteralEnum2
 }
 
 enum NumericEnum3 {
@@ -88,16 +88,16 @@ enum NumericEnum3 {
     ['A'] = LiteralEnum1.A,
 >['A'] : NumericEnum3
 >'A' : "A"
->LiteralEnum1.A : LiteralEnum1.A
+>LiteralEnum1.A : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->A : LiteralEnum1.A
+>A : LiteralEnum1
 
     ['B'] = LiteralEnum2.B
 >['B'] : NumericEnum3
 >'B' : "B"
->LiteralEnum2.B : LiteralEnum2.B
+>LiteralEnum2.B : LiteralEnum2
 >LiteralEnum2 : typeof LiteralEnum2
->B : LiteralEnum2.B
+>B : LiteralEnum2
 }
 
 const enum ConstEnum {

@@ -1,10 +1,28 @@
 tests/cases/conformance/enums/spreadEnum7.ts(2,8): error TS2450: Enum 'LiteralEnum1' used before its declaration.
+tests/cases/conformance/enums/spreadEnum7.ts(7,5): error TS2300: Duplicate identifier 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(8,5): error TS2300: Duplicate identifier 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(12,8): error TS1397: Spread enum member has overlapped on 'R2'.
 tests/cases/conformance/enums/spreadEnum7.ts(12,8): error TS2450: Enum 'R3' used before its declaration.
+tests/cases/conformance/enums/spreadEnum7.ts(13,5): error TS2300: Duplicate identifier 'R2'.
+tests/cases/conformance/enums/spreadEnum7.ts(33,8): error TS1397: Spread enum member has overlapped on 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(33,8): error TS1397: Spread enum member has overlapped on 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(34,8): error TS1397: Spread enum member has overlapped on 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(34,8): error TS1397: Spread enum member has overlapped on 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(39,5): error TS2300: Duplicate identifier 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(40,5): error TS2300: Duplicate identifier 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(41,8): error TS1397: Spread enum member has overlapped on 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(41,8): error TS1397: Spread enum member has overlapped on 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(58,5): error TS2300: Duplicate identifier 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(59,8): error TS1397: Spread enum member has overlapped on 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(59,8): error TS1397: Spread enum member has overlapped on 'B'.
+tests/cases/conformance/enums/spreadEnum7.ts(60,5): error TS2300: Duplicate identifier 'A'.
+tests/cases/conformance/enums/spreadEnum7.ts(64,8): error TS1397: Spread enum member has overlapped on 'R88'.
 tests/cases/conformance/enums/spreadEnum7.ts(64,8): error TS1398: Spread enum member cannot reference to itself.
+tests/cases/conformance/enums/spreadEnum7.ts(65,5): error TS2300: Duplicate identifier 'R88'.
 tests/cases/conformance/enums/spreadEnum7.ts(69,8): error TS1394: Enum expected.
 
 
-==== tests/cases/conformance/enums/spreadEnum7.ts (4 errors) ====
+==== tests/cases/conformance/enums/spreadEnum7.ts (22 errors) ====
     enum R1 {
         ...LiteralEnum1,
            ~~~~~~~~~~~~
@@ -15,15 +33,28 @@ tests/cases/conformance/enums/spreadEnum7.ts(69,8): error TS1394: Enum expected.
     
     enum LiteralEnum1 {
         A,
+        ~
+!!! error TS2300: Duplicate identifier 'A'.
+!!! related TS6203 tests/cases/conformance/enums/spreadEnum7.ts:39:5: 'A' was also declared here.
+!!! related TS6204 tests/cases/conformance/enums/spreadEnum7.ts:60:5: and here.
         B
+        ~
+!!! error TS2300: Duplicate identifier 'B'.
+!!! related TS6203 tests/cases/conformance/enums/spreadEnum7.ts:40:5: 'B' was also declared here.
+!!! related TS6204 tests/cases/conformance/enums/spreadEnum7.ts:58:5: and here.
     }
     
     enum R2 {
         ...R3,
            ~~
+!!! error TS1397: Spread enum member has overlapped on 'R2'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:13:5: 'R2' is declared here.
+           ~~
 !!! error TS2450: Enum 'R3' used before its declaration.
 !!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:16:6: 'R3' is declared here.
         R2 = 'R2'
+        ~~
+!!! error TS2300: Duplicate identifier 'R2'.
     }
     
     enum R3 {
@@ -44,14 +75,38 @@ tests/cases/conformance/enums/spreadEnum7.ts(69,8): error TS1394: Enum expected.
     enum R6 {
         ...LiteralEnum1,
         ...R4,
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'A'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:7:5: 'A' is declared here.
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'B'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:8:5: 'B' is declared here.
         ...R5,
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'A'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:7:5: 'A' is declared here.
+           ~~
+!!! error TS1397: Spread enum member has overlapped on 'B'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:8:5: 'B' is declared here.
         R6 = 'R6'
     }
     
     enum R66 {
         A,
+        ~
+!!! error TS2300: Duplicate identifier 'A'.
+!!! related TS6203 tests/cases/conformance/enums/spreadEnum7.ts:7:5: 'A' was also declared here.
         B,
+        ~
+!!! error TS2300: Duplicate identifier 'B'.
+!!! related TS6203 tests/cases/conformance/enums/spreadEnum7.ts:8:5: 'B' was also declared here.
         ...LiteralEnum1,
+           ~~~~~~~~~~~~
+!!! error TS1397: Spread enum member has overlapped on 'A'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:39:5: 'A' is declared here.
+           ~~~~~~~~~~~~
+!!! error TS1397: Spread enum member has overlapped on 'B'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:40:5: 'B' is declared here.
     }
     
     enum PartEnum1 {
@@ -69,15 +124,32 @@ tests/cases/conformance/enums/spreadEnum7.ts(69,8): error TS1394: Enum expected.
     
     enum R7 {
         B = 'B',
+        ~
+!!! error TS2300: Duplicate identifier 'B'.
+!!! related TS6203 tests/cases/conformance/enums/spreadEnum7.ts:8:5: 'B' was also declared here.
         ...LiteralEnum1,
+           ~~~~~~~~~~~~
+!!! error TS1397: Spread enum member has overlapped on 'A'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:60:5: 'A' is declared here.
+           ~~~~~~~~~~~~
+!!! error TS1397: Spread enum member has overlapped on 'B'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:58:5: 'B' is declared here.
         A = 'A'
+        ~
+!!! error TS2300: Duplicate identifier 'A'.
+!!! related TS6203 tests/cases/conformance/enums/spreadEnum7.ts:7:5: 'A' was also declared here.
     }
     
     enum R8 {
         ...R8,
            ~~
+!!! error TS1397: Spread enum member has overlapped on 'R88'.
+!!! related TS2728 tests/cases/conformance/enums/spreadEnum7.ts:65:5: 'R88' is declared here.
+           ~~
 !!! error TS1398: Spread enum member cannot reference to itself.
         R88 = 'R88'
+        ~~~
+!!! error TS2300: Duplicate identifier 'R88'.
     }
     
     enum R9 {

@@ -55,24 +55,24 @@ const enum R3 {
 }
 
 LiteralEnum1.A;
->LiteralEnum1.A : LiteralEnum1.A
+>LiteralEnum1.A : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->A : LiteralEnum1.A
+>A : LiteralEnum1
 
 LiteralEnum1.B;
->LiteralEnum1.B : LiteralEnum1.B
+>LiteralEnum1.B : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->B : LiteralEnum1.B
+>B : LiteralEnum1
 
 ConstEnum.A;
->ConstEnum.A : ConstEnum.A
+>ConstEnum.A : ConstEnum
 >ConstEnum : typeof ConstEnum
->A : ConstEnum.A
+>A : ConstEnum
 
 ConstEnum.B;
->ConstEnum.B : ConstEnum.B
+>ConstEnum.B : ConstEnum
 >ConstEnum : typeof ConstEnum
->B : ConstEnum.B
+>B : ConstEnum
 
 R1.A;
 >R1.A : ConstEnum.A

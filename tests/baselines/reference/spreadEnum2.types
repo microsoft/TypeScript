@@ -56,9 +56,9 @@ enum E {
 }
 
 A.AA;
->A.AA : A.AA
+>A.AA : A
 >A : typeof A
->AA : A.AA
+>AA : A
 
 B.AA;
 >B.AA : A.AA
@@ -66,9 +66,9 @@ B.AA;
 >AA : A.AA
 
 B.BB;
->B.BB : B.BB
+>B.BB : B
 >B : typeof B
->BB : B.BB
+>BB : B
 
 C.AA;
 >C.AA : A
@@ -81,9 +81,9 @@ C.BB;
 >BB : B.BB
 
 C.CC;
->C.CC : C.CC
+>C.CC : C
 >C : typeof C
->CC : C.CC
+>CC : C
 
 D.AA;
 >D.AA : A
@@ -101,9 +101,9 @@ D.CC;
 >CC : C.CC
 
 D.DD;
->D.DD : D.DD
+>D.DD : D
 >D : typeof D
->DD : D.DD
+>DD : D
 
 E.AA;
 >E.AA : A

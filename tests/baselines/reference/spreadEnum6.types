@@ -97,24 +97,24 @@ enum R3 {
 }
 
 LiteralEnum1.A;
->LiteralEnum1.A : LiteralEnum1.A
+>LiteralEnum1.A : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->A : LiteralEnum1.A
+>A : LiteralEnum1
 
 LiteralEnum1.B;
->LiteralEnum1.B : LiteralEnum1.B
+>LiteralEnum1.B : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->B : LiteralEnum1.B
+>B : LiteralEnum1
 
 LiteralEnum1.C;
->LiteralEnum1.C : LiteralEnum1.A
+>LiteralEnum1.C : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->C : LiteralEnum1.A
+>C : LiteralEnum1
 
 LiteralEnum1.D;
->LiteralEnum1.D : LiteralEnum1.B
+>LiteralEnum1.D : LiteralEnum1
 >LiteralEnum1 : typeof LiteralEnum1
->D : LiteralEnum1.B
+>D : LiteralEnum1
 
 R1.A;
 >R1.A : LiteralEnum1.A
@@ -137,34 +137,34 @@ R1.D;
 >D : LiteralEnum1.B
 
 R1.R1;
->R1.R1 : R1.R1
+>R1.R1 : R1
 >R1 : typeof R1
->R1 : R1.R1
+>R1 : R1
 
 R1.R11;
->R1.R11 : R1.R11
+>R1.R11 : R1
 >R1 : typeof R1
->R11 : R1.R11
+>R11 : R1
 
 LiteralEnum2.E;
->LiteralEnum2.E : LiteralEnum2.E
+>LiteralEnum2.E : LiteralEnum2
 >LiteralEnum2 : typeof LiteralEnum2
->E : LiteralEnum2.E
+>E : LiteralEnum2
 
 LiteralEnum2.F;
->LiteralEnum2.F : LiteralEnum2.F
+>LiteralEnum2.F : LiteralEnum2
 >LiteralEnum2 : typeof LiteralEnum2
->F : LiteralEnum2.F
+>F : LiteralEnum2
 
 LiteralEnum2.G;
->LiteralEnum2.G : LiteralEnum2.E
+>LiteralEnum2.G : LiteralEnum2
 >LiteralEnum2 : typeof LiteralEnum2
->G : LiteralEnum2.E
+>G : LiteralEnum2
 
 LiteralEnum2.H;
->LiteralEnum2.H : LiteralEnum2.F
+>LiteralEnum2.H : LiteralEnum2
 >LiteralEnum2 : typeof LiteralEnum2
->H : LiteralEnum2.F
+>H : LiteralEnum2
 
 R2.A;
 >R2.A : LiteralEnum1
@@ -207,14 +207,14 @@ R2.H;
 >H : LiteralEnum1.B
 
 R2.R2;
->R2.R2 : R2.R2
+>R2.R2 : R2
 >R2 : typeof R2
->R2 : R2.R2
+>R2 : R2
 
 R2.R22
->R2.R22 : R2.R22
+>R2.R22 : R2
 >R2 : typeof R2
->R22 : R2.R22
+>R22 : R2
 
 R3.A;
 >R3.A : LiteralEnum1

@@ -35985,6 +35985,7 @@ namespace ts {
                 error(node.name, Diagnostics.Spread_enum_member_cannot_reference_to_itself);
             }
 
+            getExportsOfSymbol(symbol);
             checkGrammarSpreadEnumMember(enumSymbol, symbol, node);
             checkExpression(node.name);
         }
