@@ -1,0 +1,22 @@
+=== tests/cases/compiler/overloadAssignabilityChecksAllowGenericAssignment.ts ===
+declare function provide<T>(cb: (x: T) => void): void;
+>provide : { <T>(cb: (x: T) => void): void; <T>(cb: (x: T[keyof T]) => void): void; }
+>cb : (x: T) => void
+>x : T
+
+declare function provide<T>(cb: (x: T[keyof T]) => void): void;
+>provide : { <T>(cb: (x: T) => void): void; <T>(cb: (x: T[keyof T]) => void): void; }
+>cb : (x: T[keyof T]) => void
+>x : T[keyof T]
+
+declare function provider<T>(provide: (cb: (x: T) => void) => void): void;
+>provider : <T>(provide: (cb: (x: T) => void) => void) => void
+>provide : (cb: (x: T) => void) => void
+>cb : (x: T) => void
+>x : T
+
+provider(provide);
+>provider(provide) : void
+>provider : <T>(provide: (cb: (x: T) => void) => void) => void
+>provide : { <T>(cb: (x: T) => void): void; <T>(cb: (x: T[keyof T]) => void): void; }
+

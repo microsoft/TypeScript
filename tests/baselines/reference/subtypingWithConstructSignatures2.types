@@ -675,8 +675,8 @@ var r15arg1: new <T>(x: T) => T[];
 >x : T
 
 var r15 = foo15(r15arg1); // any
->r15 : any
->foo15(r15arg1) : any
+>r15 : { new (x: number): number[]; new (x: string): string[]; }
+>foo15(r15arg1) : { new (x: number): number[]; new (x: string): string[]; }
 >foo15 : { (a: { new (x: number): number[]; new (x: string): string[]; }): { new (x: number): number[]; new (x: string): string[]; }; (a: any): any; }
 >r15arg1 : new <T>(x: T) => T[]
 
@@ -696,8 +696,8 @@ var r17arg1: new <T>(x: (a: T) => T) => T[];
 >a : T
 
 var r17 = foo17(r17arg1); // any
->r17 : any
->foo17(r17arg1) : any
+>r17 : { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }
+>foo17(r17arg1) : { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }
 >foo17 : { (a: { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }): { new (x: (a: number) => number): number[]; new (x: (a: string) => string): string[]; }; (a: any): any; }
 >r17arg1 : new <T>(x: (a: T) => T) => T[]
 

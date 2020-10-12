@@ -1,0 +1,28 @@
+=== tests/cases/compiler/overloadAssignabilityChecksAllowGenericAssignment.ts ===
+declare function provide<T>(cb: (x: T) => void): void;
+>provide : Symbol(provide, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 0), Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 54))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 25))
+>cb : Symbol(cb, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 28))
+>x : Symbol(x, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 33))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 25))
+
+declare function provide<T>(cb: (x: T[keyof T]) => void): void;
+>provide : Symbol(provide, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 0), Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 54))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 25))
+>cb : Symbol(cb, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 28))
+>x : Symbol(x, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 33))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 25))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 25))
+
+declare function provider<T>(provide: (cb: (x: T) => void) => void): void;
+>provider : Symbol(provider, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 63))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 3, 26))
+>provide : Symbol(provide, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 3, 29))
+>cb : Symbol(cb, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 3, 39))
+>x : Symbol(x, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 3, 44))
+>T : Symbol(T, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 3, 26))
+
+provider(provide);
+>provider : Symbol(provider, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 1, 63))
+>provide : Symbol(provide, Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 0), Decl(overloadAssignabilityChecksAllowGenericAssignment.ts, 0, 54))
+
