@@ -1,0 +1,55 @@
+=== tests/cases/compiler/objectInstantiationFromUnionSpread.ts ===
+// #40995
+
+interface Success {
+>Success : Symbol(Success, Decl(objectInstantiationFromUnionSpread.ts, 0, 0))
+
+  isSuccess: true;
+>isSuccess : Symbol(Success.isSuccess, Decl(objectInstantiationFromUnionSpread.ts, 2, 19))
+}
+
+interface Fail {
+>Fail : Symbol(Fail, Decl(objectInstantiationFromUnionSpread.ts, 4, 1))
+
+  isSuccess: false;
+>isSuccess : Symbol(Fail.isSuccess, Decl(objectInstantiationFromUnionSpread.ts, 6, 16))
+}
+
+type Item = Success | Fail;
+>Item : Symbol(Item, Decl(objectInstantiationFromUnionSpread.ts, 8, 1))
+>Success : Symbol(Success, Decl(objectInstantiationFromUnionSpread.ts, 0, 0))
+>Fail : Symbol(Fail, Decl(objectInstantiationFromUnionSpread.ts, 4, 1))
+
+function f1(a: Item[]) {
+>f1 : Symbol(f1, Decl(objectInstantiationFromUnionSpread.ts, 10, 27))
+>a : Symbol(a, Decl(objectInstantiationFromUnionSpread.ts, 12, 12))
+>Item : Symbol(Item, Decl(objectInstantiationFromUnionSpread.ts, 8, 1))
+
+  a.map(item => ({ ...item })).filter(value => {});
+>a.map(item => ({ ...item })).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectInstantiationFromUnionSpread.ts, 12, 12))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(objectInstantiationFromUnionSpread.ts, 13, 8))
+>item : Symbol(item, Decl(objectInstantiationFromUnionSpread.ts, 13, 8))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(objectInstantiationFromUnionSpread.ts, 13, 38))
+}
+
+function f2<T>(a: Item[]) {
+>f2 : Symbol(f2, Decl(objectInstantiationFromUnionSpread.ts, 14, 1))
+>T : Symbol(T, Decl(objectInstantiationFromUnionSpread.ts, 16, 12))
+>a : Symbol(a, Decl(objectInstantiationFromUnionSpread.ts, 16, 15))
+>Item : Symbol(Item, Decl(objectInstantiationFromUnionSpread.ts, 8, 1))
+
+  a.map(item => ({ ...item })).filter(value => {});
+>a.map(item => ({ ...item })).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectInstantiationFromUnionSpread.ts, 16, 15))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(objectInstantiationFromUnionSpread.ts, 17, 8))
+>item : Symbol(item, Decl(objectInstantiationFromUnionSpread.ts, 17, 8))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(objectInstantiationFromUnionSpread.ts, 17, 38))
+}
+

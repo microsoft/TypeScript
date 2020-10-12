@@ -1,4 +1,6 @@
-=== tests/cases/compiler/wtf.ts ===
+=== tests/cases/compiler/objectInstantiationFromUnionSpread.ts ===
+// #40995
+
 interface Success {
   isSuccess: true;
 >isSuccess : true

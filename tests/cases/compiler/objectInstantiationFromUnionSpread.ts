@@ -1,5 +1,7 @@
 // @strictFunctionTypes: true
 
+// #40995
+
 interface Success {
   isSuccess: true;
 }

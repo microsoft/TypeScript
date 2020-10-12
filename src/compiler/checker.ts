@@ -15073,7 +15073,6 @@ namespace ts {
                 links.outerTypeParameters = typeParameters;
                 if (typeParameters.length) {
                     links.instantiations = new Map<string, Type>();
-                    links.instantiations.set(getTypeListId([type, ...typeParameters]), target);
                 }
             }
             if (typeParameters.length) {
@@ -15082,7 +15081,11 @@ namespace ts {
                 // instantiation cache key from the type IDs of the type arguments.
                 const combinedMapper = combineTypeMappers(type.mapper, mapper);
                 const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
-                const id = getTypeListId([type, ...typeArguments]);
+                const id = getTypeListId(typeArguments);
+                if (id === getTypeListId(typeParameters)) {
+                    return target;
+                }
+
                 let result = links.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
