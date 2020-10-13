@@ -3647,7 +3647,7 @@ namespace ts.server {
                 const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
                 proj.typeAcquisition = typeAcquisition;
             }
-            proj.typeAcquisition = proj.typeAcquisition || this.hostConfiguration.typeAcquisition || {};
+            proj.typeAcquisition = proj.typeAcquisition || {};
             proj.typeAcquisition.include = proj.typeAcquisition.include || [];
             proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
             if (proj.typeAcquisition.enable === undefined) {
