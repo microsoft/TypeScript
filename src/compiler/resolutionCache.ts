@@ -363,6 +363,12 @@ namespace ts {
             loader, getResolutionWithResolvedFileName,
             shouldRetryResolution, reusedNames, logChanges
         }: ResolveNamesWithLocalCacheInput<T, R>): T[] {
+            const compilerOptions = resolutionHost.getCompilationSettings();
+            // If resolutions are persisted, we just need to direct to loader and program will do job of storing resolutions,
+            // We also shouldnt be watching locations since those resolutions are always persisted till user opts not to
+            if (compilerOptions.persistResolutions) {
+                return names.map(name => loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference));
+            }
             const path = resolutionHost.toPath(containingFile);
             const resolutionsInFile = cache.get(path) || cache.set(path, new Map()).get(path)!;
             const dirPath = getDirectoryPath(path);
@@ -373,7 +379,6 @@ namespace ts {
                 perDirectoryCache.set(dirPath, perDirectoryResolution);
             }
             const resolvedModules: T[] = [];
-            const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
 
             // All the resolutions in this file are invalidated if this file wasn't resolved using same redirect

@@ -1323,8 +1323,30 @@ namespace ts {
             let result: (ResolvedModuleWithFailedLookupLocations | typeof predictedToResolveToAmbientModuleMarker)[] | undefined;
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
+                if (options.persistResolutions) {
+                    const oldResolvedModule = oldSourceFile?.resolvedModules?.get(moduleName);
+                    if (oldResolvedModule) {
+                        if (isTraceEnabled(options, host)) {
+                            trace(
+                                host,
+                                oldResolvedModule.resolvedModule?.resolvedFileName ?
+                                    oldResolvedModule.resolvedModule.packageId ?
+                                        Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                        Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved,
+                                moduleName,
+                                getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
+                                oldResolvedModule?.resolvedModule?.resolvedFileName,
+                                oldResolvedModule?.resolvedModule?.packageId && packageIdToString(oldResolvedModule.resolvedModule.packageId)
+                            );
+                        }
+                        (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
+                        (reusedNames || (reusedNames = [])).push(moduleName);
+                        continue;
+                    }
+                }
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
-                if (oldSourceFile && file.version === oldSourceFile.version && !hasInvalidatedResolution(oldSourceFile.path)) {
+                else if (oldSourceFile && file.version === oldSourceFile.version && !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile.resolvedModules?.get(moduleName);
                     if (oldResolvedModule?.resolvedModule) {
                         if (isTraceEnabled(options, host)) {
@@ -1457,11 +1479,19 @@ namespace ts {
 
             // check properties that can affect structure of the program or module resolution strategy
             // if any of these properties has changed - structure cannot be reused
-            const oldOptions = oldProgram.getCompilerOptions();
-            if (changesAffectModuleResolution(oldOptions, options)) {
+            if (changesAffectModuleResolution(oldProgram.getCompilerOptions(), options)) {
                 return StructureIsReused.Not;
             }
 
+            // With persistResolutions its always to reuse strcture for safe module resolutions
+            const result = tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram);
+            return options.persistResolutions && result === StructureIsReused.Not ?
+                StructureIsReused.SafeModules :
+                result;
+
+        }
+
+        function tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram: Program | ProgramFromBuildInfo): StructureIsReused {
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
@@ -1649,7 +1679,7 @@ namespace ts {
                 return structureIsReused;
             }
 
-            if (changesAffectingProgramStructure(oldOptions, options) || host.hasChangedAutomaticTypeDirectiveNames?.()) {
+            if (changesAffectingProgramStructure(oldProgram.getCompilerOptions(), options) || host.hasChangedAutomaticTypeDirectiveNames?.()) {
                 return StructureIsReused.SafeModules;
             }
 
@@ -1685,7 +1715,7 @@ namespace ts {
                 const oldPath = !isString(oldFile) ? oldFile.path : oldFile;
                 if (oldPath === path) {
                     // Set the file as found during node modules search if it was found that way in old progra,
-                    if (oldProgram!.isSourceFileFromExternalLibraryPath(oldPath)) {
+                    if (oldProgram.isSourceFileFromExternalLibraryPath(oldPath)) {
                         sourceFilesFoundSearchingNodeModules.set(oldPath, true);
                     }
                     return;
