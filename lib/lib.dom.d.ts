@@ -18346,6 +18346,7 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
     "devicemotion": DeviceMotionEvent;
     "deviceorientation": DeviceOrientationEvent;
     "deviceorientationabsolute": DeviceOrientationEvent;
+    "DOMContentLoaded": Event;
     "drag": DragEvent;
     "dragend": DragEvent;
     "dragenter": DragEvent;
