@@ -28,7 +28,8 @@ namespace ts {
             const prepends = host.getPrependNodes();
             if (sourceFiles.length || prepends.length) {
                 const bundle = factory.createBundle(sourceFiles, prepends);
-                const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
+                const outputPaths = getOutputPathsFor(bundle, host, forceDtsEmit);
+                const result = action(!onlyBuildInfo ? outputPaths : { buildInfoPath: outputPaths.buildInfoPath }, bundle);
                 if (result) {
                     return result;
                 }

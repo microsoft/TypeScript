@@ -5,7 +5,7 @@ namespace ts {
         readFile(fileName: string): string | undefined;
     }
     export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
-        if (outFile(compilerOptions)) return undefined;
+        if (outFileWithoutPersistResolutions(compilerOptions)) return undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
         const content = host.readFile(buildInfoPath);
@@ -21,7 +21,7 @@ namespace ts {
         writeFile: WriteFileCallback;
     }
     export function cleanResolutionsOfTsBuildInfo(compilerOptions: CompilerOptions, host: CleanResolutionsOfTsBuildInfoHost): EmitResult {
-        if (outFile(compilerOptions)) return emitSkippedWithNoDiagnostics;
+        if (outFileWithoutPersistResolutions(compilerOptions)) return emitSkippedWithNoDiagnostics;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return emitSkippedWithNoDiagnostics;
         const content = host.readFile(buildInfoPath);

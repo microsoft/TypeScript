@@ -1307,7 +1307,7 @@ namespace ts {
         buildResult: BuildResultFlags,
         errorType: string,
     ) {
-        const canEmitBuildInfo = !(buildResult & BuildResultFlags.SyntaxErrors) && program && !outFile(program.getCompilerOptions());
+        const canEmitBuildInfo = !(buildResult & BuildResultFlags.SyntaxErrors) && program && !outFileWithoutPersistResolutions(program.getCompilerOptions());
 
         reportAndStoreErrors(state, resolvedPath, diagnostics);
         state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });

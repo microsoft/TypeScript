@@ -1742,7 +1742,7 @@ namespace ts {
         }
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
-            Debug.assert(!outFile(options));
+            Debug.assert(!outFileWithoutPersistResolutions(options));
             tracing?.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
@@ -3934,7 +3934,7 @@ namespace ts {
         if (options.noEmit) {
             // Cache the semantic diagnostics
             program.getSemanticDiagnostics(sourceFile, cancellationToken);
-            return sourceFile || outFile(options) ?
+            return sourceFile || outFileWithoutPersistResolutions(options) ?
                 emitSkippedWithNoDiagnostics :
                 program.emitBuildInfo(writeFile, cancellationToken);
         }
@@ -3956,7 +3956,7 @@ namespace ts {
 
         if (!diagnostics.length) return undefined;
         let emittedFiles: string[] | undefined;
-        if (!sourceFile && !outFile(options)) {
+        if (!sourceFile && !outFileWithoutPersistResolutions(options)) {
             const emitResult = program.emitBuildInfo(writeFile, cancellationToken);
             if (emitResult.diagnostics) diagnostics = [...diagnostics, ...emitResult.diagnostics];
             emittedFiles = emitResult.emittedFiles;

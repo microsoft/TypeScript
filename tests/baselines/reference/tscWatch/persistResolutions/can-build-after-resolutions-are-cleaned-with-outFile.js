@@ -44,12 +44,12 @@ declare module "src/main" { }
 
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":366,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":108,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":366,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":108,"kind":"text"}]}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 
 /a/lib/tsc.js --p . -w --extendedDiagnostics
 Output::
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90m12:00:34 AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -81,7 +81,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 [7m2[0m import { something2 } from "./fileNotFound";
 [7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -148,8 +148,43 @@ exitCode:: ExitStatus.undefined
       ]
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./src/filepresent.ts": {
+        "version": "11598859296-export function something() { return 10; }"
+      },
+      "./src/main.ts": {
+        "version": "-18180953903-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";"
+      }
+    },
+    "options": {
+      "composite": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "referencedMap": {
+      "./src/main.ts": [
+        "./src/filepresent.ts"
+      ]
+    },
+    "exportedModulesMap": {}
+  },
   "version": "FakeTSVersion",
-  "size": 231
+  "size": 1114
 }
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]
@@ -194,7 +229,7 @@ Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/src/main.ts 1:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/main.ts 1:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
-[[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
 
 Synchronizing program
 CreatingProgramWith::
@@ -207,7 +242,7 @@ Reusing resolution of module './fileNotFound' from '/user/username/projects/mypr
 [7m2[0m import { something2 } from "./fileNotFound";something();
 [7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:00:58 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -259,7 +294,7 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
 
 //// [/user/username/projects/myproject/outFile.d.ts] file written with same contents
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":431,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":108,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":431,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":108,"kind":"text"}]}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"-22084070133-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -288,8 +323,43 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
       ]
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./src/filepresent.ts": {
+        "version": "11598859296-export function something() { return 10; }"
+      },
+      "./src/main.ts": {
+        "version": "-22084070133-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();"
+      }
+    },
+    "options": {
+      "composite": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "referencedMap": {
+      "./src/main.ts": [
+        "./src/filepresent.ts"
+      ]
+    },
+    "exportedModulesMap": {}
+  },
   "version": "FakeTSVersion",
-  "size": 231
+  "size": 1126
 }
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]
@@ -344,7 +414,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 FileWatcher:: Triggered with /user/username/projects/myproject/src/main.ts 1:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/main.ts 1:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:12 AM[0m] File change detected. Starting incremental compilation...
 
 Reloading new file names and options
 Synchronizing program
@@ -363,7 +433,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/newFile.t
 [7m2[0m import { something2 } from "./fileNotFound";something();
 [7m [0m [91m                           ~~~~~~~~~~~~~~~~[0m
 
-[[90m12:01:19 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:22 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -434,7 +504,7 @@ declare module "src/main" { }
 
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/newFile.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":643,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":176,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/newFile.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":643,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":176,"kind":"text"}]}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"4428918903-export function foo() { return 20; }","signature":false},{"version":"-1814339108-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -464,8 +534,49 @@ declare module "src/main" { }
       ]
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./src/filepresent.ts",
+      "./src/newfile.ts",
+      "./src/main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filepresent.ts",
+        "./src/newfile.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./src/filepresent.ts": {
+        "version": "11598859296-export function something() { return 10; }"
+      },
+      "./src/newfile.ts": {
+        "version": "4428918903-export function foo() { return 20; }"
+      },
+      "./src/main.ts": {
+        "version": "-1814339108-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();"
+      }
+    },
+    "options": {
+      "composite": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "referencedMap": {
+      "./src/main.ts": [
+        "./src/filepresent.ts",
+        "./src/newfile.ts"
+      ]
+    },
+    "exportedModulesMap": {}
+  },
   "version": "FakeTSVersion",
-  "size": 250
+  "size": 1279
 }
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]
@@ -524,7 +635,7 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotF
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/fileNotFound.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
-[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
 Reloading new file names and options
 Synchronizing program
@@ -540,7 +651,7 @@ File '/user/username/projects/myproject/src/fileNotFound.ts' exist - use it as a
 ======== Module name './fileNotFound' was successfully resolved to '/user/username/projects/myproject/src/fileNotFound.ts'. ========
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
-[[90m12:01:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -623,7 +734,7 @@ declare module "src/main" { }
 
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/fileNotFound.ts","./src/filePresent.ts","./src/newFile.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":888,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":256,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/fileNotFound.ts","./src/filePresent.ts","./src/newFile.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":888,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":256,"kind":"text"}]}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filenotfound.ts","./src/filepresent.ts","./src/newfile.ts","./src/main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"-497034637-export function something2() { return 20; }","signature":false},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"4428918903-export function foo() { return 20; }","signature":false},{"version":"-1814339108-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();","signature":false}],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -654,8 +765,55 @@ declare module "src/main" { }
       ]
     }
   },
+  "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./src/filenotfound.ts",
+      "./src/filepresent.ts",
+      "./src/newfile.ts",
+      "./src/main.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./src/filenotfound.ts",
+        "./src/filepresent.ts",
+        "./src/newfile.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../../a/lib/lib.d.ts": {
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
+      },
+      "./src/filenotfound.ts": {
+        "version": "-497034637-export function something2() { return 20; }"
+      },
+      "./src/filepresent.ts": {
+        "version": "11598859296-export function something() { return 10; }"
+      },
+      "./src/newfile.ts": {
+        "version": "4428918903-export function foo() { return 20; }"
+      },
+      "./src/main.ts": {
+        "version": "-1814339108-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";something();"
+      }
+    },
+    "options": {
+      "composite": true,
+      "module": 2,
+      "outFile": "./outFile.js"
+    },
+    "referencedMap": {
+      "./src/main.ts": [
+        "./src/filenotfound.ts",
+        "./src/filepresent.ts",
+        "./src/newfile.ts"
+      ]
+    },
+    "exportedModulesMap": {}
+  },
   "version": "FakeTSVersion",
-  "size": 274
+  "size": 1416
 }
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]

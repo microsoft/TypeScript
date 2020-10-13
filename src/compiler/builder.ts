@@ -740,7 +740,7 @@ namespace ts {
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
     function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
-        if (outFile(state.compilerOptions)) return undefined;
+        if (outFileWithoutPersistResolutions(state.compilerOptions)) return undefined;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileNames: string[] = [];

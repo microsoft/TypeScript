@@ -4208,6 +4208,10 @@ namespace ts {
         return options.outFile || options.out;
     }
 
+    export function outFileWithoutPersistResolutions(options: CompilerOptions) {
+        return !!outFile(options) && !options.persistResolutions;
+    }
+
     /** Returns 'undefined' if and only if 'options.paths' is undefined. */
     export function getPathsBasePath(options: CompilerOptions, host: { getCurrentDirectory?(): string }) {
         if (!options.paths) return undefined;
