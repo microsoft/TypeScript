@@ -640,7 +640,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
-            description: Diagnostics.Issue_a_error_if_declaration_is_deprecated
+            description: Diagnostics.Report_error_when_referencing_deprecated_declaration
         },
 
         // Module Resolution
