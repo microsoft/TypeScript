@@ -4408,6 +4408,7 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndEleme
     "pointerlockerror": Event;
     "readystatechange": Event;
     "visibilitychange": Event;
+    "DOMContentLoaded": Event;
 }
 
 /** Any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree. */
