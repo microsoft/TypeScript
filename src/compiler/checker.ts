@@ -15052,9 +15052,10 @@ namespace ts {
         }
 
         function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper) {
-            const target = type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
             const declaration = type.objectFlags & ObjectFlags.Reference ? (<TypeReference>type).node! : type.symbol.declarations[0];
             const links = getNodeLinks(declaration);
+            const target = type.objectFlags & ObjectFlags.Reference ? <DeferredTypeReference>links.resolvedType! :
+                type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
             let typeParameters = links.outerTypeParameters;
             if (!typeParameters) {
                 // The first time an anonymous type is instantiated we compute and store a list of the type
