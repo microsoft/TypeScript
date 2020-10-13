@@ -5,14 +5,16 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context: CodeFixContext) {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
+            const changes = textChanges.ChangeTracker.with(context, t =>
+                doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker())),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) =>
+            doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
     });
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
         const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
             // Bad input
@@ -86,12 +88,12 @@ namespace ts.codefix {
 
             return memberElements;
 
-            function shouldConvertDeclaration(_target: PropertyAccessExpression | ObjectLiteralExpression, source: Expression) {
+            function shouldConvertDeclaration(_target: AccessExpression | ObjectLiteralExpression, source: Expression) {
                 // Right now the only thing we can convert are function expressions, get/set accessors and methods
                 // other values like normal value fields ({a: 1}) shouldn't get transformed.
                 // We can update this once ES public class properties are available.
-                if (isPropertyAccessExpression(_target)) {
-                    if (isConstructorAssignment(_target)) return true;
+                if (isAccessExpression(_target)) {
+                    if (isPropertyAccessExpression(_target) && isConstructorAssignment(_target)) return true;
                     return isFunctionLike(source);
                 }
                 else {
@@ -115,10 +117,9 @@ namespace ts.codefix {
                     return members;
                 }
 
-                const memberDeclaration = symbol.valueDeclaration as PropertyAccessExpression | ObjectLiteralExpression;
+                const memberDeclaration = symbol.valueDeclaration as AccessExpression | ObjectLiteralExpression;
                 const assignmentBinaryExpression = memberDeclaration.parent as BinaryExpression;
                 const assignmentExpr = assignmentBinaryExpression.right;
-
                 if (!shouldConvertDeclaration(memberDeclaration, assignmentExpr)) {
                     return members;
                 }
@@ -135,8 +136,13 @@ namespace ts.codefix {
                 }
 
                 // f.x = expr
-                if (isPropertyAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
-                    return createFunctionLikeExpressionMember(members, assignmentExpr, memberDeclaration.name);
+                if (isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
+                    const quotePreference = getQuotePreference(sourceFile, preferences);
+                    const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
+                    if (name) {
+                        return createFunctionLikeExpressionMember(members, assignmentExpr, name);
+                    }
+                    return members;
                 }
                 // f.prototype = { ... }
                 else if (isObjectLiteralExpression(assignmentExpr)) {
@@ -166,14 +172,12 @@ namespace ts.codefix {
                     return members;
                 }
 
-                type MethodName = Parameters<typeof factory.createMethodDeclaration>[3];
-
-                function createFunctionLikeExpressionMember(members: readonly ClassElement[], expression: FunctionExpression | ArrowFunction, name: MethodName) {
+                function createFunctionLikeExpressionMember(members: readonly ClassElement[], expression: FunctionExpression | ArrowFunction, name: PropertyName) {
                     if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
                     else return createArrowFunctionExpressionMember(members, expression, name);
                 }
 
-                function createFunctionExpressionMember(members: readonly ClassElement[], functionExpression: FunctionExpression, name: MethodName) {
+                function createFunctionExpressionMember(members: readonly ClassElement[], functionExpression: FunctionExpression, name: PropertyName) {
                     const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
                     const method = factory.createMethodDeclaration(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
                         /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
@@ -181,7 +185,7 @@ namespace ts.codefix {
                     return members.concat(method);
                 }
 
-                function createArrowFunctionExpressionMember(members: readonly ClassElement[], arrowFunction: ArrowFunction, name: MethodName) {
+                function createArrowFunctionExpressionMember(members: readonly ClassElement[], arrowFunction: ArrowFunction, name: PropertyName) {
                     const arrowFunctionBody = arrowFunction.body;
                     let bodyBlock: Block;
 
@@ -242,5 +246,24 @@ namespace ts.codefix {
         if (!x.name) return false;
         if (isIdentifier(x.name) && x.name.text === "constructor") return true;
         return false;
+    }
+
+    function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOptions, quotePreference: QuotePreference): PropertyName | undefined {
+        if (isPropertyAccessExpression(node)) {
+            return node.name;
+        }
+
+        const propName = node.argumentExpression;
+        if (isNumericLiteral(propName)) {
+            return propName;
+        }
+
+        if (isStringLiteralLike(propName)) {
+            return isIdentifierText(propName.text, compilerOptions.target) ? factory.createIdentifier(propName.text)
+                : isNoSubstitutionTemplateLiteral(propName) ? factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
+                : propName;
+        }
+
+        return undefined;
     }
 }
