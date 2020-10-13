@@ -4642,7 +4642,7 @@ namespace ts {
         Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
 
         /* @internal */
-        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function | Enum,
+        LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
     }
 
     /* @internal */
@@ -4707,6 +4707,7 @@ namespace ts {
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
         tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
+        enumHasLateBoundMember?: boolean            // True if enum declaration contains spread enum member
     }
 
     /* @internal */

@@ -3471,8 +3471,28 @@ namespace ts {
                 : getPropertyOfType(type, memberName);
         }
 
+        function isLateBindingContainer(symbol: Symbol): boolean {
+            if (!(symbol.flags & (SymbolFlags.LateBindingContainer | SymbolFlags.Enum))) {
+                return false;
+            }
+
+            if (symbol.flags & SymbolFlags.Enum) {
+                const links = getSymbolLinks(symbol);
+                if (links.enumHasLateBoundMember === undefined) {
+                    for (const declaration of symbol.declarations) {
+                        if (isEnumDeclaration(declaration) && some(declaration.members, isSpreadEnumMember)) {
+                            return links.enumHasLateBoundMember = true;
+                        }
+                    }
+                    return links.enumHasLateBoundMember = false;
+                }
+                return links.enumHasLateBoundMember;
+            }
+            return true;
+        }
+
         function getExportsOfSymbol(symbol: Symbol): SymbolTable {
-            return symbol.flags & SymbolFlags.LateBindingContainer ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
+            return isLateBindingContainer(symbol) ? getResolvedMembersOrExportsOfSymbol(symbol, MembersOrExportsResolutionKind.resolvedExports) :
                 symbol.flags & SymbolFlags.Module ? getExportsOfModule(symbol) :
                 symbol.exports || emptySymbols;
         }
