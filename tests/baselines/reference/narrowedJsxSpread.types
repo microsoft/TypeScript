@@ -1,0 +1,43 @@
+=== tests/cases/compiler/narrowedJsxSpread.tsx ===
+/// <reference path="react16.d.ts" />
+import React from 'react';
+>React : typeof React
+
+type Props = {
+>Props : Props
+
+  foo?: string
+>foo : string | undefined
+}
+
+const Component = ({ foo }: Required<Props>) => <p>{foo}</p>;
+>Component : ({ foo }: Required<Props>) => JSX.Element
+>({ foo }: Required<Props>) => <p>{foo}</p> : ({ foo }: Required<Props>) => JSX.Element
+>foo : string
+><p>{foo}</p> : JSX.Element
+>p : any
+>foo : string
+>p : any
+
+const Example = (props: Props) => (
+>Example : (props: Props) => JSX.Element
+>(props: Props) => (  <>    {props.foo && <Component {...props} />}  </>) : (props: Props) => JSX.Element
+>props : Props
+>(  <>    {props.foo && <Component {...props} />}  </>) : JSX.Element
+
+  <>
+><>    {props.foo && <Component {...props} />}  </> : JSX.Element
+
+    {props.foo && <Component {...props} />}
+>props.foo && <Component {...props} /> : "" | JSX.Element | undefined
+>props.foo : string | undefined
+>props : Props
+>foo : string | undefined
+><Component {...props} /> : JSX.Element
+>Component : ({ foo }: Required<Props>) => JSX.Element
+>props : Props
+
+  </>
+);
+
+

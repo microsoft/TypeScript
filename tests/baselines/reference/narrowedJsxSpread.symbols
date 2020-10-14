@@ -1,0 +1,38 @@
+=== tests/cases/compiler/narrowedJsxSpread.tsx ===
+/// <reference path="react16.d.ts" />
+import React from 'react';
+>React : Symbol(React, Decl(narrowedJsxSpread.tsx, 1, 6))
+
+type Props = {
+>Props : Symbol(Props, Decl(narrowedJsxSpread.tsx, 1, 26))
+
+  foo?: string
+>foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 2, 14))
+}
+
+const Component = ({ foo }: Required<Props>) => <p>{foo}</p>;
+>Component : Symbol(Component, Decl(narrowedJsxSpread.tsx, 6, 5))
+>foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 6, 20))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(narrowedJsxSpread.tsx, 1, 26))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
+>foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 6, 20))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
+
+const Example = (props: Props) => (
+>Example : Symbol(Example, Decl(narrowedJsxSpread.tsx, 7, 5))
+>props : Symbol(props, Decl(narrowedJsxSpread.tsx, 7, 17))
+>Props : Symbol(Props, Decl(narrowedJsxSpread.tsx, 1, 26))
+
+  <>
+    {props.foo && <Component {...props} />}
+>props.foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 2, 14))
+>props : Symbol(props, Decl(narrowedJsxSpread.tsx, 7, 17))
+>foo : Symbol(foo, Decl(narrowedJsxSpread.tsx, 2, 14))
+>Component : Symbol(Component, Decl(narrowedJsxSpread.tsx, 6, 5))
+>props : Symbol(props, Decl(narrowedJsxSpread.tsx, 7, 17))
+
+  </>
+);
+
+

@@ -26190,7 +26190,8 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
+                        const narrowedType = getFlowTypeOfAllSpreadableProperties(attributeDecl.expression, exprType);
+                        spread = getSpreadType(spread, narrowedType, attributes.symbol, objectFlags, /*readonly*/ false);
                         if (allAttributesTable) {
                             checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
                         }
