@@ -15183,7 +15183,7 @@ namespace ts {
 
         /**
          * Since the source of spread types are object literals, which are not binary,
-         * this function should be called in a left folding style, with left = previous result of e
+         * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
         function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean): Type {
