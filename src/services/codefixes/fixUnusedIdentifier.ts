@@ -3,6 +3,7 @@ namespace ts.codefix {
     const fixName = "unusedIdentifier";
     const fixIdPrefix = "unusedIdentifier_prefix";
     const fixIdDelete = "unusedIdentifier_delete";
+    const fixIdDeleteImports = "unusedIdentifier_deleteImports";
     const fixIdInfer = "unusedIdentifier_infer";
     const errorCodes = [
         Diagnostics._0_is_declared_but_its_value_is_never_read.code,
@@ -32,7 +33,13 @@ namespace ts.codefix {
             const importDecl = tryGetFullImport(token);
             if (importDecl) {
                 const changes = textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, importDecl));
-                return [createDeleteFix(changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)])];
+                return [createCodeFixAction(fixName, changes, [Diagnostics.Remove_import_from_0, showModuleSpecifier(importDecl)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+            }
+            else if (isImport(token)) {
+                const deletion = textChanges.ChangeTracker.with(context, t => tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
+                if (deletion.length) {
+                    return [createCodeFixAction(fixName, deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, token.getText(sourceFile)], fixIdDeleteImports, Diagnostics.Delete_all_unused_imports)];
+                }
             }
 
             if (isObjectBindingPattern(token.parent)) {
@@ -82,7 +89,7 @@ namespace ts.codefix {
 
             return result;
         },
-        fixIds: [fixIdPrefix, fixIdDelete, fixIdInfer],
+        fixIds: [fixIdPrefix, fixIdDelete, fixIdDeleteImports, fixIdInfer],
         getAllCodeActions: context => {
             const { sourceFile, program } = context;
             const checker = program.getTypeChecker();
@@ -93,13 +100,19 @@ namespace ts.codefix {
                     case fixIdPrefix:
                         tryPrefixDeclaration(changes, diag.code, sourceFile, token);
                         break;
-                    case fixIdDelete: {
-                        if (token.kind === SyntaxKind.InferKeyword) {
-                            break; // Can't delete
-                        }
+                    case fixIdDeleteImports: {
                         const importDecl = tryGetFullImport(token);
                         if (importDecl) {
                             changes.delete(sourceFile, importDecl);
+                        }
+                        else if (isImport(token)) {
+                            tryDeleteDeclaration(sourceFile, token, changes, checker, sourceFiles, /*isFixAll*/ true);
+                        }
+                        break;
+                    }
+                    case fixIdDelete: {
+                        if (token.kind === SyntaxKind.InferKeyword || isImport(token)) {
+                            break; // Can't delete
                         }
                         else if (isJSDocTemplateTag(token)) {
                             changes.delete(sourceFile, token);
@@ -145,6 +158,11 @@ namespace ts.codefix {
 
     function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
         changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
+    }
+
+    function isImport(token: Node) {
+        return token.kind === SyntaxKind.ImportKeyword
+            || token.kind === SyntaxKind.Identifier && (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
     }
 
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
