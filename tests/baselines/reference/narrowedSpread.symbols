@@ -1,0 +1,23 @@
+=== tests/cases/compiler/narrowedSpread.ts ===
+type Obj = { x: number };
+>Obj : Symbol(Obj, Decl(narrowedSpread.ts, 0, 0))
+>x : Symbol(x, Decl(narrowedSpread.ts, 0, 12))
+
+function go(obj: Obj) { }
+>go : Symbol(go, Decl(narrowedSpread.ts, 0, 25))
+>obj : Symbol(obj, Decl(narrowedSpread.ts, 1, 12))
+>Obj : Symbol(Obj, Decl(narrowedSpread.ts, 0, 0))
+
+function fn(arg: { x?: number }) {
+>fn : Symbol(fn, Decl(narrowedSpread.ts, 1, 25))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 3, 12))
+>x : Symbol(x, Decl(narrowedSpread.ts, 3, 18))
+
+    arg.x && go({ ...arg });
+>arg.x : Symbol(x, Decl(narrowedSpread.ts, 3, 18))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 3, 12))
+>x : Symbol(x, Decl(narrowedSpread.ts, 3, 18))
+>go : Symbol(go, Decl(narrowedSpread.ts, 0, 25))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 3, 12))
+}
+

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/narrowedSpread.ts ===
+type Obj = { x: number };
+>Obj : Obj
+>x : number
+
+function go(obj: Obj) { }
+>go : (obj: Obj) => void
+>obj : Obj
+
+function fn(arg: { x?: number }) {
+>fn : (arg: {    x?: number;}) => void
+>arg : { x?: number | undefined; }
+>x : number | undefined
+
+    arg.x && go({ ...arg });
+>arg.x && go({ ...arg }) : void | 0 | undefined
+>arg.x : number | undefined
+>arg : { x?: number | undefined; }
+>x : number | undefined
+>go({ ...arg }) : void
+>go : (obj: Obj) => void
+>{ ...arg } : { x: number; }
+>arg : { x?: number | undefined; }
+}
+

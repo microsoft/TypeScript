@@ -8113,27 +8113,31 @@ namespace ts {
         // We construct a synthetic element access expression corresponding to 'obj.x' such that the control
         // flow analyzer doesn't have to handle all the different syntactic forms.
         function getFlowTypeOfDestructuring(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression, declaredType: Type) {
-            const reference = getSyntheticElementAccess(node);
+            const reference = getSyntheticElementAccessOfAssignment(node);
             return reference ? getFlowTypeOfReference(reference, declaredType) : declaredType;
         }
 
-        function getSyntheticElementAccess(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression): ElementAccessExpression | undefined {
+        function getSyntheticElementAccessOfAssignment(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression): ElementAccessExpression | undefined {
             const parentAccess = getParentElementAccess(node);
             if (parentAccess && parentAccess.flowNode) {
                 const propName = getDestructuringPropertyName(node);
                 if (propName) {
-                    const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), node);
                     const lhsExpr = isLeftHandSideExpression(parentAccess) ? parentAccess : parseNodeFactory.createParenthesizedExpression(parentAccess);
-                    const result = setTextRange(parseNodeFactory.createElementAccessExpression(lhsExpr, literal), node);
-                    setParent(literal, result);
-                    setParent(result, node);
                     if (lhsExpr !== parentAccess) {
-                        setParent(lhsExpr, result);
+                        setParent(lhsExpr, parentAccess);
                     }
-                    result.flowNode = parentAccess.flowNode;
-                    return result;
+                    return getSyntheticElementAccess(lhsExpr, propName);
                 }
             }
+        }
+
+        function getSyntheticElementAccess(parent: LeftHandSideExpression, propName: string): ElementAccessExpression {
+            const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), parent);
+            const result = setTextRange(parseNodeFactory.createElementAccessExpression(parent, literal), parent);
+            setParent(literal, result);
+            setParent(result, parent);
+            result.flowNode = parent.flowNode;
+            return result;
         }
 
         function getParentElementAccess(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression) {
@@ -8141,9 +8145,9 @@ namespace ts {
             switch (ancestor.kind) {
                 case SyntaxKind.BindingElement:
                 case SyntaxKind.PropertyAssignment:
-                    return getSyntheticElementAccess(<BindingElement | PropertyAssignment>ancestor);
+                    return getSyntheticElementAccessOfAssignment(<BindingElement | PropertyAssignment>ancestor);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return getSyntheticElementAccess(<Expression>node.parent);
+                    return getSyntheticElementAccessOfAssignment(<Expression>node.parent);
                 case SyntaxKind.VariableDeclaration:
                     return (<VariableDeclaration>ancestor).initializer;
                 case SyntaxKind.BinaryExpression:
@@ -15179,7 +15183,7 @@ namespace ts {
 
         /**
          * Since the source of spread types are object literals, which are not binary,
-         * this function should be called in a left folding style, with left = previous result of getSpreadType
+         * this function should be called in a left folding style, with left = previous result of e
          * and right = the new element to be spread.
          */
         function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, objectFlags: ObjectFlags, readonly: boolean): Type {
@@ -25921,7 +25925,8 @@ namespace ts {
                         if (spread === errorType) {
                             continue;
                         }
-                        spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
+                        const narrowedType = getFlowTypeOfAllSpreadableProperties(memberDecl.expression, type);
+                        spread = getSpreadType(spread, narrowedType, node.symbol, objectFlags, inConstContext);
                     }
                     else {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
@@ -26021,6 +26026,53 @@ namespace ts {
             return !!(type.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
                 getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((<UnionOrIntersectionType>type).types, isValidSpreadType));
+        }
+
+        function getFlowTypeOfAllSpreadableProperties(parent: Expression, initialType: Type): Type {
+            if (!(initialType.flags & TypeFlags.Object)) {
+                return initialType;
+            }
+            let narrowed = false;
+            let lhsExpr: LeftHandSideExpression | undefined;
+            const members = createSymbolTable();
+            for (const prop of getPropertiesOfType(initialType)) {
+                if (!isSpreadableProperty(prop)) {
+                    members.set(prop.escapedName, prop);
+                    continue;
+                }
+                lhsExpr ||= isLeftHandSideExpression(parent) ? parent : parseNodeFactory.createParenthesizedExpression(parent);
+                const propType = getTypeOfSymbol(prop);
+                const reference = getSyntheticElementAccess(lhsExpr, unescapeLeadingUnderscores(prop.escapedName));
+                const flowType = getFlowTypeOfReference(reference, propType);
+
+                if (flowType !== propType) {
+                    narrowed = true;
+                    let flags = prop.flags;
+                    if ((flags & SymbolFlags.Optional) && getTypeFacts(flowType) & TypeFacts.NEUndefined) {
+                        flags ^= SymbolFlags.Optional;
+                    }
+                    const member = createSymbol(flags, prop.escapedName);
+                    member.type = flowType;
+                    member.declarations = prop.declarations;
+                    member.nameType = getSymbolLinks(prop).nameType;
+                    member.syntheticOrigin = prop;
+                    members.set(prop.escapedName, member);
+                }
+                else {
+                    members.set(prop.escapedName, prop);
+                }
+            }
+            if (narrowed) {
+                return createAnonymousType(
+                    initialType.symbol,
+                    members,
+                    emptyArray,
+                    emptyArray,
+                    getIndexInfoOfType(initialType, IndexKind.String),
+                    getIndexInfoOfType(initialType, IndexKind.Number)
+                );
+            }
+            return initialType;
         }
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
