@@ -606,18 +606,19 @@ namespace ts {
                 if (getRootLength(sourceMapDir) === 0) {
                     // The relative paths are relative to the common directory
                     sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
-                    return getRelativePathToDirectoryOrUrl(
-                        getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
-                        combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
-                        host.getCurrentDirectory(),
-                        host.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/ true);
+                    return encodeURI(
+                        getRelativePathToDirectoryOrUrl(
+                            getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
+                            combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
+                            host.getCurrentDirectory(),
+                            host.getCanonicalFileName,
+                            /*isAbsolutePathAnUrl*/ true));
                 }
                 else {
-                    return combinePaths(sourceMapDir, sourceMapFile);
+                    return encodeURI(combinePaths(sourceMapDir, sourceMapFile));
                 }
             }
-            return sourceMapFile;
+            return encodeURI(sourceMapFile);
         }
     }
 
