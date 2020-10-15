@@ -39,7 +39,16 @@
             "label": "gulp: services",
             "problemMatcher": [
                 "$tsc"
+            ]
+        },
+        {
+            "type": "gulp",
+            "task": "watch-tsserver",
+            "problemMatcher": [
+                "$gulp-tsc"
             ],
+            "group": "build",
+            "label": "gulp: watch-tsserver"
         }
     ]
 }

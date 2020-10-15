@@ -481,18 +481,17 @@ namespace ts.server {
         private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
+        /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
         private constructed: boolean | undefined;
 
         constructor() {
-            let isConstructed = false;
             const event: Event | undefined = (body: object, eventName: string) => {
-                if (isConstructed) {
+                try {
                     this.event(body, eventName);
-                }
-                else {
-                    // It is unsafe to dereference `this` before initialization completes,
-                    // so we defer until the next tick.
-                    //
+                } catch(e) {
+                    // ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor in ES6 or above
+                    if (!(e instanceof ReferenceError)) throw e;
+                    // It is unsafe to reference `this` before initialization completes, so we defer until the next tick.
                     // Construction should finish before the next tick fires, so we do not need to do this recursively.
                     // eslint-disable-next-line no-restricted-globals
                     setImmediate(() => this.event(body, eventName));
@@ -540,7 +539,6 @@ namespace ts.server {
             }
 
             this.constructed = true;
-            isConstructed = true;
         }
 
         event<T extends object>(body: T, eventName: string): void {
