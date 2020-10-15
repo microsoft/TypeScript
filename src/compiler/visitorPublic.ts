@@ -912,6 +912,7 @@ namespace ts {
                     nodesVisitor((<EnumDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<EnumDeclaration>node).modifiers, visitor, isModifier),
                     nodeVisitor((<EnumDeclaration>node).name, visitor, isIdentifier),
+                    nodeVisitor((<EnumDeclaration>node).type, visitor, isIdentifier),
                     nodesVisitor((<EnumDeclaration>node).members, visitor, isEnumMember));
 
             case SyntaxKind.ModuleDeclaration:

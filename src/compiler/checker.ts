@@ -6603,6 +6603,7 @@ namespace ts {
                         /*decorators*/ undefined,
                         factory.createModifiersFromModifierFlags(isConstEnumSymbol(symbol) ? ModifierFlags.Const : 0),
                         getInternalSymbolName(symbol, symbolName),
+                        /*type*/ undefined,
                         map(filter(getPropertiesOfType(getTypeOfSymbol(symbol)), p => !!(p.flags & SymbolFlags.EnumMember)), p => {
                             // TODO: Handle computed names
                             // I hate that to get the initialized value we need to walk back to the declarations here; but there's no
@@ -35696,14 +35697,14 @@ namespace ts {
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
                 let autoValue: number | undefined = 0;
                 for (const member of node.members) {
-                    const value = computeMemberValue(member, autoValue);
+                    const value = computeMemberValue(node, member, autoValue);
                     getNodeLinks(member).enumMemberValue = value;
                     autoValue = typeof value === "number" ? value + 1 : undefined;
                 }
             }
         }
 
-        function computeMemberValue(member: EnumMember, autoValue: number | undefined) {
+        function computeMemberValue(node: EnumDeclaration, member: EnumMember, autoValue: number | undefined) {
             if (isComputedNonLiteralName(member.name)) {
                 error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
             }
@@ -35712,9 +35713,12 @@ namespace ts {
                 if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
                     error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                 }
+                if (node.type && !member.initializer) {
+                    return text as string;
+                }
             }
             if (member.initializer) {
-                return computeConstantValue(member);
+                return computeConstantValue(node, member);
             }
             // In ambient non-const numeric enum declarations, enum members without initializers are
             // considered computed members (as opposed to having auto-incremented values).
@@ -35732,16 +35736,21 @@ namespace ts {
             return undefined;
         }
 
-        function computeConstantValue(member: EnumMember): string | number | undefined {
+        function computeConstantValue(node: EnumDeclaration, member: EnumMember): string | number | undefined {
             const enumKind = getEnumKind(getSymbolOfNode(member.parent));
             const isConstEnum = isEnumConst(member.parent);
             const initializer = member.initializer!;
             const value = enumKind === EnumKind.Literal && !isLiteralEnumMember(member) ? undefined : evaluate(initializer);
             if (value !== undefined) {
-                if (isConstEnum && typeof value === "number" && !isFinite(value)) {
-                    error(initializer, isNaN(value) ?
-                        Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN :
-                        Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
+                if (typeof value === "number") {
+                    if (node.type) {
+                        error(initializer, Diagnostics.Cannot_use_non_string_initializer_in_enum_with_string_annotation);
+                    }
+                    if (isConstEnum && !isFinite(value)) {
+                        error(initializer, isNaN(value) ?
+                            Diagnostics.const_enum_member_initializer_was_evaluated_to_disallowed_value_NaN :
+                            Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
+                    }
                 }
             }
             else if (enumKind === EnumKind.Literal) {
@@ -35862,6 +35871,12 @@ namespace ts {
                     isStringLiteralLike((<ElementAccessExpression>node).argumentExpression);
         }
 
+        function checkGrammarEnumTypeAnnotation(node: EnumDeclaration) {
+            if (node.type && node.type.originalKeywordKind !== SyntaxKind.StringKeyword) {
+                error(node.type, Diagnostics.Enum_annotation_is_support_string_only);
+            }
+        }
+
         function checkEnumDeclaration(node: EnumDeclaration) {
             if (!produceDiagnostics) {
                 return;
@@ -35869,6 +35884,7 @@ namespace ts {
 
             // Grammar checking
             checkGrammarDecoratorsAndModifiers(node);
+            checkGrammarEnumTypeAnnotation(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name);

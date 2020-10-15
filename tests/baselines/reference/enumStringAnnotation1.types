@@ -1,0 +1,53 @@
+=== tests/cases/conformance/enums/enumStringAnnotation1.ts ===
+enum A: string {
+>A : A
+>string : any
+
+    A,
+>A : A.A
+
+    B
+>B : A.B
+}
+
+enum B: string {
+>B : B
+>string : any
+
+    A,
+>A : B.A
+
+    B = '1',
+>B : B.B
+>'1' : "1"
+
+    C,
+>C : B.C
+}
+
+enum C: string {
+>C : C
+>string : any
+
+    A = 1,
+>A : C.A
+>1 : 1
+
+    B = '2',
+>B : C.B
+>'2' : "2"
+
+    C
+>C : C.C
+}
+
+enum D: number {
+>D : D
+>number : any
+
+    A,
+>A : D.A
+
+    B
+>B : D.B
+}

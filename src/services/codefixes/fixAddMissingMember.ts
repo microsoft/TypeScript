@@ -344,6 +344,7 @@ namespace ts.codefix {
             enumDeclaration.decorators,
             enumDeclaration.modifiers,
             enumDeclaration.name,
+            enumDeclaration.type,
             concatenate(enumDeclaration.members, singleElementArray(enumMember))
         ), {
             leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,

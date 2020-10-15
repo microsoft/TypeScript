@@ -776,7 +776,7 @@ namespace ts.refactor {
             case SyntaxKind.ModuleDeclaration:
                 return factory.updateModuleDeclaration(d, d.decorators, modifiers, d.name, d.body);
             case SyntaxKind.EnumDeclaration:
-                return factory.updateEnumDeclaration(d, d.decorators, modifiers, d.name, d.members);
+                return factory.updateEnumDeclaration(d, d.decorators, modifiers, d.name, d.type, d.members);
             case SyntaxKind.TypeAliasDeclaration:
                 return factory.updateTypeAliasDeclaration(d, d.decorators, modifiers, d.name, d.typeParameters, d.type);
             case SyntaxKind.InterfaceDeclaration:

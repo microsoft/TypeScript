@@ -376,6 +376,7 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (<EnumDeclaration>node).name) ||
+                    visitNode(cbNode, (<EnumDeclaration>node).type) ||
                     visitNodes(cbNode, cbNodes, (<EnumDeclaration>node).members);
             case SyntaxKind.EnumMember:
                 return visitNode(cbNode, (<EnumMember>node).name) ||
@@ -6763,6 +6764,11 @@ namespace ts {
         function parseEnumDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): EnumDeclaration {
             parseExpected(SyntaxKind.EnumKeyword);
             const name = parseIdentifier();
+            let type: Identifier | undefined;
+            if (parseOptionalToken(SyntaxKind.ColonToken)) {
+                type = parseIdentifierName();
+            }
+
             let members;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 members = doOutsideOfYieldAndAwaitContext(() => parseDelimitedList(ParsingContext.EnumMembers, parseEnumMember));
@@ -6771,7 +6777,7 @@ namespace ts {
             else {
                 members = createMissingList<EnumMember>();
             }
-            const node = factory.createEnumDeclaration(decorators, modifiers, name, members);
+            const node = factory.createEnumDeclaration(decorators, modifiers, name, type, members);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 

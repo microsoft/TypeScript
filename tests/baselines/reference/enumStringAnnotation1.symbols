@@ -1,0 +1,46 @@
+=== tests/cases/conformance/enums/enumStringAnnotation1.ts ===
+enum A: string {
+>A : Symbol(A, Decl(enumStringAnnotation1.ts, 0, 0))
+
+    A,
+>A : Symbol(A.A, Decl(enumStringAnnotation1.ts, 0, 16))
+
+    B
+>B : Symbol(A.B, Decl(enumStringAnnotation1.ts, 1, 6))
+}
+
+enum B: string {
+>B : Symbol(B, Decl(enumStringAnnotation1.ts, 3, 1))
+
+    A,
+>A : Symbol(B.A, Decl(enumStringAnnotation1.ts, 5, 16))
+
+    B = '1',
+>B : Symbol(B.B, Decl(enumStringAnnotation1.ts, 6, 6))
+
+    C,
+>C : Symbol(B.C, Decl(enumStringAnnotation1.ts, 7, 12))
+}
+
+enum C: string {
+>C : Symbol(C, Decl(enumStringAnnotation1.ts, 9, 1))
+
+    A = 1,
+>A : Symbol(C.A, Decl(enumStringAnnotation1.ts, 11, 16))
+
+    B = '2',
+>B : Symbol(C.B, Decl(enumStringAnnotation1.ts, 12, 10))
+
+    C
+>C : Symbol(C.C, Decl(enumStringAnnotation1.ts, 13, 12))
+}
+
+enum D: number {
+>D : Symbol(D, Decl(enumStringAnnotation1.ts, 15, 1))
+
+    A,
+>A : Symbol(D.A, Decl(enumStringAnnotation1.ts, 17, 16))
+
+    B
+>B : Symbol(D.B, Decl(enumStringAnnotation1.ts, 18, 6))
+}

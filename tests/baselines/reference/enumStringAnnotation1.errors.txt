@@ -1,0 +1,30 @@
+tests/cases/conformance/enums/enumStringAnnotation1.ts(13,9): error TS2207: Cannot use non-string initializer in enum with 'string' annotation.
+tests/cases/conformance/enums/enumStringAnnotation1.ts(18,9): error TS2206: Enum annotation is support 'string' only.
+
+
+==== tests/cases/conformance/enums/enumStringAnnotation1.ts (2 errors) ====
+    enum A: string {
+        A,
+        B
+    }
+    
+    enum B: string {
+        A,
+        B = '1',
+        C,
+    }
+    
+    enum C: string {
+        A = 1,
+            ~
+!!! error TS2207: Cannot use non-string initializer in enum with 'string' annotation.
+        B = '2',
+        C
+    }
+    
+    enum D: number {
+            ~~~~~~
+!!! error TS2206: Enum annotation is support 'string' only.
+        A,
+        B
+    }

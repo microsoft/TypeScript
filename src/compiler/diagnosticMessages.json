@@ -1224,6 +1224,14 @@
         "code": 2205,
         "elidedInCompatabilityPyramid": true
     },
+    "Enum annotation is support 'string' only.": {
+        "category": "Error",
+        "code": 2206
+    },
+    "Cannot use non-string initializer in enum with 'string' annotation.": {
+        "category": "Error",
+        "code": 2207
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
