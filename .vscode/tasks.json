@@ -39,7 +39,7 @@
             "label": "gulp: services",
             "problemMatcher": [
                 "$tsc"
-            ]
+            ],
         }
-    ],
+    ]
 }
