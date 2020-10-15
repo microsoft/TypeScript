@@ -3059,6 +3059,10 @@
         "category": "Error",
         "code": 2796
     },
+    "Declaration or statement expected. This '=' follows a statement block, so if you intended to write a destructuring assignment, you might need to wrap the assginment in parentheses.": {
+        "category": "Error",
+        "code": 2797
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

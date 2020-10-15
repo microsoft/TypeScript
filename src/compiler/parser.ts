@@ -2054,16 +2054,17 @@ namespace ts {
             parsingContext |= 1 << kind;
             const list = [];
             const listPos = getNodePos();
+            let lastElement: Node | undefined;
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
-                    const element = parseListElement(kind, parseElement);
+                    const element = lastElement = parseListElement(kind, parseElement);
                     list.push(element);
 
                     continue;
                 }
 
-                if (abortParsingListOrMoveToNextToken(kind)) {
+                if (abortParsingListOrMoveToNextToken(kind, lastElement)) {
                     break;
                 }
             }
@@ -2367,8 +2368,8 @@ namespace ts {
         }
 
         // Returns true if we should abort parsing.
-        function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
-            parsingContextErrors(kind);
+        function abortParsingListOrMoveToNextToken(kind: ParsingContext, lastElement: Node | undefined) {
+            parsingContextErrors(kind, lastElement);
             if (isInSomeParsingContext()) {
                 return true;
             }
@@ -2376,11 +2377,18 @@ namespace ts {
             nextToken();
             return false;
         }
+        function parsingContextErrorForSourceElementsOrBlockStatements(lastElement: Node | undefined) {
+            if (lastElement && isBlock(lastElement) && token() === SyntaxKind.EqualsToken) {
+                return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_statement_block_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_assginment_in_parentheses);
+            }
 
-        function parsingContextErrors(context: ParsingContext) {
+            return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
+        }
+
+        function parsingContextErrors(context: ParsingContext, lastElement: Node | undefined) {
             switch (context) {
-                case ParsingContext.SourceElements: return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
-                case ParsingContext.BlockStatements: return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
+                case ParsingContext.SourceElements: return parsingContextErrorForSourceElementsOrBlockStatements(lastElement);
+                case ParsingContext.BlockStatements: return parsingContextErrorForSourceElementsOrBlockStatements(lastElement);
                 case ParsingContext.SwitchClauses: return parseErrorAtCurrentToken(Diagnostics.case_or_default_expected);
                 case ParsingContext.SwitchClauseStatements: return parseErrorAtCurrentToken(Diagnostics.Statement_expected);
                 case ParsingContext.RestProperties: // fallthrough
@@ -2460,7 +2468,7 @@ namespace ts {
                     break;
                 }
 
-                if (abortParsingListOrMoveToNextToken(kind)) {
+                if (abortParsingListOrMoveToNextToken(kind, /*lastElement*/ undefined)) {
                     break;
                 }
             }
