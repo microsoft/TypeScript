@@ -3727,6 +3727,8 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
+        /* @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
+
         /* @internal */ getClassifiableNames(): Set<__String>;
 
         getNodeCount(): number;
