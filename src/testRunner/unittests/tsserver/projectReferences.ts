@@ -2645,5 +2645,75 @@ bar;`
                 verifyAutoImport(/*built*/ true, /*disableSourceOfProjectReferenceRedirect*/ true);
             });
         });
+
+        it("when files from two projects are open and one project references", () => {
+            function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: CompilerOptions): [file: File, config: File] {
+                const file: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/src/file1.ts`,
+                    content: `export const ${packageName}Const = 10;`
+                };
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: { composite: true, ...optionsToExtend || {} },
+                        references: references?.map(path => ({ path: `../${path}` }))
+                    })
+                };
+                return [file, config];
+            }
+            const [mainFile, mainConfig] = getPackageAndFile("main", ["core", "indirect", "noCoreRef1", "indirectDisabledChildLoad1", "indirectDisabledChildLoad2", "refToCoreRef3", "indirectNoCoreRef"]);
+            const [coreFile, coreConfig] = getPackageAndFile("core");
+            const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
+            const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
+            const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
+            const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], { disableReferencedProjectLoad: true });
+            const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
+            const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], { disableReferencedProjectLoad: true });
+            const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);
+            const [refToCoreRef3File, refToCoreRef3Config] = getPackageAndFile("refToCoreRef3", ["coreRef3"]);
+            const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
+            const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
+
+            const host = createServerHost([
+                libFile, mainFile, mainConfig, coreFile, coreConfig, noCoreRef1File, noCoreRef1Config,
+                indirectFile, indirectConfig, coreRef1File, coreRef1Config,
+                indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config, coreRef2File, coreRef2Config,
+                indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config, coreRef3File, coreRef3Config,
+                refToCoreRef3File, refToCoreRef3Config,
+                indirectNoCoreRefFile, indirectNoCoreRefConfig, noCoreRef2File, noCoreRef2Config
+            ], { useCaseSensitiveFileNames: true });
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFilesForSession([mainFile, coreFile], session);
+
+            verifyProject(mainConfig);
+            verifyProject(coreConfig);
+
+            // Find all refs in coreFile
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`)
+            });
+            verifyProject(mainConfig);
+            verifyProject(coreConfig);
+            verifyProject(noCoreRef1Config); // Should not be loaded
+            verifyProject(indirectConfig);
+            verifyProject(coreRef1Config);
+            verifyProject(indirectDisabledChildLoad1Config);
+            verifyNoProject(coreRef2Config); // Should not be loaded
+            verifyProject(indirectDisabledChildLoad2Config);
+            verifyProject(coreRef3Config);
+            verifyProject(refToCoreRef3Config);
+            verifyProject(indirectNoCoreRefConfig); // Should not be loaded
+            verifyProject(noCoreRef2Config); // Should not be loaded
+
+            function verifyProject(config: File) {
+                assert.isDefined(service.configuredProjects.get(config.path), `Expected to find ${config.path}`);
+            }
+
+            function verifyNoProject(config: File) {
+                assert.isUndefined(service.configuredProjects.get(config.path), `Expected to not find ${config.path}`);
+            }
+        });
     });
 }
