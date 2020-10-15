@@ -914,8 +914,8 @@ namespace ts {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
             }
-            oldProgram.forEachResolvedProjectReference((resolvedProjectReference, resolvedProjectReferencePath) => {
-                if (resolvedProjectReference && !getResolvedProjectReferenceByPath(resolvedProjectReferencePath)) {
+            oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
+                if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
                     host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
                 }
             });
@@ -1038,7 +1038,6 @@ namespace ts {
             if (!source) return undefined;
             // Output of .d.ts file so return resolved ref that matches the out file name
             return forEachResolvedProjectReference(resolvedRef => {
-                if (!resolvedRef) return undefined;
                 const out = outFile(resolvedRef.commandLine.options);
                 if (!out) return undefined;
                 return toPath(out) === filePath ? resolvedRef : undefined;
@@ -2115,9 +2114,7 @@ namespace ts {
             if (!options.configFile) { return emptyArray; }
             let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
             forEachResolvedProjectReference(resolvedRef => {
-                if (resolvedRef) {
-                    diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
-                }
+                diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
             });
             return diagnostics;
         }
@@ -2597,12 +2594,11 @@ namespace ts {
         function getResolvedProjectReferenceToRedirect(fileName: string) {
             if (mapFromFileToProjectReferenceRedirects === undefined) {
                 mapFromFileToProjectReferenceRedirects = new Map();
-                forEachResolvedProjectReference((referencedProject, referenceProjectPath) => {
+                forEachResolvedProjectReference(referencedProject => {
                     // not input file from the referenced project, ignore
-                    if (referencedProject &&
-                        toPath(options.configFilePath!) !== referenceProjectPath) {
+                    if (toPath(options.configFilePath!) !== referencedProject.sourceFile.path) {
                         referencedProject.commandLine.fileNames.forEach(f =>
-                            mapFromFileToProjectReferenceRedirects!.set(toPath(f), referenceProjectPath));
+                            mapFromFileToProjectReferenceRedirects!.set(toPath(f), referencedProject.sourceFile.path));
                     }
                 });
             }
@@ -2612,13 +2608,9 @@ namespace ts {
         }
 
         function forEachResolvedProjectReference<T>(
-            cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined
+            cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined
         ): T | undefined {
-            return forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
-                const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
-                const resolvedRefPath = toPath(resolveProjectReferencePath(ref));
-                return cb(resolvedRef, resolvedRefPath);
-            });
+            return forEachProjectReference(projectReferences, resolvedProjectReferences, resolvedRef => resolvedRef && cb(resolvedRef));
         }
 
         function getSourceOfProjectReferenceRedirect(file: string) {
@@ -2626,21 +2618,19 @@ namespace ts {
             if (mapFromToProjectReferenceRedirectSource === undefined) {
                 mapFromToProjectReferenceRedirectSource = new Map();
                 forEachResolvedProjectReference(resolvedRef => {
-                    if (resolvedRef) {
-                        const out = outFile(resolvedRef.commandLine.options);
-                        if (out) {
-                            // Dont know which source file it means so return true?
-                            const outputDts = changeExtension(out, Extension.Dts);
-                            mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), true);
-                        }
-                        else {
-                            forEach(resolvedRef.commandLine.fileNames, fileName => {
-                                if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
-                                    const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
-                                    mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
-                                }
-                            });
-                        }
+                    const out = outFile(resolvedRef.commandLine.options);
+                    if (out) {
+                        // Dont know which source file it means so return true?
+                        const outputDts = changeExtension(out, Extension.Dts);
+                        mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), true);
+                    }
+                    else {
+                        forEach(resolvedRef.commandLine.fileNames, fileName => {
+                            if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
+                                const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
+                                mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
+                            }
+                        });
                     }
                 });
             }
@@ -3546,7 +3536,7 @@ namespace ts {
         toPath(fileName: string): Path;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
         getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     }
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
@@ -3576,7 +3566,6 @@ namespace ts {
                 if (!setOfDeclarationDirectories) {
                     setOfDeclarationDirectories = new Set();
                     host.forEachResolvedProjectReference(ref => {
-                        if (!ref) return;
                         const out = outFile(ref.commandLine.options);
                         if (out) {
                             setOfDeclarationDirectories!.add(getDirectoryPath(host.toPath(out)));

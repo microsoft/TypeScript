@@ -485,15 +485,6 @@ namespace ts.server {
         }
     }
 
-    /*@internal*/
-    export function forEachResolvedProjectReference<T>(
-        project: ConfiguredProject,
-        cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined
-    ): T | undefined {
-        const program = project.getCurrentProgram();
-        return program && program.forEachResolvedProjectReference(cb);
-    }
-
     function forEachPotentialProjectReference<T>(
         project: ConfiguredProject,
         cb: (potentialProjectReference: Path) => T | undefined
@@ -504,12 +495,12 @@ namespace ts.server {
 
     function forEachAnyProjectReferenceKind<T>(
         project: ConfiguredProject,
-        cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined,
+        cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
         cbProjectRef: (projectReference: ProjectReference) => T | undefined,
         cbPotentialProjectRef: (potentialProjectReference: Path) => T | undefined
     ): T | undefined {
         return project.getCurrentProgram() ?
-            forEachResolvedProjectReference(project, cb) :
+            project.forEachResolvedProjectReference(cb) :
             project.isInitialLoadPending() ?
                 forEachPotentialProjectReference(project, cbPotentialProjectRef) :
                 forEach(project.getProjectReferences(), cbProjectRef);
@@ -530,8 +521,8 @@ namespace ts.server {
     ): T | undefined {
         return forEachAnyProjectReferenceKind(
             project,
-            resolvedRef => callbackRefProject(project, cb, resolvedRef && resolvedRef.sourceFile.path),
-            projectRef => callbackRefProject(project, cb, project.toPath(projectRef.path)),
+            resolvedRef => callbackRefProject(project, cb, resolvedRef.sourceFile.path),
+            projectRef => callbackRefProject(project, cb, project.toPath(resolveProjectReferencePath(projectRef))),
             potentialProjectRef => callbackRefProject(project, cb, potentialProjectRef)
         );
     }
@@ -3167,9 +3158,8 @@ namespace ts.server {
                 if (forEachPotentialProjectReference(
                     project,
                     potentialRefPath => forProjects!.has(potentialRefPath)
-                ) || forEachResolvedProjectReference(
-                    project,
-                    (_ref, resolvedPath) => forProjects!.has(resolvedPath)
+                ) || project.forEachResolvedProjectReference(
+                    ref => forProjects!.has(ref.sourceFile.path)
                 )) {
                     // Load children
                     this.ensureProjectChildren(project, seenProjects);
