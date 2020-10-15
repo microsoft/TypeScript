@@ -323,7 +323,11 @@ namespace ts.server {
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
-            this.event({ pid: this.installer.pid }, "typingsInstallerPid");
+            // We have to schedule this event to the next tick
+            // cause this fn will be called during
+            // new IOSession => super(which is Session) => new ProjectService => NodeTypingsInstaller.attach
+            // and if "event" is referencing "this" before super class is initialized, it will be a ReferenceError in ES6 class.
+            this.host.setImmediate(() => this.event({ pid: this.installer.pid }, "typingsInstallerPid"));
 
             process.on("exit", () => {
                 this.installer.kill();
@@ -485,17 +489,8 @@ namespace ts.server {
         private constructed: boolean | undefined;
 
         constructor() {
-            const event: Event | undefined = (body: object, eventName: string) => {
-                try {
-                    this.event(body, eventName);
-                } catch(e) {
-                    // ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor in ES6 or above
-                    if (!(e instanceof ReferenceError)) throw e;
-                    // It is unsafe to reference `this` before initialization completes, so we defer until the next tick.
-                    // Construction should finish before the next tick fires, so we do not need to do this recursively.
-                    // eslint-disable-next-line no-restricted-globals
-                    setImmediate(() => this.event(body, eventName));
-                }
+            const event = (body: object, eventName: string) => {
+                this.event(body, eventName);
             };
 
             const host = sys;
