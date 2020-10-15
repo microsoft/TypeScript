@@ -304,7 +304,6 @@ namespace ts.server {
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
         watchOptions?: WatchOptions;
-        typeAcquisition?: TypeAcquisition;
     }
 
     export interface OpenConfiguredProjectResult {
