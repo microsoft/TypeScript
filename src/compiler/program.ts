@@ -531,6 +531,51 @@ namespace ts {
     }
 
     /* @internal */
+    export function forEachResolvedProjectReference<T>(
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined
+    ): T | undefined {
+        return forEachProjectReference(/*projectReferences*/ undefined, resolvedProjectReferences, (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent));
+    }
+
+    function forEachProjectReference<T>(
+        projectReferences: readonly ProjectReference[] | undefined,
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, parent: ResolvedProjectReference | undefined, index: number) => T | undefined,
+        cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
+    ): T | undefined {
+        let seenResolvedRefs: Set<Path> | undefined;
+
+        return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
+
+        function worker(
+            projectReferences: readonly ProjectReference[] | undefined,
+            resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+            parent: ResolvedProjectReference | undefined,
+        ): T | undefined {
+
+            // Visit project references first
+            if (cbRef) {
+                const result = cbRef(projectReferences, parent);
+                if (result) { return result; }
+            }
+
+            return forEach(resolvedProjectReferences, (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    // ignore recursives
+                    return undefined;
+                }
+
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+                return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef);
+            });
+        }
+    }
+
+    /* @internal */
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
@@ -1250,7 +1295,7 @@ namespace ts {
             return !forEachProjectReference(
                 oldProgram!.getProjectReferences(),
                 oldProgram!.getResolvedProjectReferences(),
-                (oldResolvedRef, index, parent) => {
+                (oldResolvedRef, parent, index) => {
                     const newRef = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                     const newResolvedRef = parseProjectReferenceConfigFile(newRef);
                     if (oldResolvedRef) {
@@ -2610,7 +2655,7 @@ namespace ts {
         function forEachResolvedProjectReference<T>(
             cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined
         ): T | undefined {
-            return forEachProjectReference(projectReferences, resolvedProjectReferences, resolvedRef => resolvedRef && cb(resolvedRef));
+            return ts.forEachResolvedProjectReference(resolvedProjectReferences, cb);
         }
 
         function getSourceOfProjectReferenceRedirect(file: string) {
@@ -2639,49 +2684,6 @@ namespace ts {
 
         function isSourceOfProjectReferenceRedirect(fileName: string) {
             return useSourceOfProjectReferenceRedirect && !!getResolvedProjectReferenceToRedirect(fileName);
-        }
-
-        function forEachProjectReference<T>(
-            projectReferences: readonly ProjectReference[] | undefined,
-            resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-            cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
-            cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
-        ): T | undefined {
-            let seenResolvedRefs: ResolvedProjectReference[] | undefined;
-
-            return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined, cbResolvedRef, cbRef);
-
-            function worker(
-                projectReferences: readonly ProjectReference[] | undefined,
-                resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-                parent: ResolvedProjectReference | undefined,
-                cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
-                cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
-            ): T | undefined {
-
-                // Visit project references first
-                if (cbRef) {
-                    const result = cbRef(projectReferences, parent);
-                    if (result) { return result; }
-                }
-
-                return forEach(resolvedProjectReferences, (resolvedRef, index) => {
-                    if (contains(seenResolvedRefs, resolvedRef)) {
-                        // ignore recursives
-                        return undefined;
-                    }
-
-                    const result = cbResolvedRef(resolvedRef, index, parent);
-                    if (result) {
-                        return result;
-                    }
-
-                    if (!resolvedRef) return undefined;
-
-                    (seenResolvedRefs || (seenResolvedRefs = [])).push(resolvedRef);
-                    return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef, cbResolvedRef, cbRef);
-                });
-            }
         }
 
         function getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined {
@@ -3338,7 +3340,7 @@ namespace ts {
 
         function verifyProjectReferences() {
             const buildInfoPath = !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
-            forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
+            forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
                 if (!resolvedRef) {
