@@ -2891,7 +2891,7 @@ declare namespace ts {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        inferTypingsFromFilenames?: boolean;
+        disableFilenameBasedTypeAcquisition?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
     export enum ModuleKind {

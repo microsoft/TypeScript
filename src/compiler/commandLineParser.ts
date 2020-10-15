@@ -1135,7 +1135,7 @@ namespace ts {
             }
         },
         {
-            name: "inferTypingsFromFilenames",
+            name: "disableFilenameBasedTypeAcquisition",
             type: "boolean",
         },
     ];

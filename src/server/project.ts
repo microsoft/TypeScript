@@ -1840,7 +1840,7 @@ namespace ts.server {
                 enable: allRootFilesAreJsOrDts(this),
                 include: ts.emptyArray,
                 exclude: ts.emptyArray,
-                inferTypingsFromFilenames: true
+                disableFilenameBasedTypeAcquisition: false
             };
         }
     }

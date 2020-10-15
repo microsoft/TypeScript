@@ -149,8 +149,7 @@ namespace ts.JsTyping {
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
             getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
         });
-        // filename-based ATA must be explicitly disabled
-        if(typeAcquisition.inferTypingsFromFilenames !== false) {
+        if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
             getTypingNamesFromSourceFileNames(fileNames);
         }
         // add typings for unresolved imports

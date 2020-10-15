@@ -207,9 +207,9 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
-        it("inferred project - type acquisition with inferTypingsFromFile:false", () => {
+        it("inferred project - type acquisition with disableFilenameBasedTypeAcquisition:true", () => {
             // Tests:
-            // Exclude file from filename-based type acquisition with inferTypingsFromFile:false
+            // Exclude file with disableFilenameBasedTypeAcquisition:true
             const jqueryJs = {
                 path: "/a/b/jquery.js",
                 content: ""
@@ -235,7 +235,7 @@ namespace ts.projectSystem {
             projectService.setCompilerOptionsForInferredProjects({
                 allowJs: true,
                 enable: true,
-                inferTypingsFromFilenames: false
+                disableFilenameBasedTypeAcquisition: true
             });
             projectService.openClientFile(jqueryJs.path);
 
@@ -479,9 +479,9 @@ namespace ts.projectSystem {
             installer.checkPendingCommands(/*expectedCount*/ 0);
         });
 
-        it("external project - type acquisition with inferTypingsFromFilenames: false", () => {
+        it("external project - type acquisition with disableFilenameBasedTypeAcquisition:true", () => {
             // Tests:
-            // Exclude file from filename-based type acquisition with inferTypingsFromFile:false
+            // Exclude file with disableFilenameBasedTypeAcquisition:true
             const jqueryJs = {
                 path: "/a/b/jquery.js",
                 content: ""
@@ -509,7 +509,7 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(jqueryJs.path)],
-                typeAcquisition: { enable: true, inferTypingsFromFilenames: false }
+                typeAcquisition: { enable: true, disableFilenameBasedTypeAcquisition: true }
             });
 
             const p = projectService.externalProjects[0];

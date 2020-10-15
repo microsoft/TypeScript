@@ -3535,8 +3535,8 @@ namespace ts.server {
             const { rootFiles } = proj;
             const typeAcquisition = proj.typeAcquisition!;
             Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
-            // If type acquisition has been explicitly disabled, do not exclude anything from the project
-            if (typeAcquisition.enable === false || typeAcquisition.inferTypingsFromFilenames === false) {
+
+            if (typeAcquisition.enable === false || typeAcquisition.disableFilenameBasedTypeAcquisition) {
                 return [];
             }
 
