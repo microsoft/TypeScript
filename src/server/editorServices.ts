@@ -3154,31 +3154,37 @@ namespace ts.server {
             // Work on array copy as we could add more projects as part of callback
             for (const project of arrayFrom(this.configuredProjects.values())) {
                 // If this project has potential project reference for any of the project we are loading ancestor tree for
-                // we need to load this project tree
-                if (forEachPotentialProjectReference(
-                    project,
-                    potentialRefPath => forProjects!.has(potentialRefPath)
-                ) || project.forEachResolvedProjectReference(
-                    ref => forProjects!.has(ref.sourceFile.path)
-                )) {
-                    // Load children
-                    this.ensureProjectChildren(project, seenProjects);
+                // load this project first
+                if (forEachPotentialProjectReference(project, potentialRefPath => forProjects!.has(potentialRefPath))) {
+                    updateProjectIfDirty(project);
                 }
+                this.ensureProjectChildren(project, forProjects, seenProjects);
             }
         }
 
-        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Set<NormalizedPath>) {
+        private ensureProjectChildren(project: ConfiguredProject, forProjects: ReadonlyCollection<string>, seenProjects: Set<NormalizedPath>) {
             if (!tryAddToSet(seenProjects, project.canonicalConfigFilePath)) return;
-            // Update the project
-            updateProjectIfDirty(project);
 
-            // Create tree because project is uptodate we only care of resolved references
-            forEachResolvedProjectReferenceProject(
-                project,
-                child => this.ensureProjectChildren(child, seenProjects),
-                ProjectReferenceProjectLoadKind.FindCreateLoad,
-                `Creating project for reference of project: ${project.projectName}`
-            );
+            // If this project disables child load ignore it
+            if (project.getCompilerOptions().disableReferencedProjectLoad) return;
+
+            const children = project.getCurrentProgram()?.getResolvedProjectReferences();
+            if (!children) return;
+
+            for (const child of children) {
+                if (!child) continue;
+                const referencedProject = forEachResolvedProjectReference(child.references, ref => forProjects.has(ref.sourceFile.path) ? ref : undefined);
+                if (!referencedProject) continue;
+
+                // Load this project,
+                const configFileName = toNormalizedPath(child.sourceFile.fileName);
+                const childProject = project.projectService.findConfiguredProjectByProjectName(configFileName) ||
+                    project.projectService.createAndLoadConfiguredProject(configFileName, `Creating project referenced by : ${project.projectName} as it references project ${referencedProject.sourceFile.fileName}`);
+                updateProjectIfDirty(childProject);
+
+                // Ensure children for this project
+                this.ensureProjectChildren(childProject, forProjects, seenProjects);
+            }
         }
 
         private cleanupAfterOpeningFile(toRetainConfigProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {

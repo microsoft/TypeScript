@@ -2696,7 +2696,7 @@ bar;`
             });
             verifyProject(mainConfig);
             verifyProject(coreConfig);
-            verifyProject(noCoreRef1Config); // Should not be loaded
+            verifyNoProject(noCoreRef1Config); // Should not be loaded
             verifyProject(indirectConfig);
             verifyProject(coreRef1Config);
             verifyProject(indirectDisabledChildLoad1Config);
@@ -2704,8 +2704,8 @@ bar;`
             verifyProject(indirectDisabledChildLoad2Config);
             verifyProject(coreRef3Config);
             verifyProject(refToCoreRef3Config);
-            verifyProject(indirectNoCoreRefConfig); // Should not be loaded
-            verifyProject(noCoreRef2Config); // Should not be loaded
+            verifyNoProject(indirectNoCoreRefConfig); // Should not be loaded
+            verifyNoProject(noCoreRef2Config); // Should not be loaded
 
             function verifyProject(config: File) {
                 assert.isDefined(service.configuredProjects.get(config.path), `Expected to find ${config.path}`);
