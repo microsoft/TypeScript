@@ -91,6 +91,7 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it a
 
 Program root files: ["/user/username/projects/myproject/packages/pkg2/const.ts","/user/username/projects/myproject/packages/pkg2/index.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","baseUrl":"/user/username/projects/myproject/packages/pkg2","traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/const.ts
@@ -103,6 +104,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts

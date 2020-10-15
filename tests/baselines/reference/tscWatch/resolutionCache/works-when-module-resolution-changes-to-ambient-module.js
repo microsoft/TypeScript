@@ -32,6 +32,7 @@ Output::
 
 Program root files: ["/a/b/foo.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts
@@ -91,6 +92,7 @@ Output::
 
 Program root files: ["/a/b/foo.ts"]
 Program options: {"watch":true}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts

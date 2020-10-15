@@ -824,9 +824,9 @@ namespace ts {
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
         // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
-        let structuralIsReused: StructureIsReused | undefined;
-        structuralIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
-        if (structuralIsReused !== StructureIsReused.Completely) {
+        let structureIsReused: StructureIsReused;
+        structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
+        if (structureIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];
 
@@ -937,6 +937,7 @@ namespace ts {
             getOptionsDiagnostics,
             getGlobalDiagnostics,
             getSemanticDiagnostics,
+            getCachedSemanticDiagnostics,
             getSuggestionDiagnostics,
             getDeclarationDiagnostics,
             getBindAndCheckDiagnostics,
@@ -979,6 +980,7 @@ namespace ts {
             getSymlinkCache,
             realpath: host.realpath?.bind(host),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+            structureIsReused,
         };
 
         onProgramCreateComplete();
@@ -1107,7 +1109,7 @@ namespace ts {
         }
 
         function resolveModuleNamesReusingOldState(moduleNames: string[], file: SourceFile): readonly ResolvedModuleFull[] {
-            if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
+            if (structureIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
                 return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
@@ -1278,22 +1280,22 @@ namespace ts {
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if (changesAffectModuleResolution(oldOptions, options)) {
-                return oldProgram.structureIsReused = StructureIsReused.Not;
+                return StructureIsReused.Not;
             }
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
-                return oldProgram.structureIsReused = StructureIsReused.Not;
+                return StructureIsReused.Not;
             }
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
-                return oldProgram.structureIsReused = StructureIsReused.Not;
+                return StructureIsReused.Not;
             }
 
             // Check if any referenced project tsconfig files are different
             if (!canReuseProjectReferences()) {
-                return oldProgram.structureIsReused = StructureIsReused.Not;
+                return StructureIsReused.Not;
             }
             if (projectReferences) {
                 resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
@@ -1302,13 +1304,13 @@ namespace ts {
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
-            oldProgram.structureIsReused = StructureIsReused.Completely;
+            structureIsReused = StructureIsReused.Completely;
 
             // If the missing file paths are now present, it can change the progam structure,
             // and hence cant reuse the structure.
             // This is same as how we dont reuse the structure if one of the file from old program is now missing
             if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
-                return oldProgram.structureIsReused = StructureIsReused.Not;
+                return StructureIsReused.Not;
             }
 
             const oldSourceFiles = oldProgram.getSourceFiles();
@@ -1321,7 +1323,7 @@ namespace ts {
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
-                    return oldProgram.structureIsReused = StructureIsReused.Not;
+                    return StructureIsReused.Not;
                 }
 
                 Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
@@ -1332,7 +1334,7 @@ namespace ts {
                     // This lets us know if the unredirected file has changed. If it has we should break the redirect.
                     if (newSourceFile !== oldSourceFile.redirectInfo.unredirected) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
-                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                        return StructureIsReused.Not;
                     }
                     fileChanged = false;
                     newSourceFile = oldSourceFile; // Use the redirect.
@@ -1340,7 +1342,7 @@ namespace ts {
                 else if (oldProgram.redirectTargetsMap.has(oldSourceFile.path)) {
                     // If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
-                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                        return StructureIsReused.Not;
                     }
                     fileChanged = false;
                 }
@@ -1361,7 +1363,7 @@ namespace ts {
                     const prevKind = seenPackageNames.get(packageName);
                     const newKind = fileChanged ? SeenPackageName.Modified : SeenPackageName.Exists;
                     if ((prevKind !== undefined && newKind === SeenPackageName.Modified) || prevKind === SeenPackageName.Modified) {
-                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                        return StructureIsReused.Not;
                     }
                     seenPackageNames.set(packageName, newKind);
                 }
@@ -1371,39 +1373,39 @@ namespace ts {
 
                     if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
-                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                        return StructureIsReused.Not;
                     }
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
                         // value of no-default-lib has changed
                         // this will affect if default library is injected into the list of files
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // check tripleslash references
                     if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                         // tripleslash references has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
                     if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
                     if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
                         // moduleAugmentations has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
                     if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
                         // dynamicImport has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'types' references has changed
-                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // tentatively approve the file
@@ -1411,7 +1413,7 @@ namespace ts {
                 }
                 else if (hasInvalidatedResolution(oldSourceFile.path)) {
                     // 'module/types' references could have changed
-                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    structureIsReused = StructureIsReused.SafeModules;
 
                     // add file to the modified list so that we will resolve it later
                     modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
@@ -1421,8 +1423,8 @@ namespace ts {
                 newSourceFiles.push(newSourceFile);
             }
 
-            if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
-                return oldProgram.structureIsReused;
+            if (structureIsReused !== StructureIsReused.Completely) {
+                return structureIsReused;
             }
 
             const modifiedFiles = modifiedSourceFiles.map(f => f.oldFile);
@@ -1440,7 +1442,7 @@ namespace ts {
                 // ensure that module resolution results are still correct
                 const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
                 if (resolutionsChanged) {
-                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    structureIsReused = StructureIsReused.SafeModules;
                     newSourceFile.resolvedModules = zipToMap(moduleNames, resolutions);
                 }
                 else {
@@ -1452,7 +1454,7 @@ namespace ts {
                 // ensure that types resolutions are still correct
                 const typeReferenceEesolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
                 if (typeReferenceEesolutionsChanged) {
-                    oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    structureIsReused = StructureIsReused.SafeModules;
                     newSourceFile.resolvedTypeReferenceDirectiveNames = zipToMap(typesReferenceDirectives, typeReferenceResolutions);
                 }
                 else {
@@ -1460,12 +1462,12 @@ namespace ts {
                 }
             }
 
-            if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
-                return oldProgram.structureIsReused;
+            if (structureIsReused !== StructureIsReused.Completely) {
+                return structureIsReused;
             }
 
             if (host.hasChangedAutomaticTypeDirectiveNames?.()) {
-                return oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                return StructureIsReused.SafeModules;
             }
 
             missingFilePaths = oldProgram.getMissingFilePaths();
@@ -1503,7 +1505,7 @@ namespace ts {
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
 
-            return oldProgram.structureIsReused = StructureIsReused.Completely;
+            return StructureIsReused.Completely;
         }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
@@ -1690,6 +1692,12 @@ namespace ts {
 
         function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
             return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
+        }
+
+        function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
+           return sourceFile
+                ? cachedBindAndCheckDiagnosticsForFile.perFile?.get(sourceFile.path)
+                : cachedBindAndCheckDiagnosticsForFile.allDiagnostics;
         }
 
         function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {

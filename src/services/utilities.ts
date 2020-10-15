@@ -2261,45 +2261,26 @@ namespace ts {
         return clone;
     }
 
-    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: ESMap<string, Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
-        let clone;
-        if (renameMap && checker && isBindingElement(node) && isIdentifier(node.name) && isObjectBindingPattern(node.parent)) {
-            const symbol = checker.getSymbolAtLocation(node.name);
-            const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
-
-            if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
-                clone = setOriginalNode(
-                    factory.createBindingElement(
-                        node.dotDotDotToken,
-                        node.propertyName || node.name,
-                        renameInfo,
-                        node.initializer),
-                    node);
-            }
+    export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
+        node: T,
+        includeTrivia: boolean,
+        replaceNode: (node: Node) => Node | undefined
+    ): T {
+        let clone = replaceNode(node);
+        if (clone) {
+            setOriginalNode(clone, node);
         }
-        else if (renameMap && checker && isIdentifier(node)) {
-            const symbol = checker.getSymbolAtLocation(node);
-            const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
-
-            if (renameInfo) {
-                clone = setOriginalNode(factory.createIdentifier(renameInfo.text), node);
-            }
-        }
-
-        if (!clone) {
-            clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
+        else {
+            clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
         }
 
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-        if (callback && clone) callback(node, clone);
-
         return clone as T;
     }
 
-
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: ESMap<string, Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
-        const visited = (renameMap || checker || callback) ?
-            visitEachChild(node, wrapper, nullTransformationContext) :
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
+        const visited = replaceNode ?
+            visitEachChild(node, n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode), nullTransformationContext) :
             visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
 
         if (visited === node) {
@@ -2316,16 +2297,20 @@ namespace ts {
         // would have made.
         (visited as Mutable<T>).parent = undefined!;
         return visited;
-
-        function wrapper(node: T) {
-            return getSynthesizedDeepCloneWithRenames(node, /*includeTrivia*/ true, renameMap, checker, callback);
-        }
     }
 
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
         return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+    }
+
+    export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
+        nodes: NodeArray<T>,
+        includeTrivia: boolean,
+        replaceNode: (node: Node) => Node | undefined
+    ): NodeArray<T> {
+        return factory.createNodeArray(nodes.map(n => getSynthesizedDeepCloneWithReplacements(n, includeTrivia, replaceNode)), nodes.hasTrailingComma);
     }
 
     /**
@@ -2488,20 +2473,11 @@ namespace ts {
         }
     }
 
-    export function quote(text: string, preferences: UserPreferences): string {
+    export function quote(sourceFile: SourceFile, preferences: UserPreferences, text: string): string {
         // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
-        const quotePreference = preferences.quotePreference || "auto";
+        const quotePreference = getQuotePreference(sourceFile, preferences);
         const quoted = JSON.stringify(text);
-        switch (quotePreference) {
-            // TODO use getQuotePreference to infer the actual quote style.
-            case "auto":
-            case "double":
-                return quoted;
-            case "single":
-                return `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'`;
-            default:
-                return Debug.assertNever(quotePreference);
-        }
+        return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'` : quoted;
     }
 
     export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {

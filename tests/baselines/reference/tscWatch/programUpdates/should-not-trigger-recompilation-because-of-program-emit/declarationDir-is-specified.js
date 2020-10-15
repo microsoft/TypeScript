@@ -105,6 +105,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
 Program options: {"target":1,"module":2,"declaration":true,"strict":true,"esModuleInterop":true,"declarationDir":"/user/username/projects/myproject/decls","skipLibCheck":true,"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
@@ -210,6 +211,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
 Program options: {"target":1,"module":2,"declaration":true,"strict":true,"esModuleInterop":true,"declarationDir":"/user/username/projects/myproject/decls","skipLibCheck":true,"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts

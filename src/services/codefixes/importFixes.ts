@@ -622,7 +622,13 @@ namespace ts.codefix {
 
         if (defaultExport.flags & SymbolFlags.Alias) {
             const aliased = checker.getImmediateAliasedSymbol(defaultExport);
-            return aliased && getDefaultExportInfoWorker(aliased, Debug.checkDefined(aliased.parent, "Alias targets of default exports must have a parent"), checker, compilerOptions);
+            if (aliased && aliased.parent) {
+                // - `aliased` will be undefined if the module is exporting an unresolvable name,
+                //    but we can still offer completions for it.
+                // - `aliased.parent` will be undefined if the module is exporting `globalThis.something`,
+                //    or another expression that resolves to a global.
+                return getDefaultExportInfoWorker(aliased, aliased.parent, checker, compilerOptions);
+            }
         }
 
         if (defaultExport.escapedName !== InternalSymbolName.Default &&
