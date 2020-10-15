@@ -18,7 +18,7 @@ namespace ts {
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
-        /*@internal*/ cleanResolutions?: boolean;
+        /*@internal*/ cleanPersistedProgram?: boolean;
 
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;
@@ -134,10 +134,10 @@ namespace ts {
     export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         clean(project?: string): ExitStatus;
-        cleanResolutions(project?: string): ExitStatus;
+        cleanPersistedProgram(project?: string): ExitStatus;
         buildReferences(project: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         cleanReferences(project?: string): ExitStatus;
-        cleanResolutionsOfReferences(project?: string): ExitStatus;
+        cleanPersistedProgramOfReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
         // Currently used for testing but can be made public if needed:
@@ -1727,7 +1727,7 @@ namespace ts {
         return ExitStatus.Success;
     }
 
-    function cleanResolutions(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
+    function cleanPersistedProgram(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -1742,7 +1742,7 @@ namespace ts {
             const resolvedPath = toResolvedConfigFilePath(state, proj);
             const parsed = parseConfigFile(state, proj, resolvedPath);
             if (parsed) {
-                diagnostics += cleanResolutionsOfTsBuildInfoAndReportError(
+                diagnostics += cleanPersistedProgramOfTsBuildInfoAndReportError(
                     parsed.options,
                     state.compilerHost,
                     err => state.host.reportDiagnostic(err),
@@ -1933,10 +1933,10 @@ namespace ts {
         return {
             build: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers),
             clean: project => clean(state, project),
-            cleanResolutions: project => cleanResolutions(state, project),
+            cleanPersistedProgram: project => cleanPersistedProgram(state, project),
             buildReferences: (project, cancellationToken, writeFile, getCustomTransformers) => build(state, project, cancellationToken, writeFile, getCustomTransformers, /*onlyReferences*/ true),
             cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
-            cleanResolutionsOfReferences: project => cleanResolutions(state, project, /*onlyReferences*/ true),
+            cleanPersistedProgramOfReferences: project => cleanPersistedProgram(state, project, /*onlyReferences*/ true),
             getNextInvalidatedProject: cancellationToken => {
                 setupInitialBuild(state, cancellationToken);
                 return getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);

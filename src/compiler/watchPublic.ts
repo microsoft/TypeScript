@@ -16,11 +16,11 @@ namespace ts {
         return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
-    export interface CleanResolutionsOfTsBuildInfoHost {
+    export interface CleanPersistedProgramOfTsBuildInfoHost {
         readFile(fileName: string): string | undefined;
         writeFile: WriteFileCallback;
     }
-    export function cleanResolutionsOfTsBuildInfo(compilerOptions: CompilerOptions, host: CleanResolutionsOfTsBuildInfoHost): EmitResult {
+    export function cleanPersistedProgramOfTsBuildInfo(compilerOptions: CompilerOptions, host: CleanPersistedProgramOfTsBuildInfoHost): EmitResult {
         if (outFileWithoutPersistResolutions(compilerOptions)) return emitSkippedWithNoDiagnostics;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return emitSkippedWithNoDiagnostics;

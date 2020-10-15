@@ -2902,7 +2902,7 @@ declare namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         persistResolutions?: string;
-        cleanResolutions?: boolean;
+        cleanPersistedProgram?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -5091,11 +5091,11 @@ declare namespace ts {
         readFile(fileName: string): string | undefined;
     }
     function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    interface CleanResolutionsOfTsBuildInfoHost {
+    interface CleanPersistedProgramOfTsBuildInfoHost {
         readFile(fileName: string): string | undefined;
         writeFile: WriteFileCallback;
     }
-    function cleanResolutionsOfTsBuildInfo(compilerOptions: CompilerOptions, host: CleanResolutionsOfTsBuildInfoHost): EmitResult;
+    function cleanPersistedProgramOfTsBuildInfo(compilerOptions: CompilerOptions, host: CleanPersistedProgramOfTsBuildInfoHost): EmitResult;
     function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
     interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: readonly string[];
@@ -5262,10 +5262,10 @@ declare namespace ts {
     interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         clean(project?: string): ExitStatus;
-        cleanResolutions(project?: string): ExitStatus;
+        cleanPersistedProgram(project?: string): ExitStatus;
         buildReferences(project: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers): ExitStatus;
         cleanReferences(project?: string): ExitStatus;
-        cleanResolutionsOfReferences(project?: string): ExitStatus;
+        cleanPersistedProgramOfReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
     }
     /**

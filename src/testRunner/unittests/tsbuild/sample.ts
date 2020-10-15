@@ -530,7 +530,7 @@ class someClass2 { }`),
                         subScenario: "Clean resolutions",
                         buildKind: BuildKind.IncrementalDtsChange,
                         modifyFs: noop,
-                        commandLineArgs: ["--b", "/src/tests", "--cleanResolutions"],
+                        commandLineArgs: ["--b", "/src/tests", "--cleanPersistedProgram"],
                     },
                     {
                         subScenario: "Modify core",

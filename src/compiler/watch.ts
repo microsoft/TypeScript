@@ -392,17 +392,17 @@ namespace ts {
         return ExitStatus.Success;
     }
 
-    export interface CleanResolutionsOfTsBuildInfoAndReportErrorHost extends CleanResolutionsOfTsBuildInfoHost {
+    export interface CleanPersistedProgramOfTsBuildInfoAndReportErrorHost extends CleanPersistedProgramOfTsBuildInfoHost {
         getCurrentDirectory(): string;
     }
-    export function cleanResolutionsOfTsBuildInfoAndReportError(
+    export function cleanPersistedProgramOfTsBuildInfoAndReportError(
         options: CompilerOptions,
-        host: CleanResolutionsOfTsBuildInfoAndReportErrorHost,
+        host: CleanPersistedProgramOfTsBuildInfoAndReportErrorHost,
         reportDiagnostic: DiagnosticReporter,
         write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,
     ): number {
-        const { emittedFiles, diagnostics } = cleanResolutionsOfTsBuildInfo(options, host);
+        const { emittedFiles, diagnostics } = cleanPersistedProgramOfTsBuildInfo(options, host);
         diagnostics.forEach(reportDiagnostic);
         if (write) {
             const currentDir = host.getCurrentDirectory();

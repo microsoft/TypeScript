@@ -6105,7 +6105,7 @@ namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         persistResolutions?: string;
-        cleanResolutions?: boolean;
+        cleanPersistedProgram?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];

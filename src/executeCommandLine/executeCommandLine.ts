@@ -307,9 +307,9 @@ namespace ts {
                 reportDiagnostic,
                 configParseResult.options
             );
-            if (commandLineOptions.cleanResolutions) {
+            if (commandLineOptions.cleanPersistedProgram) {
                 configParseResult.errors.forEach(reportDiagnostic);
-                return cleanResolutions(sys, configParseResult.options, reportDiagnostic);
+                return cleanPersistedProgram(sys, configParseResult.options, reportDiagnostic);
             }
             if (isWatchSet(configParseResult.options)) {
                 if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
@@ -351,8 +351,8 @@ namespace ts {
                 reportDiagnostic,
                 commandLineOptions
             );
-            if (commandLineOptions.cleanResolutions) {
-                return cleanResolutions(sys, commandLineOptions, reportDiagnostic);
+            if (commandLineOptions.cleanPersistedProgram) {
+                return cleanPersistedProgram(sys, commandLineOptions, reportDiagnostic);
             }
             if (isWatchSet(commandLineOptions)) {
                 if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
@@ -485,7 +485,7 @@ namespace ts {
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
-        if (buildOptions.cleanResolutions) {
+        if (buildOptions.cleanPersistedProgram) {
             const buildHost = createSolutionBuilderHost(
                 sys,
                 /*createProgram*/ undefined,
@@ -495,7 +495,7 @@ namespace ts {
             );
             updateSolutionBuilderHost(sys, cb, buildHost);
             const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-            return sys.exit(builder.cleanResolutions());
+            return sys.exit(builder.cleanPersistedProgram());
         }
 
         if (buildOptions.watch) {
@@ -533,8 +533,8 @@ namespace ts {
             undefined;
     }
 
-    function cleanResolutions(sys: System, options: CompilerOptions, reportDiagnostic: DiagnosticReporter) {
-        const diagnostics = cleanResolutionsOfTsBuildInfoAndReportError(
+    function cleanPersistedProgram(sys: System, options: CompilerOptions, reportDiagnostic: DiagnosticReporter) {
+        const diagnostics = cleanPersistedProgramOfTsBuildInfoAndReportError(
             options,
             sys,
             reportDiagnostic,

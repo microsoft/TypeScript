@@ -88,7 +88,7 @@ namespace ts.tscWatch {
                 sys.exit = exit;
                 sys.clearOutput();
                 return sys;
-           },
+            },
             commandLineArgs: ["--b", ".", "-w", "--extendedDiagnostics"],
             changes: [
                 {
@@ -147,7 +147,7 @@ namespace ts.tscWatch {
                 sys.exit = noop;
                 fakes.withTemporaryPatchingForBuildinfoReadWrite(sys, sys => {
                     executeCommandLine(sys, noop, ["--b", "."]);
-                    executeCommandLine(sys, noop, ["--b", ".", "--cleanResolutions"]);
+                    executeCommandLine(sys, noop, ["--b", ".", "--cleanPersistedProgram"]);
                 });
                 sys.exit = exit;
                 sys.clearOutput();
@@ -329,7 +329,7 @@ namespace ts.tscWatch {
                 sys.exit = noop;
                 fakes.withTemporaryPatchingForBuildinfoReadWrite(sys, sys => {
                     executeCommandLine(sys, noop, ["--b", "."]);
-                    executeCommandLine(sys, noop, ["--b", ".", "--cleanResolutions"]);
+                    executeCommandLine(sys, noop, ["--b", ".", "--cleanPersistedProgram"]);
                 });
                 sys.exit = exit;
                 sys.clearOutput();

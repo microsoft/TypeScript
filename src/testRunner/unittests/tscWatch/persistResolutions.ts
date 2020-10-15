@@ -147,7 +147,7 @@ namespace ts.tscWatch {
                 sys.exit = noop;
                 fakes.withTemporaryPatchingForBuildinfoReadWrite(sys, sys => {
                     executeCommandLine(sys, noop, ["--p", "."]);
-                    executeCommandLine(sys, noop, ["--p", ".", "--cleanResolutions"]);
+                    executeCommandLine(sys, noop, ["--p", ".", "--cleanPersistedProgram"]);
                 });
                 sys.exit = exit;
                 sys.clearOutput();
@@ -329,7 +329,7 @@ namespace ts.tscWatch {
                 sys.exit = noop;
                 fakes.withTemporaryPatchingForBuildinfoReadWrite(sys, sys => {
                     executeCommandLine(sys, noop, ["--p", "."]);
-                    executeCommandLine(sys, noop, ["--p", ".", "--cleanResolutions"]);
+                    executeCommandLine(sys, noop, ["--p", ".", "--cleanPersistedProgram"]);
                 });
                 sys.exit = exit;
                 sys.clearOutput();
