@@ -35,20 +35,7 @@ namespace ts.codefix {
         const exportDeclaration = exportClause.parent;
         const typeExportSpecifiers = getTypeExportSpecifiers(exportSpecifier, context);
         if (typeExportSpecifiers.length === exportClause.elements.length) {
-            changes.replaceNode(
-                context.sourceFile,
-                exportDeclaration,
-                factory.updateExportDeclaration(
-                    exportDeclaration,
-                    exportDeclaration.decorators,
-                    exportDeclaration.modifiers,
-                    /*isTypeOnly*/ true,
-                    exportClause,
-                    exportDeclaration.moduleSpecifier),
-                {
-                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                    trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
-                });
+            changes.insertModifierBefore(context.sourceFile, SyntaxKind.TypeKeyword, exportClause);
         }
         else {
             const valueExportDeclaration = factory.updateExportDeclaration(
