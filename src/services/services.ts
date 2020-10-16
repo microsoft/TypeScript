@@ -1598,7 +1598,7 @@ namespace ts {
             );
             return {
                 kind: symbolKind,
-                kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
+                kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,

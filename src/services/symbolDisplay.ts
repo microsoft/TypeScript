@@ -102,15 +102,26 @@ namespace ts.SymbolDisplay {
         return ScriptElementKind.unknown;
     }
 
-    export function getSymbolModifiers(symbol: Symbol): string {
-        const nodeModifiers = symbol && symbol.declarations && symbol.declarations.length > 0
-            ? getNodeModifiers(symbol.declarations[0])
-            : ScriptElementKindModifier.none;
+    export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): string {
+        if (!symbol) {
+            return ScriptElementKindModifier.none;
+        }
 
-        const symbolModifiers = symbol && symbol.flags & SymbolFlags.Optional ?
-            ScriptElementKindModifier.optionalModifier
-            : ScriptElementKindModifier.none;
-        return nodeModifiers && symbolModifiers ? nodeModifiers + "," + symbolModifiers : nodeModifiers || symbolModifiers;
+        const modifiers: string[] = [];
+        if (symbol.declarations && symbol.declarations.length > 0) {
+            modifiers.push(getNodeModifiers(symbol.declarations[0]));
+        }
+        if (symbol.flags & SymbolFlags.Alias) {
+            const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
+            if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
+                modifiers.push(getNodeModifiers(resolvedSymbol.declarations[0]));
+            }
+        }
+        if (symbol.flags & SymbolFlags.Optional) {
+            modifiers.push(ScriptElementKindModifier.optionalModifier);
+        }
+
+        return modifiers.filter(s => !!s).join(",");
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
