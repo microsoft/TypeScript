@@ -434,55 +434,105 @@ namespace ts.server {
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
+        fileName: string | undefined,
         cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.Find | ProjectReferenceProjectLoadKind.FindCreate,
     ): T | undefined;
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
+        fileName: string | undefined,
         cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason: string
     ): T | undefined;
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
+        fileName: string | undefined,
         cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason?: string
     ): T | undefined {
+        const resolvedRefs = project.getCurrentProgram()?.getResolvedProjectReferences();
+        if (!resolvedRefs) return undefined;
         let seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined;
-        return worker(project.getCurrentProgram()?.getResolvedProjectReferences(), project.getCompilerOptions());
-
-        function worker(resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined, parentOptions: CompilerOptions): T | undefined {
-            const loadKind = parentOptions.disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : projectReferenceProjectLoadKind;
-            return forEach(resolvedProjectReferences, ref => {
-                if (!ref) return undefined;
-
-                const configFileName = toNormalizedPath(ref.sourceFile.fileName);
-                const canonicalPath = project.projectService.toCanonicalFileName(configFileName);
-                const seenValue = seenResolvedRefs?.get(canonicalPath);
-                if (seenValue !== undefined && seenValue >= loadKind) {
-                    return undefined;
-                }
-                const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
-                    loadKind === ProjectReferenceProjectLoadKind.Find ?
-                        undefined :
-                        loadKind === ProjectReferenceProjectLoadKind.FindCreate ?
-                            project.projectService.createConfiguredProject(configFileName) :
-                            loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
-                                project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
-                                Debug.assertNever(loadKind)
+        const possibleDefaultRef = fileName ? project.getResolvedProjectReferenceToRedirect(fileName) : undefined;
+        if (possibleDefaultRef) {
+            // Try to find the name of the file directly through resolved project references
+            const configFileName = toNormalizedPath(possibleDefaultRef.sourceFile.fileName);
+            const child = project.projectService.findConfiguredProjectByProjectName(configFileName);
+            if (child) {
+                const result = cb(child);
+                if (result) return result;
+            }
+            else if (projectReferenceProjectLoadKind !== ProjectReferenceProjectLoadKind.Find) {
+                seenResolvedRefs = new Map();
+                // Try to see if this project can be loaded
+                const result = forEachResolvedProjectReferenceProjectWorker(
+                    resolvedRefs,
+                    project.getCompilerOptions(),
+                    (ref, loadKind) => possibleDefaultRef === ref ? callback(ref, loadKind) : undefined,
+                    projectReferenceProjectLoadKind,
+                    project.projectService,
+                    seenResolvedRefs
                 );
-
-                const result = child && cb(child);
-                if (result) {
-                    return result;
-                }
-
-                (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
-                return worker(ref.references, ref.commandLine.options);
-            });
+                if (result) return result;
+                // Cleanup seenResolvedRefs
+                seenResolvedRefs.clear();
+            }
         }
+
+        return forEachResolvedProjectReferenceProjectWorker(
+            resolvedRefs,
+            project.getCompilerOptions(),
+            (ref, loadKind) => possibleDefaultRef !== ref ? callback(ref, loadKind) : undefined,
+            projectReferenceProjectLoadKind,
+            project.projectService,
+            seenResolvedRefs
+        );
+
+        function callback(ref: ResolvedProjectReference, loadKind: ProjectReferenceProjectLoadKind) {
+            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+            const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
+                loadKind === ProjectReferenceProjectLoadKind.Find ?
+                    undefined :
+                    loadKind === ProjectReferenceProjectLoadKind.FindCreate ?
+                        project.projectService.createConfiguredProject(configFileName) :
+                        loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
+                            project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
+                            Debug.assertNever(loadKind)
+            );
+
+            return child && cb(child);
+        }
+    }
+
+    function forEachResolvedProjectReferenceProjectWorker<T>(
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[],
+        parentOptions: CompilerOptions,
+        cb: (resolvedRef: ResolvedProjectReference, loadKind: ProjectReferenceProjectLoadKind) => T | undefined,
+        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
+        projectService: ProjectService,
+        seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined,
+    ): T | undefined {
+        const loadKind = parentOptions.disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : projectReferenceProjectLoadKind;
+        return forEach(resolvedProjectReferences, ref => {
+            if (!ref) return undefined;
+
+            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+            const canonicalPath = projectService.toCanonicalFileName(configFileName);
+            const seenValue = seenResolvedRefs?.get(canonicalPath);
+            if (seenValue !== undefined && seenValue >= loadKind) {
+                return undefined;
+            }
+            const result = cb(ref, loadKind);
+            if (result) {
+                return result;
+            }
+
+            (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
+            return ref.references && forEachResolvedProjectReferenceProjectWorker(ref.references, ref.commandLine.options, cb, loadKind, projectService, seenResolvedRefs);
+        });
     }
 
     function forEachPotentialProjectReference<T>(
@@ -2845,6 +2895,7 @@ namespace ts.server {
                             if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
                                     project,
+                                    info.path,
                                     child => {
                                         reloadChildProject(child);
                                         return projectContainsInfoDirectly(child, info);
@@ -2855,6 +2906,7 @@ namespace ts.server {
                                     // Reload the project's tree that is already present
                                     forEachResolvedProjectReferenceProject(
                                         project,
+                                        /*fileName*/ undefined,
                                         reloadChildProject,
                                         ProjectReferenceProjectLoadKind.Find
                                     );
@@ -2960,11 +3012,12 @@ namespace ts.server {
                 // Find the project that is referenced from this solution that contains the script info directly
                 configuredProject = forEachResolvedProjectReferenceProject(
                     configuredProject,
+                    fileName,
                     child => {
                         updateProjectIfDirty(child);
                         return projectContainsOriginalInfo(child) ? child : undefined;
                     },
-                    configuredProject.getCompilerOptions().disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : ProjectReferenceProjectLoadKind.FindCreateLoad,
+                    ProjectReferenceProjectLoadKind.FindCreateLoad,
                     `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
                 );
                 if (!configuredProject) return undefined;
@@ -3040,6 +3093,7 @@ namespace ts.server {
                     if (!projectContainsInfoDirectly(project, info)) {
                         forEachResolvedProjectReferenceProject(
                             project,
+                            info.path,
                             child => {
                                 updateProjectIfDirty(child);
                                 // Retain these projects

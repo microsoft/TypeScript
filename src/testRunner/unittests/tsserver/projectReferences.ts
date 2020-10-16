@@ -2189,19 +2189,14 @@ export function bar() {}`
                 verifySolutionScenario({
                     configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
                     additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
-                    additionalProjects: [{
-                        projectName: tsconfigIndirect.path,
-                        files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path]
-                    }],
+                    additionalProjects: emptyArray,
                     expectedOpenEvents: [
                         ...expectedSolutionLoadAndTelemetry(),
-                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
                         ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
                         configFileDiagEvent(main.path, tsconfigSrcPath, [])
                     ],
                     expectedReloadEvents: [
                         ...expectedReloadEvent(tsconfigPath),
-                        ...expectedReloadEvent(tsconfigIndirect.path),
                         ...expectedReloadEvent(tsconfigSrcPath),
                     ],
                     expectedReferences: {
@@ -2217,8 +2212,8 @@ export function bar() {}`
                         refs: [
                             ...expectedIndirectRefs(fileResolvingToMainDts),
                             ...refs,
-                            ...expectedIndirectRefs(indirect2),
                             ...expectedIndirectRefs(indirect),
+                            ...expectedIndirectRefs(indirect2),
                         ],
                         symbolDisplayString: "(alias) const foo: 1\nimport foo",
                     }
@@ -2296,8 +2291,6 @@ export function bar() {}`
                 const expectedProjectsOnOpen: VerifyProjects = {
                     configuredProjects: [
                         { projectName: tsconfigPath, files: [tsconfigPath] },
-                        { projectName: tsconfigIndirect.path, files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path] },
-                        { projectName: tsconfigIndirect2.path, files: [tsconfigIndirect2.path, main.path, helper.path, indirect2.path, libFile.path] },
                         { projectName: tsconfigSrcPath, files: [tsconfigSrcPath, main.path, helper.path, libFile.path] },
                     ],
                     inferredProjects: emptyArray
@@ -2307,8 +2300,6 @@ export function bar() {}`
                     additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
                     expectedOpenEvents: [
                         ...expectedSolutionLoadAndTelemetry(),
-                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
-                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect2.path),
                         ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
                         configFileDiagEvent(main.path, tsconfigSrcPath, [])
                     ],
@@ -2317,9 +2308,7 @@ export function bar() {}`
                     expectedProjectsOnOpen,
                     expectedReloadEvents: [
                         ...expectedReloadEvent(tsconfigPath),
-                        ...expectedReloadEvent(tsconfigIndirect.path),
                         ...expectedReloadEvent(tsconfigSrcPath),
-                        ...expectedReloadEvent(tsconfigIndirect2.path),
                     ]
                 });
             });
@@ -2387,19 +2376,14 @@ bar;`
                         solutionProject: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path],
                         configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
                         additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2, ownMain],
-                        additionalProjects: [{
-                            projectName: tsconfigIndirect.path,
-                            files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path]
-                        }],
+                        additionalProjects: emptyArray,
                         expectedOpenEvents: [
                             ...expectedSolutionLoadAndTelemetry(),
-                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
                             ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
                             configFileDiagEvent(main.path, tsconfigSrcPath, [])
                         ],
                         expectedReloadEvents: [
                             ...expectedReloadEvent(tsconfigPath),
-                            ...expectedReloadEvent(tsconfigIndirect.path),
                             ...expectedReloadEvent(tsconfigSrcPath),
                         ],
                         expectedReferences: {
@@ -2415,8 +2399,8 @@ bar;`
                             refs: [
                                 ...expectedIndirectRefs(fileResolvingToMainDts),
                                 ...refs,
-                                ...expectedIndirectRefs(indirect2),
                                 ...expectedIndirectRefs(indirect),
+                                ...expectedIndirectRefs(indirect2),
                             ],
                             symbolDisplayString: "(alias) const foo: 1\nimport foo",
                         }
@@ -2502,8 +2486,6 @@ bar;`
                     const expectedProjectsOnOpen: VerifyProjects = {
                         configuredProjects: [
                             { projectName: tsconfigPath, files: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path] },
-                            { projectName: tsconfigIndirect.path, files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path] },
-                            { projectName: tsconfigIndirect2.path, files: [tsconfigIndirect2.path, main.path, helper.path, indirect2.path, libFile.path] },
                             { projectName: tsconfigSrcPath, files: [tsconfigSrcPath, main.path, helper.path, libFile.path] },
                         ],
                         inferredProjects: emptyArray
@@ -2518,8 +2500,6 @@ bar;`
                         additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2, ownMain],
                         expectedOpenEvents: [
                             ...expectedSolutionLoadAndTelemetry(),
-                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
-                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect2.path),
                             ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
                             configFileDiagEvent(main.path, tsconfigSrcPath, [])
                         ],
@@ -2528,9 +2508,7 @@ bar;`
                         expectedProjectsOnOpen,
                         expectedReloadEvents: [
                             ...expectedReloadEvent(tsconfigPath),
-                            ...expectedReloadEvent(tsconfigIndirect.path),
                             ...expectedReloadEvent(tsconfigSrcPath),
-                            ...expectedReloadEvent(tsconfigIndirect2.path),
                         ]
                     });
                 });

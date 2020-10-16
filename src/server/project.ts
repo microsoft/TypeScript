@@ -2303,6 +2303,7 @@ namespace ts.server {
         getDefaultChildProjectFromProjectWithReferences(info: ScriptInfo) {
             return forEachResolvedProjectReferenceProject(
                 this,
+                info.path,
                 child => projectContainsInfoDirectly(child, info) ?
                     child :
                     undefined,
@@ -2340,6 +2341,7 @@ namespace ts.server {
                     return this.containsScriptInfo(info) ||
                         !!forEachResolvedProjectReferenceProject(
                             this,
+                            info.path,
                             child => child.containsScriptInfo(info),
                             ProjectReferenceProjectLoadKind.Find
                         );
