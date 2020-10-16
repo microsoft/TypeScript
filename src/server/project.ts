@@ -249,6 +249,8 @@ namespace ts.server {
         private symlinks: SymlinkCache | undefined;
         /*@internal*/
         autoImportProviderHost: AutoImportProviderProject | false | undefined;
+        /*@internal*/
+        protected typeAcquisition: TypeAcquisition | undefined;
 
         /*@internal*/
         constructor(
@@ -692,12 +694,11 @@ namespace ts.server {
         getProjectName() {
             return this.projectName;
         }
-        abstract getTypeAcquisition(): TypeAcquisition;
 
-        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition {
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): TypeAcquisition {
             if (!newTypeAcquisition || !newTypeAcquisition.include) {
                 // Nothing to filter out, so just return as-is
-                return newTypeAcquisition;
+                return newTypeAcquisition || {};
             }
             return { ...newTypeAcquisition, include: this.removeExistingTypings(newTypeAcquisition.include) };
         }
@@ -1400,6 +1401,14 @@ namespace ts.server {
             return this.watchOptions;
         }
 
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void {
+            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
+        }
+
+        getTypeAcquisition() {
+            return this.typeAcquisition || {};
+        }
+
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
             const includeProjectReferenceRedirectInfoIfRequested =
@@ -1732,8 +1741,6 @@ namespace ts.server {
 
         private _isJsInferredProject = false;
 
-        private typeAcquisition: TypeAcquisition | undefined;
-
         toggleJsInferredProject(isJsInferredProject: boolean) {
             if (isJsInferredProject !== this._isJsInferredProject) {
                 this._isJsInferredProject = isJsInferredProject;
@@ -1831,16 +1838,11 @@ namespace ts.server {
             super.close();
         }
 
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
-        }
-
         getTypeAcquisition(): TypeAcquisition {
             return this.typeAcquisition || {
                 enable: allRootFilesAreJsOrDts(this),
                 include: ts.emptyArray,
-                exclude: ts.emptyArray,
-                disableFilenameBasedTypeAcquisition: false
+                exclude: ts.emptyArray
             };
         }
     }
@@ -2019,7 +2021,6 @@ namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {
-        private typeAcquisition: TypeAcquisition | undefined;
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher> | undefined;
@@ -2231,14 +2232,6 @@ namespace ts.server {
             this.projectErrors = projectErrors;
         }
 
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
-        }
-
-        getTypeAcquisition() {
-            return this.typeAcquisition || {};
-        }
-
         /*@internal*/
         watchWildcards(wildcardDirectories: ESMap<string, WatchDirectoryFlags>) {
             updateWatchingWildcardDirectories(
@@ -2357,7 +2350,6 @@ namespace ts.server {
      */
     export class ExternalProject extends Project {
         excludedFiles: readonly NormalizedPath[] = [];
-        private typeAcquisition: TypeAcquisition | undefined;
         /*@internal*/
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -2390,18 +2382,6 @@ namespace ts.server {
 
         getExcludedFiles() {
             return this.excludedFiles;
-        }
-
-        getTypeAcquisition() {
-            return this.typeAcquisition || {};
-        }
-
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
-            Debug.assert(!!newTypeAcquisition, "newTypeAcquisition may not be null/undefined");
-            Debug.assert(!!newTypeAcquisition.include, "newTypeAcquisition.include may not be null/undefined");
-            Debug.assert(!!newTypeAcquisition.exclude, "newTypeAcquisition.exclude may not be null/undefined");
-            Debug.assert(typeof newTypeAcquisition.enable === "boolean", "newTypeAcquisition.enable may not be null/undefined");
-            this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
     }
 

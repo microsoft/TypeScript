@@ -2891,7 +2891,7 @@ declare namespace ts {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        inferTypingsFromFilenames?: boolean;
+        disableFilenameBasedTypeAcquisition?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
     export enum ModuleKind {
@@ -7502,7 +7502,7 @@ declare namespace ts.server.protocol {
      * For external projects, some of the project settings are sent together with
      * compiler settings.
      */
-    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions & TypeAcquisition;
+    type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
     interface FileWithProjectReferenceRedirectInfo {
         /**
          * Name of file
@@ -7756,6 +7756,10 @@ declare namespace ts.server.protocol {
         closedFiles?: string[];
     }
     /**
+     * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+     */
+    type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+    /**
      * Request to set compiler options for inferred projects.
      * External projects are opened / closed explicitly.
      * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
@@ -7775,7 +7779,7 @@ declare namespace ts.server.protocol {
         /**
          * Compiler options to be used with inferred projects.
          */
-        options: ExternalProjectCompilerOptions;
+        options: InferredProjectCompilerOptions;
         /**
          * Specifies the project root path used to scope compiler options.
          * It is an error to provide this property if the server has not been started with
@@ -9301,8 +9305,7 @@ declare namespace ts.server {
         enableLanguageService(): void;
         disableLanguageService(lastFileExceededProgramSize?: string): void;
         getProjectName(): string;
-        abstract getTypeAcquisition(): TypeAcquisition;
-        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile | undefined;
         close(): void;
@@ -9340,6 +9343,8 @@ declare namespace ts.server {
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
+        getTypeAcquisition(): TypeAcquisition;
         protected removeRoot(info: ScriptInfo): void;
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void;
@@ -9354,7 +9359,6 @@ declare namespace ts.server {
     class InferredProject extends Project {
         private static readonly newName;
         private _isJsInferredProject;
-        private typeAcquisition;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
         /** this is canonical project root path */
@@ -9363,7 +9367,6 @@ declare namespace ts.server {
         removeRoot(info: ScriptInfo): void;
         isProjectWithSingleRoot(): boolean;
         close(): void;
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
     }
     class AutoImportProviderProject extends Project {
@@ -9387,7 +9390,6 @@ declare namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
-        private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
@@ -9411,8 +9413,6 @@ declare namespace ts.server {
          */
         getAllProjectErrors(): readonly Diagnostic[];
         setProjectErrors(projectErrors: Diagnostic[]): void;
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
-        getTypeAcquisition(): TypeAcquisition;
         close(): void;
         getEffectiveTypeRoots(): string[];
     }
@@ -9424,11 +9424,8 @@ declare namespace ts.server {
         externalProjectName: string;
         compileOnSaveEnabled: boolean;
         excludedFiles: readonly NormalizedPath[];
-        private typeAcquisition;
         updateGraph(): boolean;
         getExcludedFiles(): readonly NormalizedPath[];
-        getTypeAcquisition(): TypeAcquisition;
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
 }
 declare namespace ts.server {
@@ -9562,7 +9559,7 @@ declare namespace ts.server {
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
     export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined;
-    export function convertTypeAcquisition(protocolOptions: protocol.ExternalProjectCompilerOptions): TypeAcquisition | undefined;
+    export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     export interface HostConfiguration {
@@ -9571,7 +9568,6 @@ declare namespace ts.server {
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
         watchOptions?: WatchOptions;
-        typeAcquisition?: TypeAcquisition;
     }
     export interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
@@ -9679,7 +9675,7 @@ declare namespace ts.server {
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         private delayUpdateProjectGraph;
         private delayUpdateProjectGraphs;
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
         private doEnsureDefaultProjectForFile;

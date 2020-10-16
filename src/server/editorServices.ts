@@ -263,7 +263,7 @@ namespace ts.server {
         return result;
     }
 
-    export function convertTypeAcquisition(protocolOptions: protocol.ExternalProjectCompilerOptions): TypeAcquisition | undefined {
+    export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined {
         let result: TypeAcquisition | undefined;
         typeAcquisitionDeclarations.forEach((option) => {
             const propertyValue = protocolOptions[option.name];
@@ -995,7 +995,7 @@ namespace ts.server {
             }
         }
 
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
@@ -1031,6 +1031,7 @@ namespace ts.server {
                     !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
                     project.setWatchOptions(watchOptions);
+                    project.setTypeAcquisition(typeAcquisition);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave!;
                     project.markAsDirty();
                     this.delayUpdateProjectGraph(project);
