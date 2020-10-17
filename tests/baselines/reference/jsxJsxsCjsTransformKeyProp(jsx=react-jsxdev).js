@@ -21,9 +21,10 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 exports.__esModule = true;
+var react_1 = require("react");
 var jsx_dev_runtime_js_1 = require("react/jsx-dev-runtime.js");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx";
 /// <reference path="react16.d.ts" />
 var props = { answer: 42 };
 var a = jsx_dev_runtime_js_1.jsxDEV("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
-var b = React.createElement("div", __assign({}, props, { key: "bar" }), "text");
+var b = react_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
