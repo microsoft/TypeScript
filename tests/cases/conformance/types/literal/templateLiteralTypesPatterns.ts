@@ -160,3 +160,8 @@ type A = `${number}`;
 type B = `${A} ${A}`;
 const exampleBad: B = "anything"; // fails
 const exampleGood: B = "1 2"; // ok
+
+// Repro from #41161
+
+var aa: '0';
+var aa: '0' & `${number}`;
