@@ -191,7 +191,7 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
-            const nonWhitespaceChildren = filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
+            const nonWhitespaceChildren = getSemanticJsxChildren(children);
             if (length(nonWhitespaceChildren) === 1) {
                 const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createObjectLiteralExpression([
@@ -244,7 +244,7 @@ namespace ts {
                 objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
             }
 
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)), isChild, location);
+            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(getSemanticJsxChildren(children || emptyArray)), isChild, location);
         }
 
         function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
@@ -336,7 +336,7 @@ namespace ts {
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)),
+                length(getSemanticJsxChildren(children)),
                 isChild,
                 location
             );
