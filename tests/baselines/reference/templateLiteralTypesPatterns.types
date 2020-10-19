@@ -552,3 +552,11 @@ const exampleGood: B = "1 2"; // ok
 >exampleGood : `${number} ${number}`
 >"1 2" : "1 2"
 
+// Repro from #41161
+
+var aa: '0';
+>aa : "0"
+
+var aa: '0' & `${number}`;
+>aa : "0"
+

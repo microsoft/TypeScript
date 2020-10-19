@@ -161,6 +161,12 @@ type B = `${A} ${A}`;
 const exampleBad: B = "anything"; // fails
 const exampleGood: B = "1 2"; // ok
 
+// Repro from #41161
+
+var aa: '0';
+var aa: '0' & `${number}`;
+
+
 //// [templateLiteralTypesPatterns.js]
 "use strict";
 // ok
@@ -280,3 +286,6 @@ var shouldWork1 = null;
 var shouldWork2 = null;
 var exampleBad = "anything"; // fails
 var exampleGood = "1 2"; // ok
+// Repro from #41161
+var aa;
+var aa;
