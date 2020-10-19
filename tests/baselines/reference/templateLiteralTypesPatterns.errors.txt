@@ -333,3 +333,9 @@ tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts(160,7): er
           ~~~~~~~~~~
 !!! error TS2322: Type '"anything"' is not assignable to type '`${number} ${number}`'.
     const exampleGood: B = "1 2"; // ok
+    
+    // Repro from #41161
+    
+    var aa: '0';
+    var aa: '0' & `${number}`;
+    
