@@ -109,16 +109,8 @@ namespace ts.codefix {
                         }
                         else if (isObjectBindingPattern(token.parent)) {
                             if (isParameter(token.parent.parent)) {
-                                const parameter = token.parent.parent;
-                                const index = parameter.parent.parameters.indexOf(parameter);
-                                let isUsed = false;
-                                FindAllReferences.Core.eachSignatureCall(parameter.parent, sourceFiles, checker, call => {
-                                    if (call.arguments.length > index) {
-                                        isUsed = true;
-                                    }
-                                })
-                                if (!isUsed) {
-                                    deleteDestructuringElements(changes, sourceFile, token.parent, /*isFixAll*/);
+                                if (isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
+                                    deleteDestructuringElements(changes, sourceFile, token.parent);
                                 }
                             }
                             else {
@@ -231,30 +223,33 @@ namespace ts.codefix {
         }
     }
 
-    function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll = false): void {
-        if (mayDeleteParameter(checker, sourceFile, p, isFixAll)) {
-            if (p.modifiers && p.modifiers.length > 0 &&
-                (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
-                p.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
+    function tryDeleteParameter(
+        changes: textChanges.ChangeTracker,
+        sourceFile: SourceFile,
+        parameter: ParameterDeclaration,
+        checker: TypeChecker,
+        sourceFiles: readonly SourceFile[],
+        isFixAll = false): void {
+        if (mayDeleteParameter(checker, sourceFile, parameter, isFixAll)) {
+            if (parameter.modifiers && parameter.modifiers.length > 0 &&
+                (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
+                parameter.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
             }
-            else {
-                let isUsed = false;
-                FindAllReferences.Core.eachSignatureCall(p.parent, sourceFiles, checker, call => {
-                    const index = p.parent.parameters.indexOf(p);
-                    if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
-                        if (isFixAll) {
-                            isUsed = true;
-                        }
-                        else {
-                            changes.delete(sourceFile, call.arguments[index]);
-                        }
-                    }
-                });
-                if (!isFixAll || !isUsed) {
-                    changes.delete(sourceFile, p);
-                }
+            else if (isNotProvidedArguments(parameter, checker, sourceFiles)) {
+                changes.delete(sourceFile, parameter);
             }
         }
+    }
+
+    function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
+        let isUsed = false;
+        const index = parameter.parent.parameters.indexOf(parameter);
+        FindAllReferences.Core.eachSignatureCall(parameter.parent, sourceFiles, checker, call => {
+            if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
+                isUsed = true;
+            }
+        });
+        return !isUsed;
     }
 
     function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, isFixAll: boolean): boolean {
