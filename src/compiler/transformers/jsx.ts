@@ -74,7 +74,7 @@ namespace ts {
                 statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
             }
             if (currentFileState.utilizedImplicitRuntimeImports && currentFileState.utilizedImplicitRuntimeImports.size && currentFileState.importSpecifier !== undefined) {
-                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime.js" : "jsx-runtime.js"}`;
+                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}`;
                 if (isExternalModule(node)) {
                     // Add `import` statement
                     const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(currentFileState.utilizedImplicitRuntimeImports.values()))), factory.createStringLiteral(specifier));
