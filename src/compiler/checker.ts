@@ -12877,9 +12877,21 @@ namespace ts {
                         // Spread variadic elements with tuple types into the resulting tuple.
                         forEach(getTypeArguments(type), (t, n) => addElementOrRest(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
                     }
+                    else if (getReducedApparentType(type).flags & TypeFlags.Never) {
+                        return neverType;
+                    }
                     else {
-                        // Treat everything else as an array type and create a rest element.
-                        addElementOrRest(isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
+                        const length = getDefiniteLength(type);
+                        const indexType = isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType;
+                        if (length !== undefined) {
+                            for (let j = 0; j < length; j++) {
+                                addElementOrRest(getTypeOfPropertyOfType(type, ("" + j) as __String) || indexType, 0, /*declaration*/ undefined);
+                            }
+                        }
+                        else {
+                            // Treat everything else as an array type and create a rest element.
+                            addElementOrRest(indexType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
+                        }
                     }
                 }
                 else {
@@ -12925,6 +12937,13 @@ namespace ts {
                         expandedDeclarations = undefined;
                     }
                 }
+            }
+        }
+
+        function getDefiniteLength(type: Type) {
+            const lengthType = getTypeOfPropertyOfType(type, "length" as __String);
+            if (lengthType?.flags! & (TypeFlags.NumberLiteral) && Number.isInteger((lengthType as NumberLiteralType).value)) {
+                return (lengthType as NumberLiteralType).value;
             }
         }
 
