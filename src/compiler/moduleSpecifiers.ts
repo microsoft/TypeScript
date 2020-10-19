@@ -16,7 +16,7 @@ namespace ts.moduleSpecifiers {
             relativePreference:
                 importModuleSpecifierPreference === "relative" ? RelativePreference.Relative :
                 importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
-                importModuleSpecifierPreference === "external-non-relative" ? RelativePreference.ExternalNonRelative :
+                importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
                 RelativePreference.Shortest,
             ending: getEnding(),
         };

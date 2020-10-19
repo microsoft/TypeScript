@@ -49,10 +49,10 @@ format.setOption("newline", "\n");
 
 goTo.marker("external");
 verify.importFixAtPosition([`import { Pkg2 } from "pkg-2/utils";\n\nPkg2`], /*errorCode*/ undefined, {
-  importModuleSpecifierPreference: "external-non-relative"
+  importModuleSpecifierPreference: "project-relative"
 });
 
 goTo.marker("internal");
 verify.importFixAtPosition([`import { Pkg2 } from "../../utils";\n\nPkg2`], /*errorCode*/ undefined, {
-  importModuleSpecifierPreference: "external-non-relative"
+  importModuleSpecifierPreference: "project-relative"
 });

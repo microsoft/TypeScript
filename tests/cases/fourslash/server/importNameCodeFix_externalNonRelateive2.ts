@@ -30,15 +30,15 @@ format.setOption("newline", "\n");
 
 goTo.marker("internal2external");
 verify.importFixAtPosition([`import { shared } from "shared/constants";\n\nshared`], /*errorCode*/ undefined, {
-  importModuleSpecifierPreference: "external-non-relative"
+  importModuleSpecifierPreference: "project-relative"
 });
 
 goTo.marker("internal2internal");
 verify.importFixAtPosition([`import { utils } from "./utils";\n\nutils`], /*errorCode*/ undefined, {
-  importModuleSpecifierPreference: "external-non-relative"
+  importModuleSpecifierPreference: "project-relative"
 });
 
 goTo.marker("external2external");
 verify.importFixAtPosition([`import { shared } from "./constants";\n\nshared`], /*errorCode*/ undefined, {
-  importModuleSpecifierPreference: "external-non-relative"
+  importModuleSpecifierPreference: "project-relative"
 });
