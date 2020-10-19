@@ -22,8 +22,8 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var preact_1 = require("preact");
-var jsx_runtime_js_1 = require("preact/jsx-runtime.js");
+var jsx_runtime_1 = require("preact/jsx-runtime");
 /// <reference path="react16.d.ts" />
 var props = { answer: 42 };
-var a = jsx_runtime_js_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
+var a = jsx_runtime_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
 var b = preact_1.createElement("div", __assign({}, props, { key: "bar" }), "text");

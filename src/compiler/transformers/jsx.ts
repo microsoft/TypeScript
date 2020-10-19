@@ -42,7 +42,7 @@ namespace ts {
         function getImplicitImportForName(name: string) {
             const importSource = name === "createElement"
                 ? currentFileState.importSpecifier!
-                : `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime.js" : "jsx-runtime.js"}`;
+                : `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}`;
             const existing = currentFileState.utilizedImplicitRuntimeImports?.get(importSource)?.get(name);
             if (existing) {
                 return existing.name;
@@ -200,7 +200,7 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
-            const nonWhitespaceChildren = filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
+            const nonWhitespaceChildren = getSemanticJsxChildren(children);
             if (length(nonWhitespaceChildren) === 1) {
                 const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createObjectLiteralExpression([
@@ -253,7 +253,7 @@ namespace ts {
                 objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
             }
 
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)), isChild, location);
+            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(getSemanticJsxChildren(children || emptyArray)), isChild, location);
         }
 
         function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
@@ -352,7 +352,7 @@ namespace ts {
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)),
+                length(getSemanticJsxChildren(children)),
                 isChild,
                 location
             );

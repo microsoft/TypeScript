@@ -13373,6 +13373,9 @@ namespace ts {
                 includes & TypeFlags.VoidLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
                 return neverType;
             }
+            if (includes & TypeFlags.TemplateLiteral && includes & TypeFlags.StringLiteral && extractRedundantTemplateLiterals(typeSet)) {
+                return neverType;
+            }
             if (includes & TypeFlags.Any) {
                 return includes & TypeFlags.IncludesWildcard ? wildcardType : anyType;
             }
@@ -13424,12 +13427,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (includes & TypeFlags.TemplateLiteral && includes & TypeFlags.StringLiteral && extractRedundantTemplateLiterals(typeSet)) {
-                        result = neverType;
-                    }
-                    else {
-                        result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
-                    }
+                    result = createIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
                 intersectionTypes.set(id, result);
             }
@@ -15046,9 +15044,10 @@ namespace ts {
         }
 
         function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper) {
-            const target = type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
             const declaration = type.objectFlags & ObjectFlags.Reference ? (<TypeReference>type).node! : type.symbol.declarations[0];
             const links = getNodeLinks(declaration);
+            const target = type.objectFlags & ObjectFlags.Reference ? <DeferredTypeReference>links.resolvedType! :
+                type.objectFlags & ObjectFlags.Instantiated ? type.target! : type;
             let typeParameters = links.outerTypeParameters;
             if (!typeParameters) {
                 // The first time an anonymous type is instantiated we compute and store a list of the type
@@ -15065,10 +15064,6 @@ namespace ts {
                     filter(typeParameters, tp => isTypeParameterPossiblyReferenced(tp, declaration)) :
                     typeParameters;
                 links.outerTypeParameters = typeParameters;
-                if (typeParameters.length) {
-                    links.instantiations = new Map<string, Type>();
-                    links.instantiations.set(getTypeListId(typeParameters), target);
-                }
             }
             if (typeParameters.length) {
                 // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
@@ -15077,13 +15072,17 @@ namespace ts {
                 const combinedMapper = combineTypeMappers(type.mapper, mapper);
                 const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
                 const id = getTypeListId(typeArguments);
-                let result = links.instantiations!.get(id);
+                if (!target.instantiations) {
+                    target.instantiations = new Map<string, Type>();
+                    target.instantiations.set(getTypeListId(typeParameters), target);
+                }
+                let result = target.instantiations.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
                     result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((<DeferredTypeReference>type).target, (<DeferredTypeReference>type).node, newMapper) :
                         target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper) :
                         instantiateAnonymousType(target, newMapper);
-                    links.instantiations!.set(id, result);
+                    target.instantiations.set(id, result);
                 }
                 return result;
             }
@@ -15824,10 +15823,6 @@ namespace ts {
                 default:
                     return Debug.assertNever(child, "Found invalid jsx child");
             }
-        }
-
-        function getSemanticJsxChildren(children: NodeArray<JsxChild>) {
-            return filter(children, i => !isJsxText(i) || !i.containsOnlyTriviaWhiteSpaces);
         }
 
         function elaborateJsxComponents(
@@ -24985,6 +24980,9 @@ namespace ts {
                     if (!child.containsOnlyTriviaWhiteSpaces) {
                         childrenTypes.push(stringType);
                     }
+                }
+                else if (child.kind === SyntaxKind.JsxExpression && !child.expression) {
+                    continue; // empty jsx expressions don't *really* count as present children
                 }
                 else {
                     childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));

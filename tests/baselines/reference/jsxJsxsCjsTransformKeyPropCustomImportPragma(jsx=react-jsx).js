@@ -35,11 +35,11 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var preact_1 = require("preact");
-var jsx_runtime_js_1 = require("preact/jsx-runtime.js");
+var jsx_runtime_1 = require("preact/jsx-runtime");
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource preact */
 var props = { answer: 42 };
-var a = jsx_runtime_js_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
+var a = jsx_runtime_1.jsx("div", __assign({}, props, { children: "text" }), "foo");
 var b = preact_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
 //// [react.js]
 "use strict";
@@ -56,10 +56,10 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var react_1 = require("react");
-var jsx_runtime_js_1 = require("react/jsx-runtime.js");
+var jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource react */
 require("./preact");
 var props2 = { answer: 42 };
-var a2 = jsx_runtime_js_1.jsx("div", __assign({}, props2, { children: "text" }), "foo");
+var a2 = jsx_runtime_1.jsx("div", __assign({}, props2, { children: "text" }), "foo");
 var b2 = react_1.createElement("div", __assign({}, props2, { key: "bar" }), "text");

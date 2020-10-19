@@ -35,12 +35,12 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var preact_1 = require("preact");
-var jsx_dev_runtime_js_1 = require("preact/jsx-dev-runtime.js");
+var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/preact.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource preact */
 var props = { answer: 42 };
-var a = jsx_dev_runtime_js_1.jsxDEV("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
+var a = jsx_dev_runtime_1.jsxDEV("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
 var b = preact_1.createElement("div", __assign({}, props, { key: "bar" }), "text");
 //// [react.js]
 "use strict";
@@ -57,11 +57,11 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var react_1 = require("react");
-var jsx_dev_runtime_js_1 = require("react/jsx-dev-runtime.js");
+var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/react.tsx";
 /// <reference path="react16.d.ts" />
 /* @jsxImportSource react */
 require("./preact");
 var props2 = { answer: 42 };
-var a2 = jsx_dev_runtime_js_1.jsxDEV("div", __assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 11 }, this);
+var a2 = jsx_dev_runtime_1.jsxDEV("div", __assign({}, props2, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 11 }, this);
 var b2 = react_1.createElement("div", __assign({}, props2, { key: "bar" }), "text");

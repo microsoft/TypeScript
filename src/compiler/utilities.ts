@@ -3621,6 +3621,19 @@ namespace ts {
         return -1;
     }
 
+    export function getSemanticJsxChildren(children: readonly JsxChild[]) {
+        return filter(children, i => {
+            switch (i.kind) {
+                case SyntaxKind.JsxExpression:
+                    return !!i.expression;
+                case SyntaxKind.JsxText:
+                    return !i.containsOnlyTriviaWhiteSpaces;
+                default:
+                    return true;
+            }
+        });
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
         const filesWithDiagnostics = [] as string[] as SortedArray<string>;
