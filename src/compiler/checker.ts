@@ -15827,10 +15827,6 @@ namespace ts {
             }
         }
 
-        function getSemanticJsxChildren(children: NodeArray<JsxChild>) {
-            return filter(children, i => !isJsxText(i) || !i.containsOnlyTriviaWhiteSpaces);
-        }
-
         function elaborateJsxComponents(
             node: JsxAttributes,
             source: Type,
@@ -24986,6 +24982,9 @@ namespace ts {
                     if (!child.containsOnlyTriviaWhiteSpaces) {
                         childrenTypes.push(stringType);
                     }
+                }
+                else if (child.kind === SyntaxKind.JsxExpression && !child.expression) {
+                    continue; // empty jsx expressions don't *really* count as present children
                 }
                 else {
                     childrenTypes.push(checkExpressionForMutableLocation(child, checkMode));
