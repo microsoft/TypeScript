@@ -263,6 +263,16 @@ namespace ts.server {
         return result;
     }
 
+    export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined {
+        let result: TypeAcquisition | undefined;
+        typeAcquisitionDeclarations.forEach((option) => {
+            const propertyValue = protocolOptions[option.name];
+            if (propertyValue === undefined) return;
+            (result || (result = {}))[option.name] = propertyValue;
+        });
+        return result;
+    }
+
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
         return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
     }
@@ -642,6 +652,8 @@ namespace ts.server {
         private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
         private watchOptionsForInferredProjects: WatchOptions | undefined;
         private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
+        private typeAcquisitionForInferredProjects: TypeAcquisition | undefined;
+        private typeAcquisitionForInferredProjectsPerProjectRoot = new Map<string, TypeAcquisition | undefined>();
         /**
          * Project size for configured or external projects
          */
@@ -982,11 +994,12 @@ namespace ts.server {
             }
         }
 
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
             const watchOptions = convertWatchOptions(projectCompilerOptions);
+            const typeAcquisition = convertTypeAcquisition(projectCompilerOptions);
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
@@ -995,10 +1008,12 @@ namespace ts.server {
             if (canonicalProjectRootPath) {
                 this.compilerOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, compilerOptions);
                 this.watchOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, watchOptions || false);
+                this.typeAcquisitionForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, typeAcquisition);
             }
             else {
                 this.compilerOptionsForInferredProjects = compilerOptions;
                 this.watchOptionsForInferredProjects = watchOptions;
+                this.typeAcquisitionForInferredProjects = typeAcquisition;
             }
 
             for (const project of this.inferredProjects) {
@@ -1015,6 +1030,7 @@ namespace ts.server {
                     !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
                     project.setWatchOptions(watchOptions);
+                    project.setTypeAcquisition(typeAcquisition);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave!;
                     project.markAsDirty();
                     this.delayUpdateProjectGraph(project);
@@ -2298,13 +2314,18 @@ namespace ts.server {
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
             let watchOptions: WatchOptions | false | undefined;
+            let typeAcquisition: TypeAcquisition | undefined;
             if (projectRootPath) {
                 watchOptions = this.watchOptionsForInferredProjectsPerProjectRoot.get(projectRootPath);
+                typeAcquisition = this.typeAcquisitionForInferredProjectsPerProjectRoot.get(projectRootPath);
             }
             if (watchOptions === undefined) {
                 watchOptions = this.watchOptionsForInferredProjects;
             }
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
+            if (typeAcquisition === undefined) {
+                typeAcquisition = this.typeAcquisitionForInferredProjects;
+            }
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -3513,8 +3534,8 @@ namespace ts.server {
             const { rootFiles } = proj;
             const typeAcquisition = proj.typeAcquisition!;
             Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
-            // If type acquisition has been explicitly disabled, do not exclude anything from the project
-            if (typeAcquisition.enable === false) {
+
+            if (typeAcquisition.enable === false || typeAcquisition.disableFilenameBasedTypeAcquisition) {
                 return [];
             }
 

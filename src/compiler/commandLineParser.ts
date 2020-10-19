@@ -1134,7 +1134,11 @@ namespace ts {
                 name: "exclude",
                 type: "string"
             }
-        }
+        },
+        {
+            name: "disableFilenameBasedTypeAcquisition",
+            type: "boolean",
+        },
     ];
 
     /* @internal */
