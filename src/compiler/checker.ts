@@ -12881,7 +12881,7 @@ namespace ts {
                         return neverType;
                     }
                     else {
-                        const length = getDefiniteLength(type);
+                        const length = getTupleLikeLength(type);
                         const indexType = isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType;
                         if (length !== undefined) {
                             for (let j = 0; j < length; j++) {
@@ -12940,9 +12940,15 @@ namespace ts {
             }
         }
 
-        function getDefiniteLength(type: Type) {
-            const lengthType = getTypeOfPropertyOfType(type, "length" as __String);
-            if (lengthType?.flags! & (TypeFlags.NumberLiteral) && Number.isInteger((lengthType as NumberLiteralType).value)) {
+        function getTupleLikeLength(type: Type) {
+            const lengthSymbol = getPropertyOfType(type, "length" as __String);
+            const lengthType = lengthSymbol && getTypeOfSymbol(lengthSymbol);
+            if (lengthType?.flags! & (TypeFlags.NumberLiteral) &&
+                Number.isInteger((lengthType as NumberLiteralType).value) &&
+                (lengthType as NumberLiteralType).value >= 0 &&
+                // Ensure we are not looking at `number[] & { length: 1e9 }`
+                arrayIsEqualTo(lengthSymbol!.declarations, getPropertyOfType(globalArrayType, "length" as __String)!.declarations)
+            ) {
                 return (lengthType as NumberLiteralType).value;
             }
         }

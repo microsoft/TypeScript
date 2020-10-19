@@ -14,3 +14,7 @@ type T4 = [...number[] & ([1, 2] | [3, 4])];    // [1, 2] | [3, 4]
 type T5 = [...number[] & ([1, 2] | [3, 4, 5])]; // [1, 2] | [3, 4, 5]
 >T5 : Symbol(T5, Decl(spreadOfTupleArrayIntersection.ts, 3, 44))
 
+type T6 = [...number[] & { length: 3 }];        // number[]
+>T6 : Symbol(T6, Decl(spreadOfTupleArrayIntersection.ts, 4, 47))
+>length : Symbol(length, Decl(spreadOfTupleArrayIntersection.ts, 5, 26))
+
