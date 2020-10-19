@@ -5,37 +5,53 @@
 
 ////function f(a, b, { x, y }) { b; }
 ////f(0, 1, { x: 1, y: 1 });
+////function g(a, b, { x, y }) { b; }
+////g;
 ////
 ////class C {
 ////    m(a, b, c) { b; }
+////    n(a, b, c) { b; }
 ////}
 ////new C().m(0, 1, 2);
+////new C().n;
 ////
 ////// Test of deletedAncestors
 ////function a(a: any, unused: any) { a; }
 ////function b(a: any, unused: any) { a; }
+////function c(a: any, unused: any) { a; }
 ////
 ////b(1, {
 ////    prop: a(2, [
 ////        b(3, a(4, undefined)),
 ////    ]),
 ////});
+////b(1, { prop: c });
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: ts.Diagnostics.Delete_all_unused_declarations.message,
     newFileContent:
-`function f(b, {  }) { b; }
-f(1, { x: 1, y: 1 });
+`function f(a, b, { x, y }) { b; }
+f(0, 1, { x: 1, y: 1 });
+function g(b, {  }) { b; }
+g;
 
 class C {
-    m(b) { b; }
+    m(a, b, c) { b; }
+    n(b) { b; }
 }
-new C().m(1);
+new C().m(0, 1, 2);
+new C().n;
 
 // Test of deletedAncestors
-function a(a: any) { a; }
-function b(a: any) { a; }
+function a(a: any, unused: any) { a; }
+function b(a: any, unused: any) { a; }
+function c(a: any) { a; }
 
-b(1);`,
+b(1, {
+    prop: a(2, [
+        b(3, a(4, undefined)),
+    ]),
+});
+b(1, { prop: c });`,
 });

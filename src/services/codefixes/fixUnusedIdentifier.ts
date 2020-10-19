@@ -109,7 +109,17 @@ namespace ts.codefix {
                         }
                         else if (isObjectBindingPattern(token.parent)) {
                             if (isParameter(token.parent.parent)) {
-                                deleteDestructuringElements(changes, sourceFile, token.parent);
+                                const parameter = token.parent.parent;
+                                const index = parameter.parent.parameters.indexOf(parameter);
+                                let isUsed = false;
+                                FindAllReferences.Core.eachSignatureCall(parameter.parent, sourceFiles, checker, call => {
+                                    if (call.arguments.length > index) {
+                                        isUsed = true;
+                                    }
+                                })
+                                if (!isUsed) {
+                                    deleteDestructuringElements(changes, sourceFile, token.parent, /*isFixAll*/);
+                                }
                             }
                             else {
                                 changes.delete(sourceFile, token.parent.parent);
@@ -201,16 +211,14 @@ namespace ts.codefix {
 
     function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean) {
         tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, isFixAll);
-        if (isIdentifier(token)) deleteAssignments(changes, sourceFile, token, checker);
-    }
-
-    function deleteAssignments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier, checker: TypeChecker) {
-        FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
-            if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
-            if (isBinaryExpression(ref.parent) && isExpressionStatement(ref.parent.parent) && ref.parent.left === ref) {
-                changes.delete(sourceFile, ref.parent.parent);
-            }
-        });
+        if (isIdentifier(token)) {
+            FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
+                if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
+                if (!isFixAll && isBinaryExpression(ref.parent) && isExpressionStatement(ref.parent.parent) && ref.parent.left === ref) {
+                    changes.delete(sourceFile, ref.parent.parent);
+                }
+            });
+        }
     }
 
     function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], isFixAll: boolean): void {
@@ -218,7 +226,7 @@ namespace ts.codefix {
         if (isParameter(parent)) {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, isFixAll);
         }
-        else {
+        else if (!isFixAll || !(isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
             changes.delete(sourceFile, isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
         }
     }
@@ -230,8 +238,21 @@ namespace ts.codefix {
                 p.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
             }
             else {
-                changes.delete(sourceFile, p);
-                deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
+                let isUsed = false;
+                FindAllReferences.Core.eachSignatureCall(p.parent, sourceFiles, checker, call => {
+                    const index = p.parent.parameters.indexOf(p);
+                    if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
+                        if (isFixAll) {
+                            isUsed = true;
+                        }
+                        else {
+                            changes.delete(sourceFile, call.arguments[index]);
+                        }
+                    }
+                });
+                if (!isFixAll || !isUsed) {
+                    changes.delete(sourceFile, p);
+                }
             }
         }
     }
@@ -264,15 +285,6 @@ namespace ts.codefix {
             default:
                 return Debug.failBadSyntaxKind(parent);
         }
-    }
-
-    function deleteUnusedArguments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, deletedParameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker): void {
-        FindAllReferences.Core.eachSignatureCall(deletedParameter.parent, sourceFiles, checker, call => {
-            const index = deletedParameter.parent.parameters.indexOf(deletedParameter);
-            if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
-                changes.delete(sourceFile, call.arguments[index]);
-            }
-        });
     }
 
     function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Identifier): boolean {

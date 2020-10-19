@@ -12,8 +12,9 @@
 ////function f(a, b) {
 ////    const x = 0;
 ////}
-////function g(a, b, c) { return a; }
-////f; g;
+////function g(a) { return a; }
+////function h(c) { return c; }
+////f; g; h;
 ////
 ////interface I {
 ////    m(x: number): void;
@@ -68,7 +69,8 @@ used1; used2;
 function f() {
 }
 function g(a) { return a; }
-f; g;
+function h(c) { return c; }
+f; g; h;
 
 interface I {
     m(x: number): void;
