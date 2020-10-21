@@ -120,3 +120,53 @@ const e2: T2 = "foo";
 >e2 : "foo"
 >"foo" : "foo"
 
+// Repro from #41133
+
+interface Car {
+    name: string;
+>name : string
+
+    seats: number;
+>seats : number
+
+    engine: Engine;
+>engine : Engine
+
+    wheels: Wheel[];
+>wheels : Wheel[]
+}
+
+interface Engine {
+    manufacturer: string;
+>manufacturer : string
+
+    horsepower: number;
+>horsepower : number
+}
+
+interface Wheel {
+    type: "summer" | "winter";
+>type : "summer" | "winter"
+
+    radius: number;
+>radius : number
+}
+
+type Primitive = string | number | boolean;
+>Primitive : Primitive
+
+type OnlyPrimitives<T> = { [K in keyof T as T[K] extends Primitive ? K : never]: T[K] };
+>OnlyPrimitives : OnlyPrimitives<T>
+
+let primitiveCar: OnlyPrimitives<Car>;  // { name: string; seats: number; }
+>primitiveCar : OnlyPrimitives<Car>
+
+let keys: keyof OnlyPrimitives<Car>;  //  "name" | "seats"
+>keys : "name" | "seats"
+
+type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
+>KeysOfPrimitives : keyof OnlyPrimitives<T>
+
+let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
+>carKeys : "name" | "seats"
+
