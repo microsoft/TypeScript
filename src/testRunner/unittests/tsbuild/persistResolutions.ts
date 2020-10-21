@@ -46,9 +46,31 @@ namespace ts {
                     subScenario: "Write file that could not be resolved",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "export function something2() { return 20; }"),
+                    // when doing clean build, fileNotFound.ts would be resolved so the output order in outFile.js would change
+                    // In build mode the out is generated only when there are no errors
+                    // Outputs are generated, buildinfo is updated to report no errors
+                    cleanBuildDiscrepancies: () => new Map([
+                        [`/src/project/src/filepresent.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/filepresent.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/filenotfound.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/filenotfound.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/anotherfilereusingresolution.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/anotherfilereusingresolution.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/main.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/main.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/newfile.js`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/src/newfile.d.ts`, CleanBuildDescrepancy.CleanFilePresent],
+                        [`/src/project/tsconfig.tsbuildinfo`, CleanBuildDescrepancy.CleanFileTextDifferent],
+                    ]),
                 },
                 {
                     subScenario: "Clean resolutions",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: noop,
+                    commandLineArgs: ["--b", "src/project", "--cleanPersistedProgram"]
+                },
+                {
+                    subScenario: "Clean resolutions again",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: noop,
                     commandLineArgs: ["--b", "src/project", "--cleanPersistedProgram"]
@@ -87,9 +109,23 @@ namespace ts {
                     subScenario: "Write file that could not be resolved",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => fs.writeFileSync(`/src/project/src/fileNotFound.ts`, "export function something2() { return 20; }"),
+                    // when doing clean build, fileNotFound.ts would be resolved so the output order in outFile.js would change
+                    // In build mode the out is generated only when there are no errors
+                    cleanBuildDiscrepancies: () => new Map([
+                        ["/src/project/outfile.tsbuildinfo", CleanBuildDescrepancy.CleanFileTextDifferent],
+                        ["/src/project/outfile.js", CleanBuildDescrepancy.CleanFilePresent],
+                        ["/src/project/outfile.d.ts", CleanBuildDescrepancy.CleanFilePresent],
+                        ["/src/project/outfile.tsbuildinfo.baseline.txt", CleanBuildDescrepancy.CleanFilePresent],
+                    ]),
                 },
                 {
                     subScenario: "Clean resolutions",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: noop,
+                    commandLineArgs: ["--b", "src/project", "--cleanPersistedProgram"]
+                },
+                {
+                    subScenario: "Clean resolutions again",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: noop,
                     commandLineArgs: ["--b", "src/project", "--cleanPersistedProgram"]

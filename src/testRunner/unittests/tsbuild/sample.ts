@@ -516,13 +516,19 @@ class someClass2 { }`),
                 subScenario: "persistResolutions",
                 baselinePrograms: true,
                 fs: () => projFs,
-                modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
-                    compilerOptions: {
-                        composite: true,
-                        skipDefaultLibCheck: true,
-                        persistResolutions: true,
+                modifyFs: fs => {
+                    persistResolutions("/src/core/tsconfig.json");
+                    persistResolutions("/src/logic/tsconfig.json");
+                    persistResolutions("/src/tests/tsconfig.json");
+                    function persistResolutions(file: string) {
+                        const content = JSON.parse(fs.readFileSync(file, "utf-8"));
+                        content.compilerOptions = {
+                            ...content.compilerOptions || {},
+                            persistResolutions: true
+                        };
+                        fs.writeFileSync(file, JSON.stringify(content, /*replacer*/ undefined, 4));
                     }
-                })),
+                },
                 commandLineArgs: ["--b", "/src/tests"],
                 incrementalScenarios: [
                     ...coreChanges,

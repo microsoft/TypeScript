@@ -28,13 +28,13 @@ namespace ts {
         if (!content) return emitSkippedWithNoDiagnostics;
         const buildInfo = getBuildInfo(content);
         if (buildInfo.version !== version) return emitSkippedWithNoDiagnostics;
-        if (!buildInfo.program) return emitSkippedWithNoDiagnostics;
-        // TODO:: Clean the actual program
-        let newContent = content;
+        if (!buildInfo.program?.peristedProgram) return emitSkippedWithNoDiagnostics;
+        const { program: { peristedProgram, ...program } } = buildInfo;
+        buildInfo.program = program;
 
         // Actual writeFile with new program
         const emitDiagnostics = createDiagnosticCollection();
-        writeFile(host, emitDiagnostics, buildInfoPath, newContent, /*writeByteOrderMark*/ false);
+        writeFile(host, emitDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false);
         return {
             emitSkipped: false,
             diagnostics: emitDiagnostics.getDiagnostics(),
