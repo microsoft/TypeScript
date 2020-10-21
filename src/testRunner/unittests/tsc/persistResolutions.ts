@@ -1,12 +1,14 @@
 namespace ts {
     describe("unittests:: tsc:: persistResolutions::", () => {
-        verifyTscSerializedIncrementalEdits({
-            scenario: "persistResolutions",
-            subScenario: `saves resolution and uses it for new program`,
-            fs: () => loadProjectFromFiles({
+        function getFs(outFile?: string) {
+            return loadProjectFromFiles({
                 "/src/project/src/main.ts": Utils.dedent`
-                        import { something } from "./filePresent";
-                        import { something2 } from "./fileNotFound";`,
+                    import { something } from "./filePresent";
+                    import { something as something1 } from "./filePresent";
+                    import { something2 } from "./fileNotFound";`,
+                "/src/project/src/anotherFileReusingResolution.ts": Utils.dedent`
+                    import { something } from "./filePresent";
+                    import { something2 } from "./fileNotFound";`,
                 "/src/project/src/filePresent.ts": `export function something() { return 10; }`,
                 "/src/project/tsconfig.json": JSON.stringify({
                     compilerOptions: {
@@ -14,10 +16,16 @@ namespace ts {
                         composite: true,
                         persistResolutions: true,
                         traceResolution: true,
+                        outFile
                     },
                     include: ["src/**/*.ts"]
                 }),
-            }),
+            });
+        }
+        verifyTscSerializedIncrementalEdits({
+            scenario: "persistResolutions",
+            subScenario: `saves resolution and uses it for new program`,
+            fs: getFs,
             commandLineArgs: ["--p", "src/project"],
             incrementalScenarios: [
                 noChangeRun,
@@ -58,22 +66,7 @@ namespace ts {
         verifyTscSerializedIncrementalEdits({
             scenario: "persistResolutions",
             subScenario: `saves resolution and uses it for new program with outFile`,
-            fs: () => loadProjectFromFiles({
-                "/src/project/src/main.ts": Utils.dedent`
-                        import { something } from "./filePresent";
-                        import { something2 } from "./fileNotFound";`,
-                "/src/project/src/filePresent.ts": `export function something() { return 10; }`,
-                "/src/project/tsconfig.json": JSON.stringify({
-                    compilerOptions: {
-                        module: "amd",
-                        composite: true,
-                        persistResolutions: true,
-                        traceResolution: true,
-                        outFile: "outFile.js"
-                    },
-                    include: ["src/**/*.ts"]
-                }),
-            }),
+            fs: () => getFs("outFile.js"),
             commandLineArgs: ["--p", "src/project"],
             incrementalScenarios: [
                 noChangeRun,
