@@ -34,12 +34,8 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n) || n.kind === SyntaxKind.EndOfFileToken) {
+            if (isDeclaration(n) || isVariableStatement(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
-            }
-
-            if (isFunctionExpressionAssignedToVariable(n)) {
-                addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
             }
 
             if (isFunctionLike(n) && isBinaryExpression(n.parent) && isPropertyAccessExpression(n.parent.left)) {
@@ -69,14 +65,6 @@ namespace ts.OutliningElementsCollector {
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
-        }
-
-        function isFunctionExpressionAssignedToVariable(n: Node) {
-            if (!isFunctionExpression(n) && !isArrowFunction(n)) {
-                return false;
-            }
-            const ancestor = findAncestor(n, isVariableStatement);
-            return !!ancestor && getSingleInitializerOfVariableStatementOrPropertyDeclaration(ancestor) === n;
         }
     }
 
@@ -300,7 +288,7 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
-    function functionSpan(node: FunctionLike, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
+    function functionSpan(node: SignatureDeclaration, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
         const openToken = tryGetFunctionOpenToken(node, body, sourceFile);
         const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
         return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
@@ -315,7 +303,7 @@ namespace ts.OutliningElementsCollector {
         return { textSpan, kind, hintSpan, bannerText, autoCollapse };
     }
 
-    function tryGetFunctionOpenToken(node: FunctionLike, body: Block, sourceFile: SourceFile): Node | undefined {
+    function tryGetFunctionOpenToken(node: SignatureDeclaration, body: Block, sourceFile: SourceFile): Node | undefined {
         if (isNodeArrayMultiLine(node.parameters, sourceFile)) {
             const openParenToken = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
             if (openParenToken) {

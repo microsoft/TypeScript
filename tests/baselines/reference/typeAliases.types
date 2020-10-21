@@ -72,13 +72,13 @@ var x7: T7;
 >x7 : C7
 
 type T8 = string | boolean;
->T8 : string | boolean
+>T8 : T8
 
 var x8: string | boolean;
->x8 : string | boolean
+>x8 : T8
 
 var x8: T8;
->x8 : string | boolean
+>x8 : T8
 
 type T9 = () => string;
 >T9 : T9

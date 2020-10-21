@@ -176,13 +176,16 @@ import * as ns from "./cls";
 export { ns as classContainer };
 import * as ns from "./cls";
 //// [cjs.d.ts]
-export const ns: typeof import("./cls");
+import ns = require("./cls");
+export { ns };
 //// [cjs2.d.ts]
 export = ns;
-declare const ns: typeof import("./cls");
+import ns = require("./cls");
 //// [cjs3.d.ts]
-export var ns: typeof import("./cls");
+export { ns };
+import ns = require("./cls");
 //// [cjs4.d.ts]
-export var names: typeof import("./cls");
+export { ns as names };
+import ns = require("./cls");
 //// [includeAll.d.ts]
 export {};

@@ -19,11 +19,11 @@ module.exports.C = C
 /** @param {X} c */
 function demo(c) {
 >demo : (c: X) => void
->c : C
+>c : import("tests/cases/conformance/jsdoc/mod1").C
 
     c.s
 >c.s : () => void
->c : C
+>c : import("tests/cases/conformance/jsdoc/mod1").C
 >s : () => void
 }
 

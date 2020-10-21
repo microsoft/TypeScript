@@ -263,6 +263,16 @@ namespace ts.server {
         return result;
     }
 
+    export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined {
+        let result: TypeAcquisition | undefined;
+        typeAcquisitionDeclarations.forEach((option) => {
+            const propertyValue = protocolOptions[option.name];
+            if (propertyValue === undefined) return;
+            (result || (result = {}))[option.name] = propertyValue;
+        });
+        return result;
+    }
+
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind {
         return isString(scriptKindName) ? convertScriptKindName(scriptKindName) : scriptKindName;
     }
@@ -396,7 +406,9 @@ namespace ts.server {
         pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -432,64 +444,105 @@ namespace ts.server {
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
+        fileName: string | undefined,
         cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.Find | ProjectReferenceProjectLoadKind.FindCreate,
     ): T | undefined;
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
+        fileName: string | undefined,
         cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason: string
     ): T | undefined;
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
+        fileName: string | undefined,
         cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason?: string
     ): T | undefined {
+        const resolvedRefs = project.getCurrentProgram()?.getResolvedProjectReferences();
+        if (!resolvedRefs) return undefined;
         let seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined;
-        return worker(project.getCurrentProgram()?.getResolvedProjectReferences(), project.getCompilerOptions());
-
-        function worker(resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined, parentOptions: CompilerOptions): T | undefined {
-            const loadKind = parentOptions.disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : projectReferenceProjectLoadKind;
-            return forEach(resolvedProjectReferences, ref => {
-                if (!ref) return undefined;
-
-                const configFileName = toNormalizedPath(ref.sourceFile.fileName);
-                const canonicalPath = project.projectService.toCanonicalFileName(configFileName);
-                const seenValue = seenResolvedRefs?.get(canonicalPath);
-                if (seenValue !== undefined && seenValue >= loadKind) {
-                    return undefined;
-                }
-                const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
-                    loadKind === ProjectReferenceProjectLoadKind.Find ?
-                        undefined :
-                        loadKind === ProjectReferenceProjectLoadKind.FindCreate ?
-                            project.projectService.createConfiguredProject(configFileName) :
-                            loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
-                                project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
-                                Debug.assertNever(loadKind)
+        const possibleDefaultRef = fileName ? project.getResolvedProjectReferenceToRedirect(fileName) : undefined;
+        if (possibleDefaultRef) {
+            // Try to find the name of the file directly through resolved project references
+            const configFileName = toNormalizedPath(possibleDefaultRef.sourceFile.fileName);
+            const child = project.projectService.findConfiguredProjectByProjectName(configFileName);
+            if (child) {
+                const result = cb(child);
+                if (result) return result;
+            }
+            else if (projectReferenceProjectLoadKind !== ProjectReferenceProjectLoadKind.Find) {
+                seenResolvedRefs = new Map();
+                // Try to see if this project can be loaded
+                const result = forEachResolvedProjectReferenceProjectWorker(
+                    resolvedRefs,
+                    project.getCompilerOptions(),
+                    (ref, loadKind) => possibleDefaultRef === ref ? callback(ref, loadKind) : undefined,
+                    projectReferenceProjectLoadKind,
+                    project.projectService,
+                    seenResolvedRefs
                 );
+                if (result) return result;
+                // Cleanup seenResolvedRefs
+                seenResolvedRefs.clear();
+            }
+        }
 
-                const result = child && cb(child);
-                if (result) {
-                    return result;
-                }
+        return forEachResolvedProjectReferenceProjectWorker(
+            resolvedRefs,
+            project.getCompilerOptions(),
+            (ref, loadKind) => possibleDefaultRef !== ref ? callback(ref, loadKind) : undefined,
+            projectReferenceProjectLoadKind,
+            project.projectService,
+            seenResolvedRefs
+        );
 
-                (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
-                return worker(ref.references, ref.commandLine.options);
-            });
+        function callback(ref: ResolvedProjectReference, loadKind: ProjectReferenceProjectLoadKind) {
+            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+            const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
+                loadKind === ProjectReferenceProjectLoadKind.Find ?
+                    undefined :
+                    loadKind === ProjectReferenceProjectLoadKind.FindCreate ?
+                        project.projectService.createConfiguredProject(configFileName) :
+                        loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
+                            project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
+                            Debug.assertNever(loadKind)
+            );
+
+            return child && cb(child);
         }
     }
 
-    /*@internal*/
-    export function forEachResolvedProjectReference<T>(
-        project: ConfiguredProject,
-        cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined
+    function forEachResolvedProjectReferenceProjectWorker<T>(
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[],
+        parentOptions: CompilerOptions,
+        cb: (resolvedRef: ResolvedProjectReference, loadKind: ProjectReferenceProjectLoadKind) => T | undefined,
+        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
+        projectService: ProjectService,
+        seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined,
     ): T | undefined {
-        const program = project.getCurrentProgram();
-        return program && program.forEachResolvedProjectReference(cb);
+        const loadKind = parentOptions.disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : projectReferenceProjectLoadKind;
+        return forEach(resolvedProjectReferences, ref => {
+            if (!ref) return undefined;
+
+            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+            const canonicalPath = projectService.toCanonicalFileName(configFileName);
+            const seenValue = seenResolvedRefs?.get(canonicalPath);
+            if (seenValue !== undefined && seenValue >= loadKind) {
+                return undefined;
+            }
+            const result = cb(ref, loadKind);
+            if (result) {
+                return result;
+            }
+
+            (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
+            return ref.references && forEachResolvedProjectReferenceProjectWorker(ref.references, ref.commandLine.options, cb, loadKind, projectService, seenResolvedRefs);
+        });
     }
 
     function forEachPotentialProjectReference<T>(
@@ -502,12 +555,12 @@ namespace ts.server {
 
     function forEachAnyProjectReferenceKind<T>(
         project: ConfiguredProject,
-        cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined,
+        cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
         cbProjectRef: (projectReference: ProjectReference) => T | undefined,
         cbPotentialProjectRef: (potentialProjectReference: Path) => T | undefined
     ): T | undefined {
         return project.getCurrentProgram() ?
-            forEachResolvedProjectReference(project, cb) :
+            project.forEachResolvedProjectReference(cb) :
             project.isInitialLoadPending() ?
                 forEachPotentialProjectReference(project, cbPotentialProjectRef) :
                 forEach(project.getProjectReferences(), cbProjectRef);
@@ -528,8 +581,8 @@ namespace ts.server {
     ): T | undefined {
         return forEachAnyProjectReferenceKind(
             project,
-            resolvedRef => callbackRefProject(project, cb, resolvedRef && resolvedRef.sourceFile.path),
-            projectRef => callbackRefProject(project, cb, project.toPath(projectRef.path)),
+            resolvedRef => callbackRefProject(project, cb, resolvedRef.sourceFile.path),
+            projectRef => callbackRefProject(project, cb, project.toPath(resolveProjectReferencePath(projectRef))),
             potentialProjectRef => callbackRefProject(project, cb, potentialProjectRef)
         );
     }
@@ -640,6 +693,8 @@ namespace ts.server {
         private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
         private watchOptionsForInferredProjects: WatchOptions | undefined;
         private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
+        private typeAcquisitionForInferredProjects: TypeAcquisition | undefined;
+        private typeAcquisitionForInferredProjectsPerProjectRoot = new Map<string, TypeAcquisition | undefined>();
         /**
          * Project size for configured or external projects
          */
@@ -683,7 +738,9 @@ namespace ts.server {
 
         public readonly typesMapLocation: string | undefined;
 
-        public readonly syntaxOnly?: boolean;
+        /** @deprecated use serverMode instead */
+        public readonly syntaxOnly: boolean;
+        public readonly serverMode: LanguageServiceMode;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = new Map<string, true>();
@@ -713,9 +770,19 @@ namespace ts.server {
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
-            this.syntaxOnly = opts.syntaxOnly;
+            if (opts.serverMode !== undefined) {
+                this.serverMode = opts.serverMode;
+                this.syntaxOnly = this.serverMode === LanguageServiceMode.Syntactic;
+            }
+            else if (opts.syntaxOnly) {
+                this.serverMode = LanguageServiceMode.Syntactic;
+                this.syntaxOnly = true;
+            }
+            else {
+                this.serverMode = LanguageServiceMode.Semantic;
+                this.syntaxOnly = false;
+            }
 
-            Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
                 this.realpathToScriptInfos = createMultiMap();
             }
@@ -749,7 +816,7 @@ namespace ts.server {
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
             this.packageJsonCache = createPackageJsonCache(this);
-            this.watchFactory = this.syntaxOnly ?
+            this.watchFactory = this.serverMode !== LanguageServiceMode.Semantic ?
                 {
                     watchFile: returnNoopFileWatcher,
                     watchFilePath: returnNoopFileWatcher,
@@ -968,11 +1035,12 @@ namespace ts.server {
             }
         }
 
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void {
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
             const watchOptions = convertWatchOptions(projectCompilerOptions);
+            const typeAcquisition = convertTypeAcquisition(projectCompilerOptions);
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
             // previously we did not expose a way for user to change these settings and this option was enabled by default
@@ -981,10 +1049,12 @@ namespace ts.server {
             if (canonicalProjectRootPath) {
                 this.compilerOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, compilerOptions);
                 this.watchOptionsForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, watchOptions || false);
+                this.typeAcquisitionForInferredProjectsPerProjectRoot.set(canonicalProjectRootPath, typeAcquisition);
             }
             else {
                 this.compilerOptionsForInferredProjects = compilerOptions;
                 this.watchOptionsForInferredProjects = watchOptions;
+                this.typeAcquisitionForInferredProjects = typeAcquisition;
             }
 
             for (const project of this.inferredProjects) {
@@ -1001,6 +1071,7 @@ namespace ts.server {
                     !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
                     project.setWatchOptions(watchOptions);
+                    project.setTypeAcquisition(typeAcquisition);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave!;
                     project.markAsDirty();
                     this.delayUpdateProjectGraph(project);
@@ -1727,7 +1798,7 @@ namespace ts.server {
          * the newly opened file.
          */
         private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
-            if (this.syntaxOnly) {
+            if (this.serverMode !== LanguageServiceMode.Semantic) {
                 return undefined;
             }
 
@@ -2284,13 +2355,18 @@ namespace ts.server {
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
             let watchOptions: WatchOptions | false | undefined;
+            let typeAcquisition: TypeAcquisition | undefined;
             if (projectRootPath) {
                 watchOptions = this.watchOptionsForInferredProjectsPerProjectRoot.get(projectRootPath);
+                typeAcquisition = this.typeAcquisitionForInferredProjectsPerProjectRoot.get(projectRootPath);
             }
             if (watchOptions === undefined) {
                 watchOptions = this.watchOptionsForInferredProjects;
             }
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
+            if (typeAcquisition === undefined) {
+                typeAcquisition = this.typeAcquisitionForInferredProjects;
+            }
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2840,6 +2916,7 @@ namespace ts.server {
                             if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
                                     project,
+                                    info.path,
                                     child => {
                                         reloadChildProject(child);
                                         return projectContainsInfoDirectly(child, info);
@@ -2850,6 +2927,7 @@ namespace ts.server {
                                     // Reload the project's tree that is already present
                                     forEachResolvedProjectReferenceProject(
                                         project,
+                                        /*fileName*/ undefined,
                                         reloadChildProject,
                                         ProjectReferenceProjectLoadKind.Find
                                     );
@@ -2955,11 +3033,12 @@ namespace ts.server {
                 // Find the project that is referenced from this solution that contains the script info directly
                 configuredProject = forEachResolvedProjectReferenceProject(
                     configuredProject,
+                    fileName,
                     child => {
                         updateProjectIfDirty(child);
                         return projectContainsOriginalInfo(child) ? child : undefined;
                     },
-                    configuredProject.getCompilerOptions().disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : ProjectReferenceProjectLoadKind.FindCreateLoad,
+                    ProjectReferenceProjectLoadKind.FindCreateLoad,
                     `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
                 );
                 if (!configuredProject) return undefined;
@@ -3014,15 +3093,7 @@ namespace ts.server {
             let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
             let projectForConfigFileDiag: ConfiguredProject | undefined;
             let defaultConfigProjectIsCreated = false;
-            if (this.syntaxOnly) {
-                // Invalidate resolutions in the file since this file is now open
-                info.containingProjects.forEach(project => {
-                    if (project.resolutionCache.removeRelativeNoResolveResolutionsOfFile(info.path)) {
-                        project.markAsDirty();
-                    }
-                });
-            }
-            else if (!project) { // Checking syntaxOnly is an optimization
+            if (!project && this.serverMode === LanguageServiceMode.Semantic) { // Checking semantic mode is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -3043,6 +3114,7 @@ namespace ts.server {
                     if (!projectContainsInfoDirectly(project, info)) {
                         forEachResolvedProjectReferenceProject(
                             project,
+                            info.path,
                             child => {
                                 updateProjectIfDirty(child);
                                 // Retain these projects
@@ -3109,10 +3181,6 @@ namespace ts.server {
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
             }
-            else if (this.syntaxOnly && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
-                // This file was just opened and references in this file will previously not been resolved so schedule update
-                info.containingProjects.forEach(project => project.markAsDirty());
-            }
             Debug.assert(!info.isOrphan());
             return { configFileName, configFileErrors, retainProjects };
         }
@@ -3161,32 +3229,37 @@ namespace ts.server {
             // Work on array copy as we could add more projects as part of callback
             for (const project of arrayFrom(this.configuredProjects.values())) {
                 // If this project has potential project reference for any of the project we are loading ancestor tree for
-                // we need to load this project tree
-                if (forEachPotentialProjectReference(
-                    project,
-                    potentialRefPath => forProjects!.has(potentialRefPath)
-                ) || forEachResolvedProjectReference(
-                    project,
-                    (_ref, resolvedPath) => forProjects!.has(resolvedPath)
-                )) {
-                    // Load children
-                    this.ensureProjectChildren(project, seenProjects);
+                // load this project first
+                if (forEachPotentialProjectReference(project, potentialRefPath => forProjects!.has(potentialRefPath))) {
+                    updateProjectIfDirty(project);
                 }
+                this.ensureProjectChildren(project, forProjects, seenProjects);
             }
         }
 
-        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Set<NormalizedPath>) {
+        private ensureProjectChildren(project: ConfiguredProject, forProjects: ReadonlyCollection<string>, seenProjects: Set<NormalizedPath>) {
             if (!tryAddToSet(seenProjects, project.canonicalConfigFilePath)) return;
-            // Update the project
-            updateProjectIfDirty(project);
 
-            // Create tree because project is uptodate we only care of resolved references
-            forEachResolvedProjectReferenceProject(
-                project,
-                child => this.ensureProjectChildren(child, seenProjects),
-                ProjectReferenceProjectLoadKind.FindCreateLoad,
-                `Creating project for reference of project: ${project.projectName}`
-            );
+            // If this project disables child load ignore it
+            if (project.getCompilerOptions().disableReferencedProjectLoad) return;
+
+            const children = project.getCurrentProgram()?.getResolvedProjectReferences();
+            if (!children) return;
+
+            for (const child of children) {
+                if (!child) continue;
+                const referencedProject = forEachResolvedProjectReference(child.references, ref => forProjects.has(ref.sourceFile.path) ? ref : undefined);
+                if (!referencedProject) continue;
+
+                // Load this project,
+                const configFileName = toNormalizedPath(child.sourceFile.fileName);
+                const childProject = project.projectService.findConfiguredProjectByProjectName(configFileName) ||
+                    project.projectService.createAndLoadConfiguredProject(configFileName, `Creating project referenced by : ${project.projectName} as it references project ${referencedProject.sourceFile.fileName}`);
+                updateProjectIfDirty(childProject);
+
+                // Ensure children for this project
+                this.ensureProjectChildren(childProject, forProjects, seenProjects);
+            }
         }
 
         private cleanupAfterOpeningFile(toRetainConfigProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
@@ -3325,7 +3398,7 @@ namespace ts.server {
         }
 
         private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
-            if (this.syntaxOnly || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
+            if (this.serverMode !== LanguageServiceMode.Semantic || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
                 return;
             }
 
@@ -3511,8 +3584,8 @@ namespace ts.server {
             const { rootFiles } = proj;
             const typeAcquisition = proj.typeAcquisition!;
             Debug.assert(!!typeAcquisition, "proj.typeAcquisition should be set by now");
-            // If type acquisition has been explicitly disabled, do not exclude anything from the project
-            if (typeAcquisition.enable === false) {
+
+            if (typeAcquisition.enable === false || typeAcquisition.disableFilenameBasedTypeAcquisition) {
                 return [];
             }
 
@@ -3637,7 +3710,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
+                    if (this.serverMode === LanguageServiceMode.Semantic && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }
@@ -3759,12 +3832,10 @@ namespace ts.server {
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
-            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const toPath = this.toPath.bind(this);
-            const rootPath = rootDir && toPath(rootDir);
-            const filePath = toPath(fileName);
+            const rootPath = rootDir && this.toPath(rootDir);
+            const filePath = this.toPath(fileName);
             const result: PackageJsonInfo[] = [];
-            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+            const processDirectory = (directory: Path): boolean | undefined => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again
                     case Ternary.Maybe:
@@ -3773,15 +3844,16 @@ namespace ts.server {
                     // Check package.json
                     case Ternary.True:
                         const packageJsonFileName = combinePaths(directory, "package.json");
-                        watchPackageJsonFile(packageJsonFileName);
+                        this.watchPackageJsonFile(packageJsonFileName as Path);
                         const info = packageJsonCache.getInDirectory(directory);
                         if (info) result.push(info);
                 }
-                if (rootPath && rootPath === toPath(directory)) {
+                if (rootPath && rootPath === this.toPath(directory)) {
                     return true;
                 }
-            });
+            };
 
+            forEachAncestorDirectory(getDirectoryPath(filePath), processDirectory);
             return result;
         }
 
@@ -3825,9 +3897,9 @@ namespace ts.server {
         /*@internal*/
         includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
             switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
-                case "none": return PackageJsonAutoImportPreference.None;
-                case "all": return PackageJsonAutoImportPreference.All;
-                default: return PackageJsonAutoImportPreference.ExcludeDevDependencies;
+                case "on": return PackageJsonAutoImportPreference.On;
+                case "off": return PackageJsonAutoImportPreference.Off;
+                default: return PackageJsonAutoImportPreference.Auto;
             }
         }
 

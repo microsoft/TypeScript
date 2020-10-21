@@ -57,7 +57,7 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 exports.testRecFun = exports.updateIfChanged = void 0;
-exports.updateIfChanged = function (t) {
+var updateIfChanged = function (t) {
     var reduce = function (u, update) {
         var set = function (newU) { return Object.is(u, newU) ? t : update(newU); };
         return Object.assign(function (key) {
@@ -69,8 +69,9 @@ exports.updateIfChanged = function (t) {
     };
     return reduce(t, function (t) { return t; });
 };
+exports.updateIfChanged = updateIfChanged;
 // example from https://github.com/microsoft/TypeScript/issues/31605
-exports.testRecFun = function (parent) {
+var testRecFun = function (parent) {
     return {
         result: parent,
         deeper: function (child) {
@@ -78,6 +79,7 @@ exports.testRecFun = function (parent) {
         }
     };
 };
+exports.testRecFun = testRecFun;
 var p1 = exports.testRecFun({ one: '1' });
 void p1.result.one;
 var p2 = p1.deeper({ two: '2' });

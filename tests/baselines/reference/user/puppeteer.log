@@ -1,0 +1,7 @@
+Exit Code: 2
+Standard output:
+src/common/Target.ts(95,21): error TS2322: Type '(value: boolean | PromiseLike<boolean>) => void' is not assignable to type '() => void'.
+
+
+
+Standard error:

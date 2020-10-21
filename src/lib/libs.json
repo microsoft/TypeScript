@@ -14,6 +14,7 @@
         "dom.iterable.generated",
         "webworker.generated",
         "webworker.importscripts",
+        "webworker.iterable.generated",
         "scripthost",
         // By-feature options
         "es2015.core",
@@ -42,12 +43,14 @@
         "es2019.symbol",
         "es2020.bigint",
         "es2020.promise",
+        "es2020.sharedmemory",
         "es2020.string",
         "es2020.symbol.wellknown",
         "es2020.intl",
         "esnext.intl",
         "esnext.string",
         "esnext.promise",
+        "esnext.weakref",
         // Default libraries
         "es5.full",
         "es2015.full",
@@ -62,6 +65,7 @@
         "dom.generated": "lib.dom.d.ts",
         "dom.iterable.generated": "lib.dom.iterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
+        "webworker.iterable.generated": "lib.webworker.iterable.d.ts",
         "es5.full": "lib.d.ts",
         "es2015.full": "lib.es6.d.ts"
     }

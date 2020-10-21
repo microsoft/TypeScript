@@ -110,10 +110,11 @@ namespace ts.refactor {
                     changes.insertNodeAfter(exportingSourceFile, exportKeyword, factory.createToken(SyntaxKind.DefaultKeyword));
                     break;
                 case SyntaxKind.VariableStatement:
-                    // If 'x' isn't used in this file, `export const x = 0;` --> `export default 0;`
-                    if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile)) {
+                    // If 'x' isn't used in this file and doesn't have type definition, `export const x = 0;` --> `export default 0;`
+                    const decl = first(exportNode.declarationList.declarations);
+                    if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile) && !decl.type) {
                         // We checked in `getInfo` that an initializer exists.
-                        changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDefault(Debug.checkDefined(first(exportNode.declarationList.declarations).initializer, "Initializer was previously known to be present")));
+                        changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDefault(Debug.checkDefined(decl.initializer, "Initializer was previously known to be present")));
                         break;
                     }
                     // falls through

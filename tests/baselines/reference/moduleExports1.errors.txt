@@ -1,5 +1,5 @@
-tests/cases/compiler/moduleExports1.ts(13,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
-tests/cases/compiler/moduleExports1.ts(13,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/compiler/moduleExports1.ts(13,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tests/cases/compiler/moduleExports1.ts(13,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 
 
 ==== tests/cases/compiler/moduleExports1.ts (2 errors) ====
@@ -17,6 +17,6 @@ tests/cases/compiler/moduleExports1.ts(13,22): error TS2580: Cannot find name 'm
     
     if (!module.exports) module.exports = "";
          ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                          ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
