@@ -7,6 +7,8 @@
 ////f(0, 1, { x: 1, y: 1 });
 ////function g(a, b, { x, y }) { b; }
 ////g;
+////function h(a, b?) { a; }
+////h(1);
 ////
 ////class C {
 ////    m(a, b, c) { b; }
@@ -35,6 +37,8 @@ verify.codeFixAll({
 f(0, 1, { x: 1, y: 1 });
 function g(b, {  }) { b; }
 g;
+function h(a) { a; }
+h(1);
 
 class C {
     m(a, b, c) { b; }
