@@ -6,7 +6,7 @@ lib/Compilation.js(37,7): error TS2440: Import declaration conflicts with local 
 lib/Compilation.js(49,7): error TS2440: Import declaration conflicts with local declaration of 'WebpackError'.
 lib/Compilation.js(53,7): error TS2440: Import declaration conflicts with local declaration of 'StatsFactory'.
 lib/Compilation.js(54,7): error TS2440: Import declaration conflicts with local declaration of 'StatsPrinter'.
-lib/ExportsInfo.js(1063,28): error TS1016: A required parameter cannot follow an optional parameter.
+lib/ExportsInfo.js(1092,28): error TS1016: A required parameter cannot follow an optional parameter.
 lib/FlagDependencyUsagePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/NormalModule.js(19,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
 lib/RuntimeTemplate.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'InitFragment'.
@@ -46,6 +46,12 @@ lib/library/EnableLibraryPlugin.js(139,12): error TS2300: Duplicate identifier '
 lib/library/EnableLibraryPlugin.js(150,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
 lib/optimize/SplitChunksPlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Chunk'.
 lib/runtime/LoadScriptRuntimeModule.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
+lib/util/registerExternalSerializer.js(319,16): error TS2339: Property 'errors' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(320,16): error TS2339: Property 'schema' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(322,17): error TS2339: Property 'headerName' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(323,25): error TS2339: Property 'baseDataPath' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(324,26): error TS2339: Property 'postFormatter' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(333,4): error TS2739: Type 'ValidationError' is missing the following properties from type 'typeof ValidationError': prototype, captureStackTrace, stackTraceLimit
 lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
 lib/webpack.js(10,7): error TS2440: Import declaration conflicts with local declaration of 'Compiler'.
 lib/webpack.js(11,7): error TS2440: Import declaration conflicts with local declaration of 'MultiCompiler'.
