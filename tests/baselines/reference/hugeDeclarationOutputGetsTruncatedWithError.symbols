@@ -1,0 +1,18 @@
+=== tests/cases/compiler/hugeDeclarationOutputGetsTruncatedWithError.ts ===
+type props = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z";
+>props : Symbol(props, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 0))
+
+type manyprops = `${props}${props}`;
+>manyprops : Symbol(manyprops, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 167))
+>props : Symbol(props, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 0))
+>props : Symbol(props, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 0))
+
+export const c = null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}};
+>c : Symbol(c, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 12))
+>K : Symbol(K, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 34))
+>manyprops : Symbol(manyprops, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 167))
+>K2 : Symbol(K2, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 53))
+>manyprops : Symbol(manyprops, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 167))
+>K : Symbol(K, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 34))
+>K2 : Symbol(K2, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 53))
+

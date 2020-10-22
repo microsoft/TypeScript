@@ -11,6 +11,7 @@
 //// * @property {number} x The prop
 //// * @param {number} x The param
 //// * @returns The result
+//// * @see x (the parameter)
 //// */
 ////function /**/foo(x) {}
 

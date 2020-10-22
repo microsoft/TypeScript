@@ -1,18 +1,24 @@
-//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+export const x = 10;function forlibfile1Rest() { }
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
-12:08:00 AM - Projects in this build: 
+[[90m12:08:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-12:08:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:08:00 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
 
-12:08:00 AM - Building project '/src/lib/tsconfig.json'...
+[[90m12:08:00 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-12:08:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:08:00 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-12:08:00 AM - Updating output of project '/src/app/tsconfig.json'...
+[[90m12:08:00 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
-12:08:00 AM - Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
+[[90m12:08:00 AM[0m] Updating unchanged output timestamps of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -91,7 +97,7 @@ appfile4Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -398,29 +404,80 @@ sourceFile:file3.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(60, 9) Source(3, 1) + SourceIndex(4)
 2 >Emitted(60, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(60, 42) Source(3, 48) + SourceIndex(4)
-4 >Emitted(60, 44) Source(3, 9) + SourceIndex(4)
-5 >Emitted(60, 52) Source(3, 10) + SourceIndex(4)
-6 >Emitted(60, 54) Source(3, 12) + SourceIndex(4)
-7 >Emitted(60, 78) Source(3, 48) + SourceIndex(4)
-8 >Emitted(60, 79) Source(3, 49) + SourceIndex(4)
+3 >Emitted(60, 18) Source(3, 24) + SourceIndex(4)
+4 >Emitted(60, 20) Source(3, 26) + SourceIndex(4)
+5 >Emitted(60, 21) Source(3, 27) + SourceIndex(4)
+6 >Emitted(60, 23) Source(3, 29) + SourceIndex(4)
+7 >Emitted(60, 25) Source(3, 31) + SourceIndex(4)
+8 >Emitted(60, 27) Source(3, 33) + SourceIndex(4)
+9 >Emitted(60, 28) Source(3, 34) + SourceIndex(4)
+10>Emitted(60, 30) Source(3, 36) + SourceIndex(4)
+11>Emitted(60, 32) Source(3, 38) + SourceIndex(4)
+12>Emitted(60, 34) Source(3, 40) + SourceIndex(4)
+13>Emitted(60, 36) Source(3, 42) + SourceIndex(4)
+14>Emitted(60, 38) Source(3, 44) + SourceIndex(4)
+15>Emitted(60, 40) Source(3, 46) + SourceIndex(4)
+16>Emitted(60, 42) Source(3, 48) + SourceIndex(4)
+17>Emitted(60, 44) Source(3, 9) + SourceIndex(4)
+18>Emitted(60, 45) Source(3, 10) + SourceIndex(4)
+19>Emitted(60, 52) Source(3, 10) + SourceIndex(4)
+20>Emitted(60, 54) Source(3, 15) + SourceIndex(4)
+21>Emitted(60, 58) Source(3, 19) + SourceIndex(4)
+22>Emitted(60, 72) Source(3, 7) + SourceIndex(4)
+23>Emitted(60, 77) Source(3, 21) + SourceIndex(4)
+24>Emitted(60, 78) Source(3, 48) + SourceIndex(4)
+25>Emitted(60, 79) Source(3, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -748,9 +805,6 @@ declare const myVar = 30;
 declare function appfile4Spread(...b: number[]): void;
 
 ======================================================================
-
-//// [/src/lib/file1.ts]
-export const x = 10;function forlibfile1Rest() { }
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents

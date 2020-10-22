@@ -16,7 +16,14 @@ function foo() {
 >o : Symbol(o, Decl(index.js, 2, 41))
 
     };
-    exports.methods = methods;
->exports : Symbol(methods, Decl(index.js, 4, 6))
->methods : Symbol(methods, Decl(index.js, 4, 6))
+    const m = function () {
+>m : Symbol(m, Decl(index.js, 5, 9))
+
+        // I have no idea what to put here
+    }
+    exports.methods = m;
+>exports : Symbol(methods, Decl(index.js, 7, 5))
+>methods : Symbol(methods, Decl(index.js, 7, 5))
+>m : Symbol(m, Decl(index.js, 5, 9))
 }
+

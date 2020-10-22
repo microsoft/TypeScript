@@ -1,21 +1,38 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/first/first_PART1.ts]
+/*@internal*/ interface TheFirst {
+    none: any;
+}
+
+const s = "Hola, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:04:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-12:04:00 AM - Building project '/src/first/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because oldest output 'src/2/second-output.js' is older than newest input 'src/first'
+[[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because oldest output 'src/2/second-output.js' is older than newest input 'src/first'
 
-12:04:00 AM - Building project '/src/second/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/second/tsconfig.json'...
 
-12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/second'
+[[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/second'
 
-12:04:00 AM - Building project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -3279,20 +3296,6 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ======================================================================
-
-//// [/src/first/first_PART1.ts]
-/*@internal*/ interface TheFirst {
-    none: any;
-}
-
-const s = "Hola, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare const s = "Hola, world";

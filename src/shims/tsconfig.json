@@ -4,6 +4,6 @@
         "outFile": "../../built/local/shims.js"
     },
     "files": [
-        "mapShim.ts"
+        "collectionShims.ts"
     ]
 }

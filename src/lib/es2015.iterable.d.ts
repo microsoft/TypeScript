@@ -154,7 +154,7 @@ interface Set<T> {
      */
     entries(): IterableIterator<[T, T]>;
     /**
-     * Despite its name, returns an iterable of the values in the set,
+     * Despite its name, returns an iterable of the values in the set.
      */
     keys(): IterableIterator<T>;
 
@@ -174,7 +174,7 @@ interface ReadonlySet<T> {
     entries(): IterableIterator<[T, T]>;
 
     /**
-     * Despite its name, returns an iterable of the values in the set,
+     * Despite its name, returns an iterable of the values in the set.
      */
     keys(): IterableIterator<T>;
 
@@ -200,22 +200,26 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
-    all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
+     * @returns A new Promise.
+     */
+    race<T>(values: Iterable<T>): Promise<T extends PromiseLike<infer U> ? U : T>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
-}
-
-declare namespace Reflect {
-    function enumerate(target: object): IterableIterator<any>;
 }
 
 interface String {

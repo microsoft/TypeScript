@@ -227,7 +227,8 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
+     * Matches a string or an object that supports being matched against, and returns an array
+     * containing the results of that search, or null if no matches are found.
      * @param matcher An object that supports being matched against.
      */
     match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
@@ -273,7 +274,7 @@ interface Int8Array {
 }
 
 interface Uint8Array {
-    readonly [Symbol.toStringTag]: "UInt8Array";
+    readonly [Symbol.toStringTag]: "Uint8Array";
 }
 
 interface Uint8ClampedArray {

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/tsconfig.json
+Input::
 //// [/a/app.ts]
 let x = 1
 
@@ -25,19 +25,23 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+/a/lib/tsc.js -w -p /a/tsconfig.json
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
+[96mtsconfig.json[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/a/tsconfig.json' is empty.
 
-tsconfig.json(1,24): error TS18002: The 'files' list in config file '/a/tsconfig.json' is empty.
+[7m1[0m {"compiler":{},"files":[]}
+[7m [0m [91m                       ~~[0m
 
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
-12:00:24 AM - Found 1 error. Watching for file changes.
 
 
 Program root files: []
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program structureReused: Not
 Program files::
 
 No cached semantic diagnostics in the builder::
@@ -53,3 +57,4 @@ FsWatchesRecursive::
   {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

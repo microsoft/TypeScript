@@ -36,6 +36,7 @@ namespace ts.projectSystem {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 replacementSpan: undefined,
+                isPackageJsonImport: undefined,
                 sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
             };
@@ -43,6 +44,7 @@ namespace ts.projectSystem {
                 isGlobalCompletion: true,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
+                optionalReplacementSpan: { start: { line: 1, offset: 1 }, end: { line: 1, offset: 4 } },
                 entries: [entry],
             });
 

@@ -1,5 +1,5 @@
-tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(3,22): error TS2339: Property 'values' does not exist on type 'ObjectConstructor'.
-tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(7,22): error TS2339: Property 'entries' does not exist on type 'ObjectConstructor'.
+tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(3,22): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
+tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(7,22): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
 
 
 ==== tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts (2 errors) ====
@@ -7,10 +7,10 @@ tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(7,22): error TS2339
     
     for (var x of Object.values(o)) {
                          ~~~~~~
-!!! error TS2339: Property 'values' does not exist on type 'ObjectConstructor'.
+!!! error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
         let y = x;
     }
     
     var entries = Object.entries(o);
                          ~~~~~~~
-!!! error TS2339: Property 'entries' does not exist on type 'ObjectConstructor'.
+!!! error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.

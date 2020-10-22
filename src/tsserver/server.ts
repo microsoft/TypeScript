@@ -31,6 +31,7 @@ namespace ts.server {
             }
             case "openbsd":
             case "freebsd":
+            case "netbsd":
             case "darwin":
             case "linux":
             case "android": {
@@ -229,10 +230,10 @@ namespace ts.server {
         private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
-        private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry = false;
-        private typesRegistryCache: Map<MapLike<string>> | undefined;
+        private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -322,7 +323,11 @@ namespace ts.server {
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
-            this.event({ pid: this.installer.pid }, "typingsInstallerPid");
+            // We have to schedule this event to the next tick
+            // cause this fn will be called during
+            // new IOSession => super(which is Session) => new ProjectService => NodeTypingsInstaller.attach
+            // and if "event" is referencing "this" before super class is initialized, it will be a ReferenceError in ES6 class.
+            this.host.setImmediate(() => this.event({ pid: this.installer.pid }, "typingsInstallerPid"));
 
             process.on("exit", () => {
                 this.installer.kill();
@@ -373,7 +378,7 @@ namespace ts.server {
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = createMapFromTemplate(response.typesRegistry);
+                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
@@ -480,21 +485,12 @@ namespace ts.server {
         private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
+        /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
         private constructed: boolean | undefined;
 
         constructor() {
-            const event: Event | undefined = (body: object, eventName: string) => {
-                if (this.constructed) {
-                    this.event(body, eventName);
-                }
-                else {
-                    // It is unsafe to dereference `this` before initialization completes,
-                    // so we defer until the next tick.
-                    //
-                    // Construction should finish before the next tick fires, so we do not need to do this recursively.
-                    // eslint-disable-next-line no-restricted-globals
-                    setImmediate(() => this.event(body, eventName));
-                }
+            const event = (body: object, eventName: string) => {
+                this.event(body, eventName);
             };
 
             const host = sys;
@@ -515,6 +511,7 @@ namespace ts.server {
                 canUseEvents: true,
                 suppressDiagnosticEvents,
                 syntaxOnly,
+                serverMode,
                 noGetErrOnBackgroundUpdate,
                 globalPlugins,
                 pluginProbeLocations,
@@ -837,7 +834,7 @@ namespace ts.server {
 
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
-        const statusCache = createMap<boolean>();
+        const statusCache = new Map<string, boolean>();
         sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
@@ -947,6 +944,26 @@ namespace ts.server {
         return arg.split(",").filter(name => name !== "");
     }
 
+    let unknownServerMode: string | undefined;
+    function parseServerMode(): LanguageServiceMode | undefined {
+        const mode = findArgument("--serverMode");
+        if (mode === undefined) {
+            return undefined;
+        }
+
+        switch (mode.toLowerCase()) {
+            case "semantic":
+                return LanguageServiceMode.Semantic;
+            case "partialsemantic":
+                return LanguageServiceMode.PartialSemantic;
+            case "syntactic":
+                return LanguageServiceMode.Syntactic;
+            default:
+                unknownServerMode = mode;
+                return undefined;
+        }
+    }
+
     const globalPlugins = parseStringArray("--globalPlugins");
     const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
@@ -956,6 +973,7 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const syntaxOnly = hasArgument("--syntaxOnly");
+    const serverMode = parseServerMode();
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
     const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
 
@@ -963,6 +981,7 @@ namespace ts.server {
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
     logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
 
     const ioSession = new IOSession();
     process.on("uncaughtException", err => {

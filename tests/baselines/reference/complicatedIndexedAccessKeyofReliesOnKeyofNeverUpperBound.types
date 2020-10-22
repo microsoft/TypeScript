@@ -53,7 +53,7 @@ export type NewChannel<T extends Channel> = Pick<T, 'type'> &
 
 
 export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {
->makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
+>makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T>>
 >type : T
 
     const localChannelId = `blahblahblah`;

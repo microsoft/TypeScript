@@ -545,7 +545,7 @@ function foo(x: Enum1) {
 }
 
 function bar(e: A.B.C.E): number {
->bar : (e: I) => number
+>bar : (e: A.B.C.E) => number
 >e : I
 >A : any
 >B : any

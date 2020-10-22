@@ -21,8 +21,8 @@ import * as DatastoreResult from "src/datastore_result";
 >DatastoreResult : typeof DatastoreResult
 
 export const build = (): DatastoreResult.T<string> => {
->build : () => import("lib/result").Result<Error, string>
->(): DatastoreResult.T<string> => {	return null;} : () => import("lib/result").Result<Error, string>
+>build : () => DatastoreResult.T<string>
+>(): DatastoreResult.T<string> => {	return null;} : () => DatastoreResult.T<string>
 >DatastoreResult : any
 
 	return null;

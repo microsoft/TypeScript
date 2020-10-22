@@ -17,7 +17,7 @@
 ////
 ////// export ... from ...
 ////[|{| "id": "exportDecl1" |}[|export|] [|type|] * [|from|] "[|{| "isWriteAccess": false, "isDefinition": false, "contextRangeId": "exportDecl1" |}./g|]";|]
-////[|{| "id": "exportDecl2" |}[|export|] [|type|] [|{| "id": "exportDecl2_namespaceExport" |}* [|as|] [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "exportDecl2_namespaceExport" |}H|]|] [|from|] "[|{| "isWriteAccess": false, "isDefinition": false, "contextRangeId": "exportDecl2" |}./h|]";|]
+////[|{| "id": "exportDecl2" |}[|export|] [|type|] [|{| "id": "exportDecl2_namespaceExport" |}* [|as|] [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "exportDecl2" |}H|]|] [|from|] "[|{| "isWriteAccess": false, "isDefinition": false, "contextRangeId": "exportDecl2" |}./h|]";|]
 ////[|{| "id": "exportDecl3" |}[|export|] [|type|] { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "exportDecl3" |}I|] } [|from|] "[|{| "isWriteAccess": false, "isDefinition": false, "contextRangeId": "exportDecl3" |}./i|]";|]
 ////[|{| "id": "exportDecl4" |}[|export|] [|type|] { j1, j2 [|as|] [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "exportDecl4" |}j3|] } [|from|] "[|{| "isWriteAccess": false, "isDefinition": false, "contextRangeId": "exportDecl4" |}./j|]";|]
 ////[|{| "id": "typeDecl1" |}type [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "typeDecl1" |}Z1|] = 1;|]

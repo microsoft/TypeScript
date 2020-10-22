@@ -1,16 +1,47 @@
-//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+/*@internal*/ export const x = 10;
+export class normalC {
+    /*@internal*/ constructor() { }
+    /*@internal*/ prop: string;
+    /*@internal*/ method() { }
+    /*@internal*/ get c() { return 10; }
+    /*@internal*/ set c(val: number) { }
+}
+export namespace normalN {
+    /*@internal*/ export class C { }
+    /*@internal*/ export function foo() {}
+    /*@internal*/ export namespace someNamespace { export class C {} }
+    /*@internal*/ export namespace someOther.something { export class someClass {} }
+    /*@internal*/ export import someImport = someNamespace.C;
+    /*@internal*/ export type internalType = internalC;
+    /*@internal*/ export const internalConst = 10;
+    /*@internal*/ export enum internalEnum { a, b, c }
+}
+/*@internal*/ export class internalC {}
+/*@internal*/ export function internalfoo() {}
+/*@internal*/ export namespace internalNamespace { export class someClass {} }
+/*@internal*/ export namespace internalOther.something { export class someClass {} }
+/*@internal*/ export import internalImport = internalNamespace.someClass;
+/*@internal*/ export type internalType = internalC;
+/*@internal*/ export const internalConst = 10;
+/*@internal*/ export enum internalEnum { a, b, c }
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
-12:08:00 AM - Projects in this build: 
+[[90m12:08:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-12:08:00 AM - Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
+[[90m12:08:00 AM[0m] Project 'src/lib/tsconfig.json' is out of date because oldest output 'src/lib/module.js' is older than newest input 'src/lib/file1.ts'
 
-12:08:00 AM - Building project '/src/lib/tsconfig.json'...
+[[90m12:08:00 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-12:08:00 AM - Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:08:00 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-12:08:00 AM - Updating output of project '/src/app/tsconfig.json'...
+[[90m12:08:00 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2068,34 +2099,6 @@ declare module "file3" {
 declare const myVar = 30;
 
 ======================================================================
-
-//// [/src/lib/file1.ts]
-/*@internal*/ export const x = 10;
-export class normalC {
-    /*@internal*/ constructor() { }
-    /*@internal*/ prop: string;
-    /*@internal*/ method() { }
-    /*@internal*/ get c() { return 10; }
-    /*@internal*/ set c(val: number) { }
-}
-export namespace normalN {
-    /*@internal*/ export class C { }
-    /*@internal*/ export function foo() {}
-    /*@internal*/ export namespace someNamespace { export class C {} }
-    /*@internal*/ export namespace someOther.something { export class someClass {} }
-    /*@internal*/ export import someImport = someNamespace.C;
-    /*@internal*/ export type internalType = internalC;
-    /*@internal*/ export const internalConst = 10;
-    /*@internal*/ export enum internalEnum { a, b, c }
-}
-/*@internal*/ export class internalC {}
-/*@internal*/ export function internalfoo() {}
-/*@internal*/ export namespace internalNamespace { export class someClass {} }
-/*@internal*/ export namespace internalOther.something { export class someClass {} }
-/*@internal*/ export import internalImport = internalNamespace.someClass;
-/*@internal*/ export type internalType = internalC;
-/*@internal*/ export const internalConst = 10;
-/*@internal*/ export enum internalEnum { a, b, c }
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map]

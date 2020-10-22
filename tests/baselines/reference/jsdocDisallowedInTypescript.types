@@ -8,7 +8,7 @@ var ara: Array.<number> = [1,2,3];
 >3 : 3
 
 function f(x: ?number, y: Array.<number>) {
->f : (x: number | null, y: number[]) => number
+>f : (x: number | null, y: Array<number>) => number
 >x : number | null
 >y : number[]
 

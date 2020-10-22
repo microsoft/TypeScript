@@ -90,12 +90,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >storedAs : any
 
       storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>;
->storedAsJsonEncodedRedisString : () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>
+>storedAsJsonEncodedRedisString : () => BuildPubSubRecordType<SO_FAR & {    storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString;}>
 >storedAs : PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString
 >PubSubRecordIsStoredInRedisAsA : any
 
       storedRedisHash: () => BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>;
->storedRedisHash : () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>
+>storedRedisHash : () => BuildPubSubRecordType<SO_FAR & {    storedAs: PubSubRecordIsStoredInRedisAsA.redisHash;}>
 >storedAs : PubSubRecordIsStoredInRedisAsA.redisHash
 >PubSubRecordIsStoredInRedisAsA : any
     }
@@ -286,12 +286,12 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >maxMsToWaitBeforePublishing : any
 
       maxMsToWaitBeforePublishing: (t: number) => BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
->maxMsToWaitBeforePublishing : (t: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
+>maxMsToWaitBeforePublishing : (t: number) => BuildPubSubRecordType<SO_FAR & {    maxMsToWaitBeforePublishing: number;}>
 >t : number
 >maxMsToWaitBeforePublishing : number
 
       neverDelayPublishing: () => BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
->neverDelayPublishing : () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>
+>neverDelayPublishing : () => BuildPubSubRecordType<SO_FAR & {    maxMsToWaitBeforePublishing: 0;}>
 >maxMsToWaitBeforePublishing : 0
     }
   

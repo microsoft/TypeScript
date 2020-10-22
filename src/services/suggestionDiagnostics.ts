@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    const visitedNestedConvertibleFunctions = createMap<true>();
+    const visitedNestedConvertibleFunctions = new Map<string, true>();
 
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
@@ -37,7 +37,7 @@ namespace ts {
 
         function check(node: Node) {
             if (isJsFile) {
-                if (canBeConvertedToClass(node)) {
+                if (canBeConvertedToClass(node, checker)) {
                     diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                 }
             }
@@ -133,7 +133,7 @@ namespace ts {
         return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement & { expression: CallExpression } {
         return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 
@@ -156,7 +156,18 @@ namespace ts {
     }
 
     function isPromiseHandler(node: Node): node is CallExpression {
-        return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+        return isCallExpression(node) && (
+            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
+            hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    function hasSupportedNumberOfArguments(node: CallExpression) {
+        if (node.arguments.length > 2) return false;
+        if (node.arguments.length < 2) return true;
+        return some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword ||
+                isIdentifier(arg) && arg.text === "undefined";
+        });
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
@@ -179,14 +190,13 @@ namespace ts {
         return `${exp.pos.toString()}:${exp.end.toString()}`;
     }
 
-    function canBeConvertedToClass(node: Node): boolean {
+    function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
         if (node.kind === SyntaxKind.FunctionExpression) {
             if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
                 return true;
             }
 
-            const decl = getDeclarationOfExpando(node);
-            const symbol = decl?.symbol;
+            const symbol = checker.getSymbolOfExpando(node, /*allowDeclaration*/ false);
             return !!(symbol && (symbol.exports?.size || symbol.members?.size));
         }
 

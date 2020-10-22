@@ -3,10 +3,14 @@ Standard output:
 
 > xterm@X.X.X build /xtermjs
 > tsc -b ./tsconfig.all.json
-node_modules/@types/ws/index.d.ts(44,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
-node_modules/@types/ws/index.d.ts(45,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
-node_modules/@types/ws/index.d.ts(44,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
-node_modules/@types/ws/index.d.ts(45,39): error TS2694: Namespace '"url"' has no exported member 'URL'.
+addons/xterm-addon-ligatures/src/font.ts(6,29): error TS2307: Cannot find module 'font-finder' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/font.ts(7,32): error TS2307: Cannot find module 'font-ligatures' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.ts(7,22): error TS2307: Cannot find module 'font-ligatures' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.ts(75,14): error TS2347: Untyped function calls may not accept type arguments.
+addons/xterm-addon-ligatures/src/index.ts(76,9): error TS7006: Parameter 'range' implicitly has an 'any' type.
+addons/xterm-addon-ligatures/src/index.test.ts(7,24): error TS2307: Cannot find module 'sinon' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.test.ts(9,29): error TS2307: Cannot find module 'font-finder' or its corresponding type declarations.
+addons/xterm-addon-ligatures/src/index.test.ts(10,32): error TS2307: Cannot find module 'font-ligatures' or its corresponding type declarations.
 
 
 

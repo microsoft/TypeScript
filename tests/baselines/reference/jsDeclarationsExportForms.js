@@ -84,8 +84,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./cls"), exports);
 //// [bar2.js]
@@ -98,8 +98,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./func"), exports);
 __exportStar(require("./cls"), exports);
@@ -176,13 +176,16 @@ import * as ns from "./cls";
 export { ns as classContainer };
 import * as ns from "./cls";
 //// [cjs.d.ts]
-export const ns: typeof import("./cls");
+import ns = require("./cls");
+export { ns };
 //// [cjs2.d.ts]
 export = ns;
-declare const ns: typeof import("./cls");
+import ns = require("./cls");
 //// [cjs3.d.ts]
-export var ns: typeof import("./cls");
+export { ns };
+import ns = require("./cls");
 //// [cjs4.d.ts]
-export var names: typeof import("./cls");
+export { ns as names };
+import ns = require("./cls");
 //// [includeAll.d.ts]
 export {};

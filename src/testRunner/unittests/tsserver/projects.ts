@@ -27,7 +27,7 @@ namespace ts.projectSystem {
                 { diagnosticMessage: Diagnostics.File_0_not_found, errorTextArguments: [commonFile2.path] }
             ]);
 
-            host.reloadFS([file1, commonFile2, libFile]);
+            host.writeFile(commonFile2.path, commonFile2.content);
             host.runQueuedTimeoutCallbacks();
             checkNumberOfInferredProjects(projectService, 1);
             assert.strictEqual(projectService.inferredProjects[0], project, "Inferred project should be same");
@@ -56,7 +56,7 @@ namespace ts.projectSystem {
                 "compilerOptions": {},
                 "files": ["${commonFile1.path}"]
             }`;
-            host.reloadFS(files);
+            host.writeFile(configFile.path, configFile.content);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
@@ -302,16 +302,11 @@ namespace ts.projectSystem {
             const inferredProject1 = projectService.inferredProjects[1];
             checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
 
-            const modifiedFile2 = {
-                path: file2.path,
-                content: `export * from "../c/f3"` // now inferred project should inclule file3
-            };
-
-            host.reloadFS([file1, modifiedFile2, file3]);
+            host.writeFile(file2.path, `export * from "../c/f3"`); // now inferred project should inclule file3
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             assert.strictEqual(projectService.inferredProjects[0], inferredProject0);
-            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, modifiedFile2.path, file3.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path]);
             assert.strictEqual(projectService.inferredProjects[1], inferredProject1);
             assert.isTrue(inferredProject1.isOrphan());
         });
@@ -341,7 +336,7 @@ namespace ts.projectSystem {
             projectService.openClientFile(file3.path);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
 
-            host.reloadFS([file1, file3]);
+            host.deleteFile(file2.path);
             host.checkTimeoutQueueLengthAndRun(2);
 
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
@@ -621,7 +616,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
-            host.reloadFS([file1, file2]);
+            host.deleteFile(config.path);
             host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
@@ -1182,7 +1177,7 @@ namespace ts.projectSystem {
             });
 
             file2.content += "export let z = 10;";
-            host.reloadFS(files);
+            host.writeFile(file2.path, file2.content);
             // Do not let the timeout runs, before executing command
             const startOffset = file2.content.indexOf("y") + 1;
             session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
@@ -1277,14 +1272,14 @@ namespace ts.projectSystem {
                 files: ["src/file1.ts"]
             });
             config.content = configContent2;
-            host.reloadFS(files);
+            host.writeFile(config.path, config.content);
             host.runQueuedTimeoutCallbacks();
 
             checkProjectActualFiles(service.configuredProjects.get(config.path)!, [file1.path, libFile.path, config.path]);
             verifyFile2InfoIsOrphan();
 
             file2.content += "export let z = 10;";
-            host.reloadFS(files);
+            host.writeFile(file2.path, file2.content);
             host.runQueuedTimeoutCallbacks();
 
             checkProjectActualFiles(service.configuredProjects.get(config.path)!, [file1.path, libFile.path, config.path]);
@@ -1518,7 +1513,9 @@ namespace ts.projectSystem {
 
             // This should schedule 2 timeouts for ensuring project structure and ensuring projects for open file
             const filesWithFileA = files.map(f => f === fileSubA ? fileA : f);
-            host.reloadFS(files.map(f => f === fileSubA ? fileA : f));
+            host.deleteFile(fileSubA.path);
+            host.deleteFolder(getDirectoryPath(fileSubA.path));
+            host.writeFile(fileA.path, fileA.content);
             host.checkTimeoutQueueLength(2);
 
             closeFilesForSession([fileSubA], session);
@@ -1555,16 +1552,14 @@ namespace ts.projectSystem {
             host.fileExists = originalFileExists;
 
             // Actually trigger the file move
-            host.reloadFS(files);
+            host.deleteFile(fileA.path);
+            host.ensureFileOrFolder(fileSubA);
             host.checkTimeoutQueueLength(2);
 
-            verifyGetErrRequest({
+            verifyGetErrRequestNoErrors({
                 session,
                 host,
-                expected: [
-                    { file: fileB, syntax: [], semantic: [], suggestion: [] },
-                    { file: fileSubA, syntax: [], semantic: [], suggestion: [] },
-                ],
+                files: [fileB, fileSubA],
                 existingTimeouts: 2,
                 onErrEvent: () => assert.isFalse(hasErrorMsg())
             });
@@ -1589,6 +1584,35 @@ namespace ts.projectSystem {
             catch (e) {
                 assert.isTrue(e.message.indexOf("Debug Failure. False expression: Found script Info still attached to project") === 0);
             }
+        });
+        it("does not look beyond node_modules folders for default configured projects", () => {
+            const rootFilePath = server.asNormalizedPath("/project/index.ts");
+            const rootProjectPath = server.asNormalizedPath("/project/tsconfig.json");
+            const nodeModulesFilePath1 = server.asNormalizedPath("/project/node_modules/@types/a/index.d.ts");
+            const nodeModulesProjectPath1 = server.asNormalizedPath("/project/node_modules/@types/a/tsconfig.json");
+            const nodeModulesFilePath2 = server.asNormalizedPath("/project/node_modules/@types/b/index.d.ts");
+            const serverHost = createServerHost([
+                { path: rootFilePath, content: "import 'a'; import 'b';" },
+                { path: rootProjectPath, content: "{}" },
+                { path: nodeModulesFilePath1, content: "{}" },
+                { path: nodeModulesProjectPath1, content: "{}" },
+                { path: nodeModulesFilePath2, content: "{}" },
+            ]);
+            const projectService = createProjectService(serverHost, { useSingleInferredProject: true });
+
+            const openRootFileResult = projectService.openClientFile(rootFilePath);
+            assert.strictEqual(openRootFileResult.configFileName?.toString(), rootProjectPath);
+
+            const openNodeModulesFileResult1 = projectService.openClientFile(nodeModulesFilePath1);
+            assert.strictEqual(openNodeModulesFileResult1.configFileName?.toString(), nodeModulesProjectPath1);
+
+            const openNodeModulesFileResult2 = projectService.openClientFile(nodeModulesFilePath2);
+            assert.isUndefined(openNodeModulesFileResult2.configFileName);
+
+            const rootProject = projectService.findProject(rootProjectPath)!;
+            checkProjectActualFiles(rootProject, [rootProjectPath, rootFilePath, nodeModulesFilePath1, nodeModulesFilePath2]);
+
+            checkNumberOfInferredProjects(projectService, 0);
         });
     });
 }

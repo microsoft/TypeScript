@@ -60,33 +60,51 @@ sourceFile:ES5For-of26.ts
 4 >                   ^^
 5 >                     ^^^^^^^^^^
 6 >                               ^^
-7 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                           ^^
-9 >                                                             ^^^^^^^^^^
-10>                                                                       ^^
-11>                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 >                                 ^
+8 >                                  ^^^^^^^^^^^^^^^^^^^
+9 >                                                     ^
+10>                                                      ^^^^^
+11>                                                           ^^
+12>                                                             ^^^^^^^^^^
+13>                                                                       ^^
+14>                                                                         ^
+15>                                                                          ^^^^^^^^^^^^^^^^^^^
+16>                                                                                             ^
+17>                                                                                              ^^^^^
 1->
 2 >    
 3 >        [a = 0, b = 1]
 4 >                   
 5 >                     a = 0
 6 >                               
-7 >                                 a = 0
-8 >                                                           , 
-9 >                                                             b = 1
-10>                                                                       
-11>                                                                         b = 1
+7 >                                 a
+8 >                                   = 
+9 >                                                     0
+10>                                                      
+11>                                                           , 
+12>                                                             b = 1
+13>                                                                       
+14>                                                                         b
+15>                                                                           = 
+16>                                                                                             1
+17>                                                                                              
 1->Emitted(2, 5) Source(1, 10) + SourceIndex(0)
 2 >Emitted(2, 9) Source(1, 10) + SourceIndex(0)
 3 >Emitted(2, 20) Source(1, 24) + SourceIndex(0)
 4 >Emitted(2, 22) Source(1, 11) + SourceIndex(0)
 5 >Emitted(2, 32) Source(1, 16) + SourceIndex(0)
 6 >Emitted(2, 34) Source(1, 11) + SourceIndex(0)
-7 >Emitted(2, 60) Source(1, 16) + SourceIndex(0)
-8 >Emitted(2, 62) Source(1, 18) + SourceIndex(0)
-9 >Emitted(2, 72) Source(1, 23) + SourceIndex(0)
-10>Emitted(2, 74) Source(1, 18) + SourceIndex(0)
-11>Emitted(2, 100) Source(1, 23) + SourceIndex(0)
+7 >Emitted(2, 35) Source(1, 12) + SourceIndex(0)
+8 >Emitted(2, 54) Source(1, 15) + SourceIndex(0)
+9 >Emitted(2, 55) Source(1, 16) + SourceIndex(0)
+10>Emitted(2, 60) Source(1, 16) + SourceIndex(0)
+11>Emitted(2, 62) Source(1, 18) + SourceIndex(0)
+12>Emitted(2, 72) Source(1, 23) + SourceIndex(0)
+13>Emitted(2, 74) Source(1, 18) + SourceIndex(0)
+14>Emitted(2, 75) Source(1, 19) + SourceIndex(0)
+15>Emitted(2, 94) Source(1, 22) + SourceIndex(0)
+16>Emitted(2, 95) Source(1, 23) + SourceIndex(0)
+17>Emitted(2, 100) Source(1, 23) + SourceIndex(0)
 ---
 >>>    a;
 1 >^^^^

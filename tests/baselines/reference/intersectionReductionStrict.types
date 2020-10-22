@@ -250,8 +250,8 @@ t2 = t1;
 // Repro from #36736
 
 const f1 = (t: "a" | ("b" & "c")): "a" => t;
->f1 : (t: "a") => "a"
->(t: "a" | ("b" & "c")): "a" => t : (t: "a") => "a"
+>f1 : (t: "a" | ("b" & "c")) => "a"
+>(t: "a" | ("b" & "c")): "a" => t : (t: "a" | ("b" & "c")) => "a"
 >t : "a"
 >t : "a"
 
@@ -263,21 +263,21 @@ type Container<Type extends string> = {
 }
 
 const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
->f2 : (t: Container<"a">) => Container<"a">
->(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a">) => Container<"a">
+>f2 : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
+>(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
 >t : Container<"a">
 >t : Container<"a">
 
 const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
->f3 : (t: Container<"a">) => Container<"a">
->(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a">) => Container<"a">
+>f3 : (t: Container<"a"> | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => Container<"a">
+>(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => Container<"a">
 >t : Container<"a">
 >dataB : boolean
 >t : Container<"a">
 
 const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
->f4 : (t: number) => number
->(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number) => number
+>f4 : (t: number | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => number
+>(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => number
 >t : number
 >dataB : boolean
 >t : number

@@ -22,29 +22,29 @@ foo(function(x) { x });
 >v : Symbol(v, Decl(targetTypeArgs.ts, 6, 21))
 
 ["hello"].every(function(v,i,a) {return true;});
->["hello"].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>["hello"].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 7, 25))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 7, 27))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 7, 29))
 
 [1].every(function(v,i,a) {return true;});
->[1].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>[1].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 8, 19))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 8, 21))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 8, 23))
 
 [1].every(function(v,i,a) {return true;});
->[1].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>[1].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 9, 19))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 9, 21))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 9, 23))
 
 ["s"].every(function(v,i,a) {return true;});
->["s"].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>["s"].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 10, 21))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 10, 23))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 10, 25))

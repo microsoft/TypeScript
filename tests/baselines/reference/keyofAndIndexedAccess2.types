@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
->f1 : (obj: { a: number; b: 0 | 1; c: string; }, k0: "a", k1: "a" | "b", k2: "a" | "b" | "c") => void
+>f1 : (obj: {    a: number;    b: 0 | 1;    c: string;}, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') => void
 >obj : { a: number; b: 0 | 1; c: string; }
 >a : number
 >b : 0 | 1
@@ -74,7 +74,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 }
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
->f2 : <T extends { [key: string]: number; }>(a: { x: number; y: number; }, b: { [key: string]: number; }, c: T, k: keyof T) => void
+>f2 : <T extends { [key: string]: number; }>(a: {    x: number;    y: number;}, b: { [key: string]: number; }, c: T, k: keyof T) => void
 >key : string
 >a : { x: number; y: number; }
 >x : number
@@ -233,7 +233,7 @@ type Item = { a: string, b: number };
 >b : number
 
 function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
->f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: "a" | "b", k3: keyof T, k4: K) => void
+>f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
 >obj : T
 >k1 : string
 >k2 : "a" | "b"
@@ -273,7 +273,7 @@ type Dict = Record<string, number>;
 >Dict : Record<string, number>
 
 function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
->f11 : <K extends string>(obj: Record<string, number>, k1: string, k2: K) => void
+>f11 : <K extends string>(obj: Dict, k1: keyof Dict, k2: K) => void
 >obj : Record<string, number>
 >k1 : string
 >k2 : K
@@ -301,7 +301,7 @@ function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 }
 
 function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
->f12 : <T extends Readonly<Record<string, number>>, K extends keyof T>(obj: T, k1: string, k2: keyof T, k3: K) => void
+>f12 : <T extends Readonly<Record<string, number>>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
 >obj : T
 >k1 : string
 >k2 : keyof T
@@ -344,11 +344,11 @@ export interface Entity {
 }
 
 export type IdOf<E extends Entity> = E['id'];
->IdOf : E["id"]
+>IdOf : IdOf<E>
 
 export interface EntityState<E extends Entity> {
     ids: IdOf<E>[];
->ids : E["id"][]
+>ids : IdOf<E>[]
 
     entities: { [key: string]: E, [key: number]: E };
 >entities : { [key: string]: E; [key: number]: E; }
@@ -362,48 +362,48 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >state : EntityState<E>
 
     const { ids, entities } = state;
->ids : E["id"][]
+>ids : IdOf<E>[]
 >entities : { [key: string]: E; [key: number]: E; }
 >state : EntityState<E>
 
     return ids.map(id => entities[id]);
->ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[E["id"]][]
->ids.map : <U>(callbackfn: (value: E["id"], index: number, array: E["id"][]) => U, thisArg?: any) => U[]
->ids : E["id"][]
->map : <U>(callbackfn: (value: E["id"], index: number, array: E["id"][]) => U, thisArg?: any) => U[]
->id => entities[id] : (id: E["id"]) => { [key: string]: E; [key: number]: E; }[E["id"]]
->id : E["id"]
->entities[id] : { [key: string]: E; [key: number]: E; }[E["id"]]
+>ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[IdOf<E>][]
+>ids.map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
+>ids : IdOf<E>[]
+>map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
+>id => entities[id] : (id: IdOf<E>) => { [key: string]: E; [key: number]: E; }[IdOf<E>]
+>id : IdOf<E>
+>entities[id] : { [key: string]: E; [key: number]: E; }[IdOf<E>]
 >entities : { [key: string]: E; [key: number]: E; }
->id : E["id"]
+>id : IdOf<E>
 }
 
 export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
->getEntity : <E extends Entity>(id: E["id"], state: EntityState<E>) => E | undefined
->id : E["id"]
+>getEntity : <E extends Entity>(id: IdOf<E>, state: EntityState<E>) => E | undefined
+>id : IdOf<E>
 >state : EntityState<E>
 
     const { ids, entities } = state;
->ids : E["id"][]
+>ids : IdOf<E>[]
 >entities : { [key: string]: E; [key: number]: E; }
 >state : EntityState<E>
 
     if (!ids.includes(id)) {
 >!ids.includes(id) : boolean
 >ids.includes(id) : boolean
->ids.includes : (searchElement: E["id"], fromIndex?: number | undefined) => boolean
->ids : E["id"][]
->includes : (searchElement: E["id"], fromIndex?: number | undefined) => boolean
->id : E["id"]
+>ids.includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
+>ids : IdOf<E>[]
+>includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
+>id : IdOf<E>
 
         return undefined;
 >undefined : undefined
     }
 
     return entities[id];
->entities[id] : { [key: string]: E; [key: number]: E; }[E["id"]]
+>entities[id] : { [key: string]: E; [key: number]: E; }[IdOf<E>]
 >entities : { [key: string]: E; [key: number]: E; }
->id : E["id"]
+>id : IdOf<E>
 }
 
 // Repro from #30603
@@ -440,11 +440,11 @@ type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 // Repros from #30938
 
 function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
->fn : <T extends { elements: string[]; } | { elements: number[]; }>(param: T, cb: (element: T["elements"][number]) => void) => void
+>fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T['elements'][number]) => void) => void
 >elements : string[]
 >elements : number[]
 >param : T
->cb : (element: T["elements"][number]) => void
+>cb : (element: T['elements'][number]) => void
 >element : T["elements"][number]
 
     cb(param.elements[0]);
@@ -555,7 +555,7 @@ for (const action of actions) {
 
 	window[action] = (x, y) => {
 >window[action] = (x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
->window[action] : ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
+>window[action] : ((width: number, height: number) => void) & ((width: number, height: number) => void) & ((x: number, y: number) => void) & ((x: number, y: number) => void)
 >window : Window & typeof globalThis
 >action : "resizeTo" | "resizeBy"
 >(x, y) => {		window[action](x, y);	} : (x: number, y: number) => void
@@ -564,7 +564,7 @@ for (const action of actions) {
 
 		window[action](x, y);
 >window[action](x, y) : void
->window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((x: number, y: number) => void) & ((x: number, y: number) => void))
+>window[action] : (((x: number, y: number) => void) & ((x: number, y: number) => void)) | (((width: number, height: number) => void) & ((width: number, height: number) => void))
 >window : Window & typeof globalThis
 >action : "resizeTo" | "resizeBy"
 >x : number

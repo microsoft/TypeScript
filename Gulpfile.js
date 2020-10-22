@@ -22,6 +22,9 @@ const copyright = "CopyrightNotice.txt";
 const cleanTasks = [];
 
 const buildScripts = () => buildProject("scripts");
+task("scripts", buildScripts);
+task("scripts").description = "Builds files in the 'scripts' folder.";
+
 const cleanScripts = () => cleanProject("scripts");
 cleanTasks.push(cleanScripts);
 
@@ -347,11 +350,12 @@ const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lin
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
 
+    const formatter = cmdLineOptions.ci ? "stylish" : "autolinkable-stylish";
     const args = [
         "node_modules/eslint/bin/eslint",
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
-        "--format", "autolinkable-stylish",
+        "--format", formatter,
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
     ];
@@ -364,7 +368,7 @@ const eslint = (folder) => async () => {
 
     log(`Linting: ${args.join(" ")}`);
     return exec(process.execPath, args);
-}
+};
 
 const lintScripts = eslint("scripts");
 lintScripts.displayName = "lint-scripts";
@@ -409,7 +413,7 @@ const cleanTypesMap = () => del("built/local/typesMap.json");
 cleanTasks.push(cleanTypesMap);
 
 // Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
-// it to be synced to the Azure DevOps repo, so that it can get picked up by the build 
+// it to be synced to the Azure DevOps repo, so that it can get picked up by the build
 // pipeline that generates the localization artifacts that are then fed into the translation process.
 const builtLocalDiagnosticMessagesGeneratedJson = "built/local/diagnosticMessages.generated.json";
 const copyBuiltLocalDiagnosticMessages = () => src(diagnosticMessagesGeneratedJson)
@@ -587,7 +591,7 @@ task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",
 };
 
-const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification.docx"), path.resolve("doc/spec.md")]);
+const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]);
 task("generate-spec", series(buildScripts, generateSpec));
 task("generate-spec").description = "Generates a Markdown version of the Language Specification";
 

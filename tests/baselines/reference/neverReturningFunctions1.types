@@ -328,7 +328,7 @@ function f30(x: string | number | undefined) {
 }
 
 function f31(x: { a: string | number }) {
->f31 : (x: { a: string | number; }) => void
+>f31 : (x: {    a: string | number;}) => void
 >x : { a: string | number; }
 >a : string | number
 
@@ -703,6 +703,38 @@ class SuperThrowable extends MyThrowable {
 >this.throw : () => never
 >this : this
 >throw : () => never
+    }
+}
+
+// Repro from #40346
+
+interface Services {
+    panic(message: string): never;
+>panic : (message: string) => never
+>message : string
+}
+
+function foo(services: Readonly<Services>, s: string | null): string {
+>foo : (services: Readonly<Services>, s: string | null) => string
+>services : Readonly<Services>
+>s : string | null
+>null : null
+
+    if (s === null) {
+>s === null : boolean
+>s : string | null
+>null : null
+
+        services.panic("ouch");
+>services.panic("ouch") : never
+>services.panic : (message: string) => never
+>services : Readonly<Services>
+>panic : (message: string) => never
+>"ouch" : "ouch"
+
+    } else {
+        return s;
+>s : string
     }
 }
 

@@ -54,7 +54,7 @@ var i: I;
 >i : I
 
 var a: {
->a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
+>a : { new (x: 'hi'): Derived1; new (x: 'bye'): Derived2; new (x: string): Base; }
 
     new(x: 'hi'): Derived1;
 >x : "hi"

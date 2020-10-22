@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /tsconfig.json
+Input::
 //// [/f.ts]
 
 
@@ -18,14 +18,11 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/f.js]
 
-
-
+/a/lib/tsc.js --w -p /tsconfig.json
 Output::
 >> Screen clear
 12:00:13 AM - Starting compilation in watch mode...
-
 
 
 12:00:16 AM - Found 0 errors. Watching for file changes.
@@ -33,6 +30,7 @@ Output::
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /f.ts
 /a/lib/lib.d.ts
@@ -57,14 +55,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/f.js]
+
+
+
 Change:: Comment added to file f
 
+Input::
 //// [/f.ts]
 //
-
-//// [/f.js]
-//
-
 
 
 Output::
@@ -72,12 +71,12 @@ Output::
 12:00:19 AM - File change detected. Starting incremental compilation...
 
 
-
 12:00:23 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /f.ts
 /a/lib/lib.d.ts
@@ -100,3 +99,8 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/f.js]
+//
+
+

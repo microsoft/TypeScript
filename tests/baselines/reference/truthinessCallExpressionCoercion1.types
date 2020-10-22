@@ -9,9 +9,9 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >required ? console.log('required') : undefined : void
 >required : () => boolean
 >console.log('required') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'required' : "required"
 >undefined : undefined
 
@@ -20,9 +20,9 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >optional ? console.log('optional') : undefined : void
 >optional : (() => boolean) | undefined
 >console.log('optional') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'optional' : "optional"
 >undefined : undefined
 
@@ -33,9 +33,9 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >!required : false
 >required : () => boolean
 >console.log('not required') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'not required' : "not required"
 >undefined : undefined
 
@@ -45,9 +45,9 @@ function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, o
 >required() : boolean
 >required : () => boolean
 >console.log('required call') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'required call' : "required call"
 >undefined : undefined
 }
@@ -69,9 +69,9 @@ function onlyErrorsWhenUnusedInBody() {
 >test ? console.log('test') : undefined : void
 >test : () => boolean
 >console.log('test') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'test' : "test"
 >undefined : undefined
 
@@ -80,9 +80,9 @@ function onlyErrorsWhenUnusedInBody() {
 >test ? console.log(test) : undefined : void
 >test : () => boolean
 >console.log(test) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >test : () => boolean
 >undefined : undefined
 
@@ -160,9 +160,9 @@ function checksPropertyAccess() {
 >foo : { bar(): boolean; }
 >bar : () => boolean
 >console.log('x.foo.bar') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'x.foo.bar' : "x.foo.bar"
 >undefined : undefined
 
@@ -205,9 +205,9 @@ class Foo {
 >this : this
 >isUser : () => boolean
 >console.log('this.isUser') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'this.isUser' : "this.isUser"
 >undefined : undefined
 
@@ -218,11 +218,24 @@ class Foo {
 >this : this
 >maybeIsUser : (() => boolean) | undefined
 >console.log('this.maybeIsUser') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'this.maybeIsUser' : "this.maybeIsUser"
 >undefined : undefined
+
+        // ok
+        if (this.isUser) {
+>this.isUser : () => boolean
+>this : this
+>isUser : () => boolean
+
+            this.isUser();
+>this.isUser() : boolean
+>this.isUser : () => boolean
+>this : this
+>isUser : () => boolean
+        }
     }
 }
 

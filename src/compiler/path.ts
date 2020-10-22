@@ -68,6 +68,14 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(path);
     }
 
+    /**
+     * Determines whether a path is neither relative nor absolute, e.g. "path/to/file".
+     * Also known misleadingly as "non-relative".
+     */
+    export function pathIsBareSpecifier(path: string): boolean {
+        return !pathIsAbsolute(path) && !pathIsRelative(path);
+    }
+
     export function hasExtension(fileName: string): boolean {
         return stringContains(getBaseFileName(fileName), ".");
     }
@@ -527,6 +535,7 @@ namespace ts {
      *
      * ```ts
      * getNormalizedPathComponents("to/dir/../file.ext", "/path/") === ["/", "path", "to", "file.ext"]
+     * ```
      */
     export function getNormalizedPathComponents(path: string, currentDirectory: string | undefined) {
         return reducePathComponents(getPathComponents(path, currentDirectory));

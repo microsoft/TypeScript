@@ -15,8 +15,12 @@
 ////A./*3*/
 
 goTo.eachMarker((_, i) => {
-    const all = ["foo", "bar", "baz"];
-    verify.completions({ includes: all.slice(0, 3 - i), excludes: all.slice(3 - i) });
+    const all = [
+        { name: "foo", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "bar", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "baz", sortText: completion.SortText.LocalDeclarationPriority }
+    ];
+    verify.completions({ includes: all.slice(0, 3 - i), excludes: all.slice(3 - i).map(e => e.name) });
     edit.insert("foo;");
 });
 

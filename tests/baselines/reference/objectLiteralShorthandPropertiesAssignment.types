@@ -16,7 +16,7 @@ var person: { name: string; id: number } = { name, id };
 >id : number
 
 function foo( obj:{ name: string }): void { };
->foo : (obj: { name: string; }) => void
+>foo : (obj: {    name: string;}) => void
 >obj : { name: string; }
 >name : string
 
@@ -36,7 +36,7 @@ function bar1(name: string, id: number) { return { name }; }
 >name : string
 
 function baz(name: string, id: number): { name: string; id: number } { return { name, id }; }
->baz : (name: string, id: number) => { name: string; id: number; }
+>baz : (name: string, id: number) => {    name: string;    id: number;}
 >name : string
 >id : number
 >name : string

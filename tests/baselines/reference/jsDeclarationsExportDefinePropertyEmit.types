@@ -142,7 +142,7 @@ Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
  * @param {{y: typeof module.exports.b}} b
  */
 function g(a, b) {
->g : (a: { x: string; }, b: { y: () => void; }) => void
+>g : (a: {    x: string;}, b: { y: () => void; }) => void
 >a : { x: string; }
 >b : { y: () => void; }
 
@@ -175,7 +175,7 @@ Object.defineProperty(module.exports, "g", { value: g });
  * @param {{y: typeof module.exports.b}} b
  */
 function hh(a, b) {
->hh : (a: { x: string; }, b: { y: () => void; }) => void
+>hh : (a: {    x: string;}, b: { y: () => void; }) => void
 >a : { x: string; }
 >b : { y: () => void; }
 

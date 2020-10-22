@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /f.ts --diagnostics
+Input::
 //// [/f.ts]
 
 
@@ -15,31 +15,23 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/f.js]
 
-
-
+/a/lib/tsc.js --w /f.ts --diagnostics
 Output::
-
-12:00:11 AM - Starting compilation in watch mode...
-
+[[90m12:00:11 AM[0m] Starting compilation in watch mode...
 
 Current directory: / CaseSensitiveFileNames: false
-
 Synchronizing program
-
 CreatingProgramWith::
-
   roots: ["/f.ts"]
-
   options: {"watch":true,"diagnostics":true}
+[[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:14 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"diagnostics":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -60,41 +52,34 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/f.js]
+
+
+
 Change:: Comment added to file f
 
+Input::
 //// [/f.ts]
 //
-
-//// [/f.js]
-//
-
 
 
 Output::
 FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
-
 Scheduling update
-
 Elapsed:: *ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
-
-
-12:00:17 AM - File change detected. Starting incremental compilation...
-
+[[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
 Synchronizing program
-
 CreatingProgramWith::
-
   roots: ["/f.ts"]
-
   options: {"watch":true,"diagnostics":true}
+[[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:21 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"diagnostics":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -113,3 +98,8 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/f.js]
+//
+
+

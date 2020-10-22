@@ -5,7 +5,7 @@
  * @param {string} [s]
  */
 function foo(n, s) {}
->foo : (n?: number, s?: string) => void
+>foo : (n?: number | undefined, s?: string) => void
 >n : number
 >s : string
 

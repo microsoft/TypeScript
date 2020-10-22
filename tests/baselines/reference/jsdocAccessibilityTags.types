@@ -52,9 +52,9 @@ class C {
          */
         this.priv2 = 1;
 >this.priv2 = 1 : 1
->this.priv2 : number
+>this.priv2 : any
 >this : this
->priv2 : number
+>priv2 : any
 >1 : 1
 
         /**
@@ -64,9 +64,9 @@ class C {
          */
         this.prot2 = 2;
 >this.prot2 = 2 : 2
->this.prot2 : number
+>this.prot2 : any
 >this : this
->prot2 : number
+>prot2 : any
 >2 : 2
 
         /**
@@ -76,9 +76,9 @@ class C {
          */
         this.pub2 = 3;
 >this.pub2 = 3 : 3
->this.pub2 : number
+>this.pub2 : any
 >this : this
->pub2 : number
+>pub2 : any
 >3 : 3
     }
     h() { return this.priv2 }

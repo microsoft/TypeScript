@@ -30,11 +30,11 @@ verify.referenceGroups(r0, [
     { definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
 ]);
 verify.referenceGroups([r1, r5], [
-    { definition: "class D\n(property) D: typeof D", ranges: [r1, r5, r5] }, // TODO: should only reference r5 once
+    { definition: "(alias) (local class) D\nimport D", ranges: [r1, r5] },
 ]);
 verify.referenceGroups(r2, [
     { definition: "(local class) D", ranges: [r2] },
-    { definition: "class D\n(property) D: typeof D", ranges: [r5] },
+    { definition: "(alias) (local class) D\nimport D", ranges: [r5] },
 ]);
 verify.referenceGroups([r3, r4], [
     { definition: 'module "/a"', ranges: [r4, rModule] },

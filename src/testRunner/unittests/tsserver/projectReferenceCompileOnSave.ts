@@ -58,7 +58,7 @@ fn2();
                         arguments: { file: dependencyTs.path }
                     });
                     const { file, insertString } = change();
-                    if (session.getProjectService().openFiles.has(file.path)) {
+                    if (session.getProjectService().openFiles.has(file.path as Path)) {
                         const toLocation = protocolToLocation(file.content);
                         const location = toLocation(file.content.length);
                         session.executeCommandSeq<protocol.ChangeRequest>({
@@ -95,7 +95,7 @@ fn2();
                 assert.equal(host.writtenFiles.size, expectedFiles.length);
                 for (const file of expectedFiles) {
                     assert.equal(host.readFile(file.path), file.content, `Expected to write ${file.path}`);
-                    assert.isTrue(host.writtenFiles.has(file.path), `${file.path} is newly written`);
+                    assert.isTrue(host.writtenFiles.has(file.path as Path), `${file.path} is newly written`);
                 }
 
                 // Verify EmitOutput
@@ -252,7 +252,8 @@ ${appendJs}`
                     text: content,
                     writeByteOrderMark: false
                 })),
-                emitSkipped: false
+                emitSkipped: false,
+                diagnostics: emptyArray
             };
         }
 
@@ -270,7 +271,8 @@ ${appendJs}`
         function noEmitOutput(): EmitOutput {
             return {
                 emitSkipped: true,
-                outputFiles: []
+                outputFiles: [],
+                diagnostics: emptyArray
             };
         }
 
@@ -467,9 +469,7 @@ ${appendDts}`
             const host = createServerHost([libFile, tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
 
             // ts build should succeed
-            const solutionBuilder = tscWatch.createSolutionBuilder(host, [siblingConfig.path], {});
-            solutionBuilder.build();
-            assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
+            tscWatch.ensureErrorFreeBuild(host, [siblingConfig.path]);
             const sourceJs = changeExtension(siblingSource.path, ".js");
             const expectedSiblingJs = host.readFile(sourceJs);
 

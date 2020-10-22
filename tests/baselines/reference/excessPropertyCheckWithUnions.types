@@ -364,3 +364,77 @@ const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Er
 >c : string
 >'abc' : "abc"
 
+// Repro from #33732
+
+interface I1 {
+    prop1: string;
+>prop1 : string
+}
+
+interface I2 {
+    prop2: string;
+>prop2 : string
+}
+
+interface I3 extends Record<string, string> {
+
+}
+
+type Properties =
+>Properties : Properties
+
+    | { [key: string]: never }
+>key : string
+
+    | I1
+    | I2
+    | I3
+    ;
+
+
+declare const prop1: string;
+>prop1 : string
+
+declare const prop2: string | undefined;
+>prop2 : string | undefined
+
+function F1(_arg: { props: Properties }) { }
+>F1 : (_arg: {    props: Properties;}) => void
+>_arg : { props: Properties; }
+>props : Properties
+
+F1({
+>F1({    props: {        prop1,        prop2,    },}) : void
+>F1 : (_arg: { props: Properties; }) => void
+>{    props: {        prop1,        prop2,    },} : { props: { prop1: string; prop2: string | undefined; }; }
+
+    props: {
+>props : { prop1: string; prop2: string | undefined; }
+>{        prop1,        prop2,    } : { prop1: string; prop2: string | undefined; }
+
+        prop1,
+>prop1 : string
+
+        prop2,
+>prop2 : string | undefined
+
+    },
+});
+
+function F2(_props: Properties) { }
+>F2 : (_props: Properties) => void
+>_props : Properties
+
+F2({
+>F2({    prop1,    prop2,}) : void
+>F2 : (_props: Properties) => void
+>{    prop1,    prop2,} : { prop1: string; prop2: string | undefined; }
+
+    prop1,
+>prop1 : string
+
+    prop2,
+>prop2 : string | undefined
+
+});
+

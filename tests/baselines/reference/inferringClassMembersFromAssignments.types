@@ -11,24 +11,24 @@ class C {
 
             this.inConstructor = 0;
 >this.inConstructor = 0 : 0
->this.inConstructor : string | number
+>this.inConstructor : any
 >this : this
->inConstructor : string | number
+>inConstructor : any
 >0 : 0
         }
         else {
             this.inConstructor = "string"
 >this.inConstructor = "string" : "string"
->this.inConstructor : string | number
+>this.inConstructor : any
 >this : this
->inConstructor : string | number
+>inConstructor : any
 >"string" : "string"
         }
         this.inMultiple = 0;
 >this.inMultiple = 0 : 0
->this.inMultiple : number
+>this.inMultiple : any
 >this : this
->inMultiple : number
+>inMultiple : any
 >0 : 0
     }
     method() {

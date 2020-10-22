@@ -1,0 +1,14 @@
+Exit Code: 2
+Standard output:
+node_modules/soap/lib/client.d.ts(4,26): error TS7016: Could not find a declaration file for module 'request'. '../../../tests/cases/user/soap/node_modules/request/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/request` if it exists or add a new declaration (.d.ts) file containing `declare module 'request';`
+node_modules/soap/lib/http.d.ts(2,22): error TS7016: Could not find a declaration file for module 'request'. '../../../tests/cases/user/soap/node_modules/request/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/request` if it exists or add a new declaration (.d.ts) file containing `declare module 'request';`
+node_modules/soap/lib/types.d.ts(1,22): error TS7016: Could not find a declaration file for module 'request'. '../../../tests/cases/user/soap/node_modules/request/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/request` if it exists or add a new declaration (.d.ts) file containing `declare module 'request';`
+node_modules/soap/lib/wsdl/index.d.ts(1,22): error TS7016: Could not find a declaration file for module 'sax'. '../../../tests/cases/user/soap/node_modules/sax/lib/sax.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/sax` if it exists or add a new declaration (.d.ts) file containing `declare module 'sax';`
+
+
+
+Standard error:
