@@ -5,6 +5,10 @@
 ////    bar: string;
 ////}
 ////
-////let x: Foo["/*1*/"]
+////let x: Foo["[|/*1*/|]"]
 
-verify.completions({ marker: "1", exact: ["foo", "bar"] });
+const replacementSpan = test.ranges()[0]
+verify.completions({ marker: "1", exact: [
+    { name: "foo", replacementSpan },
+    { name: "bar", replacementSpan }
+] });

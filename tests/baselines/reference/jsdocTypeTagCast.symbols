@@ -64,6 +64,8 @@ function SomeFakeClass() {
 
     /** @type {string|number} */
     this.p = "bar";
+>this.p : Symbol(SomeFakeClass.p, Decl(b.js, 31, 26))
+>this : Symbol(SomeFakeClass, Decl(b.js, 29, 1))
 >p : Symbol(SomeFakeClass.p, Decl(b.js, 31, 26))
 }
 

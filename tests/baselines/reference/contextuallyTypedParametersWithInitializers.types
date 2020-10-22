@@ -9,13 +9,13 @@ declare function id2<T extends (x: any) => any>(input: T): T;
 >input : T
 
 declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
->id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
+>id3 : <T extends (x: {    foo: any;}) => any>(input: T) => T
 >x : { foo: any; }
 >foo : any
 >input : T
 
 declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
->id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
+>id4 : <T extends (x: {    foo?: number;}) => any>(input: T) => T
 >x : { foo?: number | undefined; }
 >foo : number | undefined
 >input : T

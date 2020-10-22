@@ -1,0 +1,17 @@
+=== tests/cases/compiler/index.ts ===
+import { variable } from "./variable";
+>variable : Symbol(variable, Decl(index.ts, 0, 8))
+
+export { variable as globalThis };
+>variable : Symbol(variable, Decl(index.ts, 0, 8))
+>globalThis : Symbol(globalThis, Decl(index.ts, 1, 8))
+
+=== tests/cases/compiler/variable.ts ===
+import mod = globalThis;
+>mod : Symbol(mod, Decl(variable.ts, 0, 0))
+>globalThis : Symbol(mod)
+
+export { mod as variable };
+>mod : Symbol(mod, Decl(variable.ts, 0, 0))
+>variable : Symbol(variable, Decl(variable.ts, 1, 8))
+

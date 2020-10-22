@@ -128,7 +128,7 @@ namespace ts.codefix {
                     const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                        const typeTag = createJSDocTypeTag(createJSDocTypeExpression(typeNode), /*comment*/ "");
+                        const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ "");
                         addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
                     importAdder.writeFixes(changes);
@@ -222,7 +222,7 @@ namespace ts.codefix {
         importAdder: ImportAdder,
         sourceFile: SourceFile,
         parameterDeclaration: ParameterDeclaration,
-        containingFunction: FunctionLike,
+        containingFunction: SignatureDeclaration,
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
@@ -239,13 +239,13 @@ namespace ts.codefix {
         }
         else {
             const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
-            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), createToken(SyntaxKind.OpenParenToken));
+            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
             for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
                     annotate(changes, importAdder, sourceFile, declaration, type, program, host);
                 }
             }
-            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
+            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
         }
     }
 
@@ -268,9 +268,9 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
+    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
         addJSDocTags(changes, sourceFile, containingFunction, [
-            createJSDocThisTag(createJSDocTypeExpression(typeNode)),
+            factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
         ]);
     }
 
@@ -306,11 +306,11 @@ namespace ts.codefix {
                 if (!parent) {
                     return;
                 }
-                const typeExpression = createJSDocTypeExpression(typeNode);
-                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
+                const typeExpression = factory.createJSDocTypeExpression(typeNode);
+                const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, "") : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
-            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, type, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
+            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
             }
         }
@@ -319,14 +319,13 @@ namespace ts.codefix {
     function tryReplaceImportTypeNodeWithAutoImport(
         typeNode: TypeNode,
         declaration: textChanges.TypeAnnotatable,
-        type: Type,
         sourceFile: SourceFile,
         changes: textChanges.ChangeTracker,
         importAdder: ImportAdder,
         scriptTarget: ScriptTarget
     ): boolean {
-        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
-        if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeReference)) {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+        if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
             forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
             return true;
         }
@@ -344,9 +343,9 @@ namespace ts.codefix {
             if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
 
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            const name = getSynthesizedClone(param.name);
+            const name = factory.cloneNode(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -359,7 +358,7 @@ namespace ts.codefix {
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = createJSDocComment(comments.join("\n"), createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
@@ -382,11 +381,11 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:
-                return createJSDocReturnTag((newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
         }
     }
 
@@ -410,7 +409,7 @@ namespace ts.codefix {
             }));
     }
 
-    function getFunctionReferences(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
+    function getFunctionReferences(containingFunction: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
@@ -501,7 +500,7 @@ namespace ts.codefix {
         }
 
         function combineUsages(usages: Usage[]): Usage {
-            const combinedProperties = createUnderscoreEscapedMap<Usage[]>();
+            const combinedProperties = new Map<__String, Usage[]>();
             for (const u of usages) {
                 if (u.properties) {
                     u.properties.forEach((p, name) => {
@@ -512,7 +511,7 @@ namespace ts.codefix {
                     });
                 }
             }
-            const properties = createUnderscoreEscapedMap<Usage>();
+            const properties = new Map<__String, Usage>();
             combinedProperties.forEach((ps, name) => {
                 properties.set(name, combineUsages(ps));
             });
@@ -535,7 +534,7 @@ namespace ts.codefix {
             return combineTypes(inferTypesFromReferencesSingle(references));
         }
 
-        function parameters(declaration: FunctionLike): ParameterInference[] | undefined {
+        function parameters(declaration: SignatureDeclaration): ParameterInference[] | undefined {
             if (references.length === 0 || !declaration.parameters) {
                 return undefined;
             }
@@ -603,7 +602,7 @@ namespace ts.codefix {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ExpressionStatement:
-                    addCandidateType(usage, checker.getVoidType());
+                    inferTypeFromExpressionStatement(node, usage);
                     break;
                 case SyntaxKind.PostfixUnaryExpression:
                     usage.isNumber = true;
@@ -659,6 +658,10 @@ namespace ts.codefix {
             if (isExpressionNode(node)) {
                 addCandidateType(usage, checker.getContextualType(node));
             }
+        }
+
+        function inferTypeFromExpressionStatement(node: Expression, usage: Usage): void {
+            addCandidateType(usage, isCallExpression(node) ? checker.getVoidType() : checker.getAnyType());
         }
 
         function inferTypeFromPrefixUnaryExpression(node: PrefixUnaryExpression, usage: Usage): void {
@@ -817,7 +820,7 @@ namespace ts.codefix {
         function inferTypeFromPropertyAccessExpression(parent: PropertyAccessExpression, usage: Usage): void {
             const name = escapeLeadingUnderscores(parent.name.text);
             if (!usage.properties) {
-                usage.properties = createUnderscoreEscapedMap<Usage>();
+                usage.properties = new Map();
             }
             const propertyUsage = usage.properties.get(name) || createEmptyUsage();
             calculateUsageOfNode(parent, propertyUsage);
@@ -960,10 +963,7 @@ namespace ts.codefix {
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
-            if (usage.properties && usage.properties.size
-                || usage.calls && usage.calls.length
-                || usage.constructs && usage.constructs.length
-                || usage.stringIndex) {
+            if (usage.properties?.size || usage.calls?.length || usage.constructs?.length || usage.stringIndex) {
                 types.push(inferStructuralType(usage));
             }
 
@@ -974,7 +974,7 @@ namespace ts.codefix {
         }
 
         function inferStructuralType(usage: Usage) {
-            const members = createUnderscoreEscapedMap<Symbol>();
+            const members = new Map<__String, Symbol>();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
                     const symbol = checker.createSymbol(SymbolFlags.Property, name);
@@ -1043,9 +1043,6 @@ namespace ts.codefix {
             else if (genericType.flags & TypeFlags.UnionOrIntersection) {
                 return flatMap((genericType as UnionOrIntersectionType).types, t => inferTypeParameters(t, usageType, typeParameter));
             }
-            else if (genericType.flags & TypeFlags.Awaited) {
-                return inferTypeParameters((<AwaitedType>genericType).awaitedType, usageType, typeParameter);
-            }
             else if (getObjectFlags(genericType) & ObjectFlags.Reference && getObjectFlags(usageType) & ObjectFlags.Reference) {
                 // this is wrong because we need a reference to the targetType to, so we can check that it's also a reference
                 const genericArgs = checker.getTypeArguments(genericType as TypeReference);
@@ -1062,7 +1059,6 @@ namespace ts.codefix {
             }
             const genericSigs = checker.getSignaturesOfType(genericType, SignatureKind.Call);
             const usageSigs = checker.getSignaturesOfType(usageType, SignatureKind.Call);
-            // allow for multiple overloads of `then`.
             if (genericSigs.length === 1 && usageSigs.length === 1) {
                 return inferFromSignatures(genericSigs[0], usageSigs[0], typeParameter);
             }

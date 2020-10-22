@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w sample1/tests
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -75,6 +75,87 @@ import * as mod from '../core/anotherModule';
 export const m = mod;
 
 
+
+/a/lib/tsc.js -b -w sample1/tests
+Output::
+>> Screen clear
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+
+[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
+Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+
+Program root files: ["/user/username/projects/sample1/logic/index.ts"]
+Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Program root files: ["/user/username/projects/sample1/tests/index.ts"]
+Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+WatchedFiles::
+/user/username/projects/sample1/core/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+/user/username/projects/sample1/core/index.ts:
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/logic/index.ts:
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/tests/index.ts:
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/sample1/logic:
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
 exports.__esModule = true;
@@ -109,15 +190,18 @@ export declare function multiply(a: number, b: number): number;
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -165,19 +249,23 @@ export declare const m: typeof mod;
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "../core/index.d.ts": {
         "version": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "affectsGlobalScope": false
       },
       "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
+        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -233,23 +321,28 @@ export declare const m: typeof mod;
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "../core/index.d.ts": {
         "version": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "affectsGlobalScope": false
       },
       "../core/anothermodule.d.ts": {
         "version": "-9234818176-export declare const World = \"hello\";\n",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "affectsGlobalScope": false
       },
       "../logic/index.d.ts": {
         "version": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
-        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
+        "signature": "-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
-        "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"
+        "signature": "2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -290,56 +383,30 @@ export declare const m: typeof mod;
 }
 
 
+Change:: Change to new File and build core
+
+Input::
+//// [/user/username/projects/sample1/core/newfile.ts]
+export const newFileConst = 30;
+
+
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
 
 
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
+Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts","/user/username/projects/sample1/core/newfile.ts"]
 Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/newfile.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
+/user/username/projects/sample1/core/newfile.ts
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -356,6 +423,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
 /user/username/projects/sample1/tests/index.ts:
   {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/newfile.ts:
+  {"fileName":"/user/username/projects/sample1/core/newfile.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -367,8 +436,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Change to new File and build core
-
 //// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/core/index.js] file changed its modified time
@@ -379,19 +446,23 @@ Change:: Change to new File and build core
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "affectsGlobalScope": false
       },
       "./newfile.ts": {
         "version": "-16320201030-export const newFileConst = 30;",
-        "signature": "-22941483372-export declare const newFileConst = 30;\n"
+        "signature": "-22941483372-export declare const newFileConst = 30;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -411,9 +482,6 @@ Change:: Change to new File and build core
   },
   "version": "FakeTSVersion"
 }
-
-//// [/user/username/projects/sample1/core/newfile.ts]
-export const newFileConst = 30;
 
 //// [/user/username/projects/sample1/core/newfile.js]
 "use strict";
@@ -427,62 +495,15 @@ export declare const newFileConst = 30;
 
 
 
-Output::
->> Screen clear
-[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
-
-
-
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts","/user/username/projects/sample1/core/newfile.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/newfile.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/newfile.ts
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"fileName":"/user/username/projects/sample1/core/newfile.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: Build logic or update time stamps
 
-//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
+Input::
 
 Output::
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
@@ -519,11 +540,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
+
 Change:: Build Tests
 
-//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
-//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+Input::
 
 Output::
 [[90m12:01:18 AM[0m] Found 0 errors. Watching for file changes.
@@ -532,6 +556,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
 Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
@@ -569,7 +594,63 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
+//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+
 Change:: Change to new File and build core
+
+Input::
+//// [/user/username/projects/sample1/core/newfile.ts]
+export const newFileConst = 30;
+export class someClass2 { }
+
+
+Output::
+>> Screen clear
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
+
+
+
+Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts","/user/username/projects/sample1/core/newfile.ts"]
+Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/newfile.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/sample1/core/newfile.ts
+
+WatchedFiles::
+/user/username/projects/sample1/core/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+/user/username/projects/sample1/core/index.ts:
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/logic/index.ts:
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/tests/index.ts:
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+/user/username/projects/sample1/core/newfile.ts:
+  {"fileName":"/user/username/projects/sample1/core/newfile.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/sample1/logic:
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
@@ -581,19 +662,23 @@ Change:: Change to new File and build core
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-9234818176-export declare const World = \"hello\";\n"
+        "signature": "-9234818176-export declare const World = \"hello\";\n",
+        "affectsGlobalScope": false
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"
+        "signature": "-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n",
+        "affectsGlobalScope": false
       },
       "./newfile.ts": {
         "version": "-9703836816-export const newFileConst = 30;\nexport class someClass2 { }",
-        "signature": "-12384508924-export declare const newFileConst = 30;\nexport declare class someClass2 {\n}\n"
+        "signature": "-12384508924-export declare const newFileConst = 30;\nexport declare class someClass2 {\n}\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -613,10 +698,6 @@ Change:: Change to new File and build core
   },
   "version": "FakeTSVersion"
 }
-
-//// [/user/username/projects/sample1/core/newfile.ts]
-export const newFileConst = 30;
-export class someClass2 { }
 
 //// [/user/username/projects/sample1/core/newfile.js]
 "use strict";
@@ -638,62 +719,15 @@ export declare class someClass2 {
 
 
 
-Output::
->> Screen clear
-[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
-
-
-
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts","/user/username/projects/sample1/core/newfile.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-/user/username/projects/sample1/core/newfile.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/newfile.ts
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"fileName":"/user/username/projects/sample1/core/newfile.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: Build logic or update time stamps
 
-//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
-//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
+Input::
 
 Output::
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
@@ -730,11 +764,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.js] file changed its modified time
+//// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
+
 Change:: Build Tests
 
-//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
-//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+Input::
 
 Output::
 [[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
@@ -743,6 +780,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
 Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
@@ -779,3 +817,7 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
+//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time

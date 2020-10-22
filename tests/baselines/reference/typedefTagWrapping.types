@@ -12,13 +12,13 @@
  * @returns {boolean} The return.
  */
 function callIt(func, arg) {
->callIt : (func: (arg0: string) => boolean, arg: string) => boolean
->func : (arg0: string) => boolean
+>callIt : (func: Type1, arg: string) => boolean
+>func : Type1
 >arg : string
 
   return func(arg);
 >func(arg) : boolean
->func : (arg0: string) => boolean
+>func : Type1
 >arg : string
 }
 
@@ -37,19 +37,19 @@ function callIt(func, arg) {
  * @returns {string|number} The return.
  */
 function check(obj) {
->check : (obj: { num: number; str: string; boo: boolean; }) => string | number
->obj : { num: number; str: string; boo: boolean; }
+>check : (obj: Type2) => string | number
+>obj : Type2
 
   return obj.boo ? obj.num : obj.str;
 >obj.boo ? obj.num : obj.str : string | number
 >obj.boo : boolean
->obj : { num: number; str: string; boo: boolean; }
+>obj : Type2
 >boo : boolean
 >obj.num : number
->obj : { num: number; str: string; boo: boolean; }
+>obj : Type2
 >num : number
 >obj.str : string
->obj : { num: number; str: string; boo: boolean; }
+>obj : Type2
 >str : string
 }
 
@@ -70,15 +70,15 @@ function check(obj) {
  * @returns {string|number} The return.
  */
 function use1(func, bool, str, num) {
->use1 : (func: (arg0: boolean, arg1: string, arg2: number) => string | number, bool: boolean, str: string, num: number) => string | number
->func : (arg0: boolean, arg1: string, arg2: number) => string | number
+>use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
+>func : StringOrNumber1
 >bool : boolean
 >str : string
 >num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : string | number
->func : (arg0: boolean, arg1: string, arg2: number) => string | number
+>func : StringOrNumber1
 >bool : boolean
 >str : string
 >num : number
@@ -102,15 +102,15 @@ function use1(func, bool, str, num) {
  * @returns {string|number} The return.
  */
 function use2(func, bool, str, num) {
->use2 : (func: (arg0: boolean, arg1: string, arg2: number) => string | number, bool: boolean, str: string, num: number) => string | number
->func : (arg0: boolean, arg1: string, arg2: number) => string | number
+>use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
+>func : StringOrNumber2
 >bool : boolean
 >str : string
 >num : number
 
   return func(bool, str, num)
 >func(bool, str, num) : string | number
->func : (arg0: boolean, arg1: string, arg2: number) => string | number
+>func : StringOrNumber2
 >bool : boolean
 >str : string
 >num : number
@@ -134,19 +134,19 @@ function use2(func, bool, str, num) {
  * @returns {string|number} The return.
  */
 function check5(obj) {
->check5 : (obj: { num: number; str: string; boo: boolean; }) => string | number
->obj : { num: number; str: string; boo: boolean; }
+>check5 : (obj: Type5) => string | number
+>obj : Type5
 
   return obj.boo ? obj.num : obj.str;
 >obj.boo ? obj.num : obj.str : string | number
 >obj.boo : boolean
->obj : { num: number; str: string; boo: boolean; }
+>obj : Type5
 >boo : boolean
 >obj.num : number
->obj : { num: number; str: string; boo: boolean; }
+>obj : Type5
 >num : number
 >obj.str : string
->obj : { num: number; str: string; boo: boolean; }
+>obj : Type5
 >str : string
 }
 
@@ -166,12 +166,12 @@ function check5(obj) {
  * @returns {*} The return.
  */
 function check6(obj) {
->check6 : (obj: { foo: any; bar: any; }) => any
->obj : { foo: any; bar: any; }
+>check6 : (obj: Type6) => any
+>obj : Type6
 
   return obj.foo;
 >obj.foo : any
->obj : { foo: any; bar: any; }
+>obj : Type6
 >foo : any
 }
 

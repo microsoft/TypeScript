@@ -2,7 +2,7 @@ tests/cases/compiler/baseCheck.ts(9,18): error TS2552: Cannot find name 'loc'. D
 tests/cases/compiler/baseCheck.ts(17,53): error TS2554: Expected 2 arguments, but got 1.
 tests/cases/compiler/baseCheck.ts(17,59): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/baseCheck.ts(18,62): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/baseCheck.ts(19,59): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/baseCheck.ts(19,59): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/compiler/baseCheck.ts(19,68): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/compiler/baseCheck.ts(22,9): error TS2304: Cannot find name 'x'.
 tests/cases/compiler/baseCheck.ts(23,7): error TS2304: Cannot find name 'x'.
@@ -40,7 +40,7 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     class F extends C { constructor(public z: number) { super("hello", this.z) } } // first param type
                                                               ~~~~~~~
-!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
                                                                        ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
     

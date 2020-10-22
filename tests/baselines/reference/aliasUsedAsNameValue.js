@@ -36,7 +36,8 @@ exports.a = void 0;
 ///<reference path='aliasUsedAsNameValue_1.ts' />
 var mod = require("./aliasUsedAsNameValue_0");
 var b = require("./aliasUsedAsNameValue_1");
-exports.a = function () {
+var a = function () {
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 };
+exports.a = a;

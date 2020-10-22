@@ -17,55 +17,55 @@ type A = {
 };
 
 type B = Omit<A, 'a'>;
->B : Omit<A, "a", "b" | "c" | "d">
+>B : Omit<A, "a">
 
 function f(x: B) {
->f : (x: Omit<A, "a", "b" | "c" | "d">) => void
->x : Omit<A, "a", "b" | "c" | "d">
+>f : (x: B) => void
+>x : Omit<A, "a">
 
     const b = x.b;
 >b : string | undefined
 >x.b : string | undefined
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >b : string | undefined
 
     x.b = "hello";
 >x.b = "hello" : "hello"
 >x.b : string | undefined
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >b : string | undefined
 >"hello" : "hello"
 
     x.b = undefined;
 >x.b = undefined : undefined
 >x.b : string | undefined
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >b : string | undefined
 >undefined : undefined
 
     const c = x.c;
 >c : boolean
 >x.c : boolean
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >c : boolean
 
     x.c = true;
 >x.c = true : true
 >x.c : any
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >c : any
 >true : true
 
     const d = x.d;
 >d : unknown
 >x.d : unknown
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >d : unknown
 
     x.d = d;
 >x.d = d : unknown
 >x.d : unknown
->x : Omit<A, "a", "b" | "c" | "d">
+>x : Omit<A, "a">
 >d : unknown
 >d : unknown
 }

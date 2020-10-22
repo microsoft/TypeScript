@@ -1,4 +1,55 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/core/index.ts]
+export function multiply(a: number, b: number) { return a * b; }
+
+
+//// [/src/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "skipDefaultLibCheck": true
+    }
+}
+
+
+//// [/src/no-references/tsconfig.json]
+
+
+//// [/src/with-references/tsconfig.json]
+{
+    "references": [
+        { "path": "../core" },
+    ],
+    "files": [],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
+
+
+
+
+Output::
 /lib/tsc --b /src/with-references
 exitCode:: ExitStatus.Success
 
@@ -24,11 +75,13 @@ exports.multiply = multiply;
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
       },
       "./index.ts": {
         "version": "5112841898-export function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "3361149553-export declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map"
+        "signature": "3361149553-export declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map",
+        "affectsGlobalScope": false
       }
     },
     "options": {

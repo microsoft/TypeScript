@@ -106,3 +106,20 @@ declare const o6: <T>() => undefined | ({ x: number });
 o6<number>()?.["x"];
 >o6 : Symbol(o6, Decl(elementAccessChain.ts, 22, 13))
 
+// GH#36031
+o2?.["b"]!.c;
+>o2?.["b"]!.c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+
+o2?.["b"]!["c"];
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+
+o2?.["b"]!.c!;
+>o2?.["b"]!.c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+>c : Symbol(c, Decl(elementAccessChain.ts, 3, 36))
+
+o2?.["b"]!["c"]!;
+>o2 : Symbol(o2, Decl(elementAccessChain.ts, 3, 13))
+

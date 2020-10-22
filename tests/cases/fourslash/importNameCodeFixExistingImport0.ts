@@ -7,4 +7,4 @@
 //// export function f1() {}
 //// export var v1 = 5;
 
-verify.importFixAtPosition([`{ v1, f1 }`]);
+verify.importFixAtPosition([`{ f1, v1 }`]);

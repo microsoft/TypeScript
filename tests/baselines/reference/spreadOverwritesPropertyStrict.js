@@ -25,6 +25,14 @@ function k(t: { command: string, ok: string }) {
     return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
 }
 
+function l(anyrequired: { a: any }) {
+    return { a: 'zzz', ...anyrequired } // error
+}
+function m(anyoptional: { a?: any }) {
+    return { a: 'zzz', ...anyoptional } // ok
+}
+
+
 
 //// [spreadOverwritesPropertyStrict.js]
 "use strict";
@@ -61,4 +69,10 @@ function j() {
 }
 function k(t) {
     return __assign(__assign(__assign({ command: "hi" }, { spoiler: true }), { spoiler2: true }), t); // error
+}
+function l(anyrequired) {
+    return __assign({ a: 'zzz' }, anyrequired); // error
+}
+function m(anyoptional) {
+    return __assign({ a: 'zzz' }, anyoptional); // ok
 }

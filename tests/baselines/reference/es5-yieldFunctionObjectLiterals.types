@@ -1,0 +1,178 @@
+=== tests/cases/compiler/es5-yieldFunctionObjectLiterals.ts ===
+// mainly to verify indentation of emitted code
+
+function g() { return "g"; }
+>g : () => string
+>"g" : "g"
+
+function* objectLiteral1() {
+>objectLiteral1 : () => Generator<number, void, unknown>
+
+    const x = {
+>x : { a: number; b: any; c: number; }
+>{        a: 1,        b: yield 2,        c: 3,    } : { a: number; b: any; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        b: yield 2,
+>b : any
+>yield 2 : any
+>2 : 2
+
+        c: 3,
+>c : number
+>3 : 3
+    }
+}
+
+function* objectLiteral2() {
+>objectLiteral2 : () => Generator<number, void, unknown>
+
+    const x = {
+>x : { [x: string]: any; a: number; c: number; }
+>{        a: 1,        [g()]: yield 2,        c: 3,    } : { [x: string]: any; a: number; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        [g()]: yield 2,
+>[g()] : any
+>g() : string
+>g : () => string
+>yield 2 : any
+>2 : 2
+
+        c: 3,
+>c : number
+>3 : 3
+    }
+}
+
+function* objectLiteral3() {
+>objectLiteral3 : () => Generator<number, void, unknown>
+
+    const x = {
+>x : { [x: string]: any; a: number; b: any; c: number; }
+>{        a: 1,        b: yield 2,        [g()]: 3,        c: 4,    } : { [x: string]: any; a: number; b: any; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        b: yield 2,
+>b : any
+>yield 2 : any
+>2 : 2
+
+        [g()]: 3,
+>[g()] : number
+>g() : string
+>g : () => string
+>3 : 3
+
+        c: 4,
+>c : number
+>4 : 4
+    }
+}
+
+function* objectLiteral4() {
+>objectLiteral4 : () => Generator<number, void, unknown>
+
+    const x = {
+>x : { [x: string]: any; a: number; b: any; c: number; }
+>{        a: 1,        [g()]: 2,        b: yield 3,        c: 4,    } : { [x: string]: any; a: number; b: any; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        [g()]: 2,
+>[g()] : number
+>g() : string
+>g : () => string
+>2 : 2
+
+        b: yield 3,
+>b : any
+>yield 3 : any
+>3 : 3
+
+        c: 4,
+>c : number
+>4 : 4
+    }
+}
+
+function* objectLiteral5() {
+>objectLiteral5 : () => Generator<number, void, unknown>
+
+    const x = {
+>x : { [x: string]: any; a: number; c: number; }
+>{        a: 1,        [g()]: yield 2,        c: 4,    } : { [x: string]: any; a: number; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        [g()]: yield 2,
+>[g()] : any
+>g() : string
+>g : () => string
+>yield 2 : any
+>2 : 2
+
+        c: 4,
+>c : number
+>4 : 4
+    }
+}
+
+function* objectLiteral6() {
+>objectLiteral6 : () => Generator<any, void, unknown>
+
+    const x = {
+>x : { [x: number]: number; a: number; c: number; }
+>{        a: 1,        [yield]: 2,        c: 4,    } : { [x: number]: number; a: number; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        [yield]: 2,
+>[yield] : number
+>yield : any
+>2 : 2
+
+        c: 4,
+>c : number
+>4 : 4
+    }
+}
+
+function* objectLiteral7() {
+>objectLiteral7 : () => Generator<number, void, unknown>
+
+    const x = {
+>x : { [x: number]: any; a: number; c: number; }
+>{        a: 1,        [yield]: yield 2,        c: 4,    } : { [x: number]: any; a: number; c: number; }
+
+        a: 1,
+>a : number
+>1 : 1
+
+        [yield]: yield 2,
+>[yield] : any
+>yield : any
+>yield 2 : any
+>2 : 2
+
+        c: 4,
+>c : number
+>4 : 4
+    }
+}
+

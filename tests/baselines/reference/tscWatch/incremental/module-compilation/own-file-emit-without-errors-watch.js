@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -20,6 +20,49 @@ export const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"module":"amd"}}
+
+
+/a/lib/tsc.js -w
+Output::
+>> Screen clear
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"module":2,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+WatchedFiles::
+/users/username/projects/project/tsconfig.json:
+  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
+/users/username/projects/project/file1.ts:
+  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
+/users/username/projects/project/file2.ts:
+  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/users/username/projects/project/node_modules/@types:
+  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/users/username/projects/project:
+  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
@@ -45,15 +88,18 @@ define(["require", "exports"], function (require, exports) {
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./file1.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-6821242887-export declare const x = 10;\n",
+        "affectsGlobalScope": false
       },
       "./file2.ts": {
         "version": "-13729954175-export const y = 20;",
-        "signature": "-7152436933-export declare const y = 20;\n"
+        "signature": "-7152436933-export declare const y = 20;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -74,25 +120,30 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/file2.ts]
+export const z = 10;
+
+
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90m12:00:34 AM[0m] Starting compilation in watch mode...
 
-
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
 Program options: {"incremental":true,"module":2,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
 WatchedFiles::
@@ -114,11 +165,6 @@ FsWatchesRecursive::
   {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change::
-
-//// [/users/username/projects/project/file2.ts]
-export const z = 10;
 
 //// [/users/username/projects/project/file2.js]
 define(["require", "exports"], function (require, exports) {
@@ -135,15 +181,18 @@ define(["require", "exports"], function (require, exports) {
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./file1.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-6821242887-export declare const x = 10;\n",
+        "affectsGlobalScope": false
       },
       "./file2.ts": {
         "version": "-12438487295-export const z = 10;",
-        "signature": "-7483702853-export declare const z = 10;\n"
+        "signature": "-7483702853-export declare const z = 10;\n",
+        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -163,42 +212,3 @@ define(["require", "exports"], function (require, exports) {
   "version": "FakeTSVersion"
 }
 
-
-Output::
->> Screen clear
-[[90m12:00:34 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:00:41 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/file2.ts
-
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"fileName":"/users/username/projects/project/file1.ts","pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"fileName":"/users/username/projects/project/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined

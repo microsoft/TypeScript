@@ -10,7 +10,7 @@ describe("unittests:: Public APIs", () => {
         });
 
         it("should be acknowledged when they change", () => {
-            Harness.Baseline.runBaseline(api, fileContent);
+            Harness.Baseline.runBaseline(api, fileContent, { PrintDiff: true });
         });
 
         it("should compile", () => {
@@ -49,13 +49,78 @@ describe("unittests:: Public APIs:: token to string", () => {
 
 describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-        assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(() => ts.factory.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+    });
+});
+
+describe("unittests:: Public APIs:: JSDoc newlines", () => {
+    it("are preserved verbatim", () => {
+        const testFilePath = "/file.ts";
+        const testFileText = `
+/**
+* @example
+* Some\n * text\r\n * with newlines.
+*/
+function test() {}`;
+
+        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
+        const tags = ts.getJSDocTags(funcDec);
+        assert.isDefined(tags[0].comment);
+        assert.equal(tags[0].comment, "Some\n text\r\n with newlines.");
     });
 });
 
 describe("unittests:: Public APIs:: isPropertyName", () => {
     it("checks if a PrivateIdentifier is a valid property name", () => {
-        const prop = ts.createPrivateIdentifier("#foo");
+        const prop = ts.factory.createPrivateIdentifier("#foo");
         assert.isTrue(ts.isPropertyName(prop), "PrivateIdentifier must be a valid property name.");
+    });
+});
+
+describe("unittests:: Public APIs:: getTypeAtLocation", () => {
+    it("works on PropertyAccessExpression in implements clause", () => {
+        const content = `namespace Test {
+            export interface Test {}
+        }
+        class Foo implements Test.Test {}`;
+
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const classDeclaration = file.statements.find(ts.isClassDeclaration)!;
+        const propertyAccess = classDeclaration.heritageClauses![0].types[0].expression as ts.PropertyAccessExpression;
+        const type = checker.getTypeAtLocation(propertyAccess);
+        assert.ok(!(type.flags & ts.TypeFlags.Any));
+        assert.equal(type, checker.getTypeAtLocation(propertyAccess.name));
+    });
+
+    it("works on SourceFile", () => {
+        const content = `const foo = 1;`;
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const type = checker.getTypeAtLocation(file);
+        assert.equal(type.flags, ts.TypeFlags.Any);
     });
 });

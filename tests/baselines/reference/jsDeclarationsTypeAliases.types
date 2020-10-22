@@ -35,7 +35,7 @@ No type information for this code.=== tests/cases/conformance/jsdoc/declarations
  * @returns {SomeType}
  */
 function doTheThing(x) {
->doTheThing : (x: number) => number | { x: string; } | LocalThing | ExportedThing
+>doTheThing : (x: number) => SomeType
 >x : number
 
     return {x: ""+x};
@@ -53,14 +53,14 @@ class ExportedThing {
 >"ok" : "ok"
 }
 module.exports = {
->module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => number | { x: string; } | LocalThing | ExportedThing; ExportedThing: typeof ExportedThing; }
->module.exports : { doTheThing: (x: number) => number | { x: string; } | LocalThing | ExportedThing; ExportedThing: typeof ExportedThing; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/mixed\"": { doTheThing: (x: number) => number | { x: string; } | LocalThing | ExportedThing; ExportedThing: typeof ExportedThing; }; }
->exports : { doTheThing: (x: number) => number | { x: string; } | LocalThing | ExportedThing; ExportedThing: typeof ExportedThing; }
->{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => number | { x: string; } | LocalThing | ExportedThing; ExportedThing: typeof ExportedThing; }
+>module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+>module.exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+>module : { "\"tests/cases/conformance/jsdoc/declarations/mixed\"": { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }; }
+>exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+>{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
 
     doTheThing,
->doTheThing : (x: number) => number | { x: string; } | LocalThing | ExportedThing
+>doTheThing : (x: number) => SomeType
 
     ExportedThing,
 >ExportedThing : typeof ExportedThing

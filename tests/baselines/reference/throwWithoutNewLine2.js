@@ -3,5 +3,5 @@ throw
 a;
 
 //// [throwWithoutNewLine2.js]
-throw;
+throw ;
 a;

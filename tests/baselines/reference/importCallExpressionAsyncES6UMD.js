@@ -80,7 +80,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         }
     }
     exports.cl2 = cl2;
-    exports.l = () => __awaiter(void 0, void 0, void 0, function* () {
+    const l = () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield __syncRequire ? Promise.resolve().then(() => require('./test')) : new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });
+    exports.l = l;
 });

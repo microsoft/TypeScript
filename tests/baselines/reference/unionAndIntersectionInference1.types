@@ -10,7 +10,7 @@ var y: Y = <Y>undefined;
 >undefined : undefined
 
 function destructure<a, r>(
->destructure : <a, r>(something: Y | a, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
+>destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
 
     something: a | Y,
 >something : Y | a
@@ -123,7 +123,7 @@ type Maybe<T> = T | void;
 >Maybe : Maybe<T>
 
 function get<U>(x: U | void): U {
->get : <U>(x: void | U) => U
+>get : <U>(x: U | void) => U
 >x : void | U
 
    return null; // just an example
@@ -190,12 +190,12 @@ const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ na
 >createTestAsync : () => Promise<ITest>
 >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
 >Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<awaited T>; (): Promise<void>; }
->then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<awaited TResult1 | awaited TResult2>
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => ({ name: 'test' }) : () => { name: "test"; }
 >({ name: 'test' }) : { name: "test"; }
 >{ name: 'test' } : { name: "test"; }

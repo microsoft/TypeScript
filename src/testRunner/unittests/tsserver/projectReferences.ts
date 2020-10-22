@@ -2,12 +2,8 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
         function createHost(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
             const host = createServerHost(files);
-
             // ts build should succeed
-            const solutionBuilder = tscWatch.createSolutionBuilder(host, rootNames, {});
-            solutionBuilder.build();
-            assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
-
+            tscWatch.ensureErrorFreeBuild(host, rootNames);
             return host;
         }
 
@@ -1487,13 +1483,7 @@ function foo() {
                     project,
                     [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
                 );
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
                 session.executeCommandSeq<protocol.UpdateOpenRequest>({
                     command: protocol.CommandTypes.UpdateOpen,
                     arguments: {
@@ -1507,13 +1497,7 @@ function foo() {
                         }]
                     }
                 });
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
             }
 
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
@@ -1841,11 +1825,16 @@ bar();
         });
 
         describe("when default project is solution project", () => {
-            interface VerifySolutionScenario {
+            interface Setup {
+                solutionOptions?: CompilerOptions;
+                solutionFiles?: string[];
                 configRefs: string[];
                 additionalFiles: readonly File[];
-                additionalProjects: readonly { projectName: string, files: readonly string[] }[];
                 expectedOpenEvents: protocol.Event[];
+            }
+            interface VerifySolutionScenario extends Setup {
+                solutionProject?: readonly string[];
+                additionalProjects: readonly { projectName: string, files: readonly string[] }[];
                 expectedReloadEvents: protocol.Event[];
                 expectedReferences: protocol.ReferencesResponseBody;
                 expectedReferencesFromDtsProject: protocol.ReferencesResponseBody;
@@ -1889,15 +1878,13 @@ export { foo };
             const fileResolvingToMainDts: File = {
                 path: `${tscWatch.projectRoot}/indirect3/main.ts`,
                 content: `import { foo } from 'main';
-foo;`
+foo;
+export function bar() {}`
             };
             const tsconfigSrcPath = `${tscWatch.projectRoot}/tsconfig-src.json`;
             const tsconfigPath = `${tscWatch.projectRoot}/tsconfig.json`;
-            function verifySolutionScenario({
-                configRefs, additionalFiles, additionalProjects,
-                expectedOpenEvents, expectedReloadEvents,
-                expectedReferences, expectedReferencesFromDtsProject
-            }: VerifySolutionScenario) {
+            const dummyFilePath = "/dummy/dummy.ts";
+            function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles, expectedOpenEvents }: Setup) {
                 const tsconfigSrc: File = {
                     path: tsconfigSrcPath,
                     content: JSON.stringify({
@@ -1912,12 +1899,13 @@ foo;`
                 const tsconfig: File = {
                     path: tsconfigPath,
                     content: JSON.stringify({
+                        ... (solutionOptions ? { compilerOptions: solutionOptions } : {}),
                         references: configRefs.map(path => ({ path })),
-                        files: []
+                        files: solutionFiles || []
                     })
                 };
                 const dummyFile: File = {
-                    path: "/dummy/dummy.ts",
+                    path: dummyFilePath,
                     content: "let a = 10;"
                 };
                 const host = createServerHost([
@@ -1929,34 +1917,37 @@ foo;`
                 const session = createSession(host, { canUseEvents: true });
                 const service = session.getProjectService();
                 service.openClientFile(main.path);
-                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
                 checkEvents(session, expectedOpenEvents);
+                return { session, service, host, tsconfigSrc, tsconfig };
+            }
+
+            function verifySolutionScenario(input: VerifySolutionScenario) {
+                const { session, service, host, tsconfigSrc, tsconfig } = setup(input);
+                const {
+                    solutionProject, additionalProjects, expectedReloadEvents,
+                    expectedReferences, expectedReferencesFromDtsProject
+                } = input;
+                verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ false);
                 const info = service.getScriptInfoForPath(main.path as Path)!;
                 const project = service.configuredProjects.get(tsconfigSrc.path)!;
                 assert.equal(info.getDefaultProject(), project);
                 assert.equal(service.findDefaultConfiguredProject(info), project);
 
                 // Verify errors
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: [
-                        { file: main, syntax: [], semantic: [], suggestion: [] },
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [main] });
 
                 // Verify collection of script infos
-                service.openClientFile(dummyFile.path);
+                service.openClientFile(dummyFilePath);
                 verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
 
                 service.closeClientFile(main.path);
-                service.closeClientFile(dummyFile.path);
-                service.openClientFile(dummyFile.path);
+                service.closeClientFile(dummyFilePath);
+                service.openClientFile(dummyFilePath);
                 verifyProjects(/*includeConfigured*/ false, /*includeDummy*/ true);
 
                 service.openClientFile(main.path);
-                service.closeClientFile(dummyFile.path);
-                service.openClientFile(dummyFile.path);
+                service.closeClientFile(dummyFilePath);
+                service.openClientFile(dummyFilePath);
                 verifyProjects(/*includeConfigured*/ true, /*includeDummy*/ true);
 
                 // Verify Reload projects
@@ -1973,7 +1964,7 @@ foo;`
                 assert.deepEqual(response, expectedReferences);
 
                 service.closeClientFile(main.path);
-                service.closeClientFile(dummyFile.path);
+                service.closeClientFile(dummyFilePath);
 
                 // Verify when declaration map references the file
                 service.openClientFile(fileResolvingToMainDts.path);
@@ -1993,12 +1984,12 @@ foo;`
                     checkNumberOfProjects(service, { configuredProjects, inferredProjects });
                     if (includeConfigured) {
                         checkProjectActualFiles(service.configuredProjects.get(tsconfigSrc.path)!, [tsconfigSrc.path, main.path, helper.path, libFile.path]);
-                        checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, [tsconfig.path]);
+                        checkProjectActualFiles(service.configuredProjects.get(tsconfig.path)!, solutionProject || [tsconfig.path]);
                         additionalProjects.forEach(({ projectName, files }) =>
                             checkProjectActualFiles(service.configuredProjects.get(projectName)!, files));
                     }
                     if (includeDummy) {
-                        checkProjectActualFiles(service.inferredProjects[0], [dummyFile.path, libFile.path]);
+                        checkProjectActualFiles(service.inferredProjects[0], [dummyFilePath, libFile.path]);
                     }
                 }
             }
@@ -2083,14 +2074,15 @@ foo;`
                 ];
             }
 
-            function getIndirectProject(postfix: string) {
+            function getIndirectProject(postfix: string, optionsToExtend?: CompilerOptions) {
                 const tsconfigIndirect: File = {
                     path: `${tscWatch.projectRoot}/tsconfig-indirect${postfix}.json`,
                     content: JSON.stringify({
                         compilerOptions: {
                             composite: true,
                             outDir: "./target/",
-                            baseUrl: "./src/"
+                            baseUrl: "./src/",
+                            ...optionsToExtend
                         },
                         files: [`./indirect${postfix}/main.ts`],
                         references: [{ path: "./tsconfig-src.json" }]
@@ -2101,6 +2093,66 @@ foo;`
                     content: fileResolvingToMainDts.content
                 };
                 return { tsconfigIndirect, indirect };
+            }
+
+            interface VerifyProjects {
+                configuredProjects: readonly { projectName: string, files: readonly string[] }[];
+                inferredProjects: readonly (readonly string[])[];
+            }
+
+            interface VerifyDisableReferencedProjectLoad extends Setup {
+                expectedProjectsOnOpen: VerifyProjects;
+                expectedProjectsOnDummyOpen?: VerifyProjects;
+                expectedProjectsOnReload?: VerifyProjects;
+                expectedDefaultProject: (service: server.ProjectService) => server.Project;
+                expectedDefaultConfiguredProject: (service: server.ProjectService) => server.ConfiguredProject | undefined;
+                expectedReloadEvents: protocol.Event[];
+            }
+
+            function verifyDisableReferencedProjectLoad(input: VerifyDisableReferencedProjectLoad) {
+                const { session, service } = setup(input);
+                const { expectedProjectsOnOpen, expectedDefaultProject, expectedDefaultConfiguredProject, expectedReloadEvents } = input;
+                const expectedProjectsOnOnlyDummy: VerifyProjects = {
+                    configuredProjects: emptyArray,
+                    inferredProjects: [
+                        [dummyFilePath, libFile.path],
+                    ]
+                };
+                const expectedProjectsOnDummyOpen = input.expectedProjectsOnDummyOpen || {
+                    configuredProjects: expectedProjectsOnOpen.configuredProjects,
+                    inferredProjects: expectedProjectsOnOnlyDummy.inferredProjects,
+                };
+                const expectedProjectsOnReload = input.expectedProjectsOnReload || expectedProjectsOnDummyOpen;
+
+                verifyProjects(expectedProjectsOnOpen);
+                const info = service.getScriptInfoForPath(main.path as Path)!;
+                assert.equal(info.getDefaultProject(), expectedDefaultProject(service));
+                assert.equal(service.findDefaultConfiguredProject(info), expectedDefaultConfiguredProject(service));
+
+                // Verify collection of script infos
+                service.openClientFile(dummyFilePath);
+                verifyProjects(expectedProjectsOnDummyOpen);
+
+                service.closeClientFile(main.path);
+                service.closeClientFile(dummyFilePath);
+                service.openClientFile(dummyFilePath);
+                verifyProjects(expectedProjectsOnOnlyDummy);
+
+                service.openClientFile(main.path);
+
+                // Verify Reload projects
+                session.clearMessages();
+                service.reloadProjects();
+                checkEvents(session, expectedReloadEvents);
+                verifyProjects(expectedProjectsOnReload);
+
+                function verifyProjects(expected: VerifyProjects) {
+                    checkNumberOfProjects(service, { configuredProjects: expected.configuredProjects.length, inferredProjects: expected.inferredProjects.length });
+                    expected.configuredProjects.forEach(({ projectName, files }) =>
+                        checkProjectActualFiles(service.configuredProjects.get(projectName)!, files));
+                    expected.inferredProjects.forEach((files, index) =>
+                        checkProjectActualFiles(service.inferredProjects[index], files));
+                }
             }
 
             it("when project is directly referenced by solution", () => {
@@ -2137,19 +2189,14 @@ foo;`
                 verifySolutionScenario({
                     configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
                     additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
-                    additionalProjects: [{
-                        projectName: tsconfigIndirect.path,
-                        files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path]
-                    }],
+                    additionalProjects: emptyArray,
                     expectedOpenEvents: [
                         ...expectedSolutionLoadAndTelemetry(),
-                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
                         ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
                         configFileDiagEvent(main.path, tsconfigSrcPath, [])
                     ],
                     expectedReloadEvents: [
                         ...expectedReloadEvent(tsconfigPath),
-                        ...expectedReloadEvent(tsconfigIndirect.path),
                         ...expectedReloadEvent(tsconfigSrcPath),
                     ],
                     expectedReferences: {
@@ -2165,11 +2212,305 @@ foo;`
                         refs: [
                             ...expectedIndirectRefs(fileResolvingToMainDts),
                             ...refs,
-                            ...expectedIndirectRefs(indirect2),
                             ...expectedIndirectRefs(indirect),
+                            ...expectedIndirectRefs(indirect2),
                         ],
                         symbolDisplayString: "(alias) const foo: 1\nimport foo",
                     }
+                });
+            });
+
+            it("disables looking into the child project if disableReferencedProjectLoad is set", () => {
+                const expectedProjectsOnOpen: VerifyProjects = {
+                    configuredProjects: [
+                        { projectName: tsconfigPath, files: [tsconfigPath] },
+                    ],
+                    inferredProjects: [
+                        [main.path, libFile.path],
+                    ]
+                };
+                verifyDisableReferencedProjectLoad({
+                    solutionOptions: { disableReferencedProjectLoad: true },
+                    configRefs: ["./tsconfig-src.json"],
+                    additionalFiles: emptyArray,
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        configFileDiagEvent(main.path, tsconfigPath, [])
+                    ],
+                    expectedDefaultProject: service => service.inferredProjects[0],
+                    expectedDefaultConfiguredProject: returnUndefined,
+                    expectedProjectsOnOpen,
+                    expectedProjectsOnDummyOpen: {
+                        configuredProjects: emptyArray,
+                        inferredProjects: [
+                            ...expectedProjectsOnOpen.inferredProjects,
+                            [dummyFilePath, libFile.path],
+                        ]
+                    },
+                    expectedProjectsOnReload: {
+                        configuredProjects: expectedProjectsOnOpen.configuredProjects,
+                        inferredProjects: [
+                            [dummyFilePath, libFile.path],
+                            ...expectedProjectsOnOpen.inferredProjects,
+                        ]
+                    },
+                    expectedReloadEvents: expectedReloadEvent(tsconfigPath)
+                });
+            });
+
+            it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
+                const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                const expectedProjectsOnOpen: VerifyProjects = {
+                    configuredProjects: [
+                        { projectName: tsconfigPath, files: [tsconfigPath] },
+                        { projectName: tsconfigIndirect.path, files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path] },
+                    ],
+                    inferredProjects: emptyArray
+                };
+                verifyDisableReferencedProjectLoad({
+                    configRefs: ["./tsconfig-indirect1.json"],
+                    additionalFiles: [tsconfigIndirect, indirect],
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
+                        configFileDiagEvent(main.path, tsconfigIndirect.path, [])
+                    ],
+                    expectedDefaultProject: service => service.configuredProjects.get(tsconfigIndirect.path)!,
+                    expectedDefaultConfiguredProject: returnUndefined,
+                    expectedProjectsOnOpen,
+                    expectedReloadEvents: [
+                        ...expectedReloadEvent(tsconfigPath),
+                        ...expectedReloadEvent(tsconfigIndirect.path),
+                    ]
+                });
+            });
+
+            it("disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one", () => {
+                const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                const expectedProjectsOnOpen: VerifyProjects = {
+                    configuredProjects: [
+                        { projectName: tsconfigPath, files: [tsconfigPath] },
+                        { projectName: tsconfigSrcPath, files: [tsconfigSrcPath, main.path, helper.path, libFile.path] },
+                    ],
+                    inferredProjects: emptyArray
+                };
+                verifyDisableReferencedProjectLoad({
+                    configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                    additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2],
+                    expectedOpenEvents: [
+                        ...expectedSolutionLoadAndTelemetry(),
+                        ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                        configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                    ],
+                    expectedDefaultProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                    expectedDefaultConfiguredProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                    expectedProjectsOnOpen,
+                    expectedReloadEvents: [
+                        ...expectedReloadEvent(tsconfigPath),
+                        ...expectedReloadEvent(tsconfigSrcPath),
+                    ]
+                });
+            });
+
+            describe("when solution is project that contains its own files", () => {
+                it("when the project found is not solution but references open file through project reference", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: fileResolvingToMainDts.content
+                    };
+                    const { refs, ...rest } = expectedReferencesResponse();
+                    verifySolutionScenario({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./src/"
+                        },
+                        solutionProject: [tsconfigPath, ownMain.path, main.path, libFile.path, helper.path],
+                        configRefs: ["./tsconfig-src.json"],
+                        additionalFiles: [ownMain],
+                        additionalProjects: emptyArray,
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                            configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                        ],
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigSrcPath),
+                        ],
+                        expectedReferences: {
+                            refs: [
+                                ...refs,
+                                ...expectedIndirectRefs(ownMain),
+                            ],
+                            ...rest
+                        },
+                        expectedReferencesFromDtsProject: {
+                            ...rest,
+                            refs: [
+                                ...expectedIndirectRefs(fileResolvingToMainDts),
+                                ...refs,
+                                ...expectedIndirectRefs(ownMain),
+                            ],
+                            symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                        },
+                    });
+                });
+
+                it("when project is indirectly referenced by solution", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: `import { bar } from 'main';
+bar;`
+                    };
+                    const { tsconfigIndirect, indirect } = getIndirectProject("1");
+                    const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                    const { refs, ...rest } = expectedReferencesResponse();
+                    verifySolutionScenario({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./indirect1/"
+                        },
+                        solutionProject: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path],
+                        configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                        additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2, ownMain],
+                        additionalProjects: emptyArray,
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                            configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                        ],
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigSrcPath),
+                        ],
+                        expectedReferences: {
+                            refs: [
+                                ...refs,
+                                ...expectedIndirectRefs(indirect),
+                                ...expectedIndirectRefs(indirect2),
+                            ],
+                            ...rest
+                        },
+                        expectedReferencesFromDtsProject: {
+                            ...rest,
+                            refs: [
+                                ...expectedIndirectRefs(fileResolvingToMainDts),
+                                ...refs,
+                                ...expectedIndirectRefs(indirect),
+                                ...expectedIndirectRefs(indirect2),
+                            ],
+                            symbolDisplayString: "(alias) const foo: 1\nimport foo",
+                        }
+                    });
+                });
+
+                it("disables looking into the child project if disableReferencedProjectLoad is set", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: fileResolvingToMainDts.content
+                    };
+                    const expectedProjectsOnOpen: VerifyProjects = {
+                        configuredProjects: [
+                            { projectName: tsconfigPath, files: [tsconfigPath, ownMain.path, main.path, libFile.path, helper.path] },
+                        ],
+                        inferredProjects: emptyArray
+                    };
+                    verifyDisableReferencedProjectLoad({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./src/",
+                            disableReferencedProjectLoad: true
+                        },
+                        configRefs: ["./tsconfig-src.json"],
+                        additionalFiles: [ownMain],
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            configFileDiagEvent(main.path, tsconfigPath, [])
+                        ],
+                        expectedDefaultProject: service => service.configuredProjects.get(tsconfigPath)!,
+                        expectedDefaultConfiguredProject: returnUndefined,
+                        expectedProjectsOnOpen,
+                        expectedReloadEvents: expectedReloadEvent(tsconfigPath)
+                    });
+                });
+
+                it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: `import { bar } from 'main';
+bar;`
+                    };
+                    const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                    const expectedProjectsOnOpen: VerifyProjects = {
+                        configuredProjects: [
+                            { projectName: tsconfigPath, files: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path] },
+                            { projectName: tsconfigIndirect.path, files: [tsconfigIndirect.path, main.path, helper.path, indirect.path, libFile.path] },
+                        ],
+                        inferredProjects: emptyArray
+                    };
+                    verifyDisableReferencedProjectLoad({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./indirect1/",
+                        },
+                        configRefs: ["./tsconfig-indirect1.json"],
+                        additionalFiles: [tsconfigIndirect, indirect, ownMain],
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigIndirect.path),
+                            configFileDiagEvent(main.path, tsconfigPath, [])
+                        ],
+                        expectedDefaultProject: service => service.configuredProjects.get(tsconfigPath)!,
+                        expectedDefaultConfiguredProject: returnUndefined,
+                        expectedProjectsOnOpen,
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigIndirect.path),
+                        ]
+                    });
+                });
+
+                it("disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one", () => {
+                    const ownMain: File = {
+                        path: `${tscWatch.projectRoot}/own/main.ts`,
+                        content: `import { bar } from 'main';
+bar;`
+                    };
+                    const { tsconfigIndirect, indirect } = getIndirectProject("1", { disableReferencedProjectLoad: true });
+                    const { tsconfigIndirect: tsconfigIndirect2, indirect: indirect2 } = getIndirectProject("2");
+                    const expectedProjectsOnOpen: VerifyProjects = {
+                        configuredProjects: [
+                            { projectName: tsconfigPath, files: [tsconfigPath, indirect.path, ownMain.path, main.path, libFile.path, helper.path] },
+                            { projectName: tsconfigSrcPath, files: [tsconfigSrcPath, main.path, helper.path, libFile.path] },
+                        ],
+                        inferredProjects: emptyArray
+                    };
+                    verifyDisableReferencedProjectLoad({
+                        solutionFiles: [`./own/main.ts`],
+                        solutionOptions: {
+                            outDir: "./target/",
+                            baseUrl: "./indirect1/",
+                        },
+                        configRefs: ["./tsconfig-indirect1.json", "./tsconfig-indirect2.json"],
+                        additionalFiles: [tsconfigIndirect, indirect, tsconfigIndirect2, indirect2, ownMain],
+                        expectedOpenEvents: [
+                            ...expectedSolutionLoadAndTelemetry(),
+                            ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),
+                            configFileDiagEvent(main.path, tsconfigSrcPath, [])
+                        ],
+                        expectedDefaultProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                        expectedDefaultConfiguredProject: service => service.configuredProjects.get(tsconfigSrcPath)!,
+                        expectedProjectsOnOpen,
+                        expectedReloadEvents: [
+                            ...expectedReloadEvent(tsconfigPath),
+                            ...expectedReloadEvent(tsconfigSrcPath),
+                        ]
+                    });
                 });
             });
         });
@@ -2281,6 +2622,76 @@ foo;`
             it("when disableSourceOfProjectReferenceRedirect is true", () => {
                 verifyAutoImport(/*built*/ true, /*disableSourceOfProjectReferenceRedirect*/ true);
             });
+        });
+
+        it("when files from two projects are open and one project references", () => {
+            function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: CompilerOptions): [file: File, config: File] {
+                const file: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/src/file1.ts`,
+                    content: `export const ${packageName}Const = 10;`
+                };
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: { composite: true, ...optionsToExtend || {} },
+                        references: references?.map(path => ({ path: `../${path}` }))
+                    })
+                };
+                return [file, config];
+            }
+            const [mainFile, mainConfig] = getPackageAndFile("main", ["core", "indirect", "noCoreRef1", "indirectDisabledChildLoad1", "indirectDisabledChildLoad2", "refToCoreRef3", "indirectNoCoreRef"]);
+            const [coreFile, coreConfig] = getPackageAndFile("core");
+            const [noCoreRef1File, noCoreRef1Config] = getPackageAndFile("noCoreRef1");
+            const [indirectFile, indirectConfig] = getPackageAndFile("indirect", ["coreRef1"]);
+            const [coreRef1File, coreRef1Config] = getPackageAndFile("coreRef1", ["core"]);
+            const [indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config] = getPackageAndFile("indirectDisabledChildLoad1", ["coreRef2"], { disableReferencedProjectLoad: true });
+            const [coreRef2File, coreRef2Config] = getPackageAndFile("coreRef2", ["core"]);
+            const [indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config] = getPackageAndFile("indirectDisabledChildLoad2", ["coreRef3"], { disableReferencedProjectLoad: true });
+            const [coreRef3File, coreRef3Config] = getPackageAndFile("coreRef3", ["core"]);
+            const [refToCoreRef3File, refToCoreRef3Config] = getPackageAndFile("refToCoreRef3", ["coreRef3"]);
+            const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
+            const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
+
+            const host = createServerHost([
+                libFile, mainFile, mainConfig, coreFile, coreConfig, noCoreRef1File, noCoreRef1Config,
+                indirectFile, indirectConfig, coreRef1File, coreRef1Config,
+                indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config, coreRef2File, coreRef2Config,
+                indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config, coreRef3File, coreRef3Config,
+                refToCoreRef3File, refToCoreRef3Config,
+                indirectNoCoreRefFile, indirectNoCoreRefConfig, noCoreRef2File, noCoreRef2Config
+            ], { useCaseSensitiveFileNames: true });
+            const session = createSession(host);
+            const service = session.getProjectService();
+            openFilesForSession([mainFile, coreFile], session);
+
+            verifyProject(mainConfig);
+            verifyProject(coreConfig);
+
+            // Find all refs in coreFile
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`)
+            });
+            verifyProject(mainConfig);
+            verifyProject(coreConfig);
+            verifyNoProject(noCoreRef1Config); // Should not be loaded
+            verifyProject(indirectConfig);
+            verifyProject(coreRef1Config);
+            verifyProject(indirectDisabledChildLoad1Config);
+            verifyNoProject(coreRef2Config); // Should not be loaded
+            verifyProject(indirectDisabledChildLoad2Config);
+            verifyProject(coreRef3Config);
+            verifyProject(refToCoreRef3Config);
+            verifyNoProject(indirectNoCoreRefConfig); // Should not be loaded
+            verifyNoProject(noCoreRef2Config); // Should not be loaded
+
+            function verifyProject(config: File) {
+                assert.isDefined(service.configuredProjects.get(config.path), `Expected to find ${config.path}`);
+            }
+
+            function verifyNoProject(config: File) {
+                assert.isUndefined(service.configuredProjects.get(config.path), `Expected to not find ${config.path}`);
+            }
         });
     });
 }

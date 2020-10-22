@@ -14,7 +14,7 @@ namespace ts.codefix {
             const moduleOutOfRange = moduleKind >= ModuleKind.ES2015 && moduleKind < ModuleKind.ESNext;
             if (moduleOutOfRange) {
                 const changes = textChanges.ChangeTracker.with(context, changes => {
-                    setJsonCompilerOptionValue(changes, configFile, "module", createStringLiteral("esnext"));
+                    setJsonCompilerOptionValue(changes, configFile, "module", factory.createStringLiteral("esnext"));
                 });
                 codeFixes.push(createCodeFixActionWithoutFixAll("fixModuleOption", changes, [Diagnostics.Set_the_module_option_in_your_configuration_file_to_0, "esnext"]));
             }
@@ -26,10 +26,10 @@ namespace ts.codefix {
                     const configObject = getTsConfigObjectLiteralExpression(configFile);
                     if (!configObject) return;
 
-                    const options: [string, Expression][] = [["target", createStringLiteral("es2017")]];
+                    const options: [string, Expression][] = [["target", factory.createStringLiteral("es2017")]];
                     if (moduleKind === ModuleKind.CommonJS) {
                         // Ensure we preserve the default module kind (commonjs), as targets >= ES2015 have a default module kind of es2015.
-                        options.push(["module", createStringLiteral("commonjs")]);
+                        options.push(["module", factory.createStringLiteral("commonjs")]);
                     }
 
                     setJsonCompilerOptionValues(tracker, configFile, options);

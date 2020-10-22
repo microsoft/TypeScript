@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type '""' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,2): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2539: Cannot assign to 'M3' because it is not a variable.
@@ -11,13 +11,13 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,13): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2539: Cannot assign to 'fn' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,2): error TS2539: Cannot assign to 'fn' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(49,5): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(54,5): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type '""' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(49,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(54,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(62,1): error TS2539: Cannot assign to 'E' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(63,2): error TS2539: Cannot assign to 'E' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(69,1): error TS2539: Cannot assign to 'C' because it is not a variable.
@@ -30,10 +30,10 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     (x) = 3; // OK
     x = ''; // Error
     ~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     (x) = ''; // Error
     ~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     module M {
         export var y: number;
@@ -43,13 +43,13 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     (M.y) = 3; // OK
     M.y = ''; // Error
     ~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     (M).y = ''; // Error
     ~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     (M.y) = ''; // Error
     ~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     M = { y: 3 }; // Error
     ~
@@ -98,32 +98,32 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
         (x) = 3; // OK
         x = ''; // Error
         ~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (x) = ''; // Error
         ~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         (y).t = 3; // OK
         (y.t) = 3; // OK
         (y).t = ''; // Error
         ~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (y.t) = ''; // Error
         ~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         y['t'] = 3; // OK
         (y)['t'] = 3; // OK
         (y['t']) = 3; // OK
         y['t'] = ''; // Error
         ~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (y)['t'] = ''; // Error
         ~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         (y['t']) = ''; // Error
         ~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     }
     
     enum E {

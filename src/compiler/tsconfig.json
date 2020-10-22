@@ -1,7 +1,8 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler.js"
+        "outFile": "../../built/local/compiler.js",
+        "types": ["node"]
     },
 
     "references": [
@@ -16,6 +17,7 @@
         "performance.ts",
         "perfLogger.ts",
         "semver.ts",
+        "tracing.ts",
 
         "types.ts",
         "sys.ts",
@@ -24,6 +26,15 @@
         "scanner.ts",
         "utilitiesPublic.ts",
         "utilities.ts",
+        "factory/baseNodeFactory.ts",
+        "factory/parenthesizerRules.ts",
+        "factory/nodeConverters.ts",
+        "factory/nodeFactory.ts",
+        "factory/emitNode.ts",
+        "factory/emitHelpers.ts",
+        "factory/nodeTests.ts",
+        "factory/utilities.ts",
+        "factory/utilitiesPublic.ts",
         "parser.ts",
         "commandLineParser.ts",
         "moduleNameResolver.ts",
@@ -31,10 +42,7 @@
         "binder.ts",
         "symbolWalker.ts",
         "checker.ts",
-        "factoryPublic.ts",
-        "factory.ts",
         "visitorPublic.ts",
-        "visitor.ts",
         "sourcemap.ts",
         "transformers/utilities.ts",
         "transformers/destructuring.ts",

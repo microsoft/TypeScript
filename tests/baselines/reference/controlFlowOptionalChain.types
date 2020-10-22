@@ -319,8 +319,8 @@ o4.x.y;
 >y : boolean
 
 declare const o5: { x?: { y: { z?: { w: boolean } } } };
->o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
->x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: {    z?: {        w: boolean;    };}; } | undefined; }
+>x : { y: {    z?: {        w: boolean;    };}; } | undefined
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; } | undefined
 >w : boolean
@@ -2038,7 +2038,7 @@ let i = 0;
 >0 : 0
 
 declare const arr: { tag: ("left" | "right") }[];
->arr : { tag: "left" | "right"; }[]
+>arr : { tag: ("left" | "right"); }[]
 >tag : "left" | "right"
 
 while (arr[i]?.tag === "left") {

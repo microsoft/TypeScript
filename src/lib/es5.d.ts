@@ -1047,7 +1047,7 @@ interface JSON {
     /**
      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
      * @param value A JavaScript value, usually an object or array, to be converted.
-     * @param replacer An array of strings and numbers that acts as a approved list for selecting the object properties that will be stringified.
+     * @param replacer An array of strings and numbers that acts as an approved list for selecting the object properties that will be stringified.
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
      */
     stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;
@@ -1111,22 +1111,31 @@ interface ReadonlyArray<T> {
     lastIndexOf(searchElement: T, fromIndex?: number): number;
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
+    every<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): this is readonly S[];
+    /**
+     * Determines whether all the members of an array satisfy the specified test.
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
+     * which is coercible to the Boolean value false, or until the end of the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * If thisArg is omitted, undefined is used as the this value.
+     */
+    every(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
     /**
      * Performs the specified action for each element in an array.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1141,16 +1150,16 @@ interface ReadonlyArray<T> {
     map<U>(callbackfn: (value: T, index: number, array: readonly T[]) => U, thisArg?: any): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T>(callbackfn: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): S[];
+    filter<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): S[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): T[];
+    filter(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): T[];
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1254,7 +1263,7 @@ interface Array<T> {
      * @param start The zero-based location in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      */
-    splice(start: number, deleteCount: number): T[];
+    splice(start: number, deleteCount?: number): T[];
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
@@ -1281,22 +1290,31 @@ interface Array<T> {
     lastIndexOf(searchElement: T, fromIndex?: number): number;
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+    every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[];
+    /**
+     * Determines whether all the members of an array satisfy the specified test.
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
+     * which is coercible to the Boolean value false, or until the end of the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
+     * If thisArg is omitted, undefined is used as the this value.
+     */
+    every(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
      * Performs the specified action for each element in an array.
      * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1311,16 +1329,16 @@ interface Array<T> {
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
+    filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
+    filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1358,7 +1376,7 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): arg is any[];
+    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? (unknown extends T ? never : readonly any[]) : any[];
     readonly prototype: any[];
 }
 
@@ -1378,7 +1396,7 @@ declare type PropertyDecorator = (target: Object, propertyKey: string | symbol) 
 declare type MethodDecorator = <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void;
 declare type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
 
-declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | PromiseLike<T> | awaited T) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
+declare type PromiseConstructorLike = new <T>(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>;
 
 interface PromiseLike<T> {
     /**
@@ -1387,7 +1405,7 @@ interface PromiseLike<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<awaited TResult1 | awaited TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
 }
 
 /**
@@ -1400,14 +1418,14 @@ interface Promise<T> {
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of which ever callback is executed.
      */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: awaited T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<awaited TResult1 | awaited TResult2>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
 
     /**
      * Attaches a callback for only the rejection of the Promise.
      * @param onrejected The callback to execute when the Promise is rejected.
      * @returns A Promise for the completion of the callback.
      */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<awaited T | awaited TResult>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 }
 
 interface ArrayLike<T> {
@@ -1491,6 +1509,26 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
  * Obtain the return type of a constructor function type
  */
 type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+
+/**
+ * Convert string literal type to uppercase
+ */
+type Uppercase<S extends string> = intrinsic;
+
+/**
+ * Convert string literal type to lowercase
+ */
+type Lowercase<S extends string> = intrinsic;
+
+/**
+ * Convert first character of string literal type to uppercase
+ */
+type Capitalize<S extends string> = intrinsic;
+
+/**
+ * Convert first character of string literal type to lowercase
+ */
+type Uncapitalize<S extends string> = intrinsic;
 
 /**
  * Marker for contextual 'this' type
@@ -1676,6 +1714,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
+    readonly prototype: DataView;
     new(buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
@@ -1718,13 +1757,13 @@ interface Int8Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -1738,12 +1777,12 @@ interface Int8Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
+    filter(predicate: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1885,13 +1924,13 @@ interface Int8Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -1930,8 +1969,8 @@ interface Int8Array {
 interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
     new(length: number): Int8Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Int8Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Int8Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Int8Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2000,13 +2039,13 @@ interface Uint8Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -2020,12 +2059,12 @@ interface Uint8Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
+    filter(predicate: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2167,13 +2206,13 @@ interface Uint8Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2213,8 +2252,8 @@ interface Uint8Array {
 interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
     new(length: number): Uint8Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint8Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint8Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Uint8Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2282,13 +2321,13 @@ interface Uint8ClampedArray {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -2302,12 +2341,12 @@ interface Uint8ClampedArray {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
+    filter(predicate: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2449,13 +2488,13 @@ interface Uint8ClampedArray {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2495,8 +2534,8 @@ interface Uint8ClampedArray {
 interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
     new(length: number): Uint8ClampedArray;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint8ClampedArray;
+    new(array: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
      * The size in bytes of each element in the array.
@@ -2563,13 +2602,13 @@ interface Int16Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -2583,12 +2622,12 @@ interface Int16Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(predicate: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2729,13 +2768,13 @@ interface Int16Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -2775,8 +2814,8 @@ interface Int16Array {
 interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
     new(length: number): Int16Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Int16Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Int16Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Int16Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2845,13 +2884,13 @@ interface Uint16Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -2865,12 +2904,12 @@ interface Uint16Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
+    filter(predicate: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3012,13 +3051,13 @@ interface Uint16Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3058,8 +3097,8 @@ interface Uint16Array {
 interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
     new(length: number): Uint16Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint16Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint16Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Uint16Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3127,13 +3166,13 @@ interface Int32Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -3147,12 +3186,12 @@ interface Int32Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
+    filter(predicate: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3294,13 +3333,13 @@ interface Int32Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3340,8 +3379,8 @@ interface Int32Array {
 interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
     new(length: number): Int32Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Int32Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Int32Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Int32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3409,13 +3448,13 @@ interface Uint32Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -3429,12 +3468,12 @@ interface Uint32Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
+    filter(predicate: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3575,13 +3614,13 @@ interface Uint32Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3621,8 +3660,8 @@ interface Uint32Array {
 interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
     new(length: number): Uint32Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint32Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint32Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Uint32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3690,13 +3729,13 @@ interface Float32Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -3710,12 +3749,12 @@ interface Float32Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
+    filter(predicate: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3857,13 +3896,13 @@ interface Float32Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -3903,8 +3942,8 @@ interface Float32Array {
 interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
     new(length: number): Float32Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Float32Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Float32Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Float32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3973,13 +4012,13 @@ interface Float64Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value false, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
+    every(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -3993,12 +4032,12 @@ interface Float64Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
+    filter(predicate: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -4140,13 +4179,13 @@ interface Float64Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls
-     * the callbackfn function for each element in the array until the callbackfn returns a value
+     * @param predicate A function that accepts up to three arguments. The some method calls
+     * the predicate function for each element in the array until the predicate returns a value
      * which is coercible to the Boolean value true, or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
+    some(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
 
     /**
      * Sorts an array.
@@ -4177,8 +4216,8 @@ interface Float64Array {
 interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
     new(length: number): Float64Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Float64Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Float64Array;
+    new(array: ArrayLike<number> | ArrayBufferLike): Float64Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -4247,6 +4286,7 @@ declare namespace Intl {
         style?: string;
         currency?: string;
         currencyDisplay?: string;
+        currencySign?: string;
         useGrouping?: boolean;
         minimumIntegerDigits?: number;
         minimumFractionDigits?: number;

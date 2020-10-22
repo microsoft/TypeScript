@@ -1,5 +1,5 @@
-tests/cases/compiler/omitTypeTestErrors01.ts(11,16): error TS2339: Property 'c' does not exist on type 'Omit<Foo, "c", "a" | "b">'.
-tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' does not exist on type 'Omit<Foo, "c" | "b", "a">'.
+tests/cases/compiler/omitTypeTestErrors01.ts(11,16): error TS2339: Property 'c' does not exist on type 'Omit<Foo, "c">'.
+tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' does not exist on type 'Omit<Foo, "c" | "b">'.
 
 
 ==== tests/cases/compiler/omitTypeTestErrors01.ts (2 errors) ====
@@ -15,13 +15,13 @@ tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' 
     export function getBarC(bar: Bar) {
         return bar.c;
                    ~
-!!! error TS2339: Property 'c' does not exist on type 'Omit<Foo, "c", "a" | "b">'.
+!!! error TS2339: Property 'c' does not exist on type 'Omit<Foo, "c">'.
     }
     
     export function getBazB(baz: Baz) {
         return baz.b;
                    ~
-!!! error TS2339: Property 'b' does not exist on type 'Omit<Foo, "c" | "b", "a">'.
+!!! error TS2339: Property 'b' does not exist on type 'Omit<Foo, "c" | "b">'.
     }
     
     

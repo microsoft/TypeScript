@@ -31,7 +31,6 @@ let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
 >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 0, 32))
 >ref : Symbol(ref, Decl(file.tsx, 13, 19))
 >input : Symbol(input, Decl(file.tsx, 13, 26))
->this : Symbol(globalThis)
 >input : Symbol(input, Decl(file.tsx, 13, 26))
 
 let c = <BigGreeter data-extra="hi" />
