@@ -9,7 +9,6 @@ namespace ts {
     }
 
     export interface Performance {
-        clearMarks(name?: string): void;
         mark(name: string): void;
         measure(name: string, startMark?: string, endMark?: string): void;
         now(): number;
@@ -41,14 +40,20 @@ namespace ts {
     declare const performance: Performance | undefined;
     declare const PerformanceObserver: PerformanceObserverConstructor | undefined;
 
-    function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
-        if (typeof performance === "object" &&
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    function hasRequiredAPI(performance: Performance | undefined, PerformanceObserver: PerformanceObserverConstructor | undefined) {
+        return typeof performance === "object" &&
             typeof performance.timeOrigin === "number" &&
-            typeof performance.clearMarks === "function" &&
             typeof performance.mark === "function" &&
             typeof performance.measure === "function" &&
             typeof performance.now === "function" &&
-            typeof PerformanceObserver === "function") {
+            typeof PerformanceObserver === "function";
+    }
+
+    function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
+        if (typeof performance === "object" &&
+            typeof PerformanceObserver === "function" &&
+            hasRequiredAPI(performance, PerformanceObserver)) {
             return {
                 performance,
                 PerformanceObserver
@@ -59,16 +64,38 @@ namespace ts {
     function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
         if (typeof module === "object" && typeof require === "function") {
             try {
-                const perfHooks = require("perf_hooks") as typeof import("perf_hooks");
-                const { performance, PerformanceObserver } = perfHooks;
-                if (typeof performance === "object" &&
-                    typeof performance.timeOrigin === "number" &&
-                    typeof performance.clearMarks === "function" &&
-                    typeof performance.mark === "function" &&
-                    typeof performance.measure === "function" &&
-                    typeof performance.now === "function" &&
-                    typeof PerformanceObserver === "function") {
-                    return perfHooks;
+                const { performance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
+                if (hasRequiredAPI(performance, PerformanceObserver)) {
+                    // There is a bug in Node's performance.measure prior to 12.16.3/13.13.0 that does not
+                    // match the Web Performance API specification. Node's implementation did not allow
+                    // optional `start` and `end` arguments for `performance.measure`.
+                    // See https://github.com/nodejs/node/pull/32651 for more information.
+                    const version = new Version(process.versions.node);
+                    const range = new VersionRange("<12 || 13 <13.13");
+                    if (range.test(version)) {
+                        return {
+                            performance: {
+                                get timeOrigin() { return performance.timeOrigin; },
+                                now() { return performance.now(); },
+                                mark(name) { return performance.mark(name); },
+                                measure(name, start = "nodeStart", end?) {
+                                    if (end === undefined) {
+                                        end = "__performance.measure-fix__";
+                                        performance.mark(end);
+                                    }
+                                    performance.measure(name, start, end);
+                                    if (end = "__performance.measure-fix__") {
+                                        performance.clearMarks("__performance.measure-fix__");
+                                    }
+                                }
+                            },
+                            PerformanceObserver
+                        };
+                    }
+                    return {
+                        performance,
+                        PerformanceObserver
+                    };
                 }
             }
             catch {

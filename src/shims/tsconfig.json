@@ -5,6 +5,5 @@
     },
     "files": [
         "collectionShims.ts",
-        "performanceShims.ts",
     ]
 }

@@ -49,9 +49,7 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function mark(markName: string) {
-        if (performanceImpl) {
-            performanceImpl.mark(markName);
-        }
+        performanceImpl?.mark(markName);
     }
 
     /**
@@ -64,19 +62,7 @@ namespace ts.performance {
      *      used.
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
-        if (performanceImpl) {
-            // NodeJS perf_hooks depends on call arity, not 'undefined' checks, so we
-            // need to be sure we call 'measure' with the correct number of arguments.
-            if (startMarkName === undefined) {
-                performanceImpl.measure(measureName);
-            }
-            else if (endMarkName === undefined) {
-                performanceImpl.measure(measureName, startMarkName);
-            }
-            else {
-                performanceImpl.measure(measureName, startMarkName, endMarkName);
-            }
-        }
+        performanceImpl?.measure(measureName, startMarkName, endMarkName);
     }
 
     /**
@@ -103,9 +89,7 @@ namespace ts.performance {
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        perfEntryList?.getEntriesByType("measure").forEach(entry => {
-            cb(entry.name, entry.duration);
-        });
+        perfEntryList?.getEntriesByType("measure").forEach(({ name, duration }) => { cb(name, duration); });
     }
 
     /**
@@ -118,7 +102,7 @@ namespace ts.performance {
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
         if (!performanceImpl) {
-            perfHooks ||= tryGetNativePerformanceHooks() || ShimPerformance?.createPerformanceHooksShim(timestamp);
+            perfHooks ||= tryGetNativePerformanceHooks();
             if (!perfHooks) return false;
             perfObserver ||= new perfHooks.PerformanceObserver(list => perfEntryList = list);
             perfObserver.observe({ entryTypes: ["mark", "measure"] });
