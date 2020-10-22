@@ -1565,7 +1565,7 @@ namespace ts {
     }
 
     /** Does nothing. */
-    export function noop(_?: {} | null | undefined): void { }
+    export function noop(_?: unknown): void { }
 
     /** Do nothing and return false */
     export function returnFalse(): false { return false; }
