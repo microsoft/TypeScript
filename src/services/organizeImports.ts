@@ -58,8 +58,7 @@ namespace ts.OrganizeImports {
             let anySorted = false;
 
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier!)!);
-            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) =>
-            {
+            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => {
                 const sorted = compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier);
                 anySorted = anySorted || sorted !== Comparison.GreaterThan;
                 return sorted;
