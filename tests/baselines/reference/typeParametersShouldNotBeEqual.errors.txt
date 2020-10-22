@@ -22,5 +22,6 @@ tests/cases/compiler/typeParametersShouldNotBeEqual.ts(6,5): error TS2322: Type 
         z = x;  // Ok
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'Object'.
+!!! related TS2797 tests/cases/compiler/typeParametersShouldNotBeEqual.ts:1:13: This type parameter likely needs an `extends object` constraint.
     }
     

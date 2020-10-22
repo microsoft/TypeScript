@@ -20,6 +20,7 @@ tests/cases/compiler/constructorReturningAPrimitive.ts(15,9): error TS2409: Retu
             return x;
             ~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'B<T>'.
+!!! related TS2797 tests/cases/compiler/constructorReturningAPrimitive.ts:12:9: This type parameter likely needs an `extends object` constraint.
             ~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }

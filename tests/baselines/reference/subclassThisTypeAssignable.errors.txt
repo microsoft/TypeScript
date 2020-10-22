@@ -8,6 +8,7 @@ tests/cases/compiler/tile1.ts(11,40): error TS2344: Type 'State' does not satisf
     	oninit?(vnode: Vnode<Attrs, State>): number;
     	                            ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
+!!! related TS2797 tests/cases/compiler/tile1.ts:1:28: This type parameter likely needs an `extends object` constraint.
     	[_: number]: any;
     }
     
@@ -21,6 +22,7 @@ tests/cases/compiler/tile1.ts(11,40): error TS2344: Type 'State' does not satisf
     	view(this: State, vnode: Vnode<Attrs, State>): number;
     	                                      ~~~~~
 !!! error TS2344: Type 'State' does not satisfy the constraint 'Lifecycle<Attrs, State>'.
+!!! related TS2797 tests/cases/compiler/tile1.ts:10:28: This type parameter likely needs an `extends object` constraint.
     }
     
     interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {

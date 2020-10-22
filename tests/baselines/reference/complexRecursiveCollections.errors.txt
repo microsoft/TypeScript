@@ -298,6 +298,7 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
       export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
                                                                                ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'Object'.
+!!! related TS2797 tests/cases/compiler/immutable.ts:261:26: This type parameter likely needs an `extends object` constraint.
       export module Seq {
         function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
         function of<T>(...values: Array<T>): Seq.Indexed<T>;

@@ -16918,6 +16918,9 @@ namespace ts {
                             return result;
                         }
                         reportRelationError(headMessage, source, target);
+                        if (source.flags & TypeFlags.TypeVariable && source.symbol?.declarations?.[0] && !getConstraintOfType(<TypeVariable>source) && isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
+                            associateRelatedInfo(createDiagnosticForNode(source.symbol.declarations[0], Diagnostics.This_type_parameter_likely_needs_an_extends_object_constraint));
+                        }
                     }
                 }
             }

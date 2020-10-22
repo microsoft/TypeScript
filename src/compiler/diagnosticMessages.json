@@ -3059,6 +3059,10 @@
         "category": "Error",
         "code": 2796
     },
+    "This type parameter likely needs an `extends object` constraint.": {
+        "category": "Error",
+        "code": 2797
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

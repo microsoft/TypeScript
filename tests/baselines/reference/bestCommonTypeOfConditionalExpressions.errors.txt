@@ -31,4 +31,5 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfC
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T | U' is not assignable to type 'Object'.
 !!! error TS2322:   Type 'T' is not assignable to type 'Object'.
+!!! related TS2797 tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfConditionalExpressions.ts:24:15: This type parameter likely needs an `extends object` constraint.
     }

@@ -17,6 +17,7 @@ tests/cases/conformance/jsx/file.tsx(9,5): error TS2416: Property 'props' in typ
 !!! error TS2416: Property 'props' in type 'B<U>' is not assignable to the same property in base type 'Component<U, {}>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'U & { children?: ReactNode; }'.
 !!! error TS2416:     Type 'U' is not assignable to type '{ children?: ReactNode; }'.
+!!! related TS2797 tests/cases/conformance/jsx/file.tsx:8:9: This type parameter likely needs an `extends object` constraint.
         render() {
             return <B1 {...this.props} x="hi" />;
         }

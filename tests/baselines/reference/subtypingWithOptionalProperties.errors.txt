@@ -9,6 +9,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         var b: { s?: number } = a;
             ~
 !!! error TS2322: Type 'T' is not assignable to type '{ s?: number; }'.
+!!! related TS2797 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts:4:12: This type parameter likely needs an `extends object` constraint.
         return b;
     }
     

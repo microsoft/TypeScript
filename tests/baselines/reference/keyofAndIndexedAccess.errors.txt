@@ -356,6 +356,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(619,13): error TS23
         a = x;
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{}'.
+!!! related TS2797 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:314:14: This type parameter likely needs an `extends object` constraint.
         a = y;
         ~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
@@ -373,6 +374,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(619,13): error TS23
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{} | null | undefined'.
 !!! error TS2322:   Type 'T' is not assignable to type '{}'.
+!!! related TS2797 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:321:14: This type parameter likely needs an `extends object` constraint.
+!!! related TS2797 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:321:14: This type parameter likely needs an `extends object` constraint.
         a = y;
         ~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.

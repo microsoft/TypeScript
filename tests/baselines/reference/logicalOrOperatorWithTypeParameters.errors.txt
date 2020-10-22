@@ -13,6 +13,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrO
             ~~
 !!! error TS2322: Type 'T | U' is not assignable to type '{}'.
 !!! error TS2322:   Type 'T' is not assignable to type '{}'.
+!!! related TS2797 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithTypeParameters.ts:1:14: This type parameter likely needs an `extends object` constraint.
     }
     
     function fn2<T, U/* extends T*/, V/* extends T*/>(t: T, u: U, v: V) {
@@ -25,6 +26,7 @@ tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrO
             ~~
 !!! error TS2322: Type 'U | V' is not assignable to type '{}'.
 !!! error TS2322:   Type 'U' is not assignable to type '{}'.
+!!! related TS2797 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithTypeParameters.ts:8:17: This type parameter likely needs an `extends object` constraint.
         //var r7: T = u || v;
     }
     

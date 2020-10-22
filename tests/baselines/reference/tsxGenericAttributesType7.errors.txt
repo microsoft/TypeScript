@@ -11,6 +11,7 @@ tests/cases/conformance/jsx/file.tsx(5,13): error TS2322: Type 'U' is not assign
                 ~~~~~~~~~
 !!! error TS2322: Type 'U' is not assignable to type 'IntrinsicAttributes & U'.
 !!! error TS2322:   Type 'U' is not assignable to type 'IntrinsicAttributes'.
+!!! related TS2797 tests/cases/conformance/jsx/file.tsx:4:29: This type parameter likely needs an `extends object` constraint.
     }
     
     const decorator1 = function <U extends {x: string}>(props: U) {
