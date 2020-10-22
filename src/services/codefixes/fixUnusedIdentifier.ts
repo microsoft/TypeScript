@@ -111,12 +111,7 @@ namespace ts.codefix {
                             if (isAnyBindingPatternElementInitialized(token.parent)) {
                                 break;
                             }
-                            else if (isParameter(token.parent.parent)) {
-                                if (isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
-                                    deleteDestructuringElements(changes, sourceFile, token.parent);
-                                }
-                            }
-                            else {
+                            else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
                                 changes.delete(sourceFile, token.parent.parent);
                             }
                         }
@@ -257,14 +252,9 @@ namespace ts.codefix {
     }
 
     function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
-        let isUsed = false;
         const index = parameter.parent.parameters.indexOf(parameter);
-        FindAllReferences.Core.eachSignatureCall(parameter.parent, sourceFiles, checker, call => {
-            if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
-                isUsed = true;
-            }
-        });
-        return !isUsed;
+        // Just in case the call didn't provide enough arguments.
+        return !FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
     }
 
     function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, isFixAll: boolean): boolean {

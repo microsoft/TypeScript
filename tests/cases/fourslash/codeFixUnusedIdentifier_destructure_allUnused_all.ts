@@ -16,7 +16,7 @@ verify.codeFixAll({
     newFileContent:
 `const { a } = o;
 a;
-export function f({ a }, {  }) {
+export function f({ a }) {
     a;
 }`,
 });

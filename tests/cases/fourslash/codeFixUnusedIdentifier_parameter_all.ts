@@ -6,11 +6,11 @@
 ////function f(a, b, { x, y }) { b; }
 ////f(0, 1, { x: 1, y: 1 });
 ////function g(a, b, { x, y }: { x: number, y: number }) { b; }
-////g;
+////g();
 ////function h(a, b?) { a; }
 ////h(1);
 ////function i(x = 1) { }
-////i;
+////i();
 ////
 ////function container() {
 ////    const { x, y } = { x: 1, y: 2 }
@@ -21,7 +21,7 @@
 ////    n(a, b, c) { b; }
 ////}
 ////new C().m(0, 1, 2);
-////new C().n;
+////new C().n();
 ////
 ////// Test of deletedAncestors
 ////function a(a: any, unused: any) { a; }
@@ -33,7 +33,7 @@
 ////        b(3, a(4, undefined)),
 ////    ]),
 ////});
-////b(1, { prop: c });
+////b(1, { prop: c() });
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
@@ -41,12 +41,12 @@ verify.codeFixAll({
     newFileContent:
 `function f(a, b, { x, y }) { b; }
 f(0, 1, { x: 1, y: 1 });
-function g(b, {  }: { x: number, y: number }) { b; }
-g;
+function g(b) { b; }
+g();
 function h(a) { a; }
 h(1);
 function i(x = 1) { }
-i;
+i();
 
 function container() {
     const { x, y } = { x: 1, y: 2 }
@@ -57,7 +57,7 @@ class C {
     n(b) { b; }
 }
 new C().m(0, 1, 2);
-new C().n;
+new C().n();
 
 // Test of deletedAncestors
 function a(a: any, unused: any) { a; }
@@ -69,5 +69,5 @@ b(1, {
         b(3, a(4, undefined)),
     ]),
 });
-b(1, { prop: c });`,
+b(1, { prop: c() });`,
 });
