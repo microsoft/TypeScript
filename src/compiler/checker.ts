@@ -6786,12 +6786,13 @@ namespace ts {
                         case SyntaxKind.BindingElement:
                             if (node.parent?.parent?.kind === SyntaxKind.VariableDeclaration) {
                                 // const { SomeClass } = require('./lib');
-                                const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // 'y'
+                                const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // './lib'
+                                const { propertyName } = node as BindingElement;
                                 addResult(factory.createImportDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports([factory.createImportSpecifier(
-                                        (node as BindingElement).propertyName && isIdentifier((node as BindingElement).propertyName!) ? factory.createIdentifier(idText((node as BindingElement).propertyName as Identifier)) : undefined,
+                                        propertyName && isIdentifier(propertyName) ? factory.createIdentifier(idText(propertyName)) : undefined,
                                         factory.createIdentifier(localName)
                                     )])),
                                     factory.createStringLiteral(specifier)
