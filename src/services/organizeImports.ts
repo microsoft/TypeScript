@@ -55,13 +55,23 @@ namespace ts.OrganizeImports {
             // Consider: we could do a more careful check that this trivia is actually a header,
             // but the consequences of being wrong are very minor.
             suppressLeadingTrivia(oldImportDecls[0]);
+            let anySorted = false;
 
             const oldImportGroups = group(oldImportDecls, importDecl => getExternalModuleName(importDecl.moduleSpecifier!)!);
-            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) => compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier));
+            const sortedImportGroups = stableSort(oldImportGroups, (group1, group2) =>
+            {
+                const sorted = compareModuleSpecifiers(group1[0].moduleSpecifier, group2[0].moduleSpecifier);
+                anySorted = anySorted || sorted !== Comparison.GreaterThan;
+                return sorted;
+            });
+
             const newImportDecls = flatMap(sortedImportGroups, importGroup =>
                 getExternalModuleName(importGroup[0].moduleSpecifier!)
                     ? coalesce(importGroup)
                     : importGroup);
+
+            // No import sorting or coalescing was done.
+            if (!anySorted && newImportDecls.length === oldImportDecls.length) return;
 
             // Delete or replace the first import.
             if (newImportDecls.length === 0) {
