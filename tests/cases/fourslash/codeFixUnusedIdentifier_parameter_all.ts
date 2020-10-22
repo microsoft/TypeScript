@@ -5,10 +5,16 @@
 
 ////function f(a, b, { x, y }) { b; }
 ////f(0, 1, { x: 1, y: 1 });
-////function g(a, b, { x, y }) { b; }
+////function g(a, b, { x, y }: { x: number, y: number }) { b; }
 ////g;
 ////function h(a, b?) { a; }
 ////h(1);
+////function i(x = 1) { }
+////i;
+////
+////function container() {
+////    const { x, y } = { x: 1, y: 2 }
+////}
 ////
 ////class C {
 ////    m(a, b, c) { b; }
@@ -35,10 +41,16 @@ verify.codeFixAll({
     newFileContent:
 `function f(a, b, { x, y }) { b; }
 f(0, 1, { x: 1, y: 1 });
-function g(b, {  }) { b; }
+function g(b, {  }: { x: number, y: number }) { b; }
 g;
 function h(a) { a; }
 h(1);
+function i(x = 1) { }
+i;
+
+function container() {
+    const { x, y } = { x: 1, y: 2 }
+}
 
 class C {
     m(a, b, c) { b; }

@@ -108,7 +108,10 @@ namespace ts.codefix {
                             deleteTypeParameters(changes, sourceFile, token);
                         }
                         else if (isObjectBindingPattern(token.parent)) {
-                            if (isParameter(token.parent.parent)) {
+                            if (isAnyBindingPatternElementInitialized(token.parent)) {
+                                break;
+                            }
+                            else if (isParameter(token.parent.parent)) {
                                 if (isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
                                     deleteDestructuringElements(changes, sourceFile, token.parent);
                                 }
@@ -149,9 +152,21 @@ namespace ts.codefix {
         changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
     }
 
-    // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
+    /** Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing. */
     function tryGetFullImport(token: Node): ImportDeclaration | undefined {
         return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
+    }
+
+    /** Uses a quadratic search for any use of any pattern element, because the error token doesn't specify a single element. */
+    function isAnyBindingPatternElementInitialized(pattern: ObjectBindingPattern) {
+        if (pattern.parent.initializer && isObjectLiteralExpression(pattern.parent.initializer)) {
+            const init = pattern.parent.initializer;
+            return some(
+                pattern.elements,
+                e => some(
+                    init.properties,
+                    p => !!p.name && isIdentifier(p.name) && isIdentifier(e.name) && p.name.escapedText === e.name.escapedText));
+        }
     }
 
     function canDeleteEntireVariableStatement(sourceFile: SourceFile, token: Node): boolean {
@@ -235,7 +250,7 @@ namespace ts.codefix {
                 (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
                 parameter.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
             }
-            else if (isNotProvidedArguments(parameter, checker, sourceFiles)) {
+            else if (!parameter.initializer && isNotProvidedArguments(parameter, checker, sourceFiles)) {
                 changes.delete(sourceFile, parameter);
             }
         }
