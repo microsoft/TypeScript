@@ -17402,7 +17402,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (isGenericMappedType(target) && !target.declaration.nameType) {
+                else if (isGenericMappedType(target)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
@@ -17411,7 +17411,7 @@ namespace ts {
                             (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
                             return Ternary.True;
                         }
-                        if (!isGenericMappedType(source)) {
+                        if (!isGenericMappedType(source) && !target.declaration.nameType) {
                             const targetConstraint = getConstraintTypeFromMappedType(target);
                             const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
                             const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
