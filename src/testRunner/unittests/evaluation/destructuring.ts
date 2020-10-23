@@ -36,4 +36,30 @@ describe("unittests:: evaluation:: destructuring", () => {
             assert.deepEqual(result.output, [0, 1, 2]);
         });
     });
+    describe("correct evaluation for nested rest assignment in destructured object", () => {
+        it("ES5", () => {
+            const result = evaluator.evaluateTypeScript(`
+                let a: any, b: any, c: any = { x: { a: 1, y: 2 } }, d: any;
+                ({ x: { a, ...b } = d } = c);
+                export const output = { a, b };
+            `, { target: ts.ScriptTarget.ES5 });
+            assert.deepEqual(result.output, { a: 1, b: { y: 2 } });
+        });
+        it("ES2015", () => {
+            const result = evaluator.evaluateTypeScript(`
+                let a: any, b: any, c: any = { x: { a: 1, y: 2 } }, d: any;
+                ({ x: { a, ...b } = d } = c);
+                export const output = { a, b };
+            `, { target: ts.ScriptTarget.ES2015 });
+            assert.deepEqual(result.output, { a: 1, b: { y: 2 } });
+        });
+        it("ES2018", () => {
+            const result = evaluator.evaluateTypeScript(`
+                let a: any, b: any, c: any = { x: { a: 1, y: 2 } }, d: any;
+                ({ x: { a, ...b } = d } = c);
+                export const output = { a, b };
+            `, { target: ts.ScriptTarget.ES2018 });
+            assert.deepEqual(result.output, { a: 1, b: { y: 2 } });
+        });
+    });
 });
