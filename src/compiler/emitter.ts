@@ -5136,7 +5136,12 @@ namespace ts {
             hasWrittenComment = false;
 
             if (isEmittedNode) {
-                forEachLeadingCommentToEmit(pos, emitLeadingComment);
+                if (pos === 0 && currentSourceFile?.isDeclarationFile) {
+                    forEachLeadingCommentToEmit(pos, emitNonTripleSlashLeadingComment);
+                }
+                else {
+                    forEachLeadingCommentToEmit(pos, emitLeadingComment);
+                }
             }
             else if (pos === 0) {
                 // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
@@ -5153,6 +5158,12 @@ namespace ts {
 
         function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (isTripleSlashComment(commentPos, commentEnd)) {
+                emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
+            }
+        }
+
+        function emitNonTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (!isTripleSlashComment(commentPos, commentEnd)) {
                 emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
             }
         }
