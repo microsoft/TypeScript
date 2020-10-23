@@ -17,6 +17,10 @@ namespace ts.tracing {
     let legendPath: string | undefined;
     const legend: TraceRecord[] = [];
 
+    // The actual constraint is that JSON.stringify be able to serialize it without throwing.
+    type Arg = string | number | boolean | undefined;
+    type Args = Record<string, Arg | readonly Arg[]>;
+
     /** Starts tracing for the given project (unless the `fs` module is unavailable). */
     export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
         Debug.assert(!traceFd, "Tracing already started");
@@ -108,12 +112,12 @@ namespace ts.tracing {
         Session = "session",
     }
 
-    export function instant(phase: Phase, name: string, args?: object) {
+    export function instant(phase: Phase, name: string, args?: Args) {
         if (!traceFd) return;
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
-    const eventStack: { phase: Phase, name: string, args?: object, time: number, separateBeginAndEnd: boolean }[] = [];
+    const eventStack: { phase: Phase, name: string, args?: Args, time: number, separateBeginAndEnd: boolean }[] = [];
 
     /**
      * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
@@ -121,7 +125,7 @@ namespace ts.tracing {
      * In the future we might implement an exit handler to dump unfinished events which would deprecate
      * these operations.
      */
-    export function push(phase: Phase, name: string, args?: object, separateBeginAndEnd = false) {
+    export function push(phase: Phase, name: string, args?: Args, separateBeginAndEnd = false) {
         if (!traceFd) return;
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
@@ -152,7 +156,7 @@ namespace ts.tracing {
         }
     }
 
-    function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,
+    function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
                        time: number = 1000 * timestamp()) {
         Debug.assert(traceFd);
         Debug.assert(fs);
