@@ -2473,20 +2473,11 @@ namespace ts {
         }
     }
 
-    export function quote(text: string, preferences: UserPreferences): string {
+    export function quote(sourceFile: SourceFile, preferences: UserPreferences, text: string): string {
         // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
-        const quotePreference = preferences.quotePreference || "auto";
+        const quotePreference = getQuotePreference(sourceFile, preferences);
         const quoted = JSON.stringify(text);
-        switch (quotePreference) {
-            // TODO use getQuotePreference to infer the actual quote style.
-            case "auto":
-            case "double":
-                return quoted;
-            case "single":
-                return `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'`;
-            default:
-                return Debug.assertNever(quotePreference);
-        }
+        return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'` : quoted;
     }
 
     export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {

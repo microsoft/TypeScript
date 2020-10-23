@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 14.12.0 (pre-LTS)
+Node.js version is 14.14.0 (pre-LTS)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 BLOCKED (51)

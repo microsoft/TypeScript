@@ -4,7 +4,7 @@ namespace ts {
         interface PerFileState {
             importSpecifier?: string;
             filenameDeclaration?: VariableDeclaration & { name: Identifier; };
-            utilizedImplicitRuntimeImports?: Map<ImportSpecifier>;
+            utilizedImplicitRuntimeImports?: Map<Map<ImportSpecifier>>;
         }
 
         const {
@@ -40,17 +40,25 @@ namespace ts {
         }
 
         function getImplicitImportForName(name: string) {
-            const existing = currentFileState.utilizedImplicitRuntimeImports?.get(name);
+            const importSource = name === "createElement"
+                ? currentFileState.importSpecifier!
+                : `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}`;
+            const existing = currentFileState.utilizedImplicitRuntimeImports?.get(importSource)?.get(name);
             if (existing) {
                 return existing.name;
             }
             if (!currentFileState.utilizedImplicitRuntimeImports) {
                 currentFileState.utilizedImplicitRuntimeImports = createMap();
             }
+            let specifierSourceImports = currentFileState.utilizedImplicitRuntimeImports.get(importSource);
+            if (!specifierSourceImports) {
+                specifierSourceImports = createMap();
+                currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
+            }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
             const specifier = factory.createImportSpecifier(factory.createIdentifier(name), generatedName);
             generatedName.generatedImportReference = specifier;
-            currentFileState.utilizedImplicitRuntimeImports.set(name, specifier);
+            specifierSourceImports.set(name, specifier);
             return generatedName;
         }
 
@@ -73,29 +81,30 @@ namespace ts {
             if (currentFileState.filenameDeclaration) {
                 statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
             }
-            if (currentFileState.utilizedImplicitRuntimeImports && currentFileState.utilizedImplicitRuntimeImports.size && currentFileState.importSpecifier !== undefined) {
-                const specifier = `${currentFileState.importSpecifier}/${compilerOptions.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime.js" : "jsx-runtime.js"}`;
-                if (isExternalModule(node)) {
-                    // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(currentFileState.utilizedImplicitRuntimeImports.values()))), factory.createStringLiteral(specifier));
-                    setParentRecursive(importStatement, /*incremental*/ false);
-                    statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
-                }
-                else if (isExternalOrCommonJsModule(node)) {
-                    // Add `require` statement
-                    const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
-                        factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(map(arrayFrom(currentFileState.utilizedImplicitRuntimeImports.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
-                            /*exclaimationToken*/ undefined,
-                            /*type*/ undefined,
-                            factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(specifier)])
-                        )
-                    ], NodeFlags.Const));
-                    setParentRecursive(requireStatement, /*incremental*/ false);
-                    statements = insertStatementAfterCustomPrologue(statements.slice(), requireStatement);
-                }
-                else {
-                    // Do nothing (script file) - consider an error in the checker?
+            if (currentFileState.utilizedImplicitRuntimeImports) {
+                for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
+                    if (isExternalModule(node)) {
+                        // Add `import` statement
+                        const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource));
+                        setParentRecursive(importStatement, /*incremental*/ false);
+                        statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
+                    }
+                    else if (isExternalOrCommonJsModule(node)) {
+                        // Add `require` statement
+                        const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                            factory.createVariableDeclaration(
+                                factory.createObjectBindingPattern(map(arrayFrom(importSpecifiersMap.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
+                                /*exclaimationToken*/ undefined,
+                                /*type*/ undefined,
+                                factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
+                            )
+                        ], NodeFlags.Const));
+                        setParentRecursive(requireStatement, /*incremental*/ false);
+                        statements = insertStatementAfterCustomPrologue(statements.slice(), requireStatement);
+                    }
+                    else {
+                        // Do nothing (script file) - consider an error in the checker?
+                    }
                 }
             }
             if (statements !== visited.statements) {
@@ -191,7 +200,7 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
-            const nonWhitespaceChildren = filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces);
+            const nonWhitespaceChildren = getSemanticJsxChildren(children);
             if (length(nonWhitespaceChildren) === 1) {
                 const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
                 return result && factory.createObjectLiteralExpression([
@@ -244,7 +253,7 @@ namespace ts {
                 objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
             }
 
-            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)), isChild, location);
+            return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(getSemanticJsxChildren(children || emptyArray)), isChild, location);
         }
 
         function visitJsxOpeningLikeElementOrFragmentJSX(tagName: Expression, objectProperties: Expression, keyAttr: JsxAttribute | undefined, childrenLength: number, isChild: boolean, location: TextRange) {
@@ -306,14 +315,21 @@ namespace ts {
                 }
             }
 
+            const callee = currentFileState.importSpecifier === undefined
+                ? createJsxFactoryExpression(
+                    factory,
+                    context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                    compilerOptions.reactNamespace!, // TODO: GH#18217
+                    node
+                )
+                : getImplicitImportForName("createElement");
+
             const element = createExpressionForJsxElement(
                 factory,
-                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
-                compilerOptions.reactNamespace!, // TODO: GH#18217
+                callee,
                 tagName,
                 objectProperties,
                 mapDefined(children, transformJsxChildToExpression),
-                node,
                 location
             );
 
@@ -336,7 +352,7 @@ namespace ts {
                 getImplicitJsxFragmentReference(),
                 childrenProps || factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
-                length(filter(children, c => !isJsxText(c) || !c.containsOnlyTriviaWhiteSpaces)),
+                length(getSemanticJsxChildren(children)),
                 isChild,
                 location
             );
