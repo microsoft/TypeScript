@@ -2379,7 +2379,7 @@ namespace ts {
         }
         function parsingContextErrorForSourceElementsOrBlockStatements(lastElement: Node | undefined) {
             if (lastElement && isBlock(lastElement) && token() === SyntaxKind.EqualsToken) {
-                return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_statement_block_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_assginment_in_parentheses);
+                return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
             }
 
             return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
