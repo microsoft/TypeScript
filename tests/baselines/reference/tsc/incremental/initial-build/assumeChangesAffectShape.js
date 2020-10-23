@@ -136,7 +136,7 @@ exports.foo = foo;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./extrafile.ts","./module.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13403012629-export const extra = 10;",{"version":"-4300970970-export function foo(): string { return \"hello world\"; }","signature":"-8035635627-export declare function foo(): string;\r\n"},{"version":"-7083766686-import { foo } from \"./module\";foo();","signature":"-4882119183-export {};\r\n"}],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./extrafile.ts","./module.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13403012629-export const extra = 10;","-4300970970-export function foo(): string { return \"hello world\"; }","-7083766686-import { foo } from \"./module\";foo();"],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,4,3]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -164,11 +164,11 @@ exports.foo = foo;
       },
       "./module.ts": {
         "version": "-4300970970-export function foo(): string { return \"hello world\"; }",
-        "signature": "-8035635627-export declare function foo(): string;\r\n"
+        "signature": "-4300970970-export function foo(): string { return \"hello world\"; }"
       },
       "./main.ts": {
         "version": "-7083766686-import { foo } from \"./module\";foo();",
-        "signature": "-4882119183-export {};\r\n"
+        "signature": "-7083766686-import { foo } from \"./module\";foo();"
       }
     },
     "referencedMap": {
@@ -176,7 +176,11 @@ exports.foo = foo;
         "./module.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "./main.ts": [
+        "./module.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./extrafile.ts",
@@ -185,7 +189,7 @@ exports.foo = foo;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1017
+  "size": 888
 }
 
 
@@ -202,6 +206,7 @@ Output::
 exitCode:: ExitStatus.Success
 
 
+//// [/src/project/main.js] file written with same contents
 //// [/src/project/module.js]
 "use strict";
 exports.__esModule = true;
@@ -211,7 +216,7 @@ exports.foo = foo;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./extrafile.ts","./module.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13403012629-export const extra = 10;",{"version":"-3334720882-export function foo(): string { return \"hello world world\"; }","signature":"-8035635627-export declare function foo(): string;\r\n"},{"version":"-7083766686-import { foo } from \"./module\";foo();","signature":"-4882119183-export {};\r\n"}],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./extrafile.ts","./module.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13403012629-export const extra = 10;","-3334720882-export function foo(): string { return \"hello world world\"; }","-7083766686-import { foo } from \"./module\";foo();"],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,4,3]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -239,11 +244,11 @@ exports.foo = foo;
       },
       "./module.ts": {
         "version": "-3334720882-export function foo(): string { return \"hello world world\"; }",
-        "signature": "-8035635627-export declare function foo(): string;\r\n"
+        "signature": "-3334720882-export function foo(): string { return \"hello world world\"; }"
       },
       "./main.ts": {
         "version": "-7083766686-import { foo } from \"./module\";foo();",
-        "signature": "-4882119183-export {};\r\n"
+        "signature": "-7083766686-import { foo } from \"./module\";foo();"
       }
     },
     "referencedMap": {
@@ -251,7 +256,11 @@ exports.foo = foo;
         "./module.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "./main.ts": [
+        "./module.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./extrafile.ts",
@@ -260,7 +269,7 @@ exports.foo = foo;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1023
+  "size": 894
 }
 
 
@@ -288,7 +297,7 @@ exports.foo = foo;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./extrafile.ts","./module.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13403012629-export const extra = 10;",{"version":"-3842804408-export const x = 10;export function foo(): string { return \"hello world world\"; }","signature":"1387636182-export declare const x = 10;\r\nexport declare function foo(): string;\r\n"},{"version":"-7083766686-import { foo } from \"./module\";foo();","signature":"-4882119183-export {};\r\n"}],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./extrafile.ts","./module.ts","./main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-13403012629-export const extra = 10;","-3842804408-export const x = 10;export function foo(): string { return \"hello world world\"; }","-7083766686-import { foo } from \"./module\";foo();"],"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,4,3]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -316,11 +325,11 @@ exports.foo = foo;
       },
       "./module.ts": {
         "version": "-3842804408-export const x = 10;export function foo(): string { return \"hello world world\"; }",
-        "signature": "1387636182-export declare const x = 10;\r\nexport declare function foo(): string;\r\n"
+        "signature": "-3842804408-export const x = 10;export function foo(): string { return \"hello world world\"; }"
       },
       "./main.ts": {
         "version": "-7083766686-import { foo } from \"./module\";foo();",
-        "signature": "-4882119183-export {};\r\n"
+        "signature": "-7083766686-import { foo } from \"./module\";foo();"
       }
     },
     "referencedMap": {
@@ -328,7 +337,11 @@ exports.foo = foo;
         "./module.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "./main.ts": [
+        "./module.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../lib/lib.d.ts",
       "./extrafile.ts",
@@ -337,6 +350,6 @@ exports.foo = foo;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1074
+  "size": 914
 }
 

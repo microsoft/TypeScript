@@ -243,7 +243,8 @@ namespace ts {
                 referencedMap,
                 exportedModulesMap,
                 hasCalledUpdateShapeSignature,
-                useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
+                useFileVersionAsSignature: (!disableUseFileVersionAsSignature && !useOldState) ||
+                    !!newProgram.getCompilerOptions().assumeChangesAffectShape,
             };
         }
 
