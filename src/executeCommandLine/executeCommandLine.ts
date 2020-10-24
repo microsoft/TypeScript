@@ -648,21 +648,22 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            const programTime = performance.isEnabled() ? performance.getDuration("Program") : 0;
-            const bindTime = performance.isEnabled() ? performance.getDuration("Bind") : 0;
-            const checkTime = performance.isEnabled() ? performance.getDuration("Check") : 0;
-            const emitTime = performance.isEnabled() ? performance.getDuration("Emit") : 0;
+            const isPerformanceEnabled = performance.isEnabled();
+            const programTime = isPerformanceEnabled ? performance.getDuration("Program") : 0;
+            const bindTime = isPerformanceEnabled ? performance.getDuration("Bind") : 0;
+            const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
+            const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
                 const caches = program.getRelationCacheSizes();
                 reportCountStatistic("Assignability cache size", caches.assignable);
                 reportCountStatistic("Identity cache size", caches.identity);
                 reportCountStatistic("Subtype cache size", caches.subtype);
                 reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
-                if (performance.isEnabled()) {
+                if (isPerformanceEnabled) {
                     performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
                 }
             }
-            else if (performance.isEnabled()) {
+            else if (isPerformanceEnabled) {
                 // Individual component times.
                 // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
                 // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -674,11 +675,11 @@ namespace ts {
                 reportTimeStatistic("Check time", checkTime);
                 reportTimeStatistic("Emit time", emitTime);
             }
-            if (performance.isEnabled()) {
+            if (isPerformanceEnabled) {
                 reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
             }
             reportStatistics();
-            if (!performance.isEnabled()) {
+            if (!isPerformanceEnabled) {
                 sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
             }
             else {
