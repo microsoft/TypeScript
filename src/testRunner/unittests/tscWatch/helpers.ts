@@ -43,7 +43,7 @@ namespace ts.tscWatch {
         return createWatchProgram(compilerHost);
     }
 
-    const elapsedRegex = /^Elapsed:: [0-9]+ms/;
+    const elapsedRegex = /^Elapsed:: \d+(?:\.\d+)?ms/;
     const buildVerboseLogRegEx = /^.+ \- /;
     export enum HostOutputKind {
         Log,

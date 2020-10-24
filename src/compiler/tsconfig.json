@@ -13,7 +13,7 @@
         "corePublic.ts",
         "core.ts",
         "debug.ts",
-        "performanceTimestamp.ts",
+        "performanceCore.ts",
         "performance.ts",
         "perfLogger.ts",
         "semver.ts",

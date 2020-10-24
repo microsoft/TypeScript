@@ -1,16 +1,12 @@
 /*@internal*/
 /** Performance measurements for the compiler. */
 namespace ts.performance {
-    declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
-
-    // NOTE: cannot use ts.noop as core.ts loads after this
-    const profilerEvent: (markName: string) => void = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true ? onProfilerEvent : () => { /*empty*/ };
-
-    let enabled = false;
-    let profilerStart = 0;
-    let counts: ESMap<string, number>;
-    let marks: ESMap<string, number>;
-    let measures: ESMap<string, number>;
+    let perfHooks: PerformanceHooks | undefined;
+    let perfObserver: PerformanceObserver | undefined;
+    let perfEntryList: PerformanceObserverEntryList | undefined;
+    // when set, indicates the implementation of `Performance` to use for user timing.
+    // when unset, indicates user timing is unavailable or disabled.
+    let performanceImpl: Performance | undefined;
 
     export interface Timer {
         enter(): void;
@@ -53,11 +49,7 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function mark(markName: string) {
-        if (enabled) {
-            marks.set(markName, timestamp());
-            counts.set(markName, (counts.get(markName) || 0) + 1);
-            profilerEvent(markName);
-        }
+        performanceImpl?.mark(markName);
     }
 
     /**
@@ -70,11 +62,7 @@ namespace ts.performance {
      *      used.
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
-        if (enabled) {
-            const end = endMarkName && marks.get(endMarkName) || timestamp();
-            const start = startMarkName && marks.get(startMarkName) || profilerStart;
-            measures.set(measureName, (measures.get(measureName) || 0) + (end - start));
-        }
+        performanceImpl?.measure(measureName, startMarkName, endMarkName);
     }
 
     /**
@@ -83,7 +71,7 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function getCount(markName: string) {
-        return counts && counts.get(markName) || 0;
+        return perfEntryList?.getEntriesByName(markName, "mark").length || 0;
     }
 
     /**
@@ -92,7 +80,7 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return measures && measures.get(measureName) || 0;
+        return perfEntryList?.getEntriesByName(measureName, "measure").reduce((a, entry) => a + entry.duration, 0) || 0;
     }
 
     /**
@@ -101,22 +89,31 @@ namespace ts.performance {
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        measures.forEach((measure, key) => {
-            cb(key, measure);
-        });
+        perfEntryList?.getEntriesByType("measure").forEach(({ name, duration }) => { cb(name, duration); });
+    }
+
+    /**
+     * Indicates whether the performance API is enabled.
+     */
+    export function isEnabled() {
+        return !!performanceImpl;
     }
 
     /** Enables (and resets) performance measurements for the compiler. */
     export function enable() {
-        counts = new Map<string, number>();
-        marks = new Map<string, number>();
-        measures = new Map<string, number>();
-        enabled = true;
-        profilerStart = timestamp();
+        if (!performanceImpl) {
+            perfHooks ||= tryGetNativePerformanceHooks();
+            if (!perfHooks) return false;
+            perfObserver ||= new perfHooks.PerformanceObserver(list => perfEntryList = list);
+            perfObserver.observe({ entryTypes: ["mark", "measure"] });
+            performanceImpl = perfHooks.performance;
+        }
+        return true;
     }
 
     /** Disables performance measurements for the compiler. */
     export function disable() {
-        enabled = false;
+        perfObserver?.disconnect();
+        performanceImpl = undefined;
     }
 }
