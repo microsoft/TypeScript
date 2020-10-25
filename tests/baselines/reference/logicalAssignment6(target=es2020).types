@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment6.ts ===
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment6.ts ===
 function foo1(results: number[] | undefined, results1: number[] | undefined) {
 >foo1 : (results: number[] | undefined, results1: number[] | undefined) => void
 >results : number[] | undefined
@@ -55,3 +55,4 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 >push : (...items: never[]) => number
 >100 : 100
 }
+

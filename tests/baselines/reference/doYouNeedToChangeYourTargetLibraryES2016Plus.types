@@ -238,7 +238,7 @@ const testBigInt = BigInt(123);
 >BigInt : any
 >123 : 123
 
-// esnext
+// es2021
 const testPromiseAny = Promise.any([]);
 >testPromiseAny : any
 >Promise.any([]) : any
@@ -254,6 +254,7 @@ const testStringReplaceAll = "".replaceAll();
 >"" : ""
 >replaceAll : any
 
+// esnext
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
 >testNumberFormatFormatToParts : any
 >new Intl.NumberFormat("en-US").formatToParts() : any

@@ -603,9 +603,11 @@ namespace ts {
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
-            esnext: {
+            es2021: {
                 PromiseConstructor: ["any"],
-                String: ["replaceAll"],
+                String: ["replaceAll"]
+            },
+            esnext: {
                 NumberFormat: ["formatToParts"]
             }
         };

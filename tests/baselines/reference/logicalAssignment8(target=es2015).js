@@ -13,6 +13,7 @@ function foo3(results: number[] | undefined) {
     (results &&= bar?.value ?? []).push(100);
 }
 
+
 //// [logicalAssignment8.js]
 "use strict";
 function foo1(results) {

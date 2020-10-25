@@ -1,4 +1,4 @@
-=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.hex.ts ===
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.hex.ts ===
 0x00_11;
 No type information for this code.0X0_1;
 No type information for this code.0x1100_0011;

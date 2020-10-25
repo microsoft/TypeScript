@@ -1,5 +1,5 @@
 // @strict: true
-// @target: esnext, es2020, es2015
+// @target: esnext, es2021, es2020, es2015
 // @allowUnreachableCode: false
 
 function foo1(results: number[] | undefined) {

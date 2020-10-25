@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.hexNegative.ts] ////
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.hexNegative.ts] ////
 
 //// [1.ts]
 0x00_

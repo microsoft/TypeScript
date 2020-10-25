@@ -1,154 +1,154 @@
-=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/1.ts ===
+=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/1.ts ===
 _10
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/2.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/2.ts ===
 10_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/3.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/3.ts ===
 1__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/4.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/4.ts ===
 0_.0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/5.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/5.ts ===
 0._0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/6.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/6.ts ===
 0.0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/7.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/7.ts ===
 0.0__
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/8.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/8.ts ===
 0_e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/9.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/9.ts ===
 0e_0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/10.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/10.ts ===
 0e0_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/11.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/11.ts ===
 0e0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/12.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/12.ts ===
 0_.0e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/13.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/13.ts ===
 0._0e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/14.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/14.ts ===
 0.0_e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/15.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/15.ts ===
 0.0e_0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/16.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/16.ts ===
 _0.0e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/17.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/17.ts ===
 0.0e0_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/18.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/18.ts ===
 0__0.0e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/19.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/19.ts ===
 0.0__0e0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/20.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/20.ts ===
 0.00e0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/21.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/21.ts ===
 0_e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/22.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/22.ts ===
 0e+_0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/23.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/23.ts ===
 0e+0_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/24.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/24.ts ===
 0e+0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/25.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/25.ts ===
 0_.0e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/26.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/26.ts ===
 0._0e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/27.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/27.ts ===
 0.0_e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/28.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/28.ts ===
 0.0e+_0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/29.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/29.ts ===
 _0.0e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/30.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/30.ts ===
 0.0e+0_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/31.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/31.ts ===
 0__0.0e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/32.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/32.ts ===
 0.0__0e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/33.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/33.ts ===
 0.00e+0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/34.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/34.ts ===
 0_e+0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/35.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/35.ts ===
 0e-_0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/36.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/36.ts ===
 0e-0_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/37.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/37.ts ===
 0e-0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/38.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/38.ts ===
 0_.0e-0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/39.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/39.ts ===
 0._0e-0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/40.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/40.ts ===
 0.0_e-0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/41.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/41.ts ===
 0.0e-_0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/42.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/42.ts ===
 _0.0e-0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/43.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/43.ts ===
 0.0e-0_
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/44.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/44.ts ===
 0__0.0e-0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/45.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/45.ts ===
 0.0__0e-0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/46.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/46.ts ===
 0.00e-0__0
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/47.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/47.ts ===
 ._
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/48.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/48.ts ===
 1\u005F01234
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/49.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/49.ts ===
 1.0e_+10
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/50.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/50.ts ===
 1.0e_-10
 No type information for this code.
-No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts ===
+No type information for this code.=== tests/cases/conformance/parser/ecmascript2021/numericSeparators/51.ts ===
 0._
 No type information for this code.
 No type information for this code.

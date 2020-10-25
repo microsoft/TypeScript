@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment2.ts ===
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment2.ts ===
 interface A {
     foo: {
 >foo : { bar(): {    baz: 0 | 1 | 42 | undefined | '';}; baz: 0 | 1 | 42 | undefined | ''; }

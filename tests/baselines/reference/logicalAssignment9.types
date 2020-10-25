@@ -1,4 +1,4 @@
-=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment9.ts ===
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment9.ts ===
 declare let x: { a?: boolean };
 >x : { a?: boolean | undefined; }
 >a : boolean | undefined

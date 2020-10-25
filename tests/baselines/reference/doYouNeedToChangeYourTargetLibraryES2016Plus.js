@@ -39,10 +39,13 @@ const testStringMatchAll = "".matchAll();
 const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 const testBigInt = BigInt(123);
 
-// esnext
+// es2021
 const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
+
+// esnext
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+
 
 //// [doYouNeedToChangeYourTargetLibraryES2016Plus.js]
 // es2016
@@ -80,7 +83,8 @@ var testPromiseAllSettled = Promise.allSettled([]);
 var testStringMatchAll = "".matchAll();
 var testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 var testBigInt = BigInt(123);
-// esnext
+// es2021
 var testPromiseAny = Promise.any([]);
 var testStringReplaceAll = "".replaceAll();
+// esnext
 var testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
