@@ -71,7 +71,7 @@ namespace ts {
                     // optional `start` and `end` arguments for `performance.measure`.
                     // See https://github.com/nodejs/node/pull/32651 for more information.
                     const version = new Version(process.versions.node);
-                    const range = new VersionRange("<12 || 13 <13.13");
+                    const range = new VersionRange("<12.16.3 || 13 <13.13");
                     if (range.test(version)) {
                         return {
                             performance: {
@@ -84,7 +84,7 @@ namespace ts {
                                         performance.mark(end);
                                     }
                                     performance.measure(name, start, end);
-                                    if (end = "__performance.measure-fix__") {
+                                    if (end === "__performance.measure-fix__") {
                                         performance.clearMarks("__performance.measure-fix__");
                                     }
                                 }
