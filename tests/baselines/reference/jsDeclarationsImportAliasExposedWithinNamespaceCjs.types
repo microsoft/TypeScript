@@ -27,12 +27,12 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
->input : boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }
+>input : boolean | Function | myTypes.typeB
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->input : boolean | Function | { prop1: string | RegExp | (string | RegExp)[]; prop2: string; }
+>input : boolean | Function | myTypes.typeB
 >'number' : "number"
 
         return 2 * input;
