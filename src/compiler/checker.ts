@@ -4164,7 +4164,7 @@ namespace ts {
                         && isDeclarationVisible(declaration.parent)) {
                         return addVisibleAlias(declaration, declaration);
                     }
-                    else if (isBindingElement(declaration) && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
+                    else if (symbol.flags & SymbolFlags.Alias && isBindingElement(declaration) && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
                         && isVariableDeclaration(declaration.parent.parent)
                         && declaration.parent.parent.parent?.parent && isVariableStatement(declaration.parent.parent.parent.parent)
                         && !hasSyntacticModifier(declaration.parent.parent.parent.parent, ModifierFlags.Export)
