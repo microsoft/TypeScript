@@ -3,7 +3,6 @@
 namespace ts.performance {
     let perfHooks: PerformanceHooks | undefined;
     let perfObserver: PerformanceObserver | undefined;
-    let perfEntryList: PerformanceObserverEntryList | undefined;
     // when set, indicates the implementation of `Performance` to use for user timing.
     // when unset, indicates user timing is unavailable or disabled.
     let performanceImpl: Performance | undefined;
@@ -42,6 +41,8 @@ namespace ts.performance {
     }
 
     export const nullTimer: Timer = { enter: noop, exit: noop };
+    const counts = new Map<string, number>();
+    const durations = new Map<string, number>();
 
     /**
      * Marks a performance event.
@@ -71,7 +72,7 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function getCount(markName: string) {
-        return perfEntryList?.getEntriesByName(markName, "mark").length || 0;
+        return counts.get(markName) || 0;
     }
 
     /**
@@ -80,7 +81,7 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return perfEntryList?.getEntriesByName(measureName, "measure").reduce((a, entry) => a + entry.duration, 0) || 0;
+        return durations.get(measureName) || 0;
     }
 
     /**
@@ -89,7 +90,7 @@ namespace ts.performance {
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        perfEntryList?.getEntriesByType("measure").forEach(({ name, duration }) => { cb(name, duration); });
+        durations.forEach((duration, measureName) => cb(measureName, duration));
     }
 
     /**
@@ -104,7 +105,7 @@ namespace ts.performance {
         if (!performanceImpl) {
             perfHooks ||= tryGetNativePerformanceHooks();
             if (!perfHooks) return false;
-            perfObserver ||= new perfHooks.PerformanceObserver(list => perfEntryList = list);
+            perfObserver ||= new perfHooks.PerformanceObserver(updateStatisticsFromList);
             perfObserver.observe({ entryTypes: ["mark", "measure"] });
             performanceImpl = perfHooks.performance;
         }
@@ -115,5 +116,16 @@ namespace ts.performance {
     export function disable() {
         perfObserver?.disconnect();
         performanceImpl = undefined;
+        counts.clear();
+        durations.clear();
+    }
+
+    function updateStatisticsFromList(list: PerformanceObserverEntryList) {
+        for (const mark of list.getEntriesByType("mark")) {
+            counts.set(mark.name, (counts.get(mark.name) || 0) + 1);
+        }
+        for (const measure of list.getEntriesByType("measure")) {
+            durations.set(measure.name, (durations.get(measure.name) || 0) + measure.duration);
+        }
     }
 }
