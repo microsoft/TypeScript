@@ -34,6 +34,7 @@ verify.completions({
             sourceDisplay: "./a",
             text: "(alias) function foo(): void\nexport foo",
             kind: "alias",
+            kindModifiers: "export",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },

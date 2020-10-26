@@ -160,7 +160,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "",
+      "kindModifiers": "export",
       "textSpan": {
         "start": 104,
         "length": 2
@@ -245,7 +245,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "",
+      "kindModifiers": "export",
       "textSpan": {
         "start": 123,
         "length": 2
@@ -516,7 +516,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "export",
+      "kindModifiers": "export,export",
       "textSpan": {
         "start": 194,
         "length": 2
@@ -617,7 +617,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "export",
+      "kindModifiers": "export,export",
       "textSpan": {
         "start": 213,
         "length": 2

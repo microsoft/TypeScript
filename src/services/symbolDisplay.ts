@@ -109,19 +109,25 @@ namespace ts.SymbolDisplay {
 
         const modifiers: string[] = [];
         if (symbol.declarations && symbol.declarations.length > 0) {
-            modifiers.push(getNodeModifiers(symbol.declarations[0]));
+            const kindModifiers = getNodeModifiers(symbol.declarations[0]);
+            if (kindModifiers !== ScriptElementKindModifier.none) {
+                modifiers.push(kindModifiers);
+            }
         }
         if (symbol.flags & SymbolFlags.Alias) {
             const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
             if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
-                modifiers.push(getNodeModifiers(resolvedSymbol.declarations[0]));
+                const kindModifiers = getNodeModifiers(resolvedSymbol.declarations[0]);
+                if (kindModifiers !== ScriptElementKindModifier.none) {
+                    modifiers.push(kindModifiers);
+                }
             }
         }
         if (symbol.flags & SymbolFlags.Optional) {
             modifiers.push(ScriptElementKindModifier.optionalModifier);
         }
 
-        return modifiers.filter(s => !!s).join(",");
+        return modifiers.length > 0 ? modifiers.join(",") : ScriptElementKindModifier.none;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
