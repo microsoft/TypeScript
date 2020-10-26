@@ -17288,7 +17288,8 @@ namespace ts {
                 if (result) {
                     if (result === Ternary.True || depth === 0) {
                         if (result === Ternary.True || result === Ternary.Maybe) {
-                            // If result is definitely true, record all maybe keys as having succeeded
+                            // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
+                            // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
                             for (let i = maybeStart; i < maybeCount; i++) {
                                 relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
                             }
