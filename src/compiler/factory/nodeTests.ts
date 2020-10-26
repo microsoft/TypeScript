@@ -237,6 +237,10 @@ namespace ts {
         return node.kind === SyntaxKind.TemplateLiteralTypeSpan;
     }
 
+    export function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode {
+        return node.kind === SyntaxKind.TemplateLiteralType;
+    }
+
     // Binding patterns
 
     export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
