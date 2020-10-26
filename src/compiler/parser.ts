@@ -2054,17 +2054,15 @@ namespace ts {
             parsingContext |= 1 << kind;
             const list = [];
             const listPos = getNodePos();
-            let lastElement: Node | undefined;
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
-                    const element = lastElement = parseListElement(kind, parseElement);
-                    list.push(element);
+                    list.push(parseListElement(kind, parseElement));
 
                     continue;
                 }
 
-                if (abortParsingListOrMoveToNextToken(kind, lastElement)) {
+                if (abortParsingListOrMoveToNextToken(kind)) {
                     break;
                 }
             }
@@ -2368,8 +2366,8 @@ namespace ts {
         }
 
         // Returns true if we should abort parsing.
-        function abortParsingListOrMoveToNextToken(kind: ParsingContext, lastElement: Node | undefined) {
-            parsingContextErrors(kind, lastElement);
+        function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
+            parsingContextErrors(kind);
             if (isInSomeParsingContext()) {
                 return true;
             }
@@ -2377,18 +2375,11 @@ namespace ts {
             nextToken();
             return false;
         }
-        function parsingContextErrorForSourceElementsOrBlockStatements(lastElement: Node | undefined) {
-            if (lastElement && isBlock(lastElement) && token() === SyntaxKind.EqualsToken) {
-                return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
-            }
 
-            return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
-        }
-
-        function parsingContextErrors(context: ParsingContext, lastElement: Node | undefined) {
+        function parsingContextErrors(context: ParsingContext) {
             switch (context) {
-                case ParsingContext.SourceElements: return parsingContextErrorForSourceElementsOrBlockStatements(lastElement);
-                case ParsingContext.BlockStatements: return parsingContextErrorForSourceElementsOrBlockStatements(lastElement);
+                case ParsingContext.SourceElements: return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
+                case ParsingContext.BlockStatements: return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
                 case ParsingContext.SwitchClauses: return parseErrorAtCurrentToken(Diagnostics.case_or_default_expected);
                 case ParsingContext.SwitchClauseStatements: return parseErrorAtCurrentToken(Diagnostics.Statement_expected);
                 case ParsingContext.RestProperties: // fallthrough
@@ -2468,7 +2459,7 @@ namespace ts {
                     break;
                 }
 
-                if (abortParsingListOrMoveToNextToken(kind, /*lastElement*/ undefined)) {
+                if (abortParsingListOrMoveToNextToken(kind)) {
                     break;
                 }
             }
@@ -5537,7 +5528,13 @@ namespace ts {
                         );
                     }
                 }
-                return finishNode(factory.createBlock(statements, multiLine), pos);
+                const result = finishNode(factory.createBlock(statements, multiLine), pos);
+                if (token() === SyntaxKind.EqualsToken) {
+                    parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
+                    nextToken();
+                }
+
+                return result;
             }
             else {
                 const statements = createMissingList<Statement>();

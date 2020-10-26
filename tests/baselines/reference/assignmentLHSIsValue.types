@@ -146,7 +146,7 @@ function bar() { } = value;
 >value : any
 
 () => { } = value;
->() => { } : () => void
+>() => { } = : () => void
 >value : any
 
 // function calls
