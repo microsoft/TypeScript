@@ -166,6 +166,15 @@ const exampleGood: B = "1 2"; // ok
 var aa: '0';
 var aa: '0' & `${number}`;
 
+// Remove string literals from unions with matching template literals
+
+let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
+let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
+let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
+
+var bb: `${number}`;
+var bb: `${number}` | '0';
+
 
 //// [templateLiteralTypesPatterns.js]
 "use strict";
@@ -289,3 +298,9 @@ var exampleGood = "1 2"; // ok
 // Repro from #41161
 var aa;
 var aa;
+// Remove string literals from unions with matching template literals
+var t1; // `foo${string}` | '1foo'
+var t2; // `foo${string}` | '1foo' | 'xfoo'
+var t3; // `foo${string}` | xfoo' | `${number}foo`
+var bb;
+var bb;

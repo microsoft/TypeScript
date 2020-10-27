@@ -560,3 +560,20 @@ var aa: '0';
 var aa: '0' & `${number}`;
 >aa : "0"
 
+// Remove string literals from unions with matching template literals
+
+let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
+>t1 : `foo${string}` | "1foo"
+
+let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
+>t2 : `foo${string}` | "1foo" | "xfoo"
+
+let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
+>t3 : `foo${string}` | "xfoo" | `${number}foo`
+
+var bb: `${number}`;
+>bb : `${number}`
+
+var bb: `${number}` | '0';
+>bb : `${number}`
+
