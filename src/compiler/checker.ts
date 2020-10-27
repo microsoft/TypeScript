@@ -10081,7 +10081,7 @@ namespace ts {
                 const associatedNames = restType.target.labeledElementDeclarations;
                 const restParams = map(elementTypes, (t, i) => {
                     // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
-                    const tupleLabelName = !!associatedNames && getTupleElementLabel(associatedNames[i]);
+                    const tupleLabelName = !!associatedNames?.[i] && getTupleElementLabel(associatedNames[i]);
                     const name = tupleLabelName || getParameterNameAtPosition(sig, restIndex + i, restType);
                     const flags = restType.target.elementFlags[i];
                     const checkFlags = flags & ElementFlags.Variable ? CheckFlags.RestParameter :
@@ -28672,7 +28672,7 @@ namespace ts {
             if (isTupleType(restType)) {
                 const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
                 const index = pos - paramCount;
-                return associatedNames && getTupleElementLabel(associatedNames[index]) || restParameter.escapedName + "_" + index as __String;
+                return associatedNames?.[index] && getTupleElementLabel(associatedNames[index]) || restParameter.escapedName + "_" + index as __String;
             }
             return restParameter.escapedName;
         }

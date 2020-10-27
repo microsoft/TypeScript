@@ -1,0 +1,13 @@
+/index.js(2,3): error TS2684: The 'this' context of type '<T>(...items: T[]) => T[]' is not assignable to method's 'this' of type '(this: () => void) => unknown[]'.
+  Types of parameters 'items' and 'args_0' are incompatible.
+    Type 'any' is not assignable to type 'never'.
+
+
+==== /index.js (1 errors) ====
+    function F() { }
+    !(Array.of.call(F) instanceof F);
+      ~~~~~~~~
+!!! error TS2684: The 'this' context of type '<T>(...items: T[]) => T[]' is not assignable to method's 'this' of type '(this: () => void) => unknown[]'.
+!!! error TS2684:   Types of parameters 'items' and 'args_0' are incompatible.
+!!! error TS2684:     Type 'any' is not assignable to type 'never'.
+    

@@ -1,0 +1,13 @@
+=== /index.js ===
+function F() { }
+>F : Symbol(F, Decl(index.js, 0, 0))
+
+!(Array.of.call(F) instanceof F);
+>Array.of.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>Array.of : Symbol(ArrayConstructor.of, Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>of : Symbol(ArrayConstructor.of, Decl(lib.es2015.core.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>F : Symbol(F, Decl(index.js, 0, 0))
+>F : Symbol(F, Decl(index.js, 0, 0))
+
