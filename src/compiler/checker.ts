@@ -6807,21 +6807,17 @@ namespace ts {
                                 ), ModifierFlags.None);
                                 break;
                             }
-                            // At present, the below case should be entirely unhit, as, generally speaking, the below case is *usually* bound
-                            // such that the `BinaryExpression` is the declaration rather than the specific, nested binding element
-                            // (because we don't seek to emit an alias in these forms yet). As such, the `BinaryExpression` switch case
-                            // will be what actually handles this form. _However_, in anticipation of binding the below with proper
-                            // alias symbols, I'm _pretty comfortable_ including the case here, even though it is not yet live.
+                            // We don't know how to serialize this (nested?) binding element
+                            Debug.failBadSyntaxKind(node.parent?.parent || node, "Unhandled binding element grandparent kind in declaration serialization");
+                            break;
+                        case SyntaxKind.ShorthandPropertyAssignment:
                             if (node.parent?.parent?.kind === SyntaxKind.BinaryExpression) {
                                 // module.exports = { SomeClass }
                                 serializeExportSpecifier(
                                     unescapeLeadingUnderscores(symbol.escapedName),
                                     targetName
                                 );
-                                break;
                             }
-                            // We don't know how to serialize this (nested?) binding element
-                            Debug.failBadSyntaxKind(node.parent?.parent || node, "Unhandled binding element grandparent kind in declaration serialization");
                             break;
                         case SyntaxKind.VariableDeclaration:
                             // commonjs require: const x = require('y')
