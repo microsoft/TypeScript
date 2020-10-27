@@ -1827,7 +1827,9 @@ namespace ts {
             return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
         }
         else {
-            const firstModuleSpecifier = sourceFile.imports && find(sourceFile.imports, isStringLiteral);
+            // ignore synthetic import added when importHelpers: true
+            const firstModuleSpecifier = sourceFile.imports &&
+                find(sourceFile.imports, n => isStringLiteral(n) && !nodeIsSynthesized(n.parent)) as StringLiteral;
             return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
         }
     }
