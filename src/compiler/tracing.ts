@@ -101,22 +101,27 @@ namespace ts.tracing {
      * deprecate these operations.
      */
     export function begin(phase: Phase, name: string, args?: object) {
+        if (!traceFd) return;
         writeEvent("B", phase, name, args);
     }
     export function end(phase: Phase, name: string, args?: object) {
+        if (!traceFd) return;
         writeEvent("E", phase, name, args);
     }
 
     export function instant(phase: Phase, name: string, args?: object) {
+        if (!traceFd) return;
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
     // Used for "Complete" (ph:"X") events
     const completeEvents: { phase: Phase, name: string, args?: object, time: number }[] = [];
     export function push(phase: Phase, name: string, args?: object) {
+        if (!traceFd) return;
         completeEvents.push({ phase, name, args, time: 1000 * timestamp() });
     }
     export function pop() {
+        if (!traceFd) return;
         Debug.assert(completeEvents.length > 0);
         const { phase, name, args, time } = completeEvents.pop()!;
         const dur = 1000 * timestamp() - time;
@@ -125,7 +130,7 @@ namespace ts.tracing {
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,
                        time: number = 1000 * timestamp()) {
-        if (!traceFd) return;
+        Debug.assert(traceFd);
         Debug.assert(fs);
         performance.mark("beginTracing");
         fs.writeSync(traceFd, `,\n{"pid":1,"tid":1,"ph":"${eventType}","cat":"${phase}","ts":${time},"name":"${name}"`);
