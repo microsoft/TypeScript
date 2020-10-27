@@ -17287,9 +17287,12 @@ namespace ts {
                 depth--;
                 if (result) {
                     if (result === Ternary.True || depth === 0) {
-                        // If result is definitely true, record all maybe keys as having succeeded
-                        for (let i = maybeStart; i < maybeCount; i++) {
-                            relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                        if (result === Ternary.True || result === Ternary.Maybe) {
+                            // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
+                            // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
+                            for (let i = maybeStart; i < maybeCount; i++) {
+                                relation.set(maybeKeys[i], RelationComparisonResult.Succeeded | propagatingVarianceFlags);
+                            }
                         }
                         maybeCount = maybeStart;
                     }
@@ -17359,7 +17362,7 @@ namespace ts {
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     if (variances === emptyArray) {
-                        return Ternary.Maybe;
+                        return Ternary.Unknown;
                     }
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
                     if (varianceResult !== undefined) {
@@ -17632,7 +17635,7 @@ namespace ts {
                         // effectively means we measure variance only from type parameter occurrences that aren't nested in
                         // recursive instantiations of the generic type.
                         if (variances === emptyArray) {
-                            return Ternary.Maybe;
+                            return Ternary.Unknown;
                         }
                         const varianceResult = relateVariances(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), variances, intersectionState);
                         if (varianceResult !== undefined) {

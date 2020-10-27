@@ -5531,17 +5531,17 @@ namespace ts {
 
     /**
      * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
+     * x & y picks the lesser in the order False < Unknown < Maybe < True, and
+     * x | y picks the greater in the order False < Unknown < Maybe < True.
+     * Generally, Ternary.Maybe is used as the result of a relation that depends on itself, and
+     * Ternary.Unknown is used as the result of a variance check that depends on itself. We make
+     * a distinction because we don't want to cache circular variance check results.
      */
     /* @internal */
     export const enum Ternary {
         False = 0,
-        Maybe = 1,
+        Unknown = 1,
+        Maybe = 3,
         True = -1
     }
 
