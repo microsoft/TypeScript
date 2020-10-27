@@ -1697,6 +1697,9 @@ namespace ts {
 
             function realpath(path: string): string {
                 try {
+                    if (!_fs.lstatSync(path).isSymbolicLink()) {
+                        return path;
+                    }
                     return _fs.realpathSync(path);
                 }
                 catch {
