@@ -161,6 +161,7 @@ declare namespace FourSlashInterface {
         readonly placeOpenBraceOnNewLineForFunctions?: boolean;
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
+        readonly insertSpaceAfterTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
         readonly semicolons?: ts.SemicolonPreference;
     }
