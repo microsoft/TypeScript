@@ -199,7 +199,26 @@ namespace ts.codefix {
             }
         });
 
-        return getSynthesizedDeepCloneWithRenames(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker);
+        return getSynthesizedDeepCloneWithReplacements(nodeToRename, /*includeTrivia*/ true, original => {
+            if (isBindingElement(original) && isIdentifier(original.name) && isObjectBindingPattern(original.parent)) {
+                const symbol = checker.getSymbolAtLocation(original.name);
+                const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+                if (renameInfo && renameInfo.text !== (original.name || original.propertyName).getText()) {
+                    return factory.createBindingElement(
+                        original.dotDotDotToken,
+                        original.propertyName || original.name,
+                        renameInfo,
+                        original.initializer);
+                }
+            }
+            else if (isIdentifier(original)) {
+                const symbol = checker.getSymbolAtLocation(original);
+                const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+                if (renameInfo) {
+                    return factory.createIdentifier(renameInfo.text);
+                }
+            }
+        });
     }
 
     function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyESMap<string, Symbol[]>): SynthIdentifier {
@@ -289,7 +308,7 @@ namespace ts.codefix {
 
         const tryStatement = factory.createTryStatement(tryBlock, catchClause, /*finallyBlock*/ undefined);
         const destructuredResult = prevArgName && varDeclIdentifier && isSynthBindingPattern(prevArgName)
-            && factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepCloneWithRenames(prevArgName.bindingPattern), /*exclamationToken*/ undefined, /*type*/ undefined, varDeclIdentifier)], NodeFlags.Const));
+            && factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepClone(prevArgName.bindingPattern), /*exclamationToken*/ undefined, /*type*/ undefined, varDeclIdentifier)], NodeFlags.Const));
         return compact([varDeclList, tryStatement, destructuredResult]);
     }
 

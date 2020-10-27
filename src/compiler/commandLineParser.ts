@@ -73,7 +73,8 @@ namespace ts {
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
         ["esnext.string", "lib.esnext.string.d.ts"],
-        ["esnext.promise", "lib.esnext.promise.d.ts"]
+        ["esnext.promise", "lib.esnext.promise.d.ts"],
+        ["esnext.weakref", "lib.esnext.weakref.d.ts"]
     ];
 
     /**
@@ -1133,7 +1134,11 @@ namespace ts {
                 name: "exclude",
                 type: "string"
             }
-        }
+        },
+        {
+            name: "disableFilenameBasedTypeAcquisition",
+            type: "boolean",
+        },
     ];
 
     /* @internal */

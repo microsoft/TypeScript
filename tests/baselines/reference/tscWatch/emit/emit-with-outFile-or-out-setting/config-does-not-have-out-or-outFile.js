@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/a.ts
 /a/b.ts
@@ -89,6 +90,7 @@ Output::
 
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/a.ts
 /a/b.ts

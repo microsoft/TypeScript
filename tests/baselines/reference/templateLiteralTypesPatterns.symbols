@@ -393,3 +393,11 @@ const exampleGood: B = "1 2"; // ok
 >exampleGood : Symbol(exampleGood, Decl(templateLiteralTypesPatterns.ts, 160, 5))
 >B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
 
+// Repro from #41161
+
+var aa: '0';
+>aa : Symbol(aa, Decl(templateLiteralTypesPatterns.ts, 164, 3), Decl(templateLiteralTypesPatterns.ts, 165, 3))
+
+var aa: '0' & `${number}`;
+>aa : Symbol(aa, Decl(templateLiteralTypesPatterns.ts, 164, 3), Decl(templateLiteralTypesPatterns.ts, 165, 3))
+

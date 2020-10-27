@@ -62,6 +62,19 @@ const fn2: Fn<'a', number> = fn;
 const fn3: Fn<string, unknown> = fn;
 const fn4: Fn<string, 0> = fn;  // Error
 
+// Repro from #39947
+
+interface I<Dummy, V> {
+  c: C<Dummy, V>;
+}
+
+class C<Dummy, V> {
+  declare sub: I<Dummy, V>;
+  declare covariance: V;
+}
+
+const c1: C<unknown, string> = new C<unknown, number>();  // Error
+
 
 //// [varianceMeasurement.js]
 "use strict";
@@ -81,3 +94,9 @@ var fn2 = fn;
 // Covariant in B
 var fn3 = fn;
 var fn4 = fn; // Error
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var c1 = new C(); // Error

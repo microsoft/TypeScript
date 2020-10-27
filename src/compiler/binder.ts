@@ -174,14 +174,15 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        tracing.begin(tracing.Phase.Bind, "bindSourceFile", { path: file.path });
+        const tracingData: tracing.EventData = [tracing.Phase.Bind, "bindSourceFile", { path: file.path }];
+        tracing.begin(...tracingData);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
-        tracing.end();
+        tracing.end(...tracingData);
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -586,6 +587,9 @@ namespace ts {
         }
 
         function jsdocTreatAsExported(node: Node) {
+            if (node.parent && isModuleDeclaration(node)) {
+                node = node.parent;
+            }
             if (!isJSDocTypeAlias(node)) return false;
             // jsdoc typedef handling is a bit of a doozy, but to summarize, treat the typedef as exported if:
             // 1. It has an explicit name (since by default typedefs are always directly exported, either at the top level or in a container), or
@@ -855,6 +859,7 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.PrivateIdentifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
                 (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
+                isBinaryExpression(expr) && expr.operatorToken.kind === SyntaxKind.CommaToken && isNarrowableReference(expr.right) ||
                 isElementAccessExpression(expr) && isStringOrNumericLiteralLike(expr.argumentExpression) && isNarrowableReference(expr.expression) ||
                 isAssignmentExpression(expr) && isNarrowableReference(expr.left);
         }

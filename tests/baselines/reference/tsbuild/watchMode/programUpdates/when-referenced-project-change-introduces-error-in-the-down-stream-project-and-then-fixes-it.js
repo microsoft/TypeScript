@@ -48,6 +48,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
@@ -58,6 +59,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts
@@ -184,6 +186,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
@@ -193,6 +196,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts
@@ -301,6 +305,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
@@ -310,6 +315,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts

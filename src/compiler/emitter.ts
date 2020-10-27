@@ -300,17 +300,17 @@ namespace ts {
                     sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
-            tracing.begin(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
+            tracing.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
-            tracing.end();
+            tracing.pop();
 
-            tracing.begin(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
+            tracing.push(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
-            tracing.end();
+            tracing.pop();
 
-            tracing.begin(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
+            tracing.push(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
-            tracing.end();
+            tracing.pop();
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -606,18 +606,19 @@ namespace ts {
                 if (getRootLength(sourceMapDir) === 0) {
                     // The relative paths are relative to the common directory
                     sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
-                    return getRelativePathToDirectoryOrUrl(
-                        getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
-                        combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
-                        host.getCurrentDirectory(),
-                        host.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/ true);
+                    return encodeURI(
+                        getRelativePathToDirectoryOrUrl(
+                            getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
+                            combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
+                            host.getCurrentDirectory(),
+                            host.getCanonicalFileName,
+                            /*isAbsolutePathAnUrl*/ true));
                 }
                 else {
-                    return combinePaths(sourceMapDir, sourceMapFile);
+                    return encodeURI(combinePaths(sourceMapDir, sourceMapFile));
                 }
             }
-            return sourceMapFile;
+            return encodeURI(sourceMapFile);
         }
     }
 
@@ -5135,7 +5136,12 @@ namespace ts {
             hasWrittenComment = false;
 
             if (isEmittedNode) {
-                forEachLeadingCommentToEmit(pos, emitLeadingComment);
+                if (pos === 0 && currentSourceFile?.isDeclarationFile) {
+                    forEachLeadingCommentToEmit(pos, emitNonTripleSlashLeadingComment);
+                }
+                else {
+                    forEachLeadingCommentToEmit(pos, emitLeadingComment);
+                }
             }
             else if (pos === 0) {
                 // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
@@ -5152,6 +5158,12 @@ namespace ts {
 
         function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (isTripleSlashComment(commentPos, commentEnd)) {
+                emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
+            }
+        }
+
+        function emitNonTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (!isTripleSlashComment(commentPos, commentEnd)) {
                 emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
             }
         }

@@ -3762,6 +3762,8 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
+        /* @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
+
         /* @internal */ getClassifiableNames(): Set<__String>;
 
         getTypeCatalog(): readonly Type[];
@@ -3779,7 +3781,8 @@ namespace ts {
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
-        /* @internal */ structureIsReused?: StructureIsReused;
+        // This is set on created program to let us know how the program was created using old program
+        /* @internal */ readonly structureIsReused: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
@@ -3797,7 +3800,7 @@ namespace ts {
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
         /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
         /*@internal*/ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
-        /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
@@ -4508,7 +4511,7 @@ namespace ts {
         isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         isLateBound(node: Declaration): node is LateBoundDeclaration;
         collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
         isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
@@ -4844,7 +4847,6 @@ namespace ts {
         deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;             // Is node an exhaustive switch statement
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
@@ -5138,6 +5140,8 @@ namespace ts {
         node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode;
         /* @internal */
         mapper?: TypeMapper;
+        /* @internal */
+        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
     }
 
     /* @internal */
@@ -5218,6 +5222,7 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
     }
 
     /* @internal */
@@ -5526,17 +5531,17 @@ namespace ts {
 
     /**
      * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
+     * x & y picks the lesser in the order False < Unknown < Maybe < True, and
+     * x | y picks the greater in the order False < Unknown < Maybe < True.
+     * Generally, Ternary.Maybe is used as the result of a relation that depends on itself, and
+     * Ternary.Unknown is used as the result of a variance check that depends on itself. We make
+     * a distinction because we don't want to cache circular variance check results.
      */
     /* @internal */
     export const enum Ternary {
         False = 0,
-        Maybe = 1,
+        Unknown = 1,
+        Maybe = 3,
         True = -1
     }
 
@@ -5850,7 +5855,8 @@ namespace ts {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean | undefined;
+        disableFilenameBasedTypeAcquisition?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export enum ModuleKind {
@@ -6327,7 +6333,7 @@ namespace ts {
     /*@internal*/
     export interface ResolvedProjectReferenceCallbacks {
         getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     }
 
     /* @internal */

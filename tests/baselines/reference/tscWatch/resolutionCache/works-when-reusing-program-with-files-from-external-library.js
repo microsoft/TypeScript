@@ -38,6 +38,7 @@ Output::
 
 Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
 Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/projects/myProject/node_modules/module1/index.js
@@ -112,6 +113,7 @@ Output::
 
 Program root files: ["/a/b/projects/myProject/src/file1.ts","/a/b/projects/myProject/src/file2.ts"]
 Program options: {"allowJs":true,"rootDir":"/a/b/projects/myProject/src","outDir":"/a/b/projects/myProject/dist","moduleResolution":2,"maxNodeModuleJsDepth":1,"watch":true,"project":"/a/b/projects/myProject/src","configFilePath":"/a/b/projects/myProject/src/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/projects/myProject/node_modules/module1/index.js

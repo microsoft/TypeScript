@@ -1763,6 +1763,11 @@ namespace ts.server.protocol {
     }
 
     /**
+     * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+     */
+    export type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+
+    /**
      * Request to set compiler options for inferred projects.
      * External projects are opened / closed explicitly.
      * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
@@ -1783,7 +1788,7 @@ namespace ts.server.protocol {
         /**
          * Compiler options to be used with inferred projects.
          */
-        options: ExternalProjectCompilerOptions;
+        options: InferredProjectCompilerOptions;
 
         /**
          * Specifies the project root path used to scope compiler options.

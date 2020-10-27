@@ -33,6 +33,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
@@ -128,6 +129,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
@@ -178,6 +180,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/file1.ts
@@ -373,6 +376,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/src/file1.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts

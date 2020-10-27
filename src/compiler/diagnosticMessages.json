@@ -2197,6 +2197,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.": {
+        "category": "Error",
+        "code": 2550
+    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2313,7 +2317,7 @@
         "category": "Error",
         "code": 2582
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.": {
         "category": "Error",
         "code": 2583
     },
@@ -3039,7 +3043,10 @@
         "category": "Error",
         "code": 2792
     },
-
+    "The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.": {
+        "category": "Error",
+        "code": 2793
+    },
     "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
         "category": "Error",
         "code": 2794
@@ -3047,6 +3054,10 @@
     "The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.": {
         "category": "Error",
         "code": 2795
+    },
+    "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
+        "category": "Error",
+        "code": 2796
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4707,6 +4718,10 @@
         "category": "Suggestion",
         "code": 6385,
         "reportsDeprecated": true
+    },
+    "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
+        "category": "Message",
+        "code": 6386
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
