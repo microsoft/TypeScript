@@ -5535,7 +5535,7 @@ namespace ts {
      * x | y picks the greater in the order False < Unknown < Maybe < True.
      * Generally, Ternary.Maybe is used as the result of a relation that depends on itself, and
      * Ternary.Unknown is used as the result of a variance check that depends on itself. We make
-     * a distinction between the two because we don't want to circular variance check results.
+     * a distinction because we don't want to cache circular variance check results.
      */
     /* @internal */
     export const enum Ternary {
