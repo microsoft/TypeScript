@@ -13100,6 +13100,20 @@ namespace ts {
             }
         }
 
+        function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
+            const templates = filter(types, isPatternLiteralType);
+            if (templates.length) {
+                let i = types.length;
+                while (i > 0) {
+                    i--;
+                    const t = types[i];
+                    if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeSubtypeOf(t, template))) {
+                        orderedRemoveItemAt(types, i);
+                    }
+                }
+            }
+        }
+
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -13124,6 +13138,9 @@ namespace ts {
                     case UnionReduction.Literal:
                         if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol)) {
                             removeRedundantLiteralTypes(typeSet, includes);
+                        }
+                        if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
+                            removeStringLiteralsMatchedByTemplateLiterals(typeSet);
                         }
                         break;
                     case UnionReduction.Subtype:
