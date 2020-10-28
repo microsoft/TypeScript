@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //// const item = {
-////     a: 1, b: () => void
+////     a: 1, b: () => 1
 //// }
 //// /*a*/item/*b*/.a = 2
 //// call(item.a, /*c*/item/*d*/.b(), (((/*e*/item/*f*/.b)))())

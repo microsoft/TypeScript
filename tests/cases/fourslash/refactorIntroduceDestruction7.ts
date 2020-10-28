@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //// const item = {
-////     a: 1, b: () => void
+////     a: 1, b: () => 1
 //// }
 //// item.a = 2
 //// call(/*a*/item/*b*/.a, item.b())
@@ -12,7 +12,7 @@ edit.applyRefactor({
     actionName: "Introduce destruction",
     actionDescription: "Convert access to destruction",
     newContent: `const item = {
-    a: 1, b: () => void
+    a: 1, b: () => 1
 }
 item.a = 2
 const { a } = item

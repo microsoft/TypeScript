@@ -1,9 +1,14 @@
 /// <reference path='fourslash.ts' />
 
 //// const item = {
-////     a: 1, b: () => 1
+////     a: {
+////         b: {
+////             c: 1
+////         }
+////     }
 //// }
-//// call(/*a*/item/*b*/.a, item.b())
+//// item./*a*/a/*b*/.b.c // right of item
+//// item.a.b.c // another reference
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -11,8 +16,15 @@ edit.applyRefactor({
     actionName: "Introduce destruction",
     actionDescription: "Convert access to destruction",
     newContent: `const item = {
-    a: 1, b: () => 1
+    a: {
+        b: {
+            c: 1
+        }
+    }
 }
 const { a } = item
-call(a, item.b())`,
+a.b.c // right of item
+a.b.c // another reference`,
 });
+
+

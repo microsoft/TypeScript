@@ -212,8 +212,11 @@ namespace ts.refactor {
 
         const node = findAncestor(current, (node => node.parent && isAccessExpression(node.parent) && !rangeContainsSkipTrivia(range, node.parent, file)));
 
-        if (!node || !isAccessExpression(node.parent) || node.parent.expression !== node) return undefined;
-        const symbol = checker.getSymbolAtLocation(node);
+        if (!node || !isAccessExpression(node.parent)) return undefined;
+
+        const isLeftOfAccess = node.parent.expression === node;
+
+        const symbol = checker.getSymbolAtLocation(isLeftOfAccess ? node.parent.expression : node.parent);
         if (!symbol || checker.isUnknownSymbol(symbol) || !symbol.valueDeclaration || !isVariableLike(symbol.valueDeclaration) || isEnumMember(symbol.valueDeclaration)) return undefined;
 
         // Find only current file
@@ -229,7 +232,7 @@ namespace ts.refactor {
                 return;
             }
 
-            const accessExpression = getAccessExpressionIfValidReference(reference.node, symbol, container, allReferencedAcccessExpression);
+            const accessExpression = getAccessExpressionIfValidReference(reference.node, symbol, container, allReferencedAcccessExpression, isLeftOfAccess);
             if (!accessExpression) {
                 return;
             }
@@ -282,16 +285,24 @@ namespace ts.refactor {
         forEach(allReferencedAcccessExpression, expr => {
             const referenceType = checker.getTypeAtLocation(expr.expression);
             if (referenceType !== type) {
-                const propName = isElementAccessExpression(expr) ?
-                    cast(expr.argumentExpression, isStringOrNumericLiteralLike).text :
-                    checker.getSymbolAtLocation(expr)?.name;
-
                 const accessType = checker.getTypeAtLocation(expr);
-                const prop = propName && checker.getPropertyOfType(type, propName);
+                if (!isLeftOfAccess) {
+                    if (accessType !== type) {
+                        hasUnconvertableReference = true;
+                        return "quit";
+                    }
+                }
+                else {
+                    const propName = isElementAccessExpression(expr) ?
+                        cast(expr.argumentExpression, isStringOrNumericLiteralLike).text :
+                        checker.getSymbolAtLocation(expr)?.name;
 
-                if (!prop || checker.getTypeOfSymbolAtLocation(prop, expr) !== accessType) {
-                    hasUnconvertableReference = true;
-                    return "quit";
+                    const prop = propName && checker.getPropertyOfType(type, propName);
+
+                    if (!prop || checker.getTypeOfSymbolAtLocation(prop, expr) !== accessType) {
+                        hasUnconvertableReference = true;
+                        return "quit";
+                    }
                 }
             }
         });
@@ -316,7 +327,7 @@ namespace ts.refactor {
         };
     }
 
-    function getAccessExpressionIfValidReference(node: Node, symbol: Symbol, container: Node, allReferencedAcccessExpression: Node[]): AccessExpression | undefined {
+    function getAccessExpressionIfValidReference(node: Node, symbol: Symbol, container: Node, allReferencedAcccessExpression: Node[], isLeftOfAccess: boolean): AccessExpression | undefined {
         let lastChild = node;
         const topReferencedAccessExpression = findAncestor(node.parent, n => {
             if (isParenthesizedExpression(n)) {
@@ -324,9 +335,16 @@ namespace ts.refactor {
                 return false;
             }
             else if (isAccessExpression(n)) {
-                if (n.expression === lastChild) {
+                if (isLeftOfAccess && n.expression === lastChild) {
                     return true;
                 }
+                else if (!isLeftOfAccess && (isPropertyAccessExpression(n) ? n.name === lastChild : n.argumentExpression === lastChild)) {
+                    return true;
+                }
+                lastChild = n;
+                return false;
+            }
+            else if (isIdentifier(n) && isAccessExpression(n.parent)) {
                 lastChild = n;
                 return false;
             }
