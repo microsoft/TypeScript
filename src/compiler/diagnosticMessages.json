@@ -4718,7 +4718,7 @@
         "category": "Message",
         "code": 6384
     },
-    "'{0}' is deprecated": {
+    "'{0}' is deprecated.": {
         "category": "Suggestion",
         "code": 6385,
         "reportsDeprecated": true

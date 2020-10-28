@@ -20,25 +20,25 @@ const ranges = test.ranges();
 
 verify.getSuggestionDiagnostics([
     {
-        message: "'Props' is deprecated",
+        message: "'Props' is deprecated.",
         code: 6385,
         range: ranges[0],
         reportsDeprecated: true,
     },
     {
-        message: "'Component' is deprecated",
+        message: "'Component' is deprecated.",
         code: 6385,
         range: ranges[1],
         reportsDeprecated: true
     },
     {
-        message: "'Options' is deprecated",
+        message: "'Options' is deprecated.",
         code: 6385,
         range: ranges[2],
         reportsDeprecated: true,
     },
     {
-        message: "'deprecatedFunction' is deprecated",
+        message: "'deprecatedFunction' is deprecated.",
         code: 6385,
         range: ranges[3],
         reportsDeprecated: true,

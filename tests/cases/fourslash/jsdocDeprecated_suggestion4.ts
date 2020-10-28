@@ -30,19 +30,19 @@
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
-        message: "'f' is deprecated",
+        message: "'f' is deprecated.",
         code: 6385,
         range: ranges[0],
         reportsDeprecated: true,
     },
     {
-        message: "'baz' is deprecated",
+        message: "'baz' is deprecated.",
         code: 6385,
         range: ranges[1],
         reportsDeprecated: true,
     },
     {
-        message: "'f' is deprecated",
+        message: "'f' is deprecated.",
         code: 6385,
         range: ranges[2],
         reportsDeprecated: true,
