@@ -1,25 +1,112 @@
 === tests/cases/compiler/narrowedSpread.ts ===
-type Obj = { x: number };
->Obj : Obj
+function useX(obj: { x: number }) { }
+>useX : (obj: {    x: number;}) => void
+>obj : { x: number; }
 >x : number
 
-function go(obj: Obj) { }
->go : (obj: Obj) => void
->obj : Obj
-
-function fn(arg: { x?: number }) {
->fn : (arg: {    x?: number;}) => void
+function fn1(arg: { x?: number }) {
+>fn1 : (arg: {    x?: number;}) => void
 >arg : { x?: number | undefined; }
 >x : number | undefined
 
-    arg.x && go({ ...arg });
->arg.x && go({ ...arg }) : void | 0 | undefined
+    arg.x && useX({ ...arg });
+>arg.x && useX({ ...arg }) : void | 0 | undefined
 >arg.x : number | undefined
 >arg : { x?: number | undefined; }
 >x : number | undefined
->go({ ...arg }) : void
->go : (obj: Obj) => void
+>useX({ ...arg }) : void
+>useX : (obj: { x: number; }) => void
 >{ ...arg } : { x: number; }
 >arg : { x?: number | undefined; }
 }
+
+function useXYZ(obj: { w: number; x: number; y: number; z: number }) { }
+>useXYZ : (obj: {    w: number;    x: number;    y: number;    z: number;}) => void
+>obj : { w: number; x: number; y: number; z: number; }
+>w : number
+>x : number
+>y : number
+>z : number
+
+function fn2(arg: { x?: number; y: number | null; z: string | number }) {
+>fn2 : (arg: {    x?: number;    y: number | null;    z: string | number;}) => void
+>arg : { x?: number | undefined; y: number | null; z: string | number; }
+>x : number | undefined
+>y : number | null
+>null : null
+>z : string | number
+
+    if (arg.x && arg.y !== null) {
+>arg.x && arg.y !== null : boolean | 0 | undefined
+>arg.x : number | undefined
+>arg : { x?: number | undefined; y: number | null; z: string | number; }
+>x : number | undefined
+>arg.y !== null : boolean
+>arg.y : number | null
+>arg : { x?: number | undefined; y: number | null; z: string | number; }
+>y : number | null
+>null : null
+
+        if (typeof arg.z === "number") {
+>typeof arg.z === "number" : boolean
+>typeof arg.z : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>arg.z : string | number
+>arg : { x?: number | undefined; y: number | null; z: string | number; }
+>z : string | number
+>"number" : "number"
+
+            useXYZ({ ...arg, w: 100 });
+>useXYZ({ ...arg, w: 100 }) : void
+>useXYZ : (obj: { w: number; x: number; y: number; z: number; }) => void
+>{ ...arg, w: 100 } : { w: number; x: number; y: number; z: number; }
+>arg : { x?: number | undefined; y: number | null; z: string | number; }
+>w : number
+>100 : 100
+        }
+    }
+} 
+
+type None = { type: "none" };
+>None : None
+>type : "none"
+
+type Some<T> = { type: "some"; value: T };
+>Some : Some<T>
+>type : "some"
+>value : T
+
+type Option<T> = None | Some<T>;
+>Option : Option<T>
+
+function useSome<T>(obj: { opt: Some<T> }) { }
+>useSome : <T>(obj: {    opt: Some<T>;}) => void
+>obj : { opt: Some<T>; }
+>opt : Some<T>
+
+function fn3<T>(arg: { opt: Option<T> }) {
+>fn3 : <T>(arg: {    opt: Option<T>;}) => void
+>arg : { opt: Option<T>; }
+>opt : Option<T>
+
+    if (arg.opt.type === "some") {
+>arg.opt.type === "some" : boolean
+>arg.opt.type : "none" | "some"
+>arg.opt : Option<T>
+>arg : { opt: Option<T>; }
+>opt : Option<T>
+>type : "none" | "some"
+>"some" : "some"
+
+        useSome({ ...arg });
+>useSome({ ...arg }) : void
+>useSome : <T>(obj: { opt: Some<T>; }) => void
+>{ ...arg } : { opt: Some<T>; }
+>arg : { opt: Option<T>; }
+    }
+}
+
+
+
+
+
 

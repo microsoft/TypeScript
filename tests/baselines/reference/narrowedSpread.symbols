@@ -1,23 +1,107 @@
 === tests/cases/compiler/narrowedSpread.ts ===
-type Obj = { x: number };
->Obj : Symbol(Obj, Decl(narrowedSpread.ts, 0, 0))
->x : Symbol(x, Decl(narrowedSpread.ts, 0, 12))
+function useX(obj: { x: number }) { }
+>useX : Symbol(useX, Decl(narrowedSpread.ts, 0, 0))
+>obj : Symbol(obj, Decl(narrowedSpread.ts, 0, 14))
+>x : Symbol(x, Decl(narrowedSpread.ts, 0, 20))
 
-function go(obj: Obj) { }
->go : Symbol(go, Decl(narrowedSpread.ts, 0, 25))
->obj : Symbol(obj, Decl(narrowedSpread.ts, 1, 12))
->Obj : Symbol(Obj, Decl(narrowedSpread.ts, 0, 0))
+function fn1(arg: { x?: number }) {
+>fn1 : Symbol(fn1, Decl(narrowedSpread.ts, 0, 37))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 1, 13))
+>x : Symbol(x, Decl(narrowedSpread.ts, 1, 19))
 
-function fn(arg: { x?: number }) {
->fn : Symbol(fn, Decl(narrowedSpread.ts, 1, 25))
->arg : Symbol(arg, Decl(narrowedSpread.ts, 3, 12))
->x : Symbol(x, Decl(narrowedSpread.ts, 3, 18))
-
-    arg.x && go({ ...arg });
->arg.x : Symbol(x, Decl(narrowedSpread.ts, 3, 18))
->arg : Symbol(arg, Decl(narrowedSpread.ts, 3, 12))
->x : Symbol(x, Decl(narrowedSpread.ts, 3, 18))
->go : Symbol(go, Decl(narrowedSpread.ts, 0, 25))
->arg : Symbol(arg, Decl(narrowedSpread.ts, 3, 12))
+    arg.x && useX({ ...arg });
+>arg.x : Symbol(x, Decl(narrowedSpread.ts, 1, 19))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 1, 13))
+>x : Symbol(x, Decl(narrowedSpread.ts, 1, 19))
+>useX : Symbol(useX, Decl(narrowedSpread.ts, 0, 0))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 1, 13))
 }
+
+function useXYZ(obj: { w: number; x: number; y: number; z: number }) { }
+>useXYZ : Symbol(useXYZ, Decl(narrowedSpread.ts, 3, 1))
+>obj : Symbol(obj, Decl(narrowedSpread.ts, 5, 16))
+>w : Symbol(w, Decl(narrowedSpread.ts, 5, 22))
+>x : Symbol(x, Decl(narrowedSpread.ts, 5, 33))
+>y : Symbol(y, Decl(narrowedSpread.ts, 5, 44))
+>z : Symbol(z, Decl(narrowedSpread.ts, 5, 55))
+
+function fn2(arg: { x?: number; y: number | null; z: string | number }) {
+>fn2 : Symbol(fn2, Decl(narrowedSpread.ts, 5, 72))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 6, 13))
+>x : Symbol(x, Decl(narrowedSpread.ts, 6, 19))
+>y : Symbol(y, Decl(narrowedSpread.ts, 6, 31))
+>z : Symbol(z, Decl(narrowedSpread.ts, 6, 49))
+
+    if (arg.x && arg.y !== null) {
+>arg.x : Symbol(x, Decl(narrowedSpread.ts, 6, 19))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 6, 13))
+>x : Symbol(x, Decl(narrowedSpread.ts, 6, 19))
+>arg.y : Symbol(y, Decl(narrowedSpread.ts, 6, 31))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 6, 13))
+>y : Symbol(y, Decl(narrowedSpread.ts, 6, 31))
+
+        if (typeof arg.z === "number") {
+>arg.z : Symbol(z, Decl(narrowedSpread.ts, 6, 49))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 6, 13))
+>z : Symbol(z, Decl(narrowedSpread.ts, 6, 49))
+
+            useXYZ({ ...arg, w: 100 });
+>useXYZ : Symbol(useXYZ, Decl(narrowedSpread.ts, 3, 1))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 6, 13))
+>w : Symbol(w, Decl(narrowedSpread.ts, 9, 28))
+        }
+    }
+} 
+
+type None = { type: "none" };
+>None : Symbol(None, Decl(narrowedSpread.ts, 12, 1))
+>type : Symbol(type, Decl(narrowedSpread.ts, 14, 13))
+
+type Some<T> = { type: "some"; value: T };
+>Some : Symbol(Some, Decl(narrowedSpread.ts, 14, 29))
+>T : Symbol(T, Decl(narrowedSpread.ts, 15, 10))
+>type : Symbol(type, Decl(narrowedSpread.ts, 15, 16))
+>value : Symbol(value, Decl(narrowedSpread.ts, 15, 30))
+>T : Symbol(T, Decl(narrowedSpread.ts, 15, 10))
+
+type Option<T> = None | Some<T>;
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(narrowedSpread.ts, 15, 42))
+>T : Symbol(T, Decl(narrowedSpread.ts, 16, 12))
+>None : Symbol(None, Decl(narrowedSpread.ts, 12, 1))
+>Some : Symbol(Some, Decl(narrowedSpread.ts, 14, 29))
+>T : Symbol(T, Decl(narrowedSpread.ts, 16, 12))
+
+function useSome<T>(obj: { opt: Some<T> }) { }
+>useSome : Symbol(useSome, Decl(narrowedSpread.ts, 16, 32))
+>T : Symbol(T, Decl(narrowedSpread.ts, 17, 17))
+>obj : Symbol(obj, Decl(narrowedSpread.ts, 17, 20))
+>opt : Symbol(opt, Decl(narrowedSpread.ts, 17, 26))
+>Some : Symbol(Some, Decl(narrowedSpread.ts, 14, 29))
+>T : Symbol(T, Decl(narrowedSpread.ts, 17, 17))
+
+function fn3<T>(arg: { opt: Option<T> }) {
+>fn3 : Symbol(fn3, Decl(narrowedSpread.ts, 17, 46))
+>T : Symbol(T, Decl(narrowedSpread.ts, 19, 13))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 19, 16))
+>opt : Symbol(opt, Decl(narrowedSpread.ts, 19, 22))
+>Option : Symbol(Option, Decl(lib.dom.d.ts, --, --), Decl(narrowedSpread.ts, 15, 42))
+>T : Symbol(T, Decl(narrowedSpread.ts, 19, 13))
+
+    if (arg.opt.type === "some") {
+>arg.opt.type : Symbol(type, Decl(narrowedSpread.ts, 14, 13), Decl(narrowedSpread.ts, 15, 16))
+>arg.opt : Symbol(opt, Decl(narrowedSpread.ts, 19, 22))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 19, 16))
+>opt : Symbol(opt, Decl(narrowedSpread.ts, 19, 22))
+>type : Symbol(type, Decl(narrowedSpread.ts, 14, 13), Decl(narrowedSpread.ts, 15, 16))
+
+        useSome({ ...arg });
+>useSome : Symbol(useSome, Decl(narrowedSpread.ts, 16, 32))
+>arg : Symbol(arg, Decl(narrowedSpread.ts, 19, 16))
+    }
+}
+
+
+
+
+
 
