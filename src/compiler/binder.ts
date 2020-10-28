@@ -1337,10 +1337,14 @@ namespace ts {
 
         function bindExpressionStatement(node: ExpressionStatement): void {
             bind(node.expression);
-            // A top level call expression with a dotted function name and at least one argument
+            maybeBindExpressionFlowIfCall(node.expression);
+        }
+
+        function maybeBindExpressionFlowIfCall(node: Expression) {
+            // A top level or LHS of comma expression call expression with a dotted function name and at least one argument
             // is potentially an assertion and is therefore included in the control flow.
-            if (node.expression.kind === SyntaxKind.CallExpression) {
-                const call = <CallExpression>node.expression;
+            if (node.kind === SyntaxKind.CallExpression) {
+                const call = <CallExpression>node;
                 if (isDottedName(call.expression) && call.expression.kind !== SyntaxKind.SuperKeyword) {
                     currentFlow = createFlowCall(currentFlow, call);
                 }
@@ -1511,6 +1515,9 @@ namespace ts {
                         break;
                     }
                     case BindBinaryExpressionFlowState.BindToken: {
+                        if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+                            maybeBindExpressionFlowIfCall(node.left);
+                        }
                         advanceState(BindBinaryExpressionFlowState.BindRight);
                         maybeBind(node.operatorToken);
                         break;
