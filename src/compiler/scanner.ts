@@ -111,6 +111,7 @@ namespace ts {
         infer: SyntaxKind.InferKeyword,
         instanceof: SyntaxKind.InstanceOfKeyword,
         interface: SyntaxKind.InterfaceKeyword,
+        intrinsic: SyntaxKind.IntrinsicKeyword,
         is: SyntaxKind.IsKeyword,
         keyof: SyntaxKind.KeyOfKeyword,
         let: SyntaxKind.LetKeyword,
@@ -1508,9 +1509,9 @@ namespace ts {
         }
 
         function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-            // Reserved words are between 2 and 11 characters long and start with a lowercase letter
+            // Reserved words are between 2 and 12 characters long and start with a lowercase letter
             const len = tokenValue.length;
-            if (len >= 2 && len <= 11) {
+            if (len >= 2 && len <= 12) {
                 const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
                     const keyword = textToKeyword.get(tokenValue);

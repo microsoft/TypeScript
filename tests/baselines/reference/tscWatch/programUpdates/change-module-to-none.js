@@ -25,13 +25,13 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -75,12 +75,10 @@ Output::
 >> Screen clear
 [[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/f1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1148: [0mCannot use imports, exports, or module augmentations when '--module' is 'none'.
 
 [7m1[0m export {}
 [7m [0m [91m~~~~~~~~~[0m
-
 
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
@@ -88,6 +86,7 @@ Output::
 
 Program root files: ["/a/b/f1.ts"]
 Program options: {"module":0,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts

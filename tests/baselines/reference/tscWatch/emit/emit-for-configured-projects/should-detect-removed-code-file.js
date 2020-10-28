@@ -28,12 +28,10 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-
 [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m2[0m export var x = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
 
@@ -41,6 +39,7 @@ Output::
 
 Program root files: ["/a/b/moduleFile1.ts","/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -98,18 +97,15 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/moduleFile1.ts' not found.
 
 [7m1[0m /// <reference path="./moduleFile1.ts" />
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~[0m
 
-
 [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m2[0m export var x = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
 
@@ -117,6 +113,7 @@ Output::
 
 Program root files: ["/a/b/referenceFile1.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/referenceFile1.ts

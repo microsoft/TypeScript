@@ -77,7 +77,7 @@ namespace ts {
         /**
          * Compute the hash to store the shape of the file
          */
-        export type ComputeHash = (data: string) => string;
+        export type ComputeHash = ((data: string) => string) | undefined;
 
         /**
          * Exported modules to from declaration emit being computed.
@@ -337,7 +337,7 @@ namespace ts {
                     emitOutput.outputFiles.length > 0 ? emitOutput.outputFiles[0] : undefined;
                 if (firstDts) {
                     Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
-                    latestSignature = computeHash(firstDts.text);
+                    latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
                     if (exportedModulesMapCache && latestSignature !== prevSignature) {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);
                     }
@@ -521,7 +521,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash | undefined, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }
@@ -544,13 +544,12 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash!, exportedModulesMapCache)) { // TODO: GH#18217
+                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash, exportedModulesMapCache)) {
                         queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
                 }
             }
 
-            // Return array of values that needs emit
             // Return array of values that needs emit
             return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
         }

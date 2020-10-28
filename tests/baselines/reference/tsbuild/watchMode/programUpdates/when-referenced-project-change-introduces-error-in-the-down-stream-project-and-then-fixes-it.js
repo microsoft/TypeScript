@@ -42,13 +42,13 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
@@ -59,6 +59,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts
@@ -169,7 +170,6 @@ Output::
 >> Screen clear
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96mApp/app.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS2551: [0mProperty 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?
 
 [7m2[0m createSomeObject().message;
@@ -180,13 +180,13 @@ Output::
     [7m [0m [96m    ~~~~~~~~[0m
     'message2' is declared here.
 
-
 [[90m12:00:52 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
@@ -196,6 +196,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts
@@ -298,13 +299,13 @@ Output::
 >> Screen clear
 [[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/Library/library.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/user/username/projects/sample1/Library/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
@@ -314,6 +315,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts

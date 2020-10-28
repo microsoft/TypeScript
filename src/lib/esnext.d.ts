@@ -2,3 +2,4 @@
 /// <reference lib="esnext.intl" />
 /// <reference lib="esnext.string" />
 /// <reference lib="esnext.promise" />
+/// <reference lib="esnext.weakref" />

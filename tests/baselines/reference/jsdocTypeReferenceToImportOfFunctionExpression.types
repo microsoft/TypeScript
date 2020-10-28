@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/MC.js ===
 const MW = require("./MW");
->MW : typeof import("tests/cases/conformance/jsdoc/MW")
->require("./MW") : typeof import("tests/cases/conformance/jsdoc/MW")
+>MW : typeof MW
+>require("./MW") : typeof MW
 >require : any
 >"./MW" : "./MW"
 
@@ -9,10 +9,10 @@ const MW = require("./MW");
 
 /** @class */
 module.exports = function MC() {
->module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
->module.exports : typeof MC
->module : { "\"tests/cases/conformance/jsdoc/MC\"": typeof MC; }
->exports : typeof MC
+>module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : { (): MW; new (): MC; }
+>module.exports : { (): MW; new (): MC; }
+>module : { "\"tests/cases/conformance/jsdoc/MC\"": { (): MW; new (): MC; }; }
+>exports : { (): MW; new (): MC; }
 >function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : typeof MC
 >MC : typeof MC
 
@@ -22,8 +22,8 @@ module.exports = function MC() {
 >{} : {}
 
     return new MW(x);
->new MW(x) : import("tests/cases/conformance/jsdoc/MW")
->MW : typeof import("tests/cases/conformance/jsdoc/MW")
+>new MW(x) : MW
+>MW : typeof MW
 >x : any
 
 };
@@ -38,14 +38,14 @@ class MW {
    * @param {MC} compiler the compiler
    */
   constructor(compiler) {
->compiler : typeof MC
+>compiler : { (): MW; new (): MC; }
 
     this.compiler = compiler;
->this.compiler = compiler : typeof MC
+>this.compiler = compiler : { (): MW; new (): MC; }
 >this.compiler : any
 >this : this
 >compiler : any
->compiler : typeof MC
+>compiler : { (): MW; new (): MC; }
   }
 }
 

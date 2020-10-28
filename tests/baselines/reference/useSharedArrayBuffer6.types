@@ -5,19 +5,14 @@ var foge = new SharedArrayBuffer(1024);
 >SharedArrayBuffer : SharedArrayBufferConstructor
 >1024 : 1024
 
-var species = foge[Symbol.species];
->species : SharedArrayBuffer
->foge[Symbol.species] : SharedArrayBuffer
+foge.length; // should error
+>foge.length : any
 >foge : SharedArrayBuffer
->Symbol.species : symbol
->Symbol : SymbolConstructor
->species : symbol
+>length : any
 
-var stringTag = foge[Symbol.toStringTag];
->stringTag : "SharedArrayBuffer"
->foge[Symbol.toStringTag] : "SharedArrayBuffer"
->foge : SharedArrayBuffer
->Symbol.toStringTag : symbol
->Symbol : SymbolConstructor
->toStringTag : symbol
+var length = SharedArrayBuffer.length;
+>length : number
+>SharedArrayBuffer.length : number
+>SharedArrayBuffer : SharedArrayBufferConstructor
+>length : number
 

@@ -34,9 +34,7 @@ namespace ts.GoToDefinition {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
-            if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration)) ||
-                // TODO: GH#25533 Following check shouldn't be necessary if 'require' is an alias
-                symbol.declarations && symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
+            if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration))) {
                 return [sigInfo];
             }
             else {
@@ -94,7 +92,14 @@ namespace ts.GoToDefinition {
                     getDefinitionFromSymbol(typeChecker, propertySymbol, node));
             }
         }
+
         return getDefinitionFromSymbol(typeChecker, symbol, node);
+    }
+
+    function isShorthandPropertyAssignmentOfModuleExports(symbol: Symbol): boolean {
+        const shorthandProperty = tryCast(symbol.valueDeclaration, isShorthandPropertyAssignment);
+        const binaryExpression = tryCast(shorthandProperty?.parent.parent, isAssignmentExpression);
+        return !!binaryExpression && getAssignmentDeclarationKind(binaryExpression) === AssignmentDeclarationKind.ModuleExports;
     }
 
     /**
@@ -199,24 +204,29 @@ namespace ts.GoToDefinition {
     }
 
     function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {
-        const symbol = checker.getSymbolAtLocation(node);
+        let symbol = checker.getSymbolAtLocation(node);
         // If this is an alias, and the request came at the declaration location
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        if (symbol && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
-            const aliased = checker.getAliasedSymbol(symbol);
-            if (aliased.declarations) {
-                return aliased;
-            }
-        }
-        if (symbol && isInJSFile(node)) {
-            const requireCall = forEach(symbol.declarations, d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true) ? d.initializer : undefined);
-            if (requireCall) {
-                const moduleSymbol = checker.getSymbolAtLocation(requireCall.arguments[0]);
-                if (moduleSymbol) {
-                    return checker.resolveExternalModuleSymbol(moduleSymbol);
+        while (symbol) {
+            if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+                const aliased = checker.getAliasedSymbol(symbol);
+                if (!aliased.declarations) {
+                    break;
                 }
+                symbol = aliased;
+            }
+            else if (isShorthandPropertyAssignmentOfModuleExports(symbol)) {
+                // Skip past `module.exports = { Foo }` even though 'Foo' is not a real alias
+                const shorthandTarget = checker.resolveName(symbol.name, symbol.valueDeclaration, SymbolFlags.Value, /*excludeGlobals*/ false);
+                if (!some(shorthandTarget?.declarations)) {
+                    break;
+                }
+                symbol = shorthandTarget;
+            }
+            else {
+                break;
             }
         }
         return symbol;
@@ -240,6 +250,9 @@ namespace ts.GoToDefinition {
                 return true;
             case SyntaxKind.ImportSpecifier:
                 return declaration.parent.kind === SyntaxKind.NamedImports;
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.VariableDeclaration:
+                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration, /*requireStringLiteralLikeArgument*/ true);
             default:
                 return false;
         }

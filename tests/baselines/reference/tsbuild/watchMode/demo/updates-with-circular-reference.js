@@ -152,19 +152,16 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:47 AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json
     * core/tsconfig.json
     * tsconfig.json
 
-
 [91merror[0m[90m TS6202: [0mProject references may not form a circular graph. Cycle detected: /user/username/projects/demo/tsconfig.json
 /user/username/projects/demo/core/tsconfig.json
 /user/username/projects/demo/zoo/tsconfig.json
 /user/username/projects/demo/animals/tsconfig.json
-
 
 [[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
 
@@ -220,24 +217,17 @@ Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:53 AM[0m] Project 'core/tsconfig.json' is out of date because output file 'lib/core/utilities.js' does not exist
-
 
 [[90m12:00:54 AM[0m] Building project '/user/username/projects/demo/core/tsconfig.json'...
 
-
 [[90m12:01:06 AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/animal.js' does not exist
-
 
 [[90m12:01:07 AM[0m] Building project '/user/username/projects/demo/animals/tsconfig.json'...
 
-
 [[90m12:01:25 AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/zoo.js' does not exist
 
-
 [[90m12:01:26 AM[0m] Building project '/user/username/projects/demo/zoo/tsconfig.json'...
-
 
 [[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -245,6 +235,7 @@ Output::
 
 Program root files: ["/user/username/projects/demo/core/utilities.ts"]
 Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/core","rootDir":"/user/username/projects/demo/core","watch":true,"configFilePath":"/user/username/projects/demo/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/demo/core/utilities.ts
@@ -255,6 +246,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/demo/animals/animal.ts","/user/username/projects/demo/animals/dog.ts","/user/username/projects/demo/animals/index.ts"]
 Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/animals","rootDir":"/user/username/projects/demo/animals","watch":true,"configFilePath":"/user/username/projects/demo/animals/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/demo/animals/animal.ts
@@ -271,6 +263,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/demo/zoo/zoo.ts"]
 Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/zoo","rootDir":"/user/username/projects/demo/zoo","watch":true,"configFilePath":"/user/username/projects/demo/zoo/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/demo/lib/animals/animal.d.ts

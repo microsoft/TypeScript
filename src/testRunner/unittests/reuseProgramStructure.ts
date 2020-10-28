@@ -231,7 +231,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
             const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
@@ -242,7 +242,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
             const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
             const program2Diagnostics = program2.getSemanticDiagnostics(program1.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
@@ -250,63 +250,63 @@ namespace ts {
 
         it("fails if change affects tripleslash references", () => {
             const program1 = newProgram(files, ["a.ts"], { target });
-            updateProgram(program1, ["a.ts"], { target }, files => {
+            const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
                 const newReferences = `/// <reference path='b.ts'/>
                 /// <reference path='c.ts'/>
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if change affects type references", () => {
             const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program1, ["a.ts"], { types: ["b"] }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Not);
+            const program2 = updateProgram(program1, ["a.ts"], { types: ["b"] }, noop);
+            assert.equal(program2.structureIsReused, StructureIsReused.Not);
         });
 
         it("succeeds if change doesn't affect type references", () => {
             const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
-            updateProgram(program1, ["a.ts"], { types: ["a"] }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            const program2 = updateProgram(program1, ["a.ts"], { types: ["a"] }, noop);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
         });
 
         it("fails if change affects imports", () => {
             const program1 = newProgram(files, ["a.ts"], { target });
-            updateProgram(program1, ["a.ts"], { target }, files => {
+            const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
                 files[2].text = files[2].text.updateImportsAndExports("import x from 'b'");
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if change affects type directives", () => {
             const program1 = newProgram(files, ["a.ts"], { target });
-            updateProgram(program1, ["a.ts"], { target }, files => {
+            const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
                 const newReferences = `
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
 /// <reference types="typerefs1" />`;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("fails if module kind changes", () => {
             const program1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS });
-            updateProgram(program1, ["a.ts"], { target, module: ModuleKind.AMD }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Not);
+            const program2 = updateProgram(program1, ["a.ts"], { target, module: ModuleKind.AMD }, noop);
+            assert.equal(program2.structureIsReused, StructureIsReused.Not);
         });
 
         it("succeeds if rootdir changes", () => {
             const program1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
-            updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            const program2 = updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
         });
 
         it("fails if config path changes", () => {
             const program1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
-            updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Not);
+            const program2 = updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, noop);
+            assert.equal(program2.structureIsReused, StructureIsReused.Not);
         });
 
         it("succeeds if missing files remain missing", () => {
@@ -318,7 +318,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["a.ts"], options, noop);
             assert.deepEqual(program1.getMissingFilePaths(), program2.getMissingFilePaths());
 
-            assert.equal(StructureIsReused.Completely, program1.structureIsReused);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely,);
         });
 
         it("fails if missing file is created", () => {
@@ -331,7 +331,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["a.ts"], options, noop, newTexts);
             assert.lengthOf(program2.getMissingFilePaths(), 0);
 
-            assert.equal(StructureIsReused.Not, program1.structureIsReused);
+            assert.equal(program2.structureIsReused, StructureIsReused.Not);
         });
 
         it("resolution cache follows imports", () => {
@@ -350,7 +350,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
             checkResolvedModulesCache(program1, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts") })));
@@ -360,7 +360,7 @@ namespace ts {
             const program3 = updateProgram(program2, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateImportsAndExports("");
             });
-            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program3, "a.ts", /*expectedContent*/ undefined);
 
             const program4 = updateProgram(program3, ["a.ts"], options, files => {
@@ -369,7 +369,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
-            assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program4.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedModulesCache(program4, "a.ts", new Map(getEntries({ b: createResolvedModule("b.ts"), c: undefined })));
         });
 
@@ -424,7 +424,7 @@ namespace ts {
             const program2 = updateProgram(program1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
-            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+            assert.equal(program2.structureIsReused, StructureIsReused.Completely);
 
             // content of resolution cache should not change
             checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
@@ -435,16 +435,16 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences("");
             });
 
-            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program3, "/a.ts", /*expectedContent*/ undefined);
 
-            updateProgram(program3, ["/a.ts"], options, files => {
+            const program4 = updateProgram(program3, ["/a.ts"], options, files => {
                 const newReferences = `/// <reference types="typedefs"/>
                 /// <reference types="typedefs2"/>
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.equal(program3.structureIsReused, StructureIsReused.SafeModules);
+            assert.equal(program4.structureIsReused, StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         });
 
@@ -847,7 +847,7 @@ namespace ts {
                     const program2 = updateRedirectProgram(program1, files => {
                         updateProgramText(files, root, "const x = 1;");
                     }, useGetSourceFileByPath);
-                    assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+                    assert.equal(program2.structureIsReused, StructureIsReused.Completely);
                     assert.lengthOf(program2.getSemanticDiagnostics(), 0);
                 });
 
@@ -859,7 +859,7 @@ namespace ts {
                         updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
                         updateProgramText(files, axPackage, JSON.stringify('{ name: "x", version: "1.2.4" }'));
                     }, useGetSourceFileByPath);
-                    assert.equal(program1.structureIsReused, StructureIsReused.Not);
+                    assert.equal(program2.structureIsReused, StructureIsReused.Not);
                     assert.lengthOf(program2.getSemanticDiagnostics(), 1);
                 });
 
@@ -870,7 +870,7 @@ namespace ts {
                         updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
                         updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.4" }));
                     }, useGetSourceFileByPath);
-                    assert.equal(program1.structureIsReused, StructureIsReused.Not);
+                    assert.equal(program2.structureIsReused, StructureIsReused.Not);
                     assert.lengthOf(program2.getSemanticDiagnostics(), 1);
                 });
 
@@ -881,7 +881,7 @@ namespace ts {
                         updateProgramText(files, bxIndex, "export default class X { private x: number; }");
                         updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
                     }, useGetSourceFileByPath);
-                    assert.equal(program1.structureIsReused, StructureIsReused.Not);
+                    assert.equal(program2.structureIsReused, StructureIsReused.Not);
                     assert.deepEqual(program2.getSemanticDiagnostics(), []);
                 });
             }

@@ -216,7 +216,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 }
 
 declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
->foo3 : <T extends unknown[]>(x: number, ...args_0: T, args_1: number) => T
+>foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >x : number
 >args : [...T, number]
 
@@ -226,13 +226,13 @@ function foo4<U extends unknown[]>(u: U) {
 
     foo3(1, 2);
 >foo3(1, 2) : []
->foo3 : <T extends unknown[]>(x: number, ...args_0: T, args_1: number) => T
+>foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >1 : 1
 >2 : 2
 
     foo3(1, 'hello', true, 2);
 >foo3(1, 'hello', true, 2) : [string, boolean]
->foo3 : <T extends unknown[]>(x: number, ...args_0: T, args_1: number) => T
+>foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >1 : 1
 >'hello' : "hello"
 >true : true
@@ -240,7 +240,7 @@ function foo4<U extends unknown[]>(u: U) {
 
     foo3(1, ...u, 'hi', 2);
 >foo3(1, ...u, 'hi', 2) : [...U, string]
->foo3 : <T extends unknown[]>(x: number, ...args_0: T, args_1: number) => T
+>foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >1 : 1
 >...u : unknown
 >u : U
@@ -249,7 +249,7 @@ function foo4<U extends unknown[]>(u: U) {
 
     foo3(1);
 >foo3(1) : unknown[]
->foo3 : <T extends unknown[]>(x: number, ...args_0: T, args_1: number) => T
+>foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >1 : 1
 }
 
@@ -991,8 +991,8 @@ type R36 = DropLast<readonly []>;
 // Inference to [...T, ...U] with implied arity for T
 
 function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) {
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
->f : (...args_0: T, ...args_1: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
+>f : (...args: [...T, ...U]) => R
 >args : [...T, ...U]
 >a : T
 
@@ -1000,7 +1000,7 @@ function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, 
 >(...b: U) => f(...a, ...b) : (...b: U) => R
 >b : U
 >f(...a, ...b) : R
->f : (...args_0: T, ...args_1: U) => R
+>f : (...args: [...T, ...U]) => R
 >...a : unknown
 >a : T
 >...b : unknown
@@ -1019,20 +1019,20 @@ const fn1 = (a: number, b: string, c: boolean, d: string[]) => 0;
 const c0 = curry(fn1);  // (a: number, b: string, c: boolean, d: string[]) => number
 >c0 : (a: number, b: string, c: boolean, d: string[]) => number
 >curry(fn1) : (a: number, b: string, c: boolean, d: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 
 const c1 = curry(fn1, 1);  // (b: string, c: boolean, d: string[]) => number
 >c1 : (b: string, c: boolean, d: string[]) => number
 >curry(fn1, 1) : (b: string, c: boolean, d: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >1 : 1
 
 const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
 >c2 : (c: boolean, d: string[]) => number
 >curry(fn1, 1, 'abc') : (c: boolean, d: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >1 : 1
 >'abc' : "abc"
@@ -1040,7 +1040,7 @@ const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
 const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
 >c3 : (d: string[]) => number
 >curry(fn1, 1, 'abc', true) : (d: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >1 : 1
 >'abc' : "abc"
@@ -1049,7 +1049,7 @@ const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
 const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']);  // () => number
 >c4 : () => number
 >curry(fn1, 1, 'abc', true, ['x', 'y']) : () => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >1 : 1
 >'abc' : "abc"
@@ -1069,20 +1069,20 @@ const fn2 = (x: number, b: boolean, ...args: string[]) => 0;
 const c10 = curry(fn2);  // (x: number, b: boolean, ...args: string[]) => number
 >c10 : (x: number, b: boolean, ...args: string[]) => number
 >curry(fn2) : (x: number, b: boolean, ...args: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 
 const c11 = curry(fn2, 1);  // (b: boolean, ...args: string[]) => number
 >c11 : (b: boolean, ...args: string[]) => number
 >curry(fn2, 1) : (b: boolean, ...args: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >1 : 1
 
 const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 >c12 : (...b: string[]) => number
 >curry(fn2, 1, true) : (...b: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >1 : 1
 >true : true
@@ -1090,7 +1090,7 @@ const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 const c13 = curry(fn2, 1, true, 'abc', 'def');  // (...args: string[]) => number
 >c13 : (...b: string[]) => number
 >curry(fn2, 1, true, 'abc', 'def') : (...b: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >1 : 1
 >true : true
@@ -1106,13 +1106,13 @@ const fn3 = (...args: string[]) => 0;
 const c20 = curry(fn3);  // (...args: string[]) => number
 >c20 : (...b: string[]) => number
 >curry(fn3) : (...b: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn3 : (...args: string[]) => number
 
 const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
 >c21 : (...b: string[]) => number
 >curry(fn3, 'abc', 'def') : (...b: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn3 : (...args: string[]) => number
 >'abc' : "abc"
 >'def' : "def"
@@ -1120,7 +1120,7 @@ const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
 const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 >c22 : (...b: string[]) => number
 >curry(fn3, ...sa) : (...b: string[]) => number
->curry : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, ...a: T) => (...b: U) => R
+>curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >fn3 : (...args: string[]) => number
 >...sa : string
 >sa : string[]
@@ -1128,15 +1128,15 @@ const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 // No inference to [...T, ...U] when there is no implied arity
 
 function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) {
->curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, t: [...T], u: [...U]) => R
->f : (...args_0: T, ...args_1: U) => R
+>curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
+>f : (...args: [...T, ...U]) => R
 >args : [...T, ...U]
 >t : [...T]
 >u : [...U]
 
     return f(...t, ...u);
 >f(...t, ...u) : R
->f : (...args_0: T, ...args_1: U) => R
+>f : (...args: [...T, ...U]) => R
 >...t : T[number]
 >t : [...T]
 >...u : U[number]
@@ -1151,7 +1151,7 @@ declare function fn10(a: string, b: number, c: boolean): string[];
 
 curry2(fn10, ['hello', 42], [true]);
 >curry2(fn10, ['hello', 42], [true]) : string[]
->curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, t: [...T], u: [...U]) => R
+>curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
 >fn10 : (a: string, b: number, c: boolean) => string[]
 >['hello', 42] : [string, number]
 >'hello' : "hello"
@@ -1161,7 +1161,7 @@ curry2(fn10, ['hello', 42], [true]);
 
 curry2(fn10, ['hello'], [42, true]);
 >curry2(fn10, ['hello'], [42, true]) : string[]
->curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args_0: T, ...args_1: U) => R, t: [...T], u: [...U]) => R
+>curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
 >fn10 : (a: string, b: number, c: boolean) => string[]
 >['hello'] : [string]
 >'hello' : "hello"
@@ -1223,13 +1223,13 @@ ft(['a', 'b'], ['c', 'd', 42])
 // Last argument is contextually typed
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
->call : <T extends unknown[], R>(...args_0: T, args_1: (...args: T) => R) => [T, R]
+>call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
 >args : [...T, (...args: T) => R]
 >args : T
 
 call('hello', 32, (a, b) => 42);
 >call('hello', 32, (a, b) => 42) : [[string, number], number]
->call : <T extends unknown[], R>(...args_0: T, args_1: (...args: T) => R) => [T, R]
+>call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
 >'hello' : "hello"
 >32 : 32
 >(a, b) => 42 : (a: string, b: number) => number
@@ -1242,7 +1242,7 @@ call('hello', 32, (a, b) => 42);
 
 call(...sa, (...x) => 42);
 >call(...sa, (...x) => 42) : [(string | ((...x: any[]) => number))[], number]
->call : <T extends unknown[], R>(...args_0: T, args_1: (...args: T) => R) => [T, R]
+>call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
 >...sa : string
 >sa : string[]
 >(...x) => 42 : (...x: any[]) => number
@@ -1359,15 +1359,15 @@ declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z
 >z : boolean | undefined
 
 function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
->callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
->method : (...args_0: T, args_1: object) => U
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
+>method : (...args: [...T, object]) => U
 >args : [...T, object]
 
     return (...args: [...T]) => method(...args, {});
 >(...args: [...T]) => method(...args, {}) : (...args_0: T) => U
 >args : [...T]
 >method(...args, {}) : U
->method : (...args_0: T, args_1: object) => U
+>method : (...args: [...T, object]) => U
 >...args : T[number]
 >args : [...T]
 >{} : {}
@@ -1375,11 +1375,34 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 
 callApi(getUser);
 >callApi(getUser) : (id: string) => string
->callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
 >getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
 
 callApi(getOrgUser);
 >callApi(getOrgUser) : (id: string, orgId: number) => void
->callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
 >getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
+
+// Repro from #40235
+
+type Numbers = number[];
+>Numbers : Numbers
+
+type Unbounded = [...Numbers, boolean];
+>Unbounded : (number | boolean)[]
+
+const data: Unbounded = [false, false];
+>data : (number | boolean)[]
+>[false, false] : false[]
+>false : false
+>false : false
+
+type U1 = [string, ...Numbers, boolean];
+>U1 : [string, ...(number | boolean)[]]
+
+type U2 = [...[string, ...Numbers], boolean];
+>U2 : [string, ...(number | boolean)[]]
+
+type U3 = [...[string, number], boolean];
+>U3 : [string, number, boolean]
 

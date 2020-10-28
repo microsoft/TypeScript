@@ -389,3 +389,13 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 
 callApi(getUser);
 callApi(getOrgUser);
+
+// Repro from #40235
+
+type Numbers = number[];
+type Unbounded = [...Numbers, boolean];
+const data: Unbounded = [false, false];
+
+type U1 = [string, ...Numbers, boolean];
+type U2 = [...[string, ...Numbers], boolean];
+type U3 = [...[string, number], boolean];

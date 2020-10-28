@@ -320,7 +320,6 @@ namespace ts {
             configFileName ?
                 getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory)) :
                 currentDirectory,
-            ResolutionKind.All,
             /*logChangesWhenResolvingModule*/ false
         );
         // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
@@ -636,7 +635,7 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
-            const result = getFileNamesFromConfigSpecs(configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost);
+            const result = getFileNamesFromConfigSpecs(configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
             if (updateErrorForNoInputFiles(result, getNormalizedAbsolutePath(configFileName, currentDirectory), configFileSpecs, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
             }
@@ -749,6 +748,7 @@ namespace ts {
                         fileOrDirectoryPath,
                         configFileName,
                         configFileSpecs,
+                        extraFileExtensions,
                         options: compilerOptions,
                         program: getCurrentBuilderProgram(),
                         currentDirectory,
