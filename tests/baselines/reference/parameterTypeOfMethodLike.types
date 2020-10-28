@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/methodDeclarations/parameterTypeOfMethodLike.ts ===
+class Base {
+>Base : Base
+
+    method(x: number) { }
+>method : (x: number) => void
+>x : number
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    method(x) {
+>method : (x: number) => void
+>x : number
+
+        x.toFixed(0)
+>x.toFixed(0) : string
+>x.toFixed : (fractionDigits?: number | undefined) => string
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+>0 : 0
+    }
+}

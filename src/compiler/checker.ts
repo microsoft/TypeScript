@@ -15515,8 +15515,8 @@ namespace ts {
             return !node.typeParameters && !getEffectiveReturnTypeNode(node) && !!node.body && node.body.kind !== SyntaxKind.Block && isContextSensitive(node.body);
         }
 
-        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
-            return (isInJSFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+        function isContextSensitiveFunctionOrObjectLiteralMethodOrClassMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
+            return (isInJSFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func) || (noImplicitAny && isClassMethodInSubClass(func))) &&
                 isContextSensitiveFunctionLikeDeclaration(func);
         }
 
@@ -23516,7 +23516,7 @@ namespace ts {
             if (func.kind === SyntaxKind.ArrowFunction) {
                 return undefined;
             }
-            if (isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+            if (isContextSensitiveFunctionOrObjectLiteralMethodOrClassMethod(func)) {
                 const contextualSignature = getContextualSignature(func);
                 if (contextualSignature) {
                     const thisParameter = contextualSignature.thisParameter;
@@ -23576,7 +23576,7 @@ namespace ts {
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type | undefined {
             const func = parameter.parent;
-            if (!isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
+            if (!isContextSensitiveFunctionOrObjectLiteralMethodOrClassMethod(func)) {
                 return undefined;
             }
             const iife = getImmediatelyInvokedFunctionExpression(func);
@@ -23954,6 +23954,28 @@ namespace ts {
             return getContextualTypeForObjectLiteralElement(node, contextFlags);
         }
 
+        function getContextualTypeForClassMethod(node: MethodDeclaration): Type | undefined {
+            if (node.type || !isPropertyNameLiteral(node.name) || some(node.parameters, parameter => !!parameter.type)) {
+                return undefined;
+            }
+
+            const container = cast(node.parent, isClassLike);
+            const heritageElement = getClassExtendsHeritageElement(container);
+            Debug.assertIsDefined(heritageElement);
+
+            const baseType = getTypeOfNode(heritageElement);
+            if (baseType === errorType) {
+                return undefined;
+            }
+
+            const basePropType = getTypeOfPropertyOfType(baseType, getTextOfPropertyName(node.name))
+            if (!basePropType) {
+                return undefined
+            }
+
+            return basePropType
+        }
+
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             const type = getApparentTypeOfContextualType(objectLiteral, contextFlags);
@@ -24089,6 +24111,7 @@ namespace ts {
         function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags?: ContextFlags): Type | undefined {
             const contextualType = isObjectLiteralMethod(node) ?
                 getContextualTypeForObjectLiteralMethod(node, contextFlags) :
+                isClassMethodInSubClass(node) ? getContextualTypeForClassMethod(node) :
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
             if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
@@ -24420,7 +24443,7 @@ namespace ts {
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
         function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature | undefined {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node) || isClassMethodInSubClass(node));
             const typeTagSignature = getSignatureOfTypeTag(node);
             if (typeTagSignature) {
                 return typeTagSignature;

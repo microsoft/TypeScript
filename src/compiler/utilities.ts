@@ -1450,6 +1450,14 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isClassMethodInSubClass(node: Node): node is MethodDeclaration {
+        if (!node || !isMethodDeclaration(node) || !isClassLike(node.parent)) {
+            return false;
+        }
+
+        return !!getClassExtendsHeritageElement(node.parent);
+    }
+
     export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
         return node.kind === SyntaxKind.MethodDeclaration &&
             (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
