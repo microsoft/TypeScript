@@ -1107,8 +1107,8 @@ namespace ts {
             return diagnostic;
         }
 
-        function addDeprecatedSuggestion(location: Node, declarations: Node[], arg0: string | number | undefined) {
-            const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, arg0);
+        function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
+            const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
             for (const declaration of declarations) {
                 const deprecatedTag = getJSDocDeprecatedTag(declaration);
                 if (deprecatedTag) {
