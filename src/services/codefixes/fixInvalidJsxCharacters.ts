@@ -42,7 +42,7 @@ namespace ts.codefix {
             return;
         }
 
-        const replacement = useHtmlEntity ? htmlEntity[character] : `{${quote(character, preferences)}}`;
+        const replacement = useHtmlEntity ? htmlEntity[character] : `{${quote(sourceFile, preferences, character)}}`;
         changes.replaceRangeWithText(sourceFile, { pos: start, end: start + 1 }, replacement);
     }
 }

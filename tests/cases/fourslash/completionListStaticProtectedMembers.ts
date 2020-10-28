@@ -29,11 +29,27 @@ verify.completions(
     {
         marker: ["1", "2"],
         // Same class, everything is visible
-        includes: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty", "protectedOverriddenMethod", "protectedOverriddenProperty"],
+        includes: [
+            { name: "privateMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "privateProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority},
+            { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority }
+        ],
     },
     {
         marker: "3",
-        includes: ["privateMethod", "privateProperty", "protectedMethod", "protectedProperty", "publicMethod", "publicProperty"],
+        includes: [
+            { name: "privateMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "privateProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority }
+        ],
         // Can not access protected properties overridden in subclass
         excludes: ["protectedOverriddenMethod", "protectedOverriddenProperty"],
     },

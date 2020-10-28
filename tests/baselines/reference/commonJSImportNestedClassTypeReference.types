@@ -1,0 +1,50 @@
+=== tests/cases/conformance/salsa/main.js ===
+const { K } = require("./mod1");
+>K : typeof K
+>require("./mod1") : typeof import("tests/cases/conformance/salsa/mod1")
+>require : any
+>"./mod1" : "./mod1"
+
+/** @param {K} k */
+function f(k) {
+>f : (k: K) => void
+>k : K
+
+    k.values()
+>k.values() : K
+>k.values : () => K
+>k : K
+>values : () => K
+}
+
+=== tests/cases/conformance/salsa/mod1.js ===
+var NS = {}
+>NS : typeof NS
+>{} : {}
+
+NS.K =class {
+>NS.K =class {    values() {        return new NS.K()    }} : typeof K
+>NS.K : typeof K
+>NS : typeof NS
+>K : typeof K
+>class {    values() {        return new NS.K()    }} : typeof K
+
+    values() {
+>values : () => K
+
+        return new NS.K()
+>new NS.K() : K
+>NS.K : typeof K
+>NS : typeof NS
+>K : typeof K
+    }
+}
+exports.K = NS.K;
+>exports.K = NS.K : typeof K
+>exports.K : typeof K
+>exports : typeof import("tests/cases/conformance/salsa/mod1")
+>K : typeof K
+>NS.K : typeof K
+>NS : typeof NS
+>K : typeof K
+

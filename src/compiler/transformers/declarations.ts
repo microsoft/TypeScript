@@ -14,8 +14,8 @@ namespace ts {
     export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
         const parseTreeNode = getParseTreeNode(node);
         if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
             const text = currentSourceFile.text;
             const commentRanges = previousSibling
                 ? concatenate(
@@ -73,6 +73,7 @@ namespace ts {
             reportCyclicStructureError,
             reportPrivateInBaseOfClassExpression,
             reportLikelyUnsafeImportRequiredError,
+            reportTruncationError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode,
@@ -194,6 +195,12 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     specifier));
+            }
+        }
+
+        function reportTruncationError() {
+            if (errorNameNode) {
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
             }
         }
 
