@@ -16156,36 +16156,38 @@ namespace ts {
             const restIndex = sourceRestType || targetRestType ? paramCount - 1 : -1;
 
             for (let i = 0; i < paramCount; i++) {
-                const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : getTypeAtPosition(source, i);
-                const targetType = i === restIndex ? getRestTypeAtPosition(target, i) : getTypeAtPosition(target, i);
-                // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
-                // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
-                // they naturally relate only contra-variantly). However, if the source and target parameters both have
-                // function types with a single call signature, we know we are relating two callback parameters. In
-                // that case it is sufficient to only relate the parameters of the signatures co-variantly because,
-                // similar to return values, callback parameters are output positions. This means that a Promise<T>,
-                // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
-                // with respect to T.
-                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
-                const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
-                    (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
-                let related = callbacks ?
-                    compareSignaturesRelated(targetSig!, sourceSig!, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
-                    !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
-                // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
-                if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
-                    related = Ternary.False;
-                }
-                if (!related) {
-                    if (reportErrors) {
-                        errorReporter!(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
-                            unescapeLeadingUnderscores(getParameterNameAtPosition(source, i)),
-                            unescapeLeadingUnderscores(getParameterNameAtPosition(target, i)));
+                const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : tryGetTypeAtPosition(source, i);
+                const targetType = i === restIndex ? getRestTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
+                if (sourceType && targetType) {
+                    // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
+                    // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
+                    // they naturally relate only contra-variantly). However, if the source and target parameters both have
+                    // function types with a single call signature, we know we are relating two callback parameters. In
+                    // that case it is sufficient to only relate the parameters of the signatures co-variantly because,
+                    // similar to return values, callback parameters are output positions. This means that a Promise<T>,
+                    // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
+                    // with respect to T.
+                    const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                    const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                    const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
+                        (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
+                    let related = callbacks ?
+                        compareSignaturesRelated(targetSig!, sourceSig!, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
+                        !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
+                    // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
+                    if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
+                        related = Ternary.False;
                     }
-                    return Ternary.False;
+                    if (!related) {
+                        if (reportErrors) {
+                            errorReporter!(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
+                                unescapeLeadingUnderscores(getParameterNameAtPosition(source, i)),
+                                unescapeLeadingUnderscores(getParameterNameAtPosition(target, i)));
+                        }
+                        return Ternary.False;
+                    }
+                    result &= related;
                 }
-                result &= related;
             }
 
             if (!(checkMode & SignatureCheckMode.IgnoreReturnTypes)) {
