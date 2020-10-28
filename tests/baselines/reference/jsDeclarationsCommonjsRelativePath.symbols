@@ -9,8 +9,8 @@ const Thing = require('./thing').Thing
 
 module.exports = { Thing }
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/reexport", Decl(reexport.js, 0, 0))
->module : Symbol(export=, Decl(reexport.js, 1, 38))
->exports : Symbol(export=, Decl(reexport.js, 1, 38))
+>module : Symbol(module, Decl(reexport.js, 1, 38))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/reexport", Decl(reexport.js, 0, 0))
 >Thing : Symbol(Thing, Decl(reexport.js, 2, 18))
 
 === tests/cases/conformance/jsdoc/declarations/thing.js ===
@@ -20,7 +20,7 @@ class Thing {}
 
 module.exports = { Thing }
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/thing", Decl(thing.js, 0, 0))
->module : Symbol(export=, Decl(thing.js, 1, 14))
->exports : Symbol(export=, Decl(thing.js, 1, 14))
+>module : Symbol(module, Decl(thing.js, 1, 14))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/thing", Decl(thing.js, 0, 0))
 >Thing : Symbol(Thing, Decl(thing.js, 2, 18))
 

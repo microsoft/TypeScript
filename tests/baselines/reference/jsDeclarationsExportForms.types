@@ -50,10 +50,10 @@ const ns = require("./cls");
 >"./cls" : "./cls"
 
 module.exports = { ns };
->module.exports = { ns } : { ns: typeof ns; }
->module.exports : { ns: typeof ns; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/cjs\"": { ns: typeof ns; }; }
->exports : { ns: typeof ns; }
+>module.exports = { ns } : typeof import("tests/cases/conformance/jsdoc/declarations/cjs")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/cjs")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/cjs\"": typeof import("tests/cases/conformance/jsdoc/declarations/cjs"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/cjs")
 >{ ns } : { ns: typeof ns; }
 >ns : typeof ns
 

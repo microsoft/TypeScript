@@ -2834,12 +2834,21 @@ namespace ts {
                 return;
             }
 
+            if (isObjectLiteralExpression(assignedExpression) && every(assignedExpression.properties, isShorthandPropertyAssignment)) {
+                forEach(assignedExpression.properties, bindExportAssignedObjectMemberAlias);
+                return;
+            }
+
             // 'module.exports = expr' assignment
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
             const symbol = declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
             setValueDeclaration(symbol, node);
+        }
+
+        function bindExportAssignedObjectMemberAlias(node: ShorthandPropertyAssignment) {
+            declareSymbol(file.symbol.exports!, file.symbol, node, SymbolFlags.Alias | SymbolFlags.Assignment, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
