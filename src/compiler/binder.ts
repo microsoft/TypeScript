@@ -845,7 +845,8 @@ namespace ts {
                 case SyntaxKind.CallExpression:
                     return hasNarrowableArgument(<CallExpression>expr);
                 case SyntaxKind.ParenthesizedExpression:
-                    return isNarrowingExpression((<ParenthesizedExpression>expr).expression);
+                case SyntaxKind.NonNullExpression:
+                    return isNarrowingExpression((<ParenthesizedExpression | NonNullExpression>expr).expression);
                 case SyntaxKind.BinaryExpression:
                     return isNarrowingBinaryExpression(<BinaryExpression>expr);
                 case SyntaxKind.PrefixUnaryExpression:

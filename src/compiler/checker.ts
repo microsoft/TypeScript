@@ -22618,7 +22618,8 @@ namespace ts {
                     case SyntaxKind.CallExpression:
                         return narrowTypeByCallExpression(type, <CallExpression>expr, assumeTrue);
                     case SyntaxKind.ParenthesizedExpression:
-                        return narrowType(type, (<ParenthesizedExpression>expr).expression, assumeTrue);
+                    case SyntaxKind.NonNullExpression:
+                        return narrowType(type, (<ParenthesizedExpression | NonNullExpression>expr).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
                         return narrowTypeByBinaryExpression(type, <BinaryExpression>expr, assumeTrue);
                     case SyntaxKind.PrefixUnaryExpression:
