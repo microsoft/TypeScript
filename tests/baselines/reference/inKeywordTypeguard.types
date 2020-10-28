@@ -290,10 +290,10 @@ class UnreachableCodeDetection {
 
         } else {
             let y = this.a;
->y : string
->this.a : string
->this : this
->a : string
+>y : any
+>this.a : any
+>this : never
+>a : any
         }
     }
 }

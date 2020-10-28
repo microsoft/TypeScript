@@ -236,9 +236,6 @@ class UnreachableCodeDetection {
         } else {
             let y = this.a;
 >y : Symbol(y, Decl(inKeywordTypeguard.ts, 93, 15))
->this.a : Symbol(UnreachableCodeDetection.a, Decl(inKeywordTypeguard.ts, 88, 32))
->this : Symbol(UnreachableCodeDetection, Decl(inKeywordTypeguard.ts, 86, 1))
->a : Symbol(UnreachableCodeDetection.a, Decl(inKeywordTypeguard.ts, 88, 32))
         }
     }
 }

@@ -3,6 +3,7 @@ tests/cases/conformance/fixSignatureCaching.ts(284,10): error TS2339: Property '
 tests/cases/conformance/fixSignatureCaching.ts(293,10): error TS2339: Property 'FALLBACK_PHONE' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(294,10): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(295,10): error TS2339: Property 'FALLBACK_MOBILE' does not exist on type '{}'.
+tests/cases/conformance/fixSignatureCaching.ts(301,17): error TS2339: Property 'isArray' does not exist on type 'never'.
 tests/cases/conformance/fixSignatureCaching.ts(330,74): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(369,10): error TS2339: Property 'findMatch' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(387,10): error TS2339: Property 'findMatches' does not exist on type '{}'.
@@ -58,7 +59,7 @@ tests/cases/conformance/fixSignatureCaching.ts(981,16): error TS2304: Cannot fin
 tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not exist on type 'Window & typeof globalThis'.
 
 
-==== tests/cases/conformance/fixSignatureCaching.ts (58 errors) ====
+==== tests/cases/conformance/fixSignatureCaching.ts (59 errors) ====
     // Repro from #10697
     
     (function (define, undefined) {
@@ -370,6 +371,8 @@ tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property '
         isArray = 'isArray' in Array
             ? function (value) { return Object.prototype.toString.call(value) === '[object Array]'; }
             : Array.isArray;
+                    ~~~~~~~
+!!! error TS2339: Property 'isArray' does not exist on type 'never'.
     
         function equalIC(a, b) {
             return a != null && b != null && a.toLowerCase() === b.toLowerCase();

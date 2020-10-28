@@ -6262,7 +6262,7 @@ namespace ts {
                                 // `var` is `FunctionScopedVariable`, `const` and `let` are `BlockScopedVariable`, and `module.exports.thing =` is `Property`
                                 const flags = !(symbol.flags & SymbolFlags.BlockScopedVariable) ? undefined
                                     : isConstVariable(symbol) ? NodeFlags.Const
-                                        : NodeFlags.Let;
+                                    : NodeFlags.Let;
                                 const name = (needsPostExportDefault || !(symbol.flags & SymbolFlags.Property)) ? localName : getUnusedName(localName, symbol);
                                 let textRange: Node | undefined = symbol.declarations && find(symbol.declarations, d => isVariableDeclaration(d));
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
@@ -6312,9 +6312,9 @@ namespace ts {
                                         // To create an export named `g` that does _not_ shadow the local `g`
                                         addResult(
                                             factory.createExportDeclaration(
-                                            /*decorators*/ undefined,
-                                            /*modifiers*/ undefined,
-                                            /*isTypeOnly*/ false,
+                                                /*decorators*/ undefined,
+                                                /*modifiers*/ undefined,
+                                                /*isTypeOnly*/ false,
                                                 factory.createNamedExports([factory.createExportSpecifier(name, localName)])
                                             ),
                                             ModifierFlags.None
@@ -21613,6 +21613,7 @@ namespace ts {
 
                 // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
                 // else add a new anonymous object type which contains the type and widden the origional type with it.
+
                 if (isIntersectionType(type)) {
                     // try to get the first Anonymous Object type to add new type to it.
                     const widenedType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.WidenedByNarrow);
@@ -21671,14 +21672,13 @@ namespace ts {
 
                 // This function is almost like function `getPropertyOfType`, except when type.flags contains `UnionOrIntersection`
                 // it would return the property rather than undefiend even when property is partial.
-                function isSomeDirectSubtypeContainsPropName(type1: Type, name: __String) {
-                    let prop;
-                    const type = getReducedApparentType(type1);
+                function isSomeDirectSubtypeContainsPropName(type: Type, name: __String): Symbol | undefined {
+                    type = getReducedApparentType(type);
                     if (type.flags & TypeFlags.Object) {
                         const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                         const symbol = resolved.members.get(name);
                         if (symbol && symbolIsValue(symbol)) {
-                            prop = symbol;
+                            return symbol;
                         }
                         const functionType = resolved === anyFunctionType ? globalFunctionType :
                             resolved.callSignatures.length ? globalCallableFunctionType :
@@ -21687,18 +21687,15 @@ namespace ts {
                         if (functionType) {
                             const symbol = getPropertyOfObjectType(functionType, name);
                             if (symbol) {
-                                prop = symbol;
+                                return symbol;
                             }
                         }
                         return getPropertyOfObjectType(globalObjectType, name);
                     }
                     if (type.flags & TypeFlags.UnionOrIntersection) {
-                        prop = getUnionOrIntersectionProperty(<UnionOrIntersectionType>type, name);
+                        return getUnionOrIntersectionProperty(<UnionOrIntersectionType>type, name);
                     }
-                    if (prop) {
-                        return true;
-                    }
-                    return false;
+                    return undefined;
                 }
             }
 
@@ -36872,10 +36869,10 @@ namespace ts {
         /** Returns the target of an export specifier without following aliases */
         function getExportSpecifierLocalTargetSymbol(node: ExportSpecifier | Identifier): Symbol | undefined {
             if (isExportSpecifier(node)) {
-            return node.parent.parent.moduleSpecifier ?
-                getExternalModuleMember(node.parent.parent, node) :
-                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
-        }
+                return node.parent.parent.moduleSpecifier ?
+                    getExternalModuleMember(node.parent.parent, node) :
+                    resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+            }
             else {
                 return resolveEntityName(node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }

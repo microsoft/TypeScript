@@ -18,9 +18,10 @@ tests/cases/compiler/inKeywordTypeguard.ts(72,32): error TS2339: Property 'b' do
 tests/cases/compiler/inKeywordTypeguard.ts(74,32): error TS2339: Property 'a' does not exist on type 'B'.
 tests/cases/compiler/inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
+tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
 
 
-==== tests/cases/compiler/inKeywordTypeguard.ts (16 errors) ====
+==== tests/cases/compiler/inKeywordTypeguard.ts (17 errors) ====
     class A { a: string; }
     class B { b: string; }
     
@@ -151,6 +152,8 @@ tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' do
             if ("a" in this) {
             } else {
                 let y = this.a;
+                             ~
+!!! error TS2339: Property 'a' does not exist on type 'never'.
             }
         }
     }
