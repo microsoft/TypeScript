@@ -69,13 +69,13 @@
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
-        message: "'(): undefined' is deprecated",
+        message: "'foo' is deprecated",
         code: 6385,
         range: ranges[0],
         reportsDeprecated: true,
     },
     {
-        message: "'(): number' is deprecated",
+        message: "'bar' is deprecated",
         code: 6385,
         range: ranges[1],
         reportsDeprecated: true,
@@ -87,7 +87,7 @@ verify.getSuggestionDiagnostics([
         reportsDeprecated: true,
     },
     {
-        message: "'(): number' is deprecated",
+        message: "'baz' is deprecated",
         code: 6385,
         range: ranges[3],
         reportsDeprecated: true,
@@ -99,31 +99,31 @@ verify.getSuggestionDiagnostics([
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
+        message: "'f' is deprecated",
         code: 6385,
         range: ranges[5],
         reportsDeprecated: true,
     },
     {
-        message: `'(tag: "xmp"): void' is deprecated`,
+        message: `'t.createElement' is deprecated`,
         code: 6385,
         range: ranges[6],
         reportsDeprecated: true,
     },
     {
-        message: `'(): C' is deprecated`,
+        message: `'C' is deprecated`,
         code: 6385,
         range: ranges[7],
         reportsDeprecated: true,
     },
     {
-        message: `'(): void' is deprecated`,
+        message: `'ca' is deprecated`,
         code: 6385,
         range: ranges[8],
         reportsDeprecated: true,
     },
     {
-        message: `'(): string' is deprecated`,
+        message: `'cb' is deprecated`,
         code: 6385,
         range: ranges[9],
         reportsDeprecated: true,

@@ -82,7 +82,7 @@ const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'faff' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[0]
     },
@@ -94,7 +94,7 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'foo.faff' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[2]
     },
@@ -112,25 +112,25 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'faff' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[5]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'foo.faff' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[6]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'foo.faff' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[7]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'bar' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[8]
     },
@@ -154,13 +154,13 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(): C' is deprecated",
+        "message": "'C' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[12]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'c.m' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[13]
     },
@@ -194,13 +194,13 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(_props: Props): any' is deprecated",
+        "message": "'Compi' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[18]
     },
     {
         "code": 6385,
-        "message": "'(_props: Props): any' is deprecated",
+        "message": "'Compi' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[19]
     },
@@ -212,7 +212,7 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(_x: unknown): void' is deprecated",
+        "message": "'ttf' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[21]
     },
@@ -230,7 +230,7 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(_c: unknown): void' is deprecated",
+        "message": "'dec' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[24]
     },
@@ -251,19 +251,19 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'f.bar' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[27]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'f.foo.faff' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[28]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'bar' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[29]
     },

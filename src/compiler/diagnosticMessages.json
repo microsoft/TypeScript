@@ -3059,6 +3059,10 @@
         "category": "Error",
         "code": 2796
     },
+    "The declaration was marked as deprecated here.": {
+        "category": "Error",
+        "code": 2797
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

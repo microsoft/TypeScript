@@ -68,13 +68,13 @@ verify.getSuggestionDiagnostics([
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
+        message: "'b' is deprecated",
         code: 6385,
         range: ranges[2],
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
+        message: "'c' is deprecated",
         code: 6385,
         range: ranges[3],
         reportsDeprecated: true,
@@ -92,13 +92,13 @@ verify.getSuggestionDiagnostics([
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
+        message: "'e' is deprecated",
         code: 6385,
         range: ranges[6],
         reportsDeprecated: true,
     },
     {
-        message: "'(a: number): void' is deprecated",
+        message: "'e' is deprecated",
         code: 6385,
         range: ranges[7],
         reportsDeprecated: true,
