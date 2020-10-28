@@ -747,7 +747,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan): Classifications {
+        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan, _format?: SemanticClassificationFormat): Classifications {
             return notImplemented();
         }
 
@@ -757,6 +757,7 @@ namespace ts.server {
                 name: item.name,
                 kind: item.kind,
                 kindModifiers: item.kindModifiers,
+                containerName: item.containerName,
                 span: this.decodeSpan(item.span, item.file),
                 selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
             };
@@ -778,7 +779,7 @@ namespace ts.server {
 
         provideCallHierarchyIncomingCalls(fileName: string, position: number) {
             const args = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.ProvideCallHierarchyIncomingCalls, args);
             const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
             return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
         }
@@ -792,7 +793,7 @@ namespace ts.server {
 
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             const args = this.createFileLocationRequestArgs(fileName, position);
-            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.ProvideCallHierarchyOutgoingCalls, args);
             const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
             return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
         }

@@ -125,7 +125,7 @@ type NAME = "name";
 >NAME : "name"
 
 type WIDTH_OR_HEIGHT = "width" | "height";
->WIDTH_OR_HEIGHT : "width" | "height"
+>WIDTH_OR_HEIGHT : WIDTH_OR_HEIGHT
 
 type Q10 = Shape["name"];  // string
 >Q10 : string
@@ -225,7 +225,7 @@ function f10(shape: Shape) {
 >getProperty(shape, cond ? "width" : "height") : number
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -251,7 +251,7 @@ function f10(shape: Shape) {
 >setProperty(shape, cond ? "width" : "height", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -391,7 +391,7 @@ function f20(component: Component<Shape>) {
 >component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
 >component : Component<Shape>
 >getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -420,7 +420,7 @@ function f20(component: Component<Shape>) {
 >component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
 >component : Component<Shape>
 >setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
->cond ? "width" : "height" : "width" | "height"
+>cond ? "width" : "height" : WIDTH_OR_HEIGHT
 >cond : boolean
 >"width" : "width"
 >"height" : "height"
@@ -507,7 +507,7 @@ function f31<K extends keyof Shape>(key: K) {
 }
 
 function f32<K extends "width" | "height">(key: K) {
->f32 : <K extends "width" | "height">(key: K) => Shape[K]
+>f32 : <K extends WIDTH_OR_HEIGHT>(key: K) => Shape[K]
 >key : K
 
     const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };

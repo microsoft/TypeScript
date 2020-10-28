@@ -18,7 +18,7 @@ branches:
 
 install:
   - npm uninstall typescript --no-save
-  - npm install
+  - npm ci
 
 cache:
   directories:

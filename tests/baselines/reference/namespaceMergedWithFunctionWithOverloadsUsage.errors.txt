@@ -1,0 +1,28 @@
+tests/cases/compiler/index.ts(3,3): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(opts?: Whatever): void', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'Whatever'.
+  Overload 2 of 2, '(cb: Function, opts?: Whatever): void', gave the following error.
+    Argument of type 'number' is not assignable to parameter of type 'Function'.
+
+
+==== tests/cases/compiler/index.ts (1 errors) ====
+    import X = require("./file");
+    
+    X(0); // shouldn't cause a crash
+      ~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(opts?: Whatever): void', gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'Whatever'.
+!!! error TS2769:   Overload 2 of 2, '(cb: Function, opts?: Whatever): void', gave the following error.
+!!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'Function'.
+==== tests/cases/compiler/file.d.ts (0 errors) ====
+    declare namespace Foo {
+        interface Whatever {
+            prop: any;
+        }
+    }
+    
+    declare function Foo(opts?: Foo.Whatever): void;
+    declare function Foo(cb: Function, opts?: Foo.Whatever): void;
+    
+    export = Foo;

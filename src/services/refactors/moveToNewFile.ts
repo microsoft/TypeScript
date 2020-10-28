@@ -65,18 +65,24 @@ namespace ts.refactor {
         readonly ranges: readonly StatementRange[];
     }
 
-    // Filters imports out of the range of statements to move. Imports will be copied to the new file anyway, and may still be needed in the old file.
     function getStatementsToMove(context: RefactorContext): ToMove | undefined {
         const rangeToMove = getRangeToMove(context);
         if (rangeToMove === undefined) return undefined;
         const all: Statement[] = [];
         const ranges: StatementRange[] = [];
         const { toMove, afterLast } = rangeToMove;
-        getRangesWhere(toMove, s => !isPureImport(s), (start, afterEndIndex) => {
+        getRangesWhere(toMove, isAllowedStatementToMove, (start, afterEndIndex) => {
             for (let i = start; i < afterEndIndex; i++) all.push(toMove[i]);
             ranges.push({ first: toMove[start], afterLast });
         });
         return all.length === 0 ? undefined : { all, ranges };
+    }
+
+    function isAllowedStatementToMove(statement: Statement): boolean {
+        // Filters imports and prologue directives out of the range of statements to move.
+        // Imports will be copied to the new file anyway, and may still be needed in the old file.
+        // Prologue directives will be copied to the new file and should be left in the old file.
+        return !isPureImport(statement) && !isPrologueDirective(statement);;
     }
 
     function isPureImport(node: Node): boolean {
@@ -111,10 +117,10 @@ namespace ts.refactor {
         oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
     ) {
         const checker = program.getTypeChecker();
-
+        const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
         if (!oldFile.externalModuleIndicator && !oldFile.commonJsModuleIndicator) {
             deleteMovedStatements(oldFile, toMove.ranges, changes);
-            return toMove.all;
+            return [...prologueDirectives, ...toMove.all];
         }
 
         const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
@@ -126,13 +132,13 @@ namespace ts.refactor {
 
         deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
         deleteMovedStatements(oldFile, toMove.ranges, changes);
-
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
         const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference);
         const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax);
         if (imports.length && body.length) {
             return [
+                ...prologueDirectives,
                 ...imports,
                 SyntaxKind.NewLineTrivia as const,
                 ...body
@@ -140,6 +146,7 @@ namespace ts.refactor {
         }
 
         return [
+            ...prologueDirectives,
             ...imports,
             ...body,
         ];

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/a.ts ===
+type AX = { readonly A: unique symbol };
+>AX : AX
+>A : unique symbol
+
+export const A: AX = 0 as any;
+>A : AX
+>0 as any : any
+>0 : 0
+
+=== tests/cases/compiler/b.ts ===
+import { A } from './a';
+>A : { readonly A: unique symbol; }
+
+export const A1 = A;
+>A1 : { readonly A: unique symbol; }
+>A : { readonly A: unique symbol; }
+

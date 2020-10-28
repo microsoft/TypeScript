@@ -56,6 +56,8 @@ namespace ts.textChanges {
     export enum TrailingTriviaOption {
         /** Exclude all trailing trivia (use getEnd()) */
         Exclude,
+        /** Doesn't include whitespace, but does strip comments */
+        ExcludeWhitespace,
         /** Include trailing trivia */
         Include,
     }
@@ -209,10 +211,19 @@ namespace ts.textChanges {
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         const { end } = node;
         const { trailingTriviaOption } = options;
-        if (trailingTriviaOption === TrailingTriviaOption.Exclude || (isExpression(node) && trailingTriviaOption !== TrailingTriviaOption.Include)) {
+        if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
+            return end;
+        }
+        if (trailingTriviaOption === TrailingTriviaOption.ExcludeWhitespace) {
+            const comments = concatenate(getTrailingCommentRanges(sourceFile.text, end), getLeadingCommentRanges(sourceFile.text, end));
+            const realEnd = comments?.[comments.length - 1]?.end;
+            if (realEnd) {
+                return realEnd;
+            }
             return end;
         }
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
+
         return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
             ? newEnd
             : end;
@@ -243,7 +254,7 @@ namespace ts.textChanges {
 
     export type ThisTypeAnnotatable = FunctionDeclaration | FunctionExpression;
 
-    export function isThisTypeAnnotatable(containingFunction: FunctionLike): containingFunction is ThisTypeAnnotatable {
+    export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration): containingFunction is ThisTypeAnnotatable {
         return isFunctionExpression(containingFunction) || isFunctionDeclaration(containingFunction);
     }
 
@@ -986,7 +997,12 @@ namespace ts.textChanges {
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine, neverAsciiEscape: true, preserveSourceNewlines: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({
+                newLine,
+                neverAsciiEscape: true,
+                preserveSourceNewlines: true,
+                terminateUnterminatedLiterals: true
+            }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }

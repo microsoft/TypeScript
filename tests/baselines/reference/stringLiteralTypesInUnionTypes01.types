@@ -1,18 +1,18 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes01.ts ===
 type T = "foo" | "bar" | "baz";
->T : "foo" | "bar" | "baz"
+>T : T
 
 var x: "foo" | "bar" | "baz" = undefined;
->x : "foo" | "bar" | "baz"
+>x : T
 >undefined : undefined
 
 var y: T = undefined;
->y : "foo" | "bar" | "baz"
+>y : T
 >undefined : undefined
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : "foo" | "bar" | "baz"
+>x : T
 >"foo" : "foo"
 
     let a = x;
@@ -25,10 +25,10 @@ else if (x !== "bar") {
 >"bar" : "bar"
 
     let b = x || y;
->b : "foo" | "bar" | "baz"
->x || y : "foo" | "bar" | "baz"
+>b : T
+>x || y : T
 >x : "baz"
->y : "foo" | "bar" | "baz"
+>y : T
 }
 else {
     let c = x;
@@ -36,25 +36,25 @@ else {
 >x : "bar"
 
     let d = y;
->d : "foo" | "bar" | "baz"
->y : "foo" | "bar" | "baz"
+>d : T
+>y : T
 
     let e: (typeof x) | (typeof y) = c || d;
->e : "foo" | "bar" | "baz"
+>e : T
 >x : "bar"
->y : "foo" | "bar" | "baz"
->c || d : "foo" | "bar" | "baz"
+>y : T
+>c || d : T
 >c : "bar"
->d : "foo" | "bar" | "baz"
+>d : T
 }
 
 x = y;
->x = y : "foo" | "bar" | "baz"
->x : "foo" | "bar" | "baz"
->y : "foo" | "bar" | "baz"
+>x = y : T
+>x : T
+>y : T
 
 y = x;
->y = x : "foo" | "bar" | "baz"
->y : "foo" | "bar" | "baz"
->x : "foo" | "bar" | "baz"
+>y = x : T
+>y : T
+>x : T
 

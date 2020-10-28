@@ -1,0 +1,34 @@
+/**
+ * @callback Foo
+ * @param {string} data
+ * @param {/**/number} [index] - comment
+ * @return {boolean}
+ */
+
+/** @type {Foo} */
+const foo = s => !(s.length % 2);
+
+
+           number                   
+
+
+   @param {number} [index] - comment
+
+
+/**
+ * @callback Foo
+ * @param {string} data
+ * @param {number} [index] - comment
+ * @return {boolean}
+ */
+
+
+/**
+ * @callback Foo
+ * @param {string} data
+ * @param {number} [index] - comment
+ * @return {boolean}
+ */
+
+/** @type {Foo} */
+const foo = s => !(s.length % 2);

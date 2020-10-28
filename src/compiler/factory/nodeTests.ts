@@ -233,6 +233,14 @@ namespace ts {
         return node.kind === SyntaxKind.ImportType;
     }
 
+    export function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan {
+        return node.kind === SyntaxKind.TemplateLiteralTypeSpan;
+    }
+
+    export function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode {
+        return node.kind === SyntaxKind.TemplateLiteralType;
+    }
+
     // Binding patterns
 
     export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
@@ -693,6 +701,10 @@ namespace ts {
 
     export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {
         return node.kind === SyntaxKind.JSDocTypeExpression;
+    }
+
+    export function isJSDocNameReference(node: Node): node is JSDocNameReference {
+        return node.kind === SyntaxKind.JSDocNameReference;
     }
 
     export function isJSDocAllType(node: Node): node is JSDocAllType {
