@@ -1,0 +1,70 @@
+=== tests/cases/conformance/controlFlow/controlFlowAssignmentPatternOrder.ts ===
+// https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 2, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+
+    [{ [(a = 1)]: b } = [9, a] as const] = [];
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 4, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 2, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 2, 7))
+
+    const bb: 0 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 5, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 8, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+
+    [{ [a]: b } = [9, a = 0] as const] = [];
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 10, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 8, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 8, 7))
+
+    const bb: 9 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 11, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+}
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 14, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+
+    [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 16, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 14, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 14, 7))
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 17, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 20, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+
+    [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 22, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 20, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 20, 7))
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 23, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+}
