@@ -1703,9 +1703,11 @@ namespace ts.server {
 
             const dependencySelection = this.includePackageJsonAutoImports();
             if (dependencySelection) {
+                const start = timestamp();
                 this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
                 if (this.autoImportProviderHost) {
                     updateProjectIfDirty(this.autoImportProviderHost);
+                    this.sendPerformanceEvent("CreatePackageJsonAutoImportProvider", timestamp() - start);
                     return this.autoImportProviderHost.getCurrentProgram();
                 }
             }
