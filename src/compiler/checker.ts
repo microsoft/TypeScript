@@ -1107,14 +1107,17 @@ namespace ts {
             return diagnostic;
         }
 
-        function addDeprecatedSuggestion(location: Node, declaration: Node | undefined, arg0: string | number | undefined) {
+        function addDeprecatedSuggestion(location: Node, declarations: Node[], arg0: string | number | undefined) {
             const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, arg0);
-            const deprecatedTag = declaration && getJSDocDeprecatedTag(declaration);
-            if (deprecatedTag) {
-                addRelatedInfo(
-                    diagnostic,
-                    createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here)
-                );
+            for (const declaration of declarations) {
+                const deprecatedTag = getJSDocDeprecatedTag(declaration);
+                if (deprecatedTag) {
+                    addRelatedInfo(
+                        diagnostic,
+                        createDiagnosticForNode(deprecatedTag, Diagnostics.The_declaration_was_marked_as_deprecated_here)
+                    );
+                    break;
+                }
             }
             //We call `addRelatedInfo()` before adding the diagnostic
             //to prevent duplicates.
@@ -13830,7 +13833,7 @@ namespace ts {
                 if (prop) {
                     if (reportDeprecated && accessNode && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
-                        addDeprecatedSuggestion(deprecatedNode, prop.valueDeclaration, propName as string);
+                        addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -22819,7 +22822,7 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             const sourceSymbol = localOrExportSymbol.flags & SymbolFlags.Alias ? resolveAlias(localOrExportSymbol) : localOrExportSymbol;
             if (getDeclarationNodeFlagsFromSymbol(sourceSymbol) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, sourceSymbol)) {
-                addDeprecatedSuggestion(node, sourceSymbol.valueDeclaration, node.escapedText as string);
+                addDeprecatedSuggestion(node, sourceSymbol.declarations, node.escapedText as string);
             }
 
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
@@ -25832,7 +25835,7 @@ namespace ts {
             }
             else {
                 if (getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
-                    addDeprecatedSuggestion(right, prop.valueDeclaration, right.escapedText as string);
+                    addDeprecatedSuggestion(right, prop.declarations, right.escapedText as string);
                 }
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
@@ -28430,7 +28433,7 @@ namespace ts {
                 const suggestionNode = getDeprecatedSuggestionNode(node);
                 const expr = getInvokedExpression(node);
                 const name = tryGetPropertyAccessOrIdentifierToString(expr);
-                addDeprecatedSuggestion(suggestionNode, signature.declaration, name || signatureToString(signature));
+                addDeprecatedSuggestion(suggestionNode, [signature.declaration], name || signatureToString(signature));
             }
         }
 
@@ -31877,7 +31880,7 @@ namespace ts {
                     if (some(symbol.declarations, d => isTypeDeclaration(d) && !!(d.flags & NodeFlags.Deprecated))) {
                         addDeprecatedSuggestion(
                             getDeprecatedSuggestionNode(node),
-                            find(symbol.declarations, d => isTypeDeclaration(d) && !!(d.flags & NodeFlags.Deprecated)),
+                            symbol.declarations,
                             symbol.escapedName as string
                         );
                     }
@@ -36284,8 +36287,7 @@ namespace ts {
                 }
 
                 if (isImportSpecifier(node) && every(target.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {
-                    const declaration = target.valueDeclaration ?? target.declarations[0];
-                    addDeprecatedSuggestion(node.name, declaration, symbol.escapedName as string);
+                    addDeprecatedSuggestion(node.name, target.declarations, symbol.escapedName as string);
                 }
             }
         }
