@@ -1608,7 +1608,7 @@ namespace ts {
              * If `node` is a BinaryExpression, adds it to the local work stack, otherwise recursively binds it
              */
             function maybeBind(node: Node) {
-                if (node && isBinaryExpression(node)) {
+                if (node && isBinaryExpression(node) && !isDestructuringAssignment(node)) {
                     stackIndex++;
                     workStacks.expr[stackIndex] = node;
                     workStacks.state[stackIndex] = BindBinaryExpressionFlowState.BindThenBindChildren;
