@@ -5925,6 +5925,7 @@ declare namespace ts {
         readonly placeOpenBraceOnNewLineForFunctions?: boolean;
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
+        readonly insertSpaceAfterTypeAnnotation?: boolean;
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
         readonly semicolons?: SemicolonPreference;
     }
@@ -8977,6 +8978,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
         insertSpaceBeforeTypeAnnotation?: boolean;
+        insertSpaceAfterTypeAnnotation?: boolean;
         semicolons?: SemicolonPreference;
     }
     interface UserPreferences {
