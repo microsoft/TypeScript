@@ -25142,7 +25142,7 @@ namespace ts {
                 const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
                 if (resolvedNamespace) {
                     const candidate = resolveSymbol(getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace));
-                    if (candidate) {
+                    if (candidate && candidate !== unknownSymbol) {
                         if (links) {
                             links.jsxNamespace = candidate;
                         }
@@ -25154,7 +25154,11 @@ namespace ts {
                 }
             }
             // JSX global fallback
-            return getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined)!; // TODO: GH#18217
+            const s = resolveSymbol(getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined));
+            if (s === unknownSymbol) {
+                return undefined!; // TODO: GH#18217
+            }
+            return s!; // TODO: GH#18217
         }
 
         /**
