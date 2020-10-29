@@ -9307,7 +9307,7 @@ declare namespace ts.server {
         enableLanguageService(): void;
         disableLanguageService(lastFileExceededProgramSize?: string): void;
         getProjectName(): string;
-        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): TypeAcquisition;
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile | undefined;
         close(): void;
