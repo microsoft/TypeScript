@@ -1494,7 +1494,7 @@ namespace ts {
             }
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
-                const moduleNames = getModuleNames(newSourceFile);
+                const moduleNames = getModuleNames(newSourceFile, options);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
                 // ensure that module resolution results are still correct
                 const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
@@ -2840,11 +2840,16 @@ namespace ts {
                 if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth--;
             }
             else {
-                fileProcessingDiagnostics.add(createRefFileDiagnostic(
-                    refFile,
-                    Diagnostics.Cannot_find_type_definition_file_for_0,
-                    typeReferenceDirective
-                ));
+                // Don't issue an error when auto-inclusion lookup fails for the jsxImportSource (at this point)
+                // It may be provided by an ambient module in the compilation, instead.
+                // A usage of a JSX tag later should report that the module couldn't be resolved if it is not supplied.
+                if (refFile || typeReferenceDirective !== getJSXRuntimeImport(getJSXImplicitImportBase(options), options)) {
+                    fileProcessingDiagnostics.add(createRefFileDiagnostic(
+                        refFile,
+                        Diagnostics.Cannot_find_type_definition_file_for_0,
+                        typeReferenceDirective
+                    ));
+                }
             }
 
             if (saveResolution) {
@@ -2891,9 +2896,9 @@ namespace ts {
 
         function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
-            if (file.imports.length || file.moduleAugmentations.length) {
+            if (file.imports.length || file.moduleAugmentations.length || getJSXImplicitImportBase(options, file)) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
-                const moduleNames = getModuleNames(file);
+                const moduleNames = getModuleNames(file, options);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
@@ -3882,13 +3887,18 @@ namespace ts {
         }
     }
 
-    function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
+    function getModuleNames(file: SourceFile, options: CompilerOptions): string[] {
+        const { imports, moduleAugmentations } = file;
         const res = imports.map(i => i.text);
         for (const aug of moduleAugmentations) {
             if (aug.kind === SyntaxKind.StringLiteral) {
                 res.push(aug.text);
             }
             // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
+        }
+        const jsxRuntimeImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
+        if (jsxRuntimeImport) {
+            res.push(jsxRuntimeImport);
         }
         return res;
     }
