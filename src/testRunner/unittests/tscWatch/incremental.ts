@@ -276,5 +276,33 @@ export interface A {
             ],
             modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
         });
+
+        const jsxImportSourceOptions = { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" };
+        const jsxLibraryContent = `export namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: {
+            propA?: boolean;
+        };
+    }
+}
+export function jsx(...args: any[]): void;
+export function jsxs(...args: any[]): void;
+export const Fragment: unique symbol;
+`;
+
+        verifyIncrementalWatchEmit({
+            subScenario: "jsxImportSource option changed",
+            files: () => [
+                { path: libFile.path, content: libContent },
+                { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
+                { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
+                { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
+                { path: `${project}/node_modules/preact/package.json`, content: JSON.stringify({ name: "preact", version: "0.0.1" }) },
+                { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+            ],
+            modifyFs: host => host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } }))
+        });
     });
 }

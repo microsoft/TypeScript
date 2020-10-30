@@ -803,6 +803,8 @@ namespace ts {
         {
             name: "jsxImportSource",
             type: "string",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
             affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react
