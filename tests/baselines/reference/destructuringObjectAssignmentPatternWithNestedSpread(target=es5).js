@@ -1,12 +1,9 @@
-//// [destructuringObjectBindingPatternAndAssignment5.ts]
-function a () {
-    let x: number;
-    let y: any
-    ({ x, ...y } = ({ } as any));
-}
+//// [destructuringObjectAssignmentPatternWithNestedSpread.ts]
+let a: any, b: any, c: any = {x: {a: 1, y: 2}}, d: any;
+({x: {a, ...b} = d} = c);
 
 
-//// [destructuringObjectBindingPatternAndAssignment5.js]
+//// [destructuringObjectAssignmentPatternWithNestedSpread.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -18,9 +15,6 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-function a() {
-    var _a;
-    var x;
-    var y;
-    (_a = {}, x = _a.x, y = __rest(_a, ["x"]));
-}
+var _a, _b;
+var a, b, c = { x: { a: 1, y: 2 } }, d;
+(_a = c.x, _b = _a === void 0 ? d : _a, a = _b.a, b = __rest(_b, ["a"]));

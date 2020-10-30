@@ -89,6 +89,7 @@
         "unittests/evaluation/asyncArrow.ts",
         "unittests/evaluation/asyncGenerator.ts",
         "unittests/evaluation/awaiter.ts",
+        "unittests/evaluation/destructuring.ts",
         "unittests/evaluation/forAwaitOf.ts",
         "unittests/evaluation/forOf.ts",
         "unittests/evaluation/optionalCall.ts",
