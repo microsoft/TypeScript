@@ -4843,6 +4843,7 @@ namespace ts {
         resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         switchTypes?: Type[];               // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
+        jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
         contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement

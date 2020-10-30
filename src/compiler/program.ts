@@ -2201,6 +2201,15 @@ namespace ts {
                 : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
+        function createSyntheticImport(text: string, file: SourceFile) {
+            const externalHelpersModuleReference = factory.createStringLiteral(text);
+            const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+            addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+            setParent(externalHelpersModuleReference, importDecl);
+            setParent(importDecl, file);
+            return externalHelpersModuleReference;
+        }
+
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
@@ -2216,16 +2225,17 @@ namespace ts {
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
             // helpers library.
-            if (options.importHelpers
-                && (options.isolatedModules || isExternalModuleFile)
+            if ((options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
-                // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
-                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
-                addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                setParent(externalHelpersModuleReference, importDecl);
-                setParent(importDecl, file);
-                imports = [externalHelpersModuleReference];
+                if (options.importHelpers) {
+                    // synthesize 'import "tslib"' declaration
+                    imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
+                }
+                const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
+                if (jsxImport) {
+                    // synthesize `import "base/jsx-runtime"` declaration
+                    (imports ||= []).push(createSyntheticImport(jsxImport, file));
+                }
             }
 
             for (const node of file.statements) {

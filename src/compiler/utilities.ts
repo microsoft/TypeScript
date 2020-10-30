@@ -6009,8 +6009,8 @@ namespace ts {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
     }
 
-    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
-        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
         const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
@@ -6018,6 +6018,10 @@ namespace ts {
             jsxImportSourcePragma ?
                 jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
                 undefined;
+    }
+
+    export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
+        return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
