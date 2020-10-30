@@ -1494,7 +1494,7 @@ namespace ts {
             }
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
-                const moduleNames = getModuleNames(newSourceFile, options);
+                const moduleNames = getModuleNames(newSourceFile);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
                 // ensure that module resolution results are still correct
                 const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
@@ -2201,6 +2201,15 @@ namespace ts {
                 : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
+        function createSyntheticImport(text: string, file: SourceFile) {
+            const externalHelpersModuleReference = factory.createStringLiteral(text);
+            const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+            addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+            setParent(externalHelpersModuleReference, importDecl);
+            setParent(importDecl, file);
+            return externalHelpersModuleReference;
+        }
+
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
@@ -2216,16 +2225,18 @@ namespace ts {
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
             // helpers library.
-            if (options.importHelpers
-                && (options.isolatedModules || isExternalModuleFile)
+            if ((options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
-                // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
-                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
-                addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                setParent(externalHelpersModuleReference, importDecl);
-                setParent(importDecl, file);
-                imports = [externalHelpersModuleReference];
+                if (options.importHelpers) {
+                    // synthesize 'import "tslib"' declaration
+                    imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
+                }
+                const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
+                if (jsxImport) {
+                    // synthesize `import "base/jsx-runtime"` declaration
+                    imports ||= [];
+                    imports.push(createSyntheticImport(jsxImport, file));
+                }
             }
 
             for (const node of file.statements) {
@@ -2840,16 +2851,11 @@ namespace ts {
                 if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth--;
             }
             else {
-                // Don't issue an error when auto-inclusion lookup fails for the jsxImportSource (at this point)
-                // It may be provided by an ambient module in the compilation, instead.
-                // A usage of a JSX tag later should report that the module couldn't be resolved if it is not supplied.
-                if (refFile || typeReferenceDirective !== getJSXRuntimeImport(getJSXImplicitImportBase(options), options)) {
-                    fileProcessingDiagnostics.add(createRefFileDiagnostic(
-                        refFile,
-                        Diagnostics.Cannot_find_type_definition_file_for_0,
-                        typeReferenceDirective
-                    ));
-                }
+                fileProcessingDiagnostics.add(createRefFileDiagnostic(
+                    refFile,
+                    Diagnostics.Cannot_find_type_definition_file_for_0,
+                    typeReferenceDirective
+                ));
             }
 
             if (saveResolution) {
@@ -2896,9 +2902,9 @@ namespace ts {
 
         function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
-            if (file.imports.length || file.moduleAugmentations.length || getJSXImplicitImportBase(options, file)) {
+            if (file.imports.length || file.moduleAugmentations.length) {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
-                const moduleNames = getModuleNames(file, options);
+                const moduleNames = getModuleNames(file);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
@@ -3887,18 +3893,13 @@ namespace ts {
         }
     }
 
-    function getModuleNames(file: SourceFile, options: CompilerOptions): string[] {
-        const { imports, moduleAugmentations } = file;
+    function getModuleNames({ imports, moduleAugmentations }: SourceFile): string[] {
         const res = imports.map(i => i.text);
         for (const aug of moduleAugmentations) {
             if (aug.kind === SyntaxKind.StringLiteral) {
                 res.push(aug.text);
             }
             // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
-        }
-        const jsxRuntimeImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
-        if (jsxRuntimeImport) {
-            res.push(jsxRuntimeImport);
         }
         return res;
     }

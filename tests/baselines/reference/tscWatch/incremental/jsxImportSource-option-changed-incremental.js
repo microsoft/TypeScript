@@ -64,13 +64,13 @@ Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
 
 WatchedFiles::
 
@@ -98,14 +98,14 @@ exports.App = App;
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./index.tsx": {
-        "version": "-14760199789-export const App = () => <div propA={true}></div>;",
-        "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
-        "affectsGlobalScope": false
-      },
       "./node_modules/react/jsx-runtime/index.d.ts": {
         "version": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
         "signature": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
+        "affectsGlobalScope": false
+      },
+      "./index.tsx": {
+        "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+        "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
         "affectsGlobalScope": false
       }
     },
@@ -156,13 +156,13 @@ Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preac
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
 /users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
 /users/username/projects/project/node_modules/preact/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
 
 WatchedFiles::
 
@@ -190,14 +190,14 @@ exports.App = App;
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "./index.tsx": {
-        "version": "-14760199789-export const App = () => <div propA={true}></div>;",
-        "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
-        "affectsGlobalScope": false
-      },
       "./node_modules/preact/jsx-runtime/index.d.ts": {
         "version": "-17896129664-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propB?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
         "signature": "-17896129664-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propB?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n",
+        "affectsGlobalScope": false
+      },
+      "./index.tsx": {
+        "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+        "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n",
         "affectsGlobalScope": false
       }
     },

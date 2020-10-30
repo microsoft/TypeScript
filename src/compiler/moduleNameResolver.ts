@@ -402,10 +402,8 @@ namespace ts {
      */
     export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
         // Use explicit type list from tsconfig.json
-        // jsxImportSource, if present and in use, creates implicit imports
-        const implicitImport = getJSXRuntimeImport(getJSXImplicitImportBase(options), options);
         if (options.types) {
-            return [...options.types, ...(implicitImport ? [implicitImport] : [])];
+            return options.types;
         }
 
         // Walk the primary type lookup locations
@@ -435,9 +433,6 @@ namespace ts {
                     }
                 }
             }
-        }
-        if (implicitImport) {
-            result.push(implicitImport);
         }
         return result;
     }
