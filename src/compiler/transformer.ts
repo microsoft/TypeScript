@@ -223,9 +223,9 @@ namespace ts {
         // Transform each node.
         const transformed: T[] = [];
         for (const node of nodes) {
-            tracing.begin(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
+            tracing.push(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
             transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
-            tracing.end();
+            tracing.pop();
         }
 
         // prevent modification of the lexical environment.

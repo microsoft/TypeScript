@@ -254,7 +254,7 @@ namespace ts.textChanges {
 
     export type ThisTypeAnnotatable = FunctionDeclaration | FunctionExpression;
 
-    export function isThisTypeAnnotatable(containingFunction: FunctionLike): containingFunction is ThisTypeAnnotatable {
+    export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration): containingFunction is ThisTypeAnnotatable {
         return isFunctionExpression(containingFunction) || isFunctionDeclaration(containingFunction);
     }
 

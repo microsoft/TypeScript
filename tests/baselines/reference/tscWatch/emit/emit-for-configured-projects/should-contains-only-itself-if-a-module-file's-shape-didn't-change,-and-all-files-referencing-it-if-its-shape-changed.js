@@ -36,13 +36,13 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -129,13 +129,13 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -198,12 +198,10 @@ Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m46[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
 
 [7m1[0m export var T: number;export function Foo() { console.log('hi'); };
 [7m [0m [91m                                             ~~~~~~~[0m
-
 
 [[90m12:00:56 AM[0m] Found 1 error. Watching for file changes.
 
@@ -211,6 +209,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
