@@ -621,7 +621,7 @@ namespace ts {
         }
 
         if (canTrace(system, compilerOptions)) {
-            tracing.startTracing(compilerOptions.configFilePath, compilerOptions.generateTrace!, isBuildMode);
+            tracing.startTracing(isBuildMode ? tracing.Mode.Build : tracing.Mode.Project, compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
     }
 

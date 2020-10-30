@@ -1,16 +1,24 @@
 /*@internal*/
 /** Tracing events for the compiler. */
 namespace ts.tracing {
+    export const enum Mode {
+        Project,
+        Build,
+        Server,
+    }
+
     let fs: typeof import("fs") | false | undefined;
 
     let traceCount = 0;
     let traceFd: number | undefined;
 
+    let mode: Mode = Mode.Project; // This initial value should never be consumed
+
     let legendPath: string | undefined;
     const legend: TraceRecord[] = [];
 
     /** Starts tracing for the given project (unless the `fs` module is unavailable). */
-    export function startTracing(configFilePath: string | undefined, traceDir: string, isBuildMode: boolean) {
+    export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
         Debug.assert(!traceFd, "Tracing already started");
 
         if (fs === undefined) {
@@ -26,6 +34,8 @@ namespace ts.tracing {
             return;
         }
 
+        mode = tracingMode;
+
         if (legendPath === undefined) {
             legendPath = combinePaths(traceDir, "legend.json");
         }
@@ -35,7 +45,10 @@ namespace ts.tracing {
             fs.mkdirSync(traceDir, { recursive: true });
         }
 
-        const countPart = isBuildMode ? `.${++traceCount}` : ``;
+        const countPart =
+            mode === Mode.Build ? `.${++traceCount}` :
+            mode === Mode.Server ? `.${process.pid}` :
+            ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
         const typesPath = combinePaths(traceDir, `types${countPart}.json`);
 
@@ -58,13 +71,14 @@ namespace ts.tracing {
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog (unless the `fs` module is unavailable). */
-    export function stopTracing(typeCatalog: readonly Type[]) {
+    export function stopTracing(typeCatalog?: readonly Type[]) {
         if (!traceFd) {
             Debug.assert(!fs, "Tracing is not in progress");
             return;
         }
 
         Debug.assert(fs);
+        Debug.assert(!!typeCatalog === (mode !== Mode.Server));
 
         fs.writeSync(traceFd, `\n]\n`);
         fs.closeSync(traceFd);
@@ -88,8 +102,10 @@ namespace ts.tracing {
         Parse = "parse",
         Program = "program",
         Bind = "bind",
-        Check = "check",
+        Check = "check", // Before we get into checking types (e.g. checkSourceFile)
+        CheckTypes = "checkTypes",
         Emit = "emit",
+        Session = "session",
     }
 
     export function instant(phase: Phase, name: string, args?: object) {
@@ -130,6 +146,10 @@ namespace ts.tracing {
                        time: number = 1000 * timestamp()) {
         Debug.assert(traceFd);
         Debug.assert(fs);
+
+        // In server mode, there's no easy way to dump type information, so we drop events that would require it.
+        if (mode === Mode.Server && phase === Phase.CheckTypes) return;
+
         performance.mark("beginTracing");
         fs.writeSync(traceFd, `,\n{"pid":1,"tid":1,"ph":"${eventType}","cat":"${phase}","ts":${time},"name":"${name}"`);
         if (extras) fs.writeSync(traceFd, `,${extras}`);

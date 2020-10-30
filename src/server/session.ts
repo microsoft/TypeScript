@@ -914,6 +914,7 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
+            tracing.instant(tracing.Phase.Session, "Event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -2885,15 +2886,21 @@ namespace ts.server {
         }
 
         public executeCommand(request: protocol.Request): HandlerResponse {
-            const handler = this.handlers.get(request.command);
-            if (handler) {
-                return this.executeWithRequestId(request.seq, () => handler(request));
+            tracing.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command });
+            try {
+                const handler = this.handlers.get(request.command);
+                if (handler) {
+                    return this.executeWithRequestId(request.seq, () => handler(request));
+                }
+                else {
+                    this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
+                    this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+                    return { responseRequired: false };
+                }
             }
-            else {
-                this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
-                return { responseRequired: false };
-            }
+            finally {
+                tracing.pop();
+        }
         }
 
         public onMessage(message: string) {
@@ -2915,6 +2922,7 @@ namespace ts.server {
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
+                tracing.instant(tracing.Phase.Session, "Request", { seq: request.seq, command: request.command });
                 perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
                 const { response, responseRequired } = this.executeCommand(request);
 
@@ -2930,6 +2938,7 @@ namespace ts.server {
 
                 // Note: Log before writing the response, else the editor can complete its activity before the server does
                 perfLogger.logStopCommand("" + request.command, "Success");
+                tracing.instant(tracing.Phase.Session, "Response", { seq: request.seq, command: request.command, success: !!response });
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
@@ -2941,12 +2950,14 @@ namespace ts.server {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
                     perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
+                    tracing.instant(tracing.Phase.Session, "UnhandledCancellation", { seq: request?.seq, command: request?.command });
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, message, relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
+                tracing.instant(tracing.Phase.Session, "UnhandledError", { seq: request?.seq, command: request?.command, message: (<StackTraceError>err).message });
 
                 this.doOutput(
                     /*info*/ undefined,

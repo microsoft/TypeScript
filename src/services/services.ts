@@ -1126,12 +1126,21 @@ namespace ts {
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
     }
 
+    const NoopCancellationToken: CancellationToken = {
+        isCancellationRequested: returnFalse,
+        throwIfCancellationRequested: noop,
+    };
+
     class CancellationTokenObject implements CancellationToken {
-        constructor(private cancellationToken: HostCancellationToken | undefined) {
+        constructor(private cancellationToken: HostCancellationToken) {
         }
 
         public isCancellationRequested(): boolean {
-            return !!this.cancellationToken && this.cancellationToken.isCancellationRequested();
+            if (this.cancellationToken.isCancellationRequested()) {
+                tracing.instant(tracing.Phase.Session, "CancellationDetected", { kind: "CancellationTokenObject" });
+                return true;
+            }
+            return false;
         }
 
         public throwIfCancellationRequested(): void {
@@ -1158,7 +1167,11 @@ namespace ts {
             if (duration >= this.throttleWaitMilliseconds) {
                 // Check no more than once every throttle wait milliseconds
                 this.lastCancellationCheckTime = time;
-                return this.hostCancellationToken.isCancellationRequested();
+                if (this.hostCancellationToken.isCancellationRequested()) {
+                    tracing.instant(tracing.Phase.Session, "CancellationDetected", { kind: "ThrottledCancellationToken" });
+                    return true;
+                }
+                return false;
             }
 
             return false;
@@ -1233,7 +1246,9 @@ namespace ts {
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
 
-        const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
+        const cancellationToken = host.getCancellationToken
+            ? new CancellationTokenObject(host.getCancellationToken())
+            : NoopCancellationToken;
 
         const currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
