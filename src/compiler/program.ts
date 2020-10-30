@@ -2234,8 +2234,7 @@ namespace ts {
                 const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
                 if (jsxImport) {
                     // synthesize `import "base/jsx-runtime"` declaration
-                    imports ||= [];
-                    imports.push(createSyntheticImport(jsxImport, file));
+                    (imports ||= []).push(createSyntheticImport(jsxImport, file));
                 }
             }
 
