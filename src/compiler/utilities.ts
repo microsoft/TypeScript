@@ -6973,4 +6973,42 @@ namespace ts {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
         }
     }
+
+    /**
+     * Indicates whether the result of an `Expression` will be unused.
+     *
+     * NOTE: This requires a node with a valid `parent` pointer.
+     */
+    export function expressionResultIsUnused(node: Expression): boolean {
+        Debug.assertIsDefined(node.parent);
+        while (true) {
+            const parent: Node = node.parent;
+            // walk up parenthesized expressions, but keep a pointer to the top-most parenthesized expression
+            if (isParenthesizedExpression(parent)) {
+                node = parent;
+                continue;
+            }
+            // result is unused in an expression statement, `void` expression, or the initializer or incrementer of a `for` loop
+            if (isExpressionStatement(parent) ||
+                isVoidExpression(parent) ||
+                isForStatement(parent) && (parent.initializer === node || parent.incrementor === node)) {
+                return true;
+            }
+            if (isCommaListExpression(parent)) {
+                // left side of comma is always unused
+                if (node !== last(parent.elements)) return true;
+                // right side of comma is unused if parent is unused
+                node = parent;
+                continue;
+            }
+            if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.CommaToken) {
+                // left side of comma is always unused
+                if (node === parent.left) return true;
+                // right side of comma is unused if parent is unused
+                node = parent;
+                continue;
+            }
+            return false;
+        }
+    }
 }

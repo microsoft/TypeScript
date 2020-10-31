@@ -30635,8 +30635,17 @@ namespace ts {
                 return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, isAsync)
                     || anyType;
             }
-
-            return getContextualIterationType(IterationTypeKind.Next, func) || anyType;
+            let type = getContextualIterationType(IterationTypeKind.Next, func);
+            if (!type) {
+                type = anyType;
+                if (produceDiagnostics && noImplicitAny && !expressionResultIsUnused(node)) {
+                    const contextualType = getContextualType(node);
+                    if (!contextualType || isTypeAny(contextualType)) {
+                        error(node, Diagnostics.yield_expression_implicitly_results_in_an_any_type_because_its_containing_generator_lacks_a_return_type_annotation);
+                    }
+                }
+            }
+            return type;
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
