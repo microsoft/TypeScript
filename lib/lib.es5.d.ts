@@ -282,7 +282,8 @@ interface Function {
      * @param thisArg The object to be used as the current object.
      * @param argArray A list of arguments to be passed to the method.
      */
-    call(this: Function, thisArg: any, ...argArray: any[]): any;
+    call(this: Function, thisArg: any, ...argArray?: any[]): any;
+    call<T extends Function>(this: T, thisArg: any): ReturnType<T>;
 
     /**
      * For a given function, creates a bound function that has the same body as the original function.
@@ -290,7 +291,8 @@ interface Function {
      * @param thisArg An object to which the this keyword can refer inside the new function.
      * @param argArray A list of arguments to be passed to the new function.
      */
-    bind(this: Function, thisArg: any, ...argArray: any[]): any;
+    bind(this: Function, thisArg: any, ...argArray?: any[]): any;
+    bind<T extends Function>(this: T, thisArg: any): T;
 
     /** Returns a string representation of a function. */
     toString(): string;
