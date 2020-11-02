@@ -15,7 +15,7 @@ verify.completions({
       name: "x",
       source: "/a",
       sourceDisplay: "./a",
-      text: "(property) x: number",
+      text: "(alias) const x: 0\nimport x",
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
   },

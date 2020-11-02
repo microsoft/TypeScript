@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 const{ a, m } = require("./something").o;
->a : any
->m : any
+>a : number
+>m : number
 >require("./something").o : { a: number; m: number; }
 >require("./something") : typeof import("tests/cases/conformance/jsdoc/declarations/something")
 >require : any
@@ -9,20 +9,20 @@ const{ a, m } = require("./something").o;
 >o : { a: number; m: number; }
 
 const thing = a + m
->thing : any
->a + m : any
->a : any
->m : any
+>thing : number
+>a + m : number
+>a : number
+>m : number
 
 module.exports = {
->module.exports = {    thing} : { thing: any; }
->module.exports : { thing: any; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { thing: any; }; }
->exports : { thing: any; }
->{    thing} : { thing: any; }
+>module.exports = {    thing} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>{    thing} : { thing: number; }
 
     thing
->thing : any
+>thing : number
 
 };
 

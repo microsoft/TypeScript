@@ -250,3 +250,17 @@ class SuperThrowable extends MyThrowable {
         this.throw()
     }
 }
+
+// Repro from #40346
+
+interface Services {
+    panic(message: string): never;
+}
+
+function foo(services: Readonly<Services>, s: string | null): string {
+    if (s === null) {
+        services.panic("ouch");
+    } else {
+        return s;
+    }
+}

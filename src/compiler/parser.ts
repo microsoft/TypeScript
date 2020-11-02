@@ -614,7 +614,8 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
-        tracing.begin(tracing.Phase.Parse, "createSourceFile", { path: fileName });
+        const tracingData: tracing.EventData = [tracing.Phase.Parse, "createSourceFile", { path: fileName }];
+        tracing.begin(...tracingData);
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -629,7 +630,7 @@ namespace ts {
 
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
-        tracing.end();
+        tracing.end(...tracingData);
         return result;
     }
 
@@ -2618,20 +2619,11 @@ namespace ts {
             const pos = getNodePos();
             return finishNode(
                 factory.createTemplateLiteralTypeSpan(
-                    parseTemplateCasing(),
                     parseType(),
                     parseLiteralOfTemplateSpan(/*isTaggedTemplate*/ false)
                 ),
                 pos
             );
-        }
-
-        function parseTemplateCasing(): TemplateCasing {
-            return parseOptional(SyntaxKind.UppercaseKeyword) ? TemplateCasing.Uppercase :
-                parseOptional(SyntaxKind.LowercaseKeyword) ? TemplateCasing.Lowercase :
-                parseOptional(SyntaxKind.CapitalizeKeyword) ? TemplateCasing.Capitalize :
-                parseOptional(SyntaxKind.UncapitalizeKeyword) ? TemplateCasing.Uncapitalize :
-                TemplateCasing.None;
         }
 
         function parseLiteralOfTemplateSpan(isTaggedTemplate: boolean) {
@@ -6751,7 +6743,7 @@ namespace ts {
             const name = parseIdentifier();
             const typeParameters = parseTypeParameters();
             parseExpected(SyntaxKind.EqualsToken);
-            const type = parseType();
+            const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
             parseSemicolon();
             const node = factory.createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
