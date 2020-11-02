@@ -78,8 +78,6 @@ gulp LKG               # Replace the last known good with the built one.
                        # Bootstrapping step to be executed when the built compiler reaches a stable state.
 gulp tests             # Build the test infrastructure using the built compiler.
 gulp runtests          # Run tests using the built compiler and test infrastructure.
-                       # Some low-value tests are skipped when not on a CI machine - you can use the
-                       # --skipPercent=0 command to override this behavior and run all tests locally.
                        # You can override the specific suite runner used or specify a test for this command.
                        # Use --tests=<testPath> for a specific test and/or --runner=<runnerName> for a specific suite.
                        # Valid runners include conformance, compiler, fourslash, project, user, and docker

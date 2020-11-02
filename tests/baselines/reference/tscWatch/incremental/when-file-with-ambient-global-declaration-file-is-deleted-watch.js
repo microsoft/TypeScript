@@ -35,6 +35,7 @@ Output::
 
 Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
 Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/globals.d.ts
@@ -126,6 +127,7 @@ Output::
 
 Program root files: ["/users/username/projects/project/index.ts"]
 Program options: {"incremental":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/index.ts

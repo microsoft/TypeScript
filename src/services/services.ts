@@ -2077,6 +2077,11 @@ namespace ts {
 
             // Push all text changes.
             for (let i = firstLine; i <= lastLine; i++) {
+                // If the range is multiline and ends on a beginning of a line, don't comment/uncomment.
+                if (firstLine !== lastLine && lineStarts[i] === textRange.end) {
+                    continue;
+                }
+
                 const lineTextStart = lineTextStarts.get(i.toString());
 
                 // If the line is not an empty line; otherwise no-op.

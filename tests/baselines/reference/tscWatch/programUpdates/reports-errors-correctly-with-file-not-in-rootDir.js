@@ -38,6 +38,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts
@@ -105,6 +106,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts

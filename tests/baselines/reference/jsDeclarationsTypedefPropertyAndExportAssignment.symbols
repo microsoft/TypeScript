@@ -77,8 +77,8 @@ const taskNameToGroup = {};
 
 module.exports = {
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/module", Decl(module.js, 0, 0))
->module : Symbol(export=, Decl(module.js, 24, 27))
->exports : Symbol(export=, Decl(module.js, 24, 27))
+>module : Symbol(module, Decl(module.js, 24, 27))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/module", Decl(module.js, 0, 0))
 
     taskGroups,
 >taskGroups : Symbol(taskGroups, Decl(module.js, 26, 18))

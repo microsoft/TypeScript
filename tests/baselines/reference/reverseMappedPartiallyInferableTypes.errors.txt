@@ -99,3 +99,35 @@ tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts(91,20): error TS257
         }
     });
     
+    // Repros from #40809
+    
+    type Mapped1<T> = {
+        [K in keyof T]: [T[K], (arg: T) => boolean];
+    };
+    
+    declare function inferMapped1<T>(arg: Mapped1<T>): void;
+    
+    inferMapped1({
+        key: [3, arg => arg.key > 5]
+    });
+    
+    type Mapped2<T> = {
+        [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
+    };
+    
+    declare function inferMapped2<T>(arg: Mapped2<T>): void;
+    
+    inferMapped2({
+        key: [3, arg => arg.key > 5]
+    });
+    
+    type MappedReadonly<T> = {
+        readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
+    };
+    
+    declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
+    
+    inferMappedReadonly({
+        key: [3, arg => arg.key > 5]
+    });
+    

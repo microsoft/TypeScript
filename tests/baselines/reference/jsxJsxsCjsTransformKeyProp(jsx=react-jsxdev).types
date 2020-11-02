@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx ===
+/// <reference path="react16.d.ts" />
+const props = { answer: 42 }
+>props : { answer: number; }
+>{ answer: 42 } : { answer: number; }
+>answer : number
+>42 : 42
+
+const a = <div key="foo" {...props}>text</div>;
+>a : JSX.Element
+><div key="foo" {...props}>text</div> : JSX.Element
+>div : any
+>key : string
+>props : { answer: number; }
+>div : any
+
+const b = <div {...props} key="bar">text</div>;
+>b : JSX.Element
+><div {...props} key="bar">text</div> : JSX.Element
+>div : any
+>props : { answer: number; }
+>key : string
+>div : any
+
+export {};
+

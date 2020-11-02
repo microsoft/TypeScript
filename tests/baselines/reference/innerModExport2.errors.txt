@@ -1,4 +1,4 @@
-tests/cases/compiler/innerModExport2.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/compiler/innerModExport2.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 tests/cases/compiler/innerModExport2.ts(5,12): error TS1005: ';' expected.
 tests/cases/compiler/innerModExport2.ts(7,20): error TS2395: Individual declarations in merged declaration 'export_var' must be all exported or all local.
 tests/cases/compiler/innerModExport2.ts(13,9): error TS2395: Individual declarations in merged declaration 'export_var' must be all exported or all local.
@@ -12,7 +12,7 @@ tests/cases/compiler/innerModExport2.ts(20,7): error TS2339: Property 'NonExport
         var non_export_var: number;
         module {
         ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
                ~
 !!! error TS1005: ';' expected.
             var non_export_var = 0;
