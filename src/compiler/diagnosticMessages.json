@@ -3428,6 +3428,10 @@
         "category": "Error",
         "code": 4110
     },
+    "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
+        "category": "Error",
+        "code": 4111
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4744,6 +4748,10 @@
         "category": "Error",
         "code": 6504
     },
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Error",
+        "code": 6803
+    },
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
@@ -5959,9 +5967,17 @@
         "category": "Message",
         "code": 95144
     },
-    "Delete all unused imports": {
+    "Use element access for '{0}'": {
         "category": "Message",
         "code": 95145
+    },
+    "Use element access for all undeclared properties.": {
+        "category": "Message",
+        "code": 95146
+    },
+    "Delete all unused imports": {
+        "category": "Message",
+        "code": 95147
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

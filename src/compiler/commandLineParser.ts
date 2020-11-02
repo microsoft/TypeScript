@@ -635,6 +635,15 @@ namespace ts {
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
+        {
+            name: "noPropertyAccessFromIndexSignature",
+            type: "boolean",
+            affectsBindDiagnostics: true,
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses
+        },
 
         // Module Resolution
         {
