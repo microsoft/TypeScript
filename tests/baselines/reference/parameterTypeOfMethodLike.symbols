@@ -15,7 +15,7 @@ class Derived extends Base {
 >method : Symbol(Derived.method, Decl(parameterTypeOfMethodLike.ts, 4, 28))
 >x : Symbol(x, Decl(parameterTypeOfMethodLike.ts, 5, 11))
 
-        x.toFixed(0)
+        x.toFixed(0);
 >x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(parameterTypeOfMethodLike.ts, 5, 11))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))

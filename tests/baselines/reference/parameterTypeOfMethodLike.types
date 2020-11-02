@@ -15,7 +15,7 @@ class Derived extends Base {
 >method : (x: number) => void
 >x : number
 
-        x.toFixed(0)
+        x.toFixed(0);
 >x.toFixed(0) : string
 >x.toFixed : (fractionDigits?: number | undefined) => string
 >x : number

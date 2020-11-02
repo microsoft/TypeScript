@@ -5,7 +5,7 @@ class Base {
 
 class Derived extends Base {
     method(x) {
-        x.toFixed(0)
+        x.toFixed(0);
     }
 }
 
