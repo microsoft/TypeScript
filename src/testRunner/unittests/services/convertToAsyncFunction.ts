@@ -1434,6 +1434,57 @@ function [#|foo|]() {
     })
 }
 `);
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethod", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithSingleLineComment", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    // comment
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithMultipleLineComment", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    /**
+     * comment
+     */
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithModifier", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    public [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
 
         _testConvertToAsyncFunctionFailedSuggestion("convertToAsyncFunction_OutermostOnlyFailure", `
 function foo() {

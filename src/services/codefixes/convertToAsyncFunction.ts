@@ -67,13 +67,15 @@ namespace ts.codefix {
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
         const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
-
         if (!returnStatements.length) {
             return;
         }
 
-        // add the async keyword
-        changes.insertLastModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
+        const pos = functionToConvert.modifiers ? functionToConvert.modifiers.end :
+            functionToConvert.decorators ? skipTrivia(sourceFile.text, functionToConvert.decorators.end) :
+                functionToConvert.getStart(sourceFile);
+        const options = functionToConvert.modifiers ? { prefix: " " } : { suffix: " " };
+        changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, options);
 
         for (const returnStatement of returnStatements) {
             forEachChild(returnStatement, function visit(node) {
