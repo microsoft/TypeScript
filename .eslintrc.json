@@ -17,7 +17,9 @@
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
 
-        "camelcase": "off",
+        "brace-style": "off",
+        "@typescript-eslint/brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+
         "@typescript-eslint/naming-convention": [
             "error",
             { "selector": "typeLike", "format": ["PascalCase"], "filter": { "regex": "^(__String|[A-Za-z]+_[A-Za-z]+)$", "match": false } },
@@ -32,6 +34,10 @@
         ],
 
         "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+
+        "no-duplicate-imports": "off",
+        "@typescript-eslint/no-duplicate-imports": "error",
+
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-this-alias": "error",
@@ -86,7 +92,6 @@
         "jsdoc/check-alignment": "error",
 
         // eslint
-        "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
         "constructor-super": "error",
         "curly": ["error", "multi-line"],
         "dot-notation": "error",
@@ -95,7 +100,6 @@
         "new-parens": "error",
         "no-caller": "error",
         "no-duplicate-case": "error",
-        "no-duplicate-imports": "error",
         "no-empty": "error",
         "no-eval": "error",
         "no-extra-bind": "error",
