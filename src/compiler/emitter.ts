@@ -4165,11 +4165,17 @@ namespace ts {
                 }
 
                 // Write a trailing comma, if requested.
-                const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children!.hasTrailingComma;
-                if (format & ListFormat.CommaDelimited && hasTrailingComma) {
-                    writePunctuation(",");
+                const emitFlags = previousSibling ? getEmitFlags(previousSibling) : 0;
+                const skipTrailingComments = commentsDisabled || !!(emitFlags & EmitFlags.NoTrailingComments);
+                const hasTrailingComma = children?.hasTrailingComma && (format & ListFormat.AllowTrailingComma) && (format & ListFormat.CommaDelimited);
+                if (hasTrailingComma) {
+                    if (previousSibling && !skipTrailingComments) {
+                        emitTokenWithComment(SyntaxKind.CommaToken, previousSibling.end, writePunctuation, previousSibling);
+                    }
+                    else {
+                        writePunctuation(",");
+                    }
                 }
-
 
                 // Emit any trailing comment of the last element in the list
                 // i.e
@@ -4177,8 +4183,8 @@ namespace ts {
                 //          2
                 //          /* end of element 2 */
                 //       ];
-                if (previousSibling && format & ListFormat.DelimitersMask && previousSibling.end !== parentNode.end && !(getEmitFlags(previousSibling) & EmitFlags.NoTrailingComments)) {
-                    emitLeadingCommentsOfPosition(previousSibling.end);
+                if (previousSibling && parentNode.end !== previousSibling.end && (format & ListFormat.DelimitersMask) && !skipTrailingComments) {
+                    emitLeadingCommentsOfPosition(hasTrailingComma && children?.end ? children.end : previousSibling.end);
                 }
 
                 // Decrease the indent, if requested.
