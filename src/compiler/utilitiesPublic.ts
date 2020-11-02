@@ -767,6 +767,10 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
+    export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined {
+        return getFirstJSDocTag(node, isJSDocOverrideTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc deprecated tag for the node if present */
     export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
         return getFirstJSDocTag(node, isJSDocDeprecatedTag);
