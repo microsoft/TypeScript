@@ -843,7 +843,7 @@ namespace ts.textChanges {
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
-                        this.deleteRange(sourceFile, rangeOfTypeParameters(node));
+                        this.deleteRange(sourceFile, rangeOfTypeParameters(sourceFile, node));
                     }
                     else {
                         deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);
