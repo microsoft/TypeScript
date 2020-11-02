@@ -2207,6 +2207,10 @@ namespace ts {
             addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
             setParent(externalHelpersModuleReference, importDecl);
             setParent(importDecl, file);
+            // explicitly unset the synthesized flag on these declarations so the checker API will answer questions about them
+            // (which is required to build the dependency graph for incremental emit)
+            (externalHelpersModuleReference as Mutable<Node>).flags &= ~NodeFlags.Synthesized;
+            (importDecl as Mutable<Node>).flags &= ~NodeFlags.Synthesized;
             return externalHelpersModuleReference;
         }
 
