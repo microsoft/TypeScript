@@ -3844,7 +3844,7 @@ namespace ts {
 
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
     const indentStrings: string[] = ["", "    "];

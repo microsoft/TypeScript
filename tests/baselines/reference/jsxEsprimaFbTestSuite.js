@@ -6,12 +6,13 @@ declare var LeftRight;
 declare var x;
 declare var a;
 declare var props;
+declare var value;
 
 <a />;
 
-//<n:a n:v />; Namespace unsuported
+<n:a n:v />;
 
-//<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
+<a n:foo="bar"> {value} <b><c /></b></a>;
 
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
 
@@ -56,8 +57,8 @@ baz
 
 //// [jsxEsprimaFbTestSuite.jsx]
 <a />;
-//<n:a n:v />; Namespace unsuported
-//<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
+<n:a n:v/>;
+<a n:foo="bar"> {value} <b><c /></b></a>;
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;"/>;
 <a b="&notanentity;"/>;
 <a />;

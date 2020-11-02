@@ -24922,11 +24922,7 @@ namespace ts {
             return getJsxElementTypeAt(node) || anyType;
         }
 
-        /**
-         * Returns true iff the JSX element name would be a valid JS identifier, ignoring restrictions about keywords not being identifiers
-         */
         function isUnhyphenatedJsxName(name: string | __String) {
-            // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
             return !stringContains(name as string, "-");
         }
 
