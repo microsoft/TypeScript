@@ -39,6 +39,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
 Program options: {"module":0,"types":["@myapp/ts-types"],"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib/app.ts
@@ -91,6 +92,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/lib/app.ts"]
 Program options: {"module":0,"types":["@myapp/ts-types"],"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib/app.ts

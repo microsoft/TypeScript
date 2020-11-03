@@ -1480,9 +1480,9 @@ import b = require("./moduleB");
             const diagnostics1 = program1.getOptionsDiagnostics();
             assert.equal(diagnostics1.length, 1, "expected one diagnostic");
 
-            createProgram(names, {}, compilerHost, program1);
-            assert.isTrue(program1.structureIsReused === StructureIsReused.Completely);
-            const diagnostics2 = program1.getOptionsDiagnostics();
+            const program2 = createProgram(names, {}, compilerHost, program1);
+            assert.isTrue(program2.structureIsReused === StructureIsReused.Completely);
+            const diagnostics2 = program2.getOptionsDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
             assert.deepEqual(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
         });

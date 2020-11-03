@@ -1,0 +1,41 @@
+=== /a.js ===
+const bar = {
+>bar : Symbol(bar, Decl(a.js, 0, 5))
+
+	arguments: {}
+>arguments : Symbol(arguments, Decl(a.js, 0, 13))
+}
+
+class A {
+>A : Symbol(A, Decl(a.js, 2, 1))
+
+	/**
+	 * Constructor
+	 *
+	 * @param {object} [foo={}]
+	 */
+	constructor(foo = {}) {
+>foo : Symbol(foo, Decl(a.js, 10, 13))
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this.foo : Symbol(A.foo, Decl(a.js, 10, 24))
+>this : Symbol(A, Decl(a.js, 2, 1))
+>foo : Symbol(A.foo, Decl(a.js, 10, 24))
+>foo : Symbol(foo, Decl(a.js, 10, 13))
+
+		/**
+		 * @type object
+		 */
+		this.bar = bar.arguments;
+>this.bar : Symbol(A.bar, Decl(a.js, 14, 17))
+>this : Symbol(A, Decl(a.js, 2, 1))
+>bar : Symbol(A.bar, Decl(a.js, 14, 17))
+>bar.arguments : Symbol(arguments, Decl(a.js, 0, 13))
+>bar : Symbol(bar, Decl(a.js, 0, 5))
+>arguments : Symbol(arguments, Decl(a.js, 0, 13))
+	}
+}
+

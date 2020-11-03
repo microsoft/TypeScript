@@ -22,9 +22,11 @@ tests/cases/compiler/varianceMeasurement.ts(57,7): error TS2322: Type 'Fn<string
   Type 'unknown' is not assignable to type 'string'.
 tests/cases/compiler/varianceMeasurement.ts(62,7): error TS2322: Type 'Fn<string, number>' is not assignable to type 'Fn<string, 0>'.
   Type 'number' is not assignable to type '0'.
+tests/cases/compiler/varianceMeasurement.ts(75,7): error TS2322: Type 'C<unknown, number>' is not assignable to type 'C<unknown, string>'.
+  Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/varianceMeasurement.ts (8 errors) ====
+==== tests/cases/compiler/varianceMeasurement.ts (9 errors) ====
     // The type below should be invariant in T but is measured as covariant because
     // we don't analyze recursive references.
     
@@ -119,4 +121,20 @@ tests/cases/compiler/varianceMeasurement.ts(62,7): error TS2322: Type 'Fn<string
           ~~~
 !!! error TS2322: Type 'Fn<string, number>' is not assignable to type 'Fn<string, 0>'.
 !!! error TS2322:   Type 'number' is not assignable to type '0'.
+    
+    // Repro from #39947
+    
+    interface I<Dummy, V> {
+      c: C<Dummy, V>;
+    }
+    
+    class C<Dummy, V> {
+      declare sub: I<Dummy, V>;
+      declare covariance: V;
+    }
+    
+    const c1: C<unknown, string> = new C<unknown, number>();  // Error
+          ~~
+!!! error TS2322: Type 'C<unknown, number>' is not assignable to type 'C<unknown, string>'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
     

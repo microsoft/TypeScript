@@ -635,7 +635,7 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
-            rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost);
+            rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
             if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
             }
@@ -746,6 +746,7 @@ namespace ts {
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
+                        extraFileExtensions,
                         options: compilerOptions,
                         program: getCurrentBuilderProgram(),
                         currentDirectory,

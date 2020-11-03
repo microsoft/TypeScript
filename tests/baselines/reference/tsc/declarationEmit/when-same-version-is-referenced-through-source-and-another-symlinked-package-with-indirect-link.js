@@ -160,6 +160,7 @@ plugin-one/index.ts
 
 Program root files: ["/user/username/projects/myproject/plugin-one/index.ts"]
 Program options: {"target":1,"declaration":true,"traceResolution":true,"project":"/user/username/projects/myproject/plugin-one","explainFiles":true,"configFilePath":"/user/username/projects/myproject/plugin-one/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts

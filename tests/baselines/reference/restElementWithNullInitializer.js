@@ -17,11 +17,11 @@ function foo1(_a) {
     var r = (_a === void 0 ? null : _a).slice(0);
 }
 function foo2(_a) {
-    var r = (_a === void 0 ? undefined : _a).slice(0);
+    var _b = _a === void 0 ? undefined : _a, r = _b.slice(0);
 }
 function foo3(_a) {
-    var r = (_a === void 0 ? {} : _a).slice(0);
+    var _b = _a === void 0 ? {} : _a, r = _b.slice(0);
 }
 function foo4(_a) {
-    var r = (_a === void 0 ? [] : _a).slice(0);
+    var _b = _a === void 0 ? [] : _a, r = _b.slice(0);
 }

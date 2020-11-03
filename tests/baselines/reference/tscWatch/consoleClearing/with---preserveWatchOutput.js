@@ -26,6 +26,7 @@ Output::
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"preserveWatchOutput":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /f.ts
@@ -66,6 +67,7 @@ Output::
 
 Program root files: ["/f.ts"]
 Program options: {"watch":true,"preserveWatchOutput":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /f.ts

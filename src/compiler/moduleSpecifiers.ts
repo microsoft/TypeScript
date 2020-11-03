@@ -235,7 +235,7 @@ namespace ts.moduleSpecifiers {
             : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
         const symlinkedDirectories = links.getSymlinkedDirectories();
-        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+        const useCaseSensitiveFileNames = !host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames();
         const result = symlinkedDirectories && forEachEntry(symlinkedDirectories, (resolved, path) => {
             if (resolved === false) return undefined;
             if (startsWithDirectory(importingFileName, resolved.realPath, getCanonicalFileName)) {
@@ -243,7 +243,7 @@ namespace ts.moduleSpecifiers {
             }
 
             return forEach(targets, target => {
-                if (compareStrings(target.slice(0, resolved.real.length), resolved.real) !== Comparison.EqualTo) {
+                if (!containsPath(resolved.real, target, !useCaseSensitiveFileNames)) {
                     return;
                 }
 

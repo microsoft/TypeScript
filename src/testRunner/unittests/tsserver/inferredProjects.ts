@@ -429,5 +429,26 @@ namespace ts.projectSystem {
                 configuredRemoved.clear();
             }
         });
+
+        it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
+            const file1 = { path: "/a/file1.js", content: "" };
+            const host = createServerHost([file1]);
+
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const inferredProject = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject, [file1.path]);
+            inferredProject.setTypeAcquisition(undefined);
+
+            const expected = {
+                enable: true,
+                include: [],
+                exclude: []
+            };
+            assert.deepEqual(inferredProject.getTypeAcquisition(), expected, "typeAcquisition should be inferred for inferred projects");
+        });
     });
 }

@@ -99,7 +99,7 @@
         "category": "Error",
         "code": 1030
     },
-    "'{0}' modifier cannot appear on a class element.": {
+    "'{0}' modifier cannot appear on class elements of this kind.": {
         "category": "Error",
         "code": 1031
     },
@@ -1004,7 +1004,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.": {
         "category": "Error",
         "code": 1343
     },
@@ -2333,6 +2333,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.": {
+        "category": "Error",
+        "code": 2550
+    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2449,7 +2453,7 @@
         "category": "Error",
         "code": 2582
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.": {
         "category": "Error",
         "code": 2583
     },
@@ -3175,7 +3179,10 @@
         "category": "Error",
         "code": 2792
     },
-
+    "The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.": {
+        "category": "Error",
+        "code": 2793
+    },
     "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
         "category": "Error",
         "code": 2794
@@ -3183,6 +3190,10 @@
     "The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.": {
         "category": "Error",
         "code": 2795
+    },
+    "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
+        "category": "Error",
+        "code": 2796
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3552,6 +3563,10 @@
     "Tuple type arguments circularly reference themselves.": {
         "category": "Error",
         "code": 4110
+    },
+    "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
+        "category": "Error",
+        "code": 4111
     },
 
     "The current host does not support the '{0}' option.": {
@@ -4844,6 +4859,10 @@
         "code": 6385,
         "reportsDeprecated": true
     },
+    "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
+        "category": "Message",
+        "code": 6386
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4868,6 +4887,10 @@
     "Print names of files and the reason they are part of the compilation.": {
         "category": "Message",
         "code": 6505
+    },
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Error",
+        "code": 6803
     },
 
     "Include 'undefined' in index signature results": {
@@ -6083,6 +6106,18 @@
     "Add 'void' to all Promises resolved without a value": {
         "category": "Message",
         "code": 95144
+    },
+    "Use element access for '{0}'": {
+        "category": "Message",
+        "code": 95145
+    },
+    "Use element access for all undeclared properties.": {
+        "category": "Message",
+        "code": 95146
+    },
+    "Delete all unused imports": {
+        "category": "Message",
+        "code": 95147
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

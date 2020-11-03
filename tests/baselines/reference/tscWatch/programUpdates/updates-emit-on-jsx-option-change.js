@@ -31,6 +31,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/index.tsx"]
 Program options: {"jsx":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/index.tsx
@@ -79,6 +80,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/index.tsx"]
 Program options: {"jsx":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/index.tsx
@@ -96,10 +98,10 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
