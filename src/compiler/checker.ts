@@ -17365,12 +17365,9 @@ namespace ts {
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 tracing.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
-                try {
-                    return structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                }
-                finally {
-                    tracing.pop();
-                }
+                const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
+                tracing.pop(); // If we start reporting this event on the server, this will need to be wrapped in a finally block
+                return result;
             }
 
             function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
@@ -18625,45 +18622,41 @@ namespace ts {
             let variances = cache.variances;
             if (!variances) {
                 tracing.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
-                try {
-                    // The emptyArray singleton is used to signal a recursive invocation.
-                    cache.variances = emptyArray;
-                    variances = [];
-                    for (const tp of typeParameters) {
-                        let unmeasurable = false;
-                        let unreliable = false;
-                        const oldHandler = outofbandVarianceMarkerHandler;
-                        outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? unreliable = true : unmeasurable = true;
-                        // We first compare instantiations where the type parameter is replaced with
-                        // marker types that have a known subtype relationship. From this we can infer
-                        // invariance, covariance, contravariance or bivariance.
-                        const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
-                        const typeWithSub = createMarkerType(cache, tp, markerSubType);
-                        let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
-                            (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
-                        // If the instantiations appear to be related bivariantly it may be because the
-                        // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
-                        // type). To determine this we compare instantiations where the type parameter is
-                        // replaced with marker types that are known to be unrelated.
-                        if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
-                            variance = VarianceFlags.Independent;
-                        }
-                        outofbandVarianceMarkerHandler = oldHandler;
-                        if (unmeasurable || unreliable) {
-                            if (unmeasurable) {
-                                variance |= VarianceFlags.Unmeasurable;
-                            }
-                            if (unreliable) {
-                                variance |= VarianceFlags.Unreliable;
-                            }
-                        }
-                        variances.push(variance);
+                // The emptyArray singleton is used to signal a recursive invocation.
+                cache.variances = emptyArray;
+                variances = [];
+                for (const tp of typeParameters) {
+                    let unmeasurable = false;
+                    let unreliable = false;
+                    const oldHandler = outofbandVarianceMarkerHandler;
+                    outofbandVarianceMarkerHandler = (onlyUnreliable) => onlyUnreliable ? unreliable = true : unmeasurable = true;
+                    // We first compare instantiations where the type parameter is replaced with
+                    // marker types that have a known subtype relationship. From this we can infer
+                    // invariance, covariance, contravariance or bivariance.
+                    const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
+                    const typeWithSub = createMarkerType(cache, tp, markerSubType);
+                    let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
+                        (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+                    // If the instantiations appear to be related bivariantly it may be because the
+                    // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
+                    // type). To determine this we compare instantiations where the type parameter is
+                    // replaced with marker types that are known to be unrelated.
+                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
+                        variance = VarianceFlags.Independent;
                     }
-                    cache.variances = variances;
+                    outofbandVarianceMarkerHandler = oldHandler;
+                    if (unmeasurable || unreliable) {
+                        if (unmeasurable) {
+                            variance |= VarianceFlags.Unmeasurable;
+                        }
+                        if (unreliable) {
+                            variance |= VarianceFlags.Unreliable;
+                        }
+                    }
+                    variances.push(variance);
                 }
-                finally {
-                    tracing.pop();
-                }
+                cache.variances = variances;
+                tracing.pop(); // If we start reporting this event on the server, this will need to be wrapped in a finally block
             }
             return variances;
         }
