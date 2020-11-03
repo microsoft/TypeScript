@@ -69,24 +69,18 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:36 AM[0m] Projects in this build: 
     * src/pure/tsconfig.json
     * src/main/tsconfig.json
     * src/tsconfig.json
 
-
 [[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/index.js' does not exist
-
 
 [[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-
 [[90m12:00:54 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
 
-
 [[90m12:00:55 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
-
 
 [[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -94,6 +88,7 @@ Output::
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
@@ -106,6 +101,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts
@@ -244,18 +240,13 @@ Output::
 >> Screen clear
 [[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:06 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
-
 
 [[90m12:01:07 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-
 [[90m12:01:23 AM[0m] Project 'src/main/tsconfig.json' is out of date because oldest output 'out/main/index.js' is older than newest input 'src/pure/tsconfig.json'
 
-
 [[90m12:01:24 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
-
 
 [96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
@@ -267,13 +258,13 @@ Output::
     [7m [0m [96m    ~~~[0m
     'bar' is declared here.
 
-
 [[90m12:01:25 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
@@ -285,6 +276,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts
@@ -392,21 +384,15 @@ Output::
 >> Screen clear
 [[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:30 AM[0m] Project 'src/pure/tsconfig.json' is out of date because oldest output 'out/pure/index.js' is older than newest input 'src/pure/session.ts'
-
 
 [[90m12:01:31 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
 
-
 [[90m12:01:47 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
-
 
 [[90m12:01:48 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-
 [[90m12:01:50 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
-
 
 [[90m12:01:51 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -414,6 +400,7 @@ Output::
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
@@ -425,6 +412,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts

@@ -339,17 +339,23 @@ namespace FourSlash {
                         this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
                     }
                 });
-                if (!compilationOptions.noLib) {
-                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                        Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
 
-                    compilationOptions.lib?.forEach(fileName => {
+                if (!compilationOptions.noLib) {
+                    const seen = new Set<string>();
+                    const addSourceFile = (fileName: string) => {
+                        if (seen.has(fileName)) return;
+                        seen.add(fileName);
                         const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                         ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                        if (libFile) {
-                            this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        this.languageServiceAdapterHost.addScript(fileName, libFile.text, /*isRootFile*/ false);
+                        if (!ts.some(libFile.libReferenceDirectives)) return;
+                        for (const directive of libFile.libReferenceDirectives) {
+                            addSourceFile(`lib.${directive.fileName}.d.ts`);
                         }
-                    });
+                    };
+
+                    addSourceFile(Harness.Compiler.defaultLibFileName);
+                    compilationOptions.lib?.forEach(addSourceFile);
                 }
             }
 
@@ -753,7 +759,18 @@ namespace FourSlash {
             ts.zipWith(endMarkers, definitions, (endMarker, definition, i) => {
                 const marker = this.getMarkerByName(endMarker);
                 if (ts.comparePaths(marker.fileName, definition.fileName, /*ignoreCase*/ true) !== ts.Comparison.EqualTo || marker.position !== definition.textSpan.start) {
-                    this.raiseError(`${testName} failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}`);
+                    const filesToDisplay = ts.deduplicate([marker.fileName, definition.fileName], ts.equateValues);
+                    const markers = [{ text: "EXPECTED", fileName: marker.fileName, position: marker.position }, { text: "ACTUAL", fileName: definition.fileName, position: definition.textSpan.start }];
+                    const text = filesToDisplay.map(fileName => {
+                        const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
+                        let fileContent = this.getFileContent(fileName);
+                        for (const marker of markersToRender) {
+                            fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
+                        }
+                        return `// @Filename: ${fileName}\n${fileContent}`;
+                    }).join("\n\n");
+
+                    this.raiseError(`${testName} failed for definition ${endMarker} (${i}): expected ${marker.fileName} at ${marker.position}, got ${definition.fileName} at ${definition.textSpan.start}\n\n${text}\n`);
                 }
             });
         }
@@ -771,7 +788,7 @@ namespace FourSlash {
                 const fileContent = this.getFileContent(startFile);
                 const spanContent = fileContent.slice(defs.textSpan.start, ts.textSpanEnd(defs.textSpan));
                 const spanContentWithMarker = spanContent.slice(0, marker.position - defs.textSpan.start) + `/*${startMarkerName}*/` + spanContent.slice(marker.position - defs.textSpan.start);
-                const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
+                const suggestedFileContent = (fileContent.slice(0, defs.textSpan.start) + `\x1b[1;4m[|${spanContentWithMarker}|]\x1b[0;31m` + fileContent.slice(ts.textSpanEnd(defs.textSpan)))
                     .split(/\r?\n/).map(line => " ".repeat(6) + line).join(ts.sys.newLine);
                 this.raiseError(`goToDefinitionsAndBoundSpan failed. Found a starting TextSpan around '${spanContent}' in '${startFile}' (at position ${defs.textSpan.start}). `
                     + `If this is the correct input span, put a fourslash range around it: \n\n${suggestedFileContent}\n`);
@@ -2455,8 +2472,7 @@ namespace FourSlash {
             const { fileName } = this.activeFile;
             const before = this.getFileContent(fileName);
             this.formatDocument();
-            const after = this.getFileContent(fileName);
-            this.assertObjectsEqual(after, before);
+            this.verifyFileContent(fileName, before);
         }
 
         public verifyTextAtCaretIs(text: string) {
@@ -3878,7 +3894,7 @@ namespace FourSlash {
         const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
         const state = new TestState(absoluteFileName, absoluteBasePath, testType, testData);
         const actualFileName = Harness.IO.resolvePath(fileName) || absoluteFileName;
-        const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true } });
+        const output = ts.transpileModule(content, { reportDiagnostics: true, fileName: actualFileName, compilerOptions: { target: ts.ScriptTarget.ES2015, inlineSourceMap: true, inlineSources: true } });
         if (output.diagnostics!.length > 0) {
             throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
         }
@@ -3888,7 +3904,7 @@ namespace FourSlash {
     function runCode(code: string, state: TestState, fileName: string): void {
         // Compile and execute the test
         const generatedFile = ts.changeExtension(fileName, ".js");
-        const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${code}\n//# sourceURL=${generatedFile}\n})`;
+        const wrappedCode = `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
         type SourceMapSupportModule = typeof import("source-map-support") & {
             // TODO(rbuckton): This is missing from the DT definitions and needs to be added.

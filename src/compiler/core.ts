@@ -1195,7 +1195,7 @@ namespace ts {
      * @param keyComparer A callback used to compare two keys in a sorted array.
      * @param offset An offset into `array` at which to start the search.
      */
-    export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
+    export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: (v: T, i: number) => U, keyComparer: Comparer<U>, offset?: number): number {
         if (!some(array)) {
             return -1;
         }
@@ -1204,7 +1204,7 @@ namespace ts {
         let high = array.length - 1;
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
-            const midKey = keySelector(array[middle]);
+            const midKey = keySelector(array[middle], middle);
             switch (keyComparer(midKey, key)) {
                 case Comparison.LessThan:
                     low = middle + 1;
@@ -2271,5 +2271,15 @@ namespace ts {
      */
     export function padRight(s: string, length: number, padString: " " = " ") {
         return length <= s.length ? s : s + padString.repeat(length - s.length);
+    }
+
+    export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
+    export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
+        const len = array.length;
+        let index = 0;
+        while (index < len && predicate(array[index])) {
+            index++;
+        }
+        return array.slice(0, index);
     }
 }

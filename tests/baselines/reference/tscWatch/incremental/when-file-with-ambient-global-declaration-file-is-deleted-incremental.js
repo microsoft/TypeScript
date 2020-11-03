@@ -30,6 +30,7 @@ Output::
 
 Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
 Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/globals.d.ts
@@ -100,13 +101,13 @@ Output::
 [7m [0m [91m            ~~~~~~[0m
 
 
-
 Found 1 error.
 
 
 
 Program root files: ["/users/username/projects/project/index.ts"]
 Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /users/username/projects/project/index.ts

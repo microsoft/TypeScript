@@ -13,7 +13,7 @@
       "containerName": "",
       "fileName": "/b.js",
       "kind": "alias",
-      "name": "(alias) (property) f: () => void\nimport f",
+      "name": "(alias) function f(): void\nimport f",
       "textSpan": {
         "start": 8,
         "length": 1
@@ -36,16 +36,8 @@
           "kind": "space"
         },
         {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
+          "text": "function",
+          "kind": "keyword"
         },
         {
           "text": " ",
@@ -56,14 +48,6 @@
           "kind": "aliasName"
         },
         {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
           "text": "(",
           "kind": "punctuation"
         },
@@ -72,11 +56,7 @@
           "kind": "punctuation"
         },
         {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
+          "text": ":",
           "kind": "punctuation"
         },
         {

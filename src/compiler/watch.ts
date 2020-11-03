@@ -345,11 +345,11 @@ namespace ts {
 
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = host.createHash || generateDjb2Hash;
+        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {
-                result.version = computeHash.call(host, result.text);
+                result.version = computeHash(result.text);
             }
             return result;
         };

@@ -1,0 +1,203 @@
+=== tests/cases/conformance/types/spread/objectSpreadRepeatedComplexity.ts ===
+function f(cnd: Record<number, boolean>){
+>f : Symbol(f, Decl(objectSpreadRepeatedComplexity.ts, 0, 0))
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    // Type is a union of 2^(n-1) members, where n is the number of spread objects
+    return {
+        // Without this one, it collapses to {} ?
+        ...(cnd[1] &&
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            cnd[2] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop0: 0,
+>prop0 : Symbol(prop0, Decl(objectSpreadRepeatedComplexity.ts, 5, 23))
+
+        }),
+
+        // With one prop each, it collapses to a single object (#34853?)
+        ...(cnd[3] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop3a: 1,
+>prop3a : Symbol(prop3a, Decl(objectSpreadRepeatedComplexity.ts, 10, 23))
+
+            prop3b: 1,
+>prop3b : Symbol(prop3b, Decl(objectSpreadRepeatedComplexity.ts, 11, 22))
+
+        }),
+        ...(cnd[4] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop4a: 1,
+>prop4a : Symbol(prop4a, Decl(objectSpreadRepeatedComplexity.ts, 14, 23))
+
+            prop4b: 1,
+>prop4b : Symbol(prop4b, Decl(objectSpreadRepeatedComplexity.ts, 15, 22))
+
+        }),
+        ...(cnd[5] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop5a: 1,
+>prop5a : Symbol(prop5a, Decl(objectSpreadRepeatedComplexity.ts, 18, 23))
+
+            prop5b: 1,
+>prop5b : Symbol(prop5b, Decl(objectSpreadRepeatedComplexity.ts, 19, 22))
+
+        }),
+        ...(cnd[6] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop6a: 1,
+>prop6a : Symbol(prop6a, Decl(objectSpreadRepeatedComplexity.ts, 22, 23))
+
+            prop6b: 1,
+>prop6b : Symbol(prop6b, Decl(objectSpreadRepeatedComplexity.ts, 23, 22))
+
+        }),
+        ...(cnd[7] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop7a: 1,
+>prop7a : Symbol(prop7a, Decl(objectSpreadRepeatedComplexity.ts, 26, 23))
+
+            prop7b: 1,
+>prop7b : Symbol(prop7b, Decl(objectSpreadRepeatedComplexity.ts, 27, 22))
+
+        }),
+        ...(cnd[8] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop8a: 1,
+>prop8a : Symbol(prop8a, Decl(objectSpreadRepeatedComplexity.ts, 30, 23))
+
+            prop8b: 1,
+>prop8b : Symbol(prop8b, Decl(objectSpreadRepeatedComplexity.ts, 31, 22))
+
+        }),
+        ...(cnd[9] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop9a: 1,
+>prop9a : Symbol(prop9a, Decl(objectSpreadRepeatedComplexity.ts, 34, 23))
+
+            prop9b: 1,
+>prop9b : Symbol(prop9b, Decl(objectSpreadRepeatedComplexity.ts, 35, 22))
+
+        }),
+        ...(cnd[10] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop10a: 1,
+>prop10a : Symbol(prop10a, Decl(objectSpreadRepeatedComplexity.ts, 38, 24))
+
+            prop10b: 1,
+>prop10b : Symbol(prop10b, Decl(objectSpreadRepeatedComplexity.ts, 39, 23))
+
+        }),
+        ...(cnd[11] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop11a: 1,
+>prop11a : Symbol(prop11a, Decl(objectSpreadRepeatedComplexity.ts, 42, 24))
+
+            prop11b: 1,
+>prop11b : Symbol(prop11b, Decl(objectSpreadRepeatedComplexity.ts, 43, 23))
+
+        }),
+        ...(cnd[12] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop12a: 1,
+>prop12a : Symbol(prop12a, Decl(objectSpreadRepeatedComplexity.ts, 46, 24))
+
+            prop12b: 1,
+>prop12b : Symbol(prop12b, Decl(objectSpreadRepeatedComplexity.ts, 47, 23))
+
+        }),
+        ...(cnd[13] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop13a: 1,
+>prop13a : Symbol(prop13a, Decl(objectSpreadRepeatedComplexity.ts, 50, 24))
+
+            prop13b: 1,
+>prop13b : Symbol(prop13b, Decl(objectSpreadRepeatedComplexity.ts, 51, 23))
+
+        }),
+        ...(cnd[14] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop14a: 1,
+>prop14a : Symbol(prop14a, Decl(objectSpreadRepeatedComplexity.ts, 54, 24))
+
+            prop14b: 1,
+>prop14b : Symbol(prop14b, Decl(objectSpreadRepeatedComplexity.ts, 55, 23))
+
+        }),
+        ...(cnd[15] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop15a: 1,
+>prop15a : Symbol(prop15a, Decl(objectSpreadRepeatedComplexity.ts, 58, 24))
+
+            prop15b: 1,
+>prop15b : Symbol(prop15b, Decl(objectSpreadRepeatedComplexity.ts, 59, 23))
+
+        }),
+        ...(cnd[16] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop16a: 1,
+>prop16a : Symbol(prop16a, Decl(objectSpreadRepeatedComplexity.ts, 62, 24))
+
+            prop16b: 1,
+>prop16b : Symbol(prop16b, Decl(objectSpreadRepeatedComplexity.ts, 63, 23))
+
+        }),
+        ...(cnd[17] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop17a: 1,
+>prop17a : Symbol(prop17a, Decl(objectSpreadRepeatedComplexity.ts, 66, 24))
+
+            prop17b: 1,
+>prop17b : Symbol(prop17b, Decl(objectSpreadRepeatedComplexity.ts, 67, 23))
+
+        }),
+        ...(cnd[18] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop18a: 1,
+>prop18a : Symbol(prop18a, Decl(objectSpreadRepeatedComplexity.ts, 70, 24))
+
+            prop18b: 1,
+>prop18b : Symbol(prop18b, Decl(objectSpreadRepeatedComplexity.ts, 71, 23))
+
+        }),
+        ...(cnd[19] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop19a: 1,
+>prop19a : Symbol(prop19a, Decl(objectSpreadRepeatedComplexity.ts, 74, 24))
+
+            prop19b: 1,
+>prop19b : Symbol(prop19b, Decl(objectSpreadRepeatedComplexity.ts, 75, 23))
+
+        }),
+        ...(cnd[20] && {
+>cnd : Symbol(cnd, Decl(objectSpreadRepeatedComplexity.ts, 0, 11))
+
+            prop20a: 1,
+>prop20a : Symbol(prop20a, Decl(objectSpreadRepeatedComplexity.ts, 78, 24))
+
+            prop20b: 1,
+>prop20b : Symbol(prop20b, Decl(objectSpreadRepeatedComplexity.ts, 79, 23))
+
+        }),
+    };
+}
