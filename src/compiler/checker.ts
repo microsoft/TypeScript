@@ -940,7 +940,7 @@ namespace ts {
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
-        const flowLoopCaches: ESMap<string, Type>[] = [];
+        const flowLabelCaches: ESMap<string, Type>[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -21656,6 +21656,7 @@ namespace ts {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
+            let cacheableBranches = true;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
@@ -21747,9 +21748,14 @@ namespace ts {
                     else if (flags & FlowFlags.ReduceLabel) {
                         const target = (<FlowReduceLabel>flow).target;
                         const saveAntecedents = target.antecedents;
+                        // Modifying the antecedents of a node means we lose our ability to use the cross-invocation branch cache
+                        // (since that may have follow-on effects on analysis returned by other nodes if the results get cached)
+                        const oldCacheableBranches = cacheableBranches;
+                        cacheableBranches = false;
                         target.antecedents = (<FlowReduceLabel>flow).antecedents;
                         type = getTypeAtFlowNode((<FlowReduceLabel>flow).antecedent);
                         target.antecedents = saveAntecedents;
+                        cacheableBranches = oldCacheableBranches;
                     }
                     else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
@@ -21955,6 +21961,17 @@ namespace ts {
             }
 
             function getTypeAtFlowBranchLabel(flow: FlowLabel): FlowType {
+                const id = getFlowNodeId(flow);
+                const cache = flowLabelCaches[id] || (flowLabelCaches[id] = new Map<string, Type>());
+                const key = getOrSetCacheKey();
+                if (!key) {
+                    // No cache key is generated when binding patterns are in unnarrowable situations
+                    return declaredType;
+                }
+                const cached = cacheableBranches && cache.get(key);
+                if (cached) {
+                    return cached;
+                }
                 const antecedentTypes: Type[] = [];
                 let subtypeReduction = false;
                 let seenIncomplete = false;
@@ -22004,14 +22021,18 @@ namespace ts {
                         }
                     }
                 }
-                return createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
+                const result = createFlowType(getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal), seenIncomplete);
+                if (!seenIncomplete && cacheableBranches) {
+                    cache.set(key, result as Type);
+                }
+                return result;
             }
 
             function getTypeAtFlowLoopLabel(flow: FlowLabel): FlowType {
                 // If we have previously computed the control flow type for the reference at
                 // this flow loop junction, return the cached type.
                 const id = getFlowNodeId(flow);
-                const cache = flowLoopCaches[id] || (flowLoopCaches[id] = new Map<string, Type>());
+                const cache = flowLabelCaches[id] || (flowLabelCaches[id] = new Map<string, Type>());
                 const key = getOrSetCacheKey();
                 if (!key) {
                     // No cache key is generated when binding patterns are in unnarrowable situations
