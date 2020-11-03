@@ -246,6 +246,7 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
+        let extendedConfigFilesMap: ESMap<Path, FileWatcher>;               // Map of file watchers for the extended config files
         let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
@@ -354,6 +355,10 @@ namespace ts {
                 configFileWatcher.close();
                 configFileWatcher = undefined;
             }
+            if (extendedConfigFilesMap) {
+                clearMap(extendedConfigFilesMap, closeFileWatcher);
+                extendedConfigFilesMap = undefined!;
+            }
             if (watchedWildcardDirectories) {
                 clearMap(watchedWildcardDirectories, closeFileWatcherOf);
                 watchedWildcardDirectories = undefined!;
@@ -419,6 +424,7 @@ namespace ts {
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
+            updateExtendedConfigFilePathsWatch(builderProgram.getProgram(), extendedConfigFilesMap || (extendedConfigFilesMap = new Map()), watchExtendedConfigFile);
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
             if (needsUpdateInTypeRootWatch) {
                 resolutionCache.updateTypeRootsWatch();
@@ -703,6 +709,10 @@ namespace ts {
             if (cachedDirectoryStructureHost) {
                 cachedDirectoryStructureHost.addOrDeleteFile(fileName, path, eventKind);
             }
+        }
+
+        function watchExtendedConfigFile(extendedConfigFile: string) {
+            return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ConfigFile);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {

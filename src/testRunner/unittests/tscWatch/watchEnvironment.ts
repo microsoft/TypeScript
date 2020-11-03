@@ -497,5 +497,161 @@ namespace ts.tscWatch {
                 verifyWorker("-extendedDiagnostics");
             });
         });
+
+        describe("handles watch for extended configs", () => {
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchExtends/with several extended configs",
+                commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+                sys: () => {
+                    const firstExtendedFile: File = {
+                        path: "/a/b/first.tsconfig.json",
+                        content: JSON.stringify({
+                            compilerOptions: {
+                                strict: false,
+                            }
+                        })
+                    };
+                    const secondExtendedFile: File = {
+                        path: "/a/b/second.tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./first.tsconfig.json",
+                            compilerOptions: {
+                                strictNullChecks: true,
+                            }
+                        })
+                    };
+                    const thirdExtendedFile: File = {
+                        path: "/a/b/third.tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./second.tsconfig.json",
+                            compilerOptions: {
+                                strictBindCallApply: true,
+                            }
+                        })
+                    };
+                    const fourthExtendedFile: File = {
+                        path: "/a/b/fourth.tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./third.tsconfig.json",
+                            compilerOptions: {
+                                strictFunctionTypes: true,
+                            }
+                        })
+                    };
+                    const configFile: File = {
+                        path: "/a/b/tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./fourth.tsconfig.json",
+                            compilerOptions: {
+                                strictPropertyInitialization: true,
+                            }
+                        })
+                    };
+                    const files = [
+                        libFile, commonFile1, commonFile2, firstExtendedFile, secondExtendedFile, thirdExtendedFile,
+                        fourthExtendedFile, configFile
+                    ];
+                    return createWatchedSystem(files);
+                },
+                changes: emptyArray
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchExtends/with watchFile option",
+                commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+                sys: () => {
+                    const extendedFile: File = {
+                        path: "/a/b/extended.tsconfig.json",
+                        content: JSON.stringify({
+                            watchOptions: {
+                                watchFile: "UseFsEvents"
+                            }
+                        })
+                    };
+                    const configFile: File = {
+                        path: "/a/b/tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./extended.tsconfig.json"
+                        })
+                    };
+                    const files = [libFile, commonFile1, commonFile2, extendedFile, configFile];
+                    return createWatchedSystem(files);
+                },
+                changes: emptyArray
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchExtends/with watchDirectory option",
+                commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+                sys: () => {
+                    const extendedFile: File = {
+                        path: "/a/b/extended.tsconfig.json",
+                        content: JSON.stringify({
+                            watchOptions: {
+                                watchDirectory: "UseFsEvents"
+                            }
+                        })
+                    };
+                    const configFile: File = {
+                        path: "/a/b/tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./extended.tsconfig.json"
+                        })
+                    };
+                    const files = [libFile, commonFile1, commonFile2, extendedFile, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: emptyArray
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchExtends/with fallbackPolling option",
+                commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
+                sys: () => {
+                    const extendedFile: File = {
+                        path: "/a/b/extended.tsconfig.json",
+                        content: JSON.stringify({
+                            watchOptions: {
+                                fallbackPolling: "PriorityInterval"
+                            }
+                        })
+                    };
+                    const configFile: File = {
+                        path: "/a/b/tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./extended.tsconfig.json"
+                        })
+                    };
+                    const files = [libFile, commonFile1, commonFile2, extendedFile, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+                },
+                changes: emptyArray
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchExtends/with watchFile as watch options to extend",
+                commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json", "--watchFile", "UseFsEvents"],
+                sys: () => {
+                    const extendedFile: File = {
+                        path: "/a/b/extended.tsconfig.json",
+                        content: "{}"
+                    };
+                    const configFile: File = {
+                        path: "/a/b/tsconfig.json",
+                        content: JSON.stringify({
+                            extends: "./extended.tsconfig.json"
+                        })
+                    };
+                    const files = [libFile, commonFile1, commonFile2, extendedFile, configFile];
+                    return createWatchedSystem(files);
+                },
+                changes: emptyArray
+            });
+        });
     });
 }

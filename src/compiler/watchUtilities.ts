@@ -258,6 +258,30 @@ namespace ts {
     }
 
     /**
+     * Updates the extended config file watches with the new set of extended config files after new program is created
+     */
+    export function updateExtendedConfigFilePathsWatch(
+        program: Program,
+        extendedConfigFilesMap: ESMap<string, FileWatcher>,
+        createExtendedConfigFileWatch: (extendedConfigPath: string) => FileWatcher,
+    ) {
+        const extendedSourceFiles = program.getCompilerOptions().configFile?.extendedSourceFiles || [];
+        // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
+        const newExtendedConfigFilesMap = arrayToMap(extendedSourceFiles, identity, returnTrue);
+        // Update the extended config files watcher
+        mutateMap(
+            extendedConfigFilesMap,
+            newExtendedConfigFilesMap,
+            {
+                // Watch the extended config files
+                createNewValue: createExtendedConfigFileWatch,
+                // Config files that are no longer extended should no longer be watched.
+                onDeleteValue: closeFileWatcher
+            }
+        );
+    }
+
+    /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
      */
     export function updateMissingFilePathsWatch(
