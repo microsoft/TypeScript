@@ -8238,6 +8238,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_nativ_6386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les minutages de performances pour '--diagnostics' ou '--extendedDiagnostics' ne sont pas disponibles dans cette session. Une implémentation native de l'API de performances web est introuvable.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
@@ -10554,11 +10563,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La métapropriété 'import.meta' est autorisée uniquement quand l'option '--module' a la valeur 'esnext' ou 'system'.]]></Val>
+            <Val><![CDATA[La métapropriété 'import.meta' est autorisée uniquement quand l'option '--module' a la valeur 'es2020', 'esnext' ou 'system'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

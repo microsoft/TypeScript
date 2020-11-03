@@ -1,0 +1,55 @@
+=== tests/cases/conformance/jsx/jsxs/react.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource react */
+import "./preact";
+const props2 = { answer: 42 }
+>props2 : { answer: number; }
+>{ answer: 42 } : { answer: number; }
+>answer : number
+>42 : 42
+
+const a2 = <div key="foo" {...props2}>text</div>;
+>a2 : JSX.Element
+><div key="foo" {...props2}>text</div> : JSX.Element
+>div : any
+>key : string
+>props2 : { answer: number; }
+>div : any
+
+const b2 = <div {...props2} key="bar">text</div>;
+>b2 : JSX.Element
+><div {...props2} key="bar">text</div> : JSX.Element
+>div : any
+>props2 : { answer: number; }
+>key : string
+>div : any
+
+export {};
+
+=== tests/cases/conformance/jsx/jsxs/preact.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxImportSource preact */
+const props = { answer: 42 }
+>props : { answer: number; }
+>{ answer: 42 } : { answer: number; }
+>answer : number
+>42 : 42
+
+const a = <div key="foo" {...props}>text</div>;
+>a : JSX.Element
+><div key="foo" {...props}>text</div> : JSX.Element
+>div : any
+>key : string
+>props : { answer: number; }
+>div : any
+
+const b = <div {...props} key="bar">text</div>;
+>b : JSX.Element
+><div {...props} key="bar">text</div> : JSX.Element
+>div : any
+>props : { answer: number; }
+>key : string
+>div : any
+
+export {};
+

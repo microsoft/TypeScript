@@ -531,6 +531,51 @@ namespace ts {
     }
 
     /* @internal */
+    export function forEachResolvedProjectReference<T>(
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined
+    ): T | undefined {
+        return forEachProjectReference(/*projectReferences*/ undefined, resolvedProjectReferences, (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent));
+    }
+
+    function forEachProjectReference<T>(
+        projectReferences: readonly ProjectReference[] | undefined,
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, parent: ResolvedProjectReference | undefined, index: number) => T | undefined,
+        cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
+    ): T | undefined {
+        let seenResolvedRefs: Set<Path> | undefined;
+
+        return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
+
+        function worker(
+            projectReferences: readonly ProjectReference[] | undefined,
+            resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+            parent: ResolvedProjectReference | undefined,
+        ): T | undefined {
+
+            // Visit project references first
+            if (cbRef) {
+                const result = cbRef(projectReferences, parent);
+                if (result) { return result; }
+            }
+
+            return forEach(resolvedProjectReferences, (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    // ignore recursives
+                    return undefined;
+                }
+
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+                return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef);
+            });
+        }
+    }
+
+    /* @internal */
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
@@ -735,7 +780,8 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
-        tracing.begin(tracing.Phase.Program, "createProgram", {});
+        const tracingData: tracing.EventData = [tracing.Phase.Program, "createProgram"];
+        tracing.begin(...tracingData);
         performance.mark("beforeProgram");
 
         const host = createProgramOptions.host || createCompilerHost(options);
@@ -821,11 +867,15 @@ namespace ts {
             forEachResolvedProjectReference
         });
 
+        tracing.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
+        tracing.pop();
         // We set `structuralIsReused` to `undefined` because `tryReuseStructureFromOldProgram` calls `tryReuseStructureFromOldProgram` which checks
         // `structuralIsReused`, which would be a TDZ violation if it was not set in advance to `undefined`.
         let structureIsReused: StructureIsReused;
+        tracing.push(tracing.Phase.Program, "tryReuseStructureFromOldProgram", {});
         structureIsReused = tryReuseStructureFromOldProgram(); // eslint-disable-line prefer-const
+        tracing.pop();
         if (structureIsReused !== StructureIsReused.Completely) {
             processingDefaultLibFiles = [];
             processingOtherFiles = [];
@@ -861,12 +911,15 @@ namespace ts {
                 }
             }
 
+            tracing.push(tracing.Phase.Program, "processRootFiles", { count: rootNames.length });
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
+            tracing.pop();
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
             const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
 
             if (typeReferences.length) {
+                tracing.push(tracing.Phase.Program, "processTypeReferences", { count: typeReferences.length });
                 // This containingFilename needs to match with the one used in managed-side
                 const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
                 const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
@@ -874,6 +927,7 @@ namespace ts {
                 for (let i = 0; i < typeReferences.length; i++) {
                     processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }
+                tracing.pop();
             }
 
             // Do not process the default library if:
@@ -914,8 +968,8 @@ namespace ts {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
             }
-            oldProgram.forEachResolvedProjectReference((resolvedProjectReference, resolvedProjectReferencePath) => {
-                if (resolvedProjectReference && !getResolvedProjectReferenceByPath(resolvedProjectReferencePath)) {
+            oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
+                if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
                     host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
                 }
             });
@@ -987,7 +1041,7 @@ namespace ts {
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
-        tracing.end();
+        tracing.end(...tracingData);
 
         return program;
 
@@ -995,21 +1049,25 @@ namespace ts {
             if (!moduleNames.length) return emptyArray;
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
             const redirectedReference = getRedirectReferenceForResolution(containingFile);
+            tracing.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
             performance.mark("beforeResolveModule");
             const result = actualResolveModuleNamesWorker(moduleNames, containingFileName, reusedNames, redirectedReference);
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
+            tracing.pop();
             return result;
         }
 
         function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
             if (!typeDirectiveNames.length) return [];
-            performance.mark("beforeResolveTypeReference");
             const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
             const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
+            tracing.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
+            performance.mark("beforeResolveTypeReference");
             const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference);
             performance.mark("afterResolveTypeReference");
             performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
+            tracing.pop();
             return result;
         }
 
@@ -1038,7 +1096,6 @@ namespace ts {
             if (!source) return undefined;
             // Output of .d.ts file so return resolved ref that matches the out file name
             return forEachResolvedProjectReference(resolvedRef => {
-                if (!resolvedRef) return undefined;
                 const out = outFile(resolvedRef.commandLine.options);
                 if (!out) return undefined;
                 return toPath(out) === filePath ? resolvedRef : undefined;
@@ -1251,7 +1308,7 @@ namespace ts {
             return !forEachProjectReference(
                 oldProgram!.getProjectReferences(),
                 oldProgram!.getResolvedProjectReferences(),
-                (oldResolvedRef, index, parent) => {
+                (oldResolvedRef, parent, index) => {
                     const newRef = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                     const newResolvedRef = parseProjectReferenceConfigFile(newRef);
                     if (oldResolvedRef) {
@@ -1546,7 +1603,8 @@ namespace ts {
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
             Debug.assert(!outFile(options));
-            tracing.begin(tracing.Phase.Emit, "emitBuildInfo", {});
+            const tracingData: tracing.EventData = [tracing.Phase.Emit, "emitBuildInfo"];
+            tracing.begin(...tracingData);
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
                 notImplementedResolver,
@@ -1559,7 +1617,7 @@ namespace ts {
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
-            tracing.end();
+            tracing.end(...tracingData);
             return emitResult;
         }
 
@@ -1620,9 +1678,10 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
-            tracing.begin(tracing.Phase.Emit, "emit", { path: sourceFile?.path });
+            const tracingData: tracing.EventData = [tracing.Phase.Emit, "emit", { path: sourceFile?.path }];
+            tracing.begin(...tracingData);
             const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
-            tracing.end();
+            tracing.end(...tracingData);
             return result;
         }
 
@@ -2115,9 +2174,7 @@ namespace ts {
             if (!options.configFile) { return emptyArray; }
             let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
             forEachResolvedProjectReference(resolvedRef => {
-                if (resolvedRef) {
-                    diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
-                }
+                diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
             });
             return diagnostics;
         }
@@ -2144,6 +2201,19 @@ namespace ts {
                 : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
+        function createSyntheticImport(text: string, file: SourceFile) {
+            const externalHelpersModuleReference = factory.createStringLiteral(text);
+            const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+            addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+            setParent(externalHelpersModuleReference, importDecl);
+            setParent(importDecl, file);
+            // explicitly unset the synthesized flag on these declarations so the checker API will answer questions about them
+            // (which is required to build the dependency graph for incremental emit)
+            (externalHelpersModuleReference as Mutable<Node>).flags &= ~NodeFlags.Synthesized;
+            (importDecl as Mutable<Node>).flags &= ~NodeFlags.Synthesized;
+            return externalHelpersModuleReference;
+        }
+
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
@@ -2159,16 +2229,17 @@ namespace ts {
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
             // helpers library.
-            if (options.importHelpers
-                && (options.isolatedModules || isExternalModuleFile)
+            if ((options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
-                // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
-                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
-                addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                setParent(externalHelpersModuleReference, importDecl);
-                setParent(importDecl, file);
-                imports = [externalHelpersModuleReference];
+                if (options.importHelpers) {
+                    // synthesize 'import "tslib"' declaration
+                    imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
+                }
+                const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
+                if (jsxImport) {
+                    // synthesize `import "base/jsx-runtime"` declaration
+                    (imports ||= []).push(createSyntheticImport(jsxImport, file));
+                }
             }
 
             for (const node of file.statements) {
@@ -2381,6 +2452,17 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: RefFile | undefined, packageId: PackageId | undefined): SourceFile | undefined {
+            tracing.push(tracing.Phase.Program, "findSourceFile", {
+                fileName,
+                isDefaultLib: isDefaultLib || undefined,
+                refKind: refFile ? (RefFileKind as any)[refFile.kind] : undefined,
+            });
+            const result = findSourceFileWorker(fileName, path, isDefaultLib, ignoreNoDefaultLib, refFile, packageId);
+            tracing.pop();
+            return result;
+        }
+
+        function findSourceFileWorker(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: RefFile | undefined, packageId: PackageId | undefined): SourceFile | undefined {
             if (useSourceOfProjectReferenceRedirect) {
                 let source = getSourceOfProjectReferenceRedirect(fileName);
                 // If preserveSymlinks is true, module resolution wont jump the symlink
@@ -2597,12 +2679,11 @@ namespace ts {
         function getResolvedProjectReferenceToRedirect(fileName: string) {
             if (mapFromFileToProjectReferenceRedirects === undefined) {
                 mapFromFileToProjectReferenceRedirects = new Map();
-                forEachResolvedProjectReference((referencedProject, referenceProjectPath) => {
+                forEachResolvedProjectReference(referencedProject => {
                     // not input file from the referenced project, ignore
-                    if (referencedProject &&
-                        toPath(options.configFilePath!) !== referenceProjectPath) {
+                    if (toPath(options.configFilePath!) !== referencedProject.sourceFile.path) {
                         referencedProject.commandLine.fileNames.forEach(f =>
-                            mapFromFileToProjectReferenceRedirects!.set(toPath(f), referenceProjectPath));
+                            mapFromFileToProjectReferenceRedirects!.set(toPath(f), referencedProject.sourceFile.path));
                     }
                 });
             }
@@ -2612,13 +2693,9 @@ namespace ts {
         }
 
         function forEachResolvedProjectReference<T>(
-            cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined
+            cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined
         ): T | undefined {
-            return forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
-                const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
-                const resolvedRefPath = toPath(resolveProjectReferencePath(ref));
-                return cb(resolvedRef, resolvedRefPath);
-            });
+            return ts.forEachResolvedProjectReference(resolvedProjectReferences, cb);
         }
 
         function getSourceOfProjectReferenceRedirect(file: string) {
@@ -2626,21 +2703,19 @@ namespace ts {
             if (mapFromToProjectReferenceRedirectSource === undefined) {
                 mapFromToProjectReferenceRedirectSource = new Map();
                 forEachResolvedProjectReference(resolvedRef => {
-                    if (resolvedRef) {
-                        const out = outFile(resolvedRef.commandLine.options);
-                        if (out) {
-                            // Dont know which source file it means so return true?
-                            const outputDts = changeExtension(out, Extension.Dts);
-                            mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), true);
-                        }
-                        else {
-                            forEach(resolvedRef.commandLine.fileNames, fileName => {
-                                if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
-                                    const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
-                                    mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
-                                }
-                            });
-                        }
+                    const out = outFile(resolvedRef.commandLine.options);
+                    if (out) {
+                        // Dont know which source file it means so return true?
+                        const outputDts = changeExtension(out, Extension.Dts);
+                        mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), true);
+                    }
+                    else {
+                        forEach(resolvedRef.commandLine.fileNames, fileName => {
+                            if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
+                                const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
+                                mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
+                            }
+                        });
                     }
                 });
             }
@@ -2649,49 +2724,6 @@ namespace ts {
 
         function isSourceOfProjectReferenceRedirect(fileName: string) {
             return useSourceOfProjectReferenceRedirect && !!getResolvedProjectReferenceToRedirect(fileName);
-        }
-
-        function forEachProjectReference<T>(
-            projectReferences: readonly ProjectReference[] | undefined,
-            resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-            cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
-            cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
-        ): T | undefined {
-            let seenResolvedRefs: ResolvedProjectReference[] | undefined;
-
-            return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined, cbResolvedRef, cbRef);
-
-            function worker(
-                projectReferences: readonly ProjectReference[] | undefined,
-                resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-                parent: ResolvedProjectReference | undefined,
-                cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
-                cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
-            ): T | undefined {
-
-                // Visit project references first
-                if (cbRef) {
-                    const result = cbRef(projectReferences, parent);
-                    if (result) { return result; }
-                }
-
-                return forEach(resolvedProjectReferences, (resolvedRef, index) => {
-                    if (contains(seenResolvedRefs, resolvedRef)) {
-                        // ignore recursives
-                        return undefined;
-                    }
-
-                    const result = cbResolvedRef(resolvedRef, index, parent);
-                    if (result) {
-                        return result;
-                    }
-
-                    if (!resolvedRef) return undefined;
-
-                    (seenResolvedRefs || (seenResolvedRefs = [])).push(resolvedRef);
-                    return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef, cbResolvedRef, cbRef);
-                });
-            }
         }
 
         function getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined {
@@ -2751,6 +2783,16 @@ namespace ts {
         }
 
         function processTypeReferenceDirective(
+            typeReferenceDirective: string,
+            resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective,
+            refFile?: RefFile
+        ): void {
+            tracing.push(tracing.Phase.Program, "processTypeReferenceDirective", { directive: typeReferenceDirective, hasResolved: !!resolveModuleNamesReusingOldState, refKind: refFile?.kind, refPath: refFile?.file.path });
+            processTypeReferenceDirectiveWorker(typeReferenceDirective, resolvedTypeReferenceDirective, refFile);
+            tracing.pop();
+        }
+
+        function processTypeReferenceDirectiveWorker(
             typeReferenceDirective: string,
             resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective,
             refFile?: RefFile
@@ -3348,7 +3390,7 @@ namespace ts {
 
         function verifyProjectReferences() {
             const buildInfoPath = !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
-            forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
+            forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
                 if (!resolvedRef) {
@@ -3546,7 +3588,7 @@ namespace ts {
         toPath(fileName: string): Path;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
         getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     }
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
@@ -3576,7 +3618,6 @@ namespace ts {
                 if (!setOfDeclarationDirectories) {
                     setOfDeclarationDirectories = new Set();
                     host.forEachResolvedProjectReference(ref => {
-                        if (!ref) return;
                         const out = outFile(ref.commandLine.options);
                         if (out) {
                             setOfDeclarationDirectories!.add(getDirectoryPath(host.toPath(out)));

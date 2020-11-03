@@ -8225,6 +8225,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_nativ_6386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Временные показатели производительности для параметров "--diagnostics" и "--extendedDiagnostics" недоступны в этом сеансе. Не удалось найти стандартную реализацию API веб-производительности.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>

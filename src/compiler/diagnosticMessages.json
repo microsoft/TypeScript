@@ -1004,7 +1004,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.": {
         "category": "Error",
         "code": 1343
     },
@@ -3428,6 +3428,10 @@
         "category": "Error",
         "code": 4110
     },
+    "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
+        "category": "Error",
+        "code": 4111
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4719,6 +4723,10 @@
         "code": 6385,
         "reportsDeprecated": true
     },
+    "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
+        "category": "Message",
+        "code": 6386
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4739,6 +4747,10 @@
     "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
         "category": "Error",
         "code": 6504
+    },
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Error",
+        "code": 6803
     },
 
     "Include 'undefined' in index signature results": {
@@ -5954,6 +5966,18 @@
     "Add 'void' to all Promises resolved without a value": {
         "category": "Message",
         "code": 95144
+    },
+    "Use element access for '{0}'": {
+        "category": "Message",
+        "code": 95145
+    },
+    "Use element access for all undeclared properties.": {
+        "category": "Message",
+        "code": 95146
+    },
+    "Delete all unused imports": {
+        "category": "Message",
+        "code": 95147
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

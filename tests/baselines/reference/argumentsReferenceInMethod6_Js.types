@@ -1,0 +1,19 @@
+=== /a.js ===
+class A {
+>A : A
+
+	m() {
+>m : (...args: any[]) => void
+
+		/**
+		 * @type object
+		 */
+		this.foo = arguments;
+>this.foo = arguments : IArguments
+>this.foo : any
+>this : this
+>foo : any
+>arguments : IArguments
+	}
+}
+

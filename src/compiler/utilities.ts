@@ -3621,6 +3621,19 @@ namespace ts {
         return -1;
     }
 
+    export function getSemanticJsxChildren(children: readonly JsxChild[]) {
+        return filter(children, i => {
+            switch (i.kind) {
+                case SyntaxKind.JsxExpression:
+                    return !!i.expression;
+                case SyntaxKind.JsxText:
+                    return !i.containsOnlyTriviaWhiteSpaces;
+                default:
+                    return true;
+            }
+        });
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
         const filesWithDiagnostics = [] as string[] as SortedArray<string>;
@@ -3831,13 +3844,15 @@ namespace ts {
 
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
-        if (indentStrings[level] === undefined) {
-            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        // prepopulate cache
+        const singleLevel = indentStrings[1];
+        for (let current = indentStrings.length; current <= level; current++) {
+            indentStrings.push(indentStrings[current - 1] + singleLevel);
         }
         return indentStrings[level];
     }
@@ -5994,8 +6009,8 @@ namespace ts {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
     }
 
-    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
-        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
         const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
@@ -6003,6 +6018,10 @@ namespace ts {
             jsxImportSourcePragma ?
                 jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
                 undefined;
+    }
+
+    export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
+        return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -6690,9 +6709,11 @@ namespace ts {
         return { pos: getTokenPosOfNode(node), end: node.end };
     }
 
-    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+    export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
         // Include the `<>`
-        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
+        const pos = typeParameters.pos - 1;
+        const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+        return { pos, end };
     }
 
     export interface HostWithIsSourceOfProjectReferenceRedirect {
