@@ -565,7 +565,7 @@ namespace ts.server {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
             if (process.env.TSS_TRACE) {
-                ts.tracing.stopTracing(ts.emptyArray);
+                tracing.stopTracing(ts.emptyArray);
             }
             process.exit(0);
         }
@@ -982,7 +982,7 @@ namespace ts.server {
 
     const traceDir = process.env.TSS_TRACE;
     if (traceDir) {
-        ts.tracing.startTracing(tracing.Mode.Server, traceDir);
+        tracing.startTracing(tracing.Mode.Server, traceDir);
     }
 
     logger.info(`Starting TS Server`);
