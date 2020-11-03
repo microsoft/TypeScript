@@ -38417,7 +38417,10 @@ namespace ts {
                 isOptionalParameter,
                 moduleExportsSomeValue,
                 isArgumentsLocalBinding,
-                getExternalModuleFileFromDeclaration,
+                getExternalModuleFileFromDeclaration: nodeIn => {
+                    const node = getParseTreeNode(nodeIn, hasPossibleExternalModuleReference);
+                    return node && getExternalModuleFileFromDeclaration(node);
+                },
                 getTypeReferenceDirectivesForEntityName,
                 getTypeReferenceDirectivesForSymbol,
                 isLiteralConstDeclaration,
@@ -38578,7 +38581,7 @@ namespace ts {
             }
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration | ImportTypeNode): SourceFile | undefined {
+        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined {
             const specifier = declaration.kind === SyntaxKind.ModuleDeclaration ? tryCast(declaration.name, isStringLiteral) : getExternalModuleName(declaration);
             const moduleSymbol = resolveExternalModuleNameWorker(specifier!, specifier!, /*moduleNotFoundError*/ undefined); // TODO: GH#18217
             if (!moduleSymbol) {

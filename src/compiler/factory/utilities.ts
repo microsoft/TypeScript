@@ -511,12 +511,12 @@ namespace ts {
      *  3- The containing SourceFile has an entry in renamedDependencies for the import as requested by some module loaders (e.g. System).
      * Otherwise, a new StringLiteral node representing the module name will be returned.
      */
-    export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
-        const moduleName = getExternalModuleName(importNode)!; // TODO: GH#18217
-        if (moduleName.kind === SyntaxKind.StringLiteral) {
+    export function getExternalModuleNameLiteral(factory: NodeFactory, importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration | ImportCall, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+        const moduleName = getExternalModuleName(importNode);
+        if (moduleName && isStringLiteral(moduleName)) {
             return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
-                || tryRenameExternalModule(factory, <StringLiteral>moduleName, sourceFile)
-                || factory.cloneNode(<StringLiteral>moduleName);
+                || tryRenameExternalModule(factory, moduleName, sourceFile)
+                || factory.cloneNode(moduleName);
         }
 
         return undefined;
@@ -528,7 +528,7 @@ namespace ts {
      */
     function tryRenameExternalModule(factory: NodeFactory, moduleName: LiteralExpression, sourceFile: SourceFile) {
         const rename = sourceFile.renamedDependencies && sourceFile.renamedDependencies.get(moduleName.text);
-        return rename && factory.createStringLiteral(rename);
+        return rename ? factory.createStringLiteral(rename) : undefined;
     }
 
     /**
@@ -551,7 +551,7 @@ namespace ts {
         return undefined;
     }
 
-    function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration, host: EmitHost, factory: NodeFactory, resolver: EmitResolver, compilerOptions: CompilerOptions) {
+    function tryGetModuleNameFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ImportCall, host: EmitHost, factory: NodeFactory, resolver: EmitResolver, compilerOptions: CompilerOptions) {
         return tryGetModuleNameFromFile(factory, resolver.getExternalModuleFileFromDeclaration(declaration), host, compilerOptions);
     }
 
