@@ -62,21 +62,13 @@ Output::
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-
 /a/lib/lib.d.ts
-
 /user/username/projects/myproject/pkg1/dist/types.d.ts
-
 /user/username/projects/myproject/pkg1/dist/index.d.ts
-
 /user/username/projects/myproject/pkg2/dist/types.d.ts
-
 /user/username/projects/myproject/pkg2/dist/index.d.ts
-
 /user/username/projects/myproject/pkg3/src/keys.ts
-
 /user/username/projects/myproject/pkg3/src/index.ts
-
 
 Found 1 error.
 
@@ -84,6 +76,7 @@ Found 1 error.
 
 Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","listFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/pkg1/dist/types.d.ts

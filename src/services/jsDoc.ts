@@ -138,7 +138,8 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
-                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
+            case SyntaxKind.JSDocSeeTag:
+                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
                 return name ? withNode(name) : comment;
             default:
                 return comment;
@@ -163,7 +164,7 @@ namespace ts.JsDoc {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0",
+                sortText: Completions.SortText.LocationPriority,
             };
         }));
     }
@@ -176,7 +177,7 @@ namespace ts.JsDoc {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0"
+                sortText: Completions.SortText.LocationPriority
             };
         }));
     }
@@ -211,7 +212,7 @@ namespace ts.JsDoc {
                 return undefined;
             }
 
-            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
         });
     }
 
@@ -328,6 +329,7 @@ namespace ts.JsDoc {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.ArrowFunction:
                 const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                 return { commentOwner, parameters };
 

@@ -111,7 +111,7 @@ for ({ name, skills: { primary, secondary } } =
 }
 
 //// [sourceMapValidationDestructuringForObjectBindingPattern2.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
 var robot = { name: "mower", skill: "mowing" };
 var multiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 function getRobot() {
@@ -122,79 +122,79 @@ function getMultiRobot() {
 }
 var nameA, primaryA, secondaryA, i, skillA;
 var name, primary, secondary, skill;
-for (nameA = robot.name, robot, i = 0; i < 1; i++) {
+for (nameA = robot.name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_a = getRobot(), nameA = _a.name, _a, i = 0; i < 1; i++) {
+for (nameA = getRobot().name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_b = { name: "trimmer", skill: "trimming" }, nameA = _b.name, _b, i = 0; i < 1; i++) {
+for (nameA = { name: "trimmer", skill: "trimming" }.name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_c = multiRobot.skills, primaryA = _c.primary, secondaryA = _c.secondary, multiRobot, i = 0; i < 1; i++) {
+for (_a = multiRobot.skills, primaryA = _a.primary, secondaryA = _a.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_d = getMultiRobot(), _e = _d.skills, primaryA = _e.primary, secondaryA = _e.secondary, _d, i = 0; i < 1; i++) {
+for (_b = getMultiRobot().skills, primaryA = _b.primary, secondaryA = _b.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_f = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, _g = _f.skills, primaryA = _g.primary, secondaryA = _g.secondary, _f,
+for (_c = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }.skills, primaryA = _c.primary, secondaryA = _c.secondary,
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (name = robot.name, robot, i = 0; i < 1; i++) {
+for (name = robot.name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_h = getRobot(), name = _h.name, _h, i = 0; i < 1; i++) {
+for (name = getRobot().name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_j = { name: "trimmer", skill: "trimming" }, name = _j.name, _j, i = 0; i < 1; i++) {
+for (name = { name: "trimmer", skill: "trimming" }.name, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_k = multiRobot.skills, primary = _k.primary, secondary = _k.secondary, multiRobot, i = 0; i < 1; i++) {
+for (_d = multiRobot.skills, primary = _d.primary, secondary = _d.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_l = getMultiRobot(), _m = _l.skills, primary = _m.primary, secondary = _m.secondary, _l, i = 0; i < 1; i++) {
+for (_e = getMultiRobot().skills, primary = _e.primary, secondary = _e.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_o = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, _p = _o.skills, primary = _p.primary, secondary = _p.secondary, _o,
+for (_f = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }.skills, primary = _f.primary, secondary = _f.secondary,
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (nameA = robot.name, skillA = robot.skill, robot, i = 0; i < 1; i++) {
+for (nameA = robot.name, skillA = robot.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_q = getRobot(), nameA = _q.name, skillA = _q.skill, _q, i = 0; i < 1; i++) {
+for (_g = getRobot(), nameA = _g.name, skillA = _g.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_r = { name: "trimmer", skill: "trimming" }, nameA = _r.name, skillA = _r.skill, _r, i = 0; i < 1; i++) {
+for (_h = { name: "trimmer", skill: "trimming" }, nameA = _h.name, skillA = _h.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (nameA = multiRobot.name, _s = multiRobot.skills, primaryA = _s.primary, secondaryA = _s.secondary, multiRobot, i = 0; i < 1; i++) {
+for (nameA = multiRobot.name, _j = multiRobot.skills, primaryA = _j.primary, secondaryA = _j.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_t = getMultiRobot(), nameA = _t.name, _u = _t.skills, primaryA = _u.primary, secondaryA = _u.secondary, _t, i = 0; i < 1; i++) {
+for (_k = getMultiRobot(), nameA = _k.name, _l = _k.skills, primaryA = _l.primary, secondaryA = _l.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_v = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, nameA = _v.name, _w = _v.skills, primaryA = _w.primary, secondaryA = _w.secondary, _v,
+for (_m = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, nameA = _m.name, _o = _m.skills, primaryA = _o.primary, secondaryA = _o.secondary,
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (name = robot.name, skill = robot.skill, robot, i = 0; i < 1; i++) {
+for (name = robot.name, skill = robot.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_x = getRobot(), name = _x.name, skill = _x.skill, _x, i = 0; i < 1; i++) {
+for (_p = getRobot(), name = _p.name, skill = _p.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (_y = { name: "trimmer", skill: "trimming" }, name = _y.name, skill = _y.skill, _y, i = 0; i < 1; i++) {
+for (_q = { name: "trimmer", skill: "trimming" }, name = _q.name, skill = _q.skill, i = 0; i < 1; i++) {
     console.log(nameA);
 }
-for (name = multiRobot.name, _z = multiRobot.skills, primary = _z.primary, secondary = _z.secondary, multiRobot, i = 0; i < 1; i++) {
+for (name = multiRobot.name, _r = multiRobot.skills, primary = _r.primary, secondary = _r.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_0 = getMultiRobot(), name = _0.name, _1 = _0.skills, primary = _1.primary, secondary = _1.secondary, _0, i = 0; i < 1; i++) {
+for (_s = getMultiRobot(), name = _s.name, _t = _s.skills, primary = _t.primary, secondary = _t.secondary, i = 0; i < 1; i++) {
     console.log(primaryA);
 }
-for (_2 = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, name = _2.name, _3 = _2.skills, primary = _3.primary, secondary = _3.secondary, _2,
+for (_u = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }, name = _u.name, _v = _u.skills, primary = _v.primary, secondary = _v.secondary,
     i = 0; i < 1; i++) {
     console.log(primaryA);
 }

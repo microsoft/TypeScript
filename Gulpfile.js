@@ -413,7 +413,7 @@ const cleanTypesMap = () => del("built/local/typesMap.json");
 cleanTasks.push(cleanTypesMap);
 
 // Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
-// it to be synced to the Azure DevOps repo, so that it can get picked up by the build 
+// it to be synced to the Azure DevOps repo, so that it can get picked up by the build
 // pipeline that generates the localization artifacts that are then fed into the translation process.
 const builtLocalDiagnosticMessagesGeneratedJson = "built/local/diagnosticMessages.generated.json";
 const copyBuiltLocalDiagnosticMessages = () => src(diagnosticMessagesGeneratedJson)
@@ -591,7 +591,7 @@ task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",
 };
 
-const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification.docx"), path.resolve("doc/spec.md")]);
+const generateSpec = () => exec("cscript", ["//nologo", "scripts/word2md.js", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]);
 task("generate-spec", series(buildScripts, generateSpec));
 task("generate-spec").description = "Generates a Markdown version of the Language Specification";
 

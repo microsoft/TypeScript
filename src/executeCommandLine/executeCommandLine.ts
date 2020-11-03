@@ -456,6 +456,7 @@ namespace ts {
         updateSolutionBuilderHost(sys, cb, buildHost);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
+        tracing.dumpLegend();
         return sys.exit(exitStatus);
     }
 
@@ -476,7 +477,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        enableStatistics(sys, options);
+        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
 
         const programOptions: CreateProgramOptions = {
             rootNames: fileNames,
@@ -504,7 +505,7 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
-        enableStatistics(sys, options);
+        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
         const host = createIncrementalCompilerHost(options, sys);
         const exitStatus = ts.performIncrementalCompilation({
             host,
@@ -541,7 +542,7 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatistics(sys, options);
+                enableStatisticsAndTracing(sys, options, /*isBuildMode*/ true);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
@@ -610,15 +611,28 @@ namespace ts {
         return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
     }
 
-    function enableStatistics(sys: System, compilerOptions: CompilerOptions) {
-        if (canReportDiagnostics(sys, compilerOptions)) {
+    function canTrace(system: System, compilerOptions: CompilerOptions) {
+        return system === sys && compilerOptions.generateTrace;
+    }
+
+    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
+        if (canReportDiagnostics(system, compilerOptions)) {
             performance.enable();
+        }
+
+        if (canTrace(system, compilerOptions)) {
+            tracing.startTracing(compilerOptions.configFilePath, compilerOptions.generateTrace!, isBuildMode);
         }
     }
 
     function reportStatistics(sys: System, program: Program) {
-        let statistics: Statistic[];
         const compilerOptions = program.getCompilerOptions();
+
+        if (canTrace(sys, compilerOptions)) {
+            tracing.stopTracing(program.getTypeCatalog());
+        }
+
+        let statistics: Statistic[];
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
@@ -634,19 +648,22 @@ namespace ts {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");
             }
 
-            const programTime = performance.getDuration("Program");
-            const bindTime = performance.getDuration("Bind");
-            const checkTime = performance.getDuration("Check");
-            const emitTime = performance.getDuration("Emit");
+            const isPerformanceEnabled = performance.isEnabled();
+            const programTime = isPerformanceEnabled ? performance.getDuration("Program") : 0;
+            const bindTime = isPerformanceEnabled ? performance.getDuration("Bind") : 0;
+            const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
+            const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
                 const caches = program.getRelationCacheSizes();
                 reportCountStatistic("Assignability cache size", caches.assignable);
                 reportCountStatistic("Identity cache size", caches.identity);
                 reportCountStatistic("Subtype cache size", caches.subtype);
                 reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
-                performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                if (isPerformanceEnabled) {
+                    performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+                }
             }
-            else {
+            else if (isPerformanceEnabled) {
                 // Individual component times.
                 // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
                 // I/O read time and processing time for triple-slash references and module imports, and the reported
@@ -658,10 +675,16 @@ namespace ts {
                 reportTimeStatistic("Check time", checkTime);
                 reportTimeStatistic("Emit time", emitTime);
             }
-            reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            if (isPerformanceEnabled) {
+                reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
+            }
             reportStatistics();
-
-            performance.disable();
+            if (!isPerformanceEnabled) {
+                sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+            }
+            else {
+                performance.disable();
+            }
         }
 
         function reportStatistics() {

@@ -5,20 +5,20 @@
 //// /** @deprecated */
 //// declare function foo(): undefined;
 //// declare function foo (a?: string): number | undefined;
-//// [|foo()|];
+//// [|foo|]();
 //// foo('');
 //// foo;
 
 //// /** @deprecated */
 //// declare function bar(): number;
-//// [|bar()|];
+//// [|bar|]();
 //// [|bar|];
 
 //// /** @deprecated */
 //// declare function baz(): number;
 //// /** @deprecated */
 //// declare function baz(): number | undefined;
-//// [|baz()|];
+//// [|baz|]();
 //// [|baz|];
 
 //// interface Foo {
@@ -27,7 +27,7 @@
 ////     (a: number): void
 //// }
 //// declare const f: Foo;
-//// [|f()|];
+//// [|f|]();
 //// f(1);
 
 //// interface T {
@@ -37,7 +37,7 @@
 //// }
 //// declare const t: T;
 //// t.createElement();
-//// [|t.createElement('xmp')|];
+//// t.[|createElement|]('xmp');
 
 //// declare class C {
 ////     /** @deprecated */
@@ -45,7 +45,7 @@
 ////     constructor(v: string)
 //// }
 //// C;
-//// const c = [|new C()|];
+//// const c = new [|C|]();
 
 //// interface Ca {
 ////     /** @deprecated */
@@ -61,10 +61,10 @@
 //// declare const cb: Cb;
 //// ca;
 //// cb;
-//// [|ca()|];
+//// [|ca|]();
 //// cb();
 //// new ca();
-//// [|new cb()|];
+//// new [|cb|]();
 
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([

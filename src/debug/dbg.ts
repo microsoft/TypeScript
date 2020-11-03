@@ -11,6 +11,10 @@ namespace Debug {
     type MethodDeclaration = Node;
     type Expression = Node;
     type SourceFile = Node;
+    type VariableDeclaration = Node;
+    type BindingElement = Node;
+    type CallExpression = Node;
+    type BinaryExpression = Node;
 
     interface SwitchStatement extends Node {
         caseBlock: CaseBlock;
@@ -59,8 +63,6 @@ namespace Debug {
     }
 
     type FlowNode =
-        | AfterFinallyFlow
-        | PreFinallyFlow
         | FlowStart
         | FlowLabel
         | FlowAssignment
@@ -76,14 +78,6 @@ namespace Debug {
         id?: number;
     }
 
-    interface AfterFinallyFlow extends FlowNodeBase {
-        antecedent: FlowNode;
-    }
-
-    interface PreFinallyFlow extends FlowNodeBase {
-        antecedent: FlowNode;
-    }
-
     interface FlowStart extends FlowNodeBase {
         node?: FunctionExpression | ArrowFunction | MethodDeclaration;
     }
@@ -93,12 +87,12 @@ namespace Debug {
     }
 
     interface FlowAssignment extends FlowNodeBase {
-        node: Expression;
+        node: Expression | VariableDeclaration | BindingElement;
         antecedent: FlowNode;
     }
 
     interface FlowCall extends FlowNodeBase {
-        node: Expression;
+        node: CallExpression;
         antecedent: FlowNode;
     }
 
@@ -115,7 +109,7 @@ namespace Debug {
     }
 
     interface FlowArrayMutation extends FlowNodeBase {
-        node: Expression;
+        node: CallExpression | BinaryExpression;
         antecedent: FlowNode;
     }
 
@@ -192,6 +186,7 @@ namespace Debug {
             lane: number;
             endLane: number;
             level: number;
+            circular: boolean | "circularity";
         }
 
         interface FlowGraphEdge {
@@ -217,8 +212,9 @@ namespace Debug {
         const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
         const nodes: FlowGraphNode[] = [];
         const edges: FlowGraphEdge[] = [];
-        const root = buildGraphNode(flowNode);
+        const root = buildGraphNode(flowNode, new Set());
         for (const node of nodes) {
+            node.text = renderFlowNode(node.flowNode, node.circular);
             computeLevel(node);
         }
 
@@ -263,26 +259,43 @@ namespace Debug {
             return parents;
         }
 
-        function buildGraphNode(flowNode: FlowNode) {
+        function buildGraphNode(flowNode: FlowNode, seen: Set<FlowNode>): FlowGraphNode {
             const id = getDebugFlowNodeId(flowNode);
             let graphNode = links[id];
+            if (graphNode && seen.has(flowNode)) {
+                graphNode.circular = true;
+                graphNode = {
+                    id: -1,
+                    flowNode,
+                    edges: [],
+                    text: "",
+                    lane: -1,
+                    endLane: -1,
+                    level: -1,
+                    circular: "circularity"
+                };
+                nodes.push(graphNode);
+                return graphNode;
+            }
+            seen.add(flowNode);
             if (!graphNode) {
-                links[id] = graphNode = { id, flowNode, edges: [], text: renderFlowNode(flowNode), lane: -1, endLane: -1, level: -1 };
+                links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
                 nodes.push(graphNode);
                 if (hasAntecedents(flowNode)) {
                     for (const antecedent of flowNode.antecedents) {
-                        buildGraphEdge(graphNode, antecedent);
+                        buildGraphEdge(graphNode, antecedent, seen);
                     }
                 }
                 else if (hasAntecedent(flowNode)) {
-                    buildGraphEdge(graphNode, flowNode.antecedent);
+                    buildGraphEdge(graphNode, flowNode.antecedent, seen);
                 }
             }
+            seen.delete(flowNode);
             return graphNode;
         }
 
-        function buildGraphEdge(source: FlowGraphNode, antecedent: FlowNode) {
-            const target = buildGraphNode(antecedent);
+        function buildGraphEdge(source: FlowGraphNode, antecedent: FlowNode, seen: Set<FlowNode>) {
+            const target = buildGraphNode(antecedent, seen);
             const edge: FlowGraphEdge = { source, target };
             edges.push(edge);
             source.edges.push(edge);
@@ -353,8 +366,11 @@ namespace Debug {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node, /*includeTrivia*/ false);
         }
 
-        function renderFlowNode(flowNode: FlowNode) {
+        function renderFlowNode(flowNode: FlowNode, circular: boolean | "circularity") {
             let text = getHeader(flowNode.flags);
+            if (circular) {
+                text = `${text}#${getDebugFlowNodeId(flowNode)}`;
+            }
             if (hasNode(flowNode)) {
                 if (flowNode.node) {
                     text += ` (${getNodeText(flowNode.node)})`;
@@ -373,7 +389,7 @@ namespace Debug {
                 }
                 text += ` (${clauses.join(", ")})`;
             }
-            return text;
+            return circular === "circularity" ? `Circular(${text})` : text;
         }
 
         function renderGraph() {

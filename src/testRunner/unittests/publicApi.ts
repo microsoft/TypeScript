@@ -104,4 +104,23 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         assert.ok(!(type.flags & ts.TypeFlags.Any));
         assert.equal(type, checker.getTypeAtLocation(propertyAccess.name));
     });
+
+    it("works on SourceFile", () => {
+        const content = `const foo = 1;`;
+        const host = new fakes.CompilerHost(vfs.createFromFileSystem(
+            Harness.IO,
+            /*ignoreCase*/ true,
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+
+        const program = ts.createProgram({
+            host,
+            rootNames: ["/file.ts"],
+            options: { noLib: true }
+        });
+
+        const checker = program.getTypeChecker();
+        const file = program.getSourceFile("/file.ts")!;
+        const type = checker.getTypeAtLocation(file);
+        assert.equal(type.flags, ts.TypeFlags.Any);
+    });
 });

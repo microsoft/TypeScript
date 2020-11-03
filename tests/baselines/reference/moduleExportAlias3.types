@@ -4,10 +4,10 @@ class C {
 >C : C
 }
 module.exports = {
->module.exports = {    C} : { C: typeof C; }
->module.exports : { C: typeof C; }
->module : { "\"tests/cases/conformance/salsa/bug24062\"": { C: typeof C; }; }
->exports : { C: typeof C; }
+>module.exports = {    C} : typeof import("tests/cases/conformance/salsa/bug24062")
+>module.exports : typeof import("tests/cases/conformance/salsa/bug24062")
+>module : { "\"tests/cases/conformance/salsa/bug24062\"": typeof import("tests/cases/conformance/salsa/bug24062"); }
+>exports : typeof import("tests/cases/conformance/salsa/bug24062")
 >{    C} : { C: typeof C; }
 
     C

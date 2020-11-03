@@ -38,7 +38,6 @@ Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
-
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -49,13 +48,13 @@ Output::
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -164,7 +163,6 @@ Output::
 >> Screen clear
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
 [7m4[0m ;
@@ -175,13 +173,13 @@ Output::
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -227,13 +225,13 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:10 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -361,12 +359,10 @@ Output::
 >> Screen clear
 [[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
-
 
 [[90m12:01:18 AM[0m] Found 1 error. Watching for file changes.
 
@@ -374,6 +370,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -483,12 +480,10 @@ Output::
 >> Screen clear
 [[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
-
 
 [[90m12:01:23 AM[0m] Found 1 error. Watching for file changes.
 
@@ -496,6 +491,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -539,13 +535,13 @@ Output::
 >> Screen clear
 [[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:37 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -644,13 +640,13 @@ Output::
 >> Screen clear
 [[90m12:01:41 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts

@@ -44,16 +44,12 @@ Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:32 AM[0m] Projects in this build: 
     * tsconfig.json
 
-
 [[90m12:00:33 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
 
-
 [[90m12:00:34 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
@@ -65,13 +61,13 @@ Output::
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:35 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -108,12 +104,9 @@ Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:40 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
 
-
 [[90m12:00:41 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [96msrc/main.ts[0m:[93m4[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m',' expected.
 
@@ -125,13 +118,13 @@ Output::
     [7m [0m [96m          ~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -173,12 +166,9 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:47 AM[0m] Project 'tsconfig.json' is out of date because output file 'dev-build/shared/types/db.js' does not exist
 
-
 [[90m12:00:48 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [[90m12:01:07 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -186,6 +176,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -296,18 +287,14 @@ Output::
 >> Screen clear
 [[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:12 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
-
 [[90m12:01:13 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
-
 
 [[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
 
@@ -315,6 +302,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -418,18 +406,14 @@ Output::
 >> Screen clear
 [[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:22 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
-
 [[90m12:01:23 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
-
 
 [[90m12:01:24 AM[0m] Found 1 error. Watching for file changes.
 
@@ -437,6 +421,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -476,15 +461,11 @@ Output::
 >> Screen clear
 [[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:29 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
-
 
 [[90m12:01:30 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-
 [[90m12:01:38 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [[90m12:01:39 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -492,6 +473,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -585,15 +567,11 @@ Output::
 >> Screen clear
 [[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:44 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
-
 
 [[90m12:01:45 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
-
 [[90m12:01:47 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
-
 
 [[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -601,6 +579,7 @@ Output::
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
 Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
