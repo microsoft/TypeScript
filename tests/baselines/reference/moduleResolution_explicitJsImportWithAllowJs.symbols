@@ -2,7 +2,9 @@
 import { x } from "./module-a.js";
 >x : Symbol(x, Decl(index.ts, 0, 8))
 
-=== /src/module-a.d.ts ===
-export const x = 10;
->x : Symbol(x, Decl(module-a.d.ts, 0, 12))
+=== /src/module-a.js ===
+exports.x = 0;
+>exports.x : Symbol(x, Decl(module-a.js, 0, 0))
+>exports : Symbol(x, Decl(module-a.js, 0, 0))
+>x : Symbol(x, Decl(module-a.js, 0, 0))
 

@@ -1,9 +1,12 @@
 === /src/index.ts ===
 import { x } from "./module-a.js";
->x : 10
+>x : number
 
-=== /src/module-a.d.ts ===
-export const x = 10;
->x : 10
->10 : 10
+=== /src/module-a.js ===
+exports.x = 0;
+>exports.x = 0 : 0
+>exports.x : number
+>exports : typeof import("/src/module-a")
+>x : number
+>0 : 0
 
