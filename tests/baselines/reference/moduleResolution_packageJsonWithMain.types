@@ -1,0 +1,9 @@
+=== /src/index.ts ===
+import { x } from "module-a";
+>x : 10
+
+=== /src/node_modules/module-a/module-a.d.ts ===
+export const x = 10;
+>x : 10
+>10 : 10
+

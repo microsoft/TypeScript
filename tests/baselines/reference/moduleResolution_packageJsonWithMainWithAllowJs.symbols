@@ -1,0 +1,9 @@
+=== /src/index.ts ===
+import { x } from "module-a";
+>x : Symbol(x, Decl(index.ts, 0, 8))
+
+
+=== /src/node_modules/module-a/module-a.d.ts ===
+export const x = 10;
+>x : Symbol(x, Decl(module-a.d.ts, 0, 12))
+

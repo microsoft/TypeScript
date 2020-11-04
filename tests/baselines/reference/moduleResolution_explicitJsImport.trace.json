@@ -1,0 +1,13 @@
+[
+    "======== Resolving module './module-a.js' from '/src/index.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/src/module-a.js', target file type 'TypeScript'.",
+    "File '/src/module-a.js.ts' does not exist.",
+    "File '/src/module-a.js.tsx' does not exist.",
+    "File '/src/module-a.js.d.ts' does not exist.",
+    "File name '/src/module-a.js' has a '.js' extension - stripping it.",
+    "File '/src/module-a.ts' does not exist.",
+    "File '/src/module-a.tsx' does not exist.",
+    "File '/src/module-a.d.ts' exist - use it as a name resolution result.",
+    "======== Module name './module-a.js' was successfully resolved to '/src/module-a.d.ts'. ========"
+]
