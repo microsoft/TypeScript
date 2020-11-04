@@ -1882,15 +1882,15 @@ namespace ts {
             switch (valueExpression.kind) {
                 case SyntaxKind.TrueKeyword:
                     reportInvalidOptionValue(option && option.type !== "boolean");
-                    return validateValueOk(/*value*/ true);
+                    return validateValue(/*value*/ true);
 
                 case SyntaxKind.FalseKeyword:
                     reportInvalidOptionValue(option && option.type !== "boolean");
-                    return validateValueOk(/*value*/ false);
+                    return validateValue(/*value*/ false);
 
                 case SyntaxKind.NullKeyword:
                     reportInvalidOptionValue(option && option.name === "extends"); // "extends" is the only option we don't allow null/undefined for
-                    return validateValueOk(/*value*/ null); // eslint-disable-line no-null/no-null
+                    return validateValue(/*value*/ null); // eslint-disable-line no-null/no-null
 
                 case SyntaxKind.StringLiteral:
                     if (!isDoubleQuotedString(valueExpression)) {
@@ -1911,18 +1911,18 @@ namespace ts {
                             invalidReported = true;
                         }
                     }
-                    return validateValueOk(text);
+                    return validateValue(text);
 
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValueOk(Number((<NumericLiteral>valueExpression).text));
+                    return validateValue(Number((<NumericLiteral>valueExpression).text));
 
                 case SyntaxKind.PrefixUnaryExpression:
                     if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                         break; // not valid JSON syntax
                     }
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValueOk(-Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text));
+                    return validateValue(-Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text));
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
@@ -1936,18 +1936,18 @@ namespace ts {
                     // If need arises, we can modify this interface and callbacks as needed
                     if (option) {
                         const { elementOptions, extraKeyDiagnostics, name: optionName } = <TsConfigOnlyOption>option;
-                        return validateValueOk(convertObjectLiteralExpressionToJson(objectLiteralExpression,
+                        return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression,
                             elementOptions, extraKeyDiagnostics, optionName));
                     }
                     else {
-                        return validateValueOk(convertObjectLiteralExpressionToJson(
+                        return validateValue(convertObjectLiteralExpressionToJson(
                             objectLiteralExpression, /* knownOptions*/ undefined,
                             /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined));
                     }
 
                 case SyntaxKind.ArrayLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "list");
-                    return validateValueOk(convertArrayLiteralExpressionToJson(
+                    return validateValue(convertArrayLiteralExpressionToJson(
                         (<ArrayLiteralExpression>valueExpression).elements,
                         option && (<CommandLineOptionOfListType>option).element));
             }
@@ -1962,7 +1962,7 @@ namespace ts {
 
             return undefined;
 
-            function validateValueOk(value: CompilerOptionsValue) {
+            function validateValue(value: CompilerOptionsValue) {
                 if (!invalidReported) {
                     const diagnostic = option?.extraValidation?.(value);
                     if (diagnostic) {
