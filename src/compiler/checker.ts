@@ -21673,6 +21673,12 @@ namespace ts {
             }
         }
 
+        function addSharedFlowType(flow: FlowNode, type: FlowType): void {
+            sharedFlowNodes[sharedFlowCount] = flow;
+            sharedFlowTypes[sharedFlowCount] = type;
+            sharedFlowCount++;
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
             let isKeySet = false;
@@ -21715,6 +21721,7 @@ namespace ts {
                     return errorType;
                 }
                 flowDepth++;
+                let sharedFlow: FlowNode | undefined;
                 while (true) {
                     const flags = flow.flags;
                     if (flags & FlowFlags.Shared) {
@@ -21726,6 +21733,12 @@ namespace ts {
                                 flowDepth--;
                                 return sharedFlowTypes[i];
                             }
+                        }
+
+                        // Keep track of the shared flow that is seen first to ensure that the
+                        // computed type is saved in the shared flow type cache.
+                        if (!sharedFlow) {
+                            sharedFlow = flow;
                         }
                     }
                     let type: FlowType | undefined;
@@ -21790,11 +21803,15 @@ namespace ts {
                         // simply return the non-auto declared type to reduce follow-on errors.
                         type = convertAutoToAny(declaredType);
                     }
-                    if (flags & FlowFlags.Shared) {
-                        // Record visited node and the associated type in the cache.
-                        sharedFlowNodes[sharedFlowCount] = flow;
-                        sharedFlowTypes[sharedFlowCount] = type;
-                        sharedFlowCount++;
+                    if (sharedFlow) {
+                        // If the type for a shared flow was computed, record the associated type in the cache.
+                        addSharedFlowType(sharedFlow, type);
+
+                        // If a shared flow was iterated over and the current flow is also shared,
+                        // then also record the associated type with the current flow.
+                        if (flow !== sharedFlow && flags & FlowFlags.Shared) {
+                            addSharedFlowType(flow, type);
+                        }
                     }
                     flowDepth--;
                     return type;
