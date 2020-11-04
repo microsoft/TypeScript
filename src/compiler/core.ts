@@ -1939,7 +1939,7 @@ namespace ts {
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-        let bestDistance = Math.max(1, Math.floor(name.length * 0.4)); // If the best result is worse than this, don't bother.
+        let bestDistance = name.length * 0.4 + 0.1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
@@ -1958,7 +1958,7 @@ namespace ts {
                     continue;
                 }
 
-                Debug.assert(distance <= bestDistance); // Else `levenshteinWithMax` should return undefined
+                Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
                 bestDistance = distance;
                 bestCandidate = candidate;
             }
@@ -1970,7 +1970,7 @@ namespace ts {
         let previous = new Array(s2.length + 1);
         let current = new Array(s2.length + 1);
         /** Represents any value > max. We don't care about the particular value. */
-        const big = max + 1;
+        const big = max + 0.000000001;
 
         for (let i = 0; i <= s2.length; i++) {
             previous[i] = i;
@@ -1978,8 +1978,8 @@ namespace ts {
 
         for (let i = 1; i <= s1.length; i++) {
             const c1 = s1.charCodeAt(i - 1);
-            const minJ = i > max ? i - max : 1;
-            const maxJ = s2.length > max + i ? max + i : s2.length;
+            const minJ = Math.ceil(Math.max(i - max, 1));
+            const maxJ = Math.floor(Math.min(max + i, s2.length));
             current[0] = i;
             /** Smallest value of the matrix in the ith column. */
             let colMin = i;
@@ -1987,8 +1987,9 @@ namespace ts {
                 current[j] = big;
             }
             for (let j = minJ; j <= maxJ; j++) {
+                // case difference should be insignificant.
                 const substitutionDistance = s1[i - 1].toLowerCase() === s2[j-1].toLowerCase()
-                    ? (previous[j - 1] + 1)
+                    ? (previous[j - 1] + 0.01)
                     : (previous[j - 1] + 2);
                 const dist = c1 === s2.charCodeAt(j - 1)
                     ? previous[j - 1]
@@ -2010,7 +2011,7 @@ namespace ts {
         }
 
         const res = previous[s2.length];
-        return res > max ? undefined : res;
+        return res >= max ? undefined : res;
     }
 
     export function endsWith(str: string, suffix: string): boolean {
