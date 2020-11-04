@@ -55,12 +55,18 @@ export const App = () => <div propA={true}></div>;
 {"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
 
 
-/a/lib/tsc.js -i
+/a/lib/tsc.js -i --explainFiles
 Output::
+../../../../a/lib/lib.d.ts
+  Default library
+node_modules/react/jsx-runtime/index.d.ts
+  Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
+index.tsx
+  Matched by include pattern '**/*' in 'tsconfig.json'
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","explainFiles":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -114,6 +120,7 @@ exports.App = App;
       "jsx": 4,
       "incremental": true,
       "jsxImportSource": "react",
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
@@ -150,13 +157,19 @@ Output::
 [7m1[0m export const App = () => <div propA={true}></div>;
 [7m [0m [91m                              ~~~~~[0m
 
+../../../../a/lib/lib.d.ts
+  Default library
+node_modules/preact/jsx-runtime/index.d.ts
+  Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
+index.tsx
+  Matched by include pattern '**/*' in 'tsconfig.json'
 
 Found 1 error.
 
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preact","configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preact","explainFiles":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -210,6 +223,7 @@ exports.App = App;
       "jsx": 4,
       "incremental": true,
       "jsxImportSource": "preact",
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {

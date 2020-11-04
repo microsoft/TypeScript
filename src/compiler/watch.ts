@@ -186,26 +186,39 @@ namespace ts {
     export function fileIncludeReasonToDiagnostics(program: Program, reason: FileIncludeReason, fileNameConvertor?: (fileName: string) => string,): DiagnosticMessageChain {
         const options = program.getCompilerOptions();
         if (isReferencedFile(reason)) {
-            const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
-            const referenceText = referecedFromFile.text.substring(pos, end);
+            const referenceLocation = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason);
+            const referenceText = isReferenceFileLocation(referenceLocation) ? referenceLocation.file.text.substring(referenceLocation.pos, referenceLocation.end) : `"${referenceLocation.text}"`;
             let message: DiagnosticMessage;
+            Debug.assert(isReferenceFileLocation(referenceLocation) || reason.kind === FileIncludeKind.Import, "Only synthetic references are imports");
             switch (reason.kind) {
                 case FileIncludeKind.Import:
-                    message = packageId ?
-                        Diagnostics.Imported_via_0_from_file_1_with_packageId_2 :
-                        Diagnostics.Imported_via_0_from_file_1;
+                    if (isReferenceFileLocation(referenceLocation)) {
+                        message = referenceLocation.packageId ?
+                            Diagnostics.Imported_via_0_from_file_1_with_packageId_2 :
+                            Diagnostics.Imported_via_0_from_file_1;
+                    }
+                    else if (referenceLocation.text === externalHelpersModuleNameText) {
+                        message = referenceLocation.packageId ?
+                            Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_importHelpers_as_specified_in_compilerOptions :
+                            Diagnostics.Imported_via_0_from_file_1_to_import_importHelpers_as_specified_in_compilerOptions;
+                    }
+                    else {
+                        message = referenceLocation.packageId ?
+                            Diagnostics.Imported_via_0_from_file_1_with_packageId_2_to_import_jsx_and_jsxs_factory_functions :
+                            Diagnostics.Imported_via_0_from_file_1_to_import_jsx_and_jsxs_factory_functions;
+                    }
                     break;
                 case FileIncludeKind.ReferenceFile:
-                    Debug.assert(!packageId);
+                    Debug.assert(!referenceLocation.packageId);
                     message = Diagnostics.Referenced_via_0_from_file_1;
                     break;
                 case FileIncludeKind.TypeReferenceDirective:
-                    message = packageId ?
+                    message = referenceLocation.packageId ?
                         Diagnostics.Type_library_referenced_via_0_from_file_1_with_packageId_2 :
                         Diagnostics.Type_library_referenced_via_0_from_file_1;
                     break;
                 case FileIncludeKind.LibReferenceDirective:
-                    Debug.assert(!packageId);
+                    Debug.assert(!referenceLocation.packageId);
                     message = Diagnostics.Library_referenced_via_0_from_file_1;
                     break;
                 default:
@@ -215,8 +228,8 @@ namespace ts {
                 /*details*/ undefined,
                 message,
                 referenceText,
-                toFileName(referecedFromFile, fileNameConvertor),
-                packageId && packageIdToString(packageId)
+                toFileName(referenceLocation.file, fileNameConvertor),
+                referenceLocation.packageId && packageIdToString(referenceLocation.packageId)
             );
         }
         switch (reason.kind) {

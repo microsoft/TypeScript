@@ -79,5 +79,45 @@ namespace ts.tscWatch {
                 }
             ],
         });
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "jsxImportSource option changed",
+            commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+            sys: () => createWatchedSystem([
+                libFile,
+                {
+                    path: `${projectRoot}/node_modules/react/Jsx-runtime/index.d.ts`,
+                    content: `export namespace JSX {
+    interface Element {}
+    interface IntrinsicElements {
+        div: {
+            propA?: boolean;
+        };
+    }
+}
+export function jsx(...args: any[]): void;
+export function jsxs(...args: any[]): void;
+export const Fragment: unique symbol;
+`,
+                },
+                {
+                    path: `${projectRoot}/node_modules/react/package.json`,
+                    content: JSON.stringify({ name: "react", version: "0.0.1" })
+                },
+                {
+                    path: `${projectRoot}/index.tsx`,
+                    content: `export const App = () => <div propA={true}></div>;`
+                },
+                {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
+                        files: ["node_modules/react/Jsx-runtime/index.d.ts", "index.tsx"]
+                    })
+                }
+            ], { currentDirectory: projectRoot }),
+            changes: emptyArray,
+        });
     });
 }

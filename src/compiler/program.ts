@@ -596,16 +596,37 @@ namespace ts {
     }
 
     /*@internal*/
-    export function getReferencedFileLocation(getSourceFileByPath: (path: Path) => SourceFile | undefined, ref: ReferencedFile) {
-        const file = Debug.assertDefined(getSourceFileByPath(ref.file));
+    export interface ReferenceFileLocation {
+        file: SourceFile;
+        pos: number;
+        end: number;
+        packageId: PackageId | undefined;
+    }
+
+    /*@internal*/
+    export interface SyntheticReferenceFileLocation {
+        file: SourceFile;
+        packageId: PackageId | undefined;
+        text: string;
+    }
+
+    /*@internal*/
+    export function isReferenceFileLocation(location: ReferenceFileLocation | SyntheticReferenceFileLocation): location is ReferenceFileLocation {
+        return (location as ReferenceFileLocation).pos !== undefined;
+    }
+
+    /*@internal*/
+    export function getReferencedFileLocation(getSourceFileByPath: (path: Path) => SourceFile | undefined, ref: ReferencedFile): ReferenceFileLocation | SyntheticReferenceFileLocation {
+        const file = Debug.checkDefined(getSourceFileByPath(ref.file));
         const { kind, index } = ref;
-        let pos: number, end: number, packageId: PackageId | undefined;
+        let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined;
         switch (kind) {
             case FileIncludeKind.Import:
                 const importLiteral = getModuleNameStringLiteralAt(file, index);
+                packageId = file.resolvedModules?.get(importLiteral.text)?.packageId;
+                if (importLiteral.pos === -1) return { file, packageId, text: importLiteral.text };
                 pos = skipTrivia(file.text, importLiteral.pos);
                 end = importLiteral.end;
-                packageId = file.resolvedModules?.get(importLiteral.text)?.packageId;
                 break;
             case FileIncludeKind.ReferenceFile:
                 ({ pos, end } = file.referencedFiles[index]);
@@ -1077,8 +1098,8 @@ namespace ts {
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
                     return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray));
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
-                    const { file, pos, end } = getReferencedFileLocation(getSourceFileByPath, diagnostic.reason);
-                    return programDiagnostics.add(createFileDiagnostic(file, pos, end - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
+                    const { file, pos, end } = getReferencedFileLocation(getSourceFileByPath, diagnostic.reason) as ReferenceFileLocation;
+                    return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
                 default:
                     Debug.assertNever(diagnostic);
             }
@@ -3321,7 +3342,7 @@ namespace ts {
             const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
             const redirectInfo = file && explainIfFileIsRedirect(file);
             const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
-            return location ?
+            return location && isReferenceFileLocation(location) ?
                 createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
                 createCompilerDiagnosticFromMessageChain(chain, relatedInfo);
 
@@ -3355,7 +3376,7 @@ namespace ts {
 
         function fileIncludeReasonToRelatedInformation(reason: FileIncludeReason): DiagnosticWithLocation | undefined {
             if (isReferencedFile(reason)) {
-                const { file: referencedFromFile, pos, end } = getReferencedFileLocation(getSourceFileByPath, reason);
+                const referenceLocation = getReferencedFileLocation(getSourceFileByPath, reason);
                 let message: DiagnosticMessage;
                 switch (reason.kind) {
                     case FileIncludeKind.Import:
@@ -3373,12 +3394,12 @@ namespace ts {
                     default:
                         Debug.assertNever(reason);
                 }
-                return createFileDiagnostic(
-                    referencedFromFile,
-                    pos,
-                    end - pos,
+                return isReferenceFileLocation(referenceLocation) ? createFileDiagnostic(
+                    referenceLocation.file,
+                    referenceLocation.pos,
+                    referenceLocation.end - referenceLocation.pos,
                     message,
-                );
+                ) : undefined;
             }
 
             if (!options.configFile) return undefined;

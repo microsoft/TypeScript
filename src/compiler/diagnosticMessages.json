@@ -1332,6 +1332,22 @@
         "category": "Message",
         "code": 1425
     },
+    "Imported via {0} from file '{1}' to import 'importHelpers' as specified in compilerOptions": {
+        "category": "Message",
+        "code": 1426
+    },
+    "Imported via {0} from file '{1}' with packageId '{2}' to import 'importHelpers' as specified in compilerOptions": {
+        "category": "Message",
+        "code": 1427
+    },
+    "Imported via {0} from file '{1}' to import 'jsx' and 'jsxs' factory functions": {
+        "category": "Message",
+        "code": 1428
+    },
+    "Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions": {
+        "category": "Message",
+        "code": 1429
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
