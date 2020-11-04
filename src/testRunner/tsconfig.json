@@ -187,6 +187,7 @@
         "unittests/tsserver/projects.ts",
         "unittests/tsserver/refactors.ts",
         "unittests/tsserver/reload.ts",
+        "unittests/tsserver/reloadProjects.ts",
         "unittests/tsserver/rename.ts",
         "unittests/tsserver/resolutionCache.ts",
         "unittests/tsserver/session.ts",
