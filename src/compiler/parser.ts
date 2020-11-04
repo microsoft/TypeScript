@@ -2496,13 +2496,19 @@ namespace ts {
         }
 
         function parseBracketedList<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): NodeArray<T> {
+            const [ result ] = parseBracketedListWithLineBreak(kind, parseElement, open, close);
+            return result;
+        }
+
+        function parseBracketedListWithLineBreak<T extends Node>(kind: ParsingContext, parseElement: () => T, open: SyntaxKind, close: SyntaxKind): [NodeArray<T>, boolean | undefined] {
             if (parseExpected(open)) {
+                const multiLine = scanner.hasPrecedingLineBreak();
                 const result = parseDelimitedList(kind, parseElement);
                 parseExpected(close);
-                return result;
+                return [result, multiLine];
             }
 
-            return createMissingList<T>();
+            return [createMissingList<T>(), undefined];
         }
 
         function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
@@ -7004,7 +7010,7 @@ namespace ts {
             //  ImportSpecifier
             //  ImportsList, ImportSpecifier
             const node = kind === SyntaxKind.NamedImports
-                ? factory.createNamedImports(parseBracketedList(ParsingContext.ImportOrExportSpecifiers, parseImportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken))
+                ? factory.createNamedImports(...parseBracketedListWithLineBreak(ParsingContext.ImportOrExportSpecifiers, parseImportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken))
                 : factory.createNamedExports(parseBracketedList(ParsingContext.ImportOrExportSpecifiers, parseExportSpecifier, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken));
             return finishNode(node, pos);
         }

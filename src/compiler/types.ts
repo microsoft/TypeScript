@@ -3006,6 +3006,7 @@ namespace ts {
         readonly kind: SyntaxKind.NamedImports;
         readonly parent: ImportClause;
         readonly elements: NodeArray<ImportSpecifier>;
+        /* @internal */ readonly multiLine?: boolean;
     }
 
     export interface NamedExports extends Node {
@@ -7007,8 +7008,8 @@ namespace ts {
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
         createNamespaceExport(name: Identifier): NamespaceExport;
         updateNamespaceExport(node: NamespaceExport, name: Identifier): NamespaceExport;
-        createNamedImports(elements: readonly ImportSpecifier[]): NamedImports;
-        updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
+        createNamedImports(elements: readonly ImportSpecifier[], multiLine?: boolean): NamedImports;
+        updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[], multiLine?: boolean): NamedImports;
         createImportSpecifier(propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;

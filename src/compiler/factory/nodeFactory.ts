@@ -3905,18 +3905,20 @@ namespace ts {
         }
 
         // @api
-        function createNamedImports(elements: readonly ImportSpecifier[]): NamedImports {
+        function createNamedImports(elements: readonly ImportSpecifier[], multiLine?: boolean): NamedImports {
             const node = createBaseNode<NamedImports>(SyntaxKind.NamedImports);
             node.elements = createNodeArray(elements);
+            node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.elements);
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
         // @api
-        function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]) {
+        function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[], multiLine?: boolean) {
             return node.elements !== elements
-                ? update(createNamedImports(elements), node)
+                || node.multiLine !== multiLine
+                ? update(createNamedImports(elements, multiLine), node)
                 : node;
         }
 

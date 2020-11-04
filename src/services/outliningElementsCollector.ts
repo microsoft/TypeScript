@@ -21,6 +21,7 @@ namespace ts.OutliningElementsCollector {
             if (current === n) break;
             const firstImport = current;
             while (current < n && isAnyImportSyntax(statements[current])) {
+                visitAnyImportNode(statements[current] as AnyImportSyntax, sourceFile);
                 addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
                 current++;
             }
@@ -65,6 +66,11 @@ namespace ts.OutliningElementsCollector {
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
+        }
+
+        function visitAnyImportNode(n: AnyImportSyntax, sourceFile: SourceFile) {
+            const span = getOutliningSpanForAnyImportNode(n, sourceFile);
+            if (span) out.push(span);
         }
     }
 
@@ -145,8 +151,18 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
-    function createOutliningSpanFromBounds(pos: number, end: number, kind: OutliningSpanKind): OutliningSpan {
-        return createOutliningSpan(createTextSpanFromBounds(pos, end), kind);
+    function createOutliningSpanFromBounds(pos: number, end: number, kind: OutliningSpanKind, autoCollapse?: boolean, bannerText?: string): OutliningSpan {
+        return createOutliningSpan(createTextSpanFromBounds(pos, end), kind, /*hintSpan*/ undefined, autoCollapse, bannerText);
+    }
+
+    function getOutliningSpanForAnyImportNode(n: AnyImportSyntax, sourceFile: SourceFile): OutliningSpan | undefined {
+        if (isImportDeclaration(n) && n.importClause?.namedBindings && isNamedImports(n.importClause.namedBindings) && n.importClause.namedBindings.multiLine) {
+            const bindings = n.importClause?.namedBindings;
+            const openToken = findChildOfKind(bindings, SyntaxKind.OpenBraceToken, sourceFile);
+            const bannerText = isStringLiteral(n.moduleSpecifier) ? "{...} from " + n.moduleSpecifier.text : undefined;
+            return openToken && createOutliningSpanFromBounds(openToken?.getStart(sourceFile), n.end, OutliningSpanKind.Imports, /*autoCollapse*/ undefined, bannerText);
+        }
+        return undefined;
     }
 
     function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan | undefined {
