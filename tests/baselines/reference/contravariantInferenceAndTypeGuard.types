@@ -1,0 +1,97 @@
+=== tests/cases/compiler/contravariantInferenceAndTypeGuard.ts ===
+interface ListItem<TData> {
+    prev: ListItem<TData> | null;
+>prev : ListItem<TData> | null
+>null : null
+
+    next: ListItem<TData> | null;
+>next : ListItem<TData> | null
+>null : null
+
+    data: TData;
+>data : TData
+}
+type IteratorFn<TData, TResult, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => TResult;
+>IteratorFn : IteratorFn<TData, TResult, TContext>
+>this : TContext
+>item : TData
+>node : ListItem<TData>
+>list : List<TData>
+
+type FilterFn<TData, TResult extends TData, TContext = List<TData>> = (this: TContext, item: TData, node: ListItem<TData>, list: List<TData>) => item is TResult;
+>FilterFn : FilterFn<TData, TResult, TContext>
+>this : TContext
+>item : TData
+>node : ListItem<TData>
+>list : List<TData>
+
+declare class List<TData> {
+>List : List<TData>
+
+    filter<TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>;
+>filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult, List<TData>>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
+>fn : FilterFn<TData, TResult, TContext>
+>context : TContext
+
+    filter<TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>;
+>filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
+>fn : FilterFn<TData, TResult, List<TData>>
+
+    filter<TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>;
+>filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult, List<TData>>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean, List<TData>>): List<TData>; }
+>fn : IteratorFn<TData, boolean, TContext>
+>context : TContext
+
+    filter(fn: IteratorFn<TData, boolean>): List<TData>;
+>filter : { <TContext, TResult extends TData>(fn: FilterFn<TData, TResult, TContext>, context: TContext): List<TResult>; <TResult extends TData>(fn: FilterFn<TData, TResult, List<TData>>): List<TResult>; <TContext>(fn: IteratorFn<TData, boolean, TContext>, context: TContext): List<TData>; (fn: IteratorFn<TData, boolean>): List<TData>; }
+>fn : IteratorFn<TData, boolean, List<TData>>
+}
+interface Test {
+    a: string;
+>a : string
+}
+const list2 = new List<Test | null>();
+>list2 : List<Test | null>
+>new List<Test | null>() : List<Test | null>
+>List : typeof List
+>null : null
+
+const filter1 = list2.filter(function(item, node, list): item is Test {
+>filter1 : List<Test>
+>list2.filter(function(item, node, list): item is Test {    this.b; // $ExpectType string    item; // $ExpectType Test | null    node; // $ExpectType ListItem<Test | null>    list; // $ExpectType List<Test | null>    return !!item;}, {b: 'c'}) : List<Test>
+>list2.filter : { <TContext, TResult extends Test | null>(fn: FilterFn<Test | null, TResult, TContext>, context: TContext): List<TResult>; <TResult extends Test | null>(fn: FilterFn<Test | null, TResult, List<Test | null>>): List<TResult>; <TContext>(fn: IteratorFn<Test | null, boolean, TContext>, context: TContext): List<Test | null>; (fn: IteratorFn<Test | null, boolean, List<Test | null>>): List<Test | null>; }
+>list2 : List<Test | null>
+>filter : { <TContext, TResult extends Test | null>(fn: FilterFn<Test | null, TResult, TContext>, context: TContext): List<TResult>; <TResult extends Test | null>(fn: FilterFn<Test | null, TResult, List<Test | null>>): List<TResult>; <TContext>(fn: IteratorFn<Test | null, boolean, TContext>, context: TContext): List<Test | null>; (fn: IteratorFn<Test | null, boolean, List<Test | null>>): List<Test | null>; }
+>function(item, node, list): item is Test {    this.b; // $ExpectType string    item; // $ExpectType Test | null    node; // $ExpectType ListItem<Test | null>    list; // $ExpectType List<Test | null>    return !!item;} : (this: { b: string; }, item: Test | null, node: ListItem<Test | null>, list: List<Test | null>) => item is Test
+>item : Test | null
+>node : ListItem<Test | null>
+>list : List<Test | null>
+
+    this.b; // $ExpectType string
+>this.b : string
+>this : { b: string; }
+>b : string
+
+    item; // $ExpectType Test | null
+>item : Test | null
+
+    node; // $ExpectType ListItem<Test | null>
+>node : ListItem<Test | null>
+
+    list; // $ExpectType List<Test | null>
+>list : List<Test | null>
+
+    return !!item;
+>!!item : boolean
+>!item : boolean
+>item : Test | null
+
+}, {b: 'c'});
+>{b: 'c'} : { b: string; }
+>b : string
+>'c' : "c"
+
+const x: List<Test> = filter1; // $ExpectType List<Test>
+>x : List<Test>
+>filter1 : List<Test>
+

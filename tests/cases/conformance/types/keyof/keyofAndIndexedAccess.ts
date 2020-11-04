@@ -33,7 +33,8 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
+type K08 = keyof unknown; // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 type K11 = keyof Shape[];  // "length" | "toString" | ...

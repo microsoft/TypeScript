@@ -6,27 +6,46 @@ namespace ts.Completions.StringCompletions {
             return entries && convertPathCompletions(entries);
         }
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteralLike(contextToken)
-                ? undefined
-                : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host), sourceFile, checker, log, preferences);
+            if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
+            const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
+            return convertStringLiteralCompletions(entries, contextToken, sourceFile, checker, log, preferences);
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: StringLiteralLike, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
+
+        const optionalReplacementSpan = createTextSpanFromStringLiteralLikeContent(contextToken);
         switch (completion.kind) {
             case StringLiteralCompletionKind.Paths:
                 return convertPathCompletions(completion.paths);
             case StringLiteralCompletionKind.Properties: {
                 const entries: CompletionEntry[] = [];
-                getCompletionEntriesFromSymbols(completion.symbols, entries, sourceFile, sourceFile, checker, ScriptTarget.ESNext, log, CompletionKind.String, preferences); // Target will not be used, so arbitrary
-                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
+                getCompletionEntriesFromSymbols(
+                    completion.symbols,
+                    entries,
+                    contextToken,
+                    sourceFile,
+                    sourceFile,
+                    checker,
+                    ScriptTarget.ESNext,
+                    log,
+                    CompletionKind.String,
+                    preferences
+                ); // Target will not be used, so arbitrary
+                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
             }
             case StringLiteralCompletionKind.Types: {
-                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.string, sortText: "0" }));
-                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
+                const entries = completion.types.map(type => ({
+                    name: type.value,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.string,
+                    sortText: SortText.LocationPriority,
+                    replacementSpan: getReplacementSpanForContextToken(contextToken)
+                }));
+                return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
             }
             default:
                 return Debug.assertNever(completion);
@@ -56,11 +75,11 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function convertPathCompletions(pathCompletions: ReadonlyArray<PathCompletion>): CompletionInfo {
+    function convertPathCompletions(pathCompletions: readonly PathCompletion[]): CompletionInfo {
         const isGlobalCompletion = false; // We don't want the editor to offer any other completions, such as snippets, inside a comment.
         const isNewIdentifierLocation = true; // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
         const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry =>
-            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: "0", replacementSpan: span }));
+            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: SortText.LocationPriority, replacementSpan: span }));
         return { isGlobalCompletion, isMemberCompletion: false, isNewIdentifierLocation, entries };
     }
     function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {
@@ -71,6 +90,7 @@ namespace ts.Completions.StringCompletions {
             case Extension.Jsx: return ScriptElementKindModifier.jsxModifier;
             case Extension.Ts: return ScriptElementKindModifier.tsModifier;
             case Extension.Tsx: return ScriptElementKindModifier.tsxModifier;
+            case Extension.TsBuildInfo: return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported.`);
             case undefined: return ScriptElementKindModifier.none;
             default:
                 return Debug.assertNever(extension);
@@ -80,22 +100,29 @@ namespace ts.Completions.StringCompletions {
     const enum StringLiteralCompletionKind { Paths, Properties, Types }
     interface StringLiteralCompletionsFromProperties {
         readonly kind: StringLiteralCompletionKind.Properties;
-        readonly symbols: ReadonlyArray<Symbol>;
+        readonly symbols: readonly Symbol[];
         readonly hasIndexSignature: boolean;
     }
     interface StringLiteralCompletionsFromTypes {
         readonly kind: StringLiteralCompletionKind.Types;
-        readonly types: ReadonlyArray<StringLiteralType>;
+        readonly types: readonly StringLiteralType[];
         readonly isNewIdentifier: boolean;
     }
-    type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: ReadonlyArray<PathCompletion> } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
+    type StringLiteralCompletion = { readonly kind: StringLiteralCompletionKind.Paths, readonly paths: readonly PathCompletion[] } | StringLiteralCompletionsFromProperties | StringLiteralCompletionsFromTypes;
     function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringLiteralLike, position: number, typeChecker: TypeChecker, compilerOptions: CompilerOptions, host: LanguageServiceHost): StringLiteralCompletion | undefined {
-        const { parent } = node;
+        const parent = walkUpParentheses(node.parent);
         switch (parent.kind) {
-            case SyntaxKind.LiteralType:
-                switch (parent.parent.kind) {
-                    case SyntaxKind.TypeReference:
-                        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(parent as LiteralTypeNode)), isNewIdentifier: false };
+            case SyntaxKind.LiteralType: {
+                const grandParent = walkUpParentheses(parent.parent);
+                switch (grandParent.kind) {
+                    case SyntaxKind.TypeReference: {
+                        const typeReference = grandParent as TypeReferenceNode;
+                        const typeArgument = findAncestor(parent, n => n.parent === typeReference) as LiteralTypeNode;
+                        if (typeArgument) {
+                            return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
+                        }
+                        return undefined;
+                    }
                     case SyntaxKind.IndexedAccessType:
                         // Get all apparent property names
                         // i.e. interface Foo {
@@ -103,19 +130,25 @@ namespace ts.Completions.StringCompletions {
                         //          bar: string;
                         //      }
                         //      let x: Foo["/*completion position*/"]
-                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((parent.parent as IndexedAccessTypeNode).objectType));
+                        const { indexType, objectType } = grandParent as IndexedAccessTypeNode;
+                        if (!rangeContainsPosition(indexType, position)) {
+                            return undefined;
+                        }
+                        return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode(objectType));
                     case SyntaxKind.ImportType:
                         return { kind: StringLiteralCompletionKind.Paths, paths: getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
                     case SyntaxKind.UnionType: {
-                        if (!isTypeReferenceNode(parent.parent.parent)) return undefined;
-                        const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(parent.parent as UnionTypeNode, parent as LiteralTypeNode);
-                        const types = getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(parent.parent as UnionTypeNode)).filter(t => !contains(alreadyUsedTypes, t.value));
+                        if (!isTypeReferenceNode(grandParent.parent)) {
+                            return undefined;
+                        }
+                        const alreadyUsedTypes = getAlreadyUsedTypesInStringLiteralUnion(grandParent as UnionTypeNode, parent as LiteralTypeNode);
+                        const types = getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(grandParent as UnionTypeNode)).filter(t => !contains(alreadyUsedTypes, t.value));
                         return { kind: StringLiteralCompletionKind.Types, types, isNewIdentifier: false };
                     }
                     default:
                         return undefined;
                 }
-
+            }
             case SyntaxKind.PropertyAssignment:
                 if (isObjectLiteralExpression(parent.parent) && (<PropertyAssignment>parent).name === node) {
                     // Get quoted name of properties of the object literal expression
@@ -136,7 +169,7 @@ namespace ts.Completions.StringCompletions {
 
             case SyntaxKind.ElementAccessExpression: {
                 const { expression, argumentExpression } = parent as ElementAccessExpression;
-                if (node === argumentExpression) {
+                if (node === skipParentheses(argumentExpression)) {
                     // Get all names of properties on the expression
                     // i.e. interface A {
                     //      'prop1': string
@@ -181,7 +214,18 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: LiteralTypeNode): ReadonlyArray<string> {
+    function walkUpParentheses(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.ParenthesizedType:
+                return walkUpParenthesizedTypes(node);
+            case SyntaxKind.ParenthesizedExpression:
+                return walkUpParenthesizedExpressions(node);
+            default:
+                return node;
+        }
+    }
+
+    function getAlreadyUsedTypesInStringLiteralUnion(union: UnionTypeNode, current: LiteralTypeNode): readonly string[] {
         return mapDefined(union.types, type =>
             type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
     }
@@ -189,11 +233,11 @@ namespace ts.Completions.StringCompletions {
     function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
         let isNewIdentifier = false;
 
-        const uniques = createMap<true>();
+        const uniques = new Map<string, true>();
         const candidates: Signature[] = [];
         checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
         const types = flatMap(candidates, candidate => {
-            if (!candidate.hasRestParameter && argumentInfo.argumentCount > candidate.parameters.length) return;
+            if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
             const type = checker.getParameterType(candidate, argumentInfo.argumentIndex);
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);
@@ -203,17 +247,18 @@ namespace ts.Completions.StringCompletions {
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
-        return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties(), hasIndexSignature: hasIndexSignature(type) };
+        return type && {
+            kind: StringLiteralCompletionKind.Properties,
+            symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration))),
+            hasIndexSignature: hasIndexSignature(type)
+        };
     }
 
-    function getStringLiteralTypes(type: Type | undefined, uniques = createMap<true>()): ReadonlyArray<StringLiteralType> {
+    function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
         if (!type) return emptyArray;
         type = skipConstraint(type);
-        return type.isUnion()
-            ? flatMap(type.types, t => getStringLiteralTypes(t, uniques))
-            : type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value)
-            ? [type]
-            : emptyArray;
+        return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
+            type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
     }
 
     interface NameAndKind {
@@ -232,16 +277,16 @@ namespace ts.Completions.StringCompletions {
         return nameAndKind(name, ScriptElementKind.directory, /*extension*/ undefined);
     }
 
-    function addReplacementSpans(text: string, textStart: number, names: ReadonlyArray<NameAndKind>): ReadonlyArray<PathCompletion> {
+    function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[]): readonly PathCompletion[] {
         const span = getDirectoryFragmentTextSpan(text, textStart);
         return names.map(({ name, kind, extension }): PathCompletion => ({ name, kind, extension, span }));
     }
 
-    function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): ReadonlyArray<PathCompletion> {
+    function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly PathCompletion[] {
         return addReplacementSpans(node.text, node.getStart(sourceFile) + 1, getStringLiteralCompletionsFromModuleNamesWorker(sourceFile, node, compilerOptions, host, typeChecker));
     }
 
-    function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): ReadonlyArray<NameAndKind> {
+    function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly NameAndKind[] {
         const literalValue = normalizeSlashes(node.text);
 
         const scriptPath = sourceFile.path;
@@ -253,7 +298,7 @@ namespace ts.Completions.StringCompletions {
     }
 
     interface ExtensionOptions {
-        readonly extensions: ReadonlyArray<Extension>;
+        readonly extensions: readonly Extension[];
         readonly includeExtensions: boolean;
     }
     function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensions = false): ExtensionOptions {
@@ -270,7 +315,7 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): ReadonlyArray<Extension> {
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[] {
         const extensions = getSupportedExtensions(compilerOptions);
         return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
             extensions.concat(Extension.Json) :
@@ -281,7 +326,7 @@ namespace ts.Completions.StringCompletions {
      * Takes a script path and returns paths for all potential folders that could be merged with its
      * containing folder via the "rootDirs" compiler option
      */
-    function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptDirectory: string, ignoreCase: boolean): ReadonlyArray<string> {
+    function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptDirectory: string, ignoreCase: boolean): readonly string[] {
         // Make all paths absolute/normalized if they are not already
         rootDirs = rootDirs.map(rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
@@ -296,7 +341,7 @@ namespace ts.Completions.StringCompletions {
             compareStringsCaseSensitive);
     }
 
-    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptDirectory: string, extensionOptions: ExtensionOptions, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude: string): ReadonlyArray<NameAndKind> {
+    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptDirectory: string, extensionOptions: ExtensionOptions, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude: string): readonly NameAndKind[] {
         const basePath = compilerOptions.project || host.getCurrentDirectory();
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase);
@@ -344,7 +389,7 @@ namespace ts.Completions.StringCompletions {
              *
              * both foo.ts and foo.tsx become foo
              */
-            const foundFiles = createMap<Extension | undefined>(); // maps file to its extension
+            const foundFiles = new Map<string, Extension | undefined>(); // maps file to its extension
             for (let filePath of files) {
                 filePath = normalizePath(filePath);
                 if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
@@ -390,7 +435,7 @@ namespace ts.Completions.StringCompletions {
         return result;
     }
 
-    function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: ReadonlyArray<string>, paths: MapLike<string[]>, host: LanguageServiceHost) {
+    function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: readonly string[], paths: MapLike<string[]>, host: LanguageServiceHost) {
         for (const path in paths) {
             if (!hasProperty(paths, path)) continue;
             const patterns = paths[path];
@@ -412,7 +457,7 @@ namespace ts.Completions.StringCompletions {
      *      Modules from node_modules (i.e. those listed in package.json)
      *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
      */
-    function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): ReadonlyArray<NameAndKind> {
+    function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly NameAndKind[] {
         const { baseUrl, paths } = compilerOptions;
 
         const result: NameAndKind[] = [];
@@ -464,8 +509,8 @@ namespace ts.Completions.StringCompletions {
     }
 
     function getCompletionsForPathMapping(
-        path: string, patterns: ReadonlyArray<string>, fragment: string, baseUrl: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost,
-    ): ReadonlyArray<NameAndKind> {
+        path: string, patterns: readonly string[], fragment: string, baseUrl: string, fileExtensions: readonly string[], host: LanguageServiceHost,
+    ): readonly NameAndKind[] {
         if (!endsWith(path, "*")) {
             // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
             return !stringContains(path, "*") ? justPathMappingName(path) : emptyArray;
@@ -476,12 +521,12 @@ namespace ts.Completions.StringCompletions {
         return remainingFragment === undefined ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
             getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
 
-        function justPathMappingName(name: string): ReadonlyArray<NameAndKind> {
+        function justPathMappingName(name: string): readonly NameAndKind[] {
             return startsWith(name, fragment) ? [directoryResult(name)] : emptyArray;
         }
     }
 
-    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: ReadonlyArray<string>, host: LanguageServiceHost): ReadonlyArray<NameAndKind> | undefined {
+    function getModulesForPathsPattern(fragment: string, baseUrl: string, pattern: string, fileExtensions: readonly string[], host: LanguageServiceHost): readonly NameAndKind[] | undefined {
         if (!host.readDirectory) {
             return undefined;
         }
@@ -538,7 +583,7 @@ namespace ts.Completions.StringCompletions {
         return path[0] === directorySeparator ? path.slice(1) : path;
     }
 
-    function getAmbientModuleCompletions(fragment: string, fragmentDirectory: string | undefined, checker: TypeChecker): ReadonlyArray<string> {
+    function getAmbientModuleCompletions(fragment: string, fragmentDirectory: string | undefined, checker: TypeChecker): readonly string[] {
         // Get modules that the type checker picked up
         const ambientModules = checker.getAmbientModules().map(sym => stripQuotes(sym.name));
         const nonRelativeModuleNames = ambientModules.filter(moduleName => startsWith(moduleName, fragment));
@@ -553,7 +598,7 @@ namespace ts.Completions.StringCompletions {
         return nonRelativeModuleNames;
     }
 
-    function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): ReadonlyArray<PathCompletion> | undefined {
+    function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): readonly PathCompletion[] | undefined {
         const token = getTokenAtPosition(sourceFile, position);
         const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
         const range = commentRanges && find(commentRanges, commentRange => position >= commentRange.pos && position <= commentRange.end);
@@ -574,9 +619,9 @@ namespace ts.Completions.StringCompletions {
         return addReplacementSpans(toComplete, range.pos + prefix.length, names);
     }
 
-    function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result: NameAndKind[] = []): ReadonlyArray<NameAndKind> {
+    function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result: NameAndKind[] = []): readonly NameAndKind[] {
         // Check for typings specified in compiler options
-        const seen = createMap<true>();
+        const seen = new Map<string, true>();
 
         const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) || emptyArray;
 
@@ -616,31 +661,7 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function findPackageJsons(directory: string, host: LanguageServiceHost): string[] {
-        const paths: string[] = [];
-        forEachAncestorDirectory(directory, ancestor => {
-            const currentConfigPath = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (!currentConfigPath) {
-                return true; // break out
-            }
-            paths.push(currentConfigPath);
-        });
-        return paths;
-    }
-
-    function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
-        let packageJson: string | undefined;
-        forEachAncestorDirectory(directory, ancestor => {
-            if (ancestor === "node_modules") return true;
-            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
-            if (packageJson) {
-                return true; // break out
-            }
-        });
-        return packageJson;
-    }
-
-    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): ReadonlyArray<string> {
+    function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): readonly string[] {
         if (!host.readFile || !host.fileExists) return emptyArray;
 
         const result: string[] = [];
@@ -693,32 +714,7 @@ namespace ts.Completions.StringCompletions {
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
-    const nodeModulesDependencyKeys: ReadonlyArray<string> = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
-
-    function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
-        return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
-    }
-
-    function tryReadDirectory(host: LanguageServiceHost, path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>): ReadonlyArray<string> {
-        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
-    }
-
-    function tryFileExists(host: LanguageServiceHost, path: string): boolean {
-        return tryIOAndConsumeErrors(host, host.fileExists, path);
-    }
-
-    function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
-        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
-    }
-
-    function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
-        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
-    }
-
-    function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
-        try { return cb(); }
-        catch { return undefined; }
-    }
+    const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 
     function containsSlash(fragment: string) {
         return stringContains(fragment, directorySeparator);

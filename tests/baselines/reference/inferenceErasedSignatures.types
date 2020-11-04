@@ -1,0 +1,118 @@
+=== tests/cases/compiler/inferenceErasedSignatures.ts ===
+// Repro from #37163
+
+declare class SomeBaseClass {
+>SomeBaseClass : SomeBaseClass
+
+    set<K extends keyof this>(key: K, value: this[K]): this[K];
+>set : <K extends keyof this>(key: K, value: this[K]) => this[K]
+>key : K
+>value : this[K]
+}
+
+abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
+>SomeAbstractClass : SomeAbstractClass<C, M, R>
+>SomeBaseClass : SomeBaseClass
+
+    foo!: (r?: R) => void;
+>foo : (r?: R | undefined) => void
+>r : R | undefined
+
+    bar!: (r?: any) => void;
+>bar : (r?: any) => void
+>r : any
+
+    abstract baz(c: C): Promise<M>;
+>baz : (c: C) => Promise<M>
+>c : C
+}
+
+class SomeClass extends SomeAbstractClass<number, string, boolean> {
+>SomeClass : SomeClass
+>SomeAbstractClass : SomeAbstractClass<number, string, boolean>
+
+    async baz(context: number): Promise<string> {
+>baz : (context: number) => Promise<string>
+>context : number
+
+        return `${context}`;
+>`${context}` : string
+>context : number
+    }
+}
+
+type CType<T> = T extends SomeAbstractClass<infer C, any, any> ? C : never;
+>CType : CType<T>
+
+type MType<T> = T extends SomeAbstractClass<any, infer M, any> ? M : never;
+>MType : MType<T>
+
+type RType<T> = T extends SomeAbstractClass<any, any, infer R> ? R : never;
+>RType : RType<T>
+
+type SomeClassC = CType<SomeClass>; // number
+>SomeClassC : number
+
+type SomeClassM = MType<SomeClass>; // string
+>SomeClassM : string
+
+type SomeClassR = RType<SomeClass>; // boolean
+>SomeClassR : boolean
+
+// Repro from #37163
+
+interface BaseType<T1, T2>  {
+    set<K extends keyof this>(key: K, value: this[K]): this[K];
+>set : <K extends keyof this>(key: K, value: this[K]) => this[K]
+>key : K
+>value : this[K]
+
+    useT1(c: T1): void;
+>useT1 : (c: T1) => void
+>c : T1
+
+    useT2(r?: T2): void;
+>useT2 : (r?: T2 | undefined) => void
+>r : T2 | undefined
+
+    unrelatedButSomehowRelevant(r?: any): void;
+>unrelatedButSomehowRelevant : (r?: any) => void
+>r : any
+}
+
+interface InheritedType extends BaseType<number, boolean> {
+    // This declaration shouldn't do anything...
+    useT1(_: number): void
+>useT1 : (_: number) => void
+>_ : number
+}
+
+// Structural expansion of InheritedType
+interface StructuralVersion  {
+    set<K extends keyof this>(key: K, value: this[K]): this[K];
+>set : <K extends keyof this>(key: K, value: this[K]) => this[K]
+>key : K
+>value : this[K]
+
+    useT1(c: number): void;
+>useT1 : (c: number) => void
+>c : number
+
+    useT2(r?: boolean): void;
+>useT2 : (r?: boolean | undefined) => void
+>r : boolean | undefined
+
+    unrelatedButSomehowRelevant(r?: any): void;
+>unrelatedButSomehowRelevant : (r?: any) => void
+>r : any
+}
+
+type GetT1<T> = T extends BaseType<infer U, any> ? U : never;
+>GetT1 : GetT1<T>
+
+type T1 = GetT1<InheritedType>; // number
+>T1 : number
+
+type T2 = GetT1<StructuralVersion>; // number
+>T2 : number
+

@@ -1,0 +1,64 @@
+=== tests/cases/compiler/index.js ===
+function Color(obj) {
+>Color : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+>obj : Symbol(obj, Decl(index.js, 0, 15))
+
+    this.example = true
+>this.example : Symbol(Color.example, Decl(index.js, 0, 21))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+>example : Symbol(Color.example, Decl(index.js, 0, 21))
+
+};
+Color.prototype = {
+>Color.prototype : Symbol(Color.prototype, Decl(index.js, 2, 2))
+>Color : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+>prototype : Symbol(Color.prototype, Decl(index.js, 2, 2))
+
+	negate: function () {return this;},
+>negate : Symbol(negate, Decl(index.js, 3, 19))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	lighten: function (ratio) {return this;},
+>lighten : Symbol(lighten, Decl(index.js, 4, 36))
+>ratio : Symbol(ratio, Decl(index.js, 5, 20))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	darken: function (ratio) {return this;},
+>darken : Symbol(darken, Decl(index.js, 5, 42))
+>ratio : Symbol(ratio, Decl(index.js, 6, 19))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	saturate: function (ratio) {return this;},
+>saturate : Symbol(saturate, Decl(index.js, 6, 41))
+>ratio : Symbol(ratio, Decl(index.js, 7, 21))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	desaturate: function (ratio) {return this;},
+>desaturate : Symbol(desaturate, Decl(index.js, 7, 43))
+>ratio : Symbol(ratio, Decl(index.js, 8, 23))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	whiten: function (ratio) {return this;},
+>whiten : Symbol(whiten, Decl(index.js, 8, 45))
+>ratio : Symbol(ratio, Decl(index.js, 9, 19))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	blacken: function (ratio) {return this;},
+>blacken : Symbol(blacken, Decl(index.js, 9, 41))
+>ratio : Symbol(ratio, Decl(index.js, 10, 20))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	greyscale: function () {return this;},
+>greyscale : Symbol(greyscale, Decl(index.js, 10, 42))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	clearer: function (ratio) {return this;},
+>clearer : Symbol(clearer, Decl(index.js, 11, 39))
+>ratio : Symbol(ratio, Decl(index.js, 12, 20))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+	toJSON: function () {return this.rgb();},
+>toJSON : Symbol(toJSON, Decl(index.js, 12, 42))
+>this : Symbol(Color, Decl(index.js, 0, 0), Decl(index.js, 2, 2))
+
+};

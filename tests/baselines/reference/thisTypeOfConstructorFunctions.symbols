@@ -1,0 +1,118 @@
+=== tests/cases/conformance/salsa/thisTypeOfConstructorFunctions.js ===
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cp(t) {
+>Cp : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>t : Symbol(t, Decl(thisTypeOfConstructorFunctions.js, 5, 12))
+
+    /** @type {this} */
+    this.dit = this
+>this.dit : Symbol(Cp.dit, Decl(thisTypeOfConstructorFunctions.js, 5, 16))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>dit : Symbol(Cp.dit, Decl(thisTypeOfConstructorFunctions.js, 5, 16))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+
+    this.y = t
+>this.y : Symbol(Cp.y, Decl(thisTypeOfConstructorFunctions.js, 7, 19))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>y : Symbol(Cp.y, Decl(thisTypeOfConstructorFunctions.js, 7, 19))
+>t : Symbol(t, Decl(thisTypeOfConstructorFunctions.js, 5, 12))
+
+    /** @return {this} */
+    this.m3 = () => this
+>this.m3 : Symbol(Cp.m3, Decl(thisTypeOfConstructorFunctions.js, 8, 14))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>m3 : Symbol(Cp.m3, Decl(thisTypeOfConstructorFunctions.js, 8, 14))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+}
+
+Cp.prototype = {
+>Cp.prototype : Symbol(Cp.prototype, Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>Cp : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>prototype : Symbol(Cp.prototype, Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+
+    /** @return {this} */
+    m4() {
+>m4 : Symbol(m4, Decl(thisTypeOfConstructorFunctions.js, 13, 16))
+
+        this.z = this.y; return this
+>this.z : Symbol(z, Decl(thisTypeOfConstructorFunctions.js, 15, 10))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>z : Symbol(z, Decl(thisTypeOfConstructorFunctions.js, 15, 10))
+>this.y : Symbol(Cp.y, Decl(thisTypeOfConstructorFunctions.js, 7, 19))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+>y : Symbol(Cp.y, Decl(thisTypeOfConstructorFunctions.js, 7, 19))
+>this : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+    }
+}
+
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cpp(t) {
+>Cpp : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+>t : Symbol(t, Decl(thisTypeOfConstructorFunctions.js, 25, 13))
+
+    this.y = t
+>this.y : Symbol(Cpp.y, Decl(thisTypeOfConstructorFunctions.js, 25, 17))
+>this : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+>y : Symbol(Cpp.y, Decl(thisTypeOfConstructorFunctions.js, 25, 17))
+>t : Symbol(t, Decl(thisTypeOfConstructorFunctions.js, 25, 13))
+}
+/** @return {this} */
+Cpp.prototype.m2 = function () {
+>Cpp.prototype : Symbol(Cpp.m2, Decl(thisTypeOfConstructorFunctions.js, 27, 1))
+>Cpp : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m2 : Symbol(Cpp.m2, Decl(thisTypeOfConstructorFunctions.js, 27, 1))
+
+    this.z = this.y; return this
+>this.z : Symbol(Cpp.z, Decl(thisTypeOfConstructorFunctions.js, 29, 32))
+>this : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+>z : Symbol(Cpp.z, Decl(thisTypeOfConstructorFunctions.js, 29, 32))
+>this.y : Symbol(Cpp.y, Decl(thisTypeOfConstructorFunctions.js, 25, 17))
+>this : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+>y : Symbol(Cpp.y, Decl(thisTypeOfConstructorFunctions.js, 25, 17))
+>this : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+}
+
+var cp = new Cp(1)
+>cp : Symbol(cp, Decl(thisTypeOfConstructorFunctions.js, 33, 3))
+>Cp : Symbol(Cp, Decl(thisTypeOfConstructorFunctions.js, 0, 0), Decl(thisTypeOfConstructorFunctions.js, 11, 1))
+
+var cpp = new Cpp(2)
+>cpp : Symbol(cpp, Decl(thisTypeOfConstructorFunctions.js, 34, 3))
+>Cpp : Symbol(Cpp, Decl(thisTypeOfConstructorFunctions.js, 18, 1))
+
+cp.dit
+>cp.dit : Symbol(Cp.dit, Decl(thisTypeOfConstructorFunctions.js, 5, 16))
+>cp : Symbol(cp, Decl(thisTypeOfConstructorFunctions.js, 33, 3))
+>dit : Symbol(Cp.dit, Decl(thisTypeOfConstructorFunctions.js, 5, 16))
+
+/** @type {Cpp<number>} */
+var cppn = cpp.m2()
+>cppn : Symbol(cppn, Decl(thisTypeOfConstructorFunctions.js, 38, 3))
+>cpp.m2 : Symbol(Cpp.m2, Decl(thisTypeOfConstructorFunctions.js, 27, 1))
+>cpp : Symbol(cpp, Decl(thisTypeOfConstructorFunctions.js, 34, 3))
+>m2 : Symbol(Cpp.m2, Decl(thisTypeOfConstructorFunctions.js, 27, 1))
+
+/** @type {Cp<number>} */
+var cpn = cp.m3()
+>cpn : Symbol(cpn, Decl(thisTypeOfConstructorFunctions.js, 41, 3), Decl(thisTypeOfConstructorFunctions.js, 43, 3))
+>cp.m3 : Symbol(Cp.m3, Decl(thisTypeOfConstructorFunctions.js, 8, 14))
+>cp : Symbol(cp, Decl(thisTypeOfConstructorFunctions.js, 33, 3))
+>m3 : Symbol(Cp.m3, Decl(thisTypeOfConstructorFunctions.js, 8, 14))
+
+/** @type {Cp<number>} */
+var cpn = cp.m4()
+>cpn : Symbol(cpn, Decl(thisTypeOfConstructorFunctions.js, 41, 3), Decl(thisTypeOfConstructorFunctions.js, 43, 3))
+>cp.m4 : Symbol(m4, Decl(thisTypeOfConstructorFunctions.js, 13, 16))
+>cp : Symbol(cp, Decl(thisTypeOfConstructorFunctions.js, 33, 3))
+>m4 : Symbol(m4, Decl(thisTypeOfConstructorFunctions.js, 13, 16))
+
+

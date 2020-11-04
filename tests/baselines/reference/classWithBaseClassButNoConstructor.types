@@ -19,8 +19,8 @@ var r = C;
 >C : typeof C
 
 var c = new C(); // error
->c : any
->new C() : any
+>c : C
+>new C() : C
 >C : typeof C
 
 var c2 = new C(1); // ok
@@ -49,13 +49,13 @@ var r2 = D;
 >D : typeof D
 
 var d = new D(); // error
->d : any
->new D() : any
+>d : D<unknown, unknown>
+>new D() : D<unknown, unknown>
 >D : typeof D
 
 var d2 = new D(1); // ok
->d2 : D<number, {}>
->new D(1) : D<number, {}>
+>d2 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 
@@ -73,13 +73,13 @@ var r3 = D2;
 >D2 : typeof D2
 
 var d3 = new D(); // error
->d3 : any
->new D() : any
+>d3 : D<unknown, unknown>
+>new D() : D<unknown, unknown>
 >D : typeof D
 
 var d4 = new D(1); // ok
->d4 : D<number, {}>
->new D(1) : D<number, {}>
+>d4 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 
@@ -96,13 +96,13 @@ var r4 = D3;
 >D3 : typeof D3
 
 var d5 = new D(); // error
->d5 : any
->new D() : any
+>d5 : D<unknown, unknown>
+>new D() : D<unknown, unknown>
 >D : typeof D
 
 var d6 = new D(1); // ok
->d6 : D<number, {}>
->new D(1) : D<number, {}>
+>d6 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 

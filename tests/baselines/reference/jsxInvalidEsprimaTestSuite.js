@@ -37,7 +37,7 @@ declare var React: any;
 //// [17.tsx]
 <a b={}>;
 //// [18.tsx]
-var x = <div>one</div><div>two</div>;;
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
 //// [19.tsx]
 var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 //// [20.tsx]
@@ -90,10 +90,9 @@ a /  > ;
 //// [7.jsx]
 <a foo="bar;/>;
 //// [8.jsx]
-<a b></b>;
+<a:b></b>;
 //// [9.jsx]
-<a b c></a>;
-b.c > ;
+<a:b.c></a:b.c>;
 //// [10.jsx]
 <a.b c></a.b>;
 c > ;
@@ -117,13 +116,13 @@ a['foo'] > ;
 //// [17.jsx]
 <a b=>;</>;
 //// [18.jsx]
-var x = <div>one</div>, <div>two</div>;
+var x = /* Leading trivia */ <div>one</div>, <div>two</div>;
 ;
 //// [19.jsx]
 var x = <div>one</div> /* intervening comment */, /* intervening comment */ <div>two</div>;
 ;
 //// [20.jsx]
-<a>{"str"}}</a>;
+<a>{"str"};}</a>;
 //// [21.jsx]
 <span className="a" id="b"/>;
 //// [22.jsx]

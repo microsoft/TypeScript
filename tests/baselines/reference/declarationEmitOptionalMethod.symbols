@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declarationEmitOptionalMethod.ts ===
+export const Foo = (opts: {
+>Foo : Symbol(Foo, Decl(declarationEmitOptionalMethod.ts, 0, 12))
+>opts : Symbol(opts, Decl(declarationEmitOptionalMethod.ts, 0, 20))
+
+    a?(): void,
+>a : Symbol(a, Decl(declarationEmitOptionalMethod.ts, 0, 27))
+
+    b?: () => void,
+>b : Symbol(b, Decl(declarationEmitOptionalMethod.ts, 1, 15))
+
+}): {
+    c?(): void,
+>c : Symbol(c, Decl(declarationEmitOptionalMethod.ts, 3, 5))
+
+    d?: () => void,
+>d : Symbol(d, Decl(declarationEmitOptionalMethod.ts, 4, 15))
+
+} => ({  });

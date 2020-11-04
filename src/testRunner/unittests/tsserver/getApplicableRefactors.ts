@@ -6,7 +6,7 @@ namespace ts.projectSystem {
             openFilesForSession([aTs], session);
             const response = executeSessionRequest<protocol.GetApplicableRefactorsRequest, protocol.GetApplicableRefactorsResponse>(
                 session, protocol.CommandTypes.GetApplicableRefactors, { file: aTs.path, line: 1, offset: 1 });
-            assert.deepEqual<ReadonlyArray<protocol.ApplicableRefactorInfo> | undefined>(response, []);
+            assert.deepEqual<readonly protocol.ApplicableRefactorInfo[] | undefined>(response, []);
         });
     });
 }

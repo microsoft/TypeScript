@@ -12,9 +12,10 @@ tests/cases/compiler/readonlyMembers.ts(39,3): error TS2540: Cannot assign to 'a
 tests/cases/compiler/readonlyMembers.ts(48,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
 tests/cases/compiler/readonlyMembers.ts(55,3): error TS2540: Cannot assign to 'a' because it is a read-only property.
 tests/cases/compiler/readonlyMembers.ts(61,1): error TS2542: Index signature in type '{ readonly [x: string]: string; }' only permits reading.
+tests/cases/compiler/readonlyMembers.ts(64,1): error TS2542: Index signature in type '{ readonly [x: number]: string; [x: string]: string; }' only permits reading.
 
 
-==== tests/cases/compiler/readonlyMembers.ts (14 errors) ====
+==== tests/cases/compiler/readonlyMembers.ts (15 errors) ====
     interface X {
         readonly a: number;
         readonly b?: number;
@@ -107,4 +108,6 @@ tests/cases/compiler/readonlyMembers.ts(61,1): error TS2542: Index signature in 
     
     let yy: { readonly [x: number]: string, [x: string]: string };
     yy[1] = "abc";  // Error
+    ~~~~~
+!!! error TS2542: Index signature in type '{ readonly [x: number]: string; [x: string]: string; }' only permits reading.
     yy["foo"] = "abc";

@@ -19,13 +19,13 @@ export function consoleTestResultHandler(testResult: any): boolean {
 >void a : undefined
 >a : any
 
-        /* tslint:disable:no-console */
+        /* eslint-disable no-console */
         if (a) {
 >a : any
 
         } else {
         }
-        /* tslint:enable:no-console */
+        /* eslint-enable no-console */
     }
 
     return true;

@@ -58,6 +58,7 @@ expectColInfo(x2[12]);
 //// [interfaceWithEnumKeyedIndexSignature.js]
 "use strict";
 exports.__esModule = true;
+exports.UserInterfaceElement2 = exports.UserInterfaceElement = void 0;
 var UserInterfaceElement;
 (function (UserInterfaceElement) {
     UserInterfaceElement[UserInterfaceElement["ActiveTitleBar"] = 0] = "ActiveTitleBar";

@@ -1,0 +1,294 @@
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/methodIsOk.ts ===
+const o1 = {
+>o1 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMethodNameIsOk.ts ===
+const o2 = {
+>o2 : { await(): AsyncGenerator<never, void, unknown>; }
+>{    async * await() {    }} : { await(): AsyncGenerator<never, void, unknown>; }
+
+    async * await() {
+>await : () => AsyncGenerator<never, void, unknown>
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldMethodNameIsOk.ts ===
+const o3 = {
+>o3 : { yield(): AsyncGenerator<never, void, unknown>; }
+>{    async * yield() {    }} : { yield(): AsyncGenerator<never, void, unknown>; }
+
+    async * yield() {
+>yield : () => AsyncGenerator<never, void, unknown>
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts ===
+const o4 = {
+>o4 : { f(await: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(await) {    }} : { f(await: any): AsyncGenerator<never, void, unknown>; }
+
+    async * f(await) {
+>f : (await: any) => AsyncGenerator<never, void, unknown>
+>await : any
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts ===
+const o5 = {
+>o5 : { f(yield: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(yield) {    }} : { f(yield: any): AsyncGenerator<never, void, unknown>; }
+
+    async * f(yield) {
+>f : (yield: any) => AsyncGenerator<never, void, unknown>
+>yield : any
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts ===
+const o6 = {
+>o6 : { f(a?: number): AsyncGenerator<never, void, unknown>; }
+>{    async * f(a = await 1) {    }} : { f(a?: number): AsyncGenerator<never, void, unknown>; }
+
+    async * f(a = await 1) {
+>f : (a?: number) => AsyncGenerator<never, void, unknown>
+>a : number
+>await 1 : 1
+>1 : 1
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts ===
+const o7 = {
+>o7 : { f(a?: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(a = yield) {    }} : { f(a?: any): AsyncGenerator<never, void, unknown>; }
+
+    async * f(a = yield) {
+>f : (a?: any) => AsyncGenerator<never, void, unknown>
+>a : any
+>yield : any
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedAsyncGeneratorIsOk.ts ===
+const o8 = {
+>o8 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        async function * g() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        async function * g() {
+>g : () => AsyncGenerator<never, void, unknown>
+        }
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
+const o9 = {
+>o9 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        function yield() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        function yield() {
+>yield : () => void
+        }
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
+const o10 = {
+>o10 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        const x = function yield() {
+>x : () => void
+>function yield() {        } : () => void
+>yield : () => void
+
+        };
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts ===
+const o11 = {
+>o11 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        function await() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        function await() {
+>await : () => void
+        }
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
+const o12 = {
+>o12 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        const x = function await() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        const x = function await() {
+>x : () => void
+>function await() {        } : () => void
+>await : () => void
+
+        };
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldIsOk.ts ===
+const o13 = {
+>o13 : { f(): AsyncGenerator<any, void, unknown>; }
+>{    async * f() {        yield;    }} : { f(): AsyncGenerator<any, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<any, void, unknown>
+
+        yield;
+>yield : any
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldWithValueIsOk.ts ===
+const o14 = {
+>o14 : { f(): AsyncGenerator<number, void, unknown>; }
+>{    async * f() {        yield 1;    }} : { f(): AsyncGenerator<number, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<number, void, unknown>
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts ===
+const o15 = {
+>o15 : { f(): AsyncGenerator<any, void, any>; }
+>{    async * f() {        yield *;    }} : { f(): AsyncGenerator<any, void, any>; }
+
+    async * f() {
+>f : () => AsyncGenerator<any, void, any>
+
+        yield *;
+>yield * : any
+> : any
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarWithValueIsOk.ts ===
+const o16 = {
+>o16 : { f(): AsyncGenerator<any, void, undefined>; }
+>{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, undefined>; }
+
+    async * f() {
+>f : () => AsyncGenerator<any, void, undefined>
+
+        yield * [];
+>yield * [] : any
+>[] : undefined[]
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitWithValueIsOk.ts ===
+const o17 = {
+>o17 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        await 1;    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        await 1;
+>await 1 : 1
+>1 : 1
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts ===
+const o18 = {
+>o18 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        await;
+>await : any
+> : any
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitAsTypeIsOk.ts ===
+interface await {}
+const o19 = {
+>o19 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        let x: await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        let x: await;
+>x : await
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldAsTypeIsOk.ts ===
+interface yield {}
+const o20 = {
+>o20 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        let x: yield;    }} : { f(): AsyncGenerator<never, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<never, void, unknown>
+
+        let x: yield;
+>x : yield
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
+const o21 = {
+>o21 : { f(): AsyncGenerator<any, void, unknown>; }
+>{    async * f() {        const x = { [yield]: 1 };    }} : { f(): AsyncGenerator<any, void, unknown>; }
+
+    async * f() {
+>f : () => AsyncGenerator<any, void, unknown>
+
+        const x = { [yield]: 1 };
+>x : { [x: number]: number; }
+>{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
+>yield : any
+>1 : 1
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorGetAccessorIsError.ts ===
+const o22 = {
+>o22 : { get(): any; x(): number; }
+>{    async * get x() {        return 1;    }} : { get(): any; x(): number; }
+
+    async * get x() {
+>get : () => any
+>x : () => number
+
+        return 1;
+>1 : 1
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorSetAccessorIsError.ts ===
+const o23 = {
+>o23 : { set(): any; x(value: number): void; }
+>{    async * set x(value: number) {    }} : { set(): any; x(value: number): void; }
+
+    async * set x(value: number) {
+>set : () => any
+>x : (value: number) => void
+>value : number
+    }
+};
+=== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/asyncGeneratorPropertyIsError.ts ===
+const o24 = {
+>o24 : { x(): 1; }
+>{    async * x: 1;} : { x(): 1; }
+
+    async * x: 1;
+>x : () => 1
+
+};
+

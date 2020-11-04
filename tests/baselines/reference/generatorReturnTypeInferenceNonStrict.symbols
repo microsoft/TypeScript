@@ -1,0 +1,260 @@
+=== tests/cases/conformance/generators/generatorReturnTypeInferenceNonStrict.ts ===
+declare const iterableIterator: IterableIterator<number>;
+>iterableIterator : Symbol(iterableIterator, Decl(generatorReturnTypeInferenceNonStrict.ts, 0, 13))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const generator: Generator<number, string, boolean>;
+>generator : Symbol(generator, Decl(generatorReturnTypeInferenceNonStrict.ts, 1, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+declare const never: never;
+>never : Symbol(never, Decl(generatorReturnTypeInferenceNonStrict.ts, 2, 13))
+
+function* g000() { // Generator<never, void, unknown>
+>g000 : Symbol(g000, Decl(generatorReturnTypeInferenceNonStrict.ts, 2, 27))
+}
+
+// 'yield' iteration type inference
+function* g001() { // Generator<any (implicit), void, unknown>
+>g001 : Symbol(g001, Decl(generatorReturnTypeInferenceNonStrict.ts, 5, 1))
+
+    yield;
+}
+
+function* g002() { // Generator<number, void, unknown>
+>g002 : Symbol(g002, Decl(generatorReturnTypeInferenceNonStrict.ts, 10, 1))
+
+    yield 1;
+}
+
+function* g003() { // Generator<any (implicit), void, unknown>
+>g003 : Symbol(g003, Decl(generatorReturnTypeInferenceNonStrict.ts, 14, 1))
+
+    // NOTE: In strict mode, `[]` produces the type `never[]`.
+    //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
+    yield* [];
+}
+
+function* g004() { // Generator<number, void, undefined>
+>g004 : Symbol(g004, Decl(generatorReturnTypeInferenceNonStrict.ts, 20, 1))
+
+    yield* iterableIterator;
+>iterableIterator : Symbol(iterableIterator, Decl(generatorReturnTypeInferenceNonStrict.ts, 0, 13))
+}
+
+function* g005() { // Generator<number, void, boolean>
+>g005 : Symbol(g005, Decl(generatorReturnTypeInferenceNonStrict.ts, 24, 1))
+
+    const x = yield* generator;
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 27, 9))
+>generator : Symbol(generator, Decl(generatorReturnTypeInferenceNonStrict.ts, 1, 13))
+}
+
+function* g006() { // Generator<1 | 2, void, unknown>
+>g006 : Symbol(g006, Decl(generatorReturnTypeInferenceNonStrict.ts, 28, 1))
+
+    yield 1;
+    yield 2;
+}
+
+function* g007() { // Generator<never, void, unknown>
+>g007 : Symbol(g007, Decl(generatorReturnTypeInferenceNonStrict.ts, 33, 1))
+
+    yield never;
+>never : Symbol(never, Decl(generatorReturnTypeInferenceNonStrict.ts, 2, 13))
+}
+
+// 'return' iteration type inference
+function* g102() { // Generator<never, number, unknown>
+>g102 : Symbol(g102, Decl(generatorReturnTypeInferenceNonStrict.ts, 37, 1))
+
+    return 1;
+}
+
+function* g103() { // Generator<never, 1 | 2, unknown>
+>g103 : Symbol(g103, Decl(generatorReturnTypeInferenceNonStrict.ts, 42, 1))
+
+    if (Math.random()) return 1;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return 2;
+}
+
+function* g104() { // Generator<never, never, unknown>
+>g104 : Symbol(g104, Decl(generatorReturnTypeInferenceNonStrict.ts, 47, 1))
+
+    return never;
+>never : Symbol(never, Decl(generatorReturnTypeInferenceNonStrict.ts, 2, 13))
+}
+
+// 'next' iteration type inference
+function* g201() { // Generator<number, void, string>
+>g201 : Symbol(g201, Decl(generatorReturnTypeInferenceNonStrict.ts, 51, 1))
+
+    let a: string = yield 1;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 55, 7))
+}
+
+function* g202() { // Generator<1 | 2, void, never>
+>g202 : Symbol(g202, Decl(generatorReturnTypeInferenceNonStrict.ts, 56, 1))
+
+    let a: string = yield 1;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 59, 7))
+
+    let b: number = yield 2;
+>b : Symbol(b, Decl(generatorReturnTypeInferenceNonStrict.ts, 60, 7))
+}
+
+declare function f1(x: string): void;
+>f1 : Symbol(f1, Decl(generatorReturnTypeInferenceNonStrict.ts, 61, 1), Decl(generatorReturnTypeInferenceNonStrict.ts, 63, 37))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 63, 20))
+
+declare function f1(x: number): void;
+>f1 : Symbol(f1, Decl(generatorReturnTypeInferenceNonStrict.ts, 61, 1), Decl(generatorReturnTypeInferenceNonStrict.ts, 63, 37))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 64, 20))
+
+function* g203() { // Generator<number, void, string>
+>g203 : Symbol(g203, Decl(generatorReturnTypeInferenceNonStrict.ts, 64, 37))
+
+	const x = f1(yield 1);
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 67, 6))
+>f1 : Symbol(f1, Decl(generatorReturnTypeInferenceNonStrict.ts, 61, 1), Decl(generatorReturnTypeInferenceNonStrict.ts, 63, 37))
+}
+
+declare function f2<T>(x: T): T;
+>f2 : Symbol(f2, Decl(generatorReturnTypeInferenceNonStrict.ts, 68, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 70, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 70, 23))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 70, 20))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 70, 20))
+
+function* g204() { // Generator<number, void, any>
+>g204 : Symbol(g204, Decl(generatorReturnTypeInferenceNonStrict.ts, 70, 32))
+
+	const x = f2(yield 1);
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 73, 6))
+>f2 : Symbol(f2, Decl(generatorReturnTypeInferenceNonStrict.ts, 68, 1))
+}
+
+// mixed iteration types inference
+
+function* g301() { // Generator<any (implicit), void, unknown>
+>g301 : Symbol(g301, Decl(generatorReturnTypeInferenceNonStrict.ts, 74, 1))
+
+    yield;
+    return;
+}
+
+function* g302() { // Generator<number, void, unknown>
+>g302 : Symbol(g302, Decl(generatorReturnTypeInferenceNonStrict.ts, 81, 1))
+
+    yield 1;
+    return;
+}
+
+function* g303() { // Generator<any (implicit), string, unknown>
+>g303 : Symbol(g303, Decl(generatorReturnTypeInferenceNonStrict.ts, 86, 1))
+
+    yield;
+    return "a";
+}
+
+function* g304() { // Generator<number, string, unknown>
+>g304 : Symbol(g304, Decl(generatorReturnTypeInferenceNonStrict.ts, 91, 1))
+
+    yield 1;
+    return "a";
+}
+
+function* g305() { // Generator<1 | 2, "a" | "b", unknown>
+>g305 : Symbol(g305, Decl(generatorReturnTypeInferenceNonStrict.ts, 96, 1))
+
+    if (Math.random()) yield 1;
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    yield 2;
+    if (Math.random()) return "a";
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    return "b";
+}
+
+function* g306() { // Generator<number, boolean, "hi">
+>g306 : Symbol(g306, Decl(generatorReturnTypeInferenceNonStrict.ts, 103, 1))
+
+    const a: "hi" = yield 1;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 106, 9))
+
+    return true;
+}
+
+function* g307<T>() { // Generator<number, T, T>
+>g307 : Symbol(g307, Decl(generatorReturnTypeInferenceNonStrict.ts, 108, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 110, 15))
+
+    const a: T = yield 0;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 111, 9))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 110, 15))
+
+    return a;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 111, 9))
+}
+
+function* g308<T>(x: T) { // Generator<T, T, T>
+>g308 : Symbol(g308, Decl(generatorReturnTypeInferenceNonStrict.ts, 113, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 115, 15))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 115, 18))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 115, 15))
+
+    const a: T = yield x;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 116, 9))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 115, 15))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 115, 18))
+
+    return a;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 116, 9))
+}
+
+function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
+>g309 : Symbol(g309, Decl(generatorReturnTypeInferenceNonStrict.ts, 118, 1))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 15))
+>U : Symbol(U, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 17))
+>V : Symbol(V, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 24))
+>T : Symbol(T, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 15))
+>y : Symbol(y, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 29))
+>U : Symbol(U, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 17))
+
+    const a: V = yield x;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 121, 9))
+>V : Symbol(V, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 20))
+>x : Symbol(x, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 24))
+
+    return y;
+>y : Symbol(y, Decl(generatorReturnTypeInferenceNonStrict.ts, 120, 29))
+}
+
+function* g310() { // Generator<any (implicit), void, [(1 | undefined)?, (2 | undefined)?]>
+>g310 : Symbol(g310, Decl(generatorReturnTypeInferenceNonStrict.ts, 123, 1))
+
+	const [a = 1, b = 2] = yield;
+>a : Symbol(a, Decl(generatorReturnTypeInferenceNonStrict.ts, 126, 8))
+>b : Symbol(b, Decl(generatorReturnTypeInferenceNonStrict.ts, 126, 14))
+}
+
+function* g311() { // Generator<any (implicit), void, string>
+>g311 : Symbol(g311, Decl(generatorReturnTypeInferenceNonStrict.ts, 127, 1))
+
+	yield* (function*() {
+		const y: string = yield;
+>y : Symbol(y, Decl(generatorReturnTypeInferenceNonStrict.ts, 131, 7))
+
+	})();
+}
+

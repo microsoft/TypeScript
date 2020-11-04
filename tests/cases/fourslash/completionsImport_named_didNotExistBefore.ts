@@ -13,9 +13,23 @@
 verify.completions({
     marker: "",
     exact: [
-        { name: "Test2", text: "(alias) function Test2(): void\nimport Test2", kind: "alias" },
-        "undefined",
-        { name: "Test1", source: "/a", sourceDisplay: "./a", text: "function Test1(): void", kind: "function", kindModifiers: "export", hasAction: true },
+        {
+            name: "Test2",
+            text: "(alias) function Test2(): void\nimport Test2",
+            kind: "alias"
+        },
+        completion.globalThisEntry,
+        completion.undefinedVarEntry,
+        {
+            name: "Test1",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "function Test1(): void",
+            kind: "function",
+            kindModifiers: "export",
+            hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
+        },
         ...completion.statementKeywordsWithTypes,
     ],
     preferences: { includeCompletionsForModuleExports: true },
@@ -25,6 +39,6 @@ verify.applyCodeActionFromCompletion("", {
     name: "Test1",
     source: "/a",
     description: `Add 'Test1' to existing import declaration from "./a"`,
-    newFileContent: `import { Test2, Test1 } from "./a";
+    newFileContent: `import { Test1, Test2 } from "./a";
 t`,
 });

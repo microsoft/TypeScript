@@ -22,11 +22,13 @@ export class D extends C {
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = Symbol();
 //// [b.js]
 "use strict";
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
+exports.C = void 0;
 var a_1 = require("./a");
 var C = /** @class */ (function () {
     function C() {
@@ -34,15 +36,15 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-_a = a_1.x;
 exports.C = C;
+_a = a_1.x;
 //// [c.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -51,8 +53,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
+exports.D = void 0;
 var a_1 = require("./a");
 var b_1 = require("./b");
 var D = /** @class */ (function (_super) {
@@ -64,8 +67,8 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(b_1.C));
-_a = a_1.x;
 exports.D = D;
+_a = a_1.x;
 
 
 //// [a.d.ts]

@@ -41,24 +41,27 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(121,5)
   Property 'S1.A | S2.A' does not exist on type 'IFG'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(123,5): error TS2322: Type 'F' is not assignable to type 'F & G'.
   Type 'F' is not assignable to type 'G'.
+    Property 'S2.A' does not exist on type 'F'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(124,5): error TS2322: Type 'G' is not assignable to type 'F & G'.
   Type 'G' is not assignable to type 'F'.
+    Property 'S1.A' does not exist on type 'G'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(126,5): error TS2322: Type 'IFG' is not assignable to type 'F & G'.
   Type 'IFG' is not assignable to type 'G'.
+    Property 'S2.A' does not exist on type 'IFG'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(129,5): error TS2322: Type 'G' is not assignable to type 'IFG'.
   Property 'S1.A' does not exist on type 'G'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(169,5): error TS2322: Type 'H' is not assignable to type 'J'.
   Types of property 'a' are incompatible.
-    Type '"a"' is not assignable to type 'never'.
+    Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(170,5): error TS2322: Type 'I' is not assignable to type 'J'.
   Types of property 'a' are incompatible.
-    Type '"a"' is not assignable to type 'never'.
+    Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(171,5): error TS2322: Type 'K' is not assignable to type 'J'.
   Types of property 'a' are incompatible.
-    Type '"a"' is not assignable to type 'never'.
+    Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(172,5): error TS2322: Type 'L' is not assignable to type 'J'.
   Types of property 'a' are incompatible.
-    Type '"a"' is not assignable to type 'never'.
+    Type 'string' is not assignable to type 'never'.
 
 
 ==== tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts (35 errors) ====
@@ -256,15 +259,18 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(172,5)
         ~~~
 !!! error TS2322: Type 'F' is not assignable to type 'F & G'.
 !!! error TS2322:   Type 'F' is not assignable to type 'G'.
+!!! error TS2322:     Property 'S2.A' does not exist on type 'F'.
         fg2 = g; // error: doesn't provide S1
         ~~~
 !!! error TS2322: Type 'G' is not assignable to type 'F & G'.
 !!! error TS2322:   Type 'G' is not assignable to type 'F'.
+!!! error TS2322:     Property 'S1.A' does not exist on type 'G'.
         fg2 = fg; // OK
         fg2 = fg3; // OK
         ~~~
 !!! error TS2322: Type 'IFG' is not assignable to type 'F & G'.
 !!! error TS2322:   Type 'IFG' is not assignable to type 'G'.
+!!! error TS2322:     Property 'S2.A' does not exist on type 'IFG'.
     
         fg3 = f; // error: doesn't provide S2
         fg3 = g; // error: doesn't provide S1
@@ -314,22 +320,22 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(172,5)
         ~
 !!! error TS2322: Type 'H' is not assignable to type 'J'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type '"a"' is not assignable to type 'never'.
+!!! error TS2322:     Type 'string' is not assignable to type 'never'.
         j = i; // not ok 
         ~
 !!! error TS2322: Type 'I' is not assignable to type 'J'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type '"a"' is not assignable to type 'never'.
+!!! error TS2322:     Type 'string' is not assignable to type 'never'.
         j = k; // not ok
         ~
 !!! error TS2322: Type 'K' is not assignable to type 'J'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type '"a"' is not assignable to type 'never'.
+!!! error TS2322:     Type 'string' is not assignable to type 'never'.
         j = l; // not ok
         ~
 !!! error TS2322: Type 'L' is not assignable to type 'J'.
 !!! error TS2322:   Types of property 'a' are incompatible.
-!!! error TS2322:     Type '"a"' is not assignable to type 'never'.
+!!! error TS2322:     Type 'string' is not assignable to type 'never'.
     
         k = h; // ok
         k = i; // ok

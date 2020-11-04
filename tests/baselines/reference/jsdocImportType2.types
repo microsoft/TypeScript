@@ -3,26 +3,26 @@
 /** @typedef {import("./mod1")} C
  * @type {C} */
 var c;
->c : Chunk
+>c : D
 
 c.chunk;
 >c.chunk : number
->c : Chunk
+>c : D
 >chunk : number
 
 const D = require("./mod1");
->D : typeof Chunk
->require("./mod1") : typeof Chunk
+>D : typeof D
+>require("./mod1") : typeof D
 >require : (name: string) => any
 >"./mod1" : "./mod1"
 
 /** @type {D} */
 var d;
->d : Chunk
+>d : D
 
 d.chunk;
 >d.chunk : number
->d : Chunk
+>d : D
 >chunk : number
 
 === tests/cases/conformance/jsdoc/types.d.ts ===
@@ -40,19 +40,19 @@ declare var module: { exports: any };
 === tests/cases/conformance/jsdoc/mod1.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = class Chunk {
->module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
->module.exports : typeof Chunk
->module : { "tests/cases/conformance/jsdoc/mod1": typeof Chunk; }
->exports : typeof Chunk
->class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
->Chunk : typeof Chunk
+>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof import("tests/cases/conformance/jsdoc/mod1"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("tests/cases/conformance/jsdoc/mod1")
+>Chunk : typeof import("tests/cases/conformance/jsdoc/mod1")
 
     constructor() {
         this.chunk = 1;
 >this.chunk = 1 : 1
->this.chunk : number
+>this.chunk : any
 >this : this
->chunk : number
+>chunk : any
 >1 : 1
     }
 }

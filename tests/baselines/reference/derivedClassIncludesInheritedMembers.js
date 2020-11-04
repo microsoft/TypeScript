@@ -45,7 +45,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -61,14 +61,14 @@ var Base = /** @class */ (function () {
     Object.defineProperty(Base.prototype, "c", {
         get: function () { return ''; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Base.s = function () { };
     Object.defineProperty(Base, "t", {
         get: function () { return ''; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Base;

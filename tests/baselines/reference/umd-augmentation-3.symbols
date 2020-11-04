@@ -41,10 +41,10 @@ export as namespace Math2d;
 >Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
 
 export = M2D;
->M2D : Symbol(M2D, Decl(index.d.ts, 2, 13))
+>M2D : Symbol(M2D, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
 
 declare namespace M2D {
->M2D : Symbol("tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts", Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
+>M2D : Symbol(M2D, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
 
 	interface Point {
 >Point : Symbol(Point, Decl(index.d.ts, 4, 23))

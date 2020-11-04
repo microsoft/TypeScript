@@ -115,8 +115,8 @@ const strdirective = "directive";
 >"directive" : "directive"
 
 declare function bar<TArg, TRet, TDir>(options:
->bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { [strdirective]?: TDir; }) => [TArg, TRet, TDir]
->options : { [x: symbol]: (arg: TArg) => TRet; } & { [strdirective]?: TDir; }
+>bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { directive?: TDir; }) => [TArg, TRet, TDir]
+>options : { [x: symbol]: (arg: TArg) => TRet; } & { directive?: TDir; }
 
     {[x in symbol]: (arg: TArg) => TRet}
 >arg : TArg
@@ -142,8 +142,8 @@ const s2 = Symbol("s2");
 let case4 = bar({
 >case4 : [number, number, (x: string) => "str"]
 >bar({    [strdirective]: (x: string) => 'str',    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,}) : [number, number, (x: string) => "str"]
->bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { [strdirective]?: TDir; }) => [TArg, TRet, TDir]
->{    [strdirective]: (x: string) => 'str',    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,} : { [strdirective]: (x: string) => "str"; [s1]: (x: number) => number; [s2]: (x: number) => number; }
+>bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { directive?: TDir; }) => [TArg, TRet, TDir]
+>{    [strdirective]: (x: string) => 'str',    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,} : { directive: (x: string) => "str"; [s1]: (x: number) => number; [s2]: (x: number) => number; }
 
     [strdirective]: (x: string) => 'str',
 >[strdirective] : (x: string) => "str"
@@ -175,8 +175,8 @@ let case4 = bar({
 let case5 = bar({
 >case5 : [number, number, (x: string) => "str"]
 >bar({    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,    [strdirective]: (x: string) => 'str',}) : [number, number, (x: string) => "str"]
->bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { [strdirective]?: TDir; }) => [TArg, TRet, TDir]
->{    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,    [strdirective]: (x: string) => 'str',} : { [s1]: (x: number) => number; [s2]: (x: number) => number; [strdirective]: (x: string) => "str"; }
+>bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { directive?: TDir; }) => [TArg, TRet, TDir]
+>{    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,    [strdirective]: (x: string) => 'str',} : { [s1]: (x: number) => number; [s2]: (x: number) => number; directive: (x: string) => "str"; }
 
     [s1]: (x: number) => x + 1,
 >[s1] : (x: number) => number
@@ -208,8 +208,8 @@ let case5 = bar({
 let case6 = bar({
 >case6 : [number, number, string]
 >bar({    [strdirective]: 'str',    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,}) : [number, number, string]
->bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { [strdirective]?: TDir; }) => [TArg, TRet, TDir]
->{    [strdirective]: 'str',    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,} : { [strdirective]: string; [s1]: (x: number) => number; [s2]: (x: number) => number; }
+>bar : <TArg, TRet, TDir>(options: { [x: symbol]: (arg: TArg) => TRet; } & { directive?: TDir; }) => [TArg, TRet, TDir]
+>{    [strdirective]: 'str',    [s1]: (x: number) => x + 1,    [s2]: (x: number) => x + x,} : { directive: string; [s1]: (x: number) => number; [s2]: (x: number) => number; }
 
     [strdirective]: 'str',
 >[strdirective] : string

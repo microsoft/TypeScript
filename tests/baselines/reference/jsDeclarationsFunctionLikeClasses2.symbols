@@ -1,0 +1,200 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+/**
+ * @param {number} len
+ */
+export function Vec(len) {
+>Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>len : Symbol(len, Decl(source.js, 3, 20))
+
+    /**
+     * @type {number[]}
+     */
+    this.storage = new Array(len);
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>len : Symbol(len, Decl(source.js, 3, 20))
+}
+
+Vec.prototype = {
+>Vec.prototype : Symbol(Vec.prototype, Decl(source.js, 8, 1))
+>Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>prototype : Symbol(Vec.prototype, Decl(source.js, 8, 1))
+
+    /**
+     * @param {Vec} other
+     */
+    dot(other) {
+>dot : Symbol(dot, Decl(source.js, 10, 17))
+>other : Symbol(other, Decl(source.js, 14, 8))
+
+        if (other.storage.length !== this.storage.length) {
+>other.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>other : Symbol(other, Decl(source.js, 14, 8))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            throw new Error(`Dot product only applicable for vectors of equal length`);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+        let sum = 0;
+>sum : Symbol(sum, Decl(source.js, 18, 11))
+
+        for (let i = 0; i < this.storage.length; i++) {
+>i : Symbol(i, Decl(source.js, 19, 16))
+>i : Symbol(i, Decl(source.js, 19, 16))
+>this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(source.js, 19, 16))
+
+            sum += (this.storage[i] * other.storage[i]);
+>sum : Symbol(sum, Decl(source.js, 18, 11))
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>i : Symbol(i, Decl(source.js, 19, 16))
+>other.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>other : Symbol(other, Decl(source.js, 14, 8))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>i : Symbol(i, Decl(source.js, 19, 16))
+        }
+        return sum;
+>sum : Symbol(sum, Decl(source.js, 18, 11))
+
+    },
+    magnitude() {
+>magnitude : Symbol(magnitude, Decl(source.js, 23, 6))
+
+        let sum = 0;
+>sum : Symbol(sum, Decl(source.js, 25, 11))
+
+        for (let i = 0; i < this.storage.length; i++) {
+>i : Symbol(i, Decl(source.js, 26, 16))
+>i : Symbol(i, Decl(source.js, 26, 16))
+>this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(source.js, 26, 16))
+
+            sum += (this.storage[i] ** 2);
+>sum : Symbol(sum, Decl(source.js, 25, 11))
+>this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
+>i : Symbol(i, Decl(source.js, 26, 16))
+        }
+        return Math.sqrt(sum);
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>sum : Symbol(sum, Decl(source.js, 25, 11))
+    }
+}
+
+/**
+ * @param {number} x
+ * @param {number} y
+ */
+export function Point2D(x, y) {
+>Point2D : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+>x : Symbol(x, Decl(source.js, 37, 24))
+>y : Symbol(y, Decl(source.js, 37, 26))
+
+    if (!(this instanceof Point2D)) {
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+>Point2D : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+
+        return new Point2D(x, y);
+>Point2D : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+>x : Symbol(x, Decl(source.js, 37, 24))
+>y : Symbol(y, Decl(source.js, 37, 26))
+    }
+    Vec.call(this, 2);
+>Vec.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+
+    this.x = x;
+>this.x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>x : Symbol(x, Decl(source.js, 37, 24))
+
+    this.y = y;
+>this.y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+>this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+>y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+>y : Symbol(y, Decl(source.js, 37, 26))
+}
+
+Point2D.prototype = {
+>Point2D.prototype : Symbol(Point2D.prototype, Decl(source.js, 44, 1))
+>Point2D : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
+>prototype : Symbol(Point2D.prototype, Decl(source.js, 44, 1))
+
+    __proto__: Vec,
+>__proto__ : Symbol(__proto__, Decl(source.js, 46, 21))
+>Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
+
+    get x() {
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+
+        return this.storage[0];
+>this : Symbol(__object, Decl(source.js, 46, 19))
+
+    },
+    /**
+     * @param {number} x
+     */
+    set x(x) {
+>x : Symbol(Point2D.x, Decl(source.js, 41, 22), Decl(source.js, 47, 19), Decl(source.js, 50, 6))
+>x : Symbol(x, Decl(source.js, 54, 10))
+
+        this.storage[0] = x;
+>this : Symbol(__object, Decl(source.js, 46, 19))
+>x : Symbol(x, Decl(source.js, 54, 10))
+
+    },
+    get y() {
+>y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+
+        return this.storage[1];
+>this : Symbol(__object, Decl(source.js, 46, 19))
+
+    },
+    /**
+     * @param {number} y
+     */
+    set y(y) {
+>y : Symbol(Point2D.y, Decl(source.js, 42, 15), Decl(source.js, 56, 6), Decl(source.js, 59, 6))
+>y : Symbol(y, Decl(source.js, 63, 10))
+
+        this.storage[1] = y;
+>this : Symbol(__object, Decl(source.js, 46, 19))
+>y : Symbol(y, Decl(source.js, 63, 10))
+    }
+};
+
+=== tests/cases/conformance/jsdoc/declarations/referencer.js ===
+import {Point2D} from "./source";
+>Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
+
+export const origin = new Point2D(0, 0);
+>origin : Symbol(origin, Decl(referencer.js, 2, 12))
+>Point2D : Symbol(Point2D, Decl(referencer.js, 0, 8))
+
+// export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
+

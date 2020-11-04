@@ -18,7 +18,7 @@ var v = (_a = {},
         get: function () {
             return 0;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     _a);

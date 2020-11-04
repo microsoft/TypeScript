@@ -1,12 +1,19 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Feature Request
+about: Suggest an idea
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
 <!-- 🚨 STOP 🚨 𝗦𝗧𝗢𝗣 🚨 𝑺𝑻𝑶𝑷 🚨
 
-Half of all issues filed here are duplicates, answered in the FAQ, or not appropriate for the bug tracker. Please read the FAQ first, especially the "Common Feature Requests" section.
+Half of all issues filed here are duplicates, answered in the FAQ, or not appropriate for the bug tracker.
+
+Please help us by doing the following steps before logging an issue:
+  * Search: https://github.com/Microsoft/TypeScript/search?type=Issues
+  * Read the FAQ, especially the "Common Feature Requests" section: https://github.com/Microsoft/TypeScript/wiki/FAQ
 
 -->
 
@@ -38,4 +45,3 @@ My suggestion meets these guidelines:
 * [ ] This could be implemented without emitting different JS based on the types of the expressions
 * [ ] This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, etc.)
 * [ ] This feature would agree with the rest of [TypeScript's Design Goals](https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals).
-

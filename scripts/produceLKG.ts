@@ -1,10 +1,9 @@
 /// <reference types="node" />
 
-import childProcess = require('child_process');
-import fs = require('fs-extra');
-import path = require('path');
-import removeInternal = require('remove-internal');
-import glob = require('glob');
+import childProcess = require("child_process");
+import fs = require("fs-extra");
+import path = require("path");
+import glob = require("glob");
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
@@ -15,9 +14,10 @@ async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
-    await buildProtocol();
+    await copyTypesMap();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
+    await buildProtocol();
     await writeGitAttributes();
 }
 
@@ -27,13 +27,21 @@ async function copyLibFiles() {
 
 async function copyLocalizedDiagnostics() {
     const dir = await fs.readdir(source);
+    const ignoredFolders = ["enu"];
+
     for (const d of dir) {
         const fileName = path.join(source, d);
-        if (fs.statSync(fileName).isDirectory()) {
-            if (d === 'tslint') continue;
+        if (
+            fs.statSync(fileName).isDirectory() &&
+            ignoredFolders.indexOf(d) < 0
+        ) {
             await fs.copy(fileName, path.join(dest, d));
         }
     }
+}
+
+async function copyTypesMap() {
+    await copyFromBuiltLocal("typesMap.json"); // Cannot accommodate copyright header
 }
 
 async function buildProtocol() {

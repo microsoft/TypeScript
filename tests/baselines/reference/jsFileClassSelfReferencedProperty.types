@@ -9,10 +9,10 @@ export class StackOverflowTest {
 >this : this
 >testStackOverflow : any
 >this.testStackOverflow.bind(this) : error
->this.testStackOverflow.bind : any
->this.testStackOverflow : any
+>this.testStackOverflow.bind : error
+>this.testStackOverflow : undefined
 >this : this
->testStackOverflow : any
+>testStackOverflow : undefined
 >bind : any
 >this : this
   }

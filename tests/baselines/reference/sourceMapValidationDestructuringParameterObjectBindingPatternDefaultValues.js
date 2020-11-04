@@ -33,7 +33,7 @@ foo3({ name: "Edger", skill: "cutting edges" });
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
 function foo1(_a) {
-    var _b = (_a === void 0 ? {} : _a).name, nameA = _b === void 0 ? "<NoName>" : _b;
+    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameA = _c === void 0 ? "<NoName>" : _c;
     console.log(nameA);
 }
 function foo2(_a) {
@@ -41,7 +41,7 @@ function foo2(_a) {
     console.log(nameB);
 }
 function foo3(_a) {
-    var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
+    var _b = _a === void 0 ? {} : _a, _c = _b.name, name = _c === void 0 ? "<NoName>" : _c;
     console.log(name);
 }
 foo1(robotA);

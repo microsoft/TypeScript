@@ -1,0 +1,10 @@
+=== tests/cases/compiler/exportDefaultInterfaceAndValue.ts ===
+export default interface A { a: string; }
+>A : Symbol(A, Decl(exportDefaultInterfaceAndValue.ts, 0, 41), Decl(exportDefaultInterfaceAndValue.ts, 0, 0))
+>a : Symbol(A.a, Decl(exportDefaultInterfaceAndValue.ts, 0, 28))
+
+export default function() { return 1; }
+declare var x: A;
+>x : Symbol(x, Decl(exportDefaultInterfaceAndValue.ts, 2, 11))
+>A : Symbol(A, Decl(exportDefaultInterfaceAndValue.ts, 0, 41), Decl(exportDefaultInterfaceAndValue.ts, 0, 0))
+

@@ -14,6 +14,6 @@ function /*[#|*/innerPromise/*|]*/(): Promise<string> {
 async function innerPromise(): Promise<string> {
     const resp = await fetch("https://typescriptlang.org");
     var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
-    const blob_1 = blob2;
+    const blob_1 = await blob2;
     return blob_1.toString();
 }

@@ -38,7 +38,7 @@ exports = module.exports = C
 >exports : typeof C
 >module.exports = C : typeof C
 >module.exports : typeof C
->module : { "tests/cases/conformance/salsa/semver": typeof C; }
+>module : { "\"tests/cases/conformance/salsa/semver\"": typeof C; }
 >exports : typeof C
 >C : typeof C
 
@@ -59,7 +59,7 @@ function C() {
     this.p = 1
 >this.p = 1 : 1
 >this.p : any
->this : any
+>this : this
 >p : any
 >1 : 1
 }

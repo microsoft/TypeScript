@@ -5,7 +5,7 @@ function C() {
     this.m = null;
 >this.m = null : null
 >this.m : any
->this : any
+>this : this
 >m : any
 >null : null
 }
@@ -21,7 +21,7 @@ C.prototype.m = function() {
     this.nothing();
 >this.nothing() : error
 >this.nothing : error
->this : C
+>this : this
 >nothing : any
 }
 class X {

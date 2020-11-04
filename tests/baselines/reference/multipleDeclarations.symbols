@@ -3,6 +3,8 @@ function C() {
 >C : Symbol(C, Decl(input.js, 0, 0))
 
     this.m = null;
+>this.m : Symbol(C.m, Decl(input.js, 0, 14))
+>this : Symbol(C, Decl(input.js, 0, 0))
 >m : Symbol(C.m, Decl(input.js, 0, 14))
 }
 C.prototype.m = function() {

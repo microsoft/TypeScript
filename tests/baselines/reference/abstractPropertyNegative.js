@@ -48,7 +48,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -71,7 +71,7 @@ var C = /** @class */ (function (_super) {
     }
     Object.defineProperty(C.prototype, "concreteWithNoBody", {
         get: function () { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -104,7 +104,7 @@ var WrongTypeAccessorImpl = /** @class */ (function (_super) {
     }
     Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
         get: function () { return "nope, wrong"; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return WrongTypeAccessorImpl;
@@ -123,13 +123,13 @@ var AbstractAccessorMismatch = /** @class */ (function () {
     }
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p1", {
         set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     ;
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p2", {
         get: function () { return "should work"; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return AbstractAccessorMismatch;

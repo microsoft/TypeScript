@@ -1,14 +1,12 @@
 tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(55,9): error TS2322: Type '{ [k: K]: V; }[K]' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to '{ [k: K]: V; }[K]'.
 tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(59,9): error TS2322: Type 'V' is not assignable to type '{ [k: K]: V; }[K]'.
 tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(64,13): error TS2322: Type '{ [k: K]: V; }[K]' is not assignable to type 'V'.
+  'V' could be instantiated with an arbitrary type which could be unrelated to '{ [k: K]: V; }[K]'.
 tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(67,9): error TS2322: Type 'V' is not assignable to type '{ [k: K]: V; }[K]'.
-tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(84,9): error TS2322: Type '{ [x: string | number | symbol]: V; }[K]' is not assignable to type 'V'.
-tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(88,9): error TS2322: Type 'V' is not assignable to type '{ [x: string | number | symbol]: V; }[K]'.
-tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(93,13): error TS2322: Type '{ [x: string | number | symbol]: V; }[K]' is not assignable to type 'V'.
-tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(96,9): error TS2322: Type 'V' is not assignable to type '{ [x: string | number | symbol]: V; }[K]'.
 
 
-==== tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts (8 errors) ====
+==== tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts (4 errors) ====
     interface Dict<T> {
         [index: string]: T;
         [index: symbol]: T;
@@ -66,6 +64,7 @@ tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(96,9
             return this.o[k];
             ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ [k: K]: V; }[K]' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to '{ [k: K]: V; }[K]'.
         }
     
         public set(k: K, v: V) {
@@ -79,6 +78,7 @@ tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(96,9
                 return this.o[k];
                 ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ [k: K]: V; }[K]' is not assignable to type 'V'.
+!!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to '{ [k: K]: V; }[K]'.
             }
             const res = new SimpleMapMap<K, V>();
             this.o[k] = res as any as V;
@@ -101,26 +101,18 @@ tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts(96,9
     
         public get(k: K): V {
             return this.o[k];
-            ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ [x: string | number | symbol]: V; }[K]' is not assignable to type 'V'.
         }
     
         public set(k: K, v: V) {
             this.o[k] = v;
-            ~~~~~~~~~
-!!! error TS2322: Type 'V' is not assignable to type '{ [x: string | number | symbol]: V; }[K]'.
         }
     
         public getMap(k: K): V {
             if (k in this.o) {
                 return this.o[k];
-                ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ [x: string | number | symbol]: V; }[K]' is not assignable to type 'V'.
             }
             const res = new SimpleMapMap2<K, V>();
             this.o[k] = res as any as V;
-            ~~~~~~~~~
-!!! error TS2322: Type 'V' is not assignable to type '{ [x: string | number | symbol]: V; }[K]'.
             return res as any as V;
         }
     

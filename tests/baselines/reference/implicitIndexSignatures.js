@@ -45,6 +45,18 @@ function f4() {
     const v4 = getNumberIndexValue(o2);
 }
 
+function f5() {
+    enum E1 { A, B }
+    enum E2 { A = "A", B = "B" }
+    enum E3 { A = 0, B = "B" }
+    const v1 = getStringIndexValue(E1);
+    const v2 = getStringIndexValue(E2);
+    const v3 = getStringIndexValue(E3);
+    const v4 = getNumberIndexValue(E1);
+    const v5 = getNumberIndexValue(E2);
+    const v6 = getNumberIndexValue(E3);
+}
+
 
 //// [implicitIndexSignatures.js]
 var empty1 = {};
@@ -82,4 +94,27 @@ function f4() {
     var v2 = getStringIndexValue(o2);
     var v3 = getNumberIndexValue(o1);
     var v4 = getNumberIndexValue(o2);
+}
+function f5() {
+    var E1;
+    (function (E1) {
+        E1[E1["A"] = 0] = "A";
+        E1[E1["B"] = 1] = "B";
+    })(E1 || (E1 = {}));
+    var E2;
+    (function (E2) {
+        E2["A"] = "A";
+        E2["B"] = "B";
+    })(E2 || (E2 = {}));
+    var E3;
+    (function (E3) {
+        E3[E3["A"] = 0] = "A";
+        E3["B"] = "B";
+    })(E3 || (E3 = {}));
+    var v1 = getStringIndexValue(E1);
+    var v2 = getStringIndexValue(E2);
+    var v3 = getStringIndexValue(E3);
+    var v4 = getNumberIndexValue(E1);
+    var v5 = getNumberIndexValue(E2);
+    var v6 = getNumberIndexValue(E3);
 }

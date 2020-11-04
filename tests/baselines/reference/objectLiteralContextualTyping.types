@@ -69,16 +69,16 @@ var w: number;
 >w : number
 
 declare function bar<T>(param: { x?: T }): T;
->bar : <T>(param: { x?: T; }) => T
+>bar : <T>(param: {    x?: T;}) => T
 >param : { x?: T; }
 >x : T
 
 var b = bar({});
->b : {}
->bar({}) : {}
+>b : unknown
+>bar({}) : unknown
 >bar : <T>(param: { x?: T; }) => T
 >{} : {}
 
 var b: {};
->b : {}
+>b : unknown
 

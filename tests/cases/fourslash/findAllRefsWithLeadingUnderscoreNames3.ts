@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public [|{| "isWriteAccess": true, "isDefinition": true |}___bar|]() { return 0; }
+////    [|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}___bar|]() { return 0; }|]
 ////}
 ////
 ////var x: Foo;
 ////x.[|___bar|];
 
-verify.singleReferenceGroup("(method) Foo.___bar(): number");
+verify.singleReferenceGroup("(method) Foo.___bar(): number", "___bar");

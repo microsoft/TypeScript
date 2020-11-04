@@ -8,7 +8,7 @@ export async function foo({ foo = await import("./bar") }) {
 }
 
 export function* foo2({ foo = yield "a" }) {
->foo2 : ({ foo }: { foo?: any; }) => IterableIterator<any>
+>foo2 : ({ foo }: { foo?: any; }) => Generator<never, void, unknown>
 >foo : any
 >yield "a" : any
 >"a" : "a"

@@ -1,6 +1,6 @@
 === tests/cases/compiler/constructorOverloads7.ts ===
 declare class Point
->Point : Symbol(Point, Decl(constructorOverloads7.ts, 0, 0))
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
 {
     x: number;
 >x : Symbol(Point.x, Decl(constructorOverloads7.ts, 1, 1))
@@ -16,9 +16,11 @@ declare class Point
 >add : Symbol(Point.add, Decl(constructorOverloads7.ts, 4, 38))
 >dx : Symbol(dx, Decl(constructorOverloads7.ts, 6, 9))
 >dy : Symbol(dy, Decl(constructorOverloads7.ts, 6, 20))
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
 
      origin: Point;
 >origin : Symbol(Point.origin, Decl(constructorOverloads7.ts, 6, 40))
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
 
 }
 
@@ -26,7 +28,7 @@ declare class Point
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void
 function Point(x, y) {
->Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1))
+>Point : Symbol(Point, Decl(constructorOverloads7.ts, 9, 1), Decl(constructorOverloads7.ts, 0, 0))
 >x : Symbol(x, Decl(constructorOverloads7.ts, 14, 15))
 >y : Symbol(y, Decl(constructorOverloads7.ts, 14, 17))
 

@@ -1,0 +1,108 @@
+=== tests/cases/compiler/awaitInNonAsyncFunction.ts ===
+// https://github.com/Microsoft/TypeScript/issues/26586
+
+function normalFunc(p: Promise<number>) {
+>normalFunc : (p: Promise<number>) => number
+>p : Promise<number>
+
+  for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+  return await p;
+>await p : number
+>p : Promise<number>
+}
+
+export function exportedFunc(p: Promise<number>) {
+>exportedFunc : (p: Promise<number>) => number
+>p : Promise<number>
+
+  for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+  return await p;
+>await p : number
+>p : Promise<number>
+}
+
+const functionExpression = function(p: Promise<number>) {
+>functionExpression : (p: Promise<number>) => void
+>function(p: Promise<number>) {  for await (const _ of []);  await p;} : (p: Promise<number>) => void
+>p : Promise<number>
+
+  for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+  await p;
+>await p : number
+>p : Promise<number>
+}
+
+const arrowFunc = (p: Promise<number>) => {
+>arrowFunc : (p: Promise<number>) => number
+>(p: Promise<number>) => {  for await (const _ of []);  return await p;} : (p: Promise<number>) => number
+>p : Promise<number>
+
+  for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+  return await p;
+>await p : number
+>p : Promise<number>
+
+};
+
+function* generatorFunc(p: Promise<number>) {
+>generatorFunc : (p: Promise<number>) => Generator<number, void, unknown>
+>p : Promise<number>
+
+  for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+  yield await p;
+>yield await p : any
+>await p : number
+>p : Promise<number>
+}
+
+class clazz {
+>clazz : clazz
+
+  constructor(p: Promise<number>) {
+>p : Promise<number>
+
+    for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+    await p;
+>await p : number
+>p : Promise<number>
+  }
+  method(p: Promise<number>) {
+>method : (p: Promise<number>) => void
+>p : Promise<number>
+
+  for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+    await p;
+>await p : number
+>p : Promise<number>
+  }
+}
+
+for await (const _ of []);
+>_ : any
+>[] : undefined[]
+
+await null;
+>await null : null
+>null : null
+

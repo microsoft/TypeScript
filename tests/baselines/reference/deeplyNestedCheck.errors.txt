@@ -1,0 +1,69 @@
+tests/cases/compiler/deeplyNestedCheck.ts(34,25): error TS2741: Property 'i' is missing in type '{}' but required in type 'H'.
+tests/cases/compiler/deeplyNestedCheck.ts(52,35): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/deeplyNestedCheck.ts(53,50): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/deeplyNestedCheck.ts (3 errors) ====
+    // Repro from #14794
+    
+    interface DataSnapshot<X = {}> {
+      child(path: string): DataSnapshot;
+    }
+    
+    interface Snapshot<T> extends DataSnapshot {
+      child<U extends Extract<keyof T, string>>(path: U): Snapshot<T[U]>;
+    }
+    
+    // Repro from 34619
+    
+    interface A { b: B[] }
+    interface B { c: C }
+    interface C { d: D[] }
+    interface D { e: E[] }
+    interface E { f: F[] }
+    interface F { g: G }
+    interface G { h: H[] }
+    interface H { i: string }
+    
+    const x: A = {
+      b: [
+        {
+          c: {
+            d: [
+              {
+                e: [
+                  {
+                    f: [
+                      {
+                        g: {
+                          h: [
+                            {
+                            ~
+                              // i: '',
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            },
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'i' is missing in type '{}' but required in type 'H'.
+!!! related TS2728 tests/cases/compiler/deeplyNestedCheck.ts:20:15: 'i' is declared here.
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
+    };
+    
+    // Repro from 34619
+    
+    const a1: string[][][][][] = [[[[[42]]]]];
+                                      ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    const a2: string[][][][][][][][][][] = [[[[[[[[[[42]]]]]]]]]];
+                                                     ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    

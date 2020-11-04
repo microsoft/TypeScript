@@ -21,8 +21,8 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 >EntityPrototype : any
 
 var o = {
->o : { "__proto__": number; }
->{    "__proto__": 0} : { "__proto__": number; }
+>o : { __proto__: number; }
+>{    "__proto__": 0} : { __proto__: number; }
 
     "__proto__": 0
 >"__proto__" : number

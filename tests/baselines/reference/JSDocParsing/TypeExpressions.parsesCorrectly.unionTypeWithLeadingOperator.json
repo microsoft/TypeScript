@@ -1,0 +1,39 @@
+{
+    "kind": "ParenthesizedType",
+    "pos": 1,
+    "end": 22,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 1,
+    "type": {
+        "kind": "UnionType",
+        "pos": 2,
+        "end": 20,
+        "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 1,
+        "types": {
+            "0": {
+                "kind": "NumberKeyword",
+                "pos": 4,
+                "end": 11,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 1
+            },
+            "1": {
+                "kind": "StringKeyword",
+                "pos": 13,
+                "end": 20,
+                "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 1
+            },
+            "length": 2,
+            "pos": 2,
+            "end": 20,
+            "hasTrailingComma": false,
+            "transformFlags": 1
+        }
+    }
+}

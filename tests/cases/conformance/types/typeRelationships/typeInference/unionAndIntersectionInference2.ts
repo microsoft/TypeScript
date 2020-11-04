@@ -19,5 +19,5 @@ var c2: string & { name: string } & number;
 var d2: string & { name: string } & number & { name: string };
 f2(a2); // string
 f2(b2); // string[]
-f2(c2); // string & number
-f2(d2); // string & number
+f2(c2); // never
+f2(d2); // never

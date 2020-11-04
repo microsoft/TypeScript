@@ -1,0 +1,173 @@
+=== tests/cases/conformance/salsa/propertiesOfGenericConstructorFunctions.js ===
+/**
+ * @template {string} K
+ * @template V
+ * @param {string} ik
+ * @param {V} iv
+ */
+function Multimap(ik, iv) {
+>Multimap : typeof Multimap
+>ik : string
+>iv : V
+
+    /** @type {{ [s: string]: V }} */
+    this._map = {};
+>this._map = {} : {}
+>this._map : { [s: string]: V; }
+>this : this
+>_map : { [s: string]: V; }
+>{} : {}
+
+    // without type annotation
+    this._map2 = { [ik]: iv };
+>this._map2 = { [ik]: iv } : { [x: string]: V; }
+>this._map2 : any
+>this : this
+>_map2 : any
+>{ [ik]: iv } : { [x: string]: V; }
+>[ik] : V
+>ik : string
+>iv : V
+
+};
+
+/** @type {Multimap<"a" | "b", number>} with type annotation */
+const map = new Multimap("a", 1);
+>map : Multimap<"a" | "b", number>
+>new Multimap("a", 1) : Multimap<"a" | "b", number>
+>Multimap : typeof Multimap
+>"a" : "a"
+>1 : 1
+
+// without type annotation
+const map2 = new Multimap("m", 2);
+>map2 : Multimap<string, number>
+>new Multimap("m", 2) : Multimap<string, number>
+>Multimap : typeof Multimap
+>"m" : "m"
+>2 : 2
+
+/** @type {number} */
+var n = map._map['hi']
+>n : number
+>map._map['hi'] : number
+>map._map : { [s: string]: number; }
+>map : Multimap<"a" | "b", number>
+>_map : { [s: string]: number; }
+>'hi' : "hi"
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : number
+>map._map2['hi'] : number
+>map._map2 : { [x: string]: number; }
+>map : Multimap<"a" | "b", number>
+>_map2 : { [x: string]: number; }
+>'hi' : "hi"
+
+/** @type {number} */
+var n = map2._map['hi']
+>n : number
+>map2._map['hi'] : number
+>map2._map : { [s: string]: number; }
+>map2 : Multimap<string, number>
+>_map : { [s: string]: number; }
+>'hi' : "hi"
+
+/** @type {number} */
+var n = map._map2['hi']
+>n : number
+>map._map2['hi'] : number
+>map._map2 : { [x: string]: number; }
+>map : Multimap<"a" | "b", number>
+>_map2 : { [x: string]: number; }
+>'hi' : "hi"
+
+/**
+ * @class
+ * @template T
+ * @param {T} t
+ */
+function Cp(t) {
+>Cp : typeof Cp
+>t : T
+
+    this.x = 1
+>this.x = 1 : 1
+>this.x : any
+>this : this
+>x : any
+>1 : 1
+
+    this.y = t
+>this.y = t : T
+>this.y : any
+>this : this
+>y : any
+>t : T
+}
+Cp.prototype = {
+>Cp.prototype = {    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1(): number; m2(): T; }
+>Cp.prototype : { m1(): number; m2(): T; }
+>Cp : typeof Cp
+>prototype : { m1(): number; m2(): T; }
+>{    m1() { return this.x },    m2() { this.z = this.x + 1; return this.y }} : { m1(): number; m2(): T; }
+
+    m1() { return this.x },
+>m1 : () => number
+>this.x : number
+>this : this
+>x : number
+
+    m2() { this.z = this.x + 1; return this.y }
+>m2 : () => T
+>this.z = this.x + 1 : number
+>this.z : number
+>this : this
+>z : number
+>this.x + 1 : number
+>this.x : number
+>this : this
+>x : number
+>1 : 1
+>this.y : T
+>this : this
+>y : T
+}
+var cp = new Cp(1)
+>cp : Cp<number>
+>new Cp(1) : Cp<number>
+>Cp : typeof Cp
+>1 : 1
+
+/** @type {number} */
+var n = cp.x
+>n : number
+>cp.x : number
+>cp : Cp<number>
+>x : number
+
+/** @type {number} */
+var n = cp.y
+>n : number
+>cp.y : number
+>cp : Cp<number>
+>y : number
+
+/** @type {number} */
+var n = cp.m1()
+>n : number
+>cp.m1() : number
+>cp.m1 : () => number
+>cp : Cp<number>
+>m1 : () => number
+
+/** @type {number} */
+var n = cp.m2()
+>n : number
+>cp.m2() : number
+>cp.m2 : () => number
+>cp : Cp<number>
+>m2 : () => number
+
+

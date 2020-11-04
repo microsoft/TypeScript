@@ -5,7 +5,7 @@ namespace ts.JsTyping {
         directoryExists(path: string): boolean;
         fileExists(fileName: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string> | undefined, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
     }
 
     interface PackageJson {
@@ -29,7 +29,7 @@ namespace ts.JsTyping {
         return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
-    export const nodeCoreModuleList: ReadonlyArray<string> = [
+    export const nodeCoreModuleList: readonly string[] = [
         "assert",
         "async_hooks",
         "buffer",
@@ -68,22 +68,26 @@ namespace ts.JsTyping {
         "zlib"
     ];
 
-    export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+    export const nodeCoreModules = new Set(nodeCoreModuleList);
+
+    export function nonRelativeModuleNameForTypingCache(moduleName: string) {
+        return nodeCoreModules.has(moduleName) ? "node" : moduleName;
+    }
 
     /**
      * A map of loose file names to library names that we are confident require typings
      */
-    export type SafeList = ReadonlyMap<string>;
+    export type SafeList = ReadonlyESMap<string, string>;
 
     export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
         const result = readConfigFile(safeListPath, path => host.readFile(path));
-        return createMapFromTemplate<string>(result.config);
+        return new Map(getEntries<string>(result.config));
     }
 
     export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
         const result = readConfigFile(typesMapPath, path => host.readFile(path));
         if (result.config) {
-            return createMapFromTemplate<string>(result.config.simpleMap);
+            return new Map(getEntries<string>(result.config.simpleMap));
         }
         return undefined;
     }
@@ -103,10 +107,10 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeList: SafeList,
-        packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
+        packageNameToTypingLocation: ReadonlyESMap<string, CachedTyping>,
         typeAcquisition: TypeAcquisition,
-        unresolvedImports: ReadonlyArray<string>,
-        typesRegistry: ReadonlyMap<MapLike<string>>):
+        unresolvedImports: readonly string[],
+        typesRegistry: ReadonlyESMap<string, MapLike<string>>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
@@ -114,7 +118,7 @@ namespace ts.JsTyping {
         }
 
         // A typing name to typing file path mapping
-        const inferredTypings = createMap<string>();
+        const inferredTypings = new Map<string, string>();
 
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
@@ -130,9 +134,9 @@ namespace ts.JsTyping {
         const exclude = typeAcquisition.exclude || [];
 
         // Directories to search for package.json, bower.json and other typing information
-        const possibleSearchDirs = arrayToSet(fileNames, getDirectoryPath);
-        possibleSearchDirs.set(projectRootPath, true);
-        possibleSearchDirs.forEach((_true, searchDir) => {
+        const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
+        possibleSearchDirs.add(projectRootPath);
+        possibleSearchDirs.forEach((searchDir) => {
             const packageJsonPath = combinePaths(searchDir, "package.json");
             getTypingNamesFromJson(packageJsonPath, filesToWatch);
 
@@ -145,12 +149,13 @@ namespace ts.JsTyping {
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
             getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
         });
-        getTypingNamesFromSourceFileNames(fileNames);
-
+        if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
+            getTypingNamesFromSourceFileNames(fileNames);
+        }
         // add typings for unresolved imports
         if (unresolvedImports) {
             const module = deduplicate<string>(
-                unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId),
+                unresolvedImports.map(nonRelativeModuleNameForTypingCache),
                 equateStringsCaseSensitive,
                 compareStringsCaseSensitive);
             addInferredTypings(module, "Inferred typings from unresolved imports");
@@ -188,7 +193,7 @@ namespace ts.JsTyping {
                 inferredTypings.set(typingName, undefined!); // TODO: GH#18217
             }
         }
-        function addInferredTypings(typingNames: ReadonlyArray<string>, message: string) {
+        function addInferredTypings(typingNames: readonly string[], message: string) {
             if (log) log(`${message}: ${JSON.stringify(typingNames)}`);
             forEach(typingNames, addInferredTyping);
         }
@@ -285,9 +290,8 @@ namespace ts.JsTyping {
 
     }
 
-    export const enum PackageNameValidationResult {
+    export const enum NameValidationResult {
         Ok,
-        ScopedPackagesNotSupported,
         EmptyName,
         NameTooLong,
         NameStartsWithDot,
@@ -297,49 +301,77 @@ namespace ts.JsTyping {
 
     const maxPackageNameLength = 214;
 
+    export interface ScopedPackageNameValidationResult {
+        name: string;
+        isScopeName: boolean;
+        result: NameValidationResult;
+    }
+    export type PackageNameValidationResult = NameValidationResult | ScopedPackageNameValidationResult;
+
     /**
      * Validates package name using rules defined at https://docs.npmjs.com/files/package.json
      */
     export function validatePackageName(packageName: string): PackageNameValidationResult {
+        return validatePackageNameWorker(packageName, /*supportScopedPackage*/ true);
+    }
+
+    function validatePackageNameWorker(packageName: string, supportScopedPackage: false): NameValidationResult;
+    function validatePackageNameWorker(packageName: string, supportScopedPackage: true): PackageNameValidationResult;
+    function validatePackageNameWorker(packageName: string, supportScopedPackage: boolean): PackageNameValidationResult {
         if (!packageName) {
-            return PackageNameValidationResult.EmptyName;
+            return NameValidationResult.EmptyName;
         }
         if (packageName.length > maxPackageNameLength) {
-            return PackageNameValidationResult.NameTooLong;
+            return NameValidationResult.NameTooLong;
         }
         if (packageName.charCodeAt(0) === CharacterCodes.dot) {
-            return PackageNameValidationResult.NameStartsWithDot;
+            return NameValidationResult.NameStartsWithDot;
         }
         if (packageName.charCodeAt(0) === CharacterCodes._) {
-            return PackageNameValidationResult.NameStartsWithUnderscore;
+            return NameValidationResult.NameStartsWithUnderscore;
         }
         // check if name is scope package like: starts with @ and has one '/' in the middle
         // scoped packages are not currently supported
-        // TODO: when support will be added we'll need to split and check both scope and package name
-        if (/^@[^/]+\/[^/]+$/.test(packageName)) {
-            return PackageNameValidationResult.ScopedPackagesNotSupported;
+        if (supportScopedPackage) {
+            const matches = /^@([^/]+)\/([^/]+)$/.exec(packageName);
+            if (matches) {
+                const scopeResult = validatePackageNameWorker(matches[1], /*supportScopedPackage*/ false);
+                if (scopeResult !== NameValidationResult.Ok) {
+                    return { name: matches[1], isScopeName: true, result: scopeResult };
+                }
+                const packageResult = validatePackageNameWorker(matches[2], /*supportScopedPackage*/ false);
+                if (packageResult !== NameValidationResult.Ok) {
+                    return { name: matches[2], isScopeName: false, result: packageResult };
+                }
+                return NameValidationResult.Ok;
+            }
         }
         if (encodeURIComponent(packageName) !== packageName) {
-            return PackageNameValidationResult.NameContainsNonURISafeCharacters;
+            return NameValidationResult.NameContainsNonURISafeCharacters;
         }
-        return PackageNameValidationResult.Ok;
+        return NameValidationResult.Ok;
     }
 
     export function renderPackageNameValidationFailure(result: PackageNameValidationResult, typing: string): string {
+        return typeof result === "object" ?
+            renderPackageNameValidationFailureWorker(typing, result.result, result.name, result.isScopeName) :
+            renderPackageNameValidationFailureWorker(typing, result, typing, /*isScopeName*/ false);
+    }
+
+    function renderPackageNameValidationFailureWorker(typing: string, result: NameValidationResult, name: string, isScopeName: boolean): string {
+        const kind = isScopeName ? "Scope" : "Package";
         switch (result) {
-            case PackageNameValidationResult.EmptyName:
-                return `Package name '${typing}' cannot be empty`;
-            case PackageNameValidationResult.NameTooLong:
-                return `Package name '${typing}' should be less than ${maxPackageNameLength} characters`;
-            case PackageNameValidationResult.NameStartsWithDot:
-                return `Package name '${typing}' cannot start with '.'`;
-            case PackageNameValidationResult.NameStartsWithUnderscore:
-                return `Package name '${typing}' cannot start with '_'`;
-            case PackageNameValidationResult.ScopedPackagesNotSupported:
-                return `Package '${typing}' is scoped and currently is not supported`;
-            case PackageNameValidationResult.NameContainsNonURISafeCharacters:
-                return `Package name '${typing}' contains non URI safe characters`;
-            case PackageNameValidationResult.Ok:
+            case NameValidationResult.EmptyName:
+                return `'${typing}':: ${kind} name '${name}' cannot be empty`;
+            case NameValidationResult.NameTooLong:
+                return `'${typing}':: ${kind} name '${name}' should be less than ${maxPackageNameLength} characters`;
+            case NameValidationResult.NameStartsWithDot:
+                return `'${typing}':: ${kind} name '${name}' cannot start with '.'`;
+            case NameValidationResult.NameStartsWithUnderscore:
+                return `'${typing}':: ${kind} name '${name}' cannot start with '_'`;
+            case NameValidationResult.NameContainsNonURISafeCharacters:
+                return `'${typing}':: ${kind} name '${name}' contains non URI safe characters`;
+            case NameValidationResult.Ok:
                 return Debug.fail(); // Shouldn't have called this.
             default:
                 throw Debug.assertNever(result);

@@ -26,7 +26,7 @@ const B = function() { this.id = 1; }
 >function() { this.id = 1; } : typeof B
 >this.id = 1 : 1
 >this.id : any
->this : any
+>this : this
 >id : any
 >1 : 1
 
@@ -40,7 +40,7 @@ B.prototype.m = function() { this.x = 2; }
 >function() { this.x = 2; } : () => void
 >this.x = 2 : 2
 >this.x : number
->this : B
+>this : this
 >x : number
 >2 : 2
 
@@ -64,14 +64,14 @@ function A() { this.id = 1; }
 >A : typeof A
 >this.id = 1 : 1
 >this.id : any
->this : any
+>this : this
 >id : any
 >1 : 1
 
 module.exports = A;
 >module.exports = A : typeof A
 >module.exports : typeof A
->module : { "tests/cases/conformance/salsa/other": typeof A; }
+>module : { "\"tests/cases/conformance/salsa/other\"": typeof A; }
 >exports : typeof A
 >A : typeof A
 

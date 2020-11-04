@@ -2,7 +2,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(10,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(18,5): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(21,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(21,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(25,1): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(27,1): error TS2539: Cannot assign to 'C' because it is not a variable.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(30,1): error TS2539: Cannot assign to 'E' because it is not a variable.
@@ -22,7 +22,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(65,21): error TS1128: Declaration or statement expected.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(66,11): error TS1005: ';' expected.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(69,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(72,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(72,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(73,2): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(74,2): error TS2539: Cannot assign to 'C' because it is not a variable.
 tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts(75,2): error TS2539: Cannot assign to 'E' because it is not a variable.
@@ -70,7 +70,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     
     this **= value;
     ~~~~
-!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     
     // identifiers: module, class, enum, function
     module M { export var a; }
@@ -161,7 +161,7 @@ tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignm
     // parentheses, the containted expression is value
     (this) **= value;
     ~~~~~~
-!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     (M) **= value;
      ~
 !!! error TS2539: Cannot assign to 'M' because it is not a variable.

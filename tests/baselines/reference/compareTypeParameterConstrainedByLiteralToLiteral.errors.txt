@@ -1,0 +1,13 @@
+tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts(5,5): error TS2367: This condition will always return 'false' since the types 'T' and '"x"' have no overlap.
+
+
+==== tests/cases/compiler/compareTypeParameterConstrainedByLiteralToLiteral.ts (1 errors) ====
+    // Test for #26758
+    
+    function foo<T extends "a" | "b">(t: T) {
+        t === "a";  // Should be allowed
+        t === "x";  // Should be error
+        ~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'T' and '"x"' have no overlap.
+    }
+    

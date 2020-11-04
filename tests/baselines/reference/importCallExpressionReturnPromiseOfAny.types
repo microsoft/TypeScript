@@ -93,7 +93,7 @@ var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >getSpecifier : () => string
 
 function * loadModule(directories: string[]) {
->loadModule : (directories: string[]) => IterableIterator<string>
+>loadModule : (directories: string[]) => Generator<string, void, string>
 >directories : string[]
 
     for (const directory of directories) {

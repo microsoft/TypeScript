@@ -30,16 +30,18 @@ export const l = async () => {
 
 //// [test.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
     function fn() {
         return __awaiter(this, void 0, void 0, function* () {
             const req = yield new Promise((resolve_1, reject_1) => { require(['./test'], resolve_1, reject_1); }); // ONE
@@ -55,7 +57,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.cl1 = cl1;
     exports.obj = {
-        m: () => __awaiter(this, void 0, void 0, function* () {
+        m: () => __awaiter(void 0, void 0, void 0, function* () {
             const req = yield new Promise((resolve_3, reject_3) => { require(['./test'], resolve_3, reject_3); }); // THREE
         })
     };
@@ -69,7 +71,8 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.cl2 = cl2;
-    exports.l = () => __awaiter(this, void 0, void 0, function* () {
+    const l = () => __awaiter(void 0, void 0, void 0, function* () {
         const req = yield new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });
+    exports.l = l;
 });

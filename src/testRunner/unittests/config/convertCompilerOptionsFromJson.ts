@@ -8,7 +8,7 @@ namespace ts {
 
         interface ExpectedResultWithParsingSuccess {
             compilerOptions: CompilerOptions;
-            errors: ReadonlyArray<Diagnostic>;
+            errors: readonly Diagnostic[];
         }
 
         interface ExpectedResultWithParsingFailure {
@@ -59,7 +59,7 @@ namespace ts {
             }
         }
 
-        function verifyErrors(actualErrors: Diagnostic[], expectedErrors: ReadonlyArray<Diagnostic>, ignoreLocation?: boolean) {
+        function verifyErrors(actualErrors: Diagnostic[], expectedErrors: readonly Diagnostic[], ignoreLocation?: boolean) {
             assert.isTrue(expectedErrors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedErrors.map(getDiagnosticString), undefined, " ")}. Actual error: ${JSON.stringify(actualErrors.map(getDiagnosticString), undefined, " ")}.`);
             for (let i = 0; i < actualErrors.length; i++) {
                 const actualError = actualErrors[i];
@@ -238,7 +238,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'esnext'.",
+                        messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'esnext'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -295,7 +295,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -326,7 +326,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -357,7 +357,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -388,7 +388,7 @@ namespace ts {
                         file: undefined,
                         start: 0,
                         length: 0,
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                     }]
@@ -592,16 +592,16 @@ namespace ts {
     ]
   }
 }
-`, "tsconfig.json",
-                {
-                    compilerOptions: {
-                        target: undefined,
-                        module: ModuleKind.ESNext,
-                        experimentalDecorators: true,
-                    },
-                    hasParseErrors: true
-                }
-            );
+`,
+            "tsconfig.json",
+            {
+                compilerOptions: {
+                    target: undefined,
+                    module: ModuleKind.ESNext,
+                    experimentalDecorators: true,
+                },
+                hasParseErrors: true
+            });
         });
     });
 }

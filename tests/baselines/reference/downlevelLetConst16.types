@@ -515,13 +515,13 @@ function foo3() {
 >x : any
     }
     for (let [y] = []; ;) {
->y : any
->[] : [undefined?]
+>y : undefined
+>[] : []
 
         use(y);
 >use(y) : any
 >use : (a: any) => any
->y : any
+>y : undefined
     }
     for (let {a: z} = {a: 1}; ;) {
 >a : any
@@ -554,13 +554,13 @@ function foo4() {
 >x : 1
     }
     for (const [y] = []; ;) {
->y : any
->[] : [undefined?]
+>y : undefined
+>[] : []
 
         use(y);
 >use(y) : any
 >use : (a: any) => any
->y : any
+>y : undefined
     }
     for (const {a: z} = { a: 1 }; ;) {
 >a : any

@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(11,55): error TS2322: Type '{ 3: string; 'three': string; }' is not assignable to type '{ [n: number]: string; }'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(11,55): error TS2322: Type '{ 3: string; three: string; }' is not assignable to type '{ [n: number]: string; }'.
   Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(45,14): error TS2339: Property 'qqq' does not exist on type '{ 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }'.
 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(80,19): error TS2538: Type '{ name: string; }' cannot be used as an index type.
@@ -22,7 +22,7 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     
     var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
                                                           ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ 3: string; 'three': string; }' is not assignable to type '{ [n: number]: string; }'.
+!!! error TS2322: Type '{ 3: string; three: string; }' is not assignable to type '{ [n: number]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
     var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
     var bothIndex:
@@ -146,12 +146,14 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     var ww: B;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'ww' must be of type 'A & B', but here has type 'B'.
+!!! related TS6203 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts:124:5: 'ww' was also declared here.
     
     // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
     var xx = bothIndex[<any>null];
     var xx: B;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'xx' must be of type 'A & B', but here has type 'B'.
+!!! related TS6203 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts:128:5: 'xx' was also declared here.
     
     // Bracket notation property access using string value on type with numeric index signature and string index signature
     var yy = bothIndex['foo'];
@@ -176,4 +178,5 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     var x3: A;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'A | (A & B)', but here has type 'A'.
+!!! related TS6203 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts:148:5: 'x3' was also declared here.
     

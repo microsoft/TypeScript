@@ -3,7 +3,7 @@
 // @Filename: quickInfoJsDocTags.ts
 /////**
 //// * Doc
-//// * @author Me
+//// * @author Me <me@domain.tld>
 //// * @augments {C<T>} Augments it
 //// * @template T A template
 //// * @type {number | string} A type
@@ -11,6 +11,7 @@
 //// * @property {number} x The prop
 //// * @param {number} x The param
 //// * @returns The result
+//// * @see x (the parameter)
 //// */
 ////function /**/foo(x) {}
 

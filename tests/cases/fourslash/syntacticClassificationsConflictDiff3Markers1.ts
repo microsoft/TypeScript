@@ -10,7 +10,7 @@
 ////>>>>>>> Branch - a
 ////}
 
-const c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.keyword("class"), c.className("C"), c.punctuation("{"),
     c.comment("<<<<<<< HEAD"),
@@ -21,3 +21,9 @@ verify.syntacticClassificationsAre(
     c.identifier("v"), c.punctuation("="), c.numericLiteral("2"), c.punctuation(";"),
     c.comment(">>>>>>> Branch - a"),
     c.punctuation("}"));
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("class.declaration", "C"), 
+    c2.semanticToken("property.declaration", "v"), 
+);

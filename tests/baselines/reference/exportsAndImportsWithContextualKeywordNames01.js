@@ -21,6 +21,7 @@ import { get } from "./t1";
 //// [t1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.get = exports.set = void 0;
 var set = {
     set foo(x) {
     }

@@ -1,27 +1,27 @@
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(4,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(4,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(4,8): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(4,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(5,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(5,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(5,8): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(5,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(6,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(6,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(6,8): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(6,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(7,1): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(7,8): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(7,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(10,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(10,6): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(10,13): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(10,13): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(11,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(11,6): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(11,13): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(11,13): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(12,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(12,6): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(12,13): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(12,13): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(13,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(13,6): error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(13,13): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(13,13): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(15,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(15,1): error TS17006: An unary expression with the 'typeof' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(16,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -109,28 +109,28 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxE
     ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
            ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete ++temp ** 3;
     ~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
            ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete temp-- ** 3;
     ~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
            ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete temp++ ** 3;
     ~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
            ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     
     
     1 ** delete --temp ** 3;
@@ -139,28 +139,28 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxE
          ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
                 ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     1 ** delete ++temp ** 3;
          ~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
          ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
                 ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     1 ** delete temp-- ** 3;
          ~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
          ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
                 ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     1 ** delete temp++ ** 3;
          ~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
          ~~~~~~~~~~~~~
 !!! error TS17006: An unary expression with the 'delete' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
                 ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     
     typeof --temp ** 3;
     ~~~~~~~~~~~~~

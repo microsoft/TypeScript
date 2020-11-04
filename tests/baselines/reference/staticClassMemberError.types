@@ -17,7 +17,7 @@ class C {
 
 // just want to make sure this one doesn't crash the compiler
 function Foo();
->Foo : () => any
+>Foo : typeof Foo
 
 class Foo {
 >Foo : Foo

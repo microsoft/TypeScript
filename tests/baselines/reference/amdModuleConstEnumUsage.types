@@ -1,0 +1,30 @@
+=== /proj/defs/cc.ts ===
+export const enum CharCode {
+>CharCode : CharCode
+
+    A,
+>A : CharCode.A
+
+    B
+>B : CharCode.B
+}
+=== /proj/component/file.ts ===
+import { CharCode } from 'defs/cc';
+>CharCode : typeof CharCode
+
+export class User {
+>User : User
+
+    method(input: number) {
+>method : (input: number) => void
+>input : number
+
+        if (CharCode.A === input) {}
+>CharCode.A === input : boolean
+>CharCode.A : CharCode.A
+>CharCode : typeof CharCode
+>A : CharCode.A
+>input : number
+    }
+}
+

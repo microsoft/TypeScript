@@ -38,6 +38,7 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 //// [BaseClass.js]
 "use strict";
 exports.__esModule = true;
+exports.MyBaseClass = void 0;
 var MyBaseClass = /** @class */ (function () {
     function MyBaseClass(value) {
     }
@@ -50,7 +51,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -60,6 +61,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.MyMixin = void 0;
 function MyMixin(base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
@@ -76,7 +78,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -86,6 +88,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.MyExtendedClass = void 0;
 var BaseClass_1 = require("./BaseClass");
 var MixinClass_1 = require("./MixinClass");
 var MyExtendedClass = /** @class */ (function (_super) {

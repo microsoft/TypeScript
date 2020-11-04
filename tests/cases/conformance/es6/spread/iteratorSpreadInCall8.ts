@@ -16,7 +16,7 @@ class SymbolIterator {
     }
 }
 
-class StringIterator {
+class _StringIterator {
     next() {
         return {
             value: "",
@@ -29,4 +29,4 @@ class StringIterator {
     }
 }
 
-new Foo(...new SymbolIterator, ...new StringIterator);
+new Foo(...new SymbolIterator, ...new _StringIterator);

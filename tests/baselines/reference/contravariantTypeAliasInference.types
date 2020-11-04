@@ -1,0 +1,49 @@
+=== tests/cases/compiler/contravariantTypeAliasInference.ts ===
+type Func1<T> = (x: T) => void;
+>Func1 : Func1<T>
+>x : T
+
+type Func2<T> = ((x: T) => void) | undefined;
+>Func2 : Func2<T>
+>x : T
+
+declare let f1: Func1<string>;
+>f1 : Func1<string>
+
+declare let f2: Func1<"a">;
+>f2 : Func1<"a">
+
+declare function foo<T>(f1: Func1<T>, f2: Func1<T>): void;
+>foo : <T>(f1: Func1<T>, f2: Func1<T>) => void
+>f1 : Func1<T>
+>f2 : Func1<T>
+
+foo(f1, f2);
+>foo(f1, f2) : void
+>foo : <T>(f1: Func1<T>, f2: Func1<T>) => void
+>f1 : Func1<string>
+>f2 : Func1<"a">
+
+declare let g1: Func2<string>;
+>g1 : Func2<string>
+
+declare let g2: Func2<"a">;
+>g2 : Func2<"a">
+
+declare function bar<T>(g1: Func2<T>, g2: Func2<T>): void;
+>bar : <T>(g1: Func2<T>, g2: Func2<T>) => void
+>g1 : Func2<T>
+>g2 : Func2<T>
+
+bar(f1, f2);
+>bar(f1, f2) : void
+>bar : <T>(g1: Func2<T>, g2: Func2<T>) => void
+>f1 : Func1<string>
+>f2 : Func1<"a">
+
+bar(g1, g2);
+>bar(g1, g2) : void
+>bar : <T>(g1: Func2<T>, g2: Func2<T>) => void
+>g1 : Func2<string>
+>g2 : Func2<"a">
+

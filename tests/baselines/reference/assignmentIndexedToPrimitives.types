@@ -1,0 +1,68 @@
+=== tests/cases/compiler/assignmentIndexedToPrimitives.ts ===
+const n1: number = [0];
+>n1 : number
+>[0] : number[]
+>0 : 0
+
+const n2: number = ["0"];
+>n2 : number
+>["0"] : string[]
+>"0" : "0"
+
+const n3: number = [0, "1"];
+>n3 : number
+>[0, "1"] : (string | number)[]
+>0 : 0
+>"1" : "1"
+
+const n4: 0 = [0];
+>n4 : 0
+>[0] : number[]
+>0 : 0
+
+const s1: string = [0];
+>s1 : string
+>[0] : number[]
+>0 : 0
+
+const s2: string = ["0"];
+>s2 : string
+>["0"] : string[]
+>"0" : "0"
+
+const s3: string = [0, "1"];
+>s3 : string
+>[0, "1"] : (string | number)[]
+>0 : 0
+>"1" : "1"
+
+const s4: "01" = ["0", "1"];
+>s4 : "01"
+>["0", "1"] : string[]
+>"0" : "0"
+>"1" : "1"
+
+const no1: number = { 0: 1 };
+>no1 : number
+>{ 0: 1 } : { 0: number; }
+>0 : number
+>1 : 1
+
+const so1: string = { 0: 1 };
+>so1 : string
+>{ 0: 1 } : { 0: number; }
+>0 : number
+>1 : 1
+
+const so2: string = { "0": 1 };
+>so2 : string
+>{ "0": 1 } : { "0": number; }
+>"0" : number
+>1 : 1
+
+const so3: string = { 0: "1" };
+>so3 : string
+>{ 0: "1" } : { 0: string; }
+>0 : string
+>"1" : "1"
+

@@ -12,7 +12,7 @@ type D = 0 | 1 | 2;
 >D : D
 
 function f1(a: A, b: B, c: C, d: D) {
->f1 : (a: 1, b: B, c: C, d: D) => void
+>f1 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C
@@ -40,7 +40,7 @@ function f1(a: A, b: B, c: C, d: D) {
 }
 
 function f2(a: A, b: B, c: C, d: D) {
->f2 : (a: 1, b: B, c: C, d: D) => void
+>f2 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C
@@ -68,7 +68,7 @@ function f2(a: A, b: B, c: C, d: D) {
 }
 
 function f3(a: A, b: B, c: C, d: D) {
->f3 : (a: 1, b: B, c: C, d: D) => void
+>f3 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C
@@ -96,7 +96,7 @@ function f3(a: A, b: B, c: C, d: D) {
 }
 
 function f4(a: A, b: B, c: C, d: D) {
->f4 : (a: 1, b: B, c: C, d: D) => void
+>f4 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C
@@ -124,7 +124,7 @@ function f4(a: A, b: B, c: C, d: D) {
 }
 
 function f5(a: A, b: B, c: C, d: D) {
->f5 : (a: 1, b: B, c: C, d: D) => void
+>f5 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C
@@ -212,7 +212,7 @@ function f5(a: A, b: B, c: C, d: D) {
 }
 
 function f6(a: A, b: B, c: C, d: D) {
->f6 : (a: 1, b: B, c: C, d: D) => void
+>f6 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C
@@ -300,7 +300,7 @@ function f6(a: A, b: B, c: C, d: D) {
 }
 
 function f7(a: A, b: B, c: C, d: D) {
->f7 : (a: 1, b: B, c: C, d: D) => void
+>f7 : (a: A, b: B, c: C, d: D) => void
 >a : 1
 >b : B
 >c : C

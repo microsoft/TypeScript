@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.formatting {
-    export function getFormatContext(options: FormatCodeSettings): FormatContext {
-        return { options, getRule: getRulesMap() };
+    export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
+        return { options, getRules: getRulesMap(), host };
     }
 
     let rulesMapCache: RulesMap | undefined;
@@ -13,16 +13,50 @@ namespace ts.formatting {
         return rulesMapCache;
     }
 
-    export type RulesMap = (context: FormattingContext) => Rule | undefined;
-    function createRulesMap(rules: ReadonlyArray<RuleSpec>): RulesMap {
+    /**
+     * For a given rule action, gets a mask of other rule actions that
+     * cannot be applied at the same position.
+     */
+    function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
+        let mask: RuleAction = 0;
+        if (ruleAction & RuleAction.StopProcessingSpaceActions) {
+            mask |= RuleAction.ModifySpaceAction;
+        }
+        if (ruleAction & RuleAction.StopProcessingTokenActions) {
+            mask |= RuleAction.ModifyTokenAction;
+        }
+        if (ruleAction & RuleAction.ModifySpaceAction) {
+            mask |= RuleAction.ModifySpaceAction;
+        }
+        if (ruleAction & RuleAction.ModifyTokenAction) {
+            mask |= RuleAction.ModifyTokenAction;
+        }
+        return mask;
+    }
+
+    export type RulesMap = (context: FormattingContext) => readonly Rule[] | undefined;
+    function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
         const map = buildMap(rules);
         return context => {
             const bucket = map[getRuleBucketIndex(context.currentTokenSpan.kind, context.nextTokenSpan.kind)];
-            return bucket && find(bucket, rule => every(rule.context, c => c(context)));
+            if (bucket) {
+                const rules: Rule[] = [];
+                let ruleActionMask: RuleAction = 0;
+                for (const rule of bucket) {
+                    const acceptRuleActions = ~getRuleActionExclusion(ruleActionMask);
+                    if (rule.action & acceptRuleActions && every(rule.context, c => c(context))) {
+                        rules.push(rule);
+                        ruleActionMask |= rule.action;
+                    }
+                }
+                if (rules.length) {
+                    return rules;
+                }
+            }
         };
     }
 
-    function buildMap(rules: ReadonlyArray<RuleSpec>): ReadonlyArray<ReadonlyArray<Rule>> {
+    function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
         // Map from bucket index to array of rules
         const map: Rule[][] = new Array(mapRowLength * mapRowLength);
         // This array is used only during construction of the rulesbucket in the map
@@ -54,8 +88,8 @@ namespace ts.formatting {
     const mapRowLength = SyntaxKind.LastToken + 1;
 
     enum RulesPosition {
-        IgnoreRulesSpecific = 0,
-        IgnoreRulesAny = maskBitSize * 1,
+        StopRulesSpecific = 0,
+        StopRulesAny = maskBitSize * 1,
         ContextRulesSpecific = maskBitSize * 2,
         ContextRulesAny = maskBitSize * 3,
         NoContextRulesSpecific = maskBitSize * 4,
@@ -78,11 +112,12 @@ namespace ts.formatting {
     // In order to insert a rule to the end of sub-bucket (3), we get the index by adding
     // the values in the bitmap segments 3rd, 2nd, and 1st.
     function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructionState: number[], rulesBucketIndex: number): void {
-        const position = rule.action === RuleAction.Ignore
-            ? specificTokens ? RulesPosition.IgnoreRulesSpecific : RulesPosition.IgnoreRulesAny
-            : rule.context !== anyContext
-            ? specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny
-            : specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+        const position = rule.action & RuleAction.StopAction ?
+            specificTokens ? RulesPosition.StopRulesSpecific : RulesPosition.StopRulesAny :
+            rule.context !== anyContext ?
+                specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
+                specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+
         const state = constructionState[rulesBucketIndex] || 0;
         rules.splice(getInsertionIndex(state, position), 0, rule);
         constructionState[rulesBucketIndex] = increaseInsertionIndex(state, position);

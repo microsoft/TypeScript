@@ -15,7 +15,7 @@ namespace ts.server.typingsInstaller {
 
         isEnabled = () => {
             return typeof this.logFile === "string";
-        }
+        };
         writeLine = (text: string) => {
             if (typeof this.logFile !== "string") return;
 
@@ -25,39 +25,43 @@ namespace ts.server.typingsInstaller {
             catch (e) {
                 this.logFile = undefined;
             }
-        }
+        };
     }
 
     /** Used if `--npmLocation` is not passed. */
-    function getDefaultNPMLocation(processName: string) {
+    function getDefaultNPMLocation(processName: string, validateDefaultNpmLocation: boolean, host: InstallTypingHost): string {
         if (path.basename(processName).indexOf("node") === 0) {
-            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            const npmPath = path.join(path.dirname(process.argv[0]), "npm");
+            if (!validateDefaultNpmLocation) {
+                return npmPath;
+            }
+            if (host.fileExists(npmPath)) {
+                return `"${npmPath}"`;
+            }
         }
-        else {
-            return "npm";
-        }
+        return "npm";
     }
 
     interface TypesRegistryFile {
         entries: MapLike<MapLike<string>>;
     }
 
-    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<MapLike<string>> {
+    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): ESMap<string, MapLike<string>> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<MapLike<string>>();
+            return new Map<string, MapLike<string>>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
-            return createMapFromTemplate(content.entries);
+            return new Map(getEntries(content.entries));
         }
         catch (e) {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<MapLike<string>>();
+            return new Map<string, MapLike<string>>();
         }
     }
 
@@ -75,11 +79,11 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
-        readonly typesRegistry: Map<MapLike<string>>;
+        readonly typesRegistry: ESMap<string, MapLike<string>>;
 
         private delayedInitializationError: InitializationFailedResponse | undefined;
 
-        constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, throttleLimit: number, log: Log) {
+        constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, typesMapLocation: string, npmLocation: string | undefined, validateDefaultNpmLocation: boolean, throttleLimit: number, log: Log) {
             super(
                 sys,
                 globalTypingsCacheLocation,
@@ -87,7 +91,7 @@ namespace ts.server.typingsInstaller {
                 typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
-            this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
+            this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
             // If the NPM path contains spaces and isn't wrapped in quotes, do so.
             if (stringContains(this.npmPath, " ") && this.npmPath[0] !== `"`) {
@@ -96,6 +100,7 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
                 this.log.writeLine(`NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`);
+                this.log.writeLine(`validateDefaultNpmLocation: ${validateDefaultNpmLocation}`);
             }
             ({ execSync: this.nodeExecSync } = require("child_process"));
 
@@ -117,7 +122,8 @@ namespace ts.server.typingsInstaller {
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
                     kind: "event::initializationFailed",
-                    message: (<Error>e).message
+                    message: (<Error>e).message,
+                    stack: (<Error>e).stack,
                 };
             }
 
@@ -161,11 +167,6 @@ namespace ts.server.typingsInstaller {
                             const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
                             this.sendResponse(response);
                         }
-                        break;
-                    }
-                    case "inspectValue": {
-                        const response: InspectValueResponse = { kind: ActionValueInspected, result: inspectModule(req.options.fileNameToRequire) };
-                        this.sendResponse(response);
                         break;
                     }
                     default:
@@ -229,6 +230,7 @@ namespace ts.server.typingsInstaller {
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
     const typesMapLocation = findArgument(Arguments.TypesMapLocation);
     const npmLocation = findArgument(Arguments.NpmLocation);
+    const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -242,10 +244,12 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
     installer.listen();
 
-    function indent(newline: string, str: string): string {
-        return `${newline}    ` + str.replace(/\r?\n/, `${newline}    `);
+    function indent(newline: string, str: string | undefined): string {
+        return str && str.length
+            ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
+            : "";
     }
 }

@@ -21,6 +21,7 @@ verify.completions({
             source: "/a",
             sourceDisplay: "./a",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
         {
             name: "bar",
@@ -28,6 +29,7 @@ verify.completions({
             source: "/a",
             sourceDisplay: "./a",
             hasAction: true,
+            sortText: completion.SortText.AutoImportSuggestions
         },
     ],
     preferences: {

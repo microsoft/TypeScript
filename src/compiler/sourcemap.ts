@@ -12,11 +12,11 @@ namespace ts {
         // Current source map file and its index in the sources list
         const rawSources: string[] = [];
         const sources: string[] = [];
-        const sourceToSourceIndexMap = createMap<number>();
+        const sourceToSourceIndexMap = new Map<string, number>();
         let sourcesContent: (string | null)[] | undefined;
 
         const names: string[] = [];
-        let nameToNameIndexMap: Map<number> | undefined;
+        let nameToNameIndexMap: ESMap<string, number> | undefined;
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -68,22 +68,23 @@ namespace ts {
             return sourceIndex;
         }
 
+        /* eslint-disable boolean-trivia, no-null/no-null */
         function setSourceContent(sourceIndex: number, content: string | null) {
             enter();
             if (content !== null) {
                 if (!sourcesContent) sourcesContent = [];
                 while (sourcesContent.length < sourceIndex) {
-                    // tslint:disable-next-line:no-null-keyword boolean-trivia
                     sourcesContent.push(null);
                 }
                 sourcesContent[sourceIndex] = content;
             }
             exit();
         }
+        /* eslint-enable boolean-trivia, no-null/no-null */
 
         function addName(name: string) {
             enter();
-            if (!nameToNameIndexMap) nameToNameIndexMap = createMap();
+            if (!nameToNameIndexMap) nameToNameIndexMap = new Map();
             let nameIndex = nameToNameIndexMap.get(name);
             if (nameIndex === undefined) {
                 nameIndex = names.length;
@@ -140,7 +141,7 @@ namespace ts {
             exit();
         }
 
-        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string) {
+        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter) {
             Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
             Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
             enter();
@@ -148,7 +149,19 @@ namespace ts {
             const sourceIndexToNewSourceIndexMap: number[] = [];
             let nameIndexToNewNameIndexMap: number[] | undefined;
             const mappingIterator = decodeMappings(map.mappings);
-            for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
+            for (let iterResult = mappingIterator.next(); !iterResult.done; iterResult = mappingIterator.next()) {
+                const raw = iterResult.value;
+                if (end && (
+                    raw.generatedLine > end.line ||
+                    (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
+                    break;
+                }
+
+                if (start && (
+                    raw.generatedLine < start.line ||
+                    (start.line === raw.generatedLine && raw.generatedCharacter < start.character))) {
+                    continue;
+                }
                 // Then reencode all the updated mappings into the overall map
                 let newSourceIndex: number | undefined;
                 let newSourceLine: number | undefined;
@@ -178,8 +191,10 @@ namespace ts {
                     }
                 }
 
-                const newGeneratedLine = raw.generatedLine + generatedLine;
-                const newGeneratedCharacter = raw.generatedLine === 0 ? raw.generatedCharacter + generatedCharacter : raw.generatedCharacter;
+                const rawGeneratedLine = raw.generatedLine - (start ? start.line : 0);
+                const newGeneratedLine = rawGeneratedLine + generatedLine;
+                const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character : raw.generatedCharacter;
+                const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter : rawGeneratedCharacter;
                 addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
             }
             exit();
@@ -271,7 +286,7 @@ namespace ts {
         getLineText(line: number): string;
     }
 
-    export function getLineInfo(text: string, lineStarts: ReadonlyArray<number>): LineInfo {
+    export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
         return {
             getLineCount: () => lineStarts.length,
             getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
@@ -295,13 +310,12 @@ namespace ts {
         }
     }
 
+    /* eslint-disable no-null/no-null */
     function isStringOrNull(x: any) {
-        // tslint:disable-next-line:no-null-keyword
         return typeof x === "string" || x === null;
     }
 
     export function isRawSourceMap(x: any): x is RawSourceMap {
-        // tslint:disable-next-line:no-null-keyword
         return x !== null
             && typeof x === "object"
             && x.version === 3
@@ -312,6 +326,7 @@ namespace ts {
             && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
             && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
     }
+    /* eslint-enable no-null/no-null */
 
     export function tryParseRawSourceMap(text: string) {
         try {
@@ -607,10 +622,10 @@ namespace ts {
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
         const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
-        let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
+        const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
+        let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
-        let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
+        let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;
 
         return {
             getSourcePosition,

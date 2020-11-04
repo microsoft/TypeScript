@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameImplicitDeclaration.js ===
+class C {
+>C : C
+
+    constructor() {
+        /** @type {string} */
+        this.#x;
+>this.#x : any
+>this : this
+    }
+}
+
+

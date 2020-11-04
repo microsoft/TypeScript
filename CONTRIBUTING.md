@@ -47,6 +47,27 @@ In general, things we find useful when reviewing suggestions are:
 
 # Instructions for Contributing Code
 
+## What You'll Need
+
+0. [A bug or feature you want to work on](https://github.com/microsoft/TypeScript/labels/help%20wanted)!
+1. [A GitHub account](https://github.com/join).
+2. A copy of the TypeScript code. See the next steps for instructions.
+3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
+4. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
+5. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
+
+## Get Started
+
+1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
+2. Open a terminal.
+3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
+4. Install the gulp command line tool: `npm install -g gulp-cli`
+5. Change to the TypeScript folder you made: `cd TypeScript`
+6. Install dependencies: `npm ci`
+7. Make sure everything builds and tests pass: `gulp runtests-parallel`
+8. Open the Typescript folder in your editor.
+9. Follow the directions below to add and debug a test.
+
 ## Tips
 
 ### Faster clones
@@ -55,39 +76,30 @@ The TypeScript repository is relatively large. To save some time, you might want
 
 ### Using local builds
 
-Run `gulp build` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
+Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
 
 ## Contributing bug fixes
 
-TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved ("Milestone == Community") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
+TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog milestone") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
 
 ## Contributing features
 
-Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (marked as "Milestone == Community" by a TypeScript coordinator with the message "Approved") in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
-
-Design changes will not be accepted at this time. If you have a design change proposal, please log a suggestion issue.
+Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
 ## Legal
 
-You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright.
-
-Please submit a Contributor License Agreement (CLA) before submitting a pull request. You may visit https://cla.microsoft.com to sign digitally. Alternatively, download the agreement ([Microsoft Contribution License Agreement.pdf](https://opensource.microsoft.com/pdf/microsoft-contribution-license-agreement.pdf)), sign, scan, and email it back to <cla@microsoft.com>. Be sure to include your github user name along with the agreement. Once we have received the signed CLA, we'll review the request. 
+You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
 
 ## Housekeeping
 
-Your pull request should: 
+Your pull request should:
 
 * Include a description of what your change intends to do
-* Be a child commit of a reasonably recent commit in the **master** branch 
-    * Requests need not be a single commit, but should be a linear sequence of commits (i.e. no merge commits in your PR)
-* It is desirable, but not necessary, for the tests to pass at each commit
-* Have clear commit messages 
-    * e.g. "Minor refactor in goToTypeDefinition", "Fix iterated type in for-await-of", "Add test for preserveWatchOutput on command line"
-* Include adequate tests 
+* Be based on reasonably recent commit in the **master** branch
+* Include adequate tests
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
     * Include baseline changes with your change
-    * All changed code must have 100% code coverage
 * Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
@@ -104,7 +116,7 @@ Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/
 Library files in `built/local/` are updated automatically by running the standard build task:
 
 ```sh
-jake
+gulp
 ```
 
 The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
@@ -115,102 +127,90 @@ The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` bo
 
 ## Running the Tests
 
-To run all tests, invoke the `runtests-parallel` target using jake:
+To run all tests, invoke the `runtests-parallel` target using gulp:
 
 ```Shell
-jake runtests-parallel
+gulp runtests-parallel
 ```
 
 This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
-jake runtests tests=<regex>
+gulp runtests --tests=<regex>
 ```
 
 e.g. to run all compiler baseline tests:
 
 ```Shell
-jake runtests tests=compiler
+gulp runtests --tests=compiler
 ```
 
-or to run a specific test: `tests\cases\compiler\2dArrays.ts` 
+or to run a specific test: `tests\cases\compiler\2dArrays.ts`
 
 ```Shell
-jake runtests tests=2dArrays
+gulp runtests --tests=2dArrays
 ```
 
 ## Debugging the tests
 
-To debug the tests, invoke the `runtests-browser` task from jake.
-You will probably only want to debug one test at a time:
+You can debug with VS Code or Node instead with `gulp runtests --inspect`:
 
 ```Shell
-jake runtests-browser tests=2dArrays
+gulp runtests --tests=2dArrays --inspect
 ```
 
-You can specify which browser to use for debugging. Currently Chrome and IE are supported:
-
-```Shell
-jake runtests-browser tests=2dArrays browser=chrome
-```
-
-You can debug with VS Code or Node instead with `jake runtests inspect=true`:
-
-```Shell
-jake runtests tests=2dArrays inspect=true
-```
+You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
 
 ## Adding a Test
 
-To add a new test case, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
+To add a new test case, add a `.ts` file in `tests\cases\compiler` with code that shows the your bug is now fixed, or your new feature now works.
 
 These files support metadata tags in the format  `// @metaDataName: value`.
 The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
 `fileName` tags delimit sections of a file to be used as separate compilation units.
-They are useful for tests relating to modules.
+They are useful for testing modules.
 See below for examples.
 
-**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder.
-**Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
+**Note** that if you have a test corresponding to a specific area of spec compliance, you can put it in the appropriate subfolder of `tests\cases\conformance`.
+**Note** that test filenames must be distinct from all other test names, so you may have to work a bit to find a unique name if it's something common.
 
 ### Tests for multiple files
 
-When one needs to test for scenarios which require multiple files, it is useful to use the `fileName` metadata tag as such:
+When you need to mimic having multiple files in a single test to test features such as "import", use the `filename` tag:
 
-```TypeScript
-// @fileName: file1.ts
+```ts
+// @filename: file1.ts
 export function f() {
 }
 
-// @fileName: file2.ts
+// @filename: file2.ts
 import { f as g } from "file1";
 
 var x = g();
 ```
 
-One can also write a project test, but it is slightly more involved.
-
 ## Managing the Baselines
 
-Compiler testcases generate baselines that track the emitted `.js`, the errors produced by the compiler, and the type of each expression in the file. Additionally, some testcases opt in to baselining the source map output.
+Compiler tests generate baselines: one file each for the emitted `.js`, the errors produced by the compiler, the type of each expression, and symbol for each identifier. Additionally, some tests generate baselines for the source map output.
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
 ```Shell
-jake diff
+gulp diff
 ```
 
 After verifying that the changes in the baselines are correct, run
 
 ```Shell
-jake baseline-accept
+gulp baseline-accept
 ```
 
-to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
+This will change the files in `tests\baselines\reference`, which should be included as part of your commit.
+Be sure to validate the changes carefully -- apparently unrelated changes to baselines can be clues about something you didn't think of.
 
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
+If you make changes to it, run `gulp generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

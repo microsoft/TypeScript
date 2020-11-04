@@ -19,13 +19,13 @@ namespace ts.codefix {
 
     function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.ImportKeyword);
-        Debug.assert(token.parent.kind === SyntaxKind.ImportType);
+        Debug.assert(token.kind === SyntaxKind.ImportKeyword, "This token should be an ImportKeyword");
+        Debug.assert(token.parent.kind === SyntaxKind.ImportType, "Token parent should be an ImportType");
         return <ImportTypeNode>token.parent;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
-        const newTypeNode = updateImportTypeNode(importType, importType.argument, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
+        const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
         changes.replaceNode(sourceFile, importType, newTypeNode);
     }
 }

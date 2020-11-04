@@ -1,0 +1,70 @@
+/* 
+
+  Copy this file into '.vscode/launch.json' or merge its
+  contents into your existing configurations.
+
+  If you want to remove the errors in comments for all JSON
+  files, add this to your settings in ~/.vscode/User/settings.json
+
+  "files.associations": {
+      "*.json": "jsonc"
+  },
+
+*/
+
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "protocol": "inspector",
+      "request": "launch",
+      "name": "Mocha Tests (currently opened test)",
+      "runtimeArgs": ["--nolazy"],
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "args": [
+        "-u",
+        "bdd",
+        "--no-timeouts",
+        "--colors",
+        "built/local/run.js",
+        "-f",
+        // You can change this to be the name of a specific test file (without the file extension)
+        // to consistently launch the same test
+        "${fileBasenameNoExtension}",
+        "--skip-percent",
+        "0"
+      ],
+      "env": {
+        "NODE_ENV": "testing"
+      },
+      "sourceMaps": true,
+      "smartStep": true,
+      "preLaunchTask": "gulp: tests",
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceRoot}/built/local/run.js"
+      ],
+
+      // NOTE: To use this, you must switch the "type" above to "pwa-node". You may also need to follow the instructions
+      // here: https://github.com/microsoft/vscode-js-debug#nightly-extension to use the js-debug nightly until
+      // this feature is shipping in insiders or to a release:
+      // "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+    },
+    {
+      // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to VS Code TS Server via Port",
+      "processId": "${command:PickProcess}",
+
+      // NOTE: To use this, you must switch the "type" above to "pwa-node". You may also need to follow the instructions
+      // here: https://github.com/microsoft/vscode-js-debug#nightly-extension to use the js-debug nightly until
+      // this feature is shipping in insiders or to a release:
+      // "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
+    }
+  ]
+}

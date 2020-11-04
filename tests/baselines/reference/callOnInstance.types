@@ -1,6 +1,6 @@
 === tests/cases/compiler/callOnInstance.ts ===
 declare function D(): string; // error
->D : () => string
+>D : typeof D
 
 declare class D { constructor (value: number); } // error
 >D : D
@@ -9,14 +9,14 @@ declare class D { constructor (value: number); } // error
 var s1: string = D(); // OK
 >s1 : string
 >D() : string
->D : () => string
+>D : typeof D
 
 var s2: string = (new D(1))();
 >s2 : string
 >(new D(1))() : any
->(new D(1)) : any
->new D(1) : any
->D : () => string
+>(new D(1)) : D
+>new D(1) : D
+>D : typeof D
 >1 : 1
 
 declare class C { constructor(value: number); }

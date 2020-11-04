@@ -13,9 +13,9 @@ UI.TreeElement = class {
     constructor() {
         this.treeOutline = 12
 >this.treeOutline = 12 : 12
->this.treeOutline : number
+>this.treeOutline : any
 >this : this
->treeOutline : number
+>treeOutline : any
 >12 : 12
     }
 };

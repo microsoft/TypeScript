@@ -3,7 +3,7 @@
 // References to a property of the apparent type using string indexer
 
 ////interface Object {
-////    [|{| "isDefinition": true |}toMyString|]();
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}toMyString|]();|]
 ////}
 ////
 ////var y: Object;
@@ -12,4 +12,4 @@
 ////var x = {};
 ////x["[|toMyString|]"]();
 
-verify.singleReferenceGroup("(method) Object.toMyString(): any");
+verify.singleReferenceGroup("(method) Object.toMyString(): any", "toMyString");

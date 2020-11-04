@@ -56,11 +56,11 @@ var { d: renamed, ...d } = o2;
 >o2 : { c: string; d: string; }
 
 let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
->nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
+>nestedrest : { x: number; n1: {    y: number;    n2: {        z: number;        n3: {            n4: number;        };    };}; rest: number; restrest: number; }
 >x : number
->n1 : { y: number; n2: { z: number; n3: { n4: number; }; }; }
+>n1 : { y: number; n2: {    z: number;    n3: {        n4: number;    };}; }
 >y : number
->n2 : { z: number; n3: { n4: number; }; }
+>n2 : { z: number; n3: {    n4: number;}; }
 >z : number
 >n3 : { n4: number; }
 >n4 : number
@@ -79,7 +79,7 @@ var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
 
 let complex: { x: { ka, ki }, y: number };
->complex : { x: { ka: any; ki: any; }; y: number; }
+>complex : { x: {    ka;    ki;}; y: number; }
 >x : { ka: any; ki: any; }
 >ka : any
 >ki : any

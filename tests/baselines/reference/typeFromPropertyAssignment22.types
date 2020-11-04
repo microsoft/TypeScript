@@ -5,7 +5,7 @@ function Installer () {
     this.args = 0
 >this.args = 0 : 0
 >this.args : any
->this : any
+>this : this
 >args : any
 >0 : 0
 }
@@ -27,14 +27,14 @@ Installer.prototype.loadArgMetadata = function (next) {
         this.args = 'hi'
 >this.args = 'hi' : "hi"
 >this.args : number
->this : Installer
+>this : this
 >args : number
 >'hi' : "hi"
 
         this.newProperty = 1
 >this.newProperty = 1 : 1
 >this.newProperty : number | undefined
->this : Installer
+>this : this
 >newProperty : number | undefined
 >1 : 1
     }

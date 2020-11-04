@@ -1,0 +1,65 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors3.ts ===
+class Animal {
+>Animal : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
+
+    _sound = 'rustling noise in the bushes'
+>_sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+
+    get sound() { return this._sound }
+>sound : Symbol(Animal.sound, Decl(propertyOverridesAccessors3.ts, 1, 43), Decl(propertyOverridesAccessors3.ts, 3, 38))
+>this._sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+>this : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
+>_sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+
+    set sound(val) {
+>sound : Symbol(Animal.sound, Decl(propertyOverridesAccessors3.ts, 1, 43), Decl(propertyOverridesAccessors3.ts, 3, 38))
+>val : Symbol(val, Decl(propertyOverridesAccessors3.ts, 4, 14))
+
+      this._sound = val;
+>this._sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+>this : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
+>_sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+>val : Symbol(val, Decl(propertyOverridesAccessors3.ts, 4, 14))
+
+      /* some important code here, perhaps tracking known sounds, etc */
+    }
+
+    makeSound() {
+>makeSound : Symbol(Animal.makeSound, Decl(propertyOverridesAccessors3.ts, 7, 5))
+
+        console.log(this._sound)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this._sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+>this : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
+>_sound : Symbol(Animal._sound, Decl(propertyOverridesAccessors3.ts, 0, 14))
+    }
+}
+
+const a = new Animal
+>a : Symbol(a, Decl(propertyOverridesAccessors3.ts, 14, 5))
+>Animal : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
+
+a.makeSound() // 'rustling noise in the bushes'
+>a.makeSound : Symbol(Animal.makeSound, Decl(propertyOverridesAccessors3.ts, 7, 5))
+>a : Symbol(a, Decl(propertyOverridesAccessors3.ts, 14, 5))
+>makeSound : Symbol(Animal.makeSound, Decl(propertyOverridesAccessors3.ts, 7, 5))
+
+class Lion extends Animal {
+>Lion : Symbol(Lion, Decl(propertyOverridesAccessors3.ts, 15, 13))
+>Animal : Symbol(Animal, Decl(propertyOverridesAccessors3.ts, 0, 0))
+
+    sound = 'RAWR!' // error here
+>sound : Symbol(Lion.sound, Decl(propertyOverridesAccessors3.ts, 17, 27))
+}
+
+const lion = new Lion
+>lion : Symbol(lion, Decl(propertyOverridesAccessors3.ts, 21, 5))
+>Lion : Symbol(Lion, Decl(propertyOverridesAccessors3.ts, 15, 13))
+
+lion.makeSound() // with [[Define]]: Expected "RAWR!" but got "rustling noise in the bushes"
+>lion.makeSound : Symbol(Animal.makeSound, Decl(propertyOverridesAccessors3.ts, 7, 5))
+>lion : Symbol(lion, Decl(propertyOverridesAccessors3.ts, 21, 5))
+>makeSound : Symbol(Animal.makeSound, Decl(propertyOverridesAccessors3.ts, 7, 5))
+

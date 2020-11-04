@@ -1,0 +1,28 @@
+=== tests/cases/compiler/destructuringControlFlowNoCrash.ts ===
+// legal JS, if nonsensical, which also triggers the issue
+const {
+  date,
+>date : Symbol(date, Decl(destructuringControlFlowNoCrash.ts, 1, 7))
+
+} = (inspectedElement: any) => 0;
+>inspectedElement : Symbol(inspectedElement, Decl(destructuringControlFlowNoCrash.ts, 3, 5))
+
+date.toISOString();
+>date : Symbol(date, Decl(destructuringControlFlowNoCrash.ts, 1, 7))
+
+// Working flow code
+const {
+  date2,
+>date2 : Symbol(date2, Decl(destructuringControlFlowNoCrash.ts, 8, 7))
+
+} = (inspectedElement: any).props;
+>inspectedElement : Symbol(inspectedElement, Decl(destructuringControlFlowNoCrash.ts, 10, 5))
+>props : Symbol(props, Decl(destructuringControlFlowNoCrash.ts, 10, 28))
+
+date2.toISOString();
+>date2 : Symbol(date2, Decl(destructuringControlFlowNoCrash.ts, 8, 7))
+
+// It could also be an async function
+const { constructor } = async () => {};
+>constructor : Symbol(constructor, Decl(destructuringControlFlowNoCrash.ts, 15, 7))
+

@@ -102,7 +102,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -112,6 +112,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.publicClassExtendingFromPrivateModuleClass = exports.publicClassExtendingPrivateClass = exports.publicClassExtendingPublicClass = exports.publicClass = exports.publicModule = void 0;
 var publicModule;
 (function (publicModule) {
     var publicClassInPublicModule = /** @class */ (function () {
@@ -297,7 +298,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -368,30 +369,32 @@ var publicClassExtendingPublicClassInGlobal = /** @class */ (function (_super) {
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.d.ts]
 export declare module publicModule {
-    class publicClassInPublicModule {
+    export class publicClassInPublicModule {
         private f1;
     }
     class privateClassInPublicModule {
     }
-    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
     }
-    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
     }
-    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
     }
+    export {};
 }
 declare module privateModule {
-    class publicClassInPrivateModule {
+    export class publicClassInPrivateModule {
         private f1;
     }
     class privateClassInPrivateModule {
     }
-    class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
+    export class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
     }
-    class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
     }
-    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
     }
+    export {};
 }
 export declare class publicClass {
     private f1;
@@ -407,15 +410,16 @@ export declare class publicClassExtendingFromPrivateModuleClass extends privateM
 export {};
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.d.ts]
 declare module publicModuleInGlobal {
-    class publicClassInPublicModule {
+    export class publicClassInPublicModule {
         private f1;
     }
     class privateClassInPublicModule {
     }
-    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    export class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
     }
-    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    export class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
     }
+    export {};
 }
 declare class publicClassInGlobal {
 }

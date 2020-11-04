@@ -1,12 +1,12 @@
 tests/cases/compiler/propertiesAndIndexers2.ts(2,5): error TS2413: 'number' index type 'string' is not assignable to 'string' index type 'number'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/propertiesAndIndexers2.ts(8,5): error TS2411: Property 'c' of type 'string' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers2.ts(9,5): error TS2411: Property '3' of type 'string' is not assignable to 'number' index type 'string & number'.
-tests/cases/compiler/propertiesAndIndexers2.ts(10,5): error TS2411: Property 'Infinity' of type 'string' is not assignable to 'number' index type 'string & number'.
-tests/cases/compiler/propertiesAndIndexers2.ts(11,5): error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'string & number'.
-tests/cases/compiler/propertiesAndIndexers2.ts(12,5): error TS2411: Property 'NaN' of type 'string' is not assignable to 'number' index type 'string & number'.
+tests/cases/compiler/propertiesAndIndexers2.ts(9,5): error TS2411: Property '3' of type 'string' is not assignable to 'number' index type 'never'.
+tests/cases/compiler/propertiesAndIndexers2.ts(10,5): error TS2411: Property 'Infinity' of type 'string' is not assignable to 'number' index type 'never'.
+tests/cases/compiler/propertiesAndIndexers2.ts(11,5): error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'never'.
+tests/cases/compiler/propertiesAndIndexers2.ts(12,5): error TS2411: Property 'NaN' of type 'string' is not assignable to 'number' index type 'never'.
 tests/cases/compiler/propertiesAndIndexers2.ts(13,5): error TS2411: Property '"-NaN"' of type 'string' is not assignable to 'string' index type 'number'.
-tests/cases/compiler/propertiesAndIndexers2.ts(14,5): error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'string & number'.
+tests/cases/compiler/propertiesAndIndexers2.ts(14,5): error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'never'.
 
 
 ==== tests/cases/compiler/propertiesAndIndexers2.ts (8 errors) ====
@@ -25,21 +25,21 @@ tests/cases/compiler/propertiesAndIndexers2.ts(14,5): error TS2411: Property '6'
 !!! error TS2411: Property 'c' of type 'string' is not assignable to 'string' index type 'number'.
         3: string;
         ~
-!!! error TS2411: Property '3' of type 'string' is not assignable to 'number' index type 'string & number'.
+!!! error TS2411: Property '3' of type 'string' is not assignable to 'number' index type 'never'.
         Infinity: string;
         ~~~~~~~~
-!!! error TS2411: Property 'Infinity' of type 'string' is not assignable to 'number' index type 'string & number'.
+!!! error TS2411: Property 'Infinity' of type 'string' is not assignable to 'number' index type 'never'.
         "-Infinity": string;
         ~~~~~~~~~~~
-!!! error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'string & number'.
+!!! error TS2411: Property '"-Infinity"' of type 'string' is not assignable to 'number' index type 'never'.
         NaN: string;
         ~~~
-!!! error TS2411: Property 'NaN' of type 'string' is not assignable to 'number' index type 'string & number'.
+!!! error TS2411: Property 'NaN' of type 'string' is not assignable to 'number' index type 'never'.
         "-NaN": string;
         ~~~~~~
 !!! error TS2411: Property '"-NaN"' of type 'string' is not assignable to 'string' index type 'number'.
         6(): string;
         ~~~~~~~~~~~~
-!!! error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'string & number'.
+!!! error TS2411: Property '6' of type '() => string' is not assignable to 'number' index type 'never'.
     }
     

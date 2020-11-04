@@ -1,0 +1,20 @@
+tests/cases/conformance/jsx/file.tsx(12,7): error TS2322: Type '{ w: string; }' is not assignable to type '{ n: string; }'.
+  Property 'w' does not exist on type '{ n: string; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    	    [x: string]: { n: string; };
+    	}
+    }
+    
+    // OK
+    <div n='x' />;
+    
+    // Error
+    <span w='err' />;
+          ~
+!!! error TS2322: Type '{ w: string; }' is not assignable to type '{ n: string; }'.
+!!! error TS2322:   Property 'w' does not exist on type '{ n: string; }'.

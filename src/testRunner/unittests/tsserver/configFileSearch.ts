@@ -48,7 +48,7 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, typeRootLocations.concat(configFileLocation), /*recursive*/ true);
 
             // Delete config file - should create inferred project and not configured project
-            host.reloadFS([f1, libFile, configFile2]);
+            host.deleteFile(configFile.path);
             host.runQueuedTimeoutCallbacks();
             checkNumberOfProjects(service, { inferredProjects: 1 });
             checkWatchedFiles(host, [libFile.path, configFile.path, `${configFileLocation}/jsconfig.json`, `${projectDir}/tsconfig.json`, `${projectDir}/jsconfig.json`]);
@@ -81,7 +81,7 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, getTypeRootsFromLocation(configFileLocation).concat(configFileLocation), /*recursive*/ true);
 
             // Delete config file - should create inferred project with project root path set
-            host.reloadFS([f1, libFile, configFile2]);
+            host.deleteFile(configFile.path);
             host.runQueuedTimeoutCallbacks();
             checkNumberOfProjects(service, { inferredProjects: 1 });
             assert.equal(service.inferredProjects[0].projectRootPath, projectDir);
@@ -100,8 +100,6 @@ namespace ts.projectSystem {
                 path: `${projectRoot}/tsconfig.json`,
                 content: "{}"
             };
-            const files = [file, libFile];
-            const filesWithConfig = files.concat(tsconfig);
             const dirOfFile = getDirectoryPath(file.path);
 
             function openClientFile(files: File[]) {
@@ -114,7 +112,7 @@ namespace ts.projectSystem {
 
             function verifyConfiguredProject(host: TestServerHost, projectService: TestProjectService, orphanInferredProject?: boolean) {
                 projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: orphanInferredProject ? 1 : 0 });
-                const project = Debug.assertDefined(projectService.configuredProjects.get(tsconfig.path));
+                const project = Debug.checkDefined(projectService.configuredProjects.get(tsconfig.path));
 
                 if (orphanInferredProject) {
                     const inferredProject = projectService.inferredProjects[0];
@@ -132,11 +130,7 @@ namespace ts.projectSystem {
                 const project = projectService.inferredProjects[0];
                 assert.isDefined(project);
 
-                const filesToWatch = [libFile.path];
-                forEachAncestorDirectory(dirOfFile, ancestor => {
-                    filesToWatch.push(combinePaths(ancestor, "tsconfig.json"));
-                    filesToWatch.push(combinePaths(ancestor, "jsconfig.json"));
-                });
+                const filesToWatch = [libFile.path, ...getConfigFilesToWatch(dirOfFile)];
 
                 checkProjectActualFiles(project, [file.path, libFile.path]);
                 checkWatchedFiles(host, filesToWatch);
@@ -145,29 +139,49 @@ namespace ts.projectSystem {
             }
 
             it("tsconfig for the file exists", () => {
-                const { host, projectService } = openClientFile(filesWithConfig);
+                const { host, projectService } = openClientFile([file, libFile, tsconfig]);
                 verifyConfiguredProject(host, projectService);
 
-                host.reloadFS(files);
+                host.deleteFile(tsconfig.path);
                 host.runQueuedTimeoutCallbacks();
                 verifyInferredProject(host, projectService);
 
-                host.reloadFS(filesWithConfig);
+                host.writeFile(tsconfig.path, tsconfig.content);
                 host.runQueuedTimeoutCallbacks();
                 verifyConfiguredProject(host, projectService, /*orphanInferredProject*/ true);
             });
 
             it("tsconfig for the file does not exist", () => {
-                const { host, projectService } = openClientFile(files);
+                const { host, projectService } = openClientFile([file, libFile]);
                 verifyInferredProject(host, projectService);
 
-                host.reloadFS(filesWithConfig);
+                host.writeFile(tsconfig.path, tsconfig.content);
                 host.runQueuedTimeoutCallbacks();
                 verifyConfiguredProject(host, projectService, /*orphanInferredProject*/ true);
 
-                host.reloadFS(files);
+                host.deleteFile(tsconfig.path);
                 host.runQueuedTimeoutCallbacks();
                 verifyInferredProject(host, projectService);
+            });
+        });
+
+        describe("should not search and watch config files from directories that cannot be watched", () => {
+            const root = "/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace";
+            function verifyConfigFileWatch(projectRootPath: string | undefined) {
+                const path = `${root}/x.js`;
+                const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const service = createProjectService(host);
+                service.openClientFile(path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRootPath);
+                checkNumberOfProjects(service, { inferredProjects: 1 });
+                checkProjectActualFiles(service.inferredProjects[0], [path, libFile.path]);
+                checkWatchedFilesDetailed(host, [libFile.path, ...getConfigFilesToWatch(root)], 1);
+            }
+
+            it("when projectRootPath is not present", () => {
+                verifyConfigFileWatch(/*projectRootPath*/ undefined);
+            });
+            it("when projectRootPath is present but file is not from project root", () => {
+                verifyConfigFileWatch("/a/b");
             });
         });
     });

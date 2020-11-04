@@ -1,0 +1,32 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/foo.ts ===
+class Foo {
+>Foo : Foo
+
+    get p() { return 1 }
+>p : number
+>1 : 1
+
+    set p(value) { }
+>p : number
+>value : number
+}
+
+=== tests/cases/conformance/classes/propertyMemberDeclarations/bar.js ===
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    constructor() {
+        super()
+>super() : void
+>super : typeof Foo
+
+        this.p = 2
+>this.p = 2 : 2
+>this.p : any
+>this : this
+>p : any
+>2 : 2
+    }
+}
+

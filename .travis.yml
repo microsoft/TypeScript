@@ -2,10 +2,8 @@ language: node_js
 
 node_js:
   - 'node'
+  - '12'
   - '10'
-  - '6'
-
-sudo: false
 
 env:
   - workerCount=3 timeout=600000
@@ -20,8 +18,7 @@ branches:
 
 install:
   - npm uninstall typescript --no-save
-  - npm uninstall tslint --no-save
-  - npm install
+  - npm ci
 
 cache:
   directories:

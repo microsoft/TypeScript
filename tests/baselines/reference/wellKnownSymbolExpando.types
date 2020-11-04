@@ -1,0 +1,13 @@
+=== tests/cases/compiler/wellKnownSymbolExpando.ts ===
+function f() {}
+>f : typeof f
+
+f[Symbol.iterator] = function() {}
+>f[Symbol.iterator] = function() {} : () => void
+>f[Symbol.iterator] : () => void
+>f : typeof f
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>function() {} : () => void
+

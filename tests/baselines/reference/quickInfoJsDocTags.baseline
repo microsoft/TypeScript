@@ -2,13 +2,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTags.ts",
-      "position": 256
+      "position": 298
     },
     "quickInfo": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
-        "start": 256,
+        "start": 298,
         "length": 3
       },
       "displayParts": [
@@ -70,7 +70,7 @@
       "tags": [
         {
           "name": "author",
-          "text": "Me"
+          "text": "Me <me@domain.tld>"
         },
         {
           "name": "augments",
@@ -99,6 +99,10 @@
         {
           "name": "returns",
           "text": "The result"
+        },
+        {
+          "name": "see",
+          "text": "x (the parameter)"
         }
       ]
     }

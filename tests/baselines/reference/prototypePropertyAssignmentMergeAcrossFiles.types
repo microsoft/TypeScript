@@ -1,0 +1,25 @@
+=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles.js ===
+function C() {
+>C : typeof C
+
+    this.a = 1
+>this.a = 1 : 1
+>this.a : any
+>this : this
+>a : any
+>1 : 1
+}
+
+=== tests/cases/conformance/salsa/other.js ===
+C.prototype.foo = function() { return this.a }
+>C.prototype.foo = function() { return this.a } : () => number
+>C.prototype.foo : any
+>C.prototype : any
+>C : typeof C
+>prototype : any
+>foo : any
+>function() { return this.a } : () => number
+>this.a : number
+>this : this
+>a : number
+

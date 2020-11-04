@@ -17,6 +17,7 @@ verify.completions({
         kind: "function",
         kindModifiers: "export",
         hasAction: true,
+        sortText: completion.SortText.AutoImportSuggestions
     },
     preferences: { includeCompletionsForModuleExports: true },
 });
@@ -24,7 +25,7 @@ verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
     description: `Import default 'foo' from module "./a"`,
-    newFileContent: `import f_o_o from "./a";
-import foo from "./a";
+    newFileContent: `import foo from "./a";
+import f_o_o from "./a";
 f;`,
 });

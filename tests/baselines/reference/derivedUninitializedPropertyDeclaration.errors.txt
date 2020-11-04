@@ -1,0 +1,103 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(12,21): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(15,17): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(17,24): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(24,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts(27,5): error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts (6 errors) ====
+    class A {
+        property = 'x';
+        m() { return 1 }
+    }
+    class B extends A {
+        property: any; // error
+    }
+    class BD extends A {
+        declare property: any; // ok because it's implicitly initialised
+    }
+    class BDBang extends A {
+        declare property!: any; // ! is not allowed, this is an ambient declaration
+                        ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    }
+    class BOther extends A {
+        declare m() { return 2 } // not allowed on methods
+        ~~~~~~~
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
+                    ~
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
+        declare nonce: any; // ok, even though it's not in the base
+        declare property = 'y' // initialiser not allowed with declare
+                           ~~~
+!!! error TS1039: Initializers are not allowed in ambient contexts.
+    }
+    class U {
+        declare nonce: any; // ok, even though there's no base
+    }
+    
+    class C {
+        p: string;
+        ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+    }
+    class D extends C {
+        p: 'hi'; // error
+        ~
+!!! error TS2564: Property 'p' has no initializer and is not definitely assigned in the constructor.
+    }
+    class DD extends C {
+        declare p: 'bye'; // ok
+    }
+    
+    
+    declare class E {
+        p1: string
+        p2: string
+    }
+    class F extends E {
+        p1!: 'z'
+        declare p2: 'alpha'
+    }
+    
+    class G extends E {
+        p1: 'z'
+        constructor() {
+            super()
+            this.p1 = 'z'
+        }
+    }
+    
+    abstract class H extends E {
+        abstract p1: 'a' | 'b' | 'c'
+        declare abstract p2: 'a' | 'b' | 'c'
+    }
+    
+    interface I {
+        q: number
+    }
+    interface J extends I { }
+    class J {
+        r = 5
+    }
+    class K extends J {
+        q!: 1 | 2 | 3 // ok, extends a property from an interface
+        r!: 4 | 5 // error, from class
+    }
+    
+    // #35327
+    class L {
+        a: any;
+        constructor(arg: any) {
+            this.a = arg;
+        }
+    }
+    class M extends L {
+        declare a: number;
+        constructor(arg: number) {
+            super(arg);
+            console.log(this.a);  // should be OK, M.a is ambient
+        }
+    }
+    

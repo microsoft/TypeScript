@@ -37,6 +37,7 @@ tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericString
 !!! error TS2300: Duplicate identifier '1'.
         ~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericStringNamedPropertyEquivalence.ts:16:5: '1.0' was also declared here.
     }
     
     var b = {

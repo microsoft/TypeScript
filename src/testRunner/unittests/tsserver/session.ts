@@ -1,6 +1,6 @@
-const expect: typeof _chai.expect = _chai.expect;
-
 namespace ts.server {
+    const _chai: typeof import("chai") = require("chai");
+    const expect: typeof _chai.expect = _chai.expect;
     let lastWrittenToHost: string;
     const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
@@ -8,7 +8,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile: () => undefined,
+        readFile: returnUndefined,
         writeFile: noop,
         resolvePath(): string { return undefined!; }, // TODO: GH#18217
         fileExists: () => false,
@@ -100,7 +100,8 @@ namespace ts.server {
                     seq: 0,
                     message: "Unrecognized JSON command: foobar",
                     request_seq: 0,
-                    success: false
+                    success: false,
+                    performanceData: undefined,
                 };
                 expect(lastSent).to.deep.equal(expected);
             });
@@ -126,7 +127,8 @@ namespace ts.server {
                     success: true,
                     request_seq: 0,
                     seq: 0,
-                    body: undefined
+                    body: undefined,
+                    performanceData: undefined,
                 });
             });
             it("should handle literal types in request", () => {
@@ -179,7 +181,9 @@ namespace ts.server {
                     type: "request"
                 };
 
-                const expected: protocol.StatusResponseBody = { version };
+                const expected: protocol.StatusResponseBody = {
+                    version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
         });
@@ -264,6 +268,14 @@ namespace ts.server {
                 CommandNames.OrganizeImportsFull,
                 CommandNames.GetEditsForFileRename,
                 CommandNames.GetEditsForFileRenameFull,
+                CommandNames.SelectionRange,
+                CommandNames.PrepareCallHierarchy,
+                CommandNames.ProvideCallHierarchyIncomingCalls,
+                CommandNames.ProvideCallHierarchyOutgoingCalls,
+                CommandNames.ToggleLineComment,
+                CommandNames.ToggleMultilineComment,
+                CommandNames.CommentSelection,
+                CommandNames.UncommentSelection,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -282,9 +294,7 @@ namespace ts.server {
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
-                    /* tslint:disable no-null-keyword */
-                    req.arguments = null;
-                    /* tslint:enable no-null-keyword */
+                    req.arguments = null; // eslint-disable-line no-null/no-null
                     session.onMessage(JSON.stringify(req));
                     req.seq = i;
                     i++;
@@ -322,7 +332,8 @@ namespace ts.server {
                     success: true,
                     request_seq: 0,
                     seq: 0,
-                    body: undefined
+                    body: undefined,
+                    performanceData: undefined,
                 });
             });
         });
@@ -336,7 +347,7 @@ namespace ts.server {
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
+                expect(session.send(msg)).to.not.exist; // eslint-disable-line @typescript-eslint/no-unused-expressions
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -412,7 +423,8 @@ namespace ts.server {
                     type: "response",
                     command,
                     body,
-                    success: true
+                    success: true,
+                    performanceData: undefined,
                 });
             });
         });
@@ -531,7 +543,8 @@ namespace ts.server {
                 type: "response",
                 command,
                 body,
-                success: true
+                success: true,
+                performanceData: undefined,
             });
         });
         it("can add and respond to new protocol handlers", () => {
@@ -547,7 +560,6 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            // tslint:disable-next-line no-unused-expression
             new class extends TestSession {
                 constructor() {
                     super();
@@ -613,7 +625,7 @@ namespace ts.server {
             private server: InProcSession | undefined;
             private seq = 0;
             private callbacks: ((resp: protocol.Response) => void)[] = [];
-            private eventHandlers = createMap<(args: any) => void>();
+            private eventHandlers = new Map<string, (args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {

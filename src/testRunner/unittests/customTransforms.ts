@@ -4,7 +4,7 @@ namespace ts {
             it(name, () => {
                 const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
                 const fileMap = arrayToMap(roots, file => file.fileName);
-                const outputs = createMap<string>();
+                const outputs = new Map<string, string>();
                 const host: CompilerHost = {
                     getSourceFile: (fileName) => fileMap.get(fileName),
                     getDefaultLibFileName: () => "lib.d.ts",
@@ -87,7 +87,7 @@ namespace ts {
             `
         }], {before: [
             context => node => visitNode(node, function visitor(node: Node): Node {
-                if (isStringLiteral(node) && node.text === "change") return createLiteral("changed");
+                if (isStringLiteral(node) && node.text === "change") return factory.createStringLiteral("changed");
                 return visitEachChild(node, visitor, context);
             })
         ]}, {
@@ -140,22 +140,28 @@ namespace ts {
             ],
             {
                 before: [
-                    context => node => visitNode(node, function visitor(node: Node): Node {
-                        if (isIdentifier(node) && node.text === "original") {
-                            const newNode = createIdentifier("changed");
-                            setSourceMapRange(newNode, {
-                              pos: 0,
-                              end: 7,
-                              // Do not provide a custom skipTrivia function for `source`.
-                              source: createSourceMapSource("another.html", "changed;")
-                            });
-                            return newNode;
-                        }
-                        return visitEachChild(node, visitor, context);
-                    })
+                    context => {
+                        const transformSourceFile: Transformer<SourceFile> = node => visitNode(node, function visitor(node: Node): Node {
+                            if (isIdentifier(node) && node.text === "original") {
+                                const newNode = factory.createIdentifier("changed");
+                                setSourceMapRange(newNode, {
+                                    pos: 0,
+                                    end: 7,
+                                    // Do not provide a custom skipTrivia function for `source`.
+                                    source: createSourceMapSource("another.html", "changed;")
+                                });
+                                return newNode;
+                            }
+                            return visitEachChild(node, visitor, context);
+                        });
+                        return {
+                            transformSourceFile,
+                            transformBundle: node => factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends),
+                        };
+                    }
                 ]
             },
-            { sourceMap: true }
+            { sourceMap: true, outFile: "source.js" }
         );
 
     });

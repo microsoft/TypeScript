@@ -24,7 +24,7 @@ namespace ts.projectSystem {
                 compilerOptions: { plugins: [{ name: "myplugin" }] }
             })
         };
-        function createHostWithPlugin(files: ReadonlyArray<File>) {
+        function createHostWithPlugin(files: readonly File[]) {
             const host = createServerHost(files);
             host.require = (_initialPath, moduleName) => {
                 assert.equal(moduleName, "myplugin");
@@ -54,16 +54,16 @@ namespace ts.projectSystem {
                 line: 1,
                 offset: aTs.content.indexOf("this.") + 1 + "this.".length
             };
-            const expectedCompletionEntries: ReadonlyArray<protocol.CompletionEntry> = [
-                { name: "foo", kind: ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: "0" },
-                { name: "prop", kind: ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: "0" }
+            const expectedCompletionEntries: readonly protocol.CompletionEntry[] = [
+                { name: "foo", kind: ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority },
+                { name: "prop", kind: ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority }
             ];
 
             it("can pass through metadata when the command returns array", () => {
                 const host = createHostWithPlugin([aTs, tsconfig]);
                 const session = createSession(host);
                 openFilesForSession([aTs], session);
-                verifyCommandWithMetadata<protocol.CompletionsRequest, ReadonlyArray<protocol.CompletionEntry>>(session, host, {
+                verifyCommandWithMetadata<protocol.CompletionsRequest, readonly protocol.CompletionEntry[]>(session, host, {
                     command: protocol.CommandTypes.Completions,
                     arguments: completionRequestArgs
                 }, expectedCompletionEntries);
@@ -77,11 +77,15 @@ namespace ts.projectSystem {
                     command: protocol.CommandTypes.CompletionInfo,
                     arguments: completionRequestArgs
                 }, {
-                        isGlobalCompletion: false,
-                        isMemberCompletion: true,
-                        isNewIdentifierLocation: false,
-                        entries: expectedCompletionEntries
-                    });
+                    isGlobalCompletion: false,
+                    isMemberCompletion: true,
+                    isNewIdentifierLocation: false,
+                    optionalReplacementSpan: {
+                        start: { line: 1, offset: aTs.content.indexOf("prop;") + 1 },
+                        end: { line: 1, offset: aTs.content.indexOf("prop;") + 1 + "prop".length }
+                    },
+                    entries: expectedCompletionEntries
+                });
             });
 
             it("returns undefined correctly", () => {

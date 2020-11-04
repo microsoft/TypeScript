@@ -8,10 +8,11 @@ tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signat
   Type 'boolean' is not assignable to type 'string | number | symbol'.
 tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
   Type 'NonIndexableUnion' is not assignable to type 'string | number | symbol'.
-    Type 'false' is not assignable to type 'string | number | symbol'.
+    Type 'boolean' is not assignable to type 'string | number | symbol'.
+tests/cases/compiler/indexerConstraints2.ts(79,5): error TS1021: An index signature must have a type annotation.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (5 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (6 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -86,7 +87,7 @@ tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signat
          ~
 !!! error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
 !!! error TS1023:   Type 'NonIndexableUnion' is not assignable to type 'string | number | symbol'.
-!!! error TS1023:     Type 'false' is not assignable to type 'string | number | symbol'.
+!!! error TS1023:     Type 'boolean' is not assignable to type 'string | number | symbol'.
     }
     
     type NonIndexableUnion2 = string | number;
@@ -104,3 +105,11 @@ tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signat
     interface S {
         [u: "foo" | "bar"]: A;
     }
+    
+    type Key = string;
+    interface T {
+        [key: Key]
+        ~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
+    }
+    

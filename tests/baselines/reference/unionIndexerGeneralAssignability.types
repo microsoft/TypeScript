@@ -113,7 +113,7 @@ function f1<
 >k2 : K2
 
     s2[k1]; // invalid
->s2[k1] : SubB[K1]
+>s2[k1] : any
 >s2 : SubB
 >k1 : K1
 

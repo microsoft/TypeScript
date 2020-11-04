@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/declarations/items.js ===
+export const a = 1;
+>a : Symbol(a, Decl(items.js, 0, 12))
+
+export const b = 2;
+>b : Symbol(b, Decl(items.js, 1, 12))
+
+export const c = 3;
+>c : Symbol(c, Decl(items.js, 2, 12))
+
+=== tests/cases/conformance/jsdoc/declarations/justone.js ===
+export { a, b, c } from "./items";
+>a : Symbol(a, Decl(justone.js, 0, 8))
+>b : Symbol(b, Decl(justone.js, 0, 11))
+>c : Symbol(c, Decl(justone.js, 0, 14))
+
+=== tests/cases/conformance/jsdoc/declarations/two.js ===
+export { a } from "./items";
+>a : Symbol(a, Decl(two.js, 0, 8))
+
+export { b, c } from "./items";
+>b : Symbol(b, Decl(two.js, 1, 8))
+>c : Symbol(c, Decl(two.js, 1, 11))
+
+=== tests/cases/conformance/jsdoc/declarations/multiple.js ===
+export {a, b} from "./items";
+>a : Symbol(a, Decl(multiple.js, 0, 8))
+>b : Symbol(b, Decl(multiple.js, 0, 10))
+
+export {a as aa} from "./two";
+>a : Symbol(a, Decl(two.js, 0, 8))
+>aa : Symbol(aa, Decl(multiple.js, 1, 8))
+
+export {b as bb} from "./two";
+>b : Symbol(b, Decl(two.js, 1, 8))
+>bb : Symbol(bb, Decl(multiple.js, 2, 8))
+
+export {c} from "./two"
+>c : Symbol(c, Decl(multiple.js, 3, 8))
+
+export {c as cc} from "./items";
+>c : Symbol(c, Decl(items.js, 2, 12))
+>cc : Symbol(cc, Decl(multiple.js, 4, 8))
+

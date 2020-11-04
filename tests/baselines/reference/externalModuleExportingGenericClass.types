@@ -7,11 +7,11 @@ var v: a; // this should report error
 
 var v2: any = (new a()).foo;
 >v2 : any
->(new a()).foo : {}
->(new a()) : a<{}>
->new a() : a<{}>
+>(new a()).foo : unknown
+>(new a()) : a<unknown>
+>new a() : a<unknown>
 >a : typeof a
->foo : {}
+>foo : unknown
 
 var v3: number = (new a<number>()).foo;
 >v3 : number

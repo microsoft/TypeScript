@@ -1,0 +1,91 @@
+=== tests/cases/compiler/extendedUnicodePlaneIdentifiers.ts ===
+const 𝑚 = 4;
+>𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
+
+const 𝑀 = 5;
+>𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
+
+console.log(𝑀 + 𝑚); // 9
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>𝑀 : Symbol(𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 1, 5))
+>𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
+
+// lower 8 bits look like 'a'
+const ၡ = 6;
+>ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 5))
+
+console.log(ၡ ** ၡ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 5))
+>ၡ : Symbol(ၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 5))
+
+// lower 8 bits aren't a valid unicode character
+const ဒ = 7;
+>ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
+
+console.log(ဒ ** ဒ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
+>ဒ : Symbol(ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 9, 5))
+
+// a mix, for good measure
+const ဒၡ𝑀 = 7;
+>ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 13, 5))
+
+console.log(ဒၡ𝑀 ** ဒၡ𝑀);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 13, 5))
+>ဒၡ𝑀 : Symbol(ဒၡ𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 13, 5))
+
+const ၡ𝑀ဒ = 7;
+>ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 16, 5))
+
+console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 16, 5))
+>ၡ𝑀ဒ : Symbol(ၡ𝑀ဒ, Decl(extendedUnicodePlaneIdentifiers.ts, 16, 5))
+
+const 𝑀ဒၡ = 7;
+>𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
+
+console.log(𝑀ဒၡ ** 𝑀ဒၡ);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
+>𝑀ဒၡ : Symbol(𝑀ဒၡ, Decl(extendedUnicodePlaneIdentifiers.ts, 19, 5))
+
+const 𝓱𝓮𝓵𝓵𝓸 = "𝔀𝓸𝓻𝓵𝓭";
+>𝓱𝓮𝓵𝓵𝓸 : Symbol(𝓱𝓮𝓵𝓵𝓸, Decl(extendedUnicodePlaneIdentifiers.ts, 22, 5))
+
+const Ɐⱱ = "ok"; // BMP
+>Ɐⱱ : Symbol(Ɐⱱ, Decl(extendedUnicodePlaneIdentifiers.ts, 24, 5))
+
+const 𓀸𓀹𓀺 = "ok"; // SMP
+>𓀸𓀹𓀺 : Symbol(𓀸𓀹𓀺, Decl(extendedUnicodePlaneIdentifiers.ts, 26, 5))
+
+const 𡚭𡚮𡚯 = "ok"; // SIP
+>𡚭𡚮𡚯 : Symbol(𡚭𡚮𡚯, Decl(extendedUnicodePlaneIdentifiers.ts, 28, 5))
+
+const 𡚭𓀺ⱱ𝓮 = "ok";
+>𡚭𓀺ⱱ𝓮 : Symbol(𡚭𓀺ⱱ𝓮, Decl(extendedUnicodePlaneIdentifiers.ts, 30, 5))
+
+const 𓀺ⱱ𝓮𡚭 = "ok";
+>𓀺ⱱ𝓮𡚭 : Symbol(𓀺ⱱ𝓮𡚭, Decl(extendedUnicodePlaneIdentifiers.ts, 32, 5))
+
+const ⱱ𝓮𡚭𓀺 = "ok";
+>ⱱ𝓮𡚭𓀺 : Symbol(ⱱ𝓮𡚭𓀺, Decl(extendedUnicodePlaneIdentifiers.ts, 34, 5))
+
+const 𝓮𡚭𓀺ⱱ = "ok";
+>𝓮𡚭𓀺ⱱ : Symbol(𝓮𡚭𓀺ⱱ, Decl(extendedUnicodePlaneIdentifiers.ts, 36, 5))
+

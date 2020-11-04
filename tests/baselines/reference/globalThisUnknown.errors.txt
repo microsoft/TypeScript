@@ -1,0 +1,20 @@
+tests/cases/conformance/es2019/globalThisUnknown.ts(4,5): error TS2339: Property 'hi' does not exist on type 'Window & typeof globalThis'.
+
+
+==== tests/cases/conformance/es2019/globalThisUnknown.ts (1 errors) ====
+    declare let win: Window & typeof globalThis;
+    
+    // this access should be an error
+    win.hi
+        ~~
+!!! error TS2339: Property 'hi' does not exist on type 'Window & typeof globalThis'.
+    // these two should be fine, with type any
+    this.hi
+    globalThis.hi
+    
+    // element access is always ok without noImplicitAny
+    win['hi']
+    this['hi']
+    globalThis['hi']
+    
+    

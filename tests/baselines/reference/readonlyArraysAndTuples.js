@@ -10,6 +10,7 @@ type T21 = readonly [number, number];
 type T30 = readonly string;  // Error
 type T31<T> = readonly T;  // Error
 type T32 = readonly readonly string[];  // Error
+type T33 = readonly Array<string>;  // Error
 
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
     ma = ra;  // Error
@@ -25,6 +26,15 @@ function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: reado
     rt = ra;  // Error
     rt = mt;
 }
+
+declare var v: readonly[number, number, ...number[]];
+v[0] = 1;        // Error
+v[1] = 1;        // Error
+v[2] = 1;        // Error
+delete v[2];     // Error
+v[0 + 1] = 1;    // Error
+v[0 + 2] = 1;    // Error
+delete v[0 + 1]; // Error
 
 
 //// [readonlyArraysAndTuples.js]
@@ -43,6 +53,13 @@ function f1(ma, ra, mt, rt) {
     rt = ra; // Error
     rt = mt;
 }
+v[0] = 1; // Error
+v[1] = 1; // Error
+v[2] = 1; // Error
+delete v[2]; // Error
+v[0 + 1] = 1; // Error
+v[0 + 2] = 1; // Error
+delete v[0 + 1]; // Error
 
 
 //// [readonlyArraysAndTuples.d.ts]
@@ -55,4 +72,6 @@ declare type T21 = readonly [number, number];
 declare type T30 = readonly string;
 declare type T31<T> = readonly T;
 declare type T32 = readonly readonly string[];
+declare type T33 = readonly Array<string>;
 declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): void;
+declare var v: readonly [number, number, ...number[]];

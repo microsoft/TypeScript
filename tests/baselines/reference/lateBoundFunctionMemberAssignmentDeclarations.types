@@ -1,0 +1,29 @@
+=== tests/cases/compiler/index.ts ===
+export function foo() {}
+>foo : typeof foo
+
+foo.bar = 12;
+>foo.bar = 12 : 12
+>foo.bar : number
+>foo : typeof foo
+>bar : number
+>12 : 12
+
+const _private = Symbol();
+>_private : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+foo[_private] = "ok";
+>foo[_private] = "ok" : "ok"
+>foo[_private] : string
+>foo : typeof foo
+>_private : unique symbol
+>"ok" : "ok"
+
+const x: string = foo[_private];
+>x : string
+>foo[_private] : string
+>foo : typeof foo
+>_private : unique symbol
+

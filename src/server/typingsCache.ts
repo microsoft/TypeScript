@@ -4,12 +4,11 @@ namespace ts.server {
         projectRootPath: Path;
     }
 
-    // tslint:disable-next-line interface-name (for backwards-compatibility)
+    // for backwards-compatibility
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-        /* @internal */
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -20,7 +19,6 @@ namespace ts.server {
         isKnownTypesPackageName: returnFalse,
         // Should never be called because we never provide a types registry.
         installPackage: notImplemented,
-        inspectValue: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -43,7 +41,7 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
-        const set: Map<boolean> = createMap<boolean>();
+        const set = new Map<string, boolean>();
         let unique = 0;
 
         for (const v of arr1!) {
@@ -73,7 +71,7 @@ namespace ts.server {
 
     function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
         // TODO: add more relevant properties
-        return opt1.allowJs !== opt2.allowJs;
+        return getAllowJSCompilerOption(opt1) !== getAllowJSCompilerOption(opt2);
     }
 
     function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
@@ -85,7 +83,7 @@ namespace ts.server {
 
     /*@internal*/
     export class TypingsCache {
-        private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
+        private readonly perProjectCache = new Map<string, TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }
@@ -96,10 +94,6 @@ namespace ts.server {
 
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
             return this.installer.installPackage(options);
-        }
-
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            return this.installer.inspectValue(options);
         }
 
         enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {

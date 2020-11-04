@@ -36,7 +36,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -46,12 +46,13 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Test = exports.WithTags = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
 exports.simpleExample = /** @class */ (function () {
-    function class_1() {
+    function simpleExample() {
     }
-    class_1.getTags = function () { };
-    class_1.prototype.tags = function () { };
-    return class_1;
+    simpleExample.getTags = function () { };
+    simpleExample.prototype.tags = function () { };
+    return simpleExample;
 }());
 exports.circularReference = /** @class */ (function () {
     function C() {
@@ -70,13 +71,13 @@ var FooItem = /** @class */ (function () {
 exports.FooItem = FooItem;
 function WithTags(Base) {
     return /** @class */ (function (_super) {
-        __extends(class_2, _super);
-        function class_2() {
+        __extends(class_1, _super);
+        function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_2.getTags = function () { };
-        class_2.prototype.tags = function () { };
-        return class_2;
+        class_1.getTags = function () { };
+        class_1.prototype.tags = function () { };
+        return class_1;
     }(Base));
 }
 exports.WithTags = WithTags;

@@ -18,10 +18,12 @@ tests/cases/compiler/staticClassMemberError.ts(10,7): error TS2300: Duplicate id
     function Foo();
              ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/staticClassMemberError.ts:10:7: 'Foo' was also declared here.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
     class Foo {
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/staticClassMemberError.ts:9:10: 'Foo' was also declared here.
      static bar;
     }

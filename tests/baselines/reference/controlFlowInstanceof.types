@@ -269,7 +269,7 @@ function AtTop(val) { this.val = val }
 >val : any
 >this.val = val : any
 >this.val : any
->this : AtTop
+>this : this
 >val : any
 >val : any
 

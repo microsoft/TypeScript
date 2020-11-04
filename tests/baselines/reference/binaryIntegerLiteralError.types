@@ -11,8 +11,8 @@ var bin1 = 0b11023410;
 >23410 : 23410
 
 var obj1 = {
->obj1 : { 0b11010: string; }
->{    0b11010: "hi",    26: "Hello",    "26": "world",} : { 0b11010: string; }
+>obj1 : { 26: string; }
+>{    0b11010: "hi",    26: "Hello",    "26": "world",} : { 26: string; }
 
     0b11010: "hi",
 >0b11010 : string

@@ -1,0 +1,551 @@
+=== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts ===
+declare function isString(value: unknown): value is string;
+>isString : Symbol(isString, Decl(assertionTypePredicates1.ts, 0, 0))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 0, 26))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 0, 26))
+
+declare function isArrayOfStrings(value: unknown): value is string[];
+>isArrayOfStrings : Symbol(isArrayOfStrings, Decl(assertionTypePredicates1.ts, 0, 59))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 1, 34))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 1, 34))
+
+const assert: (value: unknown) => asserts value = value => {}
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 3, 15))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 3, 15))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 3, 49))
+
+declare function assertIsString(value: unknown): asserts value is string;
+>assertIsString : Symbol(assertIsString, Decl(assertionTypePredicates1.ts, 3, 61))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 5, 32))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 5, 32))
+
+declare function assertIsArrayOfStrings(value: unknown): asserts value is string[];
+>assertIsArrayOfStrings : Symbol(assertIsArrayOfStrings, Decl(assertionTypePredicates1.ts, 5, 73))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 6, 40))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 6, 40))
+
+declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
+>assertDefined : Symbol(assertDefined, Decl(assertionTypePredicates1.ts, 6, 83))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 7, 31))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 7, 34))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 7, 31))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 7, 34))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 7, 31))
+
+function f01(x: unknown) {
+>f01 : Symbol(f01, Decl(assertionTypePredicates1.ts, 7, 77))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+    if (!!true) {
+        assert(typeof x === "string");
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assert(x instanceof Error);
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        x.message;
+>x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assert(typeof x === "boolean" || typeof x === "number");
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        x.toLocaleString;
+>x.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assert(isArrayOfStrings(x));
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>isArrayOfStrings : Symbol(isArrayOfStrings, Decl(assertionTypePredicates1.ts, 0, 59))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        x[0].length;
+>x[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assertIsArrayOfStrings(x);
+>assertIsArrayOfStrings : Symbol(assertIsArrayOfStrings, Decl(assertionTypePredicates1.ts, 5, 73))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        x[0].length;
+>x[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assertIsArrayOfStrings(false);
+>assertIsArrayOfStrings : Symbol(assertIsArrayOfStrings, Decl(assertionTypePredicates1.ts, 5, 73))
+
+        x;
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+    }
+    if (!!true) {
+        assert(x === undefined || typeof x === "string");
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        x;  // string | undefined
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        assertDefined(x);
+>assertDefined : Symbol(assertDefined, Decl(assertionTypePredicates1.ts, 6, 83))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+
+        x;  // string
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+    }
+    if (!!true) {
+        assert(false);
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+    }
+    if (!!true) {
+        assert(false && x === undefined);
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+>undefined : Symbol(undefined)
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
+    }
+}
+
+function f02(x: string | undefined) {
+>f02 : Symbol(f02, Decl(assertionTypePredicates1.ts, 48, 1))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+
+    if (!!true) {
+        assert(x);
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assert(x !== undefined);
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+>undefined : Symbol(undefined)
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assertDefined(x);
+>assertDefined : Symbol(assertDefined, Decl(assertionTypePredicates1.ts, 6, 83))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
+>f03 : Symbol(f03, Decl(assertionTypePredicates1.ts, 63, 1))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 65, 13))
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 65, 35))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 65, 45))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 65, 45))
+
+    assert(x);
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 65, 35))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 65, 13))
+
+    x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 65, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+namespace Debug {
+>Debug : Symbol(Debug, Decl(assertionTypePredicates1.ts, 68, 1))
+
+    export declare function assert(value: unknown, message?: string): asserts value;
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 70, 17))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 71, 35))
+>message : Symbol(message, Decl(assertionTypePredicates1.ts, 71, 50))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 71, 35))
+
+    export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
+>assertDefined : Symbol(assertDefined, Decl(assertionTypePredicates1.ts, 71, 84))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 72, 42))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 72, 45))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 72, 42))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 72, 45))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 72, 42))
+}
+
+function f10(x: string | undefined) {
+>f10 : Symbol(f10, Decl(assertionTypePredicates1.ts, 73, 1))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+
+    if (!!true) {
+        Debug.assert(x);
+>Debug.assert : Symbol(Debug.assert, Decl(assertionTypePredicates1.ts, 70, 17))
+>Debug : Symbol(Debug, Decl(assertionTypePredicates1.ts, 68, 1))
+>assert : Symbol(Debug.assert, Decl(assertionTypePredicates1.ts, 70, 17))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        Debug.assert(x !== undefined);
+>Debug.assert : Symbol(Debug.assert, Decl(assertionTypePredicates1.ts, 70, 17))
+>Debug : Symbol(Debug, Decl(assertionTypePredicates1.ts, 68, 1))
+>assert : Symbol(Debug.assert, Decl(assertionTypePredicates1.ts, 70, 17))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+>undefined : Symbol(undefined)
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        Debug.assertDefined(x);
+>Debug.assertDefined : Symbol(Debug.assertDefined, Decl(assertionTypePredicates1.ts, 71, 84))
+>Debug : Symbol(Debug, Decl(assertionTypePredicates1.ts, 68, 1))
+>assertDefined : Symbol(Debug.assertDefined, Decl(assertionTypePredicates1.ts, 71, 84))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        Debug.assert(false);
+>Debug.assert : Symbol(Debug.assert, Decl(assertionTypePredicates1.ts, 70, 17))
+>Debug : Symbol(Debug, Decl(assertionTypePredicates1.ts, 68, 1))
+>assert : Symbol(Debug.assert, Decl(assertionTypePredicates1.ts, 70, 17))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
+    }
+}
+
+class Test {
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+    assert(value: unknown): asserts value {
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 95, 11))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 95, 11))
+
+        if (value) return;
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 95, 11))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    isTest2(): this is Test2 {
+>isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
+>Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
+
+        return this instanceof Test2;
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
+    }
+    assertIsTest2(): asserts this is Test2 {
+>assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 101, 5))
+>Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
+
+        if (this instanceof Test2) return;
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    assertThis(): asserts this {
+>assertThis : Symbol(Test.assertThis, Decl(assertionTypePredicates1.ts, 105, 5))
+
+        if (!this) return;
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+        throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    bar() {
+>bar : Symbol(Test.bar, Decl(assertionTypePredicates1.ts, 109, 5))
+
+        this.assertThis();
+>this.assertThis : Symbol(Test.assertThis, Decl(assertionTypePredicates1.ts, 105, 5))
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>assertThis : Symbol(Test.assertThis, Decl(assertionTypePredicates1.ts, 105, 5))
+
+        this;
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+    }
+    foo(x: unknown) {
+>foo : Symbol(Test.foo, Decl(assertionTypePredicates1.ts, 113, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 114, 8))
+
+        this.assert(typeof x === "string");
+>this.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 114, 8))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 114, 8))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+        if (this.isTest2()) {
+>this.isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
+
+            this.z;
+>this.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+        }
+        this.assertIsTest2();
+>this.assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 101, 5))
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 101, 5))
+
+        this.z;
+>this.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+    }
+    baz(x: number) {
+>baz : Symbol(Test.baz, Decl(assertionTypePredicates1.ts, 122, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 123, 8))
+
+        this.assert(false);
+>this.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 123, 8))
+    }
+}
+
+class Test2 extends Test {
+>Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+    z = 0;
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+}
+
+class Derived extends Test {
+>Derived : Symbol(Derived, Decl(assertionTypePredicates1.ts, 131, 1))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+    foo(x: unknown) {
+>foo : Symbol(Derived.foo, Decl(assertionTypePredicates1.ts, 133, 28))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 134, 8))
+
+        super.assert(typeof x === "string");
+>super.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>super : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 134, 8))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 134, 8))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    baz(x: number) {
+>baz : Symbol(Derived.baz, Decl(assertionTypePredicates1.ts, 137, 5))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 138, 8))
+
+        super.assert(false);
+>super.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>super : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 138, 8))
+    }
+}
+
+function f11(items: Test[]) {
+>f11 : Symbol(f11, Decl(assertionTypePredicates1.ts, 142, 1))
+>items : Symbol(items, Decl(assertionTypePredicates1.ts, 144, 13))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+    for (let item of items) {
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 145, 12))
+>items : Symbol(items, Decl(assertionTypePredicates1.ts, 144, 13))
+
+        if (item.isTest2()) {
+>item.isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 145, 12))
+>isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
+
+            item.z;
+>item.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 145, 12))
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+        }
+        item.assertIsTest2();
+>item.assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 101, 5))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 145, 12))
+>assertIsTest2 : Symbol(Test.assertIsTest2, Decl(assertionTypePredicates1.ts, 101, 5))
+
+        item.z;
+>item.z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+>item : Symbol(item, Decl(assertionTypePredicates1.ts, 145, 12))
+>z : Symbol(Test2.z, Decl(assertionTypePredicates1.ts, 129, 26))
+    }
+}
+
+// Invalid constructs
+
+declare let Q1: new (x: unknown) => x is string;
+>Q1 : Symbol(Q1, Decl(assertionTypePredicates1.ts, 156, 11))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 156, 21))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 156, 21))
+
+declare let Q2: new (x: boolean) => asserts x;
+>Q2 : Symbol(Q2, Decl(assertionTypePredicates1.ts, 157, 11))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 157, 21))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 157, 21))
+
+declare let Q3: new (x: unknown) => asserts x is string;
+>Q3 : Symbol(Q3, Decl(assertionTypePredicates1.ts, 158, 11))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 158, 21))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 158, 21))
+
+declare class Wat {
+>Wat : Symbol(Wat, Decl(assertionTypePredicates1.ts, 158, 56))
+
+    get p1(): this is string;
+>p1 : Symbol(Wat.p1, Decl(assertionTypePredicates1.ts, 160, 19), Decl(assertionTypePredicates1.ts, 161, 29))
+
+    set p1(x: this is string);
+>p1 : Symbol(Wat.p1, Decl(assertionTypePredicates1.ts, 160, 19), Decl(assertionTypePredicates1.ts, 161, 29))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 162, 11))
+
+    get p2(): asserts this is string;
+>p2 : Symbol(Wat.p2, Decl(assertionTypePredicates1.ts, 162, 30), Decl(assertionTypePredicates1.ts, 163, 37))
+
+    set p2(x: asserts this is string);
+>p2 : Symbol(Wat.p2, Decl(assertionTypePredicates1.ts, 162, 30), Decl(assertionTypePredicates1.ts, 163, 37))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 164, 11))
+}
+
+function f20(x: unknown) {
+>f20 : Symbol(f20, Decl(assertionTypePredicates1.ts, 165, 1))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 167, 13))
+
+    const assert = (value: unknown): asserts value => {}
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 168, 9))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 168, 20))
+>value : Symbol(value, Decl(assertionTypePredicates1.ts, 168, 20))
+
+    assert(typeof x === "string");  // Error
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 168, 9))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 167, 13))
+
+    const a = [assert];
+>a : Symbol(a, Decl(assertionTypePredicates1.ts, 170, 9))
+>assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 168, 9))
+
+    a[0](typeof x === "string");  // Error
+>a : Symbol(a, Decl(assertionTypePredicates1.ts, 170, 9))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 167, 13))
+
+    const t1 = new Test();
+>t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 172, 9))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+    t1.assert(typeof x === "string");  // Error
+>t1.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>t1 : Symbol(t1, Decl(assertionTypePredicates1.ts, 172, 9))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 167, 13))
+
+    const t2: Test = new Test();
+>t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 174, 9))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+>Test : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
+
+    t2.assert(typeof x === "string");
+>t2.assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>t2 : Symbol(t2, Decl(assertionTypePredicates1.ts, 174, 9))
+>assert : Symbol(Test.assert, Decl(assertionTypePredicates1.ts, 94, 12))
+>x : Symbol(x, Decl(assertionTypePredicates1.ts, 167, 13))
+}
+
+// Repro from #35940
+
+interface Thing {
+>Thing : Symbol(Thing, Decl(assertionTypePredicates1.ts, 176, 1))
+
+    good: boolean;
+>good : Symbol(Thing.good, Decl(assertionTypePredicates1.ts, 180, 17))
+
+    isGood(): asserts this is GoodThing;
+>isGood : Symbol(Thing.isGood, Decl(assertionTypePredicates1.ts, 181, 18))
+>GoodThing : Symbol(GoodThing, Decl(assertionTypePredicates1.ts, 183, 1))
+}
+
+interface GoodThing {
+>GoodThing : Symbol(GoodThing, Decl(assertionTypePredicates1.ts, 183, 1))
+
+    good: true;
+>good : Symbol(GoodThing.good, Decl(assertionTypePredicates1.ts, 185, 21))
+}
+
+function example1(things: Thing[]) {
+>example1 : Symbol(example1, Decl(assertionTypePredicates1.ts, 187, 1))
+>things : Symbol(things, Decl(assertionTypePredicates1.ts, 189, 18))
+>Thing : Symbol(Thing, Decl(assertionTypePredicates1.ts, 176, 1))
+
+    for (let thing of things) {
+>thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 190, 12))
+>things : Symbol(things, Decl(assertionTypePredicates1.ts, 189, 18))
+
+        thing.isGood();
+>thing.isGood : Symbol(Thing.isGood, Decl(assertionTypePredicates1.ts, 181, 18))
+>thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 190, 12))
+>isGood : Symbol(Thing.isGood, Decl(assertionTypePredicates1.ts, 181, 18))
+
+        thing.good;
+>thing.good : Symbol(good, Decl(assertionTypePredicates1.ts, 180, 17), Decl(assertionTypePredicates1.ts, 185, 21))
+>thing : Symbol(thing, Decl(assertionTypePredicates1.ts, 190, 12))
+>good : Symbol(good, Decl(assertionTypePredicates1.ts, 180, 17), Decl(assertionTypePredicates1.ts, 185, 21))
+    }
+}
+

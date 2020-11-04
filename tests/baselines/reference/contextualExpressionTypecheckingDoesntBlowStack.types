@@ -21,9 +21,9 @@ export default class Operation {
         for(const parameterLocation of Object.keys(parameterValues)) {
 >parameterLocation : string
 >Object.keys(parameterValues) : string[]
->Object.keys : (o: {}) => string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
->keys : (o: {}) => string[]
+>keys : { (o: object): string[]; (o: {}): string[]; }
 >parameterValues : any
 
             const parameter: any = (this as any).getParameter();;
@@ -59,7 +59,7 @@ export default class Operation {
 >name : any
 
             if(innerResult && innerResult.length > 0) {
->innerResult && innerResult.length > 0 : boolean
+>innerResult && innerResult.length > 0 : any
 >innerResult : any
 >innerResult.length > 0 : boolean
 >innerResult.length : any

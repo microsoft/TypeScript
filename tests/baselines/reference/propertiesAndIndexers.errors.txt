@@ -9,8 +9,8 @@ tests/cases/compiler/propertiesAndIndexers.ts(29,5): error TS2411: Property 'c' 
 tests/cases/compiler/propertiesAndIndexers.ts(30,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'string' index type 'number'.
 tests/cases/compiler/propertiesAndIndexers.ts(33,11): error TS2413: 'number' index type 'string' is not assignable to 'string' index type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to 'string' index type 'number & string'.
-tests/cases/compiler/propertiesAndIndexers.ts(35,5): error TS2411: Property 'Infinity' of type 'number' is not assignable to 'string' index type 'number & string'.
+tests/cases/compiler/propertiesAndIndexers.ts(34,5): error TS2411: Property '2' of type 'Z' is not assignable to 'string' index type 'never'.
+tests/cases/compiler/propertiesAndIndexers.ts(35,5): error TS2411: Property 'Infinity' of type 'number' is not assignable to 'string' index type 'never'.
 tests/cases/compiler/propertiesAndIndexers.ts(36,5): error TS2411: Property 'zoo' of type 'string' is not assignable to 'string' index type 'number'.
 tests/cases/compiler/propertiesAndIndexers.ts(44,5): error TS2411: Property 't' of type 'number' is not assignable to 'string' index type 'string'.
 tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2411: Property '3' of type 'boolean' is not assignable to 'number' index type 'string'.
@@ -73,10 +73,10 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2411: Property '3' 
 !!! error TS2413:   Type 'string' is not assignable to type 'number'.
         2: Z;
         ~
-!!! error TS2411: Property '2' of type 'Z' is not assignable to 'string' index type 'number & string'.
+!!! error TS2411: Property '2' of type 'Z' is not assignable to 'string' index type 'never'.
         Infinity: number;
         ~~~~~~~~
-!!! error TS2411: Property 'Infinity' of type 'number' is not assignable to 'string' index type 'number & string'.
+!!! error TS2411: Property 'Infinity' of type 'number' is not assignable to 'string' index type 'never'.
         zoo: string;
         ~~~
 !!! error TS2411: Property 'zoo' of type 'string' is not assignable to 'string' index type 'number'.

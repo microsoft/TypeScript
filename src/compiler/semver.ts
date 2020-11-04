@@ -35,14 +35,14 @@ namespace ts {
         readonly major: number;
         readonly minor: number;
         readonly patch: number;
-        readonly prerelease: ReadonlyArray<string>;
-        readonly build: ReadonlyArray<string>;
+        readonly prerelease: readonly string[];
+        readonly build: readonly string[];
 
         constructor(text: string);
         constructor(major: number, minor?: number, patch?: number, prerelease?: string, build?: string);
         constructor(major: number | string, minor = 0, patch = 0, prerelease = "", build = "") {
             if (typeof major === "string") {
-                const result = Debug.assertDefined(tryParseComponents(major), "Invalid version");
+                const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
                 ({ major, minor, patch, prerelease, build } = result);
             }
 
@@ -84,7 +84,7 @@ namespace ts {
             return compareValues(this.major, other.major)
                 || compareValues(this.minor, other.minor)
                 || compareValues(this.patch, other.patch)
-                || comparePrerelaseIdentifiers(this.prerelease, other.prerelease);
+                || comparePrereleaseIdentifiers(this.prerelease, other.prerelease);
         }
 
         increment(field: "major" | "minor" | "patch") {
@@ -120,7 +120,7 @@ namespace ts {
         };
     }
 
-    function comparePrerelaseIdentifiers(left: ReadonlyArray<string>, right: ReadonlyArray<string>) {
+    function comparePrereleaseIdentifiers(left: readonly string[], right: readonly string[]) {
         // https://semver.org/#spec-item-11
         // > When major, minor, and patch are equal, a pre-release version has lower precedence
         // > than a normal version.
@@ -168,10 +168,10 @@ namespace ts {
      * Describes a semantic version range, per https://github.com/npm/node-semver#ranges
      */
     export class VersionRange {
-        private _alternatives: ReadonlyArray<ReadonlyArray<Comparator>>;
+        private _alternatives: readonly (readonly Comparator[])[];
 
         constructor(spec: string) {
-            this._alternatives = spec ? Debug.assertDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
+            this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
         }
 
         static tryParse(text: string) {
@@ -349,7 +349,7 @@ namespace ts {
         return { operator, operand };
     }
 
-    function testDisjunction(version: Version, alternatives: ReadonlyArray<ReadonlyArray<Comparator>>) {
+    function testDisjunction(version: Version, alternatives: readonly (readonly Comparator[])[]) {
         // an empty disjunction is treated as "*" (all versions)
         if (alternatives.length === 0) return true;
         for (const alternative of alternatives) {
@@ -358,7 +358,7 @@ namespace ts {
         return false;
     }
 
-    function testAlternative(version: Version, comparators: ReadonlyArray<Comparator>) {
+    function testAlternative(version: Version, comparators: readonly Comparator[]) {
         for (const comparator of comparators) {
             if (!testComparator(version, comparator.operator, comparator.operand)) return false;
         }
@@ -377,11 +377,11 @@ namespace ts {
         }
     }
 
-    function formatDisjunction(alternatives: ReadonlyArray<ReadonlyArray<Comparator>>) {
+    function formatDisjunction(alternatives: readonly (readonly Comparator[])[]) {
         return map(alternatives, formatAlternative).join(" || ") || "*";
     }
 
-    function formatAlternative(comparators: ReadonlyArray<Comparator>) {
+    function formatAlternative(comparators: readonly Comparator[]) {
         return map(comparators, formatComparator).join(" ");
     }
 

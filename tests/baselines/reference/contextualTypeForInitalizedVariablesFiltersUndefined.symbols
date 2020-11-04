@@ -1,0 +1,27 @@
+=== tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
+const fInferred = ({ a = 0 } = {}) => a;
+>fInferred : Symbol(fInferred, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 0, 5))
+>a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 0, 20))
+>a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 0, 20))
+
+// const fInferred: ({ a }?: { a?: number; }) => number
+
+const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
+>fAnnotated : Symbol(fAnnotated, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 3, 5))
+>fInferred : Symbol(fInferred, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 0, 5))
+>a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 3, 39))
+>a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 3, 39))
+
+declare var t: { s: string } | undefined;
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 16))
+
+const { s } = t;
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 6, 7))
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+
+function fst({ s } = t) { }
+>fst : Symbol(fst, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 6, 16))
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 7, 14))
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+

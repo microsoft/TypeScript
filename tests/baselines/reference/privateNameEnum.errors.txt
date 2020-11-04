@@ -1,0 +1,10 @@
+tests/cases/conformance/classes/members/privateNames/privateNameEnum.ts(2,5): error TS18024: An enum member cannot be named with a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameEnum.ts (1 errors) ====
+    enum E {
+        #x
+        ~~
+!!! error TS18024: An enum member cannot be named with a private identifier.
+    }
+    

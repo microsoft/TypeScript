@@ -1,2 +1,2 @@
 #!/bin/sh
-npm run jake -- generate-diagnostics
+npm run gulp -- generate-diagnostics

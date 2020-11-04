@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts ===
 // Arrow function used in with statement
 with (window) {
->window : Window
+>window : Window & typeof globalThis
 
     var p = () => this;
 >p : any
@@ -33,9 +33,9 @@ class Derived extends Base {
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
->window : Window
->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>window.setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
+>window : Window & typeof globalThis
+>setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
 >null : null
 >100 : 100
@@ -104,7 +104,7 @@ module M2 {
 
     // Arrow function used in with statement
     with (window) {
->window : Window
+>window : Window & typeof globalThis
 
         var p = () => this;
 >p : any
@@ -136,9 +136,9 @@ module M2 {
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
->window : Window
->setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>window.setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
+>window : Window & typeof globalThis
+>setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
 >() => null : () => any
 >null : null
 >100 : 100

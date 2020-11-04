@@ -5,9 +5,9 @@
 
 /////**
 //// * Doc comment
-//// * @typedef /*def*/[|{| "isWriteAccess": true, "isDefinition": true |}Product|]
+//// * [|@typedef /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Product|]
 //// * @property {string} title
-//// */
+//// |]*/
 
 /////**
 //// * @type {[|/*use*/Product|]}
@@ -18,11 +18,12 @@ const desc = `type Product = {
     title: string;
 }`;
 
+const [r0Def, ...ranges] = test.ranges();
 verify.quickInfoAt("use", desc, "Doc comment");
 
 verify.goToDefinition("use", "def");
 
-verify.rangesAreOccurrences();
-verify.rangesAreDocumentHighlights();
-verify.singleReferenceGroup(desc);
-verify.rangesAreRenameLocations();
+verify.rangesAreOccurrences(/*isWriteAccesss*/ undefined, ranges);
+verify.rangesAreDocumentHighlights(ranges);
+verify.singleReferenceGroup(desc, ranges);
+verify.rangesAreRenameLocations(ranges);

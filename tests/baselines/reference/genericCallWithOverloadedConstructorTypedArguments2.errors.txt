@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: {}): string; new (x: {}, y?: {}): string; }'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts(31,20): error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: unknown): string; new (x: unknown, y?: unknown): string; }'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedConstructorTypedArguments2.ts (1 errors) ====
@@ -34,7 +34,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
         var b: { new <T>(x: T, y: T): string };
         var r10 = foo6(b); // error
                        ~
-!!! error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: {}): string; new (x: {}, y?: {}): string; }'.
+!!! error TS2345: Argument of type 'new <T>(x: T, y: T) => string' is not assignable to parameter of type '{ new (x: unknown): string; new (x: unknown, y?: unknown): string; }'.
     
         function foo7<T>(x:T, cb: { new(x: T): string; new(x: T, y?: T): string }) {
             return cb;

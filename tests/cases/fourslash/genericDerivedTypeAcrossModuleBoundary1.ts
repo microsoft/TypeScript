@@ -18,5 +18,5 @@
 
 verify.quickInfos({
     1: "var n2: N.D2<number>",
-    2: "var n3: N.D2<{}>"
+    2: "var n3: N.D2<unknown>"
 });

@@ -1,25 +1,27 @@
 /* @internal */
 namespace ts.codefix {
-    const errorCodes = [Diagnostics.Class_0_incorrectly_implements_interface_1.code,
-                        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code];
+    const errorCodes = [
+        Diagnostics.Class_0_incorrectly_implements_interface_1.code,
+        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
+    ];
     const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span } = context;
             const classDeclaration = getClass(sourceFile, span.start);
-            return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getClassImplementsHeritageClauseElements(classDeclaration), implementedTypeNode => {
+            return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
                 const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
                 return changes.length === 0 ? undefined : createCodeFixAction(fixId, changes, [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)], fixId, Diagnostics.Implement_all_unimplemented_interfaces);
             });
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
-            const seenClassDeclarations = createMap<true>();
+            const seenClassDeclarations = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
-                    for (const implementedTypeNode of getClassImplementsHeritageClauseElements(classDeclaration)!) {
+                    for (const implementedTypeNode of getEffectiveImplementsTypeNodes(classDeclaration)!) {
                         addMissingDeclarations(context, implementedTypeNode, diag.file, classDeclaration, changes, context.preferences);
                     }
                 }
@@ -28,11 +30,11 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)));
+        return Debug.checkDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)), "There should be a containing class");
     }
 
-    function symbolPointsToNonPrivateMember (symbol: Symbol) {
-        return !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
+    function symbolPointsToNonPrivateMember(symbol: Symbol) {
+        return !symbol.valueDeclaration || !(getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
     }
 
     function addMissingDeclarations(
@@ -52,10 +54,13 @@ namespace ts.codefix {
         const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
 
         const classType = checker.getTypeAtLocation(classDeclaration);
+        const constructor = find(classDeclaration.members, m => isConstructorDeclaration(m));
 
         createMissingIndexSignatureDeclarations(implementedType, classType);
 
-        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
+        createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, sourceFile, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
+        importAdder.writeFixes(changeTracker);
 
         function createMissingIndexSignatureDeclarations(type: InterfaceType, implementingType: Type): void {
             const indexInfos = checker.getIndexInfosOfType(type);
@@ -67,9 +72,19 @@ namespace ts.codefix {
                 }
             }
         }
+
+        // Either adds the node at the top of the class, or if there's a constructor right after that
+        function insertInterfaceMemberNode(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
+            if (constructor) {
+                changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
+            }
+            else {
+                changeTracker.insertNodeAtClassStart(sourceFile, cls, newElement);
+            }
+        }
     }
 
-    function getHeritageClauseSymbolTable (classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
+    function getHeritageClauseSymbolTable(classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
         const heritageClauseNode = getEffectiveBaseTypeNode(classDeclaration);
         if (!heritageClauseNode) return createSymbolTable();
         const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;

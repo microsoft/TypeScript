@@ -35,7 +35,7 @@ type Value<V extends string = string> = Record<"val", V>;
 >Value : Record<"val", V>
 
 declare function value<V extends string>(val: V): Value<V>;
->value : <V extends string>(val: V) => Record<"val", V>
+>value : <V extends string>(val: V) => Value<V>
 >val : V
 
 declare function ensureNoDuplicates<
@@ -74,8 +74,8 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >"test" : "test"
 
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
->shouldBeError : any
->ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : any
+>shouldBeError : void
+>ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : void
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("dup"), alternate: value("dup")} : { main: Record<"val", "dup">; alternate: Record<"val", "dup">; }
 >main : Record<"val", "dup">
@@ -94,4 +94,27 @@ type Cond<T> = T extends number ? number : never;
 
 declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
 >function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
+
+// Repro from #31823
+
+export type Prepend<Elm, T extends unknown[]> =
+>Prepend : Prepend<Elm, T>
+
+  T extends unknown ?
+  ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+>arg : Elm
+>rest : T
+>args : T2
+
+  never :
+  never;
+export type ExactExtract<T, U> = T extends U ? U extends T ? T : never : never;
+>ExactExtract : ExactExtract<T, U>
+
+type Conv<T, U = T> =
+>Conv : Conv<T, U>
+
+  { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+>0 : [T]
+>1 : Prepend<T, Conv<ExactExtract<U, T>, ExactExtract<U, T>>>
 

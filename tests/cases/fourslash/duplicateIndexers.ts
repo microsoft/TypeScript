@@ -8,4 +8,4 @@
 ////var i: I;
 ////var /**/r = i[1];
 
-verify.quickInfoAt("", "var r: string & number");
+verify.quickInfoAt("", "var r: never");

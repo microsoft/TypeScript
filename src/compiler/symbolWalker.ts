@@ -8,9 +8,10 @@ namespace ts {
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
-        getIndexInfosOfType: (type: Type) => ReadonlyArray<IndexInfo> | undefined,
+        getIndexInfosOfType: (type: Type) => readonly IndexInfo[] | undefined,
         getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
-        getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
+        getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier,
+        getTypeArguments: (type: TypeReference) => readonly Type[]) {
 
         return getSymbolWalker;
 
@@ -89,7 +90,7 @@ namespace ts {
 
             function visitTypeReference(type: TypeReference): void {
                 visitType(type.target);
-                forEach(type.typeArguments, visitType);
+                forEach(getTypeArguments(type), visitType);
             }
 
             function visitTypeParameter(type: TypeParameter): void {

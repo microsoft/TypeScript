@@ -1,0 +1,36 @@
+=== /p1/node_modules/csv-parse/lib/index.d.ts ===
+export function bar(): number;
+>bar : Symbol(bar, Decl(index.d.ts, 0, 0))
+
+=== /p1/index.ts ===
+export interface MutableRefObject<T> {
+>MutableRefObject : Symbol(MutableRefObject, Decl(index.ts, 0, 0))
+>T : Symbol(T, Decl(index.ts, 0, 34))
+
+    current: T;
+>current : Symbol(MutableRefObject.current, Decl(index.ts, 0, 38))
+>T : Symbol(T, Decl(index.ts, 0, 34))
+}
+export function useRef<T>(current: T): MutableRefObject<T> {
+>useRef : Symbol(useRef, Decl(index.ts, 2, 1))
+>T : Symbol(T, Decl(index.ts, 3, 23))
+>current : Symbol(current, Decl(index.ts, 3, 26))
+>T : Symbol(T, Decl(index.ts, 3, 23))
+>MutableRefObject : Symbol(MutableRefObject, Decl(index.ts, 0, 0))
+>T : Symbol(T, Decl(index.ts, 3, 23))
+
+    return { current };
+>current : Symbol(current, Decl(index.ts, 4, 12))
+}
+export const useCsvParser = () => {
+>useCsvParser : Symbol(useCsvParser, Decl(index.ts, 6, 12))
+
+    const parserRef = useRef<typeof import("csv-parse")>(null);
+>parserRef : Symbol(parserRef, Decl(index.ts, 7, 9))
+>useRef : Symbol(useRef, Decl(index.ts, 2, 1))
+
+    return parserRef;
+>parserRef : Symbol(parserRef, Decl(index.ts, 7, 9))
+
+};
+
