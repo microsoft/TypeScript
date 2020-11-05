@@ -18,5 +18,14 @@
 ////   "types": "bin/lib/libfile.d.ts"
 //// }
 
-// No fix because this accesses a nested node_modules
-verify.not.codeFixAvailable();
+verify.codeFix({
+    index: 0,
+    description: [ts.Diagnostics.Add_missing_function_declaration_0.message, "f1"],
+    newFileContent:
+`f1('');
+
+function f1(arg0: string) {
+    throw new Error("Function not implemented.");
+}
+`
+});

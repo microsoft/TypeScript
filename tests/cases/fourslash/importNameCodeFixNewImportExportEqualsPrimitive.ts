@@ -6,4 +6,14 @@
 ////declare var x: number;
 ////export = x;
 
-verify.not.codeFixAvailable(); // See GH#20191
+verify.codeFix({
+    index: 0,
+    description: [ts.Diagnostics.Add_missing_function_declaration_0.message, "valueOf"],
+    newFileContent:
+`valueOf();
+
+function valueOf() {
+    throw new Error("Function not implemented.");
+}
+`
+});

@@ -5983,6 +5983,15 @@
         "category": "Message",
         "code": 95148
     },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95149
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95150
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
