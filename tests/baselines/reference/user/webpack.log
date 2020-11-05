@@ -1,7 +1,5 @@
 Exit Code: 2
 Standard output:
-bin/webpack.js(63,8): error TS2300: Duplicate identifier 'path'.
-bin/webpack.js(127,8): error TS2300: Duplicate identifier 'path'.
 lib/Compilation.js(37,7): error TS2440: Import declaration conflicts with local declaration of 'Module'.
 lib/Compilation.js(49,7): error TS2440: Import declaration conflicts with local declaration of 'WebpackError'.
 lib/Compilation.js(53,7): error TS2440: Import declaration conflicts with local declaration of 'StatsFactory'.
@@ -20,14 +18,14 @@ lib/WebpackOptionsApply.js(100,10): error TS2300: Duplicate identifier 'External
 lib/WebpackOptionsApply.js(104,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
 lib/WebpackOptionsApply.js(107,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
 lib/WebpackOptionsApply.js(158,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
-lib/WebpackOptionsApply.js(421,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
-lib/WebpackOptionsApply.js(428,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
-lib/WebpackOptionsApply.js(479,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
-lib/WebpackOptionsApply.js(489,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
+lib/WebpackOptionsApply.js(423,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
+lib/WebpackOptionsApply.js(430,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
+lib/WebpackOptionsApply.js(481,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
+lib/WebpackOptionsApply.js(491,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
 lib/cache/ResolverCachePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'LazySet'.
 lib/dependencies/CommonJsExportRequireDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/HarmonyExportImportedSpecifierDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
-lib/dependencies/HarmonyImportDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
+lib/dependencies/HarmonyImportDependency.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/HarmonyImportSpecifierDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/ImportDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/ModuleDecoratorDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
