@@ -683,11 +683,11 @@ namespace ts.Completions.StringCompletions {
 
     // Replace everything after the last directory separator that appears
     function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan | undefined {
-        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf("\\"));
+        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf(altDirectorySeparator));
         const offset = index !== -1 ? index + 1 : 0;
         // If the range is an identifier, span is unnecessary.
         const length = text.length - offset;
-        return length === 0 || isIdentifierText(text.substr(offset, length), ScriptTarget.ESNext) ? undefined : createTextSpan(textStart + offset, length);
+        return length === 0 ? undefined : createTextSpan(textStart, length + offset);
     }
 
     // Returns true if the path is explicitly relative to the script (i.e. relative to . or ..)
