@@ -1,0 +1,48 @@
+=== tests/cases/conformance/override/a.js ===
+class B {
+>B : Symbol(B, Decl(a.js, 0, 0))
+
+    foo (v) {}
+>foo : Symbol(B.foo, Decl(a.js, 0, 9))
+>v : Symbol(v, Decl(a.js, 1, 9))
+
+    fooo (v) {}
+>fooo : Symbol(B.fooo, Decl(a.js, 1, 14))
+>v : Symbol(v, Decl(a.js, 2, 10))
+}
+
+class D extends B {
+>D : Symbol(D, Decl(a.js, 3, 1))
+>B : Symbol(B, Decl(a.js, 0, 0))
+
+    foo (v) {}
+>foo : Symbol(D.foo, Decl(a.js, 5, 19))
+>v : Symbol(v, Decl(a.js, 6, 9))
+
+    /** @override */
+    fooo (v) {}
+>fooo : Symbol(D.fooo, Decl(a.js, 6, 14))
+>v : Symbol(v, Decl(a.js, 8, 10))
+
+    /** @override */
+    bar(v) {}
+>bar : Symbol(D.bar, Decl(a.js, 8, 15))
+>v : Symbol(v, Decl(a.js, 10, 8))
+}
+
+class C {
+>C : Symbol(C, Decl(a.js, 11, 1))
+
+    foo () {}
+>foo : Symbol(C.foo, Decl(a.js, 13, 9))
+
+    /** @override */
+    fooo (v) {}
+>fooo : Symbol(C.fooo, Decl(a.js, 14, 13))
+>v : Symbol(v, Decl(a.js, 16, 10))
+
+    /** @override */
+    bar(v) {}
+>bar : Symbol(C.bar, Decl(a.js, 16, 15))
+>v : Symbol(v, Decl(a.js, 18, 8))
+}

@@ -2096,6 +2096,7 @@ namespace ts {
                             case SyntaxKind.ReadonlyKeyword:
                             case SyntaxKind.DeclareKeyword:
                             case SyntaxKind.AbstractKeyword:
+                            case SyntaxKind.OverrideKeyword:
                                 diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                 break;
 
