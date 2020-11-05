@@ -5,6 +5,13 @@ namespace ts.codefix {
     const fixRemoveOverrideId = "fixRemoveOverrideModifier";
     const fixConvertToPropertyDeclarationId = "fixConvertToPropertyDeclaration";
 
+    type ClassElementHasJSDoc =
+        | ConstructorDeclaration
+        | PropertyDeclaration
+        | MethodDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration;
+
     const errorCodes = [
         Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code,
         Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code,
@@ -36,12 +43,13 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: context => {
-            const { errorCode, span } = context;
+            const { errorCode, span, sourceFile } = context;
 
             const info = errorCodeFixIdMap[errorCode];
             if (!info) return emptyArray;
 
             const [ descriptions, fixId, fixAllDescriptions ] = info;
+            if (isSourceFileJS(sourceFile)) return emptyArray;
             const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
 
             return [
@@ -51,9 +59,9 @@ namespace ts.codefix {
         fixIds: [fixName, fixAddOverrideId, fixRemoveOverrideId, fixConvertToPropertyDeclarationId],
         getAllCodeActions: context =>
             codeFixAll(context, errorCodes, (changes, diag) => {
-                const { code, start } = diag;
+                const { code, start, file } = diag;
                 const info = errorCodeFixIdMap[code];
-                if (!info || info[1] !== context.fixId) {
+                if (!info || info[1] !== context.fixId || isSourceFileJS(file)) {
                     return;
                 }
 
@@ -102,10 +110,27 @@ namespace ts.codefix {
         getConvertParameterPropertyToPropertyChanges(changeTracker, sourceFile, info, ModifierFlags.Override);
     }
 
+    function isClassElementHasJSDoc(node: Node): node is ClassElementHasJSDoc {
+        switch (node.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     function findContainerClassElement(sourceFile: SourceFile, pos: number) {
         const token = getTokenAtPosition(sourceFile, pos);
-        const classElement = findAncestor(token, isClassElement);
-        Debug.assertIsDefined(classElement);
+        const classElement = findAncestor(token, node => {
+            if (isClassLike(node)) return "quit";
+            return isClassElementHasJSDoc(node);
+        });
+
+        Debug.assert(classElement && isClassElementHasJSDoc(classElement));
         return classElement;
     }
 }

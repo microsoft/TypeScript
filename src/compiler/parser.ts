@@ -537,6 +537,7 @@ namespace ts {
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocReadonlyTag:
+            case SyntaxKind.JSDocOverrideTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
@@ -7466,6 +7467,9 @@ namespace ts {
                             break;
                         case "readonly":
                             tag = parseSimpleTag(start, factory.createJSDocReadonlyTag, tagName, margin, indentText);
+                            break;
+                        case "override":
+                            tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
                             break;
                         case "deprecated":
                             hasDeprecatedTag = true;

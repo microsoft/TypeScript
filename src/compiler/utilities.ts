@@ -4610,7 +4610,7 @@ namespace ts {
     }
 
     export function hasOverrideModifier(node: Node): boolean {
-        return hasSyntacticModifier(node, ModifierFlags.Override);
+        return hasEffectiveModifier(node, ModifierFlags.Override);
     }
 
     export function hasAbstractModifier(node: Node): boolean {
@@ -4679,6 +4679,7 @@ namespace ts {
                 if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
                 if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+                if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
             }
             if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }

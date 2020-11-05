@@ -366,6 +366,8 @@ namespace ts {
             get updateJSDocProtectedTag() { return getJSDocSimpleTagUpdateFunction<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag); },
             get createJSDocReadonlyTag() { return getJSDocSimpleTagCreateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
             get updateJSDocReadonlyTag() { return getJSDocSimpleTagUpdateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
+            get createJSDocOverrideTag() { return getJSDocSimpleTagCreateFunction<JSDocOverrideTag>(SyntaxKind.JSDocOverrideTag); },
+            get updateJSDocOverrideTag() { return getJSDocSimpleTagUpdateFunction<JSDocOverrideTag>(SyntaxKind.JSDocOverrideTag); },
             get createJSDocDeprecatedTag() { return getJSDocSimpleTagCreateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             get updateJSDocDeprecatedTag() { return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             createJSDocUnknownTag,
@@ -5862,6 +5864,7 @@ namespace ts {
             case SyntaxKind.JSDocPrivateTag: return "private";
             case SyntaxKind.JSDocProtectedTag: return "protected";
             case SyntaxKind.JSDocReadonlyTag: return "readonly";
+            case SyntaxKind.JSDocOverrideTag: return "override";
             case SyntaxKind.JSDocTemplateTag: return "template";
             case SyntaxKind.JSDocTypedefTag: return "typedef";
             case SyntaxKind.JSDocParameterTag: return "param";
