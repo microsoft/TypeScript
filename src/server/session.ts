@@ -208,15 +208,26 @@ namespace ts.server {
             try {
                 if (this.operationHost.isCancellationRequested()) {
                     stop = true;
+                    tracing.instant(tracing.Phase.Session, "StepCancellation", { seq: this.requestId });
                 }
                 else {
-                    action(this);
+                    tracing.push(tracing.Phase.Session, "StepAction", { seq: this.requestId });
+                    try {
+                        action(this);
+                    }
+                    finally {
+                        tracing.pop();
+                    }
                 }
             }
             catch (e) {
                 stop = true;
                 // ignore cancellation request
-                if (!(e instanceof OperationCanceledException)) {
+                if (e instanceof OperationCanceledException) {
+                    tracing.instant(tracing.Phase.Session, "StepUnhandledCancellation", { seq: this.requestId });
+                }
+                else {
+                    tracing.instant(tracing.Phase.Session, "StepUnhandledError", { seq: this.requestId, message: (<Error>e).message });
                     this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
                 }
             }
@@ -2957,7 +2968,7 @@ namespace ts.server {
 
                 this.logErrorWorker(err, message, relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-                tracing.instant(tracing.Phase.Session, "UnhandledError", { seq: request?.seq, command: request?.command, message: (<StackTraceError>err).message });
+                tracing.instant(tracing.Phase.Session, "UnhandledError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
 
                 this.doOutput(
                     /*info*/ undefined,
