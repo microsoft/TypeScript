@@ -1989,7 +1989,7 @@ namespace ts {
             for (let j = minJ; j <= maxJ; j++) {
                 // case difference should be insignificant.
                 const substitutionDistance = s1[i - 1].toLowerCase() === s2[j-1].toLowerCase()
-                    ? (previous[j - 1] + 0.01)
+                    ? (previous[j - 1] + 0.1)
                     : (previous[j - 1] + 2);
                 const dist = c1 === s2.charCodeAt(j - 1)
                     ? previous[j - 1]
