@@ -65,7 +65,7 @@ namespace ts.codefix {
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap);
-        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
+        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
         if (!returnStatements.length) {
             return;
@@ -90,10 +90,10 @@ namespace ts.codefix {
         }
     }
 
-    function getReturnStatementsWithPromiseHandlers(body: Block): readonly ReturnStatement[] {
+    function getReturnStatementsWithPromiseHandlers(body: Block, checker: TypeChecker): readonly ReturnStatement[] {
         const res: ReturnStatement[] = [];
         forEachReturnStatement(body, ret => {
-            if (isReturnStatementWithFixablePromiseHandler(ret)) res.push(ret);
+            if (isReturnStatementWithFixablePromiseHandler(ret, checker)) res.push(ret);
         });
         return res;
     }
@@ -379,13 +379,14 @@ namespace ts.codefix {
             case SyntaxKind.NullKeyword:
                 // do not produce a transformed statement for a null argument
                 break;
+            case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.Identifier: // identifier includes undefined
                 if (!argName) {
                     // undefined was argument passed to promise handler
                     break;
                 }
 
-                const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
+                const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier | PropertyAccessExpression), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
                 if (shouldReturn(parent, transformer)) {
                     return maybeAnnotateAndReturn(synthCall, parent.typeArguments?.[0]);
                 }
@@ -415,7 +416,7 @@ namespace ts.codefix {
                     for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
-                            if (isReturnStatementWithFixablePromiseHandler(statement)) {
+                            if (isReturnStatementWithFixablePromiseHandler(statement, transformer.checker)) {
                                 refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                             }
                             else {
@@ -437,7 +438,7 @@ namespace ts.codefix {
                             seenReturnStatement);
                 }
                 else {
-                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [factory.createReturnStatement(funcBody)] : emptyArray;
+                    const innerRetStmts = isFixablePromiseHandler(funcBody, transformer.checker) ? [factory.createReturnStatement(funcBody)] : emptyArray;
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
@@ -540,6 +541,9 @@ namespace ts.codefix {
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryOrDefault(funcNode);
+        }
+        else if (isPropertyAccessExpression(funcNode) && isIdentifier(funcNode.name)) {
+            name = getMapEntryOrDefault(funcNode.name);
         }
 
         // return undefined argName when arg is null or undefined
