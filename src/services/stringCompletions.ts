@@ -277,13 +277,14 @@ namespace ts.Completions.StringCompletions {
         return nameAndKind(name, ScriptElementKind.directory, /*extension*/ undefined);
     }
 
-    function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[]): readonly PathCompletion[] {
+    function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[], tsConfigPaths?: string[]): readonly PathCompletion[] {
         const span = getDirectoryFragmentTextSpan(text, textStart);
-        return names.map(({ name, kind, extension }): PathCompletion => ({ name, kind, extension, span }));
+        const pathSpan = getWholeFragmentTextSpan(text, textStart);
+        return names.map(({ name, kind, extension }): PathCompletion => tsConfigPaths?.some(path => path === name) ? { name, kind, extension, span: pathSpan } : { name, kind, extension, span });
     }
 
     function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly PathCompletion[] {
-        return addReplacementSpans(node.text, node.getStart(sourceFile) + 1, getStringLiteralCompletionsFromModuleNamesWorker(sourceFile, node, compilerOptions, host, typeChecker));
+        return addReplacementSpans(node.text, node.getStart(sourceFile) + 1, getStringLiteralCompletionsFromModuleNamesWorker(sourceFile, node, compilerOptions, host, typeChecker), compilerOptions.paths ? getOwnKeys(compilerOptions.paths) : undefined);
     }
 
     function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly NameAndKind[] {
@@ -688,6 +689,12 @@ namespace ts.Completions.StringCompletions {
         // If the range is an identifier, span is unnecessary.
         const length = text.length - offset;
         return length === 0 ? undefined : createTextSpan(textStart, length + offset);
+    }
+
+    // Replace everything as long as the directory separator appears
+    function getWholeFragmentTextSpan(text: string, textStart: number): TextSpan | undefined {
+        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf(altDirectorySeparator));
+        return index === -1 ? undefined : createTextSpan(textStart, text.length);
     }
 
     // Returns true if the path is explicitly relative to the script (i.e. relative to . or ..)
