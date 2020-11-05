@@ -122,28 +122,28 @@ declare class B {
 }
 declare class D extends B {
     p1: number;
-    override p2: number;
-    readonly override p3: number;
-    override readonly p4: number;
-    override static sp: number;
-    override override oop: number;
-    override pp: number;
-    override op: number;
-    override constructor();
+    p2: number;
+    readonly p3: number;
+    readonly p4: number;
+    static sp: number;
+    oop: number;
+    pp: number;
+    op: number;
+    constructor();
 }
 declare abstract class AB {
     abstract f(): void;
     abstract b(): void;
 }
 declare abstract class AD extends AB {
-    override abstract f(): void;
-    abstract override b(): void;
+    abstract f(): void;
+    abstract b(): void;
 }
 declare abstract class AND {
-    override abstract f(): void;
-    abstract override b(): void;
+    abstract f(): void;
+    abstract b(): void;
 }
 declare class ADD extends AD {
-    override f(): void;
-    override b(): void;
+    f(): void;
+    b(): void;
 }

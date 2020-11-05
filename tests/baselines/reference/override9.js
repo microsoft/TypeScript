@@ -22,7 +22,7 @@ interface B {
 }
 interface D extends B {
     foo(): void;
-    override bar(): void;
+    bar(): void;
     baz(): void;
-    override bazz(): void;
+    bazz(): void;
 }

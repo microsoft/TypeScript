@@ -75,17 +75,17 @@ declare class B {
 }
 declare class D extends B {
     foo(): void;
-    override bar(): void;
+    bar(): void;
 }
 declare class DB extends B {
-    override foo(): void;
-    override bar(): void;
+    foo(): void;
+    bar(): void;
 }
 declare class DD extends D {
-    override foo(): void;
-    override bar(): void;
+    foo(): void;
+    bar(): void;
 }
 declare class EB extends D {
     foo(): void;
-    override bar(): void;
+    bar(): void;
 }

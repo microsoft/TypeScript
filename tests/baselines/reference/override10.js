@@ -46,6 +46,6 @@ declare abstract class Base {
     abstract bar(): void;
 }
 declare abstract class Sub extends Base {
-    override abstract foo(): number;
+    abstract foo(): number;
     bar(): void;
 }

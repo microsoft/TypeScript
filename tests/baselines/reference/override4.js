@@ -79,13 +79,13 @@ declare class B {
 }
 declare class D extends B {
     p1: number;
-    override p2: number;
+    p2: number;
     p3: () => void;
-    override p4: () => void;
-    override foo(v: string): void;
+    p4: () => void;
+    foo(v: string): void;
     fooo(v: string): void;
 }
 declare class DD extends B {
-    override foo: () => void;
+    foo: () => void;
     fooo: () => void;
 }
