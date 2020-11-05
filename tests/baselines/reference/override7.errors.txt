@@ -1,9 +1,9 @@
 tests/cases/conformance/override/override7.ts(19,14): error TS1030: 'override' modifier already seen.
-tests/cases/conformance/override/override7.ts(19,23): error TS4112: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(21,21): error TS4112: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(22,21): error TS4112: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/override7.ts(41,23): error TS4111: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
-tests/cases/conformance/override/override7.ts(42,23): error TS4111: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+tests/cases/conformance/override/override7.ts(19,23): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+tests/cases/conformance/override/override7.ts(21,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+tests/cases/conformance/override/override7.ts(22,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+tests/cases/conformance/override/override7.ts(41,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+tests/cases/conformance/override/override7.ts(42,23): error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
 
 
 ==== tests/cases/conformance/override/override7.ts (6 errors) ====
@@ -29,14 +29,14 @@ tests/cases/conformance/override/override7.ts(42,23): error TS4111: This member 
                  ~~~~~~~~
 !!! error TS1030: 'override' modifier already seen.
                           ~~~
-!!! error TS4112: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
     
         public override pp: number;
                         ~~
-!!! error TS4112: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
         override public op: number;
                         ~~
-!!! error TS4112: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
     
         override constructor () {
             super();
@@ -57,10 +57,10 @@ tests/cases/conformance/override/override7.ts(42,23): error TS4111: This member 
     abstract class AND {
         override abstract f(): void;
                           ~
-!!! error TS4111: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
         abstract override b(): void;
                           ~
-!!! error TS4111: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'AND' does not extend another class.
     }
     
     class ADD extends AD {
