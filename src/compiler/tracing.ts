@@ -131,7 +131,7 @@ namespace ts.tracing {
     }
     export function pop() {
         if (!traceFd) return;
-        Debug.assert(completeEvents.length > 0);
+        Debug.assert(canPop());
         const { phase, name, args, time, separateBeginAndEnd } = completeEvents.pop()!;
         if (separateBeginAndEnd) {
             writeEvent("E", phase, name, args);
@@ -140,6 +140,9 @@ namespace ts.tracing {
             const dur = 1000 * timestamp() - time;
             writeEvent("X", phase, name, args, `"dur":${dur}`, time);
         }
+    }
+    export function canPop() {
+        return completeEvents.length > 0;
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,

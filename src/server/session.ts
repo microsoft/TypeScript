@@ -211,12 +211,15 @@ namespace ts.server {
                     tracing.instant(tracing.Phase.Session, "StepCancellation", { seq: this.requestId });
                 }
                 else {
+                    Debug.assert(!tracing.canPop());
                     tracing.push(tracing.Phase.Session, "StepAction", { seq: this.requestId });
                     try {
                         action(this);
                     }
                     finally {
-                        tracing.pop();
+                        while (tracing.canPop()) {
+                            tracing.pop();
+                        }
                     }
                 }
             }
@@ -2897,21 +2900,15 @@ namespace ts.server {
         }
 
         public executeCommand(request: protocol.Request): HandlerResponse {
-            tracing.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command });
-            try {
-                const handler = this.handlers.get(request.command);
-                if (handler) {
-                    return this.executeWithRequestId(request.seq, () => handler(request));
-                }
-                else {
-                    this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-                    this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
-                    return { responseRequired: false };
-                }
+            const handler = this.handlers.get(request.command);
+            if (handler) {
+                return this.executeWithRequestId(request.seq, () => handler(request));
             }
-            finally {
-                tracing.pop();
-        }
+            else {
+                this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
+                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+                return { responseRequired: false };
+            }
         }
 
         public onMessage(message: string) {
@@ -2930,31 +2927,44 @@ namespace ts.server {
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                request = <protocol.Request>JSON.parse(message);
-                relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
+                Debug.assert(!tracing.canPop());
+                try {
+                    request = <protocol.Request>JSON.parse(message);
+                    relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
-                tracing.instant(tracing.Phase.Session, "Request", { seq: request.seq, command: request.command });
-                perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
-                const { response, responseRequired } = this.executeCommand(request);
+                    tracing.instant(tracing.Phase.Session, "Request", { seq: request.seq, command: request.command });
+                    perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
 
-                if (this.logger.hasLevel(LogLevel.requestTime)) {
-                    const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
-                    if (responseRequired) {
-                        this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
+                    const tracingData: tracing.EventData = [tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }];
+                    tracing.begin(...tracingData);
+                    const { response, responseRequired } = this.executeCommand(request);
+                    tracing.end(...tracingData);
+
+                    if (this.logger.hasLevel(LogLevel.requestTime)) {
+                        const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
+                        if (responseRequired) {
+                            this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
+                        }
+                        else {
+                            this.logger.perftrc(`${request.seq}::${request.command}: async elapsed time (in milliseconds) ${elapsedTime}`);
+                        }
                     }
-                    else {
-                        this.logger.perftrc(`${request.seq}::${request.command}: async elapsed time (in milliseconds) ${elapsedTime}`);
+
+                    // Note: Log before writing the response, else the editor can complete its activity before the server does
+                    perfLogger.logStopCommand("" + request.command, "Success");
+                    tracing.instant(tracing.Phase.Session, "Response", { seq: request.seq, command: request.command, success: !!response });
+                    if (response) {
+                        this.doOutput(response, request.command, request.seq, /*success*/ true);
+                    }
+                    else if (responseRequired) {
+                        this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
                     }
                 }
-
-                // Note: Log before writing the response, else the editor can complete its activity before the server does
-                perfLogger.logStopCommand("" + request.command, "Success");
-                tracing.instant(tracing.Phase.Session, "Response", { seq: request.seq, command: request.command, success: !!response });
-                if (response) {
-                    this.doOutput(response, request.command, request.seq, /*success*/ true);
-                }
-                else if (responseRequired) {
-                    this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                finally {
+                    // Cancellation or an error may have left incomplete events on the tracing stack.
+                    while (tracing.canPop()) {
+                        tracing.pop();
+                    }
                 }
             }
             catch (err) {

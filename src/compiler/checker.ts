@@ -17366,7 +17366,7 @@ namespace ts {
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 tracing.push(tracing.Phase.CheckTypes, "structuredTypeRelatedTo", { sourceId: source.id, targetId: target.id });
                 const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState);
-                tracing.pop(); // If we start reporting this event on the server, this will need to be wrapped in a finally block
+                tracing.pop();
                 return result;
             }
 
@@ -18656,7 +18656,7 @@ namespace ts {
                     variances.push(variance);
                 }
                 cache.variances = variances;
-                tracing.pop(); // If we start reporting this event on the server, this will need to be wrapped in a finally block
+                tracing.pop();
             }
             return variances;
         }
@@ -31110,21 +31110,17 @@ namespace ts {
 
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             tracing.push(tracing.Phase.Check, "checkExpression", { kind: node.kind, pos: node.pos, end: node.end });
-            try {
-                const saveCurrentNode = currentNode;
-                currentNode = node;
-                instantiationCount = 0;
-                const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
-                const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
-                if (isConstEnumObjectType(type)) {
-                    checkConstEnumAccess(node, type);
-                }
-                currentNode = saveCurrentNode;
-                return type;
+            const saveCurrentNode = currentNode;
+            currentNode = node;
+            instantiationCount = 0;
+            const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
+            const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
+            if (isConstEnumObjectType(type)) {
+                checkConstEnumAccess(node, type);
             }
-            finally {
-                tracing.pop();
-            }
+            currentNode = saveCurrentNode;
+            tracing.pop();
+            return type;
         }
 
         function checkConstEnumAccess(node: Expression | QualifiedName, type: Type) {
@@ -33916,13 +33912,9 @@ namespace ts {
 
         function checkVariableDeclaration(node: VariableDeclaration) {
             tracing.push(tracing.Phase.Check, "checkVariableDeclaration", { kind: node.kind, pos: node.pos, end: node.end });
-            try {
-                checkGrammarVariableDeclaration(node);
-                checkVariableLikeDeclaration(node);
-            }
-            finally {
-                tracing.pop();
-            }
+            checkGrammarVariableDeclaration(node);
+            checkVariableLikeDeclaration(node);
+            tracing.pop();
         }
 
         function checkBindingElement(node: BindingElement) {
