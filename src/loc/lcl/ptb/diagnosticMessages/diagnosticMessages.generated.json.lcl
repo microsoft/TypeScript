@@ -10541,11 +10541,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A metapropriedade 'import.meta' só é permitida quando a opção '--module' é 'esnext' ou 'system'.]]></Val>
+            <Val><![CDATA[A metapropriedade 'import.meta' só é permitida quando a opção '--module' é 'es2020', 'esnext' ou 'system'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

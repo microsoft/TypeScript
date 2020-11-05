@@ -5979,6 +5979,10 @@
         "category": "Message",
         "code": 95147
     },
+    "Infer function return type": {
+        "category": "Message",
+        "code": 95148
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

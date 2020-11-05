@@ -121,6 +121,7 @@
         "refactors/convertParamsToDestructuredObject.ts",
         "refactors/convertStringOrTemplateLiteral.ts",
         "refactors/convertArrowFunctionOrFunctionExpression.ts",
+        "refactors/inferFunctionReturnType.ts",
         "services.ts",
         "breakpoints.ts",
         "transform.ts",
