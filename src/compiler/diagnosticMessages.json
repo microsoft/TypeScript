@@ -99,7 +99,7 @@
         "category": "Error",
         "code": 1030
     },
-    "'{0}' modifier cannot appear on a class element.": {
+    "'{0}' modifier cannot appear on class elements of this kind.": {
         "category": "Error",
         "code": 1031
     },
@@ -851,10 +851,6 @@
         "category": "Error",
         "code": 1257
     },
-    "Definite assignment assertions can only be used along with a type annotation.": {
-        "category": "Error",
-        "code": 1258
-    },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",
         "code": 1259
@@ -870,6 +866,14 @@
     "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
         "category": "Error",
         "code": 1262
+    },
+    "Declarations with initializers cannot also have definite assignment assertions.": {
+        "category": "Error",
+        "code": 1263
+    },
+    "Declarations with definite assignment assertions must also have type annotations.": {
+        "category": "Error",
+        "code": 1264
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1000,7 +1004,7 @@
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.": {
         "category": "Error",
         "code": 1343
     },
@@ -2193,6 +2197,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.": {
+        "category": "Error",
+        "code": 2550
+    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2297,19 +2305,19 @@
         "category": "Error",
         "code": 2578
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.": {
         "category": "Error",
         "code": 2582
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.": {
         "category": "Error",
         "code": 2583
     },
@@ -2341,15 +2349,15 @@
         "category": "Error",
         "code": 2590
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2591
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2592
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2593
     },
@@ -3035,13 +3043,21 @@
         "category": "Error",
         "code": 2792
     },
-    "Template literal type argument '{0}' is not literal type or a generic type.": {
+    "The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.": {
         "category": "Error",
         "code": 2793
     },
     "Expected {0} arguments, but got {1}. Did you forget to include 'void' in your type argument to 'Promise'?": {
         "category": "Error",
         "code": 2794
+    },
+    "The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.": {
+        "category": "Error",
+        "code": 2795
+    },
+    "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
+        "category": "Error",
+        "code": 2796
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3412,25 +3428,29 @@
         "category": "Error",
         "code": 4110
     },
-    "This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.": {
+    "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
         "category": "Error",
         "code": 4111
     },
-    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": {
+    "This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.": {
         "category": "Error",
         "code": 4112
     },
-    "This member must have an 'override' modifier because it overrides a member in the base class '{0}'.": {
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4113
     },
-    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+    "This member must have an 'override' modifier because it overrides a member in the base class '{0}'.": {
         "category": "Error",
         "code": 4114
     },
-    "This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class '{0}'.": {
+    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
         "category": "Error",
         "code": 4115
+    },
+    "This member cannot have an 'override' modifier because it is implemented an abstract method that declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4116
     },
 
     "The current host does not support the '{0}' option.": {
@@ -4723,6 +4743,10 @@
         "code": 6385,
         "reportsDeprecated": true
     },
+    "Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.": {
+        "category": "Message",
+        "code": 6386
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4744,14 +4768,18 @@
         "category": "Error",
         "code": 6504
     },
+    
+    "Include 'undefined' in index signature results": {
+        "category": "Message",
+        "code": 6800
+    },
     "Force overriding members in derived classes to be marked with an 'override' modifier.": {
         "category": "Error",
         "code": 6801
     },
-
-    "Include 'undefined' in index signature results": {
-        "category": "Message",
-        "code": 6800
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Error",
+        "code": 6803
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -4864,7 +4892,7 @@
         "category": "Error",
         "code": 7034
     },
-    "Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "Try `npm i --save-dev @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
     },
@@ -5963,29 +5991,46 @@
         "category": "Message",
         "code": 95144
     },
-    "Add 'override' modifier": {
+    
+    "Use element access for '{0}'": {
         "category": "Message",
         "code": 95145
     },
-    "Remove 'override' modifier": {
+    "Use element access for all undeclared properties.": {
         "category": "Message",
         "code": 95146
     },
-    "Add all 'override' modifier": {
+    "Delete all unused imports": {
         "category": "Message",
         "code": 95147
     },
-    "Remove all 'override' modifier": {
+    "Infer function return type": {
         "category": "Message",
         "code": 95148
     },
-    "Convert to property declaration and add 'override' modifier": {
+    "Add 'override' modifier": {
         "category": "Message",
         "code": 95149
     },
-    "Convert all to property declaration and add 'override' modifier": {
+    "Remove 'override' modifier": {
         "category": "Message",
         "code": 95150
+    },
+    "Add all 'override' modifier": {
+        "category": "Message",
+        "code": 95151
+    },
+    "Remove all 'override' modifier": {
+        "category": "Message",
+        "code": 95152
+    },
+    "Convert to property declaration and add 'override' modifier": {
+        "category": "Message",
+        "code": 95153
+    },
+    "Convert all to property declaration and add 'override' modifier": {
+        "category": "Message",
+        "code": 95154
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

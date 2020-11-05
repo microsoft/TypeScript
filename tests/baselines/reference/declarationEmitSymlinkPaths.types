@@ -1,0 +1,34 @@
+=== /packages/search/lib/index.d.ts ===
+export declare function test<T> (a: () => T): () => T;
+>test : <T>(a: () => T) => () => T
+>a : () => T
+
+=== /packages/search-prefix/src/API/NotificationAPIUtils.ts ===
+export type NotificationRequest = {};
+>NotificationRequest : NotificationRequest
+
+export type NotificationResponse = {};
+>NotificationResponse : NotificationResponse
+
+export function getNotification(): NotificationResponse {
+>getNotification : () => NotificationResponse
+
+  return {};
+>{} : {}
+}
+=== /packages/search-prefix/src/Store/NotificationStore.ts ===
+import { test } from "search/lib/index";
+>test : <T>(a: () => T) => () => T
+
+import { getNotification } from "../API/NotificationAPIUtils";
+>getNotification : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
+
+export const NotificationScenario = test(
+>NotificationScenario : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
+>test(  getNotification) : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
+>test : <T>(a: () => T) => () => T
+
+  getNotification
+>getNotification : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
+
+);

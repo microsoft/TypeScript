@@ -15,7 +15,7 @@ const [s1] = strArray;
 s1.toString(); // Should error, s1 possibly undefined
 >s1.toString() : string
 >s1.toString : () => string
->s1 : string
+>s1 : string | undefined
 >toString : () => string
 
 // Destructuring a rest element -> do not include undefined
@@ -57,7 +57,7 @@ const { t1 } = strMap;
 t1.toString(); // Should error, t1 possibly undefined
 >t1.toString() : string
 >t1.toString : () => string
->t1 : string
+>t1 : string | undefined
 >toString : () => string
 
 const { ...t2 } = strMap;
@@ -67,9 +67,9 @@ const { ...t2 } = strMap;
 t2.z.toString(); // Should error
 >t2.z.toString() : string
 >t2.z.toString : () => string
->t2.z : string
+>t2.z : string | undefined
 >t2 : { [s: string]: string; }
->z : string
+>z : string | undefined
 >toString : () => string
 
 // Test intersections with declared properties
@@ -100,7 +100,7 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
     z.toFixed(); // Should error
 >z.toFixed() : string
 >z.toFixed : (fractionDigits?: number | undefined) => string
->z : number
+>z : number | undefined
 >toFixed : (fractionDigits?: number | undefined) => string
 }
 
@@ -127,9 +127,9 @@ declare const numMapPoint: { x: number, y: number} & { [s: string]: number };
     q.z.toFixed(); // Should error
 >q.z.toFixed() : string
 >q.z.toFixed : (fractionDigits?: number | undefined) => string
->q.z : number
+>q.z : number | undefined
 >q : { [s: string]: number; y: number; }
->z : number
+>z : number | undefined
 >toFixed : (fractionDigits?: number | undefined) => string
 }
 

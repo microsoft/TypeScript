@@ -9,16 +9,16 @@
   * @type {StatelessComponent<MyComponentProps>}
   */
 const MyComponent = () => /* @type {any} */(null);
->MyComponent : { (): any; defaultProps?: Partial<{ color: "red" | "blue"; }>; }
->() => /* @type {any} */(null) : { (): any; defaultProps: Partial<{ color: "red" | "blue"; }>; }
+>MyComponent : StatelessComponent<MyComponentProps>
+>() => /* @type {any} */(null) : { (): any; defaultProps: Partial<MyComponentProps>; }
 >(null) : null
 >null : null
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
->MyComponent.defaultProps : Partial<{ color: "red" | "blue"; }>
->MyComponent : { (): any; defaultProps?: Partial<{ color: "red" | "blue"; }>; }
->defaultProps : Partial<{ color: "red" | "blue"; }>
+>MyComponent.defaultProps : Partial<MyComponentProps>
+>MyComponent : StatelessComponent<MyComponentProps>
+>defaultProps : Partial<MyComponentProps>
 >{    color: "red"} : { color: "red"; }
 
     color: "red"
@@ -28,8 +28,8 @@ MyComponent.defaultProps = {
 };
 
 const MyComponent2 = () => null;
->MyComponent2 : { (): any; defaultProps: { color: "red" | "blue"; }; }
->() => null : { (): any; defaultProps: { color: "red" | "blue"; }; }
+>MyComponent2 : { (): any; defaultProps: MyComponentProps; }
+>() => null : { (): any; defaultProps: MyComponentProps; }
 >null : null
 
 /**
@@ -37,9 +37,9 @@ const MyComponent2 = () => null;
  */
 MyComponent2.defaultProps = {
 >MyComponent2.defaultProps = {    color: "red"} : { color: "red"; }
->MyComponent2.defaultProps : { color: "red" | "blue"; }
+>MyComponent2.defaultProps : MyComponentProps
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
->defaultProps : { color: "red" | "blue"; }
+>defaultProps : MyComponentProps
 >{    color: "red"} : { color: "red"; }
 
     color: "red"
@@ -51,8 +51,8 @@ MyComponent2.defaultProps = {
   * @type {StatelessComponent<MyComponentProps>}
  */
 const check = MyComponent2;
->check : { (): any; defaultProps?: Partial<{ color: "red" | "blue"; }>; }
->MyComponent2 : { (): any; defaultProps: { color: "red" | "blue"; }; }
+>check : StatelessComponent<MyComponentProps>
+>MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 
 /**
  * 
@@ -60,7 +60,7 @@ const check = MyComponent2;
  */
 function expectLiteral(p) {}
 >expectLiteral : (p: {    props: MyComponentProps;}) => void
->p : { props: { color: "red" | "blue"; }; }
+>p : { props: MyComponentProps; }
 
 function foo() {
 >foo : typeof foo
@@ -70,16 +70,16 @@ function foo() {
      */
     this.props = { color: "red" };
 >this.props = { color: "red" } : { color: "red"; }
->this.props : { color: "red" | "blue"; }
+>this.props : MyComponentProps
 >this : this
->props : { color: "red" | "blue"; }
+>props : MyComponentProps
 >{ color: "red" } : { color: "red"; }
 >color : "red"
 >"red" : "red"
 
     expectLiteral(this);
 >expectLiteral(this) : void
->expectLiteral : (p: { props: { color: "red" | "blue"; }; }) => void
+>expectLiteral : (p: { props: MyComponentProps; }) => void
 >this : this
 }
 
@@ -87,10 +87,10 @@ function foo() {
  * @type {MyComponentProps}
  */
 module.exports = {
->module.exports = {    color: "red"} : { color: "red" | "blue"; }
->module.exports : { color: "red" | "blue"; }
->module : { "\"tests/cases/compiler/input\"": { color: "red" | "blue"; }; }
->exports : { color: "red" | "blue"; }
+>module.exports = {    color: "red"} : MyComponentProps
+>module.exports : MyComponentProps
+>module : { "\"tests/cases/compiler/input\"": MyComponentProps; }
+>exports : MyComponentProps
 >{    color: "red"} : { color: "red"; }
 
     color: "red"
@@ -100,10 +100,10 @@ module.exports = {
 
 expectLiteral({ props: module.exports });
 >expectLiteral({ props: module.exports }) : void
->expectLiteral : (p: { props: { color: "red" | "blue"; }; }) => void
->{ props: module.exports } : { props: { color: "red" | "blue"; }; }
->props : { color: "red" | "blue"; }
->module.exports : { color: "red" | "blue"; }
->module : { "\"tests/cases/compiler/input\"": { color: "red" | "blue"; }; }
->exports : { color: "red" | "blue"; }
+>expectLiteral : (p: { props: MyComponentProps; }) => void
+>{ props: module.exports } : { props: MyComponentProps; }
+>props : MyComponentProps
+>module.exports : MyComponentProps
+>module : { "\"tests/cases/compiler/input\"": MyComponentProps; }
+>exports : MyComponentProps
 

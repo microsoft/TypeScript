@@ -36,12 +36,10 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0m'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
 
 [7m1[0m interface GlobalFoo { age: number }
 [7m [0m [91m~~~~~~~~~[0m
-
 
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
@@ -49,6 +47,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"isolatedModules":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -135,12 +134,10 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/globalFile3.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1208: [0m'globalFile3.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
 
 [7m1[0m interface GlobalFoo { age: number }
 [7m [0m [91m~~~~~~~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -148,6 +145,7 @@ Output::
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"isolatedModules":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts

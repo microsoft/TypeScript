@@ -33,73 +33,43 @@ export {}
 Output::
 [[90m12:00:45 AM[0m] Starting compilation in watch mode...
 
-
 Current directory: /home/user/projects/myproject CaseSensitiveFileNames: false
-
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/tsconfig.json 2000 undefined Config file
-
 Synchronizing program
-
 CreatingProgramWith::
-
   roots: ["/home/user/projects/myproject/src/file.ts"]
-
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
-
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
-
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
-
 Module resolution kind is not specified, using 'NodeJs'.
-
 Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.
-
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
-
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
-
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
-
 File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
-
 File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
-
 File '/home/user/projects/myproject/node_modules/a/index.ts' does not exist.
-
 File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
-
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exist - use it as a name resolution result.
-
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
-
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
-
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
-
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
-
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
 Program root files: ["/home/user/projects/myproject/src/file.ts"]
 Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /home/user/projects/myproject/node_modules/reala/index.d.ts

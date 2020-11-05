@@ -1,14 +1,24 @@
-const playwright = require("playwright");
+// @ts-check
 const chalk = require("chalk");
 const { join } = require("path");
 const { readFileSync } = require("fs");
+try {
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    require("playwright");
+}
+catch (error) {
+    throw new Error("Playwright is expected to be installed manually before running this script");
+}
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+const playwright = require("playwright");
 
 // Turning this on will leave the Chromium browser open, giving you the
 // chance to open up the web inspector.
 const debugging = false;
 
 (async () => {
-  for (const browserType of ["chromium", "firefox", "webkit"]) {
+  for (const browserType of ["chromium", "firefox"]) {
     const browser = await playwright[browserType].launch({ headless: !debugging });
     const context = await browser.newContext();
     const page = await context.newPage();
@@ -21,7 +31,6 @@ const debugging = false;
 
     page.on("error", errorCaught);
     page.on("pageerror", errorCaught);
-    page.on("console", log => console[log._type](log._text));
 
     await page.setContent(`
     <html>
@@ -35,5 +44,14 @@ const debugging = false;
     else {
         console.log("Not closing the browser, you'll need to exit the process in your terminal manually");
     }
+    console.log(`${browserType} :+1:`);
   }
 })();
+
+process.on("unhandledRejection", (/** @type {any}*/ err) => {
+    if (err) {
+        console.error(err.stack || err.message);
+    }
+    process.exit(1);
+});
+

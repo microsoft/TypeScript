@@ -82,7 +82,7 @@ namespace ts.codefix {
 
     function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const classElement = findContainerClassElement(sourceFile, pos);
-        changeTracker.insertLastModifierBefore(sourceFile, SyntaxKind.OverrideKeyword, classElement);
+        changeTracker.insertModifierBefore(sourceFile, SyntaxKind.OverrideKeyword, classElement);
     }
 
     function doRemoveOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {

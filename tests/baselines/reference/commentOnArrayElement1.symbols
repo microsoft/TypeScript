@@ -1,6 +1,6 @@
 === tests/cases/compiler/commentOnArrayElement1.ts ===
-var array = [
->array : Symbol(array, Decl(commentOnArrayElement1.ts, 0, 3))
+const array = [
+>array : Symbol(array, Decl(commentOnArrayElement1.ts, 0, 5))
 
     /* element 1*/
     1
