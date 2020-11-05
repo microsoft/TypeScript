@@ -688,7 +688,7 @@ namespace ts.Completions.StringCompletions {
         const offset = index !== -1 ? index + 1 : 0;
         // If the range is an identifier, span is unnecessary.
         const length = text.length - offset;
-        return length === 0 ? undefined : createTextSpan(textStart, length + offset);
+        return length === 0 || isIdentifierText(text.substr(offset, length), ScriptTarget.ESNext) ? undefined : createTextSpan(textStart + offset, length);
     }
 
     // Replace everything as long as the directory separator appears
