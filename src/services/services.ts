@@ -1137,7 +1137,7 @@ namespace ts {
 
         public isCancellationRequested(): boolean {
             if (this.cancellationToken.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "CancellationDetected", { kind: "CancellationTokenObject" });
+                tracing.instant(tracing.Phase.Session, "cancellationDetected", { kind: "CancellationTokenObject" });
                 return true;
             }
             return false;
@@ -1168,7 +1168,7 @@ namespace ts {
                 // Check no more than once every throttle wait milliseconds
                 this.lastCancellationCheckTime = time;
                 if (this.hostCancellationToken.isCancellationRequested()) {
-                    tracing.instant(tracing.Phase.Session, "CancellationDetected", { kind: "ThrottledCancellationToken" });
+                    tracing.instant(tracing.Phase.Session, "cancellationDetected", { kind: "ThrottledCancellationToken" });
                     return true;
                 }
                 return false;

@@ -208,11 +208,11 @@ namespace ts.server {
             try {
                 if (this.operationHost.isCancellationRequested()) {
                     stop = true;
-                    tracing.instant(tracing.Phase.Session, "StepCancellation", { seq: this.requestId });
+                    tracing.instant(tracing.Phase.Session, "stepCancellation", { seq: this.requestId });
                 }
                 else {
                     Debug.assert(!tracing.canPop());
-                    tracing.push(tracing.Phase.Session, "StepAction", { seq: this.requestId });
+                    tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
                     try {
                         action(this);
                     }
@@ -227,10 +227,10 @@ namespace ts.server {
                 stop = true;
                 // ignore cancellation request
                 if (e instanceof OperationCanceledException) {
-                    tracing.instant(tracing.Phase.Session, "StepUnhandledCancellation", { seq: this.requestId });
+                    tracing.instant(tracing.Phase.Session, "stepUnhandledCancellation", { seq: this.requestId });
                 }
                 else {
-                    tracing.instant(tracing.Phase.Session, "StepUnhandledError", { seq: this.requestId, message: (<Error>e).message });
+                    tracing.instant(tracing.Phase.Session, "stepUnhandledError", { seq: this.requestId, message: (<Error>e).message });
                     this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
                 }
             }
@@ -928,7 +928,7 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
-            tracing.instant(tracing.Phase.Session, "Event", { eventName });
+            tracing.instant(tracing.Phase.Session, "event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -2939,7 +2939,7 @@ namespace ts.server {
                     request = <protocol.Request>JSON.parse(message);
                     relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
-                    tracing.instant(tracing.Phase.Session, "Request", { seq: request.seq, command: request.command });
+                    tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
                     perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
 
                     const { response, responseRequired } = this.executeCommand(request);
@@ -2956,7 +2956,7 @@ namespace ts.server {
 
                     // Note: Log before writing the response, else the editor can complete its activity before the server does
                     perfLogger.logStopCommand("" + request.command, "Success");
-                    tracing.instant(tracing.Phase.Session, "Response", { seq: request.seq, command: request.command, success: !!response });
+                    tracing.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
                     if (response) {
                         this.doOutput(response, request.command, request.seq, /*success*/ true);
                     }
@@ -2975,14 +2975,14 @@ namespace ts.server {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
                     perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
-                    tracing.instant(tracing.Phase.Session, "UnhandledCancellation", { seq: request?.seq, command: request?.command });
+                    tracing.instant(tracing.Phase.Session, "unhandledCancellation", { seq: request?.seq, command: request?.command });
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, message, relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-                tracing.instant(tracing.Phase.Session, "UnhandledError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
+                tracing.instant(tracing.Phase.Session, "unhandledError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
 
                 this.doOutput(
                     /*info*/ undefined,
