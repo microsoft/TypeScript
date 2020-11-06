@@ -18,5 +18,5 @@
 ////     foo () {}
 //// }
 
-verify.not.codeFixAvailable("Add 'override' modifier");
-verify.not.codeFixAvailable("Remove 'override' modifier");
+verify.not.codeFixAvailable("fixAddOverrideModifier");
+verify.not.codeFixAvailable("fixRemoveOverrideModifier");
