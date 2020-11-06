@@ -757,6 +757,24 @@ export namespace React {
                 }
             );
 
+            testOrganizeImports("JsxFragmentPragmaTsx",
+                {
+                    path: "/test.tsx",
+                    content: `/** @jsx h */
+/** @jsxFrag frag */
+import { h, frag } from "@foo/core";
+
+const elem = <><div>Foo</div></>;
+`,
+                },
+                {
+                    path: "/@foo/core/index.d.ts",
+                    content: `export function h(): void;
+export function frag(): void;
+`
+                }
+            );
+
             describe("Exports", () => {
 
                 testOrganizeExports("MoveToTop",

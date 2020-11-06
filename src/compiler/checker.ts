@@ -646,6 +646,10 @@ namespace ts {
                 return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, excludeGlobals);
             },
             getJsxNamespace: n => unescapeLeadingUnderscores(getJsxNamespace(n)),
+            getJsxFragmentFactory: n => {
+                const jsxFragmentFactory = getJsxFragmentFactoryEntity(n);
+                return jsxFragmentFactory && unescapeLeadingUnderscores(getFirstIdentifier(jsxFragmentFactory).escapedText);
+            },
             getAccessibleSymbolChain,
             getTypePredicateOfSignature,
             resolveExternalModuleName: moduleSpecifierIn => {

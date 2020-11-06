@@ -86,6 +86,7 @@ namespace ts.OrganizeImports {
     function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
+        const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];
@@ -150,7 +151,8 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-            return jsxElementsPresent && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
+                FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 

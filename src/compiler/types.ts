@@ -4131,6 +4131,7 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
         /* @internal */ resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;
+        /* @internal */ getJsxFragmentFactory(location: Node): string | undefined;
 
         /**
          * Note that this will return undefined in the following case:
