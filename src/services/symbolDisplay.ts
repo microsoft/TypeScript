@@ -107,11 +107,11 @@ namespace ts.SymbolDisplay {
             return ScriptElementKindModifier.none;
         }
 
-        const modifiers: string[] = [];
+        const modifiers = new Set<string>();
         if (symbol.declarations && symbol.declarations.length > 0) {
             const kindModifiers = getNodeModifiers(symbol.declarations[0]);
             if (kindModifiers !== ScriptElementKindModifier.none) {
-                modifiers.push(kindModifiers);
+                kindModifiers.split(",").forEach(m => modifiers.add(m));
             }
         }
         if (symbol.flags & SymbolFlags.Alias) {
@@ -119,15 +119,15 @@ namespace ts.SymbolDisplay {
             if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
                 const kindModifiers = getNodeModifiers(resolvedSymbol.declarations[0]);
                 if (kindModifiers !== ScriptElementKindModifier.none) {
-                    modifiers.push(kindModifiers);
+                    kindModifiers.split(",").forEach(m => modifiers.add(m));
                 }
             }
         }
         if (symbol.flags & SymbolFlags.Optional) {
-            modifiers.push(ScriptElementKindModifier.optionalModifier);
+            modifiers.add(ScriptElementKindModifier.optionalModifier);
         }
 
-        return modifiers.length > 0 ? modifiers.join(",") : ScriptElementKindModifier.none;
+        return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
