@@ -2,7 +2,7 @@
     "extends": "./tsconfig-base",
     "compilerOptions": {
         "declarationMap": false,
-        "sourceMap":  false,
+        "sourceMap":  true,
         "composite": false,
         "incremental":  true,
         "declaration": true,
