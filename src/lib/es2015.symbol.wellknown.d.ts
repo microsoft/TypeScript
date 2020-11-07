@@ -221,7 +221,10 @@ interface String {
     /**
      * Replaces text in a string, using an object that supports replacement within a string.
      * @param searchValue A object can search for and replace matches within a string.
-     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     * @param replaceValue A string containing the text to replace for successful
+     * match of searchValue in this string. You can use regex g flag i.e.
+     * str.replace(/replace_word/g, 'replace_me') to replace all values and gi
+     * flag to replace all case-insensitive values.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
