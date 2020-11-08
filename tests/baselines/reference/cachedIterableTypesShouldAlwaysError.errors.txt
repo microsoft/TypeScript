@@ -1,0 +1,22 @@
+tests/cases/compiler/cachedIterableTypesShouldAlwaysError.ts(5,18): error TS2488: Type '{ x: "x"; [Symbol.iterator](): Generator<{ b: false; }, any, unknown>; } | { y: "y"; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+tests/cases/compiler/cachedIterableTypesShouldAlwaysError.ts(9,18): error TS2488: Type '{ x: "x"; [Symbol.iterator](): Generator<{ b: false; }, any, unknown>; } | { y: "y"; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== tests/cases/compiler/cachedIterableTypesShouldAlwaysError.ts (2 errors) ====
+    function foo(obj:
+        { x: "x", [Symbol.iterator](): Generator<{ b: false }> } |
+        { y: "y" }
+    ) {
+    	for (const k of obj) { // should error
+    	                ~~~
+!!! error TS2488: Type '{ x: "x"; [Symbol.iterator](): Generator<{ b: false; }, any, unknown>; } | { y: "y"; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+    		void k;
+    	}
+    
+    	for (const k of obj) { // should error
+    	                ~~~
+!!! error TS2488: Type '{ x: "x"; [Symbol.iterator](): Generator<{ b: false; }, any, unknown>; } | { y: "y"; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+    		void k;
+    	}
+    }
+    

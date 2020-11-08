@@ -1,0 +1,235 @@
+=== tests/cases/compiler/iterableWithInferredThis.ts ===
+declare const success: { success: true, value: object };
+>success : { success: true; value: object; }
+>success : true
+>true : true
+>value : object
+
+declare const failure: { success: false, error: string };
+>failure : { success: false; error: string; }
+>success : false
+>false : false
+>error : string
+
+declare const result: typeof success | typeof failure;
+>result : { success: true; value: object; } | { success: false; error: string; }
+>success : { success: true; value: object; }
+>failure : { success: false; error: string; }
+
+const iterable = {
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>{	*[Symbol.iterator]<T>(this: T) {		for (const x in this) yield x;	}} : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	*[Symbol.iterator]<T>(this: T) {
+>[Symbol.iterator] : <T>(this: T) => Generator<Extract<keyof T, string>, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+		for (const x in this) yield x;
+>x : Extract<keyof T, string>
+>this : T
+>yield x : any
+>x : Extract<keyof T, string>
+	}
+};
+
+function* foo(): IterableIterator<"success" | "value" | "error"> {
+>foo : () => IterableIterator<"success" | "value" | "error">
+
+    yield* { ...result, ...iterable }; // Should be OK
+>yield* { ...result, ...iterable } : void
+>{ ...result, ...iterable } : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; success: true; value: object; } | { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; success: false; error: string; }
+>result : { success: true; value: object; } | { success: false; error: string; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+}
+
+function takesKeys(k: "success" | "value" | "error") {
+>takesKeys : (k: "success" | "value" | "error") => void
+>k : "success" | "value" | "error"
+
+	void k;
+>void k : undefined
+>k : "success" | "value" | "error"
+}
+
+for (const k of { ...iterable, ...result }) {
+>k : "success" | "value" | "error"
+>{ ...iterable, ...result } : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>result : { success: true; value: object; } | { success: false; error: string; }
+
+	takesKeys(k);
+>takesKeys(k) : void
+>takesKeys : (k: "success" | "value" | "error") => void
+>k : "success" | "value" | "error"
+}
+
+const [j] = { ...iterable, ...result };
+>j : "success" | "value" | "error"
+>{ ...iterable, ...result } : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>result : { success: true; value: object; } | { success: false; error: string; }
+
+takesKeys(j);
+>takesKeys(j) : void
+>takesKeys : (k: "success" | "value" | "error") => void
+>j : "success" | "value" | "error"
+
+const [k] = [...{ ...iterable, ...result }];
+>k : "success" | "value" | "error"
+>[...{ ...iterable, ...result }] : ("success" | "value" | "error")[]
+>...{ ...iterable, ...result } : "success" | "value" | "error"
+>{ ...iterable, ...result } : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>result : { success: true; value: object; } | { success: false; error: string; }
+
+takesKeys(k);
+>takesKeys(k) : void
+>takesKeys : (k: "success" | "value" | "error") => void
+>k : "success" | "value" | "error"
+
+function getObj<T extends string>(str: T) {
+>getObj : <T extends string>(str: T) => { str: T; [Symbol.iterator]<T>(this: T): Generator<T[Extract<keyof T, string>], void, unknown>; }
+>str : T
+
+	return {
+>{		str,		*[Symbol.iterator]<T>(this: T) {			for (const x in this) yield this[x];		}	} : { str: T; [Symbol.iterator]<T>(this: T): Generator<T[Extract<keyof T, string>], void, unknown>; }
+
+		str,
+>str : T
+
+		*[Symbol.iterator]<T>(this: T) {
+>[Symbol.iterator] : <T>(this: T) => Generator<T[Extract<keyof T, string>], void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+			for (const x in this) yield this[x];
+>x : Extract<keyof T, string>
+>this : T
+>yield this[x] : any
+>this[x] : T[Extract<keyof T, string>]
+>this : T
+>x : Extract<keyof T, string>
+		}
+	};
+}
+
+for (const k of getObj("abc")) {
+>k : "abc"
+>getObj("abc") : { str: "abc"; [Symbol.iterator]<T>(this: T): Generator<T[Extract<keyof T, string>], void, unknown>; }
+>getObj : <T extends string>(str: T) => { str: T; [Symbol.iterator]<T>(this: T): Generator<T[Extract<keyof T, string>], void, unknown>; }
+>"abc" : "abc"
+
+	void k;
+>void k : undefined
+>k : "abc"
+}
+
+for (const k of getObj<"123">("123")) {
+>k : "123"
+>getObj<"123">("123") : { str: "123"; [Symbol.iterator]<T>(this: T): Generator<T[Extract<keyof T, string>], void, unknown>; }
+>getObj : <T extends string>(str: T) => { str: T; [Symbol.iterator]<T>(this: T): Generator<T[Extract<keyof T, string>], void, unknown>; }
+>"123" : "123"
+
+	void k;
+>void k : undefined
+>k : "123"
+}
+
+for (const k of new class {
+>k : "abc"
+>new class {	str = "abc" as const;	*[Symbol.iterator]<T>(this: T) {		for (const x in this) yield this[x];	}} : (Anonymous class)
+>class {	str = "abc" as const;	*[Symbol.iterator]<T>(this: T) {		for (const x in this) yield this[x];	}} : typeof (Anonymous class)
+
+	str = "abc" as const;
+>str : "abc"
+>"abc" as const : "abc"
+>"abc" : "abc"
+
+	*[Symbol.iterator]<T>(this: T) {
+>[Symbol.iterator] : <T>(this: T) => Generator<T[Extract<keyof T, string>], void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+		for (const x in this) yield this[x];
+>x : Extract<keyof T, string>
+>this : T
+>yield this[x] : any
+>this[x] : T[Extract<keyof T, string>]
+>this : T
+>x : Extract<keyof T, string>
+	}
+}) {
+	void k;
+>void k : undefined
+>k : "abc"
+}
+
+function assertType<T>(x: T) { void x; }
+>assertType : <T>(x: T) => void
+>x : T
+>void x : undefined
+>x : T
+
+for (const x of { ...iterable, ...success }) {
+>x : "success" | "value"
+>{ ...iterable, ...success } : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>success : { success: true; value: object; }
+
+	assertType<"success" | "value">(x);
+>assertType<"success" | "value">(x) : void
+>assertType : <T>(x: T) => void
+>x : "success" | "value"
+}
+
+for (const x of { ...failure, ...iterable }) {
+>x : "success" | "error"
+>{ ...failure, ...iterable } : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; success: false; error: string; }
+>failure : { success: false; error: string; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	assertType<"success" | "error">(x);
+>assertType<"success" | "error">(x) : void
+>assertType : <T>(x: T) => void
+>x : "success" | "error"
+}
+
+const iterableResult = { ...iterable, ...result };
+>iterableResult : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>{ ...iterable, ...result } : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>iterable : { [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>result : { success: true; value: object; } | { success: false; error: string; }
+
+for (const x of iterableResult) {
+>x : "success" | "value" | "error"
+>iterableResult : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	assertType<"success" | "error" | "value">(x);
+>assertType<"success" | "error" | "value">(x) : void
+>assertType : <T>(x: T) => void
+>x : "success" | "value" | "error"
+}
+
+if (iterableResult.success) {
+>iterableResult.success : boolean
+>iterableResult : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; } | { success: false; error: string; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+>success : boolean
+
+	for (const x of iterableResult) {
+>x : "success" | "value"
+>iterableResult : { success: true; value: object; [Symbol.iterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>; }
+
+		assertType<"success" | "value">(x);
+>assertType<"success" | "value">(x) : void
+>assertType : <T>(x: T) => void
+>x : "success" | "value"
+	}
+}
+

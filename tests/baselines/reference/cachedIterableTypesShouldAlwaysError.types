@@ -1,0 +1,37 @@
+=== tests/cases/compiler/cachedIterableTypesShouldAlwaysError.ts ===
+function foo(obj:
+>foo : (obj: {    x: "x";    [Symbol.iterator](): Generator<{        b: false;    }>;} | {    y: "y";}) => void
+>obj : { x: "x"; [Symbol.iterator](): Generator<{    b: false;}>; } | { y: "y"; }
+
+    { x: "x", [Symbol.iterator](): Generator<{ b: false }> } |
+>x : "x"
+>[Symbol.iterator] : () => Generator<{    b: false;}>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>b : false
+>false : false
+
+    { y: "y" }
+>y : "y"
+
+) {
+	for (const k of obj) { // should error
+>k : any
+>obj : { x: "x"; [Symbol.iterator](): Generator<{ b: false; }, any, unknown>; } | { y: "y"; }
+
+		void k;
+>void k : undefined
+>k : any
+	}
+
+	for (const k of obj) { // should error
+>k : any
+>obj : { x: "x"; [Symbol.iterator](): Generator<{ b: false; }, any, unknown>; } | { y: "y"; }
+
+		void k;
+>void k : undefined
+>k : any
+	}
+}
+

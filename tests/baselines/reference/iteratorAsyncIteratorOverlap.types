@@ -1,0 +1,97 @@
+=== tests/cases/compiler/iteratorAsyncIteratorOverlap.ts ===
+function typeAssert<T>(x: T) { void x; }
+>typeAssert : <T>(x: T) => void
+>x : T
+>void x : undefined
+>x : T
+
+async function* f(obj: {
+>f : (obj: {    [Symbol.iterator](): Generator<string, void, unknown>;    [Symbol.asyncIterator](): AsyncGenerator<number>;}) => AsyncGenerator<never, void, unknown>
+>obj : { [Symbol.iterator](): Generator<string, void, unknown>; [Symbol.asyncIterator](): AsyncGenerator<number>; }
+
+	[Symbol.iterator](): Generator<string, void, unknown>;
+>[Symbol.iterator] : () => Generator<string, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+    [Symbol.asyncIterator](): AsyncGenerator<number>;
+>[Symbol.asyncIterator] : () => AsyncGenerator<number>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+}) {
+	for (const y of obj) {
+>y : string
+>obj : { [Symbol.iterator](): Generator<string, void, unknown>; [Symbol.asyncIterator](): AsyncGenerator<number, any, unknown>; }
+
+		typeAssert<string>(y);
+>typeAssert<string>(y) : void
+>typeAssert : <T>(x: T) => void
+>y : string
+	}
+
+	for await (const y of obj) {
+>y : number
+>obj : { [Symbol.iterator](): Generator<string, void, unknown>; [Symbol.asyncIterator](): AsyncGenerator<number, any, unknown>; }
+
+		typeAssert<number>(y);
+>typeAssert<number>(y) : void
+>typeAssert : <T>(x: T) => void
+>y : number
+	}
+}
+
+async function* g<A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>): AsyncGenerator<A, void, undefined> {
+>g : <A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>) => AsyncGenerator<A, void, undefined>
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+
+	const [c] = obj;
+>c : B
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+
+	void c;
+>void c : undefined
+>c : B
+
+	yield* obj;
+>yield* obj : any
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+}
+
+async function* h<A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>): AsyncGenerator<A, void, undefined> {
+>h : <A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>) => AsyncGenerator<A, void, undefined>
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+
+	yield* obj;
+>yield* obj : any
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+}
+
+async function* j<A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>) {
+>j : <A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>) => AsyncGenerator<A, void, undefined>
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+
+	yield* obj;
+>yield* obj : any
+>obj : AsyncIterableIterator<A> & IterableIterator<B>
+}
+
+async function* i<A, B>(obj: AsyncIterable<A> & Iterable<B>): AsyncGenerator<A, void, undefined>{
+>i : <A, B>(obj: AsyncIterable<A> & Iterable<B>) => AsyncGenerator<A, void, undefined>
+>obj : AsyncIterable<A> & Iterable<B>
+
+	const [c] = obj;
+>c : B
+>obj : AsyncIterable<A> & Iterable<B>
+
+	void c;
+>void c : undefined
+>c : B
+
+	yield* obj;
+>yield* obj : any
+>obj : AsyncIterable<A> & Iterable<B>
+}
+

@@ -1,0 +1,122 @@
+=== tests/cases/compiler/iteratorAsyncIteratorOverlap.ts ===
+function typeAssert<T>(x: T) { void x; }
+>typeAssert : Symbol(typeAssert, Decl(iteratorAsyncIteratorOverlap.ts, 0, 0))
+>T : Symbol(T, Decl(iteratorAsyncIteratorOverlap.ts, 0, 20))
+>x : Symbol(x, Decl(iteratorAsyncIteratorOverlap.ts, 0, 23))
+>T : Symbol(T, Decl(iteratorAsyncIteratorOverlap.ts, 0, 20))
+>x : Symbol(x, Decl(iteratorAsyncIteratorOverlap.ts, 0, 23))
+
+async function* f(obj: {
+>f : Symbol(f, Decl(iteratorAsyncIteratorOverlap.ts, 0, 40))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 2, 18))
+
+	[Symbol.iterator](): Generator<string, void, unknown>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iteratorAsyncIteratorOverlap.ts, 2, 24))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    [Symbol.asyncIterator](): AsyncGenerator<number>;
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(iteratorAsyncIteratorOverlap.ts, 3, 55))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+}) {
+	for (const y of obj) {
+>y : Symbol(y, Decl(iteratorAsyncIteratorOverlap.ts, 6, 11))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 2, 18))
+
+		typeAssert<string>(y);
+>typeAssert : Symbol(typeAssert, Decl(iteratorAsyncIteratorOverlap.ts, 0, 0))
+>y : Symbol(y, Decl(iteratorAsyncIteratorOverlap.ts, 6, 11))
+	}
+
+	for await (const y of obj) {
+>y : Symbol(y, Decl(iteratorAsyncIteratorOverlap.ts, 10, 17))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 2, 18))
+
+		typeAssert<number>(y);
+>typeAssert : Symbol(typeAssert, Decl(iteratorAsyncIteratorOverlap.ts, 0, 0))
+>y : Symbol(y, Decl(iteratorAsyncIteratorOverlap.ts, 10, 17))
+	}
+}
+
+async function* g<A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>): AsyncGenerator<A, void, undefined> {
+>g : Symbol(g, Decl(iteratorAsyncIteratorOverlap.ts, 13, 1))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 15, 18))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 15, 20))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 15, 24))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 15, 18))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 15, 20))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 15, 18))
+
+	const [c] = obj;
+>c : Symbol(c, Decl(iteratorAsyncIteratorOverlap.ts, 16, 8))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 15, 24))
+
+	void c;
+>c : Symbol(c, Decl(iteratorAsyncIteratorOverlap.ts, 16, 8))
+
+	yield* obj;
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 15, 24))
+}
+
+async function* h<A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>): AsyncGenerator<A, void, undefined> {
+>h : Symbol(h, Decl(iteratorAsyncIteratorOverlap.ts, 19, 1))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 21, 18))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 21, 20))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 21, 24))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 21, 18))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 21, 20))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 21, 18))
+
+	yield* obj;
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 21, 24))
+}
+
+async function* j<A, B>(obj: AsyncIterableIterator<A> & IterableIterator<B>) {
+>j : Symbol(j, Decl(iteratorAsyncIteratorOverlap.ts, 23, 1))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 25, 18))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 25, 20))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 25, 24))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 25, 18))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 25, 20))
+
+	yield* obj;
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 25, 24))
+}
+
+async function* i<A, B>(obj: AsyncIterable<A> & Iterable<B>): AsyncGenerator<A, void, undefined>{
+>i : Symbol(i, Decl(iteratorAsyncIteratorOverlap.ts, 27, 1))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 29, 18))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 29, 20))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 29, 24))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 29, 18))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>B : Symbol(B, Decl(iteratorAsyncIteratorOverlap.ts, 29, 20))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>A : Symbol(A, Decl(iteratorAsyncIteratorOverlap.ts, 29, 18))
+
+	const [c] = obj;
+>c : Symbol(c, Decl(iteratorAsyncIteratorOverlap.ts, 30, 8))
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 29, 24))
+
+	void c;
+>c : Symbol(c, Decl(iteratorAsyncIteratorOverlap.ts, 30, 8))
+
+	yield* obj;
+>obj : Symbol(obj, Decl(iteratorAsyncIteratorOverlap.ts, 29, 24))
+}
+

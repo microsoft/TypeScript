@@ -1,0 +1,430 @@
+=== tests/cases/compiler/genericIterables.ts ===
+/**
+ * Creates a new identity function with a type argument `T` that enforces that a given type `Q` is identical to `T`.
+ */
+export function constrainExact<T>() {
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>T : Symbol(T, Decl(genericIterables.ts, 3, 31))
+
+	return (x => x) as <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q;
+>x : Symbol(x, Decl(genericIterables.ts, 4, 9))
+>x : Symbol(x, Decl(genericIterables.ts, 4, 9))
+>Q : Symbol(Q, Decl(genericIterables.ts, 4, 21))
+>T : Symbol(T, Decl(genericIterables.ts, 3, 31))
+>this : Symbol(this, Decl(genericIterables.ts, 4, 34))
+>T : Symbol(T, Decl(genericIterables.ts, 3, 31))
+>Q : Symbol(Q, Decl(genericIterables.ts, 4, 21))
+>arg : Symbol(arg, Decl(genericIterables.ts, 4, 71))
+>Q : Symbol(Q, Decl(genericIterables.ts, 4, 21))
+>Q : Symbol(Q, Decl(genericIterables.ts, 4, 21))
+}
+
+async function* f<A, B, C>(
+>f : Symbol(f, Decl(genericIterables.ts, 5, 1))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+
+    source0: AsyncIterableIterator<A> & { [Symbol.asyncIterator](): Generator<B> } & IterableIterator<C>,
+>source0 : Symbol(source0, Decl(genericIterables.ts, 7, 27))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(genericIterables.ts, 8, 41))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+
+    source1: AsyncIterableIterator<A> | { [Symbol.asyncIterator](): Generator<B> } | IterableIterator<C>,
+>source1 : Symbol(source1, Decl(genericIterables.ts, 8, 105))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(genericIterables.ts, 9, 41))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+
+    source2: (AsyncIterableIterator<A> | { [Symbol.asyncIterator](): Generator<B> }) & IterableIterator<C>,
+>source2 : Symbol(source2, Decl(genericIterables.ts, 9, 105))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(genericIterables.ts, 10, 42))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+
+	source3: AsyncIterableIterator<A> & AsyncGenerator<B>,
+>source3 : Symbol(source3, Decl(genericIterables.ts, 10, 107))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+
+	source4: IterableIterator<C>,
+>source4 : Symbol(source4, Decl(genericIterables.ts, 11, 55))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+
+	source5: AsyncIterableIterator<A> & Generator<B>,
+>source5 : Symbol(source5, Decl(genericIterables.ts, 12, 30))
+>AsyncIterableIterator : Symbol(AsyncIterableIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+
+	source6: {
+>source6 : Symbol(source6, Decl(genericIterables.ts, 13, 50))
+
+		[Symbol.iterator](): Generator<B>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 14, 11))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+
+		[Symbol.asyncIterator](): AsyncGenerator<A>;
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(genericIterables.ts, 15, 36))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+
+	},
+	source7: Iterable<A> | AsyncIterable<B>,
+>source7 : Symbol(source7, Decl(genericIterables.ts, 17, 3))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+
+	source8: Iterable<A> & AsyncIterable<B>,
+>source8 : Symbol(source8, Decl(genericIterables.ts, 18, 41))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+
+	source9: {
+>source9 : Symbol(source9, Decl(genericIterables.ts, 19, 41))
+
+		a: 1,
+>a : Symbol(a, Decl(genericIterables.ts, 20, 11))
+
+		[Symbol.iterator]<T>(this: T): Generator<T[keyof T]>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 21, 7))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 22, 20))
+>this : Symbol(this, Decl(genericIterables.ts, 22, 23))
+>T : Symbol(T, Decl(genericIterables.ts, 22, 20))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 22, 20))
+>T : Symbol(T, Decl(genericIterables.ts, 22, 20))
+
+	} & {
+		[Symbol.asyncIterator]<T>(this: T): AsyncGenerator<keyof T>;
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(genericIterables.ts, 23, 6))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 24, 25))
+>this : Symbol(this, Decl(genericIterables.ts, 24, 28))
+>T : Symbol(T, Decl(genericIterables.ts, 24, 25))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 24, 25))
+
+	},
+	source10: ({
+>source10 : Symbol(source10, Decl(genericIterables.ts, 25, 3))
+
+		a: true,
+>a : Symbol(a, Decl(genericIterables.ts, 26, 13))
+
+		b: 2,
+>b : Symbol(b, Decl(genericIterables.ts, 27, 10))
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 28, 7))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 29, 20))
+>this : Symbol(this, Decl(genericIterables.ts, 29, 23))
+>T : Symbol(T, Decl(genericIterables.ts, 29, 20))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 29, 20))
+
+	} | {
+		a: false,
+>a : Symbol(a, Decl(genericIterables.ts, 30, 6))
+
+		c: 3,
+>c : Symbol(c, Decl(genericIterables.ts, 31, 11))
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 32, 7))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 33, 20))
+>this : Symbol(this, Decl(genericIterables.ts, 33, 23))
+>T : Symbol(T, Decl(genericIterables.ts, 33, 20))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 33, 20))
+
+	}) & { d: 4 },
+>d : Symbol(d, Decl(genericIterables.ts, 34, 7))
+
+	source11: ({
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+
+		a: true,
+>a : Symbol(a, Decl(genericIterables.ts, 35, 13))
+
+		b: 2,
+>b : Symbol(b, Decl(genericIterables.ts, 36, 10))
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 37, 7))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 38, 20))
+>this : Symbol(this, Decl(genericIterables.ts, 38, 23))
+>T : Symbol(T, Decl(genericIterables.ts, 38, 20))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 38, 20))
+
+	} & { e: 5 } | {
+>e : Symbol(e, Decl(genericIterables.ts, 39, 6))
+
+		a: false,
+>a : Symbol(a, Decl(genericIterables.ts, 39, 17))
+
+		c: 3,
+>c : Symbol(c, Decl(genericIterables.ts, 40, 11))
+
+		[Symbol.iterator]<T>(this: T): Generator<T[keyof T]>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 41, 7))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 42, 20))
+>this : Symbol(this, Decl(genericIterables.ts, 42, 23))
+>T : Symbol(T, Decl(genericIterables.ts, 42, 20))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 42, 20))
+>T : Symbol(T, Decl(genericIterables.ts, 42, 20))
+
+	}) & { d: 4 },
+>d : Symbol(d, Decl(genericIterables.ts, 43, 7))
+
+	source12: {
+>source12 : Symbol(source12, Decl(genericIterables.ts, 43, 15))
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(genericIterables.ts, 44, 12))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 45, 20))
+>this : Symbol(this, Decl(genericIterables.ts, 45, 23))
+>T : Symbol(T, Decl(genericIterables.ts, 45, 20))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(genericIterables.ts, 45, 20))
+
+	} & ({ a: 1 } | { b: 2 }),
+>a : Symbol(a, Decl(genericIterables.ts, 46, 7))
+>b : Symbol(b, Decl(genericIterables.ts, 46, 18))
+
+): AsyncGenerator<A & B, void, undefined> {
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+
+	const [c] = source0;
+>c : Symbol(c, Decl(genericIterables.ts, 48, 8))
+>source0 : Symbol(source0, Decl(genericIterables.ts, 7, 27))
+
+	void c;
+>c : Symbol(c, Decl(genericIterables.ts, 48, 8))
+
+	for await (const z of source0) constrainExact<A & B>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 51, 17))
+>source0 : Symbol(source0, Decl(genericIterables.ts, 7, 27))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>z : Symbol(z, Decl(genericIterables.ts, 51, 17))
+
+	for await (const z of source1) constrainExact<A | B | C>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 52, 17))
+>source1 : Symbol(source1, Decl(genericIterables.ts, 8, 105))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+>z : Symbol(z, Decl(genericIterables.ts, 52, 17))
+
+	for await (const z of source2) constrainExact<A | B>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 53, 17))
+>source2 : Symbol(source2, Decl(genericIterables.ts, 9, 105))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>z : Symbol(z, Decl(genericIterables.ts, 53, 17))
+
+    yield* source0;
+>source0 : Symbol(source0, Decl(genericIterables.ts, 7, 27))
+
+	for await (const z of source3) constrainExact<A & B>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 57, 17))
+>source3 : Symbol(source3, Decl(genericIterables.ts, 10, 107))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>z : Symbol(z, Decl(genericIterables.ts, 57, 17))
+
+	for await (const z of source4) constrainExact<C>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 58, 17))
+>source4 : Symbol(source4, Decl(genericIterables.ts, 11, 55))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>C : Symbol(C, Decl(genericIterables.ts, 7, 23))
+>z : Symbol(z, Decl(genericIterables.ts, 58, 17))
+
+	for await (const z of source5) constrainExact<A>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 59, 17))
+>source5 : Symbol(source5, Decl(genericIterables.ts, 12, 30))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>z : Symbol(z, Decl(genericIterables.ts, 59, 17))
+
+	for await (const z of source6) constrainExact<A>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 60, 17))
+>source6 : Symbol(source6, Decl(genericIterables.ts, 13, 50))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>z : Symbol(z, Decl(genericIterables.ts, 60, 17))
+
+	for (const z of source6) constrainExact<B>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 61, 11))
+>source6 : Symbol(source6, Decl(genericIterables.ts, 13, 50))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>z : Symbol(z, Decl(genericIterables.ts, 61, 11))
+
+	for await (const z of source7) constrainExact<A | B>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 62, 17))
+>source7 : Symbol(source7, Decl(genericIterables.ts, 17, 3))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>z : Symbol(z, Decl(genericIterables.ts, 62, 17))
+
+	for await (const z of source8) constrainExact<B>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 63, 17))
+>source8 : Symbol(source8, Decl(genericIterables.ts, 18, 41))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>B : Symbol(B, Decl(genericIterables.ts, 7, 20))
+>z : Symbol(z, Decl(genericIterables.ts, 63, 17))
+
+	for (const z of source8) constrainExact<A>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 64, 11))
+>source8 : Symbol(source8, Decl(genericIterables.ts, 18, 41))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>A : Symbol(A, Decl(genericIterables.ts, 7, 18))
+>z : Symbol(z, Decl(genericIterables.ts, 64, 11))
+
+	for (const z of source9) constrainExact<1>()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 65, 11))
+>source9 : Symbol(source9, Decl(genericIterables.ts, 19, 41))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 65, 11))
+
+	for await (const z of source9) constrainExact<"a">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 66, 17))
+>source9 : Symbol(source9, Decl(genericIterables.ts, 19, 41))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 66, 17))
+
+	// We do all these tests together because we need to make sure the cacheing logic didn't get screwed up
+
+	if (source10.a) {
+>source10.a : Symbol(a, Decl(genericIterables.ts, 26, 13), Decl(genericIterables.ts, 30, 6))
+>source10 : Symbol(source10, Decl(genericIterables.ts, 25, 3))
+>a : Symbol(a, Decl(genericIterables.ts, 26, 13), Decl(genericIterables.ts, 30, 6))
+
+		for (const z of source10) constrainExact<"a" | "b" | "d">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 71, 12))
+>source10 : Symbol(source10, Decl(genericIterables.ts, 25, 3))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 71, 12))
+
+		for (const z of source10[Symbol.iterator]()) constrainExact<"a" | "b" | "d">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 72, 12))
+>source10 : Symbol(source10, Decl(genericIterables.ts, 25, 3))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 72, 12))
+	}
+	for (const z of source10) constrainExact<"a" | "b" | "c" | "d">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 74, 11))
+>source10 : Symbol(source10, Decl(genericIterables.ts, 25, 3))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 74, 11))
+
+	if (source11.a) {
+>source11.a : Symbol(a, Decl(genericIterables.ts, 35, 13), Decl(genericIterables.ts, 39, 17))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+>a : Symbol(a, Decl(genericIterables.ts, 35, 13), Decl(genericIterables.ts, 39, 17))
+
+		for (const z of source11) constrainExact<"a" | "b" | "d" | "e">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 77, 12))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 77, 12))
+	}
+	for (const z of source11) constrainExact<false | 4 | 3 | "a" | "b" | "e" | "d">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 79, 11))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 79, 11))
+
+	const [h] = [...(source11.a ? [...source11] : source11.a === false && [...source11])];
+>h : Symbol(h, Decl(genericIterables.ts, 80, 8))
+>source11.a : Symbol(a, Decl(genericIterables.ts, 35, 13), Decl(genericIterables.ts, 39, 17))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+>a : Symbol(a, Decl(genericIterables.ts, 35, 13), Decl(genericIterables.ts, 39, 17))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+>source11.a : Symbol(a, Decl(genericIterables.ts, 35, 13), Decl(genericIterables.ts, 39, 17))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+>a : Symbol(a, Decl(genericIterables.ts, 35, 13), Decl(genericIterables.ts, 39, 17))
+>source11 : Symbol(source11, Decl(genericIterables.ts, 34, 15))
+
+	constrainExact<false | 4 | "a" | "b" | "e" | "d" | 3>()(h);
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>h : Symbol(h, Decl(genericIterables.ts, 80, 8))
+
+	for (const z of source12) constrainExact<"a" | "b">()(z);
+>z : Symbol(z, Decl(genericIterables.ts, 82, 11))
+>source12 : Symbol(source12, Decl(genericIterables.ts, 43, 15))
+>constrainExact : Symbol(constrainExact, Decl(genericIterables.ts, 0, 0))
+>z : Symbol(z, Decl(genericIterables.ts, 82, 11))
+}
+

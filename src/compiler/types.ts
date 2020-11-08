@@ -5277,6 +5277,7 @@ namespace ts {
         iterationTypesOfGeneratorReturnType?: IterationTypes;
         iterationTypesOfAsyncGeneratorReturnType?: IterationTypes;
         iterationTypesOfIterable?: IterationTypes;
+        iterationTypesOfAsyncedSyncIterable?: IterationTypes;
         iterationTypesOfIterator?: IterationTypes;
         iterationTypesOfAsyncIterable?: IterationTypes;
         iterationTypesOfAsyncIterator?: IterationTypes;

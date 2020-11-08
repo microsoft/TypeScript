@@ -27163,7 +27163,7 @@ namespace ts {
         }
 
         function resolveCall(node: Node | undefined, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, typeArguments: NodeArray<TypeNode> | undefined, fallbackError?: DiagnosticMessage, implicitThisType?: Type): Signature {
-            const isDecorator = !implicitThisType && node && node.kind === SyntaxKind.Decorator;
+            const isDecorator = node && node.kind === SyntaxKind.Decorator;
             const reportErrors = !!node && !candidatesOutArray && produceDiagnostics;
 
             const candidates = candidatesOutArray || [];
@@ -34097,6 +34097,7 @@ namespace ts {
             // or higher, when inside of an async generator or for-await-if, or when
             // downlevelIteration is requested.
             if (uplevelIteration || downlevelIteration || allowAsyncIterables) {
+                // We only report errors for an invalid iterable type in ES2015 or higher.
                 const iterationTypes = getIterationTypesOfIterable(inputType, use, uplevelIteration ? errorNode : undefined);
                 if (checkAssignability) {
                     if (iterationTypes) {
@@ -34239,7 +34240,7 @@ namespace ts {
          */
         function combineIterationTypes(
             array: (IterationTypes | undefined)[],
-            combineMethod: typeof getIntersectionType | typeof getUnionType = getUnionType
+            combineMethod: (types: readonly Type[]) => Type = getUnionType
         ) {
             let yieldTypes: Type[] | undefined;
             let returnTypes: Type[] | undefined;
@@ -34293,25 +34294,32 @@ namespace ts {
          * For a **for-await-of** statement or a `yield*` in an async generator we will look for
          * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
          *
-         * When we get an intersection `type` we intersect all asyncIteratorTypes if applicable, otherwise we intersect all iteratorTypes.
+         * When we get an intersection `type` we intersect all asyncIteratorTypes if applicable, otherwise we intersect all iteratorTypes. This differs from the equivalent `[Symbol.iteration]()` call since it doesn't just grab
+         * the first return value from the first candidate, but its results make more sense for iterableTypes.
+         * We also pass the intersection type as the implicitThisType for each constituent type.
          *
-         * When we get a union `type` we iterate through all unioned types and construct a union of all results
+         * When we get a union `type` we iterate through all unioned types and construct a union of all results.
+         * We don't pass an implicitThisType for unions because we want to evaluate each constituent type as it
+         * would be evaluated if it were not in the union.
+         * e.g.
+         * for (const x of {} as { [Symbol.iterator]<T>(this: T): Generator<keyof T> } & ({ a: 1 } | { b: 2 }))
+         * should get you (<{ a: 1 }>() => Generator<"a">) | (<{ b: 2 }>() => Generator<"b">)
+         * and then we should grab the return types and union them: "a" | "b"
+         * This gives a different result from calling the above object with `[Symbol.iterator]()`,
+         * but its result make more sense for iterableTypes.
+         *
+         * We only get/set from our caches if type === implicitThisType
+         * Intersection/Union caches are set in this function, the base caches are set in `getIterationTypesOfIterableSlow`
          */
-        function getIterationTypesOfIterable(
-            type: Type,
-            use: IterationUse,
-            errorNode: Node | undefined,
-            shouldCache = !!(type.flags & TypeFlags.UnionOrIntersection),
-        ): IterationTypes | undefined {
+        function getIterationTypesOfIterable(type: Type, use: IterationUse, errorNode?: Node, implicitThisType = type): IterationTypes | undefined {
             if (isTypeAny(type)) {
                 return anyIterationTypes;
             }
 
-            const cacheKey = shouldCache ? (use & IterationUse.AllowsAsyncIterablesFlag ? "iterationTypesOfAsyncIterable" : "iterationTypesOfIterable") : undefined;
+            const cacheKey = use & IterationUse.AllowsAsyncIterablesFlag ? "iterationTypesOfAsyncIterable" : "iterationTypesOfIterable";
+            let iterationTypes = (type.flags & TypeFlags.UnionOrIntersection) && type === implicitThisType && getCachedIterationTypes(type, cacheKey);
 
-            let iterationTypes = cacheKey && getCachedIterationTypes(type, cacheKey);
-
-            if (iterationTypes === undefined) {
+            if (!iterationTypes) {
                 if (type.flags & TypeFlags.Intersection) {
                     let allIterationTypes: IterationTypes[] | undefined;
                     let optimizedUse = use;
@@ -34319,23 +34327,24 @@ namespace ts {
                     if ((use & IterationUse.AllowsSyncOrAsyncIterablesFlag) === IterationUse.AllowsSyncOrAsyncIterablesFlag) {
                         optimizedUse ^= IterationUse.AllowsSyncIterablesFlag;
                         for (const constituent of (type as IntersectionType).types) {
-                            allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, /*errorNode*/ undefined, /*shouldCache*/ false));
+                            allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, /*errorNode*/ undefined, implicitThisType));
                         }
                         optimizedUse = use ^ IterationUse.AllowsAsyncIterablesFlag;
                     }
 
                     if (allIterationTypes === undefined) {
                         for (const constituent of (type as IntersectionType).types) {
-                            allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, /*errorNode*/ undefined, /*shouldCache*/ false));
+                            allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, /*errorNode*/ undefined, implicitThisType));
                         }
                     }
 
                     iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes, getIntersectionType) : noIterationTypes;
+                    if (type === implicitThisType) setCachedIterationTypes(type, cacheKey, iterationTypes);
                 }
                 else if (type.flags & TypeFlags.Union) {
                     let allIterationTypes: IterationTypes[] | undefined;
                     for (const constituent of (type as UnionType).types) {
-                        const iterationTypes = getIterationTypesOfIterable(constituent, use, /*errorNode*/ undefined, /*shouldCache*/ false);
+                        const iterationTypes = getIterationTypesOfIterable(constituent, use);
                         if (iterationTypes === undefined) {
                             allIterationTypes = undefined;
                             break;
@@ -34345,13 +34354,37 @@ namespace ts {
                         }
                     }
 
-                    iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes) : noIterationTypes;
+                    iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes, getUnionType) : noIterationTypes;
+                    setCachedIterationTypes(type, cacheKey, iterationTypes);
                 }
                 else {
-                    iterationTypes = getIterationTypesOfIterableWorker(type, use, errorNode);
-                }
+                    if (use & IterationUse.AllowsAsyncIterablesFlag) {
+                        iterationTypes = getIterationTypesOfIterableBase(type, asyncIterationTypesResolver, errorNode, implicitThisType);
 
-                if (cacheKey) setCachedIterationTypes(type, cacheKey, iterationTypes);
+                        if (iterationTypes === noIterationTypes && (use & IterationUse.AllowsSyncIterablesFlag)) {
+                            iterationTypes = type === implicitThisType
+                                ? getCachedIterationTypes(type, "iterationTypesOfAsyncedSyncIterable") ||
+                                    setCachedIterationTypes(
+                                        type,
+                                        "iterationTypesOfAsyncedSyncIterable",
+                                        getAsyncFromSyncIterationTypes(
+                                            getIterationTypesOfIterableBase(type, syncIterationTypesResolver, errorNode, implicitThisType),
+                                            errorNode
+                                        )
+                                    )
+                                : getAsyncFromSyncIterationTypes(
+                                    getIterationTypesOfIterableBase(type, syncIterationTypesResolver, errorNode, implicitThisType),
+                                    errorNode
+                                );
+                        }
+                    }
+                    else if (use & IterationUse.AllowsSyncIterablesFlag) {
+                        iterationTypes = getIterationTypesOfIterableBase(type, syncIterationTypesResolver, errorNode, implicitThisType);
+                    }
+                    else {
+                        iterationTypes = noIterationTypes;
+                    }
+                }
             }
 
             if (iterationTypes === noIterationTypes) {
@@ -34365,8 +34398,7 @@ namespace ts {
         }
 
         function getAsyncFromSyncIterationTypes(iterationTypes: IterationTypes, errorNode: Node | undefined) {
-            if (iterationTypes === noIterationTypes) return noIterationTypes;
-            if (iterationTypes === anyIterationTypes) return anyIterationTypes;
+            if (iterationTypes === noIterationTypes || iterationTypes === anyIterationTypes) return iterationTypes;
             const { yieldType, returnType, nextType } = iterationTypes;
             return createIterationTypes(
                 getAwaitedType(yieldType, errorNode) || anyType,
@@ -34374,69 +34406,15 @@ namespace ts {
                 nextType);
         }
 
-        /**
-         * Gets the *yield*, *return*, and *next* types from a non-union type.
-         *
-         * If we are unable to find the *yield*, *return*, and *next* types, `noIterationTypes` is
-         * returned to indicate to the caller that it should report an error. Otherwise, an
-         * `IterationTypes` record is returned.
-         *
-         * NOTE: You probably don't want to call this directly and should be calling
-         * `getIterationTypesOfIterable` instead.
-         */
-        function getIterationTypesOfIterableWorker(type: Type, use: IterationUse, errorNode: Node | undefined) {
-            if (isTypeAny(type)) {
-                return anyIterationTypes;
-            }
-
-            if (use & IterationUse.AllowsAsyncIterablesFlag) {
-                const iterationTypes =
-                    getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
-                    getIterationTypesOfIterableFast(type, asyncIterationTypesResolver);
-                if (iterationTypes) {
-                    return iterationTypes;
-                }
-            }
-
-            if (use & IterationUse.AllowsSyncIterablesFlag) {
-                const iterationTypes =
-                    getIterationTypesOfIterableCached(type, syncIterationTypesResolver) ||
-                    getIterationTypesOfIterableFast(type, syncIterationTypesResolver);
-                if (iterationTypes) {
-                    if (use & IterationUse.AllowsAsyncIterablesFlag) {
-                        // for a sync iterable in an async context, only use the cached types if they are valid.
-                        if (iterationTypes !== noIterationTypes) {
-                            return setCachedIterationTypes(type, "iterationTypesOfAsyncIterable", getAsyncFromSyncIterationTypes(iterationTypes, errorNode));
-                        }
-                    }
-                    else {
-                        return iterationTypes;
-                    }
-                }
-            }
-
-            if (use & IterationUse.AllowsAsyncIterablesFlag) {
-                const iterationTypes = getIterationTypesOfIterableSlow(type, asyncIterationTypesResolver, errorNode);
-                if (iterationTypes !== noIterationTypes) {
-                    return iterationTypes;
-                }
-            }
-
-            if (use & IterationUse.AllowsSyncIterablesFlag) {
-                const iterationTypes = getIterationTypesOfIterableSlow(type, syncIterationTypesResolver, errorNode);
-                if (iterationTypes !== noIterationTypes) {
-                    if (use & IterationUse.AllowsAsyncIterablesFlag) {
-                        return setCachedIterationTypes(type, "iterationTypesOfAsyncIterable", iterationTypes
-                            ? getAsyncFromSyncIterationTypes(iterationTypes, errorNode)
-                            : noIterationTypes);
-                    }
-                    else {
-                        return iterationTypes;
-                    }
-                }
-            }
-
-            return noIterationTypes;
+        function getIterationTypesOfIterableBase(
+            type: Type,
+            resolver: IterationTypesResolver,
+            errorNode: Node | undefined,
+            implicitThisType: Type,
+        ) {
+            return type === implicitThisType && getIterationTypesOfIterableCached(type, resolver) ||
+                getIterationTypesOfIterableFast(type, resolver) ||
+                getIterationTypesOfIterableSlow(type, resolver, errorNode, implicitThisType);
         }
 
         /**
@@ -34505,7 +34483,12 @@ namespace ts {
          * NOTE: You probably don't want to call this directly and should be calling
          * `getIterationTypesOfIterable` instead.
          */
-        function getIterationTypesOfIterableSlow(type: Type, resolver: IterationTypesResolver, errorNode: Node | undefined) {
+        function getIterationTypesOfIterableSlow(
+            type: Type,
+            resolver: IterationTypesResolver,
+            errorNode: Node | undefined,
+            implicitThisType = type,
+        ) {
             const method = getPropertyOfType(type, getPropertyNameForKnownSymbolName(resolver.iteratorSymbolName));
             const methodType = method && !(method.flags & SymbolFlags.Optional) ? getTypeOfSymbol(method) : undefined;
             if (isTypeAny(methodType)) {
@@ -34518,10 +34501,11 @@ namespace ts {
                 return setCachedIterationTypes(type, resolver.iterableCacheKey, noIterationTypes);
             }
 
-            const iteratorType = getReturnTypeOfSignature(resolveCall(errorNode, signatures, /*candidatesOutArray*/ undefined, CheckMode.Normal, SignatureFlags.None, /*typeArguments*/ undefined, /*fallbackError*/ undefined, type));
+            const iteratorType = getReturnTypeOfSignature(resolveCall(errorNode, signatures, /*candidatesOutArray*/ undefined, CheckMode.Normal, SignatureFlags.None, /*typeArguments*/ undefined, /*fallbackError*/ undefined, implicitThisType));
             const iterationTypes = getIterationTypesOfIterator(iteratorType, resolver, errorNode) ?? noIterationTypes;
 
-            if (every(signatures, signature => !signature.thisParameter && signature.parameters.length === 0)) {
+            const implicitEquals = type === implicitThisType;
+            if (every(signatures, signature => (implicitEquals || !signature.thisParameter) && signature.parameters.length === 0)) {
                 setCachedIterationTypes(type, resolver.iterableCacheKey, iterationTypes);
             }
 

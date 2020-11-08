@@ -1,0 +1,206 @@
+=== tests/cases/compiler/iterableWithInferredThis.ts ===
+declare const success: { success: true, value: object };
+>success : Symbol(success, Decl(iterableWithInferredThis.ts, 0, 13))
+>success : Symbol(success, Decl(iterableWithInferredThis.ts, 0, 24))
+>value : Symbol(value, Decl(iterableWithInferredThis.ts, 0, 39))
+
+declare const failure: { success: false, error: string };
+>failure : Symbol(failure, Decl(iterableWithInferredThis.ts, 1, 13))
+>success : Symbol(success, Decl(iterableWithInferredThis.ts, 1, 24))
+>error : Symbol(error, Decl(iterableWithInferredThis.ts, 1, 40))
+
+declare const result: typeof success | typeof failure;
+>result : Symbol(result, Decl(iterableWithInferredThis.ts, 2, 13))
+>success : Symbol(success, Decl(iterableWithInferredThis.ts, 0, 13))
+>failure : Symbol(failure, Decl(iterableWithInferredThis.ts, 1, 13))
+
+const iterable = {
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+
+	*[Symbol.iterator]<T>(this: T) {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iterableWithInferredThis.ts, 4, 18))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 5, 20))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 5, 23))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 5, 20))
+
+		for (const x in this) yield x;
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 6, 12))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 5, 23))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 6, 12))
+	}
+};
+
+function* foo(): IterableIterator<"success" | "value" | "error"> {
+>foo : Symbol(foo, Decl(iterableWithInferredThis.ts, 8, 2))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    yield* { ...result, ...iterable }; // Should be OK
+>result : Symbol(result, Decl(iterableWithInferredThis.ts, 2, 13))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+}
+
+function takesKeys(k: "success" | "value" | "error") {
+>takesKeys : Symbol(takesKeys, Decl(iterableWithInferredThis.ts, 12, 1))
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 14, 19))
+
+	void k;
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 14, 19))
+}
+
+for (const k of { ...iterable, ...result }) {
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 18, 10))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+>result : Symbol(result, Decl(iterableWithInferredThis.ts, 2, 13))
+
+	takesKeys(k);
+>takesKeys : Symbol(takesKeys, Decl(iterableWithInferredThis.ts, 12, 1))
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 18, 10))
+}
+
+const [j] = { ...iterable, ...result };
+>j : Symbol(j, Decl(iterableWithInferredThis.ts, 22, 7))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+>result : Symbol(result, Decl(iterableWithInferredThis.ts, 2, 13))
+
+takesKeys(j);
+>takesKeys : Symbol(takesKeys, Decl(iterableWithInferredThis.ts, 12, 1))
+>j : Symbol(j, Decl(iterableWithInferredThis.ts, 22, 7))
+
+const [k] = [...{ ...iterable, ...result }];
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 24, 7))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+>result : Symbol(result, Decl(iterableWithInferredThis.ts, 2, 13))
+
+takesKeys(k);
+>takesKeys : Symbol(takesKeys, Decl(iterableWithInferredThis.ts, 12, 1))
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 24, 7))
+
+function getObj<T extends string>(str: T) {
+>getObj : Symbol(getObj, Decl(iterableWithInferredThis.ts, 25, 13))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 27, 16))
+>str : Symbol(str, Decl(iterableWithInferredThis.ts, 27, 34))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 27, 16))
+
+	return {
+		str,
+>str : Symbol(str, Decl(iterableWithInferredThis.ts, 28, 9))
+
+		*[Symbol.iterator]<T>(this: T) {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(iterableWithInferredThis.ts, 29, 6))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 30, 21))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 30, 24))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 30, 21))
+
+			for (const x in this) yield this[x];
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 31, 13))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 30, 24))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 30, 24))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 31, 13))
+		}
+	};
+}
+
+for (const k of getObj("abc")) {
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 36, 10))
+>getObj : Symbol(getObj, Decl(iterableWithInferredThis.ts, 25, 13))
+
+	void k;
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 36, 10))
+}
+
+for (const k of getObj<"123">("123")) {
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 40, 10))
+>getObj : Symbol(getObj, Decl(iterableWithInferredThis.ts, 25, 13))
+
+	void k;
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 40, 10))
+}
+
+for (const k of new class {
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 44, 10))
+
+	str = "abc" as const;
+>str : Symbol((Anonymous class).str, Decl(iterableWithInferredThis.ts, 44, 27))
+
+	*[Symbol.iterator]<T>(this: T) {
+>[Symbol.iterator] : Symbol((Anonymous class)[Symbol.iterator], Decl(iterableWithInferredThis.ts, 45, 22))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 46, 20))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 46, 23))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 46, 20))
+
+		for (const x in this) yield this[x];
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 47, 12))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 46, 23))
+>this : Symbol(this, Decl(iterableWithInferredThis.ts, 46, 23))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 47, 12))
+	}
+}) {
+	void k;
+>k : Symbol(k, Decl(iterableWithInferredThis.ts, 44, 10))
+}
+
+function assertType<T>(x: T) { void x; }
+>assertType : Symbol(assertType, Decl(iterableWithInferredThis.ts, 51, 1))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 53, 20))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 53, 23))
+>T : Symbol(T, Decl(iterableWithInferredThis.ts, 53, 20))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 53, 23))
+
+for (const x of { ...iterable, ...success }) {
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 55, 10))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+>success : Symbol(success, Decl(iterableWithInferredThis.ts, 0, 13))
+
+	assertType<"success" | "value">(x);
+>assertType : Symbol(assertType, Decl(iterableWithInferredThis.ts, 51, 1))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 55, 10))
+}
+
+for (const x of { ...failure, ...iterable }) {
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 59, 10))
+>failure : Symbol(failure, Decl(iterableWithInferredThis.ts, 1, 13))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+
+	assertType<"success" | "error">(x);
+>assertType : Symbol(assertType, Decl(iterableWithInferredThis.ts, 51, 1))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 59, 10))
+}
+
+const iterableResult = { ...iterable, ...result };
+>iterableResult : Symbol(iterableResult, Decl(iterableWithInferredThis.ts, 63, 5))
+>iterable : Symbol(iterable, Decl(iterableWithInferredThis.ts, 4, 5))
+>result : Symbol(result, Decl(iterableWithInferredThis.ts, 2, 13))
+
+for (const x of iterableResult) {
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 65, 10))
+>iterableResult : Symbol(iterableResult, Decl(iterableWithInferredThis.ts, 63, 5))
+
+	assertType<"success" | "error" | "value">(x);
+>assertType : Symbol(assertType, Decl(iterableWithInferredThis.ts, 51, 1))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 65, 10))
+}
+
+if (iterableResult.success) {
+>iterableResult.success : Symbol(success, Decl(iterableWithInferredThis.ts, 0, 24), Decl(iterableWithInferredThis.ts, 1, 24))
+>iterableResult : Symbol(iterableResult, Decl(iterableWithInferredThis.ts, 63, 5))
+>success : Symbol(success, Decl(iterableWithInferredThis.ts, 0, 24), Decl(iterableWithInferredThis.ts, 1, 24))
+
+	for (const x of iterableResult) {
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 70, 11))
+>iterableResult : Symbol(iterableResult, Decl(iterableWithInferredThis.ts, 63, 5))
+
+		assertType<"success" | "value">(x);
+>assertType : Symbol(assertType, Decl(iterableWithInferredThis.ts, 51, 1))
+>x : Symbol(x, Decl(iterableWithInferredThis.ts, 70, 11))
+	}
+}
+

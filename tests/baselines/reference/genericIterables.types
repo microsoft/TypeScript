@@ -1,0 +1,393 @@
+=== tests/cases/compiler/genericIterables.ts ===
+/**
+ * Creates a new identity function with a type argument `T` that enforces that a given type `Q` is identical to `T`.
+ */
+export function constrainExact<T>() {
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+
+	return (x => x) as <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q;
+>(x => x) as <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q : <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>(x => x) : <Q extends T>(this: [T] extends [Q] ? void : never, x: Q) => Q
+>x => x : <Q extends T>(this: [T] extends [Q] ? void : never, x: Q) => Q
+>x : Q
+>x : Q
+>this : [T] extends [Q] ? void : never
+>arg : Q
+}
+
+async function* f<A, B, C>(
+>f : <A, B, C>(source0: AsyncIterableIterator<A> & {    [Symbol.asyncIterator](): Generator<B>;} & IterableIterator<C>, source1: AsyncIterableIterator<A> | {    [Symbol.asyncIterator](): Generator<B>;} | IterableIterator<C>, source2: (AsyncIterableIterator<A> | {    [Symbol.asyncIterator](): Generator<B>;}) & IterableIterator<C>, source3: AsyncIterableIterator<A> & AsyncGenerator<B>, source4: IterableIterator<C>, source5: AsyncIterableIterator<A> & Generator<B>, source6: {    [Symbol.iterator](): Generator<B>;    [Symbol.asyncIterator](): AsyncGenerator<A>;}, source7: Iterable<A> | AsyncIterable<B>, source8: Iterable<A> & AsyncIterable<B>, source9: { a: 1; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { [Symbol.asyncIterator]<T>(this: T): AsyncGenerator<keyof T, any, unknown>; }, source10: ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }), source11: ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; }), source12: ({ [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { a: 1; }) | ({ [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { b: 2; })) => AsyncGenerator<A & B, void, undefined>
+
+    source0: AsyncIterableIterator<A> & { [Symbol.asyncIterator](): Generator<B> } & IterableIterator<C>,
+>source0 : AsyncIterableIterator<A> & { [Symbol.asyncIterator](): Generator<B>; } & IterableIterator<C>
+>[Symbol.asyncIterator] : () => Generator<B>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+    source1: AsyncIterableIterator<A> | { [Symbol.asyncIterator](): Generator<B> } | IterableIterator<C>,
+>source1 : AsyncIterableIterator<A> | IterableIterator<C> | { [Symbol.asyncIterator](): Generator<B>; }
+>[Symbol.asyncIterator] : () => Generator<B>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+    source2: (AsyncIterableIterator<A> | { [Symbol.asyncIterator](): Generator<B> }) & IterableIterator<C>,
+>source2 : (AsyncIterableIterator<A> & IterableIterator<C>) | ({ [Symbol.asyncIterator](): Generator<B>; } & IterableIterator<C>)
+>[Symbol.asyncIterator] : () => Generator<B>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+	source3: AsyncIterableIterator<A> & AsyncGenerator<B>,
+>source3 : AsyncIterableIterator<A> & AsyncGenerator<B, any, unknown>
+
+	source4: IterableIterator<C>,
+>source4 : IterableIterator<C>
+
+	source5: AsyncIterableIterator<A> & Generator<B>,
+>source5 : AsyncIterableIterator<A> & Generator<B, any, unknown>
+
+	source6: {
+>source6 : { [Symbol.iterator](): Generator<B>; [Symbol.asyncIterator](): AsyncGenerator<A>; }
+
+		[Symbol.iterator](): Generator<B>;
+>[Symbol.iterator] : () => Generator<B>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+		[Symbol.asyncIterator](): AsyncGenerator<A>;
+>[Symbol.asyncIterator] : () => AsyncGenerator<A>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+
+	},
+	source7: Iterable<A> | AsyncIterable<B>,
+>source7 : Iterable<A> | AsyncIterable<B>
+
+	source8: Iterable<A> & AsyncIterable<B>,
+>source8 : Iterable<A> & AsyncIterable<B>
+
+	source9: {
+>source9 : { a: 1; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { [Symbol.asyncIterator]<T>(this: T): AsyncGenerator<keyof T, any, unknown>; }
+
+		a: 1,
+>a : 1
+
+		[Symbol.iterator]<T>(this: T): Generator<T[keyof T]>;
+>[Symbol.iterator] : <T>(this: T) => Generator<T[keyof T]>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+	} & {
+		[Symbol.asyncIterator]<T>(this: T): AsyncGenerator<keyof T>;
+>[Symbol.asyncIterator] : <T>(this: T) => AsyncGenerator<keyof T>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>this : T
+
+	},
+	source10: ({
+>source10 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; })
+
+		a: true,
+>a : true
+>true : true
+
+		b: 2,
+>b : 2
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : <T>(this: T) => Generator<keyof T>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+	} | {
+		a: false,
+>a : false
+>false : false
+
+		c: 3,
+>c : 3
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : <T>(this: T) => Generator<keyof T>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+	}) & { d: 4 },
+>d : 4
+
+	source11: ({
+>source11 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; })
+
+		a: true,
+>a : true
+>true : true
+
+		b: 2,
+>b : 2
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : <T>(this: T) => Generator<keyof T>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+	} & { e: 5 } | {
+>e : 5
+
+		a: false,
+>a : false
+>false : false
+
+		c: 3,
+>c : 3
+
+		[Symbol.iterator]<T>(this: T): Generator<T[keyof T]>;
+>[Symbol.iterator] : <T>(this: T) => Generator<T[keyof T]>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+	}) & { d: 4 },
+>d : 4
+
+	source12: {
+>source12 : ({ [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { a: 1; }) | ({ [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { b: 2; })
+
+		[Symbol.iterator]<T>(this: T): Generator<keyof T>;
+>[Symbol.iterator] : <T>(this: T) => Generator<keyof T>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+
+	} & ({ a: 1 } | { b: 2 }),
+>a : 1
+>b : 2
+
+): AsyncGenerator<A & B, void, undefined> {
+	const [c] = source0;
+>c : C
+>source0 : AsyncIterableIterator<A> & { [Symbol.asyncIterator](): Generator<B, any, unknown>; } & IterableIterator<C>
+
+	void c;
+>void c : undefined
+>c : C
+
+	for await (const z of source0) constrainExact<A & B>()(z);
+>z : A & B
+>source0 : AsyncIterableIterator<A> & { [Symbol.asyncIterator](): Generator<B, any, unknown>; } & IterableIterator<C>
+>constrainExact<A & B>()(z) : A & B
+>constrainExact<A & B>() : <Q extends A & B>(this: [A & B] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A & B
+
+	for await (const z of source1) constrainExact<A | B | C>()(z);
+>z : A | B | C
+>source1 : AsyncIterableIterator<A> | IterableIterator<C> | { [Symbol.asyncIterator](): Generator<B, any, unknown>; }
+>constrainExact<A | B | C>()(z) : A | B | C
+>constrainExact<A | B | C>() : <Q extends A | B | C>(this: [A | B | C] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A | B | C
+
+	for await (const z of source2) constrainExact<A | B>()(z);
+>z : A | B
+>source2 : (AsyncIterableIterator<A> & IterableIterator<C>) | ({ [Symbol.asyncIterator](): Generator<B, any, unknown>; } & IterableIterator<C>)
+>constrainExact<A | B>()(z) : A | B
+>constrainExact<A | B>() : <Q extends A | B>(this: [A | B] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A | B
+
+    yield* source0;
+>yield* source0 : any
+>source0 : AsyncIterableIterator<A> & { [Symbol.asyncIterator](): Generator<B, any, unknown>; } & IterableIterator<C>
+
+	for await (const z of source3) constrainExact<A & B>()(z);
+>z : A & B
+>source3 : AsyncIterableIterator<A> & AsyncGenerator<B, any, unknown>
+>constrainExact<A & B>()(z) : A & B
+>constrainExact<A & B>() : <Q extends A & B>(this: [A & B] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A & B
+
+	for await (const z of source4) constrainExact<C>()(z);
+>z : C
+>source4 : IterableIterator<C>
+>constrainExact<C>()(z) : C
+>constrainExact<C>() : <Q extends C>(this: [C] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : C
+
+	for await (const z of source5) constrainExact<A>()(z);
+>z : A
+>source5 : AsyncIterableIterator<A> & Generator<B, any, unknown>
+>constrainExact<A>()(z) : A
+>constrainExact<A>() : <Q extends A>(this: [A] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A
+
+	for await (const z of source6) constrainExact<A>()(z);
+>z : A
+>source6 : { [Symbol.iterator](): Generator<B, any, unknown>; [Symbol.asyncIterator](): AsyncGenerator<A, any, unknown>; }
+>constrainExact<A>()(z) : A
+>constrainExact<A>() : <Q extends A>(this: [A] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A
+
+	for (const z of source6) constrainExact<B>()(z);
+>z : B
+>source6 : { [Symbol.iterator](): Generator<B, any, unknown>; [Symbol.asyncIterator](): AsyncGenerator<A, any, unknown>; }
+>constrainExact<B>()(z) : B
+>constrainExact<B>() : <Q extends B>(this: [B] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : B
+
+	for await (const z of source7) constrainExact<A | B>()(z);
+>z : A | B
+>source7 : Iterable<A> | AsyncIterable<B>
+>constrainExact<A | B>()(z) : A | B
+>constrainExact<A | B>() : <Q extends A | B>(this: [A | B] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A | B
+
+	for await (const z of source8) constrainExact<B>()(z);
+>z : B
+>source8 : Iterable<A> & AsyncIterable<B>
+>constrainExact<B>()(z) : B
+>constrainExact<B>() : <Q extends B>(this: [B] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : B
+
+	for (const z of source8) constrainExact<A>()(z);
+>z : A
+>source8 : Iterable<A> & AsyncIterable<B>
+>constrainExact<A>()(z) : A
+>constrainExact<A>() : <Q extends A>(this: [A] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : A
+
+	for (const z of source9) constrainExact<1>()(z);
+>z : 1
+>source9 : { a: 1; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { [Symbol.asyncIterator]<T>(this: T): AsyncGenerator<keyof T, any, unknown>; }
+>constrainExact<1>()(z) : 1
+>constrainExact<1>() : <Q extends 1>(this: [1] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : 1
+
+	for await (const z of source9) constrainExact<"a">()(z);
+>z : "a"
+>source9 : { a: 1; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { [Symbol.asyncIterator]<T>(this: T): AsyncGenerator<keyof T, any, unknown>; }
+>constrainExact<"a">()(z) : "a"
+>constrainExact<"a">() : <Q extends "a">(this: ["a"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : "a"
+
+	// We do all these tests together because we need to make sure the cacheing logic didn't get screwed up
+
+	if (source10.a) {
+>source10.a : boolean
+>source10 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; })
+>a : boolean
+
+		for (const z of source10) constrainExact<"a" | "b" | "d">()(z);
+>z : "a" | "b" | "d"
+>source10 : { a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }
+>constrainExact<"a" | "b" | "d">()(z) : "a" | "b" | "d"
+>constrainExact<"a" | "b" | "d">() : <Q extends "a" | "b" | "d">(this: ["a" | "b" | "d"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : "a" | "b" | "d"
+
+		for (const z of source10[Symbol.iterator]()) constrainExact<"a" | "b" | "d">()(z);
+>z : "a" | "b" | "d"
+>source10[Symbol.iterator]() : Generator<"a" | "b" | "d", any, unknown>
+>source10[Symbol.iterator] : <T>(this: T) => Generator<keyof T, any, unknown>
+>source10 : { a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>constrainExact<"a" | "b" | "d">()(z) : "a" | "b" | "d"
+>constrainExact<"a" | "b" | "d">() : <Q extends "a" | "b" | "d">(this: ["a" | "b" | "d"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : "a" | "b" | "d"
+	}
+	for (const z of source10) constrainExact<"a" | "b" | "c" | "d">()(z);
+>z : "c" | "a" | "b" | "d"
+>source10 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { d: 4; })
+>constrainExact<"a" | "b" | "c" | "d">()(z) : "c" | "a" | "b" | "d"
+>constrainExact<"a" | "b" | "c" | "d">() : <Q extends "c" | "a" | "b" | "d">(this: ["c" | "a" | "b" | "d"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : "c" | "a" | "b" | "d"
+
+	if (source11.a) {
+>source11.a : boolean
+>source11 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; })
+>a : boolean
+
+		for (const z of source11) constrainExact<"a" | "b" | "d" | "e">()(z);
+>z : "a" | "b" | "d" | "e"
+>source11 : { a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }
+>constrainExact<"a" | "b" | "d" | "e">()(z) : "a" | "b" | "d" | "e"
+>constrainExact<"a" | "b" | "d" | "e">() : <Q extends "a" | "b" | "d" | "e">(this: ["a" | "b" | "d" | "e"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : "a" | "b" | "d" | "e"
+	}
+	for (const z of source11) constrainExact<false | 4 | 3 | "a" | "b" | "e" | "d">()(z);
+>z : false | 3 | 4 | "a" | "b" | "d" | "e"
+>source11 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; })
+>constrainExact<false | 4 | 3 | "a" | "b" | "e" | "d">()(z) : false | 3 | 4 | "a" | "b" | "d" | "e"
+>constrainExact<false | 4 | 3 | "a" | "b" | "e" | "d">() : <Q extends false | 3 | 4 | "a" | "b" | "d" | "e">(this: [false | 3 | 4 | "a" | "b" | "d" | "e"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>false : false
+>z : false | 3 | 4 | "a" | "b" | "d" | "e"
+
+	const [h] = [...(source11.a ? [...source11] : source11.a === false && [...source11])];
+>h : false | 3 | 4 | "a" | "b" | "d" | "e"
+>[...(source11.a ? [...source11] : source11.a === false && [...source11])] : ("a" | "b" | "d" | "e")[] | (false | 3 | 4)[]
+>...(source11.a ? [...source11] : source11.a === false && [...source11]) : false | 3 | 4 | "a" | "b" | "d" | "e"
+>(source11.a ? [...source11] : source11.a === false && [...source11]) : ("a" | "b" | "d" | "e")[] | (false | 3 | 4)[]
+>source11.a ? [...source11] : source11.a === false && [...source11] : ("a" | "b" | "d" | "e")[] | (false | 3 | 4)[]
+>source11.a : boolean
+>source11 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; })
+>a : boolean
+>[...source11] : ("a" | "b" | "d" | "e")[]
+>...source11 : "a" | "b" | "d" | "e"
+>source11 : { a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }
+>source11.a === false && [...source11] : (false | 3 | 4)[]
+>source11.a === false : boolean
+>source11.a : boolean
+>source11 : ({ a: true; b: 2; [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { e: 5; } & { d: 4; }) | ({ a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; })
+>a : boolean
+>false : false
+>[...source11] : (false | 3 | 4)[]
+>...source11 : false | 3 | 4
+>source11 : { a: false; c: 3; [Symbol.iterator]<T>(this: T): Generator<T[keyof T], any, unknown>; } & { d: 4; }
+
+	constrainExact<false | 4 | "a" | "b" | "e" | "d" | 3>()(h);
+>constrainExact<false | 4 | "a" | "b" | "e" | "d" | 3>()(h) : false | 3 | 4 | "a" | "b" | "d" | "e"
+>constrainExact<false | 4 | "a" | "b" | "e" | "d" | 3>() : <Q extends false | 3 | 4 | "a" | "b" | "d" | "e">(this: [false | 3 | 4 | "a" | "b" | "d" | "e"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>false : false
+>h : false | 3 | 4 | "a" | "b" | "d" | "e"
+
+	for (const z of source12) constrainExact<"a" | "b">()(z);
+>z : "a" | "b"
+>source12 : ({ [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { a: 1; }) | ({ [Symbol.iterator]<T>(this: T): Generator<keyof T, any, unknown>; } & { b: 2; })
+>constrainExact<"a" | "b">()(z) : "a" | "b"
+>constrainExact<"a" | "b">() : <Q extends "a" | "b">(this: ["a" | "b"] extends [Q] ? void : never, arg: Q) => Q
+>constrainExact : <T>() => <Q extends T>(this: [T] extends [Q] ? void : never, arg: Q) => Q
+>z : "a" | "b"
+}
+
