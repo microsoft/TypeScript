@@ -27163,6 +27163,12 @@ namespace ts {
         }
 
         function resolveCall(node: Node | undefined, signatures: readonly Signature[], candidatesOutArray: Signature[] | undefined, checkMode: CheckMode, callChainFlags: SignatureFlags, typeArguments: NodeArray<TypeNode> | undefined, fallbackError?: DiagnosticMessage, implicitThisType?: Type): Signature {
+            // `implicitThisType` is used with for..of / spread destructuring / etc
+            // If `implicitThisType` is defined then `node` should be treated exclusively as an `errorNode`.
+            // That means no node-specific logic (except in determining the node text range for error messages)
+            // For example, `for (const x of foo<R>("a"))` should not be analyzing `foo<R>("a")` as a CallExpression.
+            // If you did, you would find: typeArgs = [R], args = ["a"], thisType = `void`, etc.
+
             const isDecorator = node && node.kind === SyntaxKind.Decorator;
             const reportErrors = !!node && !candidatesOutArray && produceDiagnostics;
 
