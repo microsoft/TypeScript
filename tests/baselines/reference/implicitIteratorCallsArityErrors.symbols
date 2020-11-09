@@ -1,0 +1,254 @@
+=== tests/cases/compiler/implicitIteratorCallsArityErrors.ts ===
+const obj = {
+>obj : Symbol(obj, Decl(implicitIteratorCallsArityErrors.ts, 0, 5))
+
+	a: 1,
+>a : Symbol(a, Decl(implicitIteratorCallsArityErrors.ts, 0, 13))
+
+	b: 2,
+>b : Symbol(b, Decl(implicitIteratorCallsArityErrors.ts, 1, 6))
+
+	*[Symbol.iterator]<T>(this: T, x: string) {
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(implicitIteratorCallsArityErrors.ts, 2, 6))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 4, 20))
+>this : Symbol(this, Decl(implicitIteratorCallsArityErrors.ts, 4, 23))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 4, 20))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 4, 31))
+
+		for (const k in this) yield k;
+>k : Symbol(k, Decl(implicitIteratorCallsArityErrors.ts, 5, 12))
+>this : Symbol(this, Decl(implicitIteratorCallsArityErrors.ts, 4, 23))
+>k : Symbol(k, Decl(implicitIteratorCallsArityErrors.ts, 5, 12))
+
+	},
+};
+
+for (const i of obj) {
+>i : Symbol(i, Decl(implicitIteratorCallsArityErrors.ts, 9, 10))
+>obj : Symbol(obj, Decl(implicitIteratorCallsArityErrors.ts, 0, 5))
+
+}
+
+const [j] = obj;
+>j : Symbol(j, Decl(implicitIteratorCallsArityErrors.ts, 13, 7))
+>obj : Symbol(obj, Decl(implicitIteratorCallsArityErrors.ts, 0, 5))
+
+const arr = [...obj];
+>arr : Symbol(arr, Decl(implicitIteratorCallsArityErrors.ts, 14, 5))
+>obj : Symbol(obj, Decl(implicitIteratorCallsArityErrors.ts, 0, 5))
+
+async function* f() {
+>f : Symbol(f, Decl(implicitIteratorCallsArityErrors.ts, 14, 21))
+
+	for await (const x of obj) {
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 17, 17))
+>obj : Symbol(obj, Decl(implicitIteratorCallsArityErrors.ts, 0, 5))
+
+	}
+
+	for await (const x of {
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 21, 17))
+
+		async *[Symbol.asyncIterator](arr: string[]) {
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(implicitIteratorCallsArityErrors.ts, 21, 24))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>arr : Symbol(arr, Decl(implicitIteratorCallsArityErrors.ts, 22, 32))
+
+			yield* arr;
+>arr : Symbol(arr, Decl(implicitIteratorCallsArityErrors.ts, 22, 32))
+		}
+	}) {
+
+	}
+
+	yield* obj;
+>obj : Symbol(obj, Decl(implicitIteratorCallsArityErrors.ts, 0, 5))
+
+	yield* {
+		async *[Symbol.asyncIterator](arr: string[]) {
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(implicitIteratorCallsArityErrors.ts, 31, 9))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>arr : Symbol(arr, Decl(implicitIteratorCallsArityErrors.ts, 32, 32))
+
+			yield* arr;
+>arr : Symbol(arr, Decl(implicitIteratorCallsArityErrors.ts, 32, 32))
+		}
+	};
+}
+
+
+async function* g<A, B>(x: {
+>g : Symbol(g, Decl(implicitIteratorCallsArityErrors.ts, 36, 1))
+>A : Symbol(A, Decl(implicitIteratorCallsArityErrors.ts, 39, 18))
+>B : Symbol(B, Decl(implicitIteratorCallsArityErrors.ts, 39, 20))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 39, 24))
+
+	[Symbol.iterator](x: number): Generator<A>
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(implicitIteratorCallsArityErrors.ts, 39, 28))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 40, 19))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>A : Symbol(A, Decl(implicitIteratorCallsArityErrors.ts, 39, 18))
+
+}) {
+	for (const y of x) {}
+>y : Symbol(y, Decl(implicitIteratorCallsArityErrors.ts, 42, 11))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 39, 24))
+}
+
+
+async function* h(obj2: {
+>h : Symbol(h, Decl(implicitIteratorCallsArityErrors.ts, 43, 1))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 46, 18))
+
+	a: number;
+>a : Symbol(a, Decl(implicitIteratorCallsArityErrors.ts, 46, 25))
+
+	b: number;
+>b : Symbol(b, Decl(implicitIteratorCallsArityErrors.ts, 47, 11))
+
+	[Symbol.iterator](): Generator<number, void, unknown>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(implicitIteratorCallsArityErrors.ts, 48, 11))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+} | {
+    [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(implicitIteratorCallsArityErrors.ts, 50, 5))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 51, 27))
+>this : Symbol(this, Decl(implicitIteratorCallsArityErrors.ts, 51, 30))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 51, 27))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 51, 38))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 51, 27))
+
+}) {
+	yield* obj2;
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 46, 18))
+
+	for await (const x of obj2) {
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 55, 17))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 46, 18))
+
+	}
+
+	const [u] = obj2;
+>u : Symbol(u, Decl(implicitIteratorCallsArityErrors.ts, 59, 8))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 46, 18))
+
+	return u;
+>u : Symbol(u, Decl(implicitIteratorCallsArityErrors.ts, 59, 8))
+}
+
+async function* foo(obj2: {
+>foo : Symbol(foo, Decl(implicitIteratorCallsArityErrors.ts, 61, 1))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 63, 20))
+
+	a: number;
+>a : Symbol(a, Decl(implicitIteratorCallsArityErrors.ts, 63, 27))
+
+	b: number;
+>b : Symbol(b, Decl(implicitIteratorCallsArityErrors.ts, 64, 11))
+
+	[Symbol.iterator](): Generator<number, void, unknown>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(implicitIteratorCallsArityErrors.ts, 65, 11))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+} & {
+    [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(implicitIteratorCallsArityErrors.ts, 67, 5))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 68, 27))
+>this : Symbol(this, Decl(implicitIteratorCallsArityErrors.ts, 68, 30))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 68, 27))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 68, 38))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 68, 27))
+
+}) {
+	yield* obj2;
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 63, 20))
+
+	for await (const x of obj2) {
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 72, 17))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 63, 20))
+
+	}
+
+	const [u] = obj2; // this is fine, just making sure caching works :)
+>u : Symbol(u, Decl(implicitIteratorCallsArityErrors.ts, 76, 8))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 63, 20))
+
+	return u;
+>u : Symbol(u, Decl(implicitIteratorCallsArityErrors.ts, 76, 8))
+}
+
+async function* bar(obj2: {
+>bar : Symbol(bar, Decl(implicitIteratorCallsArityErrors.ts, 78, 1))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 80, 20))
+
+	a: number;
+>a : Symbol(a, Decl(implicitIteratorCallsArityErrors.ts, 80, 27))
+
+	b: number;
+>b : Symbol(b, Decl(implicitIteratorCallsArityErrors.ts, 81, 11))
+
+	[Symbol.iterator](): Generator<number, void, unknown>;
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(implicitIteratorCallsArityErrors.ts, 82, 11))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(implicitIteratorCallsArityErrors.ts, 83, 55))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 84, 27))
+>this : Symbol(this, Decl(implicitIteratorCallsArityErrors.ts, 84, 30))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 84, 27))
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 84, 38))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(implicitIteratorCallsArityErrors.ts, 84, 27))
+
+}) {
+	yield* obj2;
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 80, 20))
+
+	for await (const x of obj2) {
+>x : Symbol(x, Decl(implicitIteratorCallsArityErrors.ts, 88, 17))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 80, 20))
+
+	}
+
+	const [u] = obj2;
+>u : Symbol(u, Decl(implicitIteratorCallsArityErrors.ts, 92, 8))
+>obj2 : Symbol(obj2, Decl(implicitIteratorCallsArityErrors.ts, 80, 20))
+
+	return u;
+>u : Symbol(u, Decl(implicitIteratorCallsArityErrors.ts, 92, 8))
+}
+

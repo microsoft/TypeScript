@@ -1,0 +1,166 @@
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(10,17): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(14,7): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(15,17): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(18,24): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(22,24): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(30,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(32,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(43,18): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(54,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(56,24): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(60,8): error TS2488: Type '{ a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(71,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(73,24): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(87,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/implicitIteratorCallsArityErrors.ts(89,24): error TS2554: Expected 1 arguments, but got 0.
+
+
+==== tests/cases/compiler/implicitIteratorCallsArityErrors.ts (15 errors) ====
+    const obj = {
+    	a: 1,
+    	b: 2,
+    
+    	*[Symbol.iterator]<T>(this: T, x: string) {
+    		for (const k in this) yield k;
+    	},
+    };
+    
+    for (const i of obj) {
+                    ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:5:33: An argument for 'x' was not provided.
+    
+    }
+    
+    const [j] = obj;
+          ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:5:33: An argument for 'x' was not provided.
+    const arr = [...obj];
+                    ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:5:33: An argument for 'x' was not provided.
+    
+    async function* f() {
+    	for await (const x of obj) {
+    	                      ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:5:33: An argument for 'x' was not provided.
+    
+    	}
+    
+    	for await (const x of {
+    	                      ~
+    		async *[Symbol.asyncIterator](arr: string[]) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    			yield* arr;
+    ~~~~~~~~~~~~~~
+    		}
+    ~~~
+    	}) {
+    ~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:23:33: An argument for 'arr' was not provided.
+    
+    	}
+    
+    	yield* obj;
+    	       ~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:5:33: An argument for 'x' was not provided.
+    
+    	yield* {
+    	       ~
+    		async *[Symbol.asyncIterator](arr: string[]) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    			yield* arr;
+    ~~~~~~~~~~~~~~
+    		}
+    ~~~
+    	};
+    ~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:33:33: An argument for 'arr' was not provided.
+    }
+    
+    
+    async function* g<A, B>(x: {
+    	[Symbol.iterator](x: number): Generator<A>
+    }) {
+    	for (const y of x) {}
+    	                ~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:41:20: An argument for 'x' was not provided.
+    }
+    
+    
+    async function* h(obj2: {
+    	a: number;
+    	b: number;
+    	[Symbol.iterator](): Generator<number, void, unknown>;
+    } | {
+        [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+    }) {
+    	yield* obj2;
+    	       ~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:52:40: An argument for 'x' was not provided.
+    
+    	for await (const x of obj2) {
+    	                      ~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:52:40: An argument for 'x' was not provided.
+    
+    	}
+    
+    	const [u] = obj2;
+    	      ~~~
+!!! error TS2488: Type '{ a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+    	return u;
+    }
+    
+    async function* foo(obj2: {
+    	a: number;
+    	b: number;
+    	[Symbol.iterator](): Generator<number, void, unknown>;
+    } & {
+        [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+    }) {
+    	yield* obj2;
+    	       ~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:69:40: An argument for 'x' was not provided.
+    
+    	for await (const x of obj2) {
+    	                      ~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:69:40: An argument for 'x' was not provided.
+    
+    	}
+    
+    	const [u] = obj2; // this is fine, just making sure caching works :)
+    	return u;
+    }
+    
+    async function* bar(obj2: {
+    	a: number;
+    	b: number;
+    	[Symbol.iterator](): Generator<number, void, unknown>;
+        [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+    }) {
+    	yield* obj2;
+    	       ~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:85:40: An argument for 'x' was not provided.
+    
+    	for await (const x of obj2) {
+    	                      ~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/implicitIteratorCallsArityErrors.ts:85:40: An argument for 'x' was not provided.
+    
+    	}
+    
+    	const [u] = obj2;
+    	return u;
+    }
+    

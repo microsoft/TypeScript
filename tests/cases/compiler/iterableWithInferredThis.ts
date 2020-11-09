@@ -1,4 +1,5 @@
-// @target: ES6
+// @target: es6
+// @lib: es2018
 // @downlevelIteration: true
 
 declare const success: { success: true, value: object };

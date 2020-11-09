@@ -1,0 +1,246 @@
+=== tests/cases/compiler/implicitIteratorCallsArityErrors.ts ===
+const obj = {
+>obj : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+>{	a: 1,	b: 2,	*[Symbol.iterator]<T>(this: T, x: string) {		for (const k in this) yield k;	},} : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	a: 1,
+>a : number
+>1 : 1
+
+	b: 2,
+>b : number
+>2 : 2
+
+	*[Symbol.iterator]<T>(this: T, x: string) {
+>[Symbol.iterator] : <T>(this: T, x: string) => Generator<Extract<keyof T, string>, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>this : T
+>x : string
+
+		for (const k in this) yield k;
+>k : Extract<keyof T, string>
+>this : T
+>yield k : any
+>k : Extract<keyof T, string>
+
+	},
+};
+
+for (const i of obj) {
+>i : any
+>obj : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+}
+
+const [j] = obj;
+>j : any
+>obj : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+const arr = [...obj];
+>arr : any[]
+>[...obj] : any[]
+>...obj : any
+>obj : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+async function* f() {
+>f : () => AsyncGenerator<any, void, any>
+
+	for await (const x of obj) {
+>x : any
+>obj : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	}
+
+	for await (const x of {
+>x : any
+>{		async *[Symbol.asyncIterator](arr: string[]) {			yield* arr;		}	} : { [Symbol.asyncIterator](arr: string[]): AsyncGenerator<string, void, undefined>; }
+
+		async *[Symbol.asyncIterator](arr: string[]) {
+>[Symbol.asyncIterator] : (arr: string[]) => AsyncGenerator<string, void, undefined>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>arr : string[]
+
+			yield* arr;
+>yield* arr : any
+>arr : string[]
+		}
+	}) {
+
+	}
+
+	yield* obj;
+>yield* obj : any
+>obj : { a: number; b: number; [Symbol.iterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	yield* {
+>yield* {		async *[Symbol.asyncIterator](arr: string[]) {			yield* arr;		}	} : any
+>{		async *[Symbol.asyncIterator](arr: string[]) {			yield* arr;		}	} : { [Symbol.asyncIterator](arr: string[]): AsyncGenerator<string, void, undefined>; }
+
+		async *[Symbol.asyncIterator](arr: string[]) {
+>[Symbol.asyncIterator] : (arr: string[]) => AsyncGenerator<string, void, undefined>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>arr : string[]
+
+			yield* arr;
+>yield* arr : any
+>arr : string[]
+		}
+	};
+}
+
+
+async function* g<A, B>(x: {
+>g : <A, B>(x: { [Symbol.iterator](x: number): Generator<A>; }) => AsyncGenerator<never, void, unknown>
+>x : { [Symbol.iterator](x: number): Generator<A>; }
+
+	[Symbol.iterator](x: number): Generator<A>
+>[Symbol.iterator] : (x: number) => Generator<A>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+>x : number
+
+}) {
+	for (const y of x) {}
+>y : any
+>x : { [Symbol.iterator](x: number): Generator<A, any, unknown>; }
+}
+
+
+async function* h(obj2: {
+>h : (obj2: { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }) => AsyncGenerator<any, any, any>
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	a: number;
+>a : number
+
+	b: number;
+>b : number
+
+	[Symbol.iterator](): Generator<number, void, unknown>;
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+} | {
+    [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+>[Symbol.asyncIterator] : <T>(this: T, x: string) => Generator<Extract<keyof T, string>, void, unknown>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>this : T
+>x : string
+
+}) {
+	yield* obj2;
+>yield* obj2 : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	for await (const x of obj2) {
+>x : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	}
+
+	const [u] = obj2;
+>u : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } | { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	return u;
+>u : any
+}
+
+async function* foo(obj2: {
+>foo : (obj2: { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } & { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }) => AsyncGenerator<any, number, any>
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } & { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	a: number;
+>a : number
+
+	b: number;
+>b : number
+
+	[Symbol.iterator](): Generator<number, void, unknown>;
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+} & {
+    [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+>[Symbol.asyncIterator] : <T>(this: T, x: string) => Generator<Extract<keyof T, string>, void, unknown>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>this : T
+>x : string
+
+}) {
+	yield* obj2;
+>yield* obj2 : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } & { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	for await (const x of obj2) {
+>x : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } & { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	}
+
+	const [u] = obj2; // this is fine, just making sure caching works :)
+>u : number
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; } & { [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	return u;
+>u : number
+}
+
+async function* bar(obj2: {
+>bar : (obj2: { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }) => AsyncGenerator<any, number, any>
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	a: number;
+>a : number
+
+	b: number;
+>b : number
+
+	[Symbol.iterator](): Generator<number, void, unknown>;
+>[Symbol.iterator] : () => Generator<number, void, unknown>
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+    [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>;
+>[Symbol.asyncIterator] : <T>(this: T, x: string) => Generator<Extract<keyof T, string>, void, unknown>
+>Symbol.asyncIterator : symbol
+>Symbol : SymbolConstructor
+>asyncIterator : symbol
+>this : T
+>x : string
+
+}) {
+	yield* obj2;
+>yield* obj2 : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	for await (const x of obj2) {
+>x : any
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	}
+
+	const [u] = obj2;
+>u : number
+>obj2 : { a: number; b: number; [Symbol.iterator](): Generator<number, void, unknown>; [Symbol.asyncIterator]<T>(this: T, x: string): Generator<Extract<keyof T, string>, void, unknown>; }
+
+	return u;
+>u : number
+}
+
