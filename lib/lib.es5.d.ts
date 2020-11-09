@@ -472,7 +472,7 @@ interface String {
      * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
      * @param limit A value used to limit the number of elements returned in the array.
      */
-    split(separator: string | RegExp, limit?: number): string[];
+    split(separator?: string | RegExp, limit?: number): string[];
 
     /**
      * Returns the substring at the specified location within a String object.
