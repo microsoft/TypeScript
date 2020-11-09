@@ -6,3 +6,8 @@ RyanCavanaugh
 sheetalkamat
 orta
 rbuckton
+ahejlsberg
+amcasey
+jessetrinity
+minestarks
+uniqueiniquity
