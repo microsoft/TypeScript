@@ -34333,89 +34333,92 @@ namespace ts {
                 ? "iterationTypesOfAsyncIterable"
                 : "iterationTypesOfIterable";
 
-            let iterationTypes: IterationTypes | undefined;
+            // For Union/Intersection types, we only use iterationTypesOfAsyncIterable/iterationTypesOfIterable
+            let iterationTypes = type === implicitThisType && (type.flags & TypeFlags.UnionOrIntersection) ? getCachedIterationTypes(type, cacheKey) : undefined;
 
-            if (type.flags & TypeFlags.Intersection) {
-                let shouldCache = true;
-                let allIterationTypes: IterationTypes[] | undefined;
-                let optimizedUse = use;
+            if (!iterationTypes) {
+                if (type.flags & TypeFlags.Intersection) {
+                    let shouldCache = true;
+                    let allIterationTypes: IterationTypes[] | undefined;
+                    let optimizedUse = use;
 
-                if ((use & IterationUse.AllowsSyncOrAsyncIterablesFlag) === IterationUse.AllowsSyncOrAsyncIterablesFlag) {
-                    optimizedUse ^= IterationUse.AllowsSyncIterablesFlag;
-                    for (const constituent of (type as IntersectionType).types) {
-                        allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, errorNode, implicitThisType, /*reportNotIterableError*/ false));
+                    if ((use & IterationUse.AllowsSyncOrAsyncIterablesFlag) === IterationUse.AllowsSyncOrAsyncIterablesFlag) {
+                        optimizedUse ^= IterationUse.AllowsSyncIterablesFlag;
+                        for (const constituent of (type as IntersectionType).types) {
+                            allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, errorNode, implicitThisType, /*reportNotIterableError*/ false));
 
-                        // If a given constituent was cached downstream, it's okay to cache too. (even noIterationTypes)
-                        if (shouldCache) shouldCache = cacheKey in constituent;
-                    }
-                    optimizedUse = use ^ IterationUse.AllowsAsyncIterablesFlag;
-                }
-
-                if (allIterationTypes === undefined) {
-                    for (const constituent of (type as IntersectionType).types) {
-                        allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, errorNode, implicitThisType, /*reportNotIterableError*/ false));
-
-                        // If a given constituent was cached downstream, it's okay to cache too. (even noIterationTypes)
-                        if (shouldCache) shouldCache = cacheKey in constituent;
-                    }
-                }
-
-                iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes, getIntersectionType) : noIterationTypes;
-                if (shouldCache) setCachedIterationTypes(type, cacheKey, iterationTypes);
-            }
-            else if (type.flags & TypeFlags.Union) {
-                let shouldCache = true;
-                let allIterationTypes: IterationTypes[] | undefined;
-
-                for (const constituent of (type as UnionType).types) {
-                    const iterationTypes = getIterationTypesOfIterable(constituent, use, errorNode, constituent, /*reportNotIterableError*/ false);
-                    if (iterationTypes === undefined) {
-                        allIterationTypes = undefined;
-                        break;
-                    }
-                    else {
-                        allIterationTypes = append(allIterationTypes, iterationTypes);
-
-                        // If a given constituent was cached downstream, it's okay to cache too. (even noIterationTypes)
-                        if (shouldCache) shouldCache = cacheKey in constituent;
-                    }
-                }
-
-                iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes, getUnionType) : noIterationTypes;
-                if (shouldCache) setCachedIterationTypes(type, cacheKey, iterationTypes);
-            }
-            else {
-                if (use & IterationUse.AllowsAsyncIterablesFlag) {
-                    iterationTypes = getIterationTypesOfIterableBase(type, asyncIterationTypesResolver, errorNode, implicitThisType);
-
-                    if (iterationTypes === noIterationTypes && "iterationTypesOfAsyncIterable" in type && (use & IterationUse.AllowsSyncIterablesFlag)) {
-                        if (type === implicitThisType) {
-                            iterationTypes = getCachedIterationTypes(type, "iterationTypesOfAsyncedSyncIterable");
+                            // If a given constituent was cached downstream, it's okay to cache too. (even noIterationTypes)
+                            if (shouldCache) shouldCache = cacheKey in constituent;
                         }
+                        optimizedUse = use ^ IterationUse.AllowsAsyncIterablesFlag;
+                    }
 
-                        if (!iterationTypes) {
-                            iterationTypes = getAsyncFromSyncIterationTypes(
-                                getIterationTypesOfIterableBase(
-                                    type,
-                                    syncIterationTypesResolver,
-                                    errorNode,
-                                    implicitThisType
-                                ),
-                                errorNode
-                            );
+                    if (allIterationTypes === undefined) {
+                        for (const constituent of (type as IntersectionType).types) {
+                            allIterationTypes = append(allIterationTypes, getIterationTypesOfIterable(constituent, optimizedUse, errorNode, implicitThisType, /*reportNotIterableError*/ false));
 
-                            // Only cache iterationTypes if "iterationTypesOfIterable" was cached by `getIterationTypesOfIterableSlow`
-                            if ("iterationTypesOfIterable" in type) {
-                                setCachedIterationTypes(type, "iterationTypesOfAsyncedSyncIterable", iterationTypes);
+                            // If a given constituent was cached downstream, it's okay to cache too. (even noIterationTypes)
+                            if (shouldCache) shouldCache = cacheKey in constituent;
+                        }
+                    }
+
+                    iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes, getIntersectionType) : noIterationTypes;
+                    if (shouldCache) setCachedIterationTypes(type, cacheKey, iterationTypes);
+                }
+                else if (type.flags & TypeFlags.Union) {
+                    let shouldCache = true;
+                    let allIterationTypes: IterationTypes[] | undefined;
+
+                    for (const constituent of (type as UnionType).types) {
+                        const iterationTypes = getIterationTypesOfIterable(constituent, use, errorNode, constituent, /*reportNotIterableError*/ false);
+                        if (iterationTypes === undefined) {
+                            allIterationTypes = undefined;
+                            break;
+                        }
+                        else {
+                            allIterationTypes = append(allIterationTypes, iterationTypes);
+
+                            // If a given constituent was cached downstream, it's okay to cache too. (even noIterationTypes)
+                            if (shouldCache) shouldCache = cacheKey in constituent;
+                        }
+                    }
+
+                    iterationTypes = allIterationTypes ? combineIterationTypes(allIterationTypes, getUnionType) : noIterationTypes;
+                    if (shouldCache) setCachedIterationTypes(type, cacheKey, iterationTypes);
+                }
+                else {
+                    if (use & IterationUse.AllowsAsyncIterablesFlag) {
+                        iterationTypes = getIterationTypesOfIterableBase(type, asyncIterationTypesResolver, errorNode, implicitThisType);
+
+                        if (iterationTypes === noIterationTypes && "iterationTypesOfAsyncIterable" in type && (use & IterationUse.AllowsSyncIterablesFlag)) {
+                            if (type === implicitThisType) {
+                                iterationTypes = getCachedIterationTypes(type, "iterationTypesOfAsyncedSyncIterable");
+                            }
+
+                            if (!iterationTypes) {
+                                iterationTypes = getAsyncFromSyncIterationTypes(
+                                    getIterationTypesOfIterableBase(
+                                        type,
+                                        syncIterationTypesResolver,
+                                        errorNode,
+                                        implicitThisType
+                                    ),
+                                    errorNode
+                                );
+
+                                // Only cache iterationTypes if "iterationTypesOfIterable" was cached by `getIterationTypesOfIterableSlow`
+                                if ("iterationTypesOfIterable" in type) {
+                                    setCachedIterationTypes(type, "iterationTypesOfAsyncedSyncIterable", iterationTypes);
+                                }
                             }
                         }
                     }
-                }
-                else if (use & IterationUse.AllowsSyncIterablesFlag) {
-                    iterationTypes = getIterationTypesOfIterableBase(type, syncIterationTypesResolver, errorNode, implicitThisType);
-                }
-                else {
-                    iterationTypes = noIterationTypes;
+                    else if (use & IterationUse.AllowsSyncIterablesFlag) {
+                        iterationTypes = getIterationTypesOfIterableBase(type, syncIterationTypesResolver, errorNode, implicitThisType);
+                    }
+                    else {
+                        iterationTypes = noIterationTypes;
+                    }
                 }
             }
 
