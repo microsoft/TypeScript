@@ -65,18 +65,24 @@ namespace ts.refactor {
         readonly ranges: readonly StatementRange[];
     }
 
-    // Filters imports out of the range of statements to move. Imports will be copied to the new file anyway, and may still be needed in the old file.
     function getStatementsToMove(context: RefactorContext): ToMove | undefined {
         const rangeToMove = getRangeToMove(context);
         if (rangeToMove === undefined) return undefined;
         const all: Statement[] = [];
         const ranges: StatementRange[] = [];
         const { toMove, afterLast } = rangeToMove;
-        getRangesWhere(toMove, s => !isPureImport(s), (start, afterEndIndex) => {
+        getRangesWhere(toMove, isAllowedStatementToMove, (start, afterEndIndex) => {
             for (let i = start; i < afterEndIndex; i++) all.push(toMove[i]);
             ranges.push({ first: toMove[start], afterLast });
         });
         return all.length === 0 ? undefined : { all, ranges };
+    }
+
+    function isAllowedStatementToMove(statement: Statement): boolean {
+        // Filters imports and prologue directives out of the range of statements to move.
+        // Imports will be copied to the new file anyway, and may still be needed in the old file.
+        // Prologue directives will be copied to the new file and should be left in the old file.
+        return !isPureImport(statement) && !isPrologueDirective(statement);;
     }
 
     function isPureImport(node: Node): boolean {
@@ -109,12 +115,12 @@ namespace ts.refactor {
 
     function getNewStatementsAndRemoveFromOldFile(
         oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
-    ): readonly Statement[] {
+    ) {
         const checker = program.getTypeChecker();
-
+        const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
         if (!oldFile.externalModuleIndicator && !oldFile.commonJsModuleIndicator) {
             deleteMovedStatements(oldFile, toMove.ranges, changes);
-            return toMove.all;
+            return [...prologueDirectives, ...toMove.all];
         }
 
         const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
@@ -126,12 +132,23 @@ namespace ts.refactor {
 
         deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
         deleteMovedStatements(oldFile, toMove.ranges, changes);
-
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
+        const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference);
+        const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax);
+        if (imports.length && body.length) {
+            return [
+                ...prologueDirectives,
+                ...imports,
+                SyntaxKind.NewLineTrivia as const,
+                ...body
+            ];
+        }
+
         return [
-            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference),
-            ...addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax),
+            ...prologueDirectives,
+            ...imports,
+            ...body,
         ];
     }
 
@@ -269,7 +286,7 @@ namespace ts.refactor {
         | ImportEqualsDeclaration
         | VariableStatement;
 
-    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
+    function createOldFileImportsFromNewFile(newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, useEs6Imports: boolean, quotePreference: QuotePreference): AnyImportOrRequireStatement | undefined {
         let defaultImport: Identifier | undefined;
         const imports: string[] = [];
         newFileNeedExport.forEach(symbol => {
@@ -283,7 +300,7 @@ namespace ts.refactor {
         return makeImportOrRequire(defaultImport, imports, newFileNameWithExtension, useEs6Imports, quotePreference);
     }
 
-    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: readonly string[], path: string, useEs6Imports: boolean, quotePreference: QuotePreference): Statement | undefined {
+    function makeImportOrRequire(defaultImport: Identifier | undefined, imports: readonly string[], path: string, useEs6Imports: boolean, quotePreference: QuotePreference): AnyImportOrRequireStatement | undefined {
         path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
             const specifiers = imports.map(i => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(i)));
@@ -293,7 +310,7 @@ namespace ts.refactor {
             Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
             const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
             return bindingElements.length
-                ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(factory.createStringLiteral(path)))
+                ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(factory.createStringLiteral(path))) as RequireVariableStatement
                 : undefined;
         }
     }
@@ -610,7 +627,7 @@ namespace ts.refactor {
         forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
     }
     class SymbolSet implements ReadonlySymbolSet {
-        private map = createMap<Symbol>();
+        private map = new Map<string, Symbol>();
         add(symbol: Symbol): void {
             this.map.set(String(getSymbolId(symbol)), symbol);
         }

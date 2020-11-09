@@ -238,7 +238,7 @@ function Soup(flavour) {
     this.flavour = flavour
 >this.flavour = flavour : T
 >this.flavour : any
->this : any
+>this : this
 >flavour : any
 >flavour : T
 }

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/jsdoc/38572.js ===
+/**
+ * @template T
+ * @param {T} a
+ * @param {{[K in keyof T]: (value: T[K]) => void }} b
+ */
+function f(a, b) {
+>f : Symbol(f, Decl(38572.js, 0, 0))
+>a : Symbol(a, Decl(38572.js, 5, 11))
+>b : Symbol(b, Decl(38572.js, 5, 13))
+}
+
+f({ x: 42 }, { x(param) { param.toFixed() } });
+>f : Symbol(f, Decl(38572.js, 0, 0))
+>x : Symbol(x, Decl(38572.js, 8, 3))
+>x : Symbol(x, Decl(38572.js, 8, 14))
+>param : Symbol(param, Decl(38572.js, 8, 17))
+>param.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(38572.js, 8, 17))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+

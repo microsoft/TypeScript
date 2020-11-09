@@ -1,79 +1,39 @@
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts(1,34): error TS2524: 'await' expressions cannot be used in a parameter initializer.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitMissingValueIsError.ts(2,10): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts(1,29): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts(1,29): error TS2451: Cannot redeclare block-scoped variable 'await'.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts(1,34): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts(1,37): error TS1005: '=>' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(1,30): error TS1138: Parameter declaration expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(1,30): error TS2451: Cannot redeclare block-scoped variable 'await'.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(1,35): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(2,14): error TS1003: Identifier expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(2,20): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(2,22): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts(2,14): error TS1003: Identifier expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts(2,22): error TS1005: '=>' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(2,24): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(2,30): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(2,32): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(2,24): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(2,32): error TS1005: '=>' expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts(1,29): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts(1,30): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(2,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts(2,14): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts(2,24): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(2,24): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldInParameterInitializerIsError.ts(1,34): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts(1,29): error TS1005: '(' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts(1,29): error TS2451: Cannot redeclare block-scoped variable 'yield'.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts(1,34): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts(1,37): error TS1005: '=>' expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(1,30): error TS1138: Parameter declaration expected.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(1,30): error TS2451: Cannot redeclare block-scoped variable 'yield'.
-tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(1,35): error TS1005: ',' expected.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts(1,29): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts(1,30): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingValueIsError.ts(2,12): error TS1109: Expression expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/functionExpressionIsOk.ts (0 errors) ====
     const f1 = async function * f() {
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts (4 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts (1 errors) ====
     const f2 = async function * await() {
                                 ~~~~~
-!!! error TS1005: '(' expected.
-                                ~~~~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'await'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts:1:30: 'await' was also declared here.
-                                     ~
-!!! error TS1005: ',' expected.
-                                        ~
-!!! error TS1005: '=>' expected.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts (4 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts (1 errors) ====
     const f3 = async function * yield() {
                                 ~~~~~
-!!! error TS1005: '(' expected.
-                                ~~~~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'yield'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts:1:30: 'yield' was also declared here.
-                                     ~
-!!! error TS1005: ',' expected.
-                                        ~
-!!! error TS1005: '=>' expected.
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts (1 errors) ====
     const f4 = async function * (await) {
                                  ~~~~~
-!!! error TS1138: Parameter declaration expected.
-                                 ~~~~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'await'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitNameIsError.ts:1:29: 'await' was also declared here.
-                                      ~
-!!! error TS1005: ',' expected.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts (1 errors) ====
     const f5 = async function * (yield) {
                                  ~~~~~
-!!! error TS1138: Parameter declaration expected.
-                                 ~~~~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'yield'.
-!!! related TS6203 tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldNameIsError.ts:1:29: 'yield' was also declared here.
-                                      ~
-!!! error TS1005: ',' expected.
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
     };
 ==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitInParameterInitializerIsError.ts (1 errors) ====
     const f6 = async function * (a = await 1) {
@@ -90,44 +50,32 @@ tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldStarMissingVa
         async function * g() {
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts (1 errors) ====
     const f9 = async function * () {
         function yield() {
                  ~~~~~
-!!! error TS1003: Identifier expected.
-                         ~
-!!! error TS1005: '=>' expected.
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts (1 errors) ====
     const f10 = async function * () {
         const x = function yield() {
                            ~~~~~
-!!! error TS1005: '(' expected.
-                                   ~
-!!! error TS1005: '=>' expected.
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
         };
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts (1 errors) ====
     const f11 = async function * () {
         function await() {
                  ~~~~~
-!!! error TS1003: Identifier expected.
-                       ~
-!!! error TS1109: Expression expected.
-                         ~
-!!! error TS1005: ';' expected.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
         }
     };
-==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts (1 errors) ====
     const f12 = async function * () {
         const x = function await() {
                            ~~~~~
-!!! error TS1005: '(' expected.
-                                 ~
-!!! error TS1109: Expression expected.
-                                   ~
-!!! error TS1005: ';' expected.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
         };
     };
 ==== tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldIsOk.ts (0 errors) ====

@@ -110,7 +110,7 @@ f6({ y: 1 });
 f6({ x: 1, y: 1 });
 // (arg?: { a: { x?: number, y?: number } }) => void
 function f7(_a) {
-    var _b = (_a === void 0 ? { a: {} } : _a).a, _c = _b.x, x = _c === void 0 ? 0 : _c, _d = _b.y, y = _d === void 0 ? 0 : _d;
+    var _b = _a === void 0 ? { a: {} } : _a, _c = _b.a, _d = _c.x, x = _d === void 0 ? 0 : _d, _e = _c.y, y = _e === void 0 ? 0 : _e;
 }
 f7();
 f7({ a: {} });

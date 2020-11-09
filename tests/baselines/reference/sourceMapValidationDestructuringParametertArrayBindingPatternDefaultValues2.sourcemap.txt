@@ -190,7 +190,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 3 >         ^^^^
 4 >             ^
 5 >              ^^
-6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -204,58 +204,64 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 5 >Emitted(6, 17) Source(11, 74) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? ["name", ["skill1", "skill2"]] : _a)[0], nameMB = _b === void 0 ? "noName" : _b;
+>>>    var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[0], nameMB = _c === void 0 ? "noName" : _c;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^
-4 >                               ^^^^^^
-5 >                                     ^^
-6 >                                       ^
-7 >                                        ^^^^^^^^
-8 >                                                ^^
-9 >                                                  ^^^^^^^^
-10>                                                          ^
-11>                                                           ^
-12>                                                            ^^^^^^^^^
-13>                                                                     ^^
-14>                                                                       ^^^^^^
-15>                                                                             ^^^^^^^^^^^^^^^^^^^
-16>                                                                                                ^^^^^^^^
-17>                                                                                                        ^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+3 >                             ^
+4 >                              ^^^^^^
+5 >                                    ^^
+6 >                                      ^
+7 >                                       ^^^^^^^^
+8 >                                               ^^
+9 >                                                 ^^^^^^^^
+10>                                                         ^
+11>                                                          ^
+12>                                                           ^^^^^
+13>                                                                ^^
+14>                                                                  ^^^^^^^^^^
+15>                                                                            ^^
+16>                                                                              ^^^^^^
+17>                                                                                    ^^^^^^^^^^^^^^^^^^^
+18>                                                                                                       ^^^^^^^^
+19>                                                                                                               ^^^^^
 1->
-2 >        nameMB = "noName"]: Robot = 
-3 >                              [
-4 >                               "name"
-5 >                                     , 
-6 >                                       [
-7 >                                        "skill1"
-8 >                                                , 
-9 >                                                  "skill2"
-10>                                                          ]
-11>                                                           ]
-12>                                                            
-13>                                                                     
-14>                                                                       nameMB
-15>                                                                              = 
-16>                                                                                                "noName"
-17>                                                                                                        
-1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
-2 >Emitted(7, 31) Source(11, 44) + SourceIndex(0)
-3 >Emitted(7, 32) Source(11, 45) + SourceIndex(0)
-4 >Emitted(7, 38) Source(11, 51) + SourceIndex(0)
-5 >Emitted(7, 40) Source(11, 53) + SourceIndex(0)
-6 >Emitted(7, 41) Source(11, 54) + SourceIndex(0)
-7 >Emitted(7, 49) Source(11, 62) + SourceIndex(0)
-8 >Emitted(7, 51) Source(11, 64) + SourceIndex(0)
-9 >Emitted(7, 59) Source(11, 72) + SourceIndex(0)
-10>Emitted(7, 60) Source(11, 73) + SourceIndex(0)
-11>Emitted(7, 61) Source(11, 74) + SourceIndex(0)
-12>Emitted(7, 70) Source(11, 33) + SourceIndex(0)
-13>Emitted(7, 72) Source(11, 16) + SourceIndex(0)
-14>Emitted(7, 78) Source(11, 22) + SourceIndex(0)
-15>Emitted(7, 97) Source(11, 25) + SourceIndex(0)
-16>Emitted(7, 105) Source(11, 33) + SourceIndex(0)
-17>Emitted(7, 110) Source(11, 33) + SourceIndex(0)
+2 >        [nameMB = "noName"]: Robot = 
+3 >                             [
+4 >                              "name"
+5 >                                    , 
+6 >                                      [
+7 >                                       "skill1"
+8 >                                               , 
+9 >                                                 "skill2"
+10>                                                         ]
+11>                                                          ]
+12>                                                           
+13>                                                                
+14>                                                                  nameMB = "noName"
+15>                                                                            
+16>                                                                              nameMB
+17>                                                                                     = 
+18>                                                                                                       "noName"
+19>                                                                                                               
+1->Emitted(7, 9) Source(11, 15) + SourceIndex(0)
+2 >Emitted(7, 30) Source(11, 44) + SourceIndex(0)
+3 >Emitted(7, 31) Source(11, 45) + SourceIndex(0)
+4 >Emitted(7, 37) Source(11, 51) + SourceIndex(0)
+5 >Emitted(7, 39) Source(11, 53) + SourceIndex(0)
+6 >Emitted(7, 40) Source(11, 54) + SourceIndex(0)
+7 >Emitted(7, 48) Source(11, 62) + SourceIndex(0)
+8 >Emitted(7, 50) Source(11, 64) + SourceIndex(0)
+9 >Emitted(7, 58) Source(11, 72) + SourceIndex(0)
+10>Emitted(7, 59) Source(11, 73) + SourceIndex(0)
+11>Emitted(7, 60) Source(11, 74) + SourceIndex(0)
+12>Emitted(7, 65) Source(11, 74) + SourceIndex(0)
+13>Emitted(7, 67) Source(11, 16) + SourceIndex(0)
+14>Emitted(7, 77) Source(11, 33) + SourceIndex(0)
+15>Emitted(7, 79) Source(11, 16) + SourceIndex(0)
+16>Emitted(7, 85) Source(11, 22) + SourceIndex(0)
+17>Emitted(7, 104) Source(11, 25) + SourceIndex(0)
+18>Emitted(7, 112) Source(11, 33) + SourceIndex(0)
+19>Emitted(7, 117) Source(11, 33) + SourceIndex(0)
 ---
 >>>    console.log(nameMB);
 1 >^^^^

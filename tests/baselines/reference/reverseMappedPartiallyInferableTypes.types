@@ -229,3 +229,98 @@ const obj3 = id({
     }
 });
 
+// Repros from #40809
+
+type Mapped1<T> = {
+>Mapped1 : Mapped1<T>
+
+    [K in keyof T]: [T[K], (arg: T) => boolean];
+>arg : T
+
+};
+
+declare function inferMapped1<T>(arg: Mapped1<T>): void;
+>inferMapped1 : <T>(arg: Mapped1<T>) => void
+>arg : Mapped1<T>
+
+inferMapped1({
+>inferMapped1({    key: [3, arg => arg.key > 5]}) : void
+>inferMapped1 : <T>(arg: Mapped1<T>) => void
+>{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
+
+    key: [3, arg => arg.key > 5]
+>key : [number, (arg: { key: number; }) => boolean]
+>[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
+>3 : 3
+>arg => arg.key > 5 : (arg: { key: number; }) => boolean
+>arg : { key: number; }
+>arg.key > 5 : boolean
+>arg.key : number
+>arg : { key: number; }
+>key : number
+>5 : 5
+
+});
+
+type Mapped2<T> = {
+>Mapped2 : Mapped2<T>
+
+    [K in keyof T]: [T[K], unknown extends T ? unknown : (arg: T) => boolean];
+>arg : T
+
+};
+
+declare function inferMapped2<T>(arg: Mapped2<T>): void;
+>inferMapped2 : <T>(arg: Mapped2<T>) => void
+>arg : Mapped2<T>
+
+inferMapped2({
+>inferMapped2({    key: [3, arg => arg.key > 5]}) : void
+>inferMapped2 : <T>(arg: Mapped2<T>) => void
+>{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
+
+    key: [3, arg => arg.key > 5]
+>key : [number, (arg: { key: number; }) => boolean]
+>[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
+>3 : 3
+>arg => arg.key > 5 : (arg: { key: number; }) => boolean
+>arg : { key: number; }
+>arg.key > 5 : boolean
+>arg.key : number
+>arg : { key: number; }
+>key : number
+>5 : 5
+
+});
+
+type MappedReadonly<T> = {
+>MappedReadonly : MappedReadonly<T>
+
+    readonly [K in keyof T]: readonly [T[K], (arg: T) => boolean];
+>arg : T
+
+};
+
+declare function inferMappedReadonly<T>(arg: MappedReadonly<T>): void;
+>inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
+>arg : MappedReadonly<T>
+
+inferMappedReadonly({
+>inferMappedReadonly({    key: [3, arg => arg.key > 5]}) : void
+>inferMappedReadonly : <T>(arg: MappedReadonly<T>) => void
+>{    key: [3, arg => arg.key > 5]} : { key: [number, (arg: { key: number; }) => boolean]; }
+
+    key: [3, arg => arg.key > 5]
+>key : [number, (arg: { key: number; }) => boolean]
+>[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
+>3 : 3
+>arg => arg.key > 5 : (arg: { key: number; }) => boolean
+>arg : { key: number; }
+>arg.key > 5 : boolean
+>arg.key : number
+>arg : { key: number; }
+>key : number
+>5 : 5
+
+});
+

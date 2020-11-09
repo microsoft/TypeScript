@@ -25,11 +25,11 @@ namespace ts {
         fileNames: string[];                            // The file names that belong to the same project.
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: Map<JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
+        packageNameToTypingLocation: ESMap<string, JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
         typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
         unresolvedImports: readonly string[];       // List of unresolved module ids from imports
-        typesRegistry: ReadonlyMap<MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
+        typesRegistry: ReadonlyESMap<string, MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
     }
 
     export interface ScriptSnapshotShim {
@@ -145,9 +145,9 @@ namespace ts {
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
-        getSemanticClassifications(fileName: string, start: number, length: number): string;
+        getSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
-        getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
         getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined): string;
@@ -277,6 +277,11 @@ namespace ts {
 
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
+
+        toggleLineComment(fileName: string, textChange: TextRange): string;
+        toggleMultilineComment(fileName: string, textChange: TextRange): string;
+        commentSelection(fileName: string, textChange: TextRange): string;
+        uncommentSelection(fileName: string, textChange: TextRange): string;
     }
 
     export interface ClassifierShim extends Shim {
@@ -1067,6 +1072,34 @@ namespace ts {
                 /*returnJson*/ false,
                 () => this.languageService.getEmitOutput(fileName),
                 this.logPerformance) as EmitOutput;
+        }
+
+        public toggleLineComment(fileName: string, textRange: TextRange): string {
+            return this.forwardJSONCall(
+                `toggleLineComment('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.toggleLineComment(fileName, textRange)
+            );
+        }
+
+        public toggleMultilineComment(fileName: string, textRange: TextRange): string {
+            return this.forwardJSONCall(
+                `toggleMultilineComment('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.toggleMultilineComment(fileName, textRange)
+            );
+        }
+
+        public commentSelection(fileName: string, textRange: TextRange): string {
+            return this.forwardJSONCall(
+                `commentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.commentSelection(fileName, textRange)
+            );
+        }
+
+        public uncommentSelection(fileName: string, textRange: TextRange): string {
+            return this.forwardJSONCall(
+                `uncommentSelection('${fileName}', '${JSON.stringify(textRange)}')`,
+                () => this.languageService.uncommentSelection(fileName, textRange)
+            );
         }
     }
 

@@ -222,7 +222,7 @@ namespace ts.codefix {
         importAdder: ImportAdder,
         sourceFile: SourceFile,
         parameterDeclaration: ParameterDeclaration,
-        containingFunction: FunctionLike,
+        containingFunction: SignatureDeclaration,
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
@@ -268,7 +268,7 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
+    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
         addJSDocTags(changes, sourceFile, containingFunction, [
             factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
         ]);
@@ -310,7 +310,7 @@ namespace ts.codefix {
                 const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, "") : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
-            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, type, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
+            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
             }
         }
@@ -319,14 +319,13 @@ namespace ts.codefix {
     function tryReplaceImportTypeNodeWithAutoImport(
         typeNode: TypeNode,
         declaration: textChanges.TypeAnnotatable,
-        type: Type,
         sourceFile: SourceFile,
         changes: textChanges.ChangeTracker,
         importAdder: ImportAdder,
         scriptTarget: ScriptTarget
     ): boolean {
-        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
-        if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeReference)) {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+        if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
             forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
             return true;
         }
@@ -410,7 +409,7 @@ namespace ts.codefix {
             }));
     }
 
-    function getFunctionReferences(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
+    function getFunctionReferences(containingFunction: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
@@ -501,7 +500,7 @@ namespace ts.codefix {
         }
 
         function combineUsages(usages: Usage[]): Usage {
-            const combinedProperties = createUnderscoreEscapedMap<Usage[]>();
+            const combinedProperties = new Map<__String, Usage[]>();
             for (const u of usages) {
                 if (u.properties) {
                     u.properties.forEach((p, name) => {
@@ -512,7 +511,7 @@ namespace ts.codefix {
                     });
                 }
             }
-            const properties = createUnderscoreEscapedMap<Usage>();
+            const properties = new Map<__String, Usage>();
             combinedProperties.forEach((ps, name) => {
                 properties.set(name, combineUsages(ps));
             });
@@ -535,7 +534,7 @@ namespace ts.codefix {
             return combineTypes(inferTypesFromReferencesSingle(references));
         }
 
-        function parameters(declaration: FunctionLike): ParameterInference[] | undefined {
+        function parameters(declaration: SignatureDeclaration): ParameterInference[] | undefined {
             if (references.length === 0 || !declaration.parameters) {
                 return undefined;
             }
@@ -821,7 +820,7 @@ namespace ts.codefix {
         function inferTypeFromPropertyAccessExpression(parent: PropertyAccessExpression, usage: Usage): void {
             const name = escapeLeadingUnderscores(parent.name.text);
             if (!usage.properties) {
-                usage.properties = createUnderscoreEscapedMap<Usage>();
+                usage.properties = new Map();
             }
             const propertyUsage = usage.properties.get(name) || createEmptyUsage();
             calculateUsageOfNode(parent, propertyUsage);
@@ -975,7 +974,7 @@ namespace ts.codefix {
         }
 
         function inferStructuralType(usage: Usage) {
-            const members = createUnderscoreEscapedMap<Symbol>();
+            const members = new Map<__String, Symbol>();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
                     const symbol = checker.createSymbol(SymbolFlags.Property, name);

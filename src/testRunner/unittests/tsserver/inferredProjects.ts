@@ -86,7 +86,7 @@ namespace ts.projectSystem {
             const proj = projectService.inferredProjects[0];
             assert.isDefined(proj);
 
-            assert.isTrue(proj.languageServiceEnabled);
+            assert.isFalse(proj.languageServiceEnabled);
         });
 
         it("project settings for inferred projects", () => {
@@ -365,8 +365,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             const originalSet = projectService.configuredProjects.set;
             const originalDelete = projectService.configuredProjects.delete;
-            const configuredCreated = createMap<true>();
-            const configuredRemoved = createMap<true>();
+            const configuredCreated = new Map<string, true>();
+            const configuredRemoved = new Map<string, true>();
             projectService.configuredProjects.set = (key, value) => {
                 assert.isFalse(configuredCreated.has(key));
                 configuredCreated.set(key, true);
@@ -428,6 +428,27 @@ namespace ts.projectSystem {
                 assert.isTrue(configuredRemoved.has(config.path));
                 configuredRemoved.clear();
             }
+        });
+
+        it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
+            const file1 = { path: "/a/file1.js", content: "" };
+            const host = createServerHost([file1]);
+
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const inferredProject = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject, [file1.path]);
+            inferredProject.setTypeAcquisition(undefined);
+
+            const expected = {
+                enable: true,
+                include: [],
+                exclude: []
+            };
+            assert.deepEqual(inferredProject.getTypeAcquisition(), expected, "typeAcquisition should be inferred for inferred projects");
         });
     });
 }

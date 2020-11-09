@@ -255,6 +255,14 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
+    const moduleFile: TestFSWithWatch.File = {
+        path: "/module.ts",
+        content:
+`export function fn(res: any): any {
+    return res;
+}`
+    };
+
     type WithSkipAndOnly<T extends any[]> = ((...args: T) => void) & {
         skip: (...args: T) => void;
         only: (...args: T) => void;
@@ -269,7 +277,7 @@ interface Array<T> {}`
         }
     }
 
-    function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectFailure = false, onlyProvideAction = false) {
+    function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, includeLib?: boolean, includeModule?: boolean, expectFailure = false, onlyProvideAction = false) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
@@ -283,7 +291,7 @@ interface Array<T> {}`
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const languageService = makeLanguageService({ path, content: t.source }, includeLib);
+            const languageService = makeLanguageService({ path, content: t.source }, includeLib, includeModule);
             const program = languageService.getProgram()!;
 
             if (hasSyntacticDiagnostics(program)) {
@@ -338,17 +346,23 @@ interface Array<T> {}`
             const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
             data.push(newText);
 
-            const diagProgram = makeLanguageService({ path, content: newText }, includeLib).getProgram()!;
+            const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
         }
 
-        function makeLanguageService(f: { path: string, content: string }, includeLib?: boolean) {
-
-            const host = projectSystem.createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+        function makeLanguageService(file: TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
+            const files = [file];
+            if (includeLib) {
+                files.push(libFile); // libFile is expensive to parse repeatedly - only test when required
+            }
+            if (includeModule) {
+                files.push(moduleFile);
+            }
+            const host = projectSystem.createServerHost(files);
             const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
-            return projectService.inferredProjects[0].getLanguageService();
+            projectService.openClientFile(file.path);
+            return first(projectService.inferredProjects).getLanguageService();
         }
 
         function hasSyntacticDiagnostics(program: Program) {
@@ -362,11 +376,15 @@ interface Array<T> {}`
     });
 
     const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string, text: string) => {
-        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true);
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*includeModule*/ false, /*expectFailure*/ true);
     });
 
     const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {
-        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true, /*onlyProvideAction*/ true);
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*includeModule*/ false, /*expectFailure*/ true, /*onlyProvideAction*/ true);
+    });
+
+    const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*includeModule*/ true);
     });
 
     describe("unittests:: services:: convertToAsyncFunction", () => {
@@ -902,7 +920,7 @@ function [#|f|](): Promise<string> {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen1", `
 function [#|f|]() {
     return Promise.resolve().then(function () {
         return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
@@ -920,6 +938,26 @@ function [#|f|]() {
                 return fetch("https://github.com");
               })]).then(res => res.toString());
     });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen3", `
+function [#|f|]() {
+    return Promise.resolve().then(() =>
+        Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+            return fetch("https://github.com");
+        }).then(res => res.toString())]));
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen4", `
+function [#|f|]() {
+    return Promise.resolve().then(() =>
+        Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+            return fetch("https://github.com");
+        })]).then(res => res.toString()));
 }
 `
         );
@@ -1124,6 +1162,27 @@ function [#|bar|]<T>(x: T): Promise<T> {
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return1", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch((error: Error) => {
+        return Promise.reject(error);
+    });
+}`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return2", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch((error: Error) => Promise.reject(error));
+}`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return3", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch(function (error: Error) {
+        return Promise.reject(error);
+    });
+}`
+        );
 
         _testConvertToAsyncFunction("convertToAsyncFunction_LocalReturn", `
 function [#|f|]() {
@@ -1352,7 +1411,7 @@ function [#|f|]() {
 }
 `);
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs1", `
 function delay(millis: number): Promise<void> {
     throw "no"
 }
@@ -1364,7 +1423,21 @@ function [#|main2|]() {
         .then(() => { console.log("."); return delay(500); })
         .then(() => { console.log("."); return delay(500); })
 }
-`);
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs2", `
+function delay(millis: number): Promise<void> {
+    throw "no"
+}
+
+function [#|main2|]() {
+    console.log("Please wait. Loading.");
+    return delay(500)
+        .then(() => delay(500))
+        .then(() => delay(500))
+        .then(() => delay(500))
+}
+        `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_exportModifier", `
 export function [#|foo|]() {
@@ -1377,6 +1450,57 @@ function [#|foo|]() {
     return fetch('a').then(() => {
         return fetch('b').then(() => 'c');
     })
+}
+`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethod", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithSingleLineComment", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    // comment
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithMultipleLineComment", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    /**
+     * comment
+     */
+    [#|method|]() {
+        return fetch('a').then(x => x);
+    }
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_decoratedMethodWithModifier", `
+function decorator() {
+    return (target: any, key: any, descriptor: PropertyDescriptor) => descriptor;
+}
+class Foo {
+    @decorator()
+    public [#|method|]() {
+        return fetch('a').then(x => x);
+    }
 }
 `);
 
@@ -1441,5 +1565,26 @@ function [#|get|]() {
 function [#|f|]() {
     return Promise.resolve().then(undefined, undefined, () => 1);
 }`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_callbackArgument", `
+function foo(props: any): void {
+    return props;
+}
+
+const fn = (): Promise<(message: string) => void> =>
+    new Promise(resolve => resolve((message: string) => foo(message)));
+
+function [#|f|]() {
+    return fn().then(res => res("test"));
+}
+`);
+
+        _testConvertToAsyncFunctionWithModule("convertToAsyncFunction_importedFunction", `
+import { fn } from "./module";
+function [#|f|]() {
+    return Promise.resolve(0).then(fn);
+}
+`);
+
     });
 }

@@ -43,7 +43,7 @@ namespace ts.tscWatch {
         return createWatchProgram(compilerHost);
     }
 
-    const elapsedRegex = /^Elapsed:: [0-9]+ms/;
+    const elapsedRegex = /^Elapsed:: \d+(?:\.\d+)?ms/;
     const buildVerboseLogRegEx = /^.+ \- /;
     export enum HostOutputKind {
         Log,
@@ -267,7 +267,7 @@ namespace ts.tscWatch {
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
         const quotedModuleName = `"${moduleName}"`;
-        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, moduleName);
+        return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(quotedModuleName), quotedModuleName.length, Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option, moduleName);
     }
 
     export function runQueuedTimeoutCallbacks(sys: WatchedSystem) {
@@ -441,6 +441,7 @@ namespace ts.tscWatch {
         const options = program.getCompilerOptions();
         baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
         baseline.push(`Program options: ${JSON.stringify(options)}`);
+        baseline.push(`Program structureReused: ${(<any>ts).StructureIsReused[program.structureIsReused]}`);
         baseline.push("Program files::");
         for (const file of program.getSourceFiles()) {
             baseline.push(file.fileName);

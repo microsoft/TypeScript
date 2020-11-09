@@ -1531,6 +1531,7 @@ namespace ts {
                 case SyntaxKind.LiteralType:
                     switch ((<LiteralTypeNode>node).literal.kind) {
                         case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return factory.createIdentifier("String");
 
                         case SyntaxKind.PrefixUnaryExpression:
@@ -1899,7 +1900,7 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
-            if (node.flags & NodeFlags.Ambient) {
+            if (node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract)) {
                 return undefined;
             }
             const updated = factory.updatePropertyDeclaration(
@@ -2528,7 +2529,7 @@ namespace ts {
          */
         function recordEmittedDeclarationInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration) {
             if (!currentScopeFirstDeclarationsOfName) {
-                currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
+                currentScopeFirstDeclarationsOfName = new Map();
             }
 
             const name = declaredNameInScope(node);

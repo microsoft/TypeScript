@@ -16,12 +16,20 @@ namespace ts.codefix {
         readonly renameAccessor: boolean;
     }
 
-    export function generateAccessorFromProperty(file: SourceFile, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
-        const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, start, end);
-        if (!fieldInfo) return undefined;
+    type InfoOrError = {
+        info: Info,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    };
+
+    export function generateAccessorFromProperty(file: SourceFile, program: Program, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
+        const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, program, start, end);
+        if (!fieldInfo || !fieldInfo.info) return undefined;
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo;
+        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo.info;
 
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(accessorName);
@@ -43,7 +51,7 @@ namespace ts.codefix {
             }
         }
 
-        updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers);
+        updateFieldDeclaration(changeTracker, file, declaration, type, fieldName, fieldModifiers);
 
         const getAccessor = generateGetAccessor(fieldName, accessorName, type, accessorModifiers, isStatic, container);
         suppressLeadingAndTrailingTrivia(getAccessor);
@@ -104,29 +112,47 @@ namespace ts.codefix {
         return modifierFlags;
     }
 
-    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, start: number, end: number, considerEmptySpans = true): Info | undefined {
+    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): InfoOrError | undefined {
         const node = getTokenAtPosition(file, start);
         const cursorRequest = start === end && considerEmptySpans;
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
-        if (!declaration || !(nodeOverlapsWithStartEnd(declaration.name, file, start, end) || cursorRequest)
-            || !isConvertibleName(declaration.name) || (getEffectiveModifierFlags(declaration) | meaning) !== meaning) return undefined;
+
+        if (!declaration || (!(nodeOverlapsWithStartEnd(declaration.name, file, start, end) || cursorRequest))) {
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Could_not_find_property_for_which_to_generate_accessor)
+            };
+        }
+
+        if (!isConvertibleName(declaration.name)) {
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Name_is_not_valid)
+            };
+        }
+
+        if ((getEffectiveModifierFlags(declaration) | meaning) !== meaning) {
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_property_with_modifier)
+            };
+        }
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
         const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
         const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
-            isStatic: hasStaticModifier(declaration),
-            isReadonly: hasEffectiveReadonlyModifier(declaration),
-            type: getTypeAnnotationNode(declaration),
-            container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
-            originalName: (<AcceptedNameType>declaration.name).text,
-            declaration,
-            fieldName,
-            accessorName,
-            renameAccessor: startWithUnderscore
+            info: {
+                isStatic: hasStaticModifier(declaration),
+                isReadonly: hasEffectiveReadonlyModifier(declaration),
+                type: getDeclarationType(declaration, program),
+                container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
+                originalName: (<AcceptedNameType>declaration.name).text,
+                declaration,
+                fieldName,
+                accessorName,
+                renameAccessor: startWithUnderscore
+            }
         };
     }
 
@@ -169,14 +195,14 @@ namespace ts.codefix {
         );
     }
 
-    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
+    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
         const property = factory.updatePropertyDeclaration(
             declaration,
             declaration.decorators,
             modifiers,
             fieldName,
             declaration.questionToken || declaration.exclamationToken,
-            declaration.type,
+            type,
             declaration.initializer
         );
         changeTracker.replaceNode(file, declaration, property);
@@ -187,9 +213,9 @@ namespace ts.codefix {
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
-    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
+    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
         if (isPropertyDeclaration(declaration)) {
-            updatePropertyDeclaration(changeTracker, file, declaration, fieldName, modifiers);
+            updatePropertyDeclaration(changeTracker, file, declaration, type, fieldName, modifiers);
         }
         else if (isPropertyAssignment(declaration)) {
             updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
@@ -223,6 +249,19 @@ namespace ts.codefix {
                 node.forEachChild(recur);
             }
         });
+    }
+
+    function getDeclarationType(declaration: AcceptedDeclaration, program: Program): TypeNode | undefined {
+        const typeNode = getTypeAnnotationNode(declaration);
+        if (isPropertyDeclaration(declaration) && typeNode && declaration.questionToken) {
+            const typeChecker = program.getTypeChecker();
+            const type = typeChecker.getTypeFromTypeNode(typeNode);
+            if (!typeChecker.isTypeAssignableTo(typeChecker.getUndefinedType(), type)) {
+                const types = isUnionTypeNode(typeNode) ? typeNode.types : [typeNode];
+                return factory.createUnionTypeNode([...types, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
+            }
+        }
+        return typeNode;
     }
 
     export function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {

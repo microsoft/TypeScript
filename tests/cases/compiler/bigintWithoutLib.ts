@@ -12,6 +12,9 @@ bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
 let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
 stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
 stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
+stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal inferred as {}
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should not error - bigintVal inferred as {}
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) // should not error - bigintVal inferred as {}
 
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
@@ -49,3 +52,7 @@ bigintVal = dataView.getBigInt64(1);
 bigintVal = dataView.getBigInt64(1, true);
 bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
+
+// Test Intl methods with new parameter type
+new Intl.NumberFormat("fr").format(3000n);
+new Intl.NumberFormat("fr").format(bigintVal);

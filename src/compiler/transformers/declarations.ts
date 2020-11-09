@@ -14,8 +14,8 @@ namespace ts {
     export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
         const parseTreeNode = getParseTreeNode(node);
         if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
             const text = currentSourceFile.text;
             const commentRanges = previousSibling
                 ? concatenate(
@@ -58,9 +58,9 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeReferences: Map<true> | undefined;
+        let necessaryTypeReferences: Set<string> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+        let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -73,6 +73,7 @@ namespace ts {
             reportCyclicStructureError,
             reportPrivateInBaseOfClassExpression,
             reportLikelyUnsafeImportRequiredError,
+            reportTruncationError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode,
@@ -81,8 +82,8 @@ namespace ts {
         let errorNameNode: DeclarationName | undefined;
 
         let currentSourceFile: SourceFile;
-        let refs: Map<SourceFile>;
-        let libs: Map<boolean>;
+        let refs: ESMap<NodeId, SourceFile>;
+        let libs: ESMap<string, boolean>;
         let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
@@ -93,9 +94,9 @@ namespace ts {
             if (!typeReferenceDirectives) {
                 return;
             }
-            necessaryTypeReferences = necessaryTypeReferences || createMap<true>();
+            necessaryTypeReferences = necessaryTypeReferences || new Set();
             for (const ref of typeReferenceDirectives) {
-                necessaryTypeReferences.set(ref, true);
+                necessaryTypeReferences.add(ref);
             }
         }
 
@@ -107,7 +108,7 @@ namespace ts {
             }
             // Otherwise we should emit a path-based reference
             const container = getSourceFileOfNode(node);
-            refs.set("" + getOriginalNodeId(container), container);
+            refs.set(getOriginalNodeId(container), container);
         }
 
         function handleSymbolAccessibilityError(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -197,6 +198,12 @@ namespace ts {
             }
         }
 
+        function reportTruncationError() {
+            if (errorNameNode) {
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
+            }
+        }
+
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
             const primaryDeclaration = find(parentSymbol.declarations, d => getSourceFileOfNode(d) === containingFile)!;
             const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
@@ -231,8 +238,8 @@ namespace ts {
 
             if (node.kind === SyntaxKind.Bundle) {
                 isBundledEmit = true;
-                refs = createMap<SourceFile>();
-                libs = createMap<boolean>();
+                refs = new Map();
+                libs = new Map();
                 let hasNoDefaultLib = false;
                 const bundle = factory.createBundle(map(node.sourceFiles,
                     sourceFile => {
@@ -242,7 +249,7 @@ namespace ts {
                         enclosingDeclaration = sourceFile;
                         lateMarkedStatements = undefined;
                         suppressNewDiagnosticContexts = false;
-                        lateStatementReplacementMap = createMap();
+                        lateStatementReplacementMap = new Map();
                         getSymbolAccessibilityDiagnostic = throwDiagnostic;
                         needsScopeFixMarker = false;
                         resultHasScopeMarker = false;
@@ -296,10 +303,10 @@ namespace ts {
             resultHasExternalModuleIndicator = false;
             suppressNewDiagnosticContexts = false;
             lateMarkedStatements = undefined;
-            lateStatementReplacementMap = createMap();
+            lateStatementReplacementMap = new Map();
             necessaryTypeReferences = undefined;
-            refs = collectReferences(currentSourceFile, createMap());
-            libs = collectLibs(currentSourceFile, createMap());
+            refs = collectReferences(currentSourceFile, new Map());
+            libs = collectLibs(currentSourceFile, new Map());
             const references: FileReference[] = [];
             const outputFilePath = getDirectoryPath(normalizeSlashes(getOutputPathsFor(node, host, /*forceDtsPaths*/ true).declarationFilePath!));
             const referenceVisitor = mapReferencesIntoArray(references, outputFilePath);
@@ -402,18 +409,18 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: ESMap<NodeId, SourceFile>) {
             if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = host.getSourceFileFromReference(sourceFile, f);
                 if (elem) {
-                    ret.set("" + getOriginalNodeId(elem), elem);
+                    ret.set(getOriginalNodeId(elem), elem);
                 }
             });
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: ESMap<string, boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
@@ -772,7 +779,7 @@ namespace ts {
                 needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
                 const result = transformTopLevelDeclaration(i);
                 needsDeclare = priorNeedsDeclare;
-                lateStatementReplacementMap.set("" + getOriginalNodeId(i), result);
+                lateStatementReplacementMap.set(getOriginalNodeId(i), result);
             }
 
             // And lastly, we need to get the final form of all those indetermine import declarations from before and add them to the output list
@@ -781,7 +788,7 @@ namespace ts {
 
             function visitLateVisibilityMarkedStatements(statement: Statement) {
                 if (isLateVisibilityPaintedStatement(statement)) {
-                    const key = "" + getOriginalNodeId(statement);
+                    const key = getOriginalNodeId(statement);
                     if (lateStatementReplacementMap.has(key)) {
                         const result = lateStatementReplacementMap.get(key);
                         lateStatementReplacementMap.delete(key);
@@ -1103,7 +1110,7 @@ namespace ts {
 
             const result = transformTopLevelDeclaration(input);
             // Don't actually transform yet; just leave as original node - will be elided/swapped by late pass
-            lateStatementReplacementMap.set("" + getOriginalNodeId(input), result);
+            lateStatementReplacementMap.set(getOriginalNodeId(input), result);
             return input;
         }
 
@@ -1305,7 +1312,7 @@ namespace ts {
                         needsDeclare = false;
                         visitNode(inner, visitDeclarationStatements);
                         // eagerly transform nested namespaces (the nesting doesn't need any elision or painting done)
-                        const id = "" + getOriginalNodeId(inner!); // TODO: GH#18217
+                        const id = getOriginalNodeId(inner!); // TODO: GH#18217
                         const body = lateStatementReplacementMap.get(id);
                         lateStatementReplacementMap.delete(id);
                         return cleanup(factory.updateModuleDeclaration(

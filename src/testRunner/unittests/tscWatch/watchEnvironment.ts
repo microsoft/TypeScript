@@ -12,7 +12,7 @@ namespace ts.tscWatch {
                     path: `${projectFolder}/typescript.ts`,
                     content: "var z = 10;"
                 };
-                const environmentVariables = createMap<string>();
+                const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHFILE", TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
                 return createWatchedSystem([file1, libFile], { environmentVariables });
             },
@@ -88,7 +88,7 @@ namespace ts.tscWatch {
                     commandLineArgs: ["--w", "-p", configFile.path],
                     sys: () => {
                         const files = [file, configFile, libFile];
-                        const environmentVariables = createMap<string>();
+                        const environmentVariables = new Map<string, string>();
                         environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                         return createWatchedSystem(files, { environmentVariables });
                     },
@@ -156,7 +156,7 @@ namespace ts.tscWatch {
                         symLink: `${cwd}/node_modules/a`
                     };
                     const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                    const environmentVariables = createMap<string>();
+                    const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
                 },
@@ -410,6 +410,91 @@ namespace ts.tscWatch {
                     return createWatchedSystem(files);
                 },
                 changes: emptyArray
+            });
+
+            describe("exclude options", () => {
+                function sys(watchOptions: WatchOptions, runWithoutRecursiveWatches?: boolean): WatchedSystem {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ exclude: ["node_modules"], watchOptions })
+                    };
+                    const main: File = {
+                        path: `${projectRoot}/src/main.ts`,
+                        content: `import { foo } from "bar"; foo();`
+                    };
+                    const bar: File = {
+                        path: `${projectRoot}/node_modules/bar/index.d.ts`,
+                        content: `export { foo } from "./foo";`
+                    };
+                    const foo: File = {
+                        path: `${projectRoot}/node_modules/bar/foo.d.ts`,
+                        content: `export function foo(): string;`
+                    };
+                    const fooBar: File = {
+                        path: `${projectRoot}/node_modules/bar/fooBar.d.ts`,
+                        content: `export function fooBar(): string;`
+                    };
+                    const temp: File = {
+                        path: `${projectRoot}/node_modules/bar/temp/index.d.ts`,
+                        content: "export function temp(): string;"
+                    };
+                    const files = [libFile, main, bar, foo, fooBar, temp, configFile];
+                    return createWatchedSystem(files, { currentDirectory: projectRoot, runWithoutRecursiveWatches });
+                }
+
+                function verifyWorker(...additionalFlags: string[]) {
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeFiles option${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeFiles: ["node_modules/*"] }),
+                        changes: [
+                            {
+                                caption: "Change foo",
+                                change: sys => replaceFileText(sys, `${projectRoot}/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            }
+                        ]
+                    });
+
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeDirectories option${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeDirectories: ["node_modules"] }),
+                        changes: [
+                            {
+                                caption: "delete fooBar",
+                                change: sys => sys.deleteFile(`${projectRoot}/node_modules/bar/fooBar.d.ts`),
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),                            }
+                        ]
+                    });
+
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
+                        changes: [
+                            {
+                                caption: "Directory watch updates because of main.js creation",
+                                change: noop,
+                                timeouts: sys => {
+                                    sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for main.js output
+                                    sys.checkTimeoutQueueLength(0);
+                                },
+                            },
+                            {
+                                caption: "add new folder to temp",
+                                change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            }
+                        ]
+                    });
+                }
+
+                verifyWorker();
+                verifyWorker("-extendedDiagnostics");
             });
         });
     });

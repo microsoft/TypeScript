@@ -34,6 +34,7 @@ namespace ts {
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -110,6 +111,7 @@ namespace ts {
         infer: SyntaxKind.InferKeyword,
         instanceof: SyntaxKind.InstanceOfKeyword,
         interface: SyntaxKind.InterfaceKeyword,
+        intrinsic: SyntaxKind.IntrinsicKeyword,
         is: SyntaxKind.IsKeyword,
         keyof: SyntaxKind.KeyOfKeyword,
         let: SyntaxKind.LetKeyword,
@@ -153,9 +155,9 @@ namespace ts {
         of: SyntaxKind.OfKeyword,
     };
 
-    const textToKeyword = createMapFromTemplate(textToKeywordObj);
+    const textToKeyword = new Map(getEntries(textToKeywordObj));
 
-    const textToToken = createMapFromTemplate<SyntaxKind>({
+    const textToToken = new Map(getEntries({
         ...textToKeywordObj,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
@@ -217,7 +219,7 @@ namespace ts {
         "??=": SyntaxKind.QuestionQuestionEqualsToken,
         "@": SyntaxKind.AtToken,
         "`": SyntaxKind.BacktickToken
-    });
+    }));
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -330,7 +332,7 @@ namespace ts {
                 lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: Map<number>): string[] {
+    function makeReverseMap(source: ESMap<string, number>): string[] {
         const result: string[] = [];
         source.forEach((value, name) => {
             result[value] = name;
@@ -954,6 +956,7 @@ namespace ts {
             getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
             getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
+            reScanAsteriskEqualsToken,
             reScanSlashToken,
             reScanTemplateToken,
             reScanTemplateHeadOrNoSubstitutionTemplate,
@@ -1506,9 +1509,9 @@ namespace ts {
         }
 
         function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-            // Reserved words are between 2 and 11 characters long and start with a lowercase letter
+            // Reserved words are between 2 and 12 characters long and start with a lowercase letter
             const len = tokenValue.length;
-            if (len >= 2 && len <= 11) {
+            if (len >= 2 && len <= 12) {
                 const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
                     const keyword = textToKeyword.get(tokenValue);
@@ -2086,6 +2089,12 @@ namespace ts {
             return token;
         }
 
+        function reScanAsteriskEqualsToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.EqualsToken;
+        }
+
         function reScanSlashToken(): SyntaxKind {
             if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
                 let p = tokenPos + 1;
@@ -2293,9 +2302,11 @@ namespace ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (tokenIsIdentifierOrKeyword(token)) {
-                // An identifier or keyword has already been parsed - check for a `-` and then append it and everything after it to the token
+                // An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
+                // everything after it to the token
                 // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
                 // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
+                let namespaceSeparator = false;
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
                     if (ch === CharacterCodes.minus) {
@@ -2303,11 +2314,22 @@ namespace ts {
                         pos++;
                         continue;
                     }
+                    else if (ch === CharacterCodes.colon && !namespaceSeparator) {
+                        tokenValue += ":";
+                        pos++;
+                        namespaceSeparator = true;
+                        continue;
+                    }
                     const oldPos = pos;
                     tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
                     if (pos === oldPos) {
                         break;
                     }
+                }
+                // Do not include a trailing namespace separator in the token, since this is against the spec.
+                if (tokenValue.slice(-1) === ":") {
+                    tokenValue = tokenValue.slice(0, -1);
+                    pos--;
                 }
             }
             return token;
@@ -2352,8 +2374,12 @@ namespace ts {
                     return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
                     return token = SyntaxKind.AtToken;
-                case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
+                    if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
+                    // falls through
+                case CharacterCodes.lineFeed:
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
