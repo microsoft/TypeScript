@@ -131,7 +131,7 @@ namespace ts.tracing {
     }
     export function pop() {
         if (!traceFd) return;
-        Debug.assert(canPop());
+        Debug.assert(completeEvents.length > 0);
         const { phase, name, args, time, separateBeginAndEnd } = completeEvents.pop()!;
         if (separateBeginAndEnd) {
             writeEvent("E", phase, name, args);
