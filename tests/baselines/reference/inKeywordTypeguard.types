@@ -419,6 +419,7 @@ if (isAOrB(x)) {
 >x : { bProp: number; }
 >bProp : number
     }
+    // x is never because of the type predicate from unknown
     else if ("cProp" in x) {
 >"cProp" in x : boolean
 >"cProp" : "cProp"

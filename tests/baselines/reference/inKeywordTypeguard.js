@@ -138,6 +138,7 @@ if (isAOrB(x)) {
     else if ("bProp" in x) {
         x.bProp;
     }
+    // x is never because of the type predicate from unknown
     else if ("cProp" in x) {
         const _never: never = x;
     }
@@ -317,6 +318,7 @@ if (isAOrB(x)) {
     else if ("bProp" in x) {
         x.bProp;
     }
+    // x is never because of the type predicate from unknown
     else if ("cProp" in x) {
         var _never = x;
     }

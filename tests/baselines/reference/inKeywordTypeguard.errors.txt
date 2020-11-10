@@ -199,6 +199,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
         else if ("bProp" in x) {
             x.bProp;
         }
+        // x is never because of the type predicate from unknown
         else if ("cProp" in x) {
             const _never: never = x;
         }
