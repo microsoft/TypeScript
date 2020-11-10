@@ -84,6 +84,10 @@ namespace ts.FindAllReferences {
 
                     switch (direct.kind) {
                         case SyntaxKind.CallExpression:
+                            if (isImportCall(direct)) {
+                                handleImportCall(direct);
+                                break;
+                            }
                             if (!isAvailableThroughGlobal) {
                                 const parent = direct.parent;
                                 if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
@@ -140,6 +144,16 @@ namespace ts.FindAllReferences {
             }
         }
 
+        function handleImportCall(importCall: ImportCall) {
+            const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
+            const exported = findAncestor(importCall, node => {
+                if (node === top) return "quit";
+                return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
+            });
+            if (exported) addIndirectUsers(top);
+            else addIndirectUser(top);
+        }
+
         function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
             if (exportKind === ExportKind.ExportEquals) {
                 // This is a direct import, not import-as-namespace.
@@ -173,6 +187,7 @@ namespace ts.FindAllReferences {
             }
 
             const moduleSymbol = checker.getMergedSymbol(sourceFileLike.symbol);
+            if (!moduleSymbol) return;
             Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
             const directImports = getDirectImports(moduleSymbol);
             if (directImports) {
