@@ -135,6 +135,7 @@ namespace ts.FindAllReferences {
 
                         case SyntaxKind.ImportType:
                             directImports.push(direct);
+                            handleImportCall(direct);
                             break;
 
                         default:
@@ -144,7 +145,9 @@ namespace ts.FindAllReferences {
             }
         }
 
-        function handleImportCall(importCall: ImportCall) {
+        // value level "import('./file')" (dynamic import)
+        // or type level "typeof import('./file')" (import type)
+        function handleImportCall(importCall: ImportCall | ImportTypeNode) {
             const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
             const exported = findAncestor(importCall, node => {
                 if (node === top) return "quit";
