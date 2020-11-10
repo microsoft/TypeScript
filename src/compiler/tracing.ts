@@ -46,7 +46,7 @@ namespace ts.tracing {
         }
 
         const countPart =
-            mode === Mode.Build ? `.${++traceCount}` :
+            mode === Mode.Build ? `.${process.pid}.${++traceCount}` :
             mode === Mode.Server ? `.${process.pid}` :
             ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
