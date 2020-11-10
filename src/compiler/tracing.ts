@@ -12,7 +12,7 @@ namespace ts.tracing {
     let traceCount = 0;
     let traceFd: number | undefined;
 
-    let mode: Mode = Mode.Project; // This initial value should never be consumed
+    let mode: Mode;
 
     let legendPath: string | undefined;
     const legend: TraceRecord[] = [];
@@ -78,7 +78,7 @@ namespace ts.tracing {
         }
 
         Debug.assert(fs);
-        Debug.assert(!!typeCatalog === (mode !== Mode.Server));
+        Debug.assert(!!typeCatalog === (mode !== Mode.Server)); // Have a type catalog iff not in server mode
 
         fs.writeSync(traceFd, `\n]\n`);
         fs.closeSync(traceFd);
