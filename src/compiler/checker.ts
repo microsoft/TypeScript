@@ -22191,10 +22191,7 @@ namespace ts {
                         }
                         return getIntersectionType([type, record]);
                     }
-                    if (everyType(type, t => !isTypePresencePossible(t, propName, assumeTrue))) {
-                        return narrowed;
-                    }
-                    return type;
+                    return narrowed;
                 }
                 return type;
             }
