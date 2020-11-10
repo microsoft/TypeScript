@@ -2790,7 +2790,7 @@ namespace ts {
             const resolved = getExternalModuleMember(root, commonJSPropertyAccess || node, dontResolveAlias);
             const name = node.propertyName || node.name;
             if (commonJSPropertyAccess && resolved && isIdentifier(name)) {
-                return getPropertyOfType(getTypeOfSymbol(resolved), name.escapedText);
+                return resolveSymbol(getPropertyOfType(getTypeOfSymbol(resolved), name.escapedText), dontResolveAlias);
             }
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
