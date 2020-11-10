@@ -24250,10 +24250,7 @@ namespace ts {
             return undefined;
 
             function tryFindWhenConstTypeReference(node: Expression) {
-                if(isCallLikeExpression(node.parent)){
-                    return getContextualTypeForArgument(node.parent, node);
-                }
-                return undefined;
+                return getContextualType(node);
             }
         }
 
