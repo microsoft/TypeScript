@@ -22176,10 +22176,7 @@ namespace ts {
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
                     const propName = escapeLeadingUnderscores(literal.text);
                     const narrowed = filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
-                    if ((narrowed.flags & TypeFlags.Never) === 0) {
-                        return narrowed;
-                    }
-                    if (assumeTrue) {
+                    if (assumeTrue && (narrowed.flags & TypeFlags.Never)) {
                         const recordTypeAlias = getGlobalRecordSymbol();
                         if (!recordTypeAlias) {
                             return errorType;
