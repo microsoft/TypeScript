@@ -722,6 +722,7 @@ namespace ts {
         const templateLiteralTypes = new Map<string, TemplateLiteralType>();
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
+        const propertyWitnessRecordTypes = new Map<string, Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
 
@@ -915,6 +916,7 @@ namespace ts {
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
+        let deferredGlobalRecordSymbol: Symbol;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -12658,6 +12660,10 @@ namespace ts {
             return deferredGlobalBigIntType || (deferredGlobalBigIntType = getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
+        function getGlobalRecordSymbol(): Symbol {
+            return deferredGlobalRecordSymbol || (deferredGlobalRecordSymbol = getGlobalSymbol("Record" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!);
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -22169,7 +22175,20 @@ namespace ts {
                     || isThisTypeParameter(type)
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
                     const propName = escapeLeadingUnderscores(literal.text);
-                    return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
+                    const narrowed = filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
+                    if (assumeTrue && narrowed.flags & TypeFlags.Never) {
+                        const recordTypeAlias = getGlobalRecordSymbol();
+                        if (!recordTypeAlias) {
+                            return errorType;
+                        }
+                        let record = propertyWitnessRecordTypes.get(literal.text);
+                        if (!record) {
+                            record = getTypeAliasInstantiation(recordTypeAlias, [getLiteralType(literal.text), unknownType]);
+                            propertyWitnessRecordTypes.set(literal.text, record);
+                        }
+                        return getIntersectionType([type, record]);
+                    }
+                    return narrowed;
                 }
                 return type;
             }
