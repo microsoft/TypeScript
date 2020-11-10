@@ -211,15 +211,13 @@ namespace ts.server {
                     tracing.instant(tracing.Phase.Session, "stepCancellation", { seq: this.requestId });
                 }
                 else {
-                    Debug.assert(!tracing.canPop());
+                    tracing.assertStackEmpty();
                     tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
                     try {
                         action(this);
                     }
                     finally {
-                        while (tracing.canPop()) {
-                            tracing.pop();
-                        }
+                        tracing.popAll();
                     }
                 }
             }
@@ -2934,7 +2932,7 @@ namespace ts.server {
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                Debug.assert(!tracing.canPop());
+                tracing.assertStackEmpty();
                 try {
                     request = <protocol.Request>JSON.parse(message);
                     relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
@@ -2966,9 +2964,7 @@ namespace ts.server {
                 }
                 finally {
                     // Cancellation or an error may have left incomplete events on the tracing stack.
-                    while (tracing.canPop()) {
-                        tracing.pop();
-                    }
+                    tracing.popAll();
                 }
             }
             catch (err) {

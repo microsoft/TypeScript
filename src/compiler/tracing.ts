@@ -141,8 +141,18 @@ namespace ts.tracing {
             writeEvent("X", phase, name, args, `"dur":${dur}`, time);
         }
     }
-    export function canPop() {
-        return completeEvents.length > 0;
+    export function popAll() {
+        if (!traceFd) return;
+        const endTime = 1000 * timestamp();
+        for (let i = completeEvents.length - 1; i >= 0; i--) {
+            const { phase, name, args, time } = completeEvents[i];
+            const dur = endTime - time;
+            writeEvent("X", phase, name, args, `"dur":${dur}`, time);
+        }
+        completeEvents.length = 0;
+    }
+    export function assertStackEmpty() {
+        Debug.assert(completeEvents.length === 0);
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,
