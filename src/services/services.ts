@@ -1136,15 +1136,12 @@ namespace ts {
         }
 
         public isCancellationRequested(): boolean {
-            if (this.cancellationToken.isCancellationRequested()) {
-                tracing.instant(tracing.Phase.Session, "cancellationDetected", { kind: "CancellationTokenObject" });
-                return true;
-            }
-            return false;
+            return this.cancellationToken.isCancellationRequested();
         }
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
+                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
                 throw new OperationCanceledException();
             }
         }
@@ -1167,11 +1164,7 @@ namespace ts {
             if (duration >= this.throttleWaitMilliseconds) {
                 // Check no more than once every throttle wait milliseconds
                 this.lastCancellationCheckTime = time;
-                if (this.hostCancellationToken.isCancellationRequested()) {
-                    tracing.instant(tracing.Phase.Session, "cancellationDetected", { kind: "ThrottledCancellationToken" });
-                    return true;
-                }
-                return false;
+                return this.hostCancellationToken.isCancellationRequested();
             }
 
             return false;
@@ -1179,6 +1172,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
+                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
                 throw new OperationCanceledException();
             }
         }
