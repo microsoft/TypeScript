@@ -152,7 +152,7 @@ namespace ts.tracing {
         completeEvents.length = 0;
     }
     export function assertStackEmpty() {
-        Debug.assert(completeEvents.length === 0);
+        Debug.assert(completeEvents.length === 0, `Found ${completeEvents.length} events on the stack`);
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,

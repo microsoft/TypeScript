@@ -211,24 +211,26 @@ namespace ts.server {
                     tracing.instant(tracing.Phase.Session, "stepCancellation", { seq: this.requestId });
                 }
                 else {
-                    tracing.assertStackEmpty();
+                    tracing.assertStackEmpty(); // Confirm it's safe to popAll if there's an exception
+
                     tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
-                    try {
-                        action(this);
-                    }
-                    finally {
-                        tracing.popAll();
-                    }
+                    action(this);
+                    tracing.pop();
+
+                    tracing.assertStackEmpty(); // Stack should be empty if everything succeeeded
                 }
             }
             catch (e) {
+                // Cancellation or an error may have left incomplete events on the tracing stack.
+                tracing.popAll();
+
                 stop = true;
                 // ignore cancellation request
                 if (e instanceof OperationCanceledException) {
-                    tracing.instant(tracing.Phase.Session, "stepUnhandledCancellation", { seq: this.requestId });
+                    tracing.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId });
                 }
                 else {
-                    tracing.instant(tracing.Phase.Session, "stepUnhandledError", { seq: this.requestId, message: (<Error>e).message });
+                    tracing.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (<Error>e).message });
                     this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
                 }
             }
@@ -2932,53 +2934,53 @@ namespace ts.server {
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                tracing.assertStackEmpty();
-                try {
-                    request = <protocol.Request>JSON.parse(message);
-                    relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
+                tracing.assertStackEmpty(); // Confirm it's safe to popAll if there's an exception
 
-                    tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-                    perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
+                request = <protocol.Request>JSON.parse(message);
+                relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
-                    const { response, responseRequired } = this.executeCommand(request);
+                tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
+                perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
 
-                    if (this.logger.hasLevel(LogLevel.requestTime)) {
-                        const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
-                        if (responseRequired) {
-                            this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
-                        }
-                        else {
-                            this.logger.perftrc(`${request.seq}::${request.command}: async elapsed time (in milliseconds) ${elapsedTime}`);
-                        }
+                const { response, responseRequired } = this.executeCommand(request);
+
+                if (this.logger.hasLevel(LogLevel.requestTime)) {
+                    const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
+                    if (responseRequired) {
+                        this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
                     }
-
-                    // Note: Log before writing the response, else the editor can complete its activity before the server does
-                    perfLogger.logStopCommand("" + request.command, "Success");
-                    tracing.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
-                    if (response) {
-                        this.doOutput(response, request.command, request.seq, /*success*/ true);
-                    }
-                    else if (responseRequired) {
-                        this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                    else {
+                        this.logger.perftrc(`${request.seq}::${request.command}: async elapsed time (in milliseconds) ${elapsedTime}`);
                     }
                 }
-                finally {
-                    // Cancellation or an error may have left incomplete events on the tracing stack.
-                    tracing.popAll();
+
+                // Note: Log before writing the response, else the editor can complete its activity before the server does
+                perfLogger.logStopCommand("" + request.command, "Success");
+                tracing.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
+                if (response) {
+                    this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
+                else if (responseRequired) {
+                    this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                }
+
+                tracing.assertStackEmpty(); // Stack should be empty if everything succeeeded
             }
             catch (err) {
+                // Cancellation or an error may have left incomplete events on the tracing stack.
+                tracing.popAll();
+
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
                     perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
-                    tracing.instant(tracing.Phase.Session, "unhandledCancellation", { seq: request?.seq, command: request?.command });
+                    tracing.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, message, relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-                tracing.instant(tracing.Phase.Session, "unhandledError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
+                tracing.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
 
                 this.doOutput(
                     /*info*/ undefined,
