@@ -134,8 +134,9 @@ namespace ts.FindAllReferences {
                             break;
 
                         case SyntaxKind.ImportType:
+                            // Only check for typeof import('xyz')
+                            if (direct.isTypeOf && !direct.qualifier && isExported(direct)) addIndirectUsers(direct.getSourceFile());
                             directImports.push(direct);
-                            handleImportCall(direct);
                             break;
 
                         default:
@@ -145,16 +146,18 @@ namespace ts.FindAllReferences {
             }
         }
 
-        // value level "import('./file')" (dynamic import)
-        // or type level "typeof import('./file')" (import type)
-        function handleImportCall(importCall: ImportCall | ImportTypeNode) {
+        function handleImportCall(importCall: ImportCall) {
             const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
-            const exported = findAncestor(importCall, node => {
+            const exported = isExported(importCall, top);
+            if (exported) addIndirectUsers(top);
+            else addIndirectUser(top);
+        }
+
+        function isExported(node: Node, top: SourceFileLike = node.getSourceFile()) {
+            return findAncestor(node, node => {
                 if (node === top) return "quit";
                 return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
             });
-            if (exported) addIndirectUsers(top);
-            else addIndirectUser(top);
         }
 
         function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
