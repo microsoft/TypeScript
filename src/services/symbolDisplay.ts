@@ -159,14 +159,14 @@ namespace ts.SymbolDisplay {
             }
 
             // try get the call/construct signature from the type if it matches
-            let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement | undefined;
+            let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement | TaggedTemplateExpression | undefined;
             if (isCallOrNewExpression(location)) {
                 callExpressionLike = location;
             }
             else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
                 callExpressionLike = <CallExpression | NewExpression>location.parent;
             }
-            else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration)) {
+            else if (location.parent && (isJsxOpeningLikeElement(location.parent) || isTaggedTemplateExpression(location.parent)) && isFunctionLike(symbol.valueDeclaration)) {
                 callExpressionLike = location.parent;
             }
 
@@ -236,7 +236,7 @@ namespace ts.SymbolDisplay {
             else if ((isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) || // name of function declaration
                 (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                 // get the signature from the declaration and write it
-                const functionDeclaration = <FunctionLike>location.parent;
+                const functionDeclaration = <SignatureDeclaration>location.parent;
                 // Use function declaration to write the signatures only if the symbol corresponding to this declaration
                 const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration =>
                     declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
@@ -379,7 +379,8 @@ namespace ts.SymbolDisplay {
                 }
             }
         }
-        if (symbolFlags & SymbolFlags.Alias) {
+        // don't use symbolFlags since getAliasedSymbol requires the flag on the symbol itself
+        if (symbol.flags & SymbolFlags.Alias) {
             prefixNextMeaning();
             if (!hasAddedSymbolInfo) {
                 const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
@@ -480,6 +481,14 @@ namespace ts.SymbolDisplay {
                         }
                         else {
                             addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                        }
+                        if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
+                            const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                            Debug.assertNode(labelDecl.name, isIdentifier);
+                            displayParts.push(spacePart());
+                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                            displayParts.push(textPart(idText(labelDecl.name)));
+                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                     }
                     else if (symbolFlags & SymbolFlags.Function ||

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/app.ts]
 
 
@@ -18,14 +18,11 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/tsconfig.json]
 {
 
-//// [/a/b/app.js]
 
-
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
-
 
 [96ma/b/tsconfig.json[0m:[93m1[0m:[93m2[0m - [91merror[0m[90m TS1005: [0m'}' expected.
 
@@ -37,13 +34,13 @@ Output::
     [7m [0m [96m~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-
 [[90m12:00:18 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/a/b/app.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/app.ts
@@ -69,3 +66,7 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/app.js]
+
+

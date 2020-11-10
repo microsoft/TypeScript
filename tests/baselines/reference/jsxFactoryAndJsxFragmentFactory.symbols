@@ -1,0 +1,9 @@
+=== tests/cases/compiler/jsxFactoryAndJsxFragmentFactory.tsx ===
+declare var h: any;
+>h : Symbol(h, Decl(jsxFactoryAndJsxFragmentFactory.tsx, 0, 11))
+
+declare var Frag: any;
+>Frag : Symbol(Frag, Decl(jsxFactoryAndJsxFragmentFactory.tsx, 1, 11))
+
+<></>;
+<><span>1</span><><span>2.1</span><span>2.2</span></></>;

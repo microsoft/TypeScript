@@ -1,0 +1,17 @@
+=== tests/cases/compiler/recursivelyExpandingUnionNoStackoverflow.ts ===
+type N<T, K extends string> = T | { [P in K]: N<T, K> }[K];
+>N : Symbol(N, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 0))
+>T : Symbol(T, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 7))
+>K : Symbol(K, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 9))
+>T : Symbol(T, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 7))
+>P : Symbol(P, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 37))
+>K : Symbol(K, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 9))
+>N : Symbol(N, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 0))
+>T : Symbol(T, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 7))
+>K : Symbol(K, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 9))
+>K : Symbol(K, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 9))
+
+type M = N<number, "M">;
+>M : Symbol(M, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 59))
+>N : Symbol(N, Decl(recursivelyExpandingUnionNoStackoverflow.ts, 0, 0))
+

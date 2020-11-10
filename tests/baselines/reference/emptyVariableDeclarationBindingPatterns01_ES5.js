@@ -68,11 +68,11 @@
     function f(_a, _b, _c) {
         _a = a;
         _b = a;
-        var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+        var _d = _c === void 0 ? a : _c, _e = _d.p, _f = _e === void 0 ? a : _e, _g = _f;
         return function (_a, _b, _c) {
             _a = a;
             _b = a;
-            var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
+            var _d = _c === void 0 ? a : _c, _e = _d.p, _f = _e === void 0 ? a : _e, _g = _f;
             return a;
         };
     }

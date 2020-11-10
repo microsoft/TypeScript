@@ -1,6 +1,8 @@
+error TS1391: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 /main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
+!!! error TS1391: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== /mod2.ts (0 errors) ====
     import { Cls } from "./main";
     import "./mod1";

@@ -248,6 +248,20 @@ class SuperThrowable extends MyThrowable {
     }
 }
 
+// Repro from #40346
+
+interface Services {
+    panic(message: string): never;
+}
+
+function foo(services: Readonly<Services>, s: string | null): string {
+    if (s === null) {
+        services.panic("ouch");
+    } else {
+        return s;
+    }
+}
+
 
 //// [neverReturningFunctions1.js]
 "use strict";
@@ -255,7 +269,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -467,6 +481,14 @@ var SuperThrowable = /** @class */ (function (_super) {
     };
     return SuperThrowable;
 }(MyThrowable));
+function foo(services, s) {
+    if (s === null) {
+        services.panic("ouch");
+    }
+    else {
+        return s;
+    }
+}
 
 
 //// [neverReturningFunctions1.d.ts]

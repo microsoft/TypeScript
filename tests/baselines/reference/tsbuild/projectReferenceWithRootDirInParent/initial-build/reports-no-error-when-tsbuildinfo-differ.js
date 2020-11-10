@@ -1,4 +1,43 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/main/a.ts]
+import { b } from './b';
+const a = b;
+
+//// [/src/src/main/b.ts]
+export const b = 0;
+
+
+//// [/src/src/main/tsconfig.main.json]
+{"compilerOptions":{"composite":true,"outDir":"../../dist/"},"references":[{"path":"../other/tsconfig.other.json"}]}
+
+//// [/src/src/other/other.ts]
+export const Other = 0;
+
+
+//// [/src/src/other/tsconfig.other.json]
+{"compilerOptions":{"composite":true,"outDir":"../../dist/"}}
+
+//// [/src/tsconfig.base.json]
+
+
+
+
+Output::
 /lib/tsc --b /src/src/main/tsconfig.main.json --verbose
 [[90m12:00:00 AM[0m] Projects in this build: 
     * src/src/other/tsconfig.other.json
@@ -117,12 +156,4 @@ exports.Other = 0;
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/src/main/tsconfig.json] unlink
-//// [/src/src/main/tsconfig.main.json]
-{"compilerOptions":{"composite":true,"outDir":"../../dist/"},"references":[{"path":"../other/tsconfig.other.json"}]}
-
-//// [/src/src/other/tsconfig.json] unlink
-//// [/src/src/other/tsconfig.other.json]
-{"compilerOptions":{"composite":true,"outDir":"../../dist/"}}
 

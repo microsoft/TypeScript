@@ -12,10 +12,10 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const fixedExportDeclarations = createMap<true>();
+            const fixedExportDeclarations = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
-                if (exportSpecifier && !addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
+                if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {
                     fixSingleExportDeclaration(changes, exportSpecifier, context);
                 }
             });
@@ -35,33 +35,27 @@ namespace ts.codefix {
         const exportDeclaration = exportClause.parent;
         const typeExportSpecifiers = getTypeExportSpecifiers(exportSpecifier, context);
         if (typeExportSpecifiers.length === exportClause.elements.length) {
-            changes.replaceNode(
-                context.sourceFile,
-                exportDeclaration,
-                updateExportDeclaration(
-                    exportDeclaration,
-                    exportDeclaration.decorators,
-                    exportDeclaration.modifiers,
-                    exportClause,
-                    exportDeclaration.moduleSpecifier,
-                    /*isTypeOnly*/ true));
+            changes.insertModifierBefore(context.sourceFile, SyntaxKind.TypeKeyword, exportClause);
         }
         else {
-            const valueExportDeclaration = updateExportDeclaration(
+            const valueExportDeclaration = factory.updateExportDeclaration(
                 exportDeclaration,
                 exportDeclaration.decorators,
                 exportDeclaration.modifiers,
-                updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
-                exportDeclaration.moduleSpecifier,
-                /*isTypeOnly*/ false);
-            const typeExportDeclaration = createExportDeclaration(
+                /*isTypeOnly*/ false,
+                factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
+                exportDeclaration.moduleSpecifier);
+            const typeExportDeclaration = factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createNamedExports(typeExportSpecifiers),
-                exportDeclaration.moduleSpecifier,
-                /*isTypeOnly*/ true);
+                /*isTypeOnly*/ true,
+                factory.createNamedExports(typeExportSpecifiers),
+                exportDeclaration.moduleSpecifier);
 
-            changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration);
+            changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
+                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+            });
             changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
         }
     }

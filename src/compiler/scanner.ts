@@ -21,15 +21,20 @@ namespace ts {
         hasUnicodeEscape(): boolean;
         hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
+        /* @internal */
+        hasPrecedingJSDocComment(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
         isUnterminated(): boolean;
+        /* @internal */
+        getNumericLiteralFlags(): TokenFlags;
         /* @internal */
         getCommentDirectives(): CommentDirective[] | undefined;
         /* @internal */
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -106,6 +111,7 @@ namespace ts {
         infer: SyntaxKind.InferKeyword,
         instanceof: SyntaxKind.InstanceOfKeyword,
         interface: SyntaxKind.InterfaceKeyword,
+        intrinsic: SyntaxKind.IntrinsicKeyword,
         is: SyntaxKind.IsKeyword,
         keyof: SyntaxKind.KeyOfKeyword,
         let: SyntaxKind.LetKeyword,
@@ -149,9 +155,9 @@ namespace ts {
         of: SyntaxKind.OfKeyword,
     };
 
-    const textToKeyword = createMapFromTemplate(textToKeywordObj);
+    const textToKeyword = new Map(getEntries(textToKeywordObj));
 
-    const textToToken = createMapFromTemplate<SyntaxKind>({
+    const textToToken = new Map(getEntries({
         ...textToKeywordObj,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
@@ -208,9 +214,12 @@ namespace ts {
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
+        "||=": SyntaxKind.BarBarEqualsToken,
+        "&&=": SyntaxKind.AmpersandAmpersandEqualsToken,
+        "??=": SyntaxKind.QuestionQuestionEqualsToken,
         "@": SyntaxKind.AtToken,
         "`": SyntaxKind.BacktickToken
-    });
+    }));
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -323,7 +332,7 @@ namespace ts {
                 lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: Map<number>): string[] {
+    function makeReverseMap(source: ESMap<string, number>): string[] {
         const result: string[] = [];
         source.forEach((value, name) => {
             result[value] = name;
@@ -939,12 +948,15 @@ namespace ts {
             hasUnicodeEscape: () => (tokenFlags & TokenFlags.UnicodeEscape) !== 0,
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
+            hasPrecedingJSDocComment: () => (tokenFlags & TokenFlags.PrecedingJSDocComment) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
             getCommentDirectives: () => commentDirectives,
+            getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
             getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
+            reScanAsteriskEqualsToken,
             reScanSlashToken,
             reScanTemplateToken,
             reScanTemplateHeadOrNoSubstitutionTemplate,
@@ -1497,9 +1509,9 @@ namespace ts {
         }
 
         function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-            // Reserved words are between 2 and 11 characters long and start with a lowercase letter
+            // Reserved words are between 2 and 12 characters long and start with a lowercase letter
             const len = tokenValue.length;
-            if (len >= 2 && len <= 11) {
+            if (len >= 2 && len <= 12) {
                 const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
                     const keyword = textToKeyword.get(tokenValue);
@@ -1667,6 +1679,9 @@ namespace ts {
                         return token = SyntaxKind.PercentToken;
                     case CharacterCodes.ampersand:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.AmpersandAmpersandEqualsToken;
+                            }
                             return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
@@ -1928,15 +1943,16 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 2))) {
+                            return pos += 2, token = SyntaxKind.QuestionDotToken;
+                        }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.question) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.QuestionQuestionEqualsToken;
+                            }
+                            return pos += 2, token = SyntaxKind.QuestionQuestionToken;
+                        }
                         pos++;
-                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
-                            pos++;
-                            return token = SyntaxKind.QuestionDotToken;
-                        }
-                        if (text.charCodeAt(pos) === CharacterCodes.question) {
-                            pos++;
-                            return token = SyntaxKind.QuestionQuestionToken;
-                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;
@@ -1965,6 +1981,9 @@ namespace ts {
                         }
 
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.BarBarEqualsToken;
+                            }
                             return pos += 2, token = SyntaxKind.BarBarToken;
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
@@ -2068,6 +2087,12 @@ namespace ts {
                 }
             }
             return token;
+        }
+
+        function reScanAsteriskEqualsToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.EqualsToken;
         }
 
         function reScanSlashToken(): SyntaxKind {
@@ -2277,9 +2302,11 @@ namespace ts {
         // they allow dashes
         function scanJsxIdentifier(): SyntaxKind {
             if (tokenIsIdentifierOrKeyword(token)) {
-                // An identifier or keyword has already been parsed - check for a `-` and then append it and everything after it to the token
+                // An identifier or keyword has already been parsed - check for a `-` or a single instance of `:` and then append it and
+                // everything after it to the token
                 // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
                 // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
+                let namespaceSeparator = false;
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
                     if (ch === CharacterCodes.minus) {
@@ -2287,11 +2314,22 @@ namespace ts {
                         pos++;
                         continue;
                     }
+                    else if (ch === CharacterCodes.colon && !namespaceSeparator) {
+                        tokenValue += ":";
+                        pos++;
+                        namespaceSeparator = true;
+                        continue;
+                    }
                     const oldPos = pos;
                     tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
                     if (pos === oldPos) {
                         break;
                     }
+                }
+                // Do not include a trailing namespace separator in the token, since this is against the spec.
+                if (tokenValue.slice(-1) === ":") {
+                    tokenValue = tokenValue.slice(0, -1);
+                    pos--;
                 }
             }
             return token;
@@ -2336,8 +2374,12 @@ namespace ts {
                     return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
                     return token = SyntaxKind.AtToken;
-                case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
+                    if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
+                    // falls through
+                case CharacterCodes.lineFeed:
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:

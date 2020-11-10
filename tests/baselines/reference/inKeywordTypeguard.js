@@ -143,6 +143,14 @@ if (isAOrB(x)) {
     }
 }
 
+function negativeIntersectionTest() {
+    if ("ontouchstart" in window) {
+        window.ontouchstart
+    } else {
+        window.ontouchstart
+    }
+}
+
 
 //// [inKeywordTypeguard.js]
 var A = /** @class */ (function () {
@@ -311,5 +319,13 @@ if (isAOrB(x)) {
     }
     else if ("cProp" in x) {
         var _never = x;
+    }
+}
+function negativeIntersectionTest() {
+    if ("ontouchstart" in window) {
+        window.ontouchstart;
+    }
+    else {
+        window.ontouchstart;
     }
 }

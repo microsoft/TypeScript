@@ -1,8 +1,8 @@
 tests/cases/conformance/jsdoc/a.js(12,21): error TS2339: Property 'x' does not exist on type 'typeof A'.
-tests/cases/conformance/jsdoc/a.js(15,5): error TS2345: Argument of type '"no"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(16,5): error TS2345: Argument of type '"not really"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(17,5): error TS2345: Argument of type '"still no"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/a.js(18,5): error TS2345: Argument of type '"not here either"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/a.js(15,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/a.js(16,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/a.js(17,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/a.js(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/jsdoc/a.js(19,1): error TS2322: Type '10' is not assignable to type '1'.
 
 
@@ -25,16 +25,16 @@ tests/cases/conformance/jsdoc/a.js(19,1): error TS2322: Type '10' is not assigna
     var a = new A()
     a.y('no') // error
         ~~~~
-!!! error TS2345: Argument of type '"no"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     a.z('not really') // error
         ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"not really"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     A.s('still no') // error
         ~~~~~~~~~~
-!!! error TS2345: Argument of type '"still no"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     A.t('not here either') // error
         ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"not here either"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     a.first = 10 // error: '10' isn't assignable to '1'
     ~~~~~~~
 !!! error TS2322: Type '10' is not assignable to type '1'.

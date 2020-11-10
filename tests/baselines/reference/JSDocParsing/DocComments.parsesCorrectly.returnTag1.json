@@ -32,12 +32,14 @@
                     "pos": 17,
                     "end": 23,
                     "modifierFlagsCache": 0,
-                    "transformFlags": 0
+                    "transformFlags": 1
                 }
             }
         },
         "length": 1,
         "pos": 8,
-        "end": 24
+        "end": 24,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

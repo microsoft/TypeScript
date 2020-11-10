@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/c/tsconfig.json
+Input::
 //// [/a/b/f1.ts]
 export let x = 5
 
@@ -24,30 +24,11 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/c/tsconfig.json]
 {"compilerOptions":{},"files":["f2.ts","f3.ts"]}
 
-//// [/a/b/f1.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-exports.x = 5;
 
-
-//// [/a/c/f2.js]
-"use strict";
-exports.__esModule = true;
-
-
-//// [/a/c/f3.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 1;
-
-
-
+/a/lib/tsc.js -w -p /a/c/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
-
 
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -55,6 +36,7 @@ Output::
 
 Program root files: ["/a/c/f2.ts","/a/c/f3.ts"]
 Program options: {"watch":true,"project":"/a/c/tsconfig.json","configFilePath":"/a/c/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/f1.ts
@@ -86,3 +68,23 @@ FsWatchesRecursive::
   {"directoryName":"/a/c/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/f1.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+exports.x = 5;
+
+
+//// [/a/c/f2.js]
+"use strict";
+exports.__esModule = true;
+
+
+//// [/a/c/f3.js]
+"use strict";
+exports.__esModule = true;
+exports.y = void 0;
+exports.y = 1;
+
+

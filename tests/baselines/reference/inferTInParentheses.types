@@ -1,0 +1,47 @@
+=== tests/cases/compiler/inferTInParentheses.ts ===
+type F1 = (num: [number]) => void;
+>F1 : F1
+>num : [number]
+
+type IsNumber<T extends number> = T;
+>IsNumber : T
+
+type T1 = F1 extends (...args: (infer T)) => void ? T : never;
+>T1 : [num: [number]]
+>args : T
+
+type T2 = F1 extends (args: [...(infer T)]) => void ? T : never;
+>T2 : [number]
+>args : [...T]
+
+type T3<T> = T extends IsNumber<(infer N)> ? true : false;
+>T3 : T3<T>
+>true : true
+>false : false
+
+type T4 = F1 extends (...args: ((infer T))) => void ? T : never;
+>T4 : [num: [number]]
+>args : T
+
+type T5 = F1 extends (args: [...((infer T))]) => void ? T : never;
+>T5 : [number]
+>args : [...T]
+
+type T6<T> = T extends IsNumber<((infer N))> ? true : false;
+>T6 : T6<T>
+>true : true
+>false : false
+
+type T7 = F1 extends (...args: ((((infer T))))) => void ? T : never;
+>T7 : [num: [number]]
+>args : T
+
+type T8 = F1 extends (args: [...((((infer T))))]) => void ? T : never;
+>T8 : [number]
+>args : [...T]
+
+type T9<T> = T extends IsNumber<((((infer N))))> ? true : false;
+>T9 : T9<T>
+>true : true
+>false : false
+

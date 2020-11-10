@@ -1,6 +1,7 @@
 // @allowJs: true
 // @out: out.js
 // @declaration: true
+// @bundledPackageName: out
 // @filename: b.js
 function foo() {
     return 10;

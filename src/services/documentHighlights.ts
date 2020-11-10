@@ -28,7 +28,7 @@ namespace ts {
         }
 
         function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
-            const sourceFilesSet = arrayToSet(sourceFilesToSearch, f => f.fileName);
+            const sourceFilesSet = new Set(sourceFilesToSearch.map(f => f.fileName));
             const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
             if (!referenceEntries) return undefined;
             const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
@@ -204,7 +204,7 @@ namespace ts {
 
         function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
             // Types of node whose children might have modifiers.
-            const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration;
+            const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration | ObjectLiteralExpression;
             switch (container.kind) {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SourceFile:
@@ -240,6 +240,11 @@ namespace ts {
                         return [...nodes, container];
                     }
                     return nodes;
+
+                // Syntactically invalid positions that the parser might produce anyway
+                case SyntaxKind.ObjectLiteralExpression:
+                    return undefined;
+
                 default:
                     Debug.assertNever(container, "Invalid container kind.");
             }

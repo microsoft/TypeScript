@@ -183,3 +183,38 @@ const fn4: Fn<string, 0> = fn;  // Error
 >Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
 >fn : Symbol(fn, Decl(varianceMeasurement.ts, 53, 13))
 
+// Repro from #39947
+
+interface I<Dummy, V> {
+>I : Symbol(I, Decl(varianceMeasurement.ts, 61, 30))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 65, 12))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 65, 18))
+
+  c: C<Dummy, V>;
+>c : Symbol(I.c, Decl(varianceMeasurement.ts, 65, 23))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 65, 12))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 65, 18))
+}
+
+class C<Dummy, V> {
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 69, 8))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+
+  declare sub: I<Dummy, V>;
+>sub : Symbol(C.sub, Decl(varianceMeasurement.ts, 69, 19))
+>I : Symbol(I, Decl(varianceMeasurement.ts, 61, 30))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 69, 8))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+
+  declare covariance: V;
+>covariance : Symbol(C.covariance, Decl(varianceMeasurement.ts, 70, 27))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+}
+
+const c1: C<unknown, string> = new C<unknown, number>();  // Error
+>c1 : Symbol(c1, Decl(varianceMeasurement.ts, 74, 5))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+

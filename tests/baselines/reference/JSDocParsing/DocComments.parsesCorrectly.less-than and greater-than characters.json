@@ -20,6 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
+            "comment": "hi\n< > still part of the previous comment",
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
@@ -29,11 +30,12 @@
                 "escapedText": "x"
             },
             "isNameFirst": true,
-            "isBracketed": false,
-            "comment": "hi\n< > still part of the previous comment"
+            "isBracketed": false
         },
         "length": 1,
         "pos": 7,
-        "end": 59
+        "end": 59,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

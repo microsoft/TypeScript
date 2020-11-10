@@ -42,17 +42,19 @@ namespace ts {
             }
         }
 
-        const helperCall = createTemplateObjectHelper(context, createArrayLiteral(cookedStrings), createArrayLiteral(rawStrings));
+        const helperCall = context.getEmitHelperFactory().createTemplateObjectHelper(
+            factory.createArrayLiteralExpression(cookedStrings),
+            factory.createArrayLiteralExpression(rawStrings));
 
         // Create a variable to cache the template object if we're in a module.
         // Do not do this in the global scope, as any variable we currently generate could conflict with
         // variables from outside of the current compilation. In the future, we can revisit this behavior.
         if (isExternalModule(currentSourceFile)) {
-            const tempVar = createUniqueName("templateObject");
+            const tempVar = factory.createUniqueName("templateObject");
             recordTaggedTemplateString(tempVar);
-            templateArguments[0] = createLogicalOr(
+            templateArguments[0] = factory.createLogicalOr(
                 tempVar,
-                createAssignment(
+                factory.createAssignment(
                     tempVar,
                     helperCall)
             );
@@ -61,11 +63,11 @@ namespace ts {
             templateArguments[0] = helperCall;
         }
 
-        return createCall(tag, /*typeArguments*/ undefined, templateArguments);
+        return factory.createCallExpression(tag, /*typeArguments*/ undefined, templateArguments);
     }
 
     function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
-        return template.templateFlags ? createVoidZero() : createLiteral(template.text);
+        return template.templateFlags ? factory.createVoidZero() : factory.createStringLiteral(template.text);
     }
 
     /**
@@ -73,47 +75,26 @@ namespace ts {
      *
      * @param node The ES6 template literal.
      */
-    function getRawLiteral(node: LiteralLikeNode, currentSourceFile: SourceFile) {
+    function getRawLiteral(node: TemplateLiteralLikeNode, currentSourceFile: SourceFile) {
         // Find original source text, since we need to emit the raw strings of the tagged template.
         // The raw strings contain the (escaped) strings of what the user wrote.
         // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
-        let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+        let text = node.rawText;
+        if (text === undefined) {
+            text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
 
-        // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
-        // thus we need to remove those characters.
-        // First template piece starts with "`", others with "}"
-        // Last template piece ends with "`", others with "${"
-        const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
-        text = text.substring(1, text.length - (isLast ? 1 : 2));
+            // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
+            // thus we need to remove those characters.
+            // First template piece starts with "`", others with "}"
+            // Last template piece ends with "`", others with "${"
+            const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
+            text = text.substring(1, text.length - (isLast ? 1 : 2));
+        }
 
         // Newline normalization:
         // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
         // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
         text = text.replace(/\r\n?/g, "\n");
-        return setTextRange(createLiteral(text), node);
+        return setTextRange(factory.createStringLiteral(text), node);
     }
-
-    function createTemplateObjectHelper(context: TransformationContext, cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression) {
-        context.requestEmitHelper(templateObjectHelper);
-        return createCall(
-            getUnscopedHelperName("__makeTemplateObject"),
-            /*typeArguments*/ undefined,
-            [
-                cooked,
-                raw
-            ]
-        );
-    }
-
-    export const templateObjectHelper: UnscopedEmitHelper = {
-        name: "typescript:makeTemplateObject",
-        importName: "__makeTemplateObject",
-        scoped: false,
-        priority: 0,
-        text: `
-            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-                if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-                return cooked;
-            };`
-    };
 }

@@ -141,3 +141,11 @@ if (isAOrB(x)) {
         const _never: never = x;
     }
 }
+
+function negativeIntersectionTest() {
+    if ("ontouchstart" in window) {
+        window.ontouchstart
+    } else {
+        window.ontouchstart
+    }
+}
