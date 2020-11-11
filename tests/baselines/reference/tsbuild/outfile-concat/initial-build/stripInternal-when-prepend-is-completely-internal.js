@@ -24,7 +24,7 @@ declare const console: { log(msg: any): void; };
 
 
 //// [/src/first/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"sourceMap":true,"outFile":"./bin/first-output.js","bundledPackageName":"first"},"files":["/src/first/first_PART1.ts"]}
+{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"sourceMap":true,"outFile":"./bin/first-output.js"},"files":["/src/first/first_PART1.ts"]}
 
 //// [/src/second/second_part1.ts]
 
@@ -39,7 +39,7 @@ declare const console: { log(msg: any): void; };
 const B = 2;
 
 //// [/src/third/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":false,"stripInternal":true,"sourceMap":true,"outFile":"./thirdjs/output/third-output.js","bundledPackageName":"third"},"references":[{"path":"../first","prepend":true}],"files":["/src/third/third_part1.ts"]}
+{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":false,"stripInternal":true,"sourceMap":true,"outFile":"./thirdjs/output/third-output.js"},"references":[{"path":"../first","prepend":true}],"files":["/src/third/third_part1.ts"]}
 
 
 

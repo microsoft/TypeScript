@@ -3,7 +3,6 @@
 // @declaration: true
 // @module: commonjs
 // @outFile: all.js
-// @bundledPackageName: "lib"
 
 // This should be an error
 

@@ -36,7 +36,7 @@ interface Symbol {
     "compilerOptions": {
         "composite": true,
         "outFile": "common.js",
-        "bundledPackageName": "common"
+        
     },
     "include": ["nominal.js"]
 }
@@ -54,7 +54,7 @@ const c = /** @type {*} */(null);
     "compilerOptions": {
         "composite": true,
         "outFile": "sub-project.js",
-        "bundledPackageName": "sub"
+        
     },
     "references": [
         { "path": "../common", "prepend": true }
@@ -81,7 +81,7 @@ function getVar() {
     "compilerOptions": {
         "composite": true,
         "outFile": "sub-project-2.js",
-        "bundledPackageName": "sub-2"
+        
     },
     "references": [
         { "path": "../sub-project", "prepend": true }

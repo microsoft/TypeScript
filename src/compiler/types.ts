@@ -5725,7 +5725,6 @@ namespace ts {
         /** An error if set - this should only go through the -b pipeline and not actually be observed */
         /*@internal*/
         build?: boolean;
-        bundledPackageName?: string;
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
@@ -7852,7 +7851,6 @@ namespace ts {
         readonly redirectTargetsMap: RedirectTargetsMap;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        getCompilerOptions(): CompilerOptions;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
