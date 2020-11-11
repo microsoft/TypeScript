@@ -106,7 +106,7 @@ namespace ts.tracing {
      * In the future we might implement an exit handler to dump unfinished events which would deprecate
      * these operations.
      */
-    export function push(phase: Phase, name: string, args?: object, separateBeginAndEnd: boolean = false) {
+    export function push(phase: Phase, name: string, args?: object, separateBeginAndEnd = false) {
         if (!traceFd) return;
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
