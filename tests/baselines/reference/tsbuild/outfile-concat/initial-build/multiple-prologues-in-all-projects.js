@@ -49,7 +49,6 @@ function f() {
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "first",
   },
   "files": [
     "first_PART1.ts",
@@ -95,7 +94,6 @@ class C {
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "bundledPackageName": "second",
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
@@ -123,7 +121,6 @@ c.doSomething();
     "declaration": true,
     "outFile": "./thirdjs/output/third-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "third",
   },
   "files": [
     "third_part1.ts"

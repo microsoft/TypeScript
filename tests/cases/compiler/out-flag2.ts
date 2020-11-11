@@ -3,7 +3,6 @@
 // @declaration: true
 // @module: commonjs
 // @outFile: c.js
-// @bundledPackageName: out
 
 // @Filename: a.ts
 class A { }

@@ -48,7 +48,6 @@ function f() {
     "declarationMap": true,
     
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "first",
   },
   "files": [
     "first_PART1.ts",
@@ -92,7 +91,6 @@ class C {
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "bundledPackageName": "second",
     
     "skipDefaultLibCheck": true
   },
@@ -118,7 +116,6 @@ c.doSomething();
     "declaration": true,
     
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "third",
   },
   "files": [
     "third_part1.ts"
@@ -238,7 +235,6 @@ function f() {
       "sourceMap": true,
       "declarationMap": true,
       "skipDefaultLibCheck": true,
-      "bundledPackageName": "first",
       "configFilePath": "./tsconfig.json"
     },
     "semanticDiagnosticsPerFile": [
@@ -326,7 +322,6 @@ var C = (function () {
       "sourceMap": true,
       "declarationMap": true,
       "declaration": true,
-      "bundledPackageName": "second",
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
@@ -404,7 +399,6 @@ c.doSomething();
       "declarationMap": true,
       "declaration": true,
       "skipDefaultLibCheck": true,
-      "bundledPackageName": "third",
       "configFilePath": "./tsconfig.json"
     },
     "semanticDiagnosticsPerFile": [

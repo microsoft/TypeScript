@@ -53,7 +53,6 @@ declare class firstfirst_part2 { }
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "first",
   },
   "files": [
     "first_PART1.ts",
@@ -102,7 +101,6 @@ declare class secondsecond_part1 { }
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "bundledPackageName": "second",
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
@@ -133,7 +131,6 @@ declare class thirdthird_part1 { }
     "declaration": true,
     "outFile": "./thirdjs/output/third-output.js",
     "skipDefaultLibCheck": true,
-    "bundledPackageName": "third",
   },
   "files": [
     "third_part1.ts"
