@@ -174,6 +174,13 @@ Standard output:
 @fluentui/react-bindings: yarn run vX.X.X
 @fluentui/react-bindings: $ /office-ui-fabric-react/node_modules/.bin/just ts
 @fluentui/react-bindings: Done in ?s.
+@fluentui/react-shared-contexts: yarn run vX.X.X
+@fluentui/react-shared-contexts: $ just-scripts ts
+@fluentui/react-shared-contexts: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-shared-contexts/tsconfig.json
+@fluentui/react-shared-contexts: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-shared-contexts/tsconfig.json"
+@fluentui/react-shared-contexts: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-shared-contexts/tsconfig.json
+@fluentui/react-shared-contexts: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-shared-contexts/tsconfig.json"
+@fluentui/react-shared-contexts: Done in ?s.
 @fluentui/react-window-provider: yarn run vX.X.X
 @fluentui/react-window-provider: $ just-scripts ts
 @fluentui/react-window-provider: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-window-provider/tsconfig.json
@@ -207,7 +214,7 @@ Standard output:
 @fluentui/react-focus: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-focus/tsconfig.json"
 @fluentui/react-focus: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-focus/tsconfig.json
 @fluentui/react-focus: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-focus/tsconfig.json"
-@fluentui/react-focus: Done in ?s.
+@fluentui/react-focus: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 @fluentui/react-hooks: yarn run vX.X.X
 @fluentui/react-hooks: $ just-scripts ts
 @fluentui/react-hooks: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-hooks/tsconfig.json
@@ -590,20 +597,7 @@ Standard error:
 @fluentui/scripts:     at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5)
 @fluentui/scripts:     at Process.callbackTrampoline (internal/async_hooks.js:126:14)
 @fluentui/scripts: [XX:XX:XX XM] x stdout:
-@fluentui/scripts: [XX:XX:XX XM] x create-package/plopfile.ts:23:5 - error TS2322: Type 'Question<Partial<Answers>>[]' is not assignable to type 'Question<Answers>[]'.
-@fluentui/scripts:   Type 'Question<Partial<Answers>>' is not assignable to type 'Question<Answers>'.
-@fluentui/scripts:     Types of property 'message' are incompatible.
-@fluentui/scripts:       Type 'DynamicQuestionProperty<string | Promise<string>, Partial<Answers>>' is not assignable to type 'string | ((answers: Answers) => string)'.
-@fluentui/scripts:         Type 'Promise<string>' is not assignable to type 'string | ((answers: Answers) => string)'.
-@fluentui/scripts:           Type 'Promise<string>' is not assignable to type '(answers: Answers) => string'.
-@fluentui/scripts:             Type 'Promise<string>' provides no match for the signature '(answers: Answers): string'.
-@fluentui/scripts: 23     prompts: [
-@fluentui/scripts:        ~~~~~~~
-@fluentui/scripts:   ../node_modules/node-plop/index.d.ts:126:3
-@fluentui/scripts:     126   prompts: inquirer.Question[];
-@fluentui/scripts:           ~~~~~~~
-@fluentui/scripts:     The expected type comes from property 'prompts' which is declared here on type 'PlopGenerator'
-@fluentui/scripts: gulp/plugins/gulp-component-menu-behaviors.ts:1:38 - error TS2307: Cannot find module '@fluentui/a11y-testing' or its corresponding type declarations.
+@fluentui/scripts: [XX:XX:XX XM] x gulp/plugins/gulp-component-menu-behaviors.ts:1:38 - error TS2307: Cannot find module '@fluentui/a11y-testing' or its corresponding type declarations.
 @fluentui/scripts: 1 import * as behaviorDefinitions from '@fluentui/a11y-testing';
 @fluentui/scripts:                                        ~~~~~~~~~~~~~~~~~~~~~~~~
 @fluentui/scripts: gulp/plugins/util/getComponentInfo.ts:145:9 - error TS2322: Type 'Tag[]' is not assignable to type '{ title: string; description: string; type: null; name: string; }[]'.
@@ -659,7 +653,7 @@ Standard error:
 @fluentui/scripts: update-package-versions.js:47:12 - error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
 @fluentui/scripts: 47   function updateDependencies(deps) {
 @fluentui/scripts:               ~~~~~~~~~~~~~~~~~~
-@fluentui/scripts: Found 13 errors.
+@fluentui/scripts: Found 12 errors.
 @fluentui/scripts: [XX:XX:XX XM] x ------------------------------------
 @fluentui/scripts: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/scripts: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
@@ -684,6 +678,7 @@ Standard error:
 @fluentui/webpack-utilities: Found 1 error.
 @fluentui/webpack-utilities: [XX:XX:XX XM] x ------------------------------------
 @fluentui/webpack-utilities: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+@fluentui/webpack-utilities: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/webpack-utilities: error Command failed with exit code 1.
 @fluentui/docs-components: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/docs-components: [XX:XX:XX XM] x Command not defined: ts
@@ -703,9 +698,9 @@ Standard error:
 @fluentui/styles: [XX:XX:XX XM] x Command not defined: ts
 @fluentui/accessibility: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/accessibility: [XX:XX:XX XM] x Command not defined: ts
-@fluentui/merge-styles: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/merge-styles: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 @fluentui/merge-styles: [XX:XX:XX XM] x ------------------------------------
-@fluentui/merge-styles: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
+@fluentui/merge-styles: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @fluentui/merge-styles:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/merge-styles:     at ChildProcess.emit (events.js:314:20)
 @fluentui/merge-styles:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -722,7 +717,7 @@ Standard error:
 @fluentui/merge-styles: Found 2 errors.
 @fluentui/merge-styles: [XX:XX:XX XM] x ------------------------------------
 @fluentui/merge-styles: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/merge-styles: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/merge-styles: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 @fluentui/merge-styles: error Command failed with exit code 1.
 @fluentui/react-northstar-styles-renderer: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/react-northstar-styles-renderer: [XX:XX:XX XM] x Command not defined: ts
@@ -745,9 +740,15 @@ Standard error:
 @fluentui/utilities: [XX:XX:XX XM] x src/AutoScroll.ts:143:14 - error TS2790: The operand of a 'delete' operator must be optional.
 @fluentui/utilities: 143       delete this._timeoutId;
 @fluentui/utilities:                  ~~~~~~~~~~~~~~~
+@fluentui/utilities: src/appendFunction.ts:13:42 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/utilities: 13     functions.forEach((f: () => void) => f && f.apply(parent, args));
+@fluentui/utilities:                                             ~
 @fluentui/utilities: src/dom/getRect.ts:19:16 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 @fluentui/utilities: 19     } else if ((element as HTMLElement).getBoundingClientRect) {
 @fluentui/utilities:                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@fluentui/utilities: src/memoize.ts:97:23 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/utilities: 97     if (stylesheet && stylesheet.onReset) {
+@fluentui/utilities:                          ~~~~~~~~~~~~~~~~~~
 @fluentui/utilities: src/object.ts:9:11 - error TS2339: Property 'hasOwnProperty' does not exist on type 'TA'.
 @fluentui/utilities: 9     if (a.hasOwnProperty(propName)) {
 @fluentui/utilities:             ~~~~~~~~~~~~~~
@@ -763,7 +764,7 @@ Standard error:
 @fluentui/utilities: src/object.ts:17:14 - error TS2339: Property 'hasOwnProperty' does not exist on type 'TA'.
 @fluentui/utilities: 17       if (!a.hasOwnProperty(propName)) {
 @fluentui/utilities:                 ~~~~~~~~~~~~~~
-@fluentui/utilities: Found 7 errors.
+@fluentui/utilities: Found 9 errors.
 @fluentui/utilities: [XX:XX:XX XM] x ------------------------------------
 @fluentui/utilities: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/utilities: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
@@ -772,6 +773,24 @@ Standard error:
 @fluentui/react-icons-northstar: [XX:XX:XX XM] x Command not defined: ts
 @fluentui/react-telemetry: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/react-telemetry: [XX:XX:XX XM] x Command not defined: ts
+@fluentui/react-focus: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/react-focus: [XX:XX:XX XM] x ------------------------------------
+@fluentui/react-focus: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-focus/tsconfig.json"
+@fluentui/react-focus:     at ChildProcess.exithandler (child_process.js:308:12)
+@fluentui/react-focus:     at ChildProcess.emit (events.js:314:20)
+@fluentui/react-focus:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
+@fluentui/react-focus:     at maybeClose (internal/child_process.js:1021:16)
+@fluentui/react-focus:     at Process.ChildProcess._handle.onexit (internal/child_process.js:286:5)
+@fluentui/react-focus:     at Process.callbackTrampoline (internal/async_hooks.js:126:14)
+@fluentui/react-focus: [XX:XX:XX XM] x stdout:
+@fluentui/react-focus: [XX:XX:XX XM] x src/components/FocusZone/FocusZone.tsx:1255:13 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/react-focus: 1255         if (child.getAttribute && child.getAttribute(IS_FOCUSABLE_ATTRIBUTE) === 'false') {
+@fluentui/react-focus:                  ~~~~~~~~~~~~~~~~~~
+@fluentui/react-focus: Found 1 error.
+@fluentui/react-focus: [XX:XX:XX XM] x ------------------------------------
+@fluentui/react-focus: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+@fluentui/react-focus: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/react-focus: error Command failed with exit code 1.
 @fluentui/react-icons-mdl2: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-icons-mdl2: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-icons-mdl2: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-icons-mdl2/tsconfig.json"
@@ -800,9 +819,9 @@ Standard error:
 @fluentui/local-sandbox: [XX:XX:XX XM] x Command not defined: ts
 @fluentui/projects-test: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/projects-test: [XX:XX:XX XM] x Command not defined: ts
-@fluentui/foundation-legacy: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/foundation-legacy: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 @fluentui/foundation-legacy: [XX:XX:XX XM] x ------------------------------------
-@fluentui/foundation-legacy: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/foundation-legacy/tsconfig.json"
+@fluentui/foundation-legacy: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/foundation-legacy/tsconfig.json"
 @fluentui/foundation-legacy:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/foundation-legacy:     at ChildProcess.emit (events.js:314:20)
 @fluentui/foundation-legacy:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -825,11 +844,11 @@ Standard error:
 @fluentui/foundation-legacy: Found 1 error.
 @fluentui/foundation-legacy: [XX:XX:XX XM] x ------------------------------------
 @fluentui/foundation-legacy: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/foundation-legacy: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/foundation-legacy: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 @fluentui/foundation-legacy: error Command failed with exit code 1.
-codesandbox-react-northstar-template: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+codesandbox-react-northstar-template: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 codesandbox-react-northstar-template: [XX:XX:XX XM] x ------------------------------------
-codesandbox-react-northstar-template: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/apps/codesandbox-react-northstar-template/tsconfig.json"
+codesandbox-react-northstar-template: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/apps/codesandbox-react-northstar-template/tsconfig.json"
 codesandbox-react-northstar-template:     at ChildProcess.exithandler (child_process.js:308:12)
 codesandbox-react-northstar-template:     at ChildProcess.emit (events.js:314:20)
 codesandbox-react-northstar-template:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -846,7 +865,7 @@ codesandbox-react-northstar-template:                               ~~~~~~~~~~~~
 codesandbox-react-northstar-template: Found 2 errors.
 codesandbox-react-northstar-template: [XX:XX:XX XM] x ------------------------------------
 codesandbox-react-northstar-template: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-codesandbox-react-northstar-template: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+codesandbox-react-northstar-template: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-builder: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/react-builder: [XX:XX:XX XM] x Command not defined: ts
@@ -896,9 +915,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-flex: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/react-flex: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/react-flex: error Command failed with exit code 1.
-@fluentui/react-image: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
+@fluentui/react-image: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-image: [XX:XX:XX XM] x ------------------------------------
-@fluentui/react-image: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-image/tsconfig.json"
+@fluentui/react-image: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-image/tsconfig.json"
 @fluentui/react-image:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/react-image:     at ChildProcess.emit (events.js:314:20)
 @fluentui/react-image:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -914,11 +933,11 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-image: Found 1 error.
 @fluentui/react-image: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-image: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/react-image: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
+@fluentui/react-image: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/react-image: error Command failed with exit code 1.
-@fluentui/react-internal: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/react-internal: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 @fluentui/react-internal: [XX:XX:XX XM] x ------------------------------------
-@fluentui/react-internal: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-internal/tsconfig.json"
+@fluentui/react-internal: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-internal/tsconfig.json"
 @fluentui/react-internal:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/react-internal:     at ChildProcess.emit (events.js:314:20)
 @fluentui/react-internal:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -933,6 +952,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-internal:     131                 {...option}
 @fluentui/react-internal:                         ~~~~~~~~~~~
 @fluentui/react-internal:     This spread always overwrites this property.
+@fluentui/react-internal: src/components/FloatingPicker/BaseFloatingPicker.tsx:218:42 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/react-internal: 218     } else if (suggestionsPromiseLike && suggestionsPromiseLike.then) {
+@fluentui/react-internal:                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @fluentui/react-internal: src/components/FloatingPicker/PeoplePicker/PeoplePickerItems/SuggestionItemDefault.tsx:12:72 - error TS2339: Property 'peoplePickerPersonaContent' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-internal: 12     <div className={css('ms-PeoplePicker-personaContent', stylesImport.peoplePickerPersonaContent)}>
 @fluentui/react-internal:                                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -958,10 +980,13 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-internal: src/components/Persona/Persona.test.tsx:201:13 - error TS2322: Type 'ReactWrapper<HTMLAttributes, any, Component<{}, {}, any>>' is not assignable to type 'ReactWrapper<ImgHTMLAttributes<unknown>, unknown, Component<{}, {}, any>>'.
 @fluentui/react-internal: 201       const image: ReactWrapper<React.ImgHTMLAttributes<unknown>, unknown> = wrapper.find('ImageBase');
 @fluentui/react-internal:                 ~~~~~
-@fluentui/react-internal: Found 8 errors.
+@fluentui/react-internal: src/components/pickers/BasePicker.tsx:460:42 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/react-internal: 460     } else if (suggestionsPromiseLike && suggestionsPromiseLike.then) {
+@fluentui/react-internal:                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@fluentui/react-internal: Found 10 errors.
 @fluentui/react-internal: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-internal: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/react-internal: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/react-internal: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 @fluentui/react-internal: error Command failed with exit code 1.
 @fluentui/docs: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/docs: [XX:XX:XX XM] x Command not defined: ts
@@ -985,9 +1010,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-checkbox: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/react-checkbox: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 @fluentui/react-checkbox: error Command failed with exit code 1.
-@fluentui/react-link: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
+@fluentui/react-link: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-link: [XX:XX:XX XM] x ------------------------------------
-@fluentui/react-link: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-link/tsconfig.json"
+@fluentui/react-link: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-link/tsconfig.json"
 @fluentui/react-link:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/react-link:     at ChildProcess.emit (events.js:314:20)
 @fluentui/react-link:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -1007,11 +1032,11 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-link: Found 3 errors.
 @fluentui/react-link: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-link: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/react-link: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
+@fluentui/react-link: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/react-link: error Command failed with exit code 1.
-@fluentui/react-slider: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
+@fluentui/react-slider: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-slider: [XX:XX:XX XM] x ------------------------------------
-@fluentui/react-slider: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-slider/tsconfig.json"
+@fluentui/react-slider: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-slider/tsconfig.json"
 @fluentui/react-slider:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/react-slider:     at ChildProcess.emit (events.js:314:20)
 @fluentui/react-slider:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -1061,11 +1086,11 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-slider: Found 13 errors.
 @fluentui/react-slider: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-slider: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/react-slider: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
+@fluentui/react-slider: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/react-slider: error Command failed with exit code 1.
-@fluentui/react-toggle: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/react-toggle: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 @fluentui/react-toggle: [XX:XX:XX XM] x ------------------------------------
-@fluentui/react-toggle: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-toggle/tsconfig.json"
+@fluentui/react-toggle: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-toggle/tsconfig.json"
 @fluentui/react-toggle:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/react-toggle:     at ChildProcess.emit (events.js:314:20)
 @fluentui/react-toggle:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -1106,7 +1131,7 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-toggle: Found 10 errors.
 @fluentui/react-toggle: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-toggle: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/react-toggle: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/react-toggle: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 @fluentui/react-toggle: error Command failed with exit code 1.
 @fluentui/perf: [XX:XX:XX XM] x Cannot find config file "null". Please create a file called "just.config.js" in the root of the project next to "package.json".
 @fluentui/perf: [XX:XX:XX XM] x Command not defined: ts
@@ -1123,6 +1148,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react: [XX:XX:XX XM] x src/components/ComboBox/ComboBox.tsx:451:13 - error TS2554: Expected 1 arguments, but got 2.
 @fluentui/react: 451             this._onRenderContainer,
 @fluentui/react:                 ~~~~~~~~~~~~~~~~~~~~~~~
+@fluentui/react: src/components/ComboBox/ComboBox.tsx:1097:32 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/react: 1097       } else if (newOptions && newOptions.then) {
+@fluentui/react:                                     ~~~~~~~~~~~~~~~
 @fluentui/react: src/components/DetailsList/DetailsColumn.base.tsx:194:14 - error TS2790: The operand of a 'delete' operator must be optional.
 @fluentui/react: 194       delete this._dragDropSubscription;
 @fluentui/react:                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1144,7 +1172,7 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react: src/components/GroupedList/GroupedListSection.tsx:172:16 - error TS2790: The operand of a 'delete' operator must be optional.
 @fluentui/react: 172         delete this._dragDropSubscription;
 @fluentui/react:                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-@fluentui/react: Found 8 errors.
+@fluentui/react: Found 9 errors.
 @fluentui/react: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/react: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
@@ -1165,6 +1193,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-experiments: src/components/FloatingSuggestions/FloatingPeopleSuggestions/defaults/DefaultPeopleSuggestionsItem.tsx:16:64 - error TS2339: Property 'peoplePickerPersona' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-experiments: 16         className={css('ms-PeoplePicker-Persona', stylesImport.peoplePickerPersona)}
 @fluentui/react-experiments:                                                                   ~~~~~~~~~~~~~~~~~~~
+@fluentui/react-experiments: src/components/FloatingSuggestions/FloatingSuggestions.tsx:178:31 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/react-experiments: 178     } else if (suggestions && suggestions.then) {
+@fluentui/react-experiments:                                   ~~~~~~~~~~~~~~~~
 @fluentui/react-experiments: src/components/FloatingSuggestions/FloatingSuggestions.tsx:202:27 - error TS2339: Property 'callout' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-experiments: 202         className={styles.callout}
 @fluentui/react-experiments:                               ~~~~~~~
@@ -1174,6 +1205,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-experiments: src/components/SelectedItemsList/Items/subcomponents/DefaultEditingItem.tsx:86:29 - error TS2339: Property 'editingInput' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-experiments: 86           className={styles.editingInput}
 @fluentui/react-experiments:                                ~~~~~~~~~~~~
+@fluentui/react-experiments: src/components/SelectedItemsList/SelectedPeopleList/Items/SelectedPersona.tsx:113:13 - error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+@fluentui/react-experiments: 113         if (onItemChange && getExpandedItems) {
+@fluentui/react-experiments:                 ~~~~~~~~~~~~
 @fluentui/react-experiments: src/components/SelectedItemsList/SelectedPeopleList/SelectedPeopleList.test.tsx:94:9 - error TS2322: Type 'ComponentType<TriggerProps<unknown>>' is not assignable to type 'ComponentClass<ISelectedItemProps<IPersonaProps & BaseSelectedItem>, any> | FunctionComponent<ISelectedItemProps<IPersonaProps & BaseSelectedItem>> | undefined'.
 @fluentui/react-experiments:   Type 'ComponentClass<TriggerProps<unknown>, any>' is not assignable to type 'ComponentClass<ISelectedItemProps<IPersonaProps & BaseSelectedItem>, any> | FunctionComponent<ISelectedItemProps<IPersonaProps & BaseSelectedItem>> | undefined'.
 @fluentui/react-experiments:     Type 'ComponentClass<TriggerProps<unknown>, any>' is not assignable to type 'ComponentClass<ISelectedItemProps<IPersonaProps & BaseSelectedItem>, any>'.
@@ -1187,8 +1221,8 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-experiments:                     Type 'unknown' is not assignable to type 'IPersonaProps'.
 @fluentui/react-experiments: 94         onRenderItem={SelectedItem}
 @fluentui/react-experiments:            ~~~~~~~~~~~~
-@fluentui/react-experiments:   src/components/SelectedItemsList/SelectedItemsList.types.ts:76:3
-@fluentui/react-experiments:     76   onRenderItem?: React.ComponentType<ISelectedItemProps<T>>;
+@fluentui/react-experiments:   src/components/SelectedItemsList/SelectedItemsList.types.ts:75:3
+@fluentui/react-experiments:     75   onRenderItem?: React.ComponentType<ISelectedItemProps<T>>;
 @fluentui/react-experiments:          ~~~~~~~~~~~~
 @fluentui/react-experiments:     The expected type comes from property 'onRenderItem' which is declared here on type 'IntrinsicAttributes & Pick<ISelectedPeopleListProps<IPersonaProps & BaseSelectedItem>, "onChange" | ... 17 more ... | "itemsAreEqual"> & RefAttributes<...>'
 @fluentui/react-experiments: src/components/StaticList/StaticList.tsx:14:37 - error TS2339: Property 'root' does not exist on type 'typeof import("*.scss")'.
@@ -1311,7 +1345,7 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-experiments: src/utilities/scrolling/ScrollContainer.tsx:76:68 - error TS2339: Property 'root' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-experiments: 76         className={css('ms-ScrollContainer', ScrollContainerStyles.root, className)}
 @fluentui/react-experiments:                                                                       ~~~~
-@fluentui/react-experiments: Found 46 errors.
+@fluentui/react-experiments: Found 48 errors.
 @fluentui/react-experiments: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-experiments: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/react-experiments: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
@@ -1382,9 +1416,9 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/api-docs: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/api-docs: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/api-docs: error Command failed with exit code 1.
-@fluentui/react-docsite-components: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
+@fluentui/react-docsite-components: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-docsite-components: [XX:XX:XX XM] x ------------------------------------
-@fluentui/react-docsite-components: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-docsite-components/tsconfig.json"
+@fluentui/react-docsite-components: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-docsite-components/tsconfig.json"
 @fluentui/react-docsite-components:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/react-docsite-components:     at ChildProcess.emit (events.js:314:20)
 @fluentui/react-docsite-components:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -1438,11 +1472,11 @@ codesandbox-react-northstar-template: error Command failed with exit code 1.
 @fluentui/react-docsite-components: Found 13 errors.
 @fluentui/react-docsite-components: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-docsite-components: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/react-docsite-components: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
+@fluentui/react-docsite-components: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/react-docsite-components: error Command failed with exit code 1.
-theming-designer: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
+theming-designer: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 theming-designer: [XX:XX:XX XM] x ------------------------------------
-theming-designer: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/apps/theming-designer/tsconfig.json"
+theming-designer: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/apps/theming-designer/tsconfig.json"
 theming-designer:     at ChildProcess.exithandler (child_process.js:308:12)
 theming-designer:     at ChildProcess.emit (events.js:314:20)
 theming-designer:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -1456,7 +1490,7 @@ theming-designer:                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 theming-designer: Found 1 error.
 theming-designer: [XX:XX:XX XM] x ------------------------------------
 theming-designer: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-theming-designer: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
+theming-designer: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 theming-designer: error Command failed with exit code 1.
 @fluentui/react-examples: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-examples: [XX:XX:XX XM] x ------------------------------------
@@ -1492,32 +1526,38 @@ theming-designer: error Command failed with exit code 1.
 @fluentui/react-examples: src/react-button/CompoundButton/CompoundButton.stories.tsx:18:88 - error TS2339: Property 'text' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-examples: 18 const Text = (props: React.PropsWithChildren<{}>) => <h2 {...props} className={classes.text} />;
 @fluentui/react-examples:                                                                                           ~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:20:27 - error TS2339: Property 'hStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 20   <div className={classes.hStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:21:27 - error TS2339: Property 'hStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 21   <div className={classes.hStack}>
 @fluentui/react-examples:                              ~~~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:60:31 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 60       <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:59:31 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 59       <div className={classes.vStack}>
 @fluentui/react-examples:                                  ~~~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:74:31 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 74       <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:73:31 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 73       <div className={classes.vStack}>
 @fluentui/react-examples:                                  ~~~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:100:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 100     <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:97:31 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 97       <div className={classes.vStack}>
+@fluentui/react-examples:                                  ~~~~~~
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:111:31 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 111       <div className={classes.vStack}>
+@fluentui/react-examples:                                   ~~~~~~
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:137:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 137     <div className={classes.vStack}>
 @fluentui/react-examples:                                 ~~~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:114:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 114     <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:151:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 151     <div className={classes.vStack}>
 @fluentui/react-examples:                                 ~~~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:139:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 139     <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:176:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 176     <div className={classes.vStack}>
 @fluentui/react-examples:                                 ~~~~~~
-@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:153:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 153     <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/MenuButton/MenuButton.stories.tsx:190:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 190     <div className={classes.vStack}>
 @fluentui/react-examples:                                 ~~~~~~
-@fluentui/react-examples: src/react-button/SplitButton/SplitButton.stories.tsx:26:27 - error TS2339: Property 'hStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 26   <div className={classes.hStack}>
+@fluentui/react-examples: src/react-button/SplitButton/SplitButton.stories.tsx:21:27 - error TS2339: Property 'hStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 21   <div className={classes.hStack}>
 @fluentui/react-examples:                              ~~~~~~
-@fluentui/react-examples: src/react-button/SplitButton/SplitButton.stories.tsx:75:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
-@fluentui/react-examples: 75     <div className={classes.vStack}>
+@fluentui/react-examples: src/react-button/SplitButton/SplitButton.stories.tsx:70:29 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
+@fluentui/react-examples: 70     <div className={classes.vStack}>
 @fluentui/react-examples:                                ~~~~~~
 @fluentui/react-examples: src/react-button/ToggleButton/ToggleButton.stories.tsx:7:27 - error TS2339: Property 'hStack' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-examples: 7   <div className={classes.hStack}>
@@ -1585,14 +1625,14 @@ theming-designer: error Command failed with exit code 1.
 @fluentui/react-examples: src/react-image/Image/Image.stories.tsx:11:74 - error TS2339: Property 'vStack' does not exist on type 'typeof import("*.scss")'.
 @fluentui/react-examples: 11   return <div {...rest} className={horizontal ? classes.hStack : classes.vStack} />;
 @fluentui/react-examples:                                                                             ~~~~~~
-@fluentui/react-examples: Found 39 errors.
+@fluentui/react-examples: Found 41 errors.
 @fluentui/react-examples: [XX:XX:XX XM] x ------------------------------------
 @fluentui/react-examples: [XX:XX:XX XM] x Error previously detected. See above for error messages.
 @fluentui/react-examples: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
 @fluentui/react-examples: error Command failed with exit code 1.
-@fluentui/public-docsite: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/public-docsite: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
 @fluentui/public-docsite: [XX:XX:XX XM] x ------------------------------------
-@fluentui/public-docsite: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/apps/public-docsite/tsconfig.json"
+@fluentui/public-docsite: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/apps/public-docsite/tsconfig.json"
 @fluentui/public-docsite:     at ChildProcess.exithandler (child_process.js:308:12)
 @fluentui/public-docsite:     at ChildProcess.emit (events.js:314:20)
 @fluentui/public-docsite:     at ChildProcess.EventEmitter.emit (domain.js:506:15)
@@ -2098,6 +2138,6 @@ theming-designer: error Command failed with exit code 1.
 @fluentui/public-docsite: Found 165 errors.
 @fluentui/public-docsite: [XX:XX:XX XM] x ------------------------------------
 @fluentui/public-docsite: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/public-docsite: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/public-docsite: [XX:XX:XX XM] x Other tasks that did not complete: [ts:esm]
 @fluentui/public-docsite: error Command failed with exit code 1.
 lerna ERR! Received non-zero exit code 1 during execution
