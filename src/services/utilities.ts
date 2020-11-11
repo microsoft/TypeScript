@@ -1807,7 +1807,8 @@ namespace ts {
             getSourceFiles: () => program.getSourceFiles(),
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
-            isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName)
+            isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
+            getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         };
     }
 

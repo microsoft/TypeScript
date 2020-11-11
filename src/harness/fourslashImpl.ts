@@ -2937,6 +2937,10 @@ namespace FourSlash {
             }
             const range = ts.firstOrUndefined(ranges);
 
+            if (preferences) {
+                this.configure(preferences);
+            }
+
             const codeFixes = this.getCodeFixes(fileName, errorCode, preferences).filter(f => f.fixName === ts.codefix.importFixName);
 
             if (codeFixes.length === 0) {
