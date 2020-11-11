@@ -4091,6 +4091,9 @@
       <Item ItemId=";Delete_all_unused_imports_95147" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete all unused imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usuń wszystkie nieużywane importy]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6160,6 +6163,15 @@
           <Val><![CDATA[Infer all types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Wywnioskuj wszystkie typy na podstawie użycia]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Infer_function_return_type_95148" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer function return type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wnioskuj zwracany typ funkcji]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

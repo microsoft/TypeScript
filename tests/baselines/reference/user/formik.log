@@ -1,0 +1,13 @@
+Exit Code: 2
+Standard output:
+node_modules/formik/dist/Formik.d.ts(1,22): error TS6053: File '../../../tests/cases/user/formik/node_modules/formik/dist/types/index.d.ts' not found.
+node_modules/formik/dist/Formik.d.ts(23,96): error TS7016: Could not find a declaration file for module 'scheduler'. '../../../tests/cases/user/formik/node_modules/scheduler/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/scheduler` if it exists or add a new declaration (.d.ts) file containing `declare module 'scheduler';`
+node_modules/formik/dist/Formik.d.ts(27,98): error TS7016: Could not find a declaration file for module 'scheduler'. '../../../tests/cases/user/formik/node_modules/scheduler/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/scheduler` if it exists or add a new declaration (.d.ts) file containing `declare module 'scheduler';`
+node_modules/formik/dist/Formik.d.ts(28,103): error TS7016: Could not find a declaration file for module 'scheduler'. '../../../tests/cases/user/formik/node_modules/scheduler/index.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/scheduler` if it exists or add a new declaration (.d.ts) file containing `declare module 'scheduler';`
+
+
+
+Standard error:
