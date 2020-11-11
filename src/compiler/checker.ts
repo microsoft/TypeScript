@@ -1107,8 +1107,7 @@ namespace ts {
             return diagnostic;
         }
 
-        function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
-            const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
+        function addDeprecatedSuggestionImpl(declarations: Node[], diagnostic: DiagnosticWithLocation) {
             for (const declaration of declarations) {
                 const deprecatedTag = getJSDocDeprecatedTag(declaration);
                 if (deprecatedTag) {
@@ -1123,6 +1122,18 @@ namespace ts {
             //to prevent duplicates.
             suggestionDiagnostics.add(diagnostic);
             return diagnostic;
+        }
+
+        function addDeprecatedSuggestion(location: Node, declarations: Node[], deprecatedEntity: string) {
+            const diagnostic = createDiagnosticForNode(location, Diagnostics._0_is_deprecated, deprecatedEntity);
+            return addDeprecatedSuggestionImpl(declarations, diagnostic);
+        }
+
+        function addDeprecatedSuggestionWithSignature(location: Node, declarations: Node[], deprecatedEntity: string | undefined, signatureString: string) {
+            const diagnostic = deprecatedEntity
+                ? createDiagnosticForNode(location, Diagnostics.The_signature_0_of_1_is_deprecated, signatureString, deprecatedEntity)
+                : createDiagnosticForNode(location, Diagnostics._0_is_deprecated, signatureString);
+            return addDeprecatedSuggestionImpl(declarations, diagnostic);
         }
 
         function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
@@ -28433,7 +28444,8 @@ namespace ts {
                 const suggestionNode = getDeprecatedSuggestionNode(node);
                 const expr = getInvokedExpression(node);
                 const name = tryGetPropertyAccessOrIdentifierToString(expr);
-                addDeprecatedSuggestion(suggestionNode, [signature.declaration], name || signatureToString(signature));
+                const signatureString = signatureToString(signature);
+                addDeprecatedSuggestionWithSignature(suggestionNode, [signature.declaration], name, signatureString);
             }
         }
 

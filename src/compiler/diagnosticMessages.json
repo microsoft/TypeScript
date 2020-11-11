@@ -4727,6 +4727,11 @@
         "category": "Message",
         "code": 6386
     },
+    "The signature '{0}' of '{1}' is deprecated.": {
+        "category": "Suggestion",
+        "code": 6387,
+        "reportsDeprecated": true
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
