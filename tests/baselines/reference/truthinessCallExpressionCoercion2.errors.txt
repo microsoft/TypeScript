@@ -1,14 +1,23 @@
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(3,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(6,10): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(30,18): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(36,46): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(47,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(50,10): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(66,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(69,14): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(11,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(14,10): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(41,18): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(47,46): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(58,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(61,10): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(81,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(91,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(94,14): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 
 
-==== tests/cases/compiler/truthinessCallExpressionCoercion2.ts (8 errors) ====
+==== tests/cases/compiler/truthinessCallExpressionCoercion2.ts (9 errors) ====
+    declare class A {
+        static from(): string;
+    }
+    
+    declare class B {
+        static from(): string;
+    }
+    
     function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
         // error
         required1 && console.log('required');
@@ -40,6 +49,9 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(69,14): error TS2774: 
     
         // ok
         required1 && required2 && required1() && required2();
+    
+        // ok
+        [].forEach((f: () => void) => f && f.apply(parent, []));
     
         // error
         required1 && required2 && required1() && console.log('foo');
@@ -77,6 +89,22 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(69,14): error TS2774: 
     
         // ok
         x.foo.bar && 1 && x.foo.bar();
+    
+        // ok
+        const y = A.from && (A.from as Function) !== B.from ? true : false;
+        y;
+    
+        const x1 = {
+            a: { b: { c: () => {} } }
+        }
+        const x2 = {
+            a: { b: { c: () => {} } }
+        }
+    
+        // error
+        x1.a.b.c && x2.a.b.c();
+        ~~~~~~~~
+!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
     }
     
     class Foo {

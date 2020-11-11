@@ -34019,7 +34019,16 @@ namespace ts {
 
         function isFunctionUsedInBinaryExpressionChain(node: Node, testedSymbol: Symbol): boolean {
             while (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                if (isCallExpression(node.right) && testedSymbol === getSymbolAtLocation(node.right.expression)) {
+                const isUsed = forEachChild(node.right, function visit(child): boolean | undefined {
+                    if (isIdentifier(child)) {
+                        const symbol = getSymbolAtLocation(child);
+                        if (symbol && symbol === testedSymbol) {
+                            return true;
+                        }
+                    }
+                    return forEachChild(child, visit);
+                });
+                if (isUsed) {
                     return true;
                 }
                 node = node.parent;
