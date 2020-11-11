@@ -265,7 +265,7 @@ namespace ts {
         extendedConfigFilesMap: ESMap<string, FileWatcher>,
         createExtendedConfigFileWatch: (extendedConfigPath: string) => FileWatcher,
     ) {
-        const extendedSourceFiles = program.getCompilerOptions().configFile?.extendedSourceFiles || [];
+        const extendedSourceFiles = program.getCompilerOptions().configFile?.extendedSourceFiles || emptyArray;
         // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
         const newExtendedConfigFilesMap = arrayToMap(extendedSourceFiles, identity, returnTrue);
         // Update the extended config files watcher

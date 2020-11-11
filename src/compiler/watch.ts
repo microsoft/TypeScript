@@ -409,6 +409,7 @@ namespace ts {
     export type WatchType = WatchTypeRegistry[keyof WatchTypeRegistry];
     export const WatchType: WatchTypeRegistry = {
         ConfigFile: "Config file",
+        ExtendedConfigFile: "Extended config file",
         SourceFile: "Source file",
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
@@ -418,6 +419,7 @@ namespace ts {
 
     export interface WatchTypeRegistry {
         ConfigFile: "Config file",
+        ExtendedConfigFile: "Extended config file",
         SourceFile: "Source file",
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",

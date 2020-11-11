@@ -338,6 +338,9 @@ namespace ts {
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
+        // Update extended config file watch
+        watchExtendedConfigFiles();
+
         return configFileName ?
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
@@ -424,7 +427,6 @@ namespace ts {
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
-            updateExtendedConfigFilePathsWatch(builderProgram.getProgram(), extendedConfigFilesMap || (extendedConfigFilesMap = new Map()), watchExtendedConfigFile);
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
             if (needsUpdateInTypeRootWatch) {
                 resolutionCache.updateTypeRootsWatch();
@@ -663,6 +665,9 @@ namespace ts {
 
             // Update the wild card directory watch
             watchConfigFileWildCardDirectories();
+
+            // Update extended config file watch
+            watchExtendedConfigFiles();
         }
 
         function parseConfigFile() {
@@ -709,10 +714,6 @@ namespace ts {
             if (cachedDirectoryStructureHost) {
                 cachedDirectoryStructureHost.addOrDeleteFile(fileName, path, eventKind);
             }
-        }
-
-        function watchExtendedConfigFile(extendedConfigFile: string) {
-            return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ConfigFile);
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
@@ -786,6 +787,18 @@ namespace ts {
                 watchOptions,
                 WatchType.WildcardDirectory
             );
+        }
+
+        function watchExtendedConfigFiles() {
+            updateExtendedConfigFilePathsWatch(
+                builderProgram.getProgram(),
+                extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
+                watchExtendedConfigFile
+            );
+        }
+
+        function watchExtendedConfigFile(extendedConfigFile: string) {
+            return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ExtendedConfigFile);
         }
     }
 }
