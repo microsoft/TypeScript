@@ -113,8 +113,7 @@ namespace ts.tracing {
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
-    // Used for "Complete" (ph:"X") events
-    const completeEvents: { phase: Phase, name: string, args?: object, time: number, separateBeginAndEnd: boolean }[] = [];
+    const eventStack: { phase: Phase, name: string, args?: object, time: number, separateBeginAndEnd: boolean }[] = [];
 
     /**
      * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
@@ -127,27 +126,27 @@ namespace ts.tracing {
         if (separateBeginAndEnd) {
             writeEvent("B", phase, name, args);
         }
-        completeEvents.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
+        eventStack.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
     }
     export function pop() {
         if (!traceFd) return;
-        Debug.assert(completeEvents.length > 0);
-        writeStackEvent(completeEvents.length - 1, 1000 * timestamp());
-        completeEvents.length--;
+        Debug.assert(eventStack.length > 0);
+        writeStackEvent(eventStack.length - 1, 1000 * timestamp());
+        eventStack.length--;
     }
     export function popAll() {
         if (!traceFd) return;
         const endTime = 1000 * timestamp();
-        for (let i = completeEvents.length - 1; i >= 0; i--) {
+        for (let i = eventStack.length - 1; i >= 0; i--) {
             writeStackEvent(i, endTime);
         }
-        completeEvents.length = 0;
+        eventStack.length = 0;
     }
     export function assertStackEmpty() {
-        Debug.assert(completeEvents.length === 0, `Found ${completeEvents.length} events on the stack`);
+        Debug.assert(eventStack.length === 0, `Found ${eventStack.length} events on the stack`);
     }
     function writeStackEvent(index: number, endTime: number) {
-        const { phase, name, args, time, separateBeginAndEnd } = completeEvents[index];
+        const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
         if (separateBeginAndEnd) {
             writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
         }
