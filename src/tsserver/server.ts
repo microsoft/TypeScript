@@ -980,7 +980,10 @@ namespace ts.server {
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
     const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
 
-    const traceDir = process.env.TSS_TRACE;
+    const commandLineTraceDir = findArgument("--traceDirectory");
+    const traceDir = commandLineTraceDir
+        ? stripQuotes(commandLineTraceDir)
+        : process.env.TSS_TRACE;
     if (traceDir) {
         tracing.startTracing(tracing.Mode.Server, traceDir);
     }
