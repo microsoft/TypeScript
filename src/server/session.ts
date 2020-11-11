@@ -2900,21 +2900,14 @@ namespace ts.server {
         }
 
         public executeCommand(request: protocol.Request): HandlerResponse {
-            const tracingData: tracing.EventData = [tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }];
-            tracing.begin(...tracingData);
-            try {
-                const handler = this.handlers.get(request.command);
-                if (handler) {
-                    return this.executeWithRequestId(request.seq, () => handler(request));
-                }
-                else {
-                    this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-                    this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
-                    return { responseRequired: false };
-                }
+            const handler = this.handlers.get(request.command);
+            if (handler) {
+                return this.executeWithRequestId(request.seq, () => handler(request));
             }
-            finally {
-                tracing.end(...tracingData);
+            else {
+                this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
+                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+                return { responseRequired: false };
             }
         }
 
@@ -2942,7 +2935,9 @@ namespace ts.server {
                 tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
                 perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
 
+                tracing.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
                 const { response, responseRequired } = this.executeCommand(request);
+                tracing.pop();
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
                     const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
