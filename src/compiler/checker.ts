@@ -1091,8 +1091,8 @@ namespace ts {
             }
         }
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+             // Pseudo-synthesized input node
             if (location.pos < 0 || location.end < 0) {
-                // Psuedo-synthesized input node
                 if (!isError) {
                     return; // Drop suggestions (we have no span to suggest on)
                 }
