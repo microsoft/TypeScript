@@ -210,7 +210,6 @@ namespace Harness.Parallel.Worker {
             const passes: TestInfo[] = [];
             const start = +new Date();
             const runner = new Mocha.Runner(suite, /*delay*/ false);
-            // const uncaught = (err: any) => runner.uncaught(err);
 
             runner
                 .on("start", () => {
@@ -224,7 +223,6 @@ namespace Harness.Parallel.Worker {
                 })
                 .on("end", () => {
                     hookUncaughtExceptions();
-                    // @ts-ignore
                     runner.dispose();
                 })
                 .run(() => {
