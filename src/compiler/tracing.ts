@@ -46,7 +46,7 @@ namespace ts.tracing {
         }
 
         const countPart =
-            mode === Mode.Build ? `.${process.pid}.${++traceCount}` :
+            mode === Mode.Build ? `.${process.pid}-${++traceCount}` :
             mode === Mode.Server ? `.${process.pid}` :
             ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
@@ -132,27 +132,28 @@ namespace ts.tracing {
     export function pop() {
         if (!traceFd) return;
         Debug.assert(completeEvents.length > 0);
-        const { phase, name, args, time, separateBeginAndEnd } = completeEvents.pop()!;
-        if (separateBeginAndEnd) {
-            writeEvent("E", phase, name, args);
-        }
-        else {
-            const dur = 1000 * timestamp() - time;
-            writeEvent("X", phase, name, args, `"dur":${dur}`, time);
-        }
+        writeStackEvent(completeEvents.length - 1, 1000 * timestamp());
+        completeEvents.length--;
     }
     export function popAll() {
         if (!traceFd) return;
         const endTime = 1000 * timestamp();
         for (let i = completeEvents.length - 1; i >= 0; i--) {
-            const { phase, name, args, time } = completeEvents[i];
-            const dur = endTime - time;
-            writeEvent("X", phase, name, args, `"dur":${dur}`, time);
+            writeStackEvent(i, endTime);
         }
         completeEvents.length = 0;
     }
     export function assertStackEmpty() {
         Debug.assert(completeEvents.length === 0, `Found ${completeEvents.length} events on the stack`);
+    }
+    function writeStackEvent(index: number, endTime: number) {
+        const { phase, name, args, time, separateBeginAndEnd } = completeEvents[index];
+        if (separateBeginAndEnd) {
+            writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
+        }
+        else {
+            writeEvent("X", phase, name, args, `"dur":${endTime - time}`, time);
+        }
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,
