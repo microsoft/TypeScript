@@ -1,4 +1,4 @@
-tests/cases/compiler/throwType_property_access.ts(4,1): error TS2796: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_property_access.ts(4,1): error TS2797: Type instantiated results in a throw type saying: 
     
 
 
@@ -8,5 +8,5 @@ tests/cases/compiler/throwType_property_access.ts(4,1): error TS2796: Type insta
     }
     new X<0>().i
     ~~~~~~~~~~~~
-!!! error TS2796: Type instantiated results in a throw type saying: 
-!!! error TS2796:     
+!!! error TS2797: Type instantiated results in a throw type saying: 
+!!! error TS2797:     

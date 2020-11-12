@@ -1,6 +1,6 @@
-tests/cases/compiler/throwType_function_return.ts(5,1): error TS2796: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_function_return.ts(5,1): error TS2797: Type instantiated results in a throw type saying: 
     Cannot divided by 0
-tests/cases/compiler/throwType_function_return.ts(10,1): error TS2796: Type instantiated results in a throw type saying: 
+tests/cases/compiler/throwType_function_return.ts(10,1): error TS2797: Type instantiated results in a throw type saying: 
     Wrong
 
 
@@ -11,14 +11,14 @@ tests/cases/compiler/throwType_function_return.ts(10,1): error TS2796: Type inst
     }
     checkedDivide(0)
     ~~~~~~~~~~~~~~~~
-!!! error TS2796: Type instantiated results in a throw type saying: 
-!!! error TS2796:     Cannot divided by 0
+!!! error TS2797: Type instantiated results in a throw type saying: 
+!!! error TS2797:     Cannot divided by 0
     checkedDivide(1)
     
     const theAnswerToEverything = <T>(x: T): T extends 42 ? T : throw "Wrong" => x
     theAnswerToEverything(42 as const)
     theAnswerToEverything('')
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2796: Type instantiated results in a throw type saying: 
-!!! error TS2796:     Wrong
+!!! error TS2797: Type instantiated results in a throw type saying: 
+!!! error TS2797:     Wrong
     

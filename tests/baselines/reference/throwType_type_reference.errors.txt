@@ -1,18 +1,15 @@
-tests/cases/compiler/throwType_type_reference.ts(1,82): error TS2793: Template literal type argument 'any' is not literal type or a generic type.
 tests/cases/compiler/throwType_type_reference.ts(1,89): error TS2693: 'T' only refers to a type, but is being used as a value here.
-tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2796: Type instantiated results in a throw type saying: 
-    string
+tests/cases/compiler/throwType_type_reference.ts(3,10): error TS2797: Type instantiated results in a throw type saying: 
+    `Expected number, but found "${any}"`
 
 
-==== tests/cases/compiler/throwType_type_reference.ts (3 errors) ====
+==== tests/cases/compiler/throwType_type_reference.ts (2 errors) ====
     type MustNumber<T> = T extends number ? T : throw `Expected number, but found "${typeof T}"`
-                                                                                     ~~~~~~~~
-!!! error TS2793: Template literal type argument 'any' is not literal type or a generic type.
                                                                                             ~
 !!! error TS2693: 'T' only refers to a type, but is being used as a value here.
     type A = MustNumber<1>
     type B = MustNumber<typeof window>
              ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2796: Type instantiated results in a throw type saying: 
-!!! error TS2796:     string
+!!! error TS2797: Type instantiated results in a throw type saying: 
+!!! error TS2797:     `Expected number, but found "${any}"`
     
