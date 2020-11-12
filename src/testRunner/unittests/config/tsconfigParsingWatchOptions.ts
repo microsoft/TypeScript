@@ -45,20 +45,33 @@ namespace ts {
             expectedOptions: WatchOptions | undefined;
             additionalFiles?: vfs.FileSet;
             existingWatchOptions?: WatchOptions | undefined;
+            expectedErrors?: (sourceFile?: SourceFile) => Diagnostic[];
         }
 
         function verifyWatchOptions(scenario: () => VerifyWatchOptions[]) {
             it("with json api", () => {
-                for (const { json, expectedOptions, additionalFiles, existingWatchOptions } of scenario()) {
+                for (const { json, expectedOptions, additionalFiles, existingWatchOptions, expectedErrors } of scenario()) {
                     const parsed = getParsedCommandJson(json, additionalFiles, existingWatchOptions);
-                    assert.deepEqual(parsed.watchOptions, expectedOptions);
+                    assert.deepEqual(parsed.watchOptions, expectedOptions, `With ${JSON.stringify(json)}`);
+                    if (length(parsed.errors)) {
+                        assert.deepEqual(parsed.errors, expectedErrors?.());
+                    }
+                    else {
+                        assert.equal(0, length(expectedErrors?.()), `Expected no errors`);
+                    }
                 }
             });
 
             it("with json source file api", () => {
-                for (const { json, expectedOptions, additionalFiles, existingWatchOptions } of scenario()) {
+                for (const { json, expectedOptions, additionalFiles, existingWatchOptions, expectedErrors } of scenario()) {
                     const parsed = getParsedCommandJsonNode(json, additionalFiles, existingWatchOptions);
                     assert.deepEqual(parsed.watchOptions, expectedOptions);
+                    if (length(parsed.errors)) {
+                        assert.deepEqual(parsed.errors, expectedErrors?.(parsed.options.configFile));
+                    }
+                    else {
+                        assert.equal(0, length(expectedErrors?.(parsed.options.configFile)), `Expected no errors`);
+                    }
                 }
             });
         }
@@ -156,7 +169,47 @@ namespace ts {
                 {
                     json: { watchOptions: { synchronousWatchDirectory: true } },
                     expectedOptions: { synchronousWatchDirectory: true }
-                }
+                },
+                {
+                    json: { watchOptions: { excludeDirectories: ["**/temp"] } },
+                    expectedOptions: { excludeDirectories: ["/**/temp"] }
+                },
+                {
+                    json: { watchOptions: { excludeFiles: ["**/temp/*.ts"] } },
+                    expectedOptions: { excludeFiles: ["/**/temp/*.ts"] }
+                },
+                {
+                    json: { watchOptions: { excludeDirectories: ["**/../*"] } },
+                    expectedOptions: { excludeDirectories: [] },
+                    expectedErrors: sourceFile => [
+                        {
+                            messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                            file: sourceFile,
+                            start: sourceFile && sourceFile.text.indexOf(`"**/../*"`),
+                            length: sourceFile && `"**/../*"`.length,
+                            reportsDeprecated: undefined,
+                            reportsUnnecessary: undefined
+                        }
+                    ]
+                },
+                {
+                    json: { watchOptions: { excludeFiles: ["**/../*"] } },
+                    expectedOptions: { excludeFiles: [] },
+                    expectedErrors: sourceFile => [
+                        {
+                            messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                            category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                            code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                            file: sourceFile,
+                            start: sourceFile && sourceFile.text.indexOf(`"**/../*"`),
+                            length: sourceFile && `"**/../*"`.length,
+                            reportsDeprecated: undefined,
+                            reportsUnnecessary: undefined
+                        }
+                    ]
+                },
             ]);
         });
 

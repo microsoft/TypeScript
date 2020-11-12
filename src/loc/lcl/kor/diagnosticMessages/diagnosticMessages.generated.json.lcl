@@ -4098,6 +4098,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Delete_all_unused_imports_95147" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[사용하지 않는 가져오기 모두 삭제]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects]]></Val>
@@ -6164,6 +6173,15 @@
           <Val><![CDATA[Infer all types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[사용량에서 모든 형식 유추]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Infer_function_return_type_95148" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer function return type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[함수 반환 형식 유추]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8493,6 +8511,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0_4111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' comes from an index signature, so it must be accessed with ['{0}']5D;.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 속성은 인덱스 시그니처에서 가져오는 것이므로 ['{0}']5D;을(를) 사용하여 액세스해야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_does_not_exist_on_const_enum_1_2479" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
@@ -9278,6 +9305,15 @@
           <Val><![CDATA[Report errors on unused parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[사용되지 않은 매개 변수에 대한 오류를 보고합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Require_undeclared_properties_from_index_signatures_to_use_element_accesses_6803" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Require undeclared properties from index signatures to use element accesses.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[요소 액세스를 사용하려면 인덱스 시그니처의 선언되지 않은 속성이 필요합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10551,11 +10587,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['import.meta' 메타 속성은 '--module' 옵션이 'esnext' 또는 'system'인 경우에만 사용할 수 있습니다.]]></Val>
+            <Val><![CDATA['import.meta' 메타 속성은 '--module' 옵션이 'es2020', 'esnext' 또는 'system'인 경우에만 허용됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12338,6 +12374,24 @@
           <Val><![CDATA[Updating unchanged output timestamps of project '{0}'...]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 프로젝트의 변경되지 않은 출력 타임스탬프를 업데이트하는 중...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_element_access_for_0_95145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use element access for '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'에 요소 액세스 사용]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_element_access_for_all_undeclared_properties_95146" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use element access for all undeclared properties.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[선언되지 않은 모든 속성에 요소 액세스를 사용합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -663,6 +663,64 @@ namespace ts {
                         watchOptions: { fallbackPolling: undefined }
                     });
             });
+
+            it("parse --excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/temp", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeDirectories: ["**/temp"] }
+                    });
+            });
+
+            it("errors on invalid excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/../*", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeDirectories: [] }
+                    });
+            });
+
+            it("parse --excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/temp/*.ts", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeFiles: ["**/temp/*.ts"] }
+                    });
+            });
+
+            it("errors on invalid excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/../*", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeFiles: [] }
+                    });
+            });
         });
     });
 
@@ -910,6 +968,54 @@ namespace ts {
                         projects: ["."],
                         buildOptions: { verbose: true },
                         watchOptions: { fallbackPolling: undefined }
+                    });
+            });
+
+            it("errors on invalid excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/../*"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeDirectories: [] }
+                    });
+            });
+
+            it("parse --excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/temp/*.ts"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeFiles: ["**/temp/*.ts"] }
+                    });
+            });
+
+            it("errors on invalid excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/../*"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeFiles: [] }
                     });
             });
         });

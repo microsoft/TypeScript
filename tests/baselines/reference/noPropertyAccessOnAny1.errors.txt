@@ -1,11 +1,11 @@
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(3,3): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(4,3): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(5,3): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(5,5): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(7,3): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(8,3): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(9,3): error TS4111: Cannot access member from 'any' type
-tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(9,5): error TS4111: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(3,3): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(4,3): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(5,3): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(5,5): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(7,3): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(8,3): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(9,3): error TS4112: Cannot access member from 'any' type
+tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(9,5): error TS4112: Cannot access member from 'any' type
 
 
 ==== tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts (8 errors) ====
@@ -13,24 +13,24 @@ tests/cases/conformance/additionalChecks/noPropertyAccessOnAny1.ts(9,5): error T
     
     a.a;
       ~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
     a["a"];
       ~~~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
     a.a.a;
       ~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
         ~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
     
     a.a = 1;
       ~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
     a["a"] = 1;
       ~~~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
     a.a.a = 1;
       ~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type
         ~
-!!! error TS4111: Cannot access member from 'any' type
+!!! error TS4112: Cannot access member from 'any' type

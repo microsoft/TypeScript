@@ -774,6 +774,27 @@ namespace ts {
         }
     }
 
+    function getAncestorTypeNode(node: Node) {
+        let lastTypeNode: TypeNode | undefined;
+        findAncestor(node, a => {
+            if (isTypeNode(a)) {
+                lastTypeNode = a;
+            }
+            return !isQualifiedName(a.parent) && !isTypeNode(a.parent) && !isTypeElement(a.parent);
+        });
+        return lastTypeNode;
+    }
+
+    export function getContextualTypeOrAncestorTypeNodeType(node: Expression, checker: TypeChecker) {
+        const contextualType = checker.getContextualType(node);
+        if (contextualType) {
+            return contextualType;
+        }
+
+        const ancestorTypeNode = getAncestorTypeNode(node);
+        return ancestorTypeNode && checker.getTypeAtLocation(ancestorTypeNode);
+    }
+
     function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
         if (!forRename) {
             switch (node.kind) {
@@ -1787,7 +1808,8 @@ namespace ts {
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
-            getCompilerOptions: () => program.getCompilerOptions()
+            getCompilerOptions: () => program.getCompilerOptions(),
+            getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         };
     }
 

@@ -92,40 +92,38 @@ namespace ts.tracing {
         Emit = "emit",
     }
 
-    export type EventData = [phase: Phase, name: string, args?: object];
-
-    /** Note: `push`/`pop` should be used by default.
-     * `begin`/`end` are for special cases where we need the data point even if the event never
-     * terminates (typically for reducing a scenario too big to trace to one that can be completed).
-     * In the future we might implement an exit handler to dump unfinished events which would
-     * deprecate these operations.
-     */
-    export function begin(phase: Phase, name: string, args?: object) {
-        if (!traceFd) return;
-        writeEvent("B", phase, name, args);
-    }
-    export function end(phase: Phase, name: string, args?: object) {
-        if (!traceFd) return;
-        writeEvent("E", phase, name, args);
-    }
-
     export function instant(phase: Phase, name: string, args?: object) {
         if (!traceFd) return;
         writeEvent("I", phase, name, args, `"s":"g"`);
     }
 
     // Used for "Complete" (ph:"X") events
-    const completeEvents: { phase: Phase, name: string, args?: object, time: number }[] = [];
-    export function push(phase: Phase, name: string, args?: object) {
+    const completeEvents: { phase: Phase, name: string, args?: object, time: number, separateBeginAndEnd: boolean }[] = [];
+
+    /**
+     * @param separateBeginAndEnd - used for special cases where we need the trace point even if the event
+     * never terminates (typically for reducing a scenario too big to trace to one that can be completed).
+     * In the future we might implement an exit handler to dump unfinished events which would deprecate
+     * these operations.
+     */
+    export function push(phase: Phase, name: string, args?: object, separateBeginAndEnd = false) {
         if (!traceFd) return;
-        completeEvents.push({ phase, name, args, time: 1000 * timestamp() });
+        if (separateBeginAndEnd) {
+            writeEvent("B", phase, name, args);
+        }
+        completeEvents.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
     }
     export function pop() {
         if (!traceFd) return;
         Debug.assert(completeEvents.length > 0);
-        const { phase, name, args, time } = completeEvents.pop()!;
-        const dur = 1000 * timestamp() - time;
-        writeEvent("X", phase, name, args, `"dur":${dur}`, time);
+        const { phase, name, args, time, separateBeginAndEnd } = completeEvents.pop()!;
+        if (separateBeginAndEnd) {
+            writeEvent("E", phase, name, args);
+        }
+        else {
+            const dur = 1000 * timestamp() - time;
+            writeEvent("X", phase, name, args, `"dur":${dur}`, time);
+        }
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: object | undefined, extras?: string,

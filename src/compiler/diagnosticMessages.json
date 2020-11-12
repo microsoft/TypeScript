@@ -3428,9 +3428,13 @@
         "category": "Error",
         "code": 4110
     },
-    "Cannot access member from 'any' type": {
+    "Property '{0}' comes from an index signature, so it must be accessed with ['{0}'].": {
         "category": "Error",
         "code": 4111
+    },
+    "Cannot access member from 'any' type": {
+        "category": "Error",
+        "code": 4112
     },
 
     "The current host does not support the '{0}' option.": {
@@ -4748,14 +4752,18 @@
         "category": "Error",
         "code": 6504
     },
-    "Disallow access member from 'any' type.": {
-        "category": "Error",
-        "code": 6804
-    },
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
         "code": 6800
+    },
+    "Require undeclared properties from index signatures to use element accesses.": {
+        "category": "Error",
+        "code": 6803
+    },
+    "Disallow access member from 'any' type.": {
+        "category": "Error",
+        "code": 6804
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -5966,6 +5974,22 @@
     "Add 'void' to all Promises resolved without a value": {
         "category": "Message",
         "code": 95144
+    },
+    "Use element access for '{0}'": {
+        "category": "Message",
+        "code": 95145
+    },
+    "Use element access for all undeclared properties.": {
+        "category": "Message",
+        "code": 95146
+    },
+    "Delete all unused imports": {
+        "category": "Message",
+        "code": 95147
+    },
+    "Infer function return type": {
+        "category": "Message",
+        "code": 95148
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

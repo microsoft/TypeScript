@@ -21,7 +21,7 @@ namespace ts {
     let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
 
     /**
-     * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/compat/deprecations.ts`.
+     * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
      */
     /* @internal */
     export const parseBaseNodeFactory: BaseNodeFactory = {
@@ -614,8 +614,7 @@ namespace ts {
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
-        const tracingData: tracing.EventData = [tracing.Phase.Parse, "createSourceFile", { path: fileName }];
-        tracing.begin(...tracingData);
+        tracing.push(tracing.Phase.Parse, "createSourceFile", { path: fileName }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -630,7 +629,7 @@ namespace ts {
 
         performance.mark("afterParse");
         performance.measure("Parse", "beforeParse", "afterParse");
-        tracing.end(...tracingData);
+        tracing.pop();
         return result;
     }
 
@@ -1768,6 +1767,7 @@ namespace ts {
                 case SyntaxKind.DefaultKeyword:
                     return nextTokenCanFollowDefaultKeyword();
                 case SyntaxKind.StaticKeyword:
+                    return nextTokenIsOnSameLineAndCanFollowModifier();
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
                     nextToken();

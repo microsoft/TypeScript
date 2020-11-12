@@ -22,14 +22,9 @@ No type information for this code.=== tests/cases/conformance/jsx/7.tsx ===
 
 === tests/cases/conformance/jsx/8.tsx ===
 <a:b></b>;
->b : Symbol(b, Decl(8.tsx, 0, 3))
-
-=== tests/cases/conformance/jsx/9.tsx ===
+No type information for this code.=== tests/cases/conformance/jsx/9.tsx ===
 <a:b.c></a:b.c>;
->b : Symbol(b, Decl(9.tsx, 0, 3))
->c : Symbol(c, Decl(9.tsx, 0, 5))
-
-=== tests/cases/conformance/jsx/10.tsx ===
+No type information for this code.=== tests/cases/conformance/jsx/10.tsx ===
 <a.b:c></a.b:c>;
 >c : Symbol(c, Decl(10.tsx, 0, 5))
 

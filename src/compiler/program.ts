@@ -780,8 +780,7 @@ namespace ts {
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
         const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
-        const tracingData: tracing.EventData = [tracing.Phase.Program, "createProgram"];
-        tracing.begin(...tracingData);
+        tracing.push(tracing.Phase.Program, "createProgram", {}, /*separateBeginAndEnd*/ true);
         performance.mark("beforeProgram");
 
         const host = createProgramOptions.host || createCompilerHost(options);
@@ -1041,7 +1040,7 @@ namespace ts {
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
-        tracing.end(...tracingData);
+        tracing.pop();
 
         return program;
 
@@ -1603,8 +1602,7 @@ namespace ts {
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
             Debug.assert(!outFile(options));
-            const tracingData: tracing.EventData = [tracing.Phase.Emit, "emitBuildInfo"];
-            tracing.begin(...tracingData);
+            tracing.push(tracing.Phase.Emit, "emitBuildInfo", {}, /*separateBeginAndEnd*/ true);
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
                 notImplementedResolver,
@@ -1617,7 +1615,7 @@ namespace ts {
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
-            tracing.end(...tracingData);
+            tracing.pop();
             return emitResult;
         }
 
@@ -1678,10 +1676,9 @@ namespace ts {
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
-            const tracingData: tracing.EventData = [tracing.Phase.Emit, "emit", { path: sourceFile?.path }];
-            tracing.begin(...tracingData);
+            tracing.push(tracing.Phase.Emit, "emit", { path: sourceFile?.path }, /*separateBeginAndEnd*/ true);
             const result = runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, forceDtsEmit));
-            tracing.end(...tracingData);
+            tracing.pop();
             return result;
         }
 
@@ -2201,6 +2198,19 @@ namespace ts {
                 : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
         }
 
+        function createSyntheticImport(text: string, file: SourceFile) {
+            const externalHelpersModuleReference = factory.createStringLiteral(text);
+            const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
+            addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
+            setParent(externalHelpersModuleReference, importDecl);
+            setParent(importDecl, file);
+            // explicitly unset the synthesized flag on these declarations so the checker API will answer questions about them
+            // (which is required to build the dependency graph for incremental emit)
+            (externalHelpersModuleReference as Mutable<Node>).flags &= ~NodeFlags.Synthesized;
+            (importDecl as Mutable<Node>).flags &= ~NodeFlags.Synthesized;
+            return externalHelpersModuleReference;
+        }
+
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
@@ -2216,16 +2226,17 @@ namespace ts {
 
             // If we are importing helpers, we need to add a synthetic reference to resolve the
             // helpers library.
-            if (options.importHelpers
-                && (options.isolatedModules || isExternalModuleFile)
+            if ((options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
-                // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = factory.createStringLiteral(externalHelpersModuleNameText);
-                const importDecl = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
-                addEmitFlags(importDecl, EmitFlags.NeverApplyImportHelper);
-                setParent(externalHelpersModuleReference, importDecl);
-                setParent(importDecl, file);
-                imports = [externalHelpersModuleReference];
+                if (options.importHelpers) {
+                    // synthesize 'import "tslib"' declaration
+                    imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
+                }
+                const jsxImport = getJSXRuntimeImport(getJSXImplicitImportBase(options, file), options);
+                if (jsxImport) {
+                    // synthesize `import "base/jsx-runtime"` declaration
+                    (imports ||= []).push(createSyntheticImport(jsxImport, file));
+                }
             }
 
             for (const node of file.statements) {

@@ -61,8 +61,10 @@ verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
     fixAllDescription: ts.Diagnostics.Delete_all_unused_declarations.message,
     newFileContent:
-`import { used1 } from "foo";
-import { used2 } from "foo";
+`import d from "foo";
+import d2, { used1 } from "foo";
+import { x } from "foo";
+import { x2, used2 } from "foo";
 used1; used2;
 
 function f() {

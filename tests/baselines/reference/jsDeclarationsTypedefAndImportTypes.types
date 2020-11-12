@@ -56,10 +56,10 @@ class Wrap {
 }
 
 module.exports = {
->module.exports = {    Wrap} : { Wrap: typeof Wrap; }
->module.exports : { Wrap: typeof Wrap; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/usage\"": { Wrap: typeof Wrap; }; }
->exports : { Wrap: typeof Wrap; }
+>module.exports = {    Wrap} : typeof import("tests/cases/conformance/jsdoc/declarations/usage")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/usage")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/usage\"": typeof import("tests/cases/conformance/jsdoc/declarations/usage"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/usage")
 >{    Wrap} : { Wrap: typeof Wrap; }
 
     Wrap

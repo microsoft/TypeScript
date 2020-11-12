@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.1";
+    const versionMajorMinor = "4.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -81,7 +81,7 @@ declare namespace ts {
             value: T;
             done?: false;
         } | {
-            value: never;
+            value: void;
             done: true;
         };
     }
@@ -2833,6 +2833,7 @@ declare namespace ts {
         noUnusedParameters?: boolean;
         noPropertyAccessOnAny?: boolean;
         noImplicitUseStrict?: boolean;
+        noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -2881,6 +2882,8 @@ declare namespace ts {
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     export interface TypeAcquisition {
@@ -3864,7 +3867,7 @@ declare namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
