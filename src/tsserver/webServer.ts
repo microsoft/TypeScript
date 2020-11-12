@@ -19,13 +19,15 @@ namespace ts.server {
         getLogFileName: returnUndefined,
     };
 
-    // Save off original versions before they are overwitten
-    const consoleLog = console.log.bind(console);
-    const consoleError = console.error.bind(console);
+    type MessageLogLevel = "info" | "perf" | "error";
 
-    class ConsoleLogger implements Logger {
+    interface LoggingMessage {
+        readonly type: "log";
+        readonly level: MessageLogLevel;
+        readonly body: string
+    }
 
-        private readonly topLevelGroupName = "TS Server";
+    class MainProcessLogger implements Logger {
 
         private currentGroupCount = 0;
         private seq = 0;
@@ -71,16 +73,16 @@ namespace ts.server {
 
             switch (type) {
                 case Msg.Info:
-                    this.write(() => { consoleLog(s); });
+                    this.write("info", s);
                     break;
 
                 case Msg.Perf:
-                    this.write(() => { consoleLog(s); });
+                    this.write("perf", s);
                     break;
 
                 case Msg.Err:
                 default:
-                    this.write(() => { consoleError(s); });
+                    this.write("error", s);
                     break;
             }
 
@@ -93,14 +95,12 @@ namespace ts.server {
             return undefined;
         }
 
-        private write(f: () => void) {
-            console.group(this.topLevelGroupName);
-            try {
-                f();
-            }
-            finally {
-                console.groupEnd();
-            }
+        private write(level: MessageLogLevel, body: string) {
+            postMessage(<LoggingMessage>{
+                type: "log",
+                level,
+                body,
+            });
         }
     }
 
@@ -137,7 +137,7 @@ namespace ts.server {
 
     function createLogger() {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        return typeof cmdLineVerbosity === "undefined" ? nullLogger : new ConsoleLogger(cmdLineVerbosity);
+        return typeof cmdLineVerbosity === "undefined" ? nullLogger : new MainProcessLogger(cmdLineVerbosity);
     }
 
     function createWebSystem(args: string[]) {
