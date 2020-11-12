@@ -189,8 +189,9 @@ interface Symbol {
     export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<string>; }) {
         const mapFileNames = mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
         while (true) {
-            const { value: mapFile, done } = mapFileNames.next();
-            if (done) break;
+            const result = mapFileNames.next();
+            if (result.done) break;
+            const mapFile = result.value;
             const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
             sys.writeFile(`${mapFile}.baseline.txt`, text);
         }

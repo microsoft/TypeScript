@@ -1091,6 +1091,16 @@ namespace ts {
             }
         }
         function errorOrSuggestion(isError: boolean, location: Node, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+             // Pseudo-synthesized input node
+            if (location.pos < 0 || location.end < 0) {
+                if (!isError) {
+                    return; // Drop suggestions (we have no span to suggest on)
+                }
+                // Issue errors globally
+                const file = getSourceFileOfNode(location);
+                addErrorOrSuggestion(isError, "message" in message ? createFileDiagnostic(file, 0, 0, message, arg0, arg1, arg2, arg3) : createDiagnosticForFileFromMessageChain(file, message)); // eslint-disable-line no-in-operator
+                return;
+            }
             addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line no-in-operator
         }
 
@@ -2790,7 +2800,7 @@ namespace ts {
             const resolved = getExternalModuleMember(root, commonJSPropertyAccess || node, dontResolveAlias);
             const name = node.propertyName || node.name;
             if (commonJSPropertyAccess && resolved && isIdentifier(name)) {
-                return getPropertyOfType(getTypeOfSymbol(resolved), name.escapedText);
+                return resolveSymbol(getPropertyOfType(getTypeOfSymbol(resolved), name.escapedText), dontResolveAlias);
             }
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
@@ -30156,6 +30166,9 @@ namespace ts {
                         workStacks.leftType[stackIndex] = leftType;
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                            if (operator === SyntaxKind.AmpersandAmpersandToken) {
+                                checkTestingKnownTruthyCallableType(node.left, leftType);
+                            }
                             checkTruthinessOfType(leftType, node.left);
                         }
                         advanceState(CheckBinaryExpressionState.FinishCheck);
@@ -30689,7 +30702,7 @@ namespace ts {
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
             const type = checkTruthinessExpression(node.condition);
-            checkTestingKnownTruthyCallableType(node.condition, node.whenTrue, type);
+            checkTestingKnownTruthyCallableType(node.condition, type, node.whenTrue);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -33931,7 +33944,7 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
             const type = checkTruthinessExpression(node.expression);
-            checkTestingKnownTruthyCallableType(node.expression, node.thenStatement, type);
+            checkTestingKnownTruthyCallableType(node.expression, type, node.thenStatement);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -33941,16 +33954,16 @@ namespace ts {
             checkSourceElement(node.elseStatement);
         }
 
-        function checkTestingKnownTruthyCallableType(condExpr: Expression, body: Statement | Expression, type: Type) {
+        function checkTestingKnownTruthyCallableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
             if (!strictNullChecks) {
                 return;
             }
 
-            const testedNode = isIdentifier(condExpr)
-                ? condExpr
-                : isPropertyAccessExpression(condExpr)
-                    ? condExpr.name
-                    : undefined;
+            const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
+            const testedNode = isIdentifier(location) ? location
+                : isPropertyAccessExpression(location) ? location.name
+                : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
+                : undefined;
 
             if (!testedNode) {
                 return;
@@ -33971,27 +33984,34 @@ namespace ts {
                 return;
             }
 
-            const testedFunctionSymbol = getSymbolAtLocation(testedNode);
-            if (!testedFunctionSymbol) {
+            const testedSymbol = getSymbolAtLocation(testedNode);
+            if (!testedSymbol) {
                 return;
             }
 
-            const functionIsUsedInBody = forEachChild(body, function check(childNode): boolean | undefined {
+            const isUsed = isBinaryExpression(condExpr.parent) ? isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+                : body ? isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol)
+                : false;
+            if (!isUsed) {
+                error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+            }
+        }
+
+        function isFunctionUsedInConditionBody(expr: Expression, body: Statement | Expression, testedNode: Node, testedSymbol: Symbol): boolean {
+            return !!forEachChild(body, function check(childNode): boolean | undefined {
                 if (isIdentifier(childNode)) {
                     const childSymbol = getSymbolAtLocation(childNode);
-                    if (childSymbol && childSymbol === testedFunctionSymbol) {
+                    if (childSymbol && childSymbol === testedSymbol) {
                         // If the test was a simple identifier, the above check is sufficient
-                        if (isIdentifier(condExpr)) {
+                        if (isIdentifier(expr)) {
                             return true;
                         }
                         // Otherwise we need to ensure the symbol is called on the same target
                         let testedExpression = testedNode.parent;
                         let childExpression = childNode.parent;
                         while (testedExpression && childExpression) {
-
                             if (isIdentifier(testedExpression) && isIdentifier(childExpression) ||
-                                testedExpression.kind === SyntaxKind.ThisKeyword && childExpression.kind === SyntaxKind.ThisKeyword
-                            ) {
+                                testedExpression.kind === SyntaxKind.ThisKeyword && childExpression.kind === SyntaxKind.ThisKeyword) {
                                 return getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
                             }
 
@@ -34008,13 +34028,18 @@ namespace ts {
                         }
                     }
                 }
-
                 return forEachChild(childNode, check);
             });
+        }
 
-            if (!functionIsUsedInBody) {
-                error(condExpr, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
+        function isFunctionUsedInBinaryExpressionChain(node: Node, testedSymbol: Symbol): boolean {
+            while (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+                if (isCallExpression(node.right) && testedSymbol === getSymbolAtLocation(node.right.expression)) {
+                    return true;
+                }
+                node = node.parent;
             }
+            return false;
         }
 
         function checkDoStatement(node: DoStatement) {
@@ -36977,13 +37002,12 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
-            const tracingData: tracing.EventData = [tracing.Phase.Check, "checkSourceFile", { path: node.path }];
-            tracing.begin(...tracingData);
+            tracing.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
             performance.mark("beforeCheck");
             checkSourceFileWorker(node);
             performance.mark("afterCheck");
             performance.measure("Check", "beforeCheck", "afterCheck");
-            tracing.end(...tracingData);
+            tracing.pop();
         }
 
         function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {

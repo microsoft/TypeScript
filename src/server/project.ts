@@ -1652,6 +1652,11 @@ namespace ts.server {
         }
 
         /*@internal*/
+        getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
+            return this.projectService.getNearestAncestorDirectoryWithPackageJson(fileName);
+        }
+
+        /*@internal*/
         getPackageJsonsForAutoImport(rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
             this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
@@ -1992,6 +1997,10 @@ namespace ts.server {
             this.rootFileNames = rootFileNames;
             this.hostProject.getImportSuggestionsCache().clear();
             return super.updateGraph();
+        }
+
+        hasRoots() {
+            return !!this.rootFileNames?.length;
         }
 
         markAsDirty() {

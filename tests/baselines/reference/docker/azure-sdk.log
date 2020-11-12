@@ -2,7 +2,7 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 14.14.0 (pre-LTS)
+Node.js version is 15.1.0 (unstable)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
 BLOCKED (51)
@@ -10,8 +10,9 @@ BLOCKED (51)
 @azure/abort-controller
 @azure/core-auth
 @azure/logger
-@azure/core-asynciterator-polyfill
 @azure/core-http
+@azure/core-asynciterator-polyfill
+@azure/identity
 @azure/communication-common
 @azure/core-amqp
 @azure/core-lro
@@ -38,10 +39,9 @@ BLOCKED (51)
 @azure/core-tracing
 @azure/cosmos
 @azure/data-tables
-@azure/digital-twins
+@azure/digital-twins-core
 @azure/eventgrid
 @azure/eventhubs-checkpointstore-blob
-@azure/identity
 @azure/keyvault-admin
 @azure/keyvault-certificates
 @azure/keyvault-common
@@ -84,12 +84,13 @@ rush rebuild - Errors! (? seconds)
 
 
 Standard error:
-
+Your version of Node.js (X.X.X) has not been tested with this release of Rush. Please consider installing a newer version of the "@microsoft/rush" package, or downgrading Node.js.
+Your version of Node.js (X.X.X) is an odd-numbered release. These releases frequently have bugs. Please consider installing a Long Term Support (LTS) version instead.
 XX of XX: [@azure/eslint-plugin-azure-sdk] failed!
 XX of XX: [@azure/abort-controller] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/communication-administration] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/communication-chat] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/communication-common] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/communication-administration] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/communication-sms] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/eslint-plugin-azure-sdk]!
@@ -113,16 +114,16 @@ XX of XX: [@azure/storage-blob] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-blob-changefeed] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-file-datalake] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/data-tables] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/digital-twins] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/digital-twins-core] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/eventgrid] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/identity] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/schema-registry] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/schema-registry-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/search-documents] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-file-share] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/template] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/test-utils-perfstress] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/test-utils-recorder] blocked by [@azure/eslint-plugin-azure-sdk]!

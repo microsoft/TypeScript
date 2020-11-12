@@ -3878,13 +3878,27 @@ namespace ts.server {
                         const info = packageJsonCache.getInDirectory(directory);
                         if (info) result.push(info);
                 }
-                if (rootPath && rootPath === this.toPath(directory)) {
+                if (rootPath && rootPath === directory) {
                     return true;
                 }
             };
 
             forEachAncestorDirectory(getDirectoryPath(filePath), processDirectory);
             return result;
+        }
+
+        /*@internal*/
+        getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
+            return forEachAncestorDirectory(fileName, directory => {
+                switch (this.packageJsonCache.directoryHasPackageJson(this.toPath(directory))) {
+                    case Ternary.True: return directory;
+                    case Ternary.False: return undefined;
+                    case Ternary.Maybe:
+                        return this.host.fileExists(combinePaths(directory, "package.json"))
+                            ? directory
+                            : undefined;
+                }
+            });
         }
 
         /*@internal*/

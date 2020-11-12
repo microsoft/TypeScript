@@ -1,11 +1,22 @@
 Exit Code: 2
 Standard output:
-bin/webpack.js(63,8): error TS2300: Duplicate identifier 'path'.
-bin/webpack.js(127,8): error TS2300: Duplicate identifier 'path'.
 lib/Compilation.js(37,7): error TS2440: Import declaration conflicts with local declaration of 'Module'.
 lib/Compilation.js(49,7): error TS2440: Import declaration conflicts with local declaration of 'WebpackError'.
 lib/Compilation.js(53,7): error TS2440: Import declaration conflicts with local declaration of 'StatsFactory'.
 lib/Compilation.js(54,7): error TS2440: Import declaration conflicts with local declaration of 'StatsPrinter'.
+lib/Compiler.js(156,4): error TS2322: Type 'AsyncParallelHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+lib/Compiler.js(156,4): error TS2322: Type 'AsyncParallelHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+  Types of property 'intercept' are incompatible.
+    Type '(interceptor: HookInterceptor<any, void, UnsetAdditionalOptions>) => void' is not assignable to type '(interceptor: HookInterceptor<[Compilation], void, Module>) => void'.
+      Types of parameters 'interceptor' and 'interceptor' are incompatible.
+        Type 'HookInterceptor<[Compilation], void, Module>' is not assignable to type 'HookInterceptor<any, void, UnsetAdditionalOptions>'.
+          Property '_UnsetAdditionalOptions' is missing in type 'Module' but required in type 'UnsetAdditionalOptions'.
+lib/Compiler.js(158,4): error TS2322: Type 'AsyncSeriesHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+lib/Compiler.js(158,4): error TS2322: Type 'AsyncSeriesHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+  Types of property 'intercept' are incompatible.
+    Type '(interceptor: HookInterceptor<any, void, UnsetAdditionalOptions>) => void' is not assignable to type '(interceptor: HookInterceptor<[Compilation], void, Module>) => void'.
+      Types of parameters 'interceptor' and 'interceptor' are incompatible.
+        Type 'HookInterceptor<[Compilation], void, Module>' is not assignable to type 'HookInterceptor<any, void, UnsetAdditionalOptions>'.
 lib/ExportsInfo.js(1092,28): error TS1016: A required parameter cannot follow an optional parameter.
 lib/FlagDependencyUsagePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/NormalModule.js(19,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
@@ -20,14 +31,14 @@ lib/WebpackOptionsApply.js(100,10): error TS2300: Duplicate identifier 'External
 lib/WebpackOptionsApply.js(104,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
 lib/WebpackOptionsApply.js(107,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
 lib/WebpackOptionsApply.js(158,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
-lib/WebpackOptionsApply.js(421,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
-lib/WebpackOptionsApply.js(428,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
-lib/WebpackOptionsApply.js(479,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
-lib/WebpackOptionsApply.js(489,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
+lib/WebpackOptionsApply.js(423,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
+lib/WebpackOptionsApply.js(430,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
+lib/WebpackOptionsApply.js(481,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
+lib/WebpackOptionsApply.js(491,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
 lib/cache/ResolverCachePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'LazySet'.
 lib/dependencies/CommonJsExportRequireDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/HarmonyExportImportedSpecifierDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
-lib/dependencies/HarmonyImportDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
+lib/dependencies/HarmonyImportDependency.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/HarmonyImportSpecifierDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/ImportDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/ModuleDecoratorDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.

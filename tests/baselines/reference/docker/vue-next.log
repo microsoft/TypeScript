@@ -1,10 +1,10 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X build /vue-next
+> build
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/compiler-core.api.json
 The API report is up to date: temp/compiler-core.api.md
@@ -12,7 +12,7 @@ Writing package typings: /vue-next/packages/compiler-core/dist/compiler-core.d.t
 Writing package typings: /vue-next/dist/compiler-core.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for compiler-dom...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/compiler-dom.api.json
 The API report is up to date: temp/compiler-dom.api.md
@@ -20,7 +20,7 @@ Writing package typings: /vue-next/packages/compiler-dom/dist/compiler-dom.d.ts
 Writing package typings: /vue-next/dist/compiler-dom.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for compiler-sfc...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/compiler-sfc.api.json
 The API report is up to date: temp/compiler-sfc.api.md
@@ -28,7 +28,7 @@ Writing package typings: /vue-next/packages/compiler-sfc/dist/compiler-sfc.d.ts
 Writing package typings: /vue-next/dist/compiler-sfc.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for compiler-ssr...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/compiler-ssr.api.json
 The API report is up to date: temp/compiler-ssr.api.md
@@ -36,7 +36,7 @@ Writing package typings: /vue-next/packages/compiler-ssr/dist/compiler-ssr.d.ts
 Writing package typings: /vue-next/dist/compiler-ssr.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for reactivity...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/reactivity.api.json
 The API report is up to date: temp/reactivity.api.md
@@ -44,7 +44,7 @@ Writing package typings: /vue-next/packages/reactivity/dist/reactivity.d.ts
 Writing package typings: /vue-next/dist/reactivity.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for runtime-core...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/runtime-core.api.json
 The API report is up to date: temp/runtime-core.api.md
@@ -52,7 +52,7 @@ Writing package typings: /vue-next/packages/runtime-core/dist/runtime-core.d.ts
 Writing package typings: /vue-next/dist/runtime-core.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for runtime-dom...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/runtime-dom.api.json
 The API report is up to date: temp/runtime-dom.api.md
@@ -60,7 +60,7 @@ Writing package typings: /vue-next/packages/runtime-dom/dist/runtime-dom.d.ts
 Writing package typings: /vue-next/dist/runtime-dom.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for server-renderer...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/server-renderer.api.json
 The API report is up to date: temp/server-renderer.api.md
@@ -68,7 +68,7 @@ Writing package typings: /vue-next/packages/server-renderer/dist/server-renderer
 Writing package typings: /vue-next/dist/server-renderer.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for shared...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/shared.api.json
 The API report is up to date: temp/shared.api.md
@@ -76,7 +76,7 @@ Writing package typings: /vue-next/packages/shared/dist/shared.d.ts
 Writing package typings: /vue-next/dist/shared.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for vue...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/vue.api.json
 The API report is up to date: temp/vue.api.md
@@ -85,9 +85,9 @@ Writing package typings: /vue-next/dist/vue.d.ts
 API Extractor completed successfully.
 compiler-dom.global.prod.js min:44.24kb / gzip:17.04kb / brotli:15.46kb
 reactivity.global.prod.js min:8.37kb / gzip:3.24kb / brotli:3.00kb
-runtime-dom.global.prod.js min:68.76kb / gzip:26.43kb / brotli:23.92kb
-size-check.global.prod.js min:39.98kb / gzip:15.95kb / brotli:14.59kb
-vue.global.prod.js min:105.87kb / gzip:40.14kb / brotli:36.07kb
+runtime-dom.global.prod.js min:68.76kb / gzip:26.44kb / brotli:23.91kb
+size-check.global.prod.js min:39.98kb / gzip:15.95kb / brotli:14.55kb
+vue.global.prod.js min:105.87kb / gzip:40.15kb / brotli:36.04kb
 
 
 
