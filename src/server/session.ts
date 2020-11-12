@@ -208,16 +208,12 @@ namespace ts.server {
             try {
                 if (this.operationHost.isCancellationRequested()) {
                     stop = true;
-                    tracing.instant(tracing.Phase.Session, "stepCancellation", { seq: this.requestId });
+                    tracing.instant(tracing.Phase.Session, "stepEarlyCancellation", { seq: this.requestId });
                 }
                 else {
-                    tracing.assertStackEmpty(); // Confirm it's safe to popAll if there's an exception
-
                     tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
                     action(this);
                     tracing.pop();
-
-                    tracing.assertStackEmpty(); // Stack should be empty if everything succeeeded
                 }
             }
             catch (e) {
@@ -2927,8 +2923,6 @@ namespace ts.server {
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                tracing.assertStackEmpty(); // Confirm it's safe to popAll if there's an exception
-
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
@@ -2958,8 +2952,6 @@ namespace ts.server {
                 else if (responseRequired) {
                     this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
                 }
-
-                tracing.assertStackEmpty(); // Stack should be empty if everything succeeeded
             }
             catch (err) {
                 // Cancellation or an error may have left incomplete events on the tracing stack.
