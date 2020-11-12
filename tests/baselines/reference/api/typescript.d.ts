@@ -4331,7 +4331,7 @@ declare namespace ts {
     /**
      * Gets the EmitHelpers of a node.
      */
-    function getEmitHelpers(node: Node): EmitHelper[] | undefined;
+    function getEmitHelpers(node: Node, directlyUsedOnly?: boolean): EmitHelper[] | undefined;
     /**
      * Moves matching emit helpers from a source node to a target node.
      */

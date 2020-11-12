@@ -120,7 +120,7 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const updated = factory.updateSourceFile(node, setTextRange(factory.createNodeArray(statements), node.statements));
-            addEmitHelpers(updated, context.readEmitHelpers());
+            addEmitHelperRequests(updated, context.readEmitHelperRequests());
             return updated;
         }
 
@@ -207,7 +207,7 @@ namespace ts {
                 )
             );
 
-            addEmitHelpers(updated, context.readEmitHelpers());
+            addEmitHelperRequests(updated, context.readEmitHelperRequests());
             return updated;
         }
 
@@ -347,7 +347,7 @@ namespace ts {
                 )
             );
 
-            addEmitHelpers(updated, context.readEmitHelpers());
+            addEmitHelperRequests(updated, context.readEmitHelperRequests());
             return updated;
         }
 

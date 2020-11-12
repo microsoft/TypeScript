@@ -1,0 +1,31 @@
+=== tests/cases/compiler/a.ts ===
+const a = [1, 2];
+>a : number[]
+>[1, 2] : number[]
+>1 : 1
+>2 : 2
+
+const b = [3, 4]
+>b : number[]
+>[3, 4] : number[]
+>3 : 3
+>4 : 4
+
+export const c = [...a, ...b];
+>c : number[]
+>[...a, ...b] : number[]
+>...a : number
+>a : number[]
+>...b : number
+>b : number[]
+
+=== tests/cases/compiler/tslib.d.ts ===
+export declare function __read(o: any, n?: number): any[];
+>__read : (o: any, n?: number) => any[]
+>o : any
+>n : number
+
+export declare function __spread(...args: any[][]): any[];
+>__spread : (...args: any[][]) => any[]
+>args : any[][]
+

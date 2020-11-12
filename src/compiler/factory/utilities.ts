@@ -407,7 +407,7 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
                 // use named imports
-                const helpers = getEmitHelpers(sourceFile);
+                const helpers = getEmitHelpers(sourceFile, true);
                 if (helpers) {
                     const helperNames: string[] = [];
                     for (const helper of helpers) {

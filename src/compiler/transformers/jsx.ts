@@ -76,7 +76,7 @@ namespace ts {
             currentFileState = {};
             currentFileState.importSpecifier = getJSXImplicitImportBase(compilerOptions, node);
             let visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, context.readEmitHelpers());
+            addEmitHelperRequests(visited, context.readEmitHelperRequests());
             let statements: readonly Statement[] = visited.statements;
             if (currentFileState.filenameDeclaration) {
                 statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));

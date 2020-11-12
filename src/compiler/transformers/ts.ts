@@ -117,7 +117,7 @@ namespace ts {
             currentSourceFile = node;
 
             const visited = saveStateAndInvoke(node, visitSourceFile);
-            addEmitHelpers(visited, context.readEmitHelpers());
+            addEmitHelperRequests(visited, context.readEmitHelperRequests());
 
             currentSourceFile = undefined!;
             return visited;

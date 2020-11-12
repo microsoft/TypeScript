@@ -111,7 +111,7 @@ namespace ts {
 
             currentSourceFile = node;
             const visited = visitSourceFile(node);
-            addEmitHelpers(visited, context.readEmitHelpers());
+            addEmitHelperRequests(visited, context.readEmitHelperRequests());
 
             currentSourceFile = undefined!;
             taggedTemplateStringDeclarations = undefined!;

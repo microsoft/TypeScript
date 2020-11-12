@@ -1100,7 +1100,7 @@ namespace ts {
                         bundleFileInfo.sources.prologues = prologues;
                     }
 
-                    // Store helpes
+                    // Store helpers
                     const helpers = getHelpersFromBundledSourceFiles(bundle);
                     if (helpers) {
                         if (!bundleFileInfo.sources) bundleFileInfo.sources = {};

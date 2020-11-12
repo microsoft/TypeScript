@@ -1,0 +1,22 @@
+=== tests/cases/compiler/a.ts ===
+const a = [1, 2];
+>a : Symbol(a, Decl(a.ts, 0, 5))
+
+const b = [3, 4]
+>b : Symbol(b, Decl(a.ts, 1, 5))
+
+export const c = [...a, ...b];
+>c : Symbol(c, Decl(a.ts, 2, 12))
+>a : Symbol(a, Decl(a.ts, 0, 5))
+>b : Symbol(b, Decl(a.ts, 1, 5))
+
+=== tests/cases/compiler/tslib.d.ts ===
+export declare function __read(o: any, n?: number): any[];
+>__read : Symbol(__read, Decl(tslib.d.ts, --, --))
+>o : Symbol(o, Decl(tslib.d.ts, --, --))
+>n : Symbol(n, Decl(tslib.d.ts, --, --))
+
+export declare function __spread(...args: any[][]): any[];
+>__spread : Symbol(__spread, Decl(tslib.d.ts, --, --))
+>args : Symbol(args, Decl(tslib.d.ts, --, --))
+

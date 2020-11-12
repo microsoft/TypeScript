@@ -68,7 +68,7 @@ namespace ts {
             setContextFlag(ContextFlags.NonTopLevel, false);
             setContextFlag(ContextFlags.HasLexicalThis, !isEffectiveStrictModeSourceFile(node, compilerOptions));
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, context.readEmitHelpers());
+            addEmitHelperRequests(visited, context.readEmitHelperRequests());
             return visited;
         }
 

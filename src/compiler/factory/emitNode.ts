@@ -193,7 +193,27 @@ namespace ts {
      */
     export function addEmitHelper<T extends Node>(node: T, helper: EmitHelper): T {
         const emitNode = getOrCreateEmitNode(node);
-        emitNode.helpers = append(emitNode.helpers, helper);
+        emitNode.helperRequests = append(emitNode.helperRequests, { helper, directlyUsed: true });
+        return node;
+    }
+
+    /** @internal */
+    export function addEmitHelperRequests<T extends Node>(node: T, requests: EmitHelperRequest[] | undefined): T {
+        if (some(requests)) {
+            const emitNode = getOrCreateEmitNode(node);
+            emitNode.helperRequests = emitNode.helperRequests ?? [];
+            for (const request of requests) {
+                const foundRequestIndex: number = findIndex(emitNode.helperRequests, existingRequest => existingRequest.helper === request.helper);
+                if (foundRequestIndex === -1) {
+                    emitNode.helperRequests = append(emitNode.helperRequests, request);
+                } else {
+                    emitNode.helperRequests = replaceElement(emitNode.helperRequests, foundRequestIndex, {
+                        ...emitNode.helperRequests[foundRequestIndex],
+                        directlyUsed: emitNode.helperRequests[foundRequestIndex].directlyUsed || request.directlyUsed
+                    });
+                }
+            }
+        }
         return node;
     }
 
@@ -202,10 +222,7 @@ namespace ts {
      */
     export function addEmitHelpers<T extends Node>(node: T, helpers: EmitHelper[] | undefined): T {
         if (some(helpers)) {
-            const emitNode = getOrCreateEmitNode(node);
-            for (const helper of helpers) {
-                emitNode.helpers = appendIfUnique(emitNode.helpers, helper);
-            }
+            return addEmitHelperRequests(node, helpers.map(helper => ({ helper, directlyUsed: true })));
         }
         return node;
     }
@@ -214,9 +231,14 @@ namespace ts {
      * Removes an EmitHelper from a node.
      */
     export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
-        const helpers = node.emitNode?.helpers;
-        if (helpers) {
-            return orderedRemoveItem(helpers, helper);
+        const helperRequests = node.emitNode?.helperRequests;
+        if (helperRequests) {
+            const foundRequestIndex = findIndex(helperRequests, request => request.helper === helper);
+            if (foundRequestIndex === -1) {
+                return false;
+            }
+            orderedRemoveItemAt(helperRequests, foundRequestIndex);
+            return true;
         }
         return false;
     }
@@ -224,8 +246,8 @@ namespace ts {
     /**
      * Gets the EmitHelpers of a node.
      */
-    export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
-        return node.emitNode?.helpers;
+    export function getEmitHelpers(node: Node, directlyUsedOnly = false): EmitHelper[] | undefined {
+        return node.emitNode?.helperRequests?.filter(request => !directlyUsedOnly || request.directlyUsed).map(request => request.helper);
     }
 
     /**
@@ -233,24 +255,33 @@ namespace ts {
      */
     export function moveEmitHelpers(source: Node, target: Node, predicate: (helper: EmitHelper) => boolean) {
         const sourceEmitNode = source.emitNode;
-        const sourceEmitHelpers = sourceEmitNode && sourceEmitNode.helpers;
-        if (!some(sourceEmitHelpers)) return;
+        const sourceEmitHelperRequests = sourceEmitNode && sourceEmitNode.helperRequests;
+        if (!some(sourceEmitHelperRequests)) return;
 
         const targetEmitNode = getOrCreateEmitNode(target);
-        let helpersRemoved = 0;
-        for (let i = 0; i < sourceEmitHelpers.length; i++) {
-            const helper = sourceEmitHelpers[i];
-            if (predicate(helper)) {
-                helpersRemoved++;
-                targetEmitNode.helpers = appendIfUnique(targetEmitNode.helpers, helper);
+        targetEmitNode.helperRequests = targetEmitNode.helperRequests ?? [];
+        let requestsRemoved = 0;
+        for (let i = 0; i < sourceEmitHelperRequests.length; i++) {
+            const request = sourceEmitHelperRequests[i];
+            if (predicate(request.helper)) {
+                requestsRemoved++;
+                const foundRequestIndex: number = findIndex(targetEmitNode.helperRequests, targetRequest => request.helper === targetRequest.helper);
+                if (foundRequestIndex === -1) {
+                    targetEmitNode.helperRequests = append(targetEmitNode.helperRequests, request);
+                } else {
+                    targetEmitNode.helperRequests = replaceElement(targetEmitNode.helperRequests, foundRequestIndex, {
+                        ...targetEmitNode.helperRequests[foundRequestIndex],
+                        directlyUsed: request.directlyUsed || targetEmitNode.helperRequests[foundRequestIndex].directlyUsed
+                    });
+                }
             }
-            else if (helpersRemoved > 0) {
-                sourceEmitHelpers[i - helpersRemoved] = helper;
+            else if (requestsRemoved > 0) {
+                sourceEmitHelperRequests[i - requestsRemoved] = request;
             }
         }
 
-        if (helpersRemoved > 0) {
-            sourceEmitHelpers.length -= helpersRemoved;
+        if (requestsRemoved > 0) {
+            sourceEmitHelperRequests.length -= requestsRemoved;
         }
     }
 

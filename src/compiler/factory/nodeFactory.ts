@@ -6377,7 +6377,7 @@ namespace ts {
             sourceMapRange,
             tokenSourceMapRanges,
             constantValue,
-            helpers,
+            helperRequests,
             startsOnNewLine,
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {} as EmitNode;
@@ -6389,9 +6389,18 @@ namespace ts {
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
         if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
-        if (helpers) {
-            for (const helper of helpers) {
-                destEmitNode.helpers = appendIfUnique(destEmitNode.helpers, helper);
+        if (some(helperRequests)) {
+            destEmitNode.helperRequests = destEmitNode.helperRequests ?? [];
+            for (const request of helperRequests) {
+                const foundRequestIndex: number = findIndex(destEmitNode.helperRequests, destRequest => request.helper === destRequest.helper);
+                if (foundRequestIndex === -1) {
+                    destEmitNode.helperRequests = append(destEmitNode.helperRequests, request);
+                } else {
+                    destEmitNode.helperRequests = replaceElement(destEmitNode.helperRequests, foundRequestIndex, {
+                        ...destEmitNode.helperRequests[foundRequestIndex],
+                        directlyUsed: request.directlyUsed || destEmitNode.helperRequests[foundRequestIndex].directlyUsed
+                    });
+                }
             }
         }
         if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;

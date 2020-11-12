@@ -301,7 +301,7 @@ namespace ts {
 
 
             const visited = visitEachChild(node, visitor, context);
-            addEmitHelpers(visited, context.readEmitHelpers());
+            addEmitHelperRequests(visited, context.readEmitHelperRequests());
             return visited;
         }
 

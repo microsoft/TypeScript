@@ -293,7 +293,7 @@ namespace ts {
             currentText = node.text;
 
             const visited = visitSourceFile(node);
-            addEmitHelpers(visited, context.readEmitHelpers());
+            addEmitHelperRequests(visited, context.readEmitHelperRequests());
 
             currentSourceFile = undefined!;
             currentText = undefined!;
