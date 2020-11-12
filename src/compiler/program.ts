@@ -3221,9 +3221,9 @@ namespace ts {
                 }
             }
 
-            // Without a package name, for multiple files being bundled into a .d.ts file you basically get a file which doesn't wrk
+            // Without a package name, for multiple files being bundled into a .d.ts file you basically get a file which doesn't work
             if (outputFile && getEmitDeclarations(options) && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && !options.bundledPackageName) {
-                createDiagnosticForOptionName(Diagnostics.The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_declaration_emit, options.out ? "out" : "outFile");
+                createDiagnosticForOptionName(Diagnostics.The_bundledPackageName_option_should_be_provided_when_using_outFile_and_node_module_resolution_with_declaration_emit, options.out ? "out" : "outFile");
             }
 
             if (options.resolveJsonModule) {

@@ -1192,8 +1192,8 @@
         "category": "Message",
         "code": 1390
     },
-    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
-        "category": "Error",
+    "The `bundledPackageName` option should be provided when using outFile and node module resolution with declaration emit.": {
+        "category": "Suggestion",
         "code": 1391
     },
     "The types of '{0}' are incompatible between these types.": {
