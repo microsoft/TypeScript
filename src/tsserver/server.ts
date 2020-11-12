@@ -564,7 +564,7 @@ namespace ts.server {
         exit() {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
-            if (process.env.TSS_TRACE) {
+            if (traceDir) {
                 tracing.stopTracing(ts.emptyArray);
             }
             process.exit(0);
