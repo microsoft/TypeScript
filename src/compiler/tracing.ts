@@ -142,9 +142,6 @@ namespace ts.tracing {
         }
         eventStack.length = 0;
     }
-    export function assertStackEmpty() {
-        Debug.assert(eventStack.length === 0, `Found ${eventStack.length} events on the stack`);
-    }
     function writeStackEvent(index: number, endTime: number) {
         const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
         if (separateBeginAndEnd) {
