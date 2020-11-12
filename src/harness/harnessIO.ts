@@ -1381,7 +1381,7 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                if (require && opts && opts.PrintDiff) {
+                if (!!require && opts && opts.PrintDiff) {
                     const Diff = require("diff");
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
                     throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
