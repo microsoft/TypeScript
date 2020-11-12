@@ -621,8 +621,9 @@ namespace ts {
             const invokeMap = new Map<Path, string[]>();
 
             while (!timerToUpdateChildWatches && cacheToUpdateChildWatches.size) {
-                const { value: [dirPath, { dirName, options, fileNames }], done } = cacheToUpdateChildWatches.entries().next();
-                Debug.assert(!done);
+                const result = cacheToUpdateChildWatches.entries().next();
+                Debug.assert(!result.done);
+                const { value: [dirPath, { dirName, options, fileNames }] } = result;
                 cacheToUpdateChildWatches.delete(dirPath);
                 // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
                 // to ensure that all the changes are reflected at this time
