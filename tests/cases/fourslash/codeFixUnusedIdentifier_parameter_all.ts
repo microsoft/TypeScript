@@ -12,8 +12,9 @@
 ////function i(x = 1) { }
 ////i();
 ////
-////function container() {
+////function container(o) {
 ////    const { x, y } = { x: 1, y: 2 }
+////    const { a, b } = o
 ////}
 ////
 ////class C {
@@ -48,8 +49,9 @@ h(1);
 function i(x = 1) { }
 i();
 
-function container() {
+function container(o) {
     const { x, y } = { x: 1, y: 2 }
+    const { a, b } = o
 }
 
 class C {

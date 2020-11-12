@@ -42,7 +42,7 @@ namespace ts.codefix {
                 }
             }
 
-            if (isObjectBindingPattern(token.parent)) {
+            if (isObjectBindingPattern(token.parent) || isArrayBindingPattern(token.parent)) {
                 if (isParameter(token.parent.parent)) {
                     const elements = token.parent.elements;
                     const diagnostic: [DiagnosticMessage, string] = [
@@ -51,7 +51,7 @@ namespace ts.codefix {
                     ];
                     return [
                         createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                            deleteDestructuringElements(t, sourceFile, <ObjectBindingPattern>token.parent)), diagnostic)
+                            deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic)
                     ];
                 }
                 return [
@@ -120,8 +120,8 @@ namespace ts.codefix {
                         else if (token.kind === SyntaxKind.LessThanToken) {
                             deleteTypeParameters(changes, sourceFile, token);
                         }
-                        else if (isObjectBindingPattern(token.parent)) {
-                            if (isAnyBindingPatternElementInitialized(token.parent)) {
+                        else if (isObjectBindingPattern(token.parent) || isArrayBindingPattern(token.parent)) {
+                            if (token.parent.parent.initializer) {
                                 break;
                             }
                             else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
@@ -170,18 +170,6 @@ namespace ts.codefix {
         return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
     }
 
-    /** Uses a quadratic search for any use of any pattern element, because the error token doesn't specify a single element. */
-    function isAnyBindingPatternElementInitialized(pattern: ObjectBindingPattern) {
-        if (pattern.parent.initializer && isObjectLiteralExpression(pattern.parent.initializer)) {
-            const init = pattern.parent.initializer;
-            return some(
-                pattern.elements,
-                e => some(
-                    init.properties,
-                    p => !!p.name && isIdentifier(p.name) && isIdentifier(e.name) && p.name.escapedText === e.name.escapedText));
-        }
-    }
-
     function canDeleteEntireVariableStatement(sourceFile: SourceFile, token: Node): boolean {
         return isVariableDeclarationList(token.parent) && first(token.parent.getChildren(sourceFile)) === token;
     }
@@ -190,7 +178,7 @@ namespace ts.codefix {
         changes.delete(sourceFile, node.parent.kind === SyntaxKind.VariableStatement ? node.parent : node);
     }
 
-    function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern) {
+    function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern | ArrayBindingPattern) {
         forEach(node.elements, n => changes.delete(sourceFile, n));
     }
 
