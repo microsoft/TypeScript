@@ -208,7 +208,7 @@ namespace ts.server {
             try {
                 if (this.operationHost.isCancellationRequested()) {
                     stop = true;
-                    tracing.instant(tracing.Phase.Session, "stepEarlyCancellation", { seq: this.requestId });
+                    tracing.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId, early: true });
                 }
                 else {
                     tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
