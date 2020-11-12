@@ -88,7 +88,7 @@ namespace ts {
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
-        next(): { value: T, done?: false } | { value: never, done: true };
+        next(): { value: T, done?: false } | { value: void, done: true };
     }
 
     /** Array that is only intended to be pushed to, never read. */
