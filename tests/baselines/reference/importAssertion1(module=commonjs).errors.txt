@@ -1,8 +1,8 @@
-tests/cases/conformance/esnext/importAssertion/1.ts(1,14): error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
-tests/cases/conformance/esnext/importAssertion/1.ts(2,28): error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
-tests/cases/conformance/esnext/importAssertion/1.ts(3,28): error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
-tests/cases/conformance/esnext/importAssertion/2.ts(1,28): error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
-tests/cases/conformance/esnext/importAssertion/2.ts(2,38): error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+tests/cases/conformance/esnext/importAssertion/1.ts(1,14): error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+tests/cases/conformance/esnext/importAssertion/1.ts(2,28): error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+tests/cases/conformance/esnext/importAssertion/1.ts(3,28): error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+tests/cases/conformance/esnext/importAssertion/2.ts(1,28): error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+tests/cases/conformance/esnext/importAssertion/2.ts(2,38): error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
 tests/cases/conformance/esnext/importAssertion/3.ts(2,11): error TS1324: Dynamic import must have one specifier as an argument.
 tests/cases/conformance/esnext/importAssertion/3.ts(3,11): error TS1324: Dynamic import must have one specifier as an argument.
 tests/cases/conformance/esnext/importAssertion/3.ts(4,11): error TS1324: Dynamic import must have one specifier as an argument.
@@ -18,13 +18,13 @@ tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1324: Dynamic
 ==== tests/cases/conformance/esnext/importAssertion/1.ts (3 errors) ====
     import './0' assert { type: "json" }
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+!!! error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
     import { a, b } from './0' assert { "type": "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+!!! error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
     import * as foo from './0' assert { type: "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+!!! error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
     a;
     b;
     foo.a;
@@ -33,10 +33,10 @@ tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1324: Dynamic
 ==== tests/cases/conformance/esnext/importAssertion/2.ts (2 errors) ====
     import { a, b } from './0' assert {}
                                ~~~~~~~~~
-!!! error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+!!! error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
     import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2796: Import assertions are only supported when the '--module' flag is set to 'esnext'.
+!!! error TS2797: Import assertions are only supported when the '--module' flag is set to 'esnext'.
     a;
     b;
     c;

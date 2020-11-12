@@ -15,10 +15,10 @@ const thing = new Something();
 >Something : typeof Something
 
 module.exports = {
->module.exports = {    thing} : { thing: Something; }
->module.exports : { thing: Something; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { thing: Something; }; }
->exports : { thing: Something; }
+>module.exports = {    thing} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >{    thing} : { thing: Something; }
 
     thing

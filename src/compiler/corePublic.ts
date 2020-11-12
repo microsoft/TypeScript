@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
-    export const versionMajorMinor = "4.1";
+    export const versionMajorMinor = "4.2";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 
@@ -88,7 +88,7 @@ namespace ts {
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
-        next(): { value: T, done?: false } | { value: never, done: true };
+        next(): { value: T, done?: false } | { value: void, done: true };
     }
 
     /** Array that is only intended to be pushed to, never read. */

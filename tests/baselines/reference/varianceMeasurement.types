@@ -131,3 +131,25 @@ const fn4: Fn<string, 0> = fn;  // Error
 >fn4 : Fn<string, 0>
 >fn : Fn<string, number>
 
+// Repro from #39947
+
+interface I<Dummy, V> {
+  c: C<Dummy, V>;
+>c : C<Dummy, V>
+}
+
+class C<Dummy, V> {
+>C : C<Dummy, V>
+
+  declare sub: I<Dummy, V>;
+>sub : I<Dummy, V>
+
+  declare covariance: V;
+>covariance : V
+}
+
+const c1: C<unknown, string> = new C<unknown, number>();  // Error
+>c1 : C<unknown, string>
+>new C<unknown, number>() : C<unknown, number>
+>C : typeof C
+

@@ -2686,10 +2686,13 @@
       </Item>
       <Item ItemId=";Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_2583" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zmienić bibliotekę docelową? Spróbuj zmienić opcję kompilatora „lib” na es2015 lub nowszą.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zmienić bibliotekę docelową? Spróbuj zmienić opcję kompilatora `lib` na „{1}” lub nowszą.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2702,56 +2705,56 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_types_Slashje_2582" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2582" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla modułu uruchamiającego testy? Spróbuj użyć polecenia „npm i @types/jest” lub „npm i @types/mocha”.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla modułu uruchamiającego testy? Spróbuj użyć polecenia „npm i --save-dev @types/jest” lub „npm i --save-dev @types/mocha”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_types_Slashje_2593" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_a_test_runner_Try_npm_i_save_dev_type_2593" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla modułu uruchamiającego testy? Spróbuj użyć polecenia „npm i @types/jest” lub „npm i @types/mocha”, a następnie dodaj element „jest” lub „mocha” do pola types w pliku tsconfig.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla modułu uruchamiającego testy? Spróbuj użyć polecenia „npm i --save-dev @types/jest” lub „npm i --save-dev @types/mocha”, a następnie dodaj element „jest” lub „mocha” do pola types w pliku tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_types_Slashjquery_2581" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2581" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla biblioteki jQuery? Spróbuj użyć polecenia „npm i @types/jquery”.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla biblioteki jQuery? Spróbuj użyć polecenia „npm i --save-dev @types/jquery”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_types_Slashjquery_an_2592" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_jQuery_Try_npm_i_save_dev_types_Slash_2592" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla biblioteki jQuery? Spróbuj użyć polecenia „npm i @types/jquery”, a następnie dodaj element „jquery” do pola types w pliku tsconfig.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla biblioteki jQuery? Spróbuj użyć polecenia „npm i --save-dev @types/jquery”, a następnie dodaj element „jquery” do pola types w pliku tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_types_Slashnode_2580" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2580" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla node? Spróbuj użyć polecenia „npm i @types/node”.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla środowiska Node? Spróbuj użyć polecenia „npm i --save-dev @types/node”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_types_Slashnode_and_th_2591" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashno_2591" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
+          <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla node? Spróbuj użyć polecenia „npm i @types/node”, a następnie dodaj element „node” do pola types w pliku tsconfig.]]></Val>
+            <Val><![CDATA[Nie można odnaleźć nazwy „{0}”. Czy chcesz zainstalować definicje typów dla środowiska Node? Spróbuj użyć polecenia „npm i --save-dev @types/node”, a następnie dodaj element „node” do pola types w pliku tsconfig.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3947,6 +3950,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declarations_with_definite_assignment_assertions_must_also_have_type_annotations_1264" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with definite assignment assertions must also have type annotations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklaracje z asercjami określonego przypisania muszą również mieć adnotacje typu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declarations_with_initializers_cannot_also_have_definite_assignment_assertions_1263" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declarations with initializers cannot also have definite assignment assertions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklaracje z inicjatorami nie mogą mieć również asercji określonego przypisania.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declare_a_private_field_named_0_90053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declare a private field named '{0}'.]]></Val>
@@ -4049,15 +4070,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Definite_assignment_assertions_can_only_be_used_along_with_a_type_annotation_1258" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Definite assignment assertions can only be used along with a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Asercje określonego przypisania mogą być używane tylko wraz z adnotacją typu.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0_6200" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Definitions of the following identifiers conflict with those in another file: {0}]]></Val>
@@ -4072,6 +4084,15 @@
           <Val><![CDATA[Delete all unused declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Usuń wszystkie nieużywane deklaracje]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Delete_all_unused_imports_95147" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usuń wszystkie nieużywane importy]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6146,6 +6167,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Infer_function_return_type_95148" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer function return type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wnioskuj zwracany typ funkcji]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Infer_parameter_types_from_usage_95012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Infer parameter types from usage]]></Val>
@@ -6391,6 +6421,15 @@
           <Val><![CDATA[Invalid value for '--reactNamespace'. '{0}' is not a valid identifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Nieprawidłowa wartość opcji „--reactNamespace”. Element „{0}” nie jest prawidłowym identyfikatorem.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";It_is_likely_that_you_are_missing_a_comma_to_separate_these_two_template_expressions_They_form_a_tag_2796" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Prawdopodobnie brakuje przecinka, aby oddzielić te dwa wyrażenia szablonu. Tworzą one wyrażenie szablonu z tagami, którego nie można wywołać.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8192,6 +8231,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_nativ_6386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Performance timings for '--diagnostics' or '--extendedDiagnostics' are not available in this session. A native implementation of the Web Performance API could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Chronometraż wydajności dla opcji „--diagnostics” lub „--extendedDiagnostics” nie jest dostępny w tej sesji. Nie można było znaleźć natywnej implementacji interfejsu Web Performance API.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Prefix_0_with_an_underscore_90025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Prefix '{0}' with an underscore]]></Val>
@@ -8450,6 +8498,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0_4111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' comes from an index signature, so it must be accessed with ['{0}']5D;.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość „{0}” pochodzi z sygnatury indeksu, dlatego należy uzyskiwać do niej dostęp za pomocą elementu [„{0}”]5D;.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_does_not_exist_on_const_enum_1_2479" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
@@ -8473,6 +8530,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Właściwość „{0}” nie istnieje w typie „{1}”. Czy chodziło Ci o „{2}”?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Do_you_need_to_change_your_target_library_Try_changing_the_lib_c_2550" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość „{0}” nie istnieje w typie „{1}”. Czy chcesz zmienić bibliotekę docelową? Spróbuj zmienić opcję kompilatora `lib` na „{2}” lub nowszą.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9226,6 +9292,15 @@
           <Val><![CDATA[Report errors on unused parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Raportuj błędy dla nieużywanych parametrów.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Require_undeclared_properties_from_index_signatures_to_use_element_accesses_6803" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Require undeclared properties from index signatures to use element accesses.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wymagaj, aby niezadeklarowane właściwości z sygnatur indeksów korzystały z dostępów do elementów.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10271,15 +10346,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Template_literal_type_argument_0_is_not_literal_type_or_a_generic_type_2793" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Template literal type argument '{0}' is not literal type or a generic type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Argument typu literału szablonu „{0}” nie jest typem literału ani typem ogólnym.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_0_modifier_can_only_be_used_in_TypeScript_files_8009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The '{0}' modifier can only be used in TypeScript files.]]></Val>
@@ -10366,6 +10432,15 @@
           <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Opcja „bundledPackageName” musi być podana, gdy używana jest opcja outFile i rozpoznawanie modułu węzła z emitowaniem deklaracji.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_call_would_have_succeeded_against_this_implementation_but_implementation_signatures_of_overloads_2793" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wywołanie powiodłoby się dla tej implementacji, ale sygnatury implementacji przeciążeń nie są widoczne na zewnątrz.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10499,11 +10574,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Metawłaściwość „import.meta” jest dozwolona tylko wtedy, gdy opcja „--module” ma wartość „esnext” lub „system”.]]></Val>
+            <Val><![CDATA[Metawłaściwość „import.meta” jest dozwolona tylko wtedy, gdy opcja „--module” ma wartość „es2020”, „esnext” lub „system”.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10558,6 +10633,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Przecięcie „{0}” zostało zredukowane do wartości „never”, ponieważ właściwość „{1}” zawiera typy powodujące konflikt w niektórych elementach składowych.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types_2795" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'intrinsic' keyword can only be used to declare compiler provided intrinsic types.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Słowa kluczowego „intrinsic” można używać tylko do deklarowania typów wewnętrznych udostępnianych przez kompilator.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11261,11 +11345,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Try_npm_install_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_mod_7035" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare__7035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
+          <Val><![CDATA[Try `npm i --save-dev @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Spróbuj użyć polecenia „npm install @types/{1}”, jeśli istnieje, lub dodać nowy plik deklaracji (.d.ts) zawierający ciąg „declare module '{0}';”]]></Val>
+            <Val><![CDATA[Spróbuj użyć polecenia „npm i --save-dev @types/{1}”, jeśli istnieje, lub dodać nowy plik deklaracji (.d.ts) zawierający ciąg „declare module '{0}';”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12281,6 +12365,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Use_element_access_for_0_95145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use element access for '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Użyj dostępu do elementu w przypadku elementu „{0}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_element_access_for_all_undeclared_properties_95146" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use element access for all undeclared properties.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Użyj dostępu do elementu w przypadku wszystkich niezadeklarowanych właściwości.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Use_synthetic_default_member_95016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Use synthetic 'default' member.]]></Val>
@@ -12848,15 +12950,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_modifier_cannot_appear_on_a_class_element_1031" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot appear on a class element.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Modyfikator „{0}” nie może występować w elemencie klasy.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";_0_modifier_cannot_appear_on_a_constructor_declaration_1089" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on a constructor declaration.]]></Val>
@@ -12907,6 +13000,15 @@
           <Val><![CDATA['{0}' modifier cannot appear on an index signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Modyfikator „{0}” nie może być stosowany w przypadku sygnatury indeksu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_modifier_cannot_appear_on_class_elements_of_this_kind_1031" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' modifier cannot appear on class elements of this kind.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Modyfikator „{0}” nie może występować w elementach klasy tego rodzaju.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

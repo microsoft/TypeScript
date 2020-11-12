@@ -210,12 +210,10 @@ namespace Harness.Parallel.Worker {
             const passes: TestInfo[] = [];
             const start = +new Date();
             const runner = new Mocha.Runner(suite, /*delay*/ false);
-            const uncaught = (err: any) => runner.uncaught(err);
 
             runner
                 .on("start", () => {
                     unhookUncaughtExceptions(); // turn off global uncaught handling
-                    process.on("unhandledRejection", uncaught); // turn on unhandled rejection handling (not currently handled in mocha)
                 })
                 .on("pass", (test: Mocha.Test) => {
                     passes.push({ name: test.titlePath() });
@@ -224,8 +222,8 @@ namespace Harness.Parallel.Worker {
                     errors.push({ name: test.titlePath(), error: err.message, stack: err.stack });
                 })
                 .on("end", () => {
-                    process.removeListener("unhandledRejection", uncaught);
                     hookUncaughtExceptions();
+                    runner.dispose();
                 })
                 .run(() => {
                     fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });

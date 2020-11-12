@@ -14,8 +14,8 @@ namespace ts {
     export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
         const parseTreeNode = getParseTreeNode(node);
         if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
             const text = currentSourceFile.text;
             const commentRanges = previousSibling
                 ? concatenate(

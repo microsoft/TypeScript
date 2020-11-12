@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.1";
+    const versionMajorMinor = "4.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -81,7 +81,7 @@ declare namespace ts {
             value: T;
             done?: false;
         } | {
-            value: never;
+            value: void;
             done: true;
         };
     }
@@ -2227,6 +2227,7 @@ declare namespace ts {
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): readonly Symbol[];
+        getSymbolOfExpando(node: Node, allowDeclaration: boolean): Symbol | undefined;
         getContextualType(node: Expression): Type | undefined;
         /**
          * returns unknownSignature in the case of an error.
@@ -2851,6 +2852,7 @@ declare namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -2899,6 +2901,8 @@ declare namespace ts {
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     export interface TypeAcquisition {
@@ -2910,7 +2914,8 @@ declare namespace ts {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean | undefined;
+        disableFilenameBasedTypeAcquisition?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
     export enum ModuleKind {
         None = 0,
@@ -3886,7 +3891,7 @@ declare namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
@@ -4075,6 +4080,14 @@ declare namespace ts {
     function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function getOriginalNode(node: Node | undefined): Node | undefined;
     function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest: (node: Node | undefined) => node is T): T | undefined;
+    /**
+     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+     * At that point findAncestor returns undefined.
+     */
+    function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
+    function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
     /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
@@ -4393,6 +4406,8 @@ declare namespace ts {
     function isMappedTypeNode(node: Node): node is MappedTypeNode;
     function isLiteralTypeNode(node: Node): node is LiteralTypeNode;
     function isImportTypeNode(node: Node): node is ImportTypeNode;
+    function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan;
+    function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode;
     function isObjectBindingPattern(node: Node): node is ObjectBindingPattern;
     function isArrayBindingPattern(node: Node): node is ArrayBindingPattern;
     function isBindingElement(node: Node): node is BindingElement;
@@ -7598,6 +7613,8 @@ declare namespace ts.server.protocol {
         watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     /**
@@ -7773,6 +7790,10 @@ declare namespace ts.server.protocol {
         closedFiles?: string[];
     }
     /**
+     * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+     */
+    type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+    /**
      * Request to set compiler options for inferred projects.
      * External projects are opened / closed explicitly.
      * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
@@ -7792,7 +7813,7 @@ declare namespace ts.server.protocol {
         /**
          * Compiler options to be used with inferred projects.
          */
-        options: ExternalProjectCompilerOptions;
+        options: InferredProjectCompilerOptions;
         /**
          * Specifies the project root path used to scope compiler options.
          * It is an error to provide this property if the server has not been started with
@@ -8979,6 +9000,7 @@ declare namespace ts.server.protocol {
         insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
@@ -9010,7 +9032,7 @@ declare namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
@@ -9270,6 +9292,7 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
+        protected projectErrors: Diagnostic[] | undefined;
         protected isInitialLoadPending: () => boolean;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
@@ -9308,7 +9331,11 @@ declare namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[];
+        /**
+         * Get all the project errors
+         */
         getAllProjectErrors(): readonly Diagnostic[];
+        setProjectErrors(projectErrors: Diagnostic[] | undefined): void;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**
@@ -9318,7 +9345,6 @@ declare namespace ts.server {
         enableLanguageService(): void;
         disableLanguageService(lastFileExceededProgramSize?: string): void;
         getProjectName(): string;
-        abstract getTypeAcquisition(): TypeAcquisition;
         protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile | undefined;
@@ -9357,6 +9383,8 @@ declare namespace ts.server {
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
+        setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
+        getTypeAcquisition(): TypeAcquisition;
         protected removeRoot(info: ScriptInfo): void;
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void;
@@ -9387,6 +9415,7 @@ declare namespace ts.server {
         private rootFileNames;
         isOrphan(): boolean;
         updateGraph(): boolean;
+        hasRoots(): boolean;
         markAsDirty(): void;
         getScriptFileNames(): string[];
         getLanguageService(): never;
@@ -9402,12 +9431,10 @@ declare namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
-        private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
-        private projectErrors;
         private projectReferences;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
@@ -9426,8 +9453,6 @@ declare namespace ts.server {
          */
         getAllProjectErrors(): readonly Diagnostic[];
         setProjectErrors(projectErrors: Diagnostic[]): void;
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
-        getTypeAcquisition(): TypeAcquisition;
         close(): void;
         getEffectiveTypeRoots(): string[];
     }
@@ -9439,11 +9464,8 @@ declare namespace ts.server {
         externalProjectName: string;
         compileOnSaveEnabled: boolean;
         excludedFiles: readonly NormalizedPath[];
-        private typeAcquisition;
         updateGraph(): boolean;
         getExcludedFiles(): readonly NormalizedPath[];
-        getTypeAcquisition(): TypeAcquisition;
-        setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
 }
 declare namespace ts.server {
@@ -9576,7 +9598,8 @@ declare namespace ts.server {
     }
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
-    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined;
+    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
+    export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     export interface HostConfiguration {
@@ -9607,6 +9630,10 @@ declare namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
+    }
+    export interface WatchOptionsAndErrors {
+        watchOptions: WatchOptions;
+        errors: Diagnostic[] | undefined;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;
@@ -9645,6 +9672,8 @@ declare namespace ts.server {
         private compilerOptionsForInferredProjectsPerProjectRoot;
         private watchOptionsForInferredProjects;
         private watchOptionsForInferredProjectsPerProjectRoot;
+        private typeAcquisitionForInferredProjects;
+        private typeAcquisitionForInferredProjectsPerProjectRoot;
         /**
          * Project size for configured or external projects
          */
@@ -9690,7 +9719,7 @@ declare namespace ts.server {
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
         private delayUpdateProjectGraph;
         private delayUpdateProjectGraphs;
-        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
+        setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
         findProject(projectName: string): Project | undefined;
         getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
         private doEnsureDefaultProjectForFile;

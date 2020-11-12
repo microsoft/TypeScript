@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts ===
+abstract class A {
+>A : Symbol(A, Decl(abstractProperty.ts, 0, 0))
+
+    protected abstract x: string;
+>x : Symbol(A.x, Decl(abstractProperty.ts, 0, 18))
+
+    public foo() {
+>foo : Symbol(A.foo, Decl(abstractProperty.ts, 1, 33))
+
+        console.log(this.x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.x : Symbol(A.x, Decl(abstractProperty.ts, 0, 18))
+>this : Symbol(A, Decl(abstractProperty.ts, 0, 0))
+>x : Symbol(A.x, Decl(abstractProperty.ts, 0, 18))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(abstractProperty.ts, 5, 1))
+>A : Symbol(A, Decl(abstractProperty.ts, 0, 0))
+
+    protected x = 'B.x';
+>x : Symbol(B.x, Decl(abstractProperty.ts, 7, 19))
+}
+
+class C extends A {
+>C : Symbol(C, Decl(abstractProperty.ts, 9, 1))
+>A : Symbol(A, Decl(abstractProperty.ts, 0, 0))
+
+    protected get x() { return 'C.x' };
+>x : Symbol(C.x, Decl(abstractProperty.ts, 11, 19))
+}
+

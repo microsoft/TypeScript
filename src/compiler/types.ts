@@ -3786,6 +3786,8 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
+        /* @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
+
         /* @internal */ getClassifiableNames(): Set<__String>;
 
         getTypeCatalog(): readonly Type[];
@@ -3803,7 +3805,8 @@ namespace ts {
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
         // For testing purposes only.
-        /* @internal */ structureIsReused?: StructureIsReused;
+        // This is set on created program to let us know how the program was created using old program
+        /* @internal */ readonly structureIsReused: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile | UnparsedSource, ref: FileReference): SourceFile | undefined;
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
@@ -3821,7 +3824,7 @@ namespace ts {
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
         /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
         /*@internal*/ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
-        /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
@@ -4028,6 +4031,7 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
 
         getRootSymbols(symbol: Symbol): readonly Symbol[];
+        getSymbolOfExpando(node: Node, allowDeclaration: boolean): Symbol | undefined;
         getContextualType(node: Expression): Type | undefined;
         /* @internal */ getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
@@ -4531,7 +4535,7 @@ namespace ts {
         isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
         isLateBound(node: Declaration): node is LateBoundDeclaration;
         collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
-        isImplementationOfOverload(node: FunctionLike): boolean | undefined;
+        isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
         isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
@@ -4863,11 +4867,11 @@ namespace ts {
         resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         switchTypes?: Type[];               // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
+        jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
         contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;             // Is node an exhaustive switch statement
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
@@ -5161,6 +5165,8 @@ namespace ts {
         node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode;
         /* @internal */
         mapper?: TypeMapper;
+        /* @internal */
+        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
     }
 
     /* @internal */
@@ -5211,7 +5217,9 @@ namespace ts {
         /* @internal */
         objectFlags: ObjectFlags;
         /* @internal */
-        propertyCache: SymbolTable;       // Cache of resolved properties
+        propertyCache?: SymbolTable;       // Cache of resolved properties
+        /* @internal */
+        propertyCacheWithoutObjectFunctionPropertyAugment?: SymbolTable; // Cache of resolved properties that does not augment function or object type properties
         /* @internal */
         resolvedProperties: Symbol[];
         /* @internal */
@@ -5241,6 +5249,7 @@ namespace ts {
     export interface AnonymousType extends ObjectType {
         target?: AnonymousType;  // Instantiation target
         mapper?: TypeMapper;     // Instantiation mapper
+        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
     }
 
     /* @internal */
@@ -5346,6 +5355,12 @@ namespace ts {
     export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
+        /**
+         * @internal
+         * Indicates that --noUncheckedIndexedAccess may introduce 'undefined' into
+         * the resulting type, depending on how type variable constraints are resolved.
+         */
+        noUncheckedIndexedAccessCandidate: boolean;
         constraint?: Type;
         simplifiedForReading?: Type;
         simplifiedForWriting?: Type;
@@ -5543,17 +5558,17 @@ namespace ts {
 
     /**
      * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
+     * x & y picks the lesser in the order False < Unknown < Maybe < True, and
+     * x | y picks the greater in the order False < Unknown < Maybe < True.
+     * Generally, Ternary.Maybe is used as the result of a relation that depends on itself, and
+     * Ternary.Unknown is used as the result of a variance check that depends on itself. We make
+     * a distinction because we don't want to cache circular variance check results.
      */
     /* @internal */
     export const enum Ternary {
         False = 0,
-        Maybe = 1,
+        Unknown = 1,
+        Maybe = 3,
         True = -1
     }
 
@@ -5795,6 +5810,7 @@ namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -5854,6 +5870,8 @@ namespace ts {
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -5867,7 +5885,8 @@ namespace ts {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean | undefined;
+        disableFilenameBasedTypeAcquisition?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
 
     export enum ModuleKind {
@@ -6023,6 +6042,7 @@ namespace ts {
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
+        extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
 
     /* @internal */
@@ -6344,7 +6364,7 @@ namespace ts {
     /*@internal*/
     export interface ResolvedProjectReferenceCallbacks {
         getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     }
 
     /* @internal */
@@ -7866,6 +7886,7 @@ namespace ts {
         realpath?(path: string): string;
         getSymlinkCache?(): SymlinkCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
@@ -8168,7 +8189,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

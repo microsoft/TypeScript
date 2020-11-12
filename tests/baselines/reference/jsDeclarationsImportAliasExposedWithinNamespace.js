@@ -54,6 +54,20 @@ export {testFn, testFnTypes};
 
 
 //// [file.d.ts]
+export namespace myTypes {
+    type typeA = string | RegExp | (string | RegExp)[];
+    type typeB = {
+        /**
+         * - Prop 1.
+         */
+        prop1: typeA;
+        /**
+         * - Prop 2.
+         */
+        prop2: string;
+    };
+    type typeC = Function | typeB;
+}
 /**
  * @namespace myTypes
  * @global
@@ -62,21 +76,10 @@ export {testFn, testFnTypes};
 export const myTypes: {
     [x: string]: any;
 };
-export namespace myTypes {
-    type typeA = string | RegExp | (string | RegExp)[];
-    type typeB = {
-        /**
-         * - Prop 1.
-         */
-        prop1: string | RegExp | (string | RegExp)[];
-        /**
-         * - Prop 2.
-         */
-        prop2: string;
-    };
-    type typeC = Function | typeB;
-}
 //// [file2.d.ts]
+export namespace testFnTypes {
+    type input = boolean | Function | myTypes.typeB;
+}
 /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
 /**
  * @function testFn
@@ -84,7 +87,8 @@ export namespace myTypes {
  * @param {testFnTypes.input} input - Input.
  * @returns {number|null} Result.
  */
-export function testFn(input: boolean | Function | myTypes.typeB): number | null;
+export function testFn(input: testFnTypes.input): number | null;
+import { myTypes } from "./file.js";
 /**
  * @namespace testFnTypes
  * @global
@@ -93,7 +97,3 @@ export function testFn(input: boolean | Function | myTypes.typeB): number | null
 export const testFnTypes: {
     [x: string]: any;
 };
-export namespace testFnTypes {
-    type input = boolean | Function | myTypes.typeB;
-}
-import { myTypes } from "./file.js";

@@ -1,0 +1,17 @@
+Exit Code: 2
+Standard output:
+pyright-internal: src/tests/harness/utils.ts(328,12): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+
+
+
+Standard error:
+lerna notice cli vX.X.X
+lerna info Executing command in 3 packages: "tsc --noEmit"
+lerna ERR! Received non-zero exit code 2 during execution
+lerna success exec Executed command in 3 packages: "tsc --noEmit"
+npm ERR! code 2
+npm ERR! path /pyright
+npm ERR! command failed
+npm ERR! command sh -c lerna exec --stream --concurrency 1 --no-bail -- tsc --noEmit
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/XXXX-XX-XXXXXXXXX-debug.log

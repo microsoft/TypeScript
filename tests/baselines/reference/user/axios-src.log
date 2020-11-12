@@ -1,6 +1,6 @@
 Exit Code: 2
 Standard output:
-lib/adapters/http.js(13,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+lib/adapters/http.js(13,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 lib/adapters/http.js(84,22): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
   Type 'null' is not assignable to type 'string'.
 lib/adapters/http.js(121,17): error TS2531: Object is possibly 'null'.
@@ -12,12 +12,12 @@ lib/adapters/http.js(239,15): error TS2322: Type 'string' is not assignable to t
 lib/adapters/http.js(239,45): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 lib/adapters/http.js(252,40): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/adapters/http.js(281,42): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/xhr.js(72,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(84,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(91,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
-lib/adapters/xhr.js(94,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(107,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
-lib/adapters/xhr.js(175,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(65,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(77,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(84,51): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
+lib/adapters/xhr.js(87,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(100,7): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
+lib/adapters/xhr.js(168,9): error TS2322: Type 'null' is not assignable to type 'XMLHttpRequest'.
 lib/axios.js(23,9): error TS2554: Expected 3 arguments, but got 2.
 lib/axios.js(25,3): error TS2739: Type '(...args: any[]) => any' is missing the following properties from type 'Axios': defaults, interceptors, request, getUri
 lib/axios.js(32,7): error TS2339: Property 'Axios' does not exist on type 'Axios'.
@@ -27,6 +27,7 @@ lib/axios.js(41,7): error TS2339: Property 'CancelToken' does not exist on type 
 lib/axios.js(42,7): error TS2339: Property 'isCancel' does not exist on type 'Axios'.
 lib/axios.js(45,7): error TS2339: Property 'all' does not exist on type 'Axios'.
 lib/axios.js(48,7): error TS2339: Property 'spread' does not exist on type 'Axios'.
+lib/axios.js(51,7): error TS2339: Property 'isAxiosError' does not exist on type 'Axios'.
 lib/cancel/CancelToken.js(23,15): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(28,11): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(29,26): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
