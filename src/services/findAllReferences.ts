@@ -11,7 +11,7 @@ namespace ts.FindAllReferences {
         | { readonly type: DefinitionKind.Label; readonly node: Identifier }
         | { readonly type: DefinitionKind.Keyword; readonly node: Node }
         | { readonly type: DefinitionKind.This; readonly node: Node }
-        | { readonly type: DefinitionKind.String; readonly node: StringLiteral };
+        | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike };
 
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
@@ -621,7 +621,7 @@ namespace ts.FindAllReferences {
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
-                return !options.implementations && isStringLiteral(node) ? getReferencesForStringLiteral(node, sourceFiles, cancellationToken) : undefined;
+                return !options.implementations && isStringLiteralLike(node) ? getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken) : undefined;
             }
 
             if (symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -1889,11 +1889,23 @@ namespace ts.FindAllReferences {
             }];
         }
 
-        function getReferencesForStringLiteral(node: StringLiteral, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] {
+        function getReferencesForStringLiteral(node: StringLiteralLike, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
+            const type = getContextualTypeOrAncestorTypeNodeType(node, checker);
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
-                return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref =>
-                    isStringLiteral(ref) && ref.text === node.text ? nodeEntry(ref, EntryKind.StringLiteral) : undefined);
+                return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
+                    if (isStringLiteralLike(ref) && ref.text === node.text) {
+                        if (type) {
+                            const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
+                            if (type !== checker.getStringType() && type === refType) {
+                                return nodeEntry(ref, EntryKind.StringLiteral);
+                            }
+                        }
+                        else {
+                            return nodeEntry(ref, EntryKind.StringLiteral);
+                        }
+                    }
+                });
             });
 
             return [{

@@ -43,7 +43,7 @@ namespace ts.tscWatch {
         return createWatchProgram(compilerHost);
     }
 
-    const elapsedRegex = /^Elapsed:: [0-9]+ms/;
+    const elapsedRegex = /^Elapsed:: \d+(?:\.\d+)?ms/;
     const buildVerboseLogRegEx = /^.+ \- /;
     export enum HostOutputKind {
         Log,
@@ -441,6 +441,7 @@ namespace ts.tscWatch {
         const options = program.getCompilerOptions();
         baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
         baseline.push(`Program options: ${JSON.stringify(options)}`);
+        baseline.push(`Program structureReused: ${(<any>ts).StructureIsReused[program.structureIsReused]}`);
         baseline.push("Program files::");
         for (const file of program.getSourceFiles()) {
             baseline.push(file.fileName);

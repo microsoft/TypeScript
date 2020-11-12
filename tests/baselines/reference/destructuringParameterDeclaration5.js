@@ -90,7 +90,7 @@ var SubD = /** @class */ (function (_super) {
     return SubD;
 }(D));
 function d0(_a) {
-    var x = (_a === void 0 ? { x: new Class() } : _a).x;
+    var _b = _a === void 0 ? { x: new Class() } : _a, x = _b.x;
 }
 function d1(_a) {
     var x = _a.x;
@@ -102,7 +102,7 @@ function d3(_a) {
     var y = _a.y;
 }
 function d4(_a) {
-    var y = (_a === void 0 ? { y: new D() } : _a).y;
+    var _b = _a === void 0 ? { y: new D() } : _a, y = _b.y;
 }
 var obj = new Class();
 d0({ x: 1 });

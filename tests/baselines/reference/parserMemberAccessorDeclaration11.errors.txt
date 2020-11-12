@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts(2,5): error TS1031: 'declare' modifier cannot appear on a class element.
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts(2,5): error TS1031: 'declare' modifier cannot appear on class elements of this kind.
 tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts(2,17): error TS2378: A 'get' accessor must return a value.
 
 
@@ -6,7 +6,7 @@ tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemb
     class C {
         declare get Foo() { }
         ~~~~~~~
-!!! error TS1031: 'declare' modifier cannot appear on a class element.
+!!! error TS1031: 'declare' modifier cannot appear on class elements of this kind.
                     ~~~
 !!! error TS2378: A 'get' accessor must return a value.
     }

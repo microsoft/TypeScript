@@ -176,8 +176,8 @@ import * as ns from "./cls";
 export { ns as classContainer };
 import * as ns from "./cls";
 //// [cjs.d.ts]
-import ns = require("./cls");
 export { ns };
+import ns = require("./cls");
 //// [cjs2.d.ts]
 export = ns;
 import ns = require("./cls");

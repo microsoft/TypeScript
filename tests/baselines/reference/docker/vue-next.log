@@ -1,10 +1,10 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-rc.6 build /vue-next
+> build
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/compiler-core.api.json
 The API report is up to date: temp/compiler-core.api.md
@@ -12,13 +12,82 @@ Writing package typings: /vue-next/packages/compiler-core/dist/compiler-core.d.t
 Writing package typings: /vue-next/dist/compiler-core.d.ts
 API Extractor completed successfully.
 Rolling up type definitions for compiler-dom...
-Analysis will use the bundled TypeScript version 3.9.7
+Analysis will use the bundled TypeScript version 4.0.5
 *** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
 Writing: /vue-next/temp/compiler-dom.api.json
 The API report is up to date: temp/compiler-dom.api.md
 Writing package typings: /vue-next/packages/compiler-dom/dist/compiler-dom.d.ts
 Writing package typings: /vue-next/dist/compiler-dom.d.ts
 API Extractor completed successfully.
+Rolling up type definitions for compiler-sfc...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/compiler-sfc.api.json
+The API report is up to date: temp/compiler-sfc.api.md
+Writing package typings: /vue-next/packages/compiler-sfc/dist/compiler-sfc.d.ts
+Writing package typings: /vue-next/dist/compiler-sfc.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for compiler-ssr...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/compiler-ssr.api.json
+The API report is up to date: temp/compiler-ssr.api.md
+Writing package typings: /vue-next/packages/compiler-ssr/dist/compiler-ssr.d.ts
+Writing package typings: /vue-next/dist/compiler-ssr.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for reactivity...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/reactivity.api.json
+The API report is up to date: temp/reactivity.api.md
+Writing package typings: /vue-next/packages/reactivity/dist/reactivity.d.ts
+Writing package typings: /vue-next/dist/reactivity.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for runtime-core...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/runtime-core.api.json
+The API report is up to date: temp/runtime-core.api.md
+Writing package typings: /vue-next/packages/runtime-core/dist/runtime-core.d.ts
+Writing package typings: /vue-next/dist/runtime-core.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for runtime-dom...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/runtime-dom.api.json
+The API report is up to date: temp/runtime-dom.api.md
+Writing package typings: /vue-next/packages/runtime-dom/dist/runtime-dom.d.ts
+Writing package typings: /vue-next/dist/runtime-dom.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for server-renderer...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/server-renderer.api.json
+The API report is up to date: temp/server-renderer.api.md
+Writing package typings: /vue-next/packages/server-renderer/dist/server-renderer.d.ts
+Writing package typings: /vue-next/dist/server-renderer.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for shared...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/shared.api.json
+The API report is up to date: temp/shared.api.md
+Writing package typings: /vue-next/packages/shared/dist/shared.d.ts
+Writing package typings: /vue-next/dist/shared.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for vue...
+Analysis will use the bundled TypeScript version 4.0.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/vue.api.json
+The API report is up to date: temp/vue.api.md
+Writing package typings: /vue-next/packages/vue/dist/vue.d.ts
+Writing package typings: /vue-next/dist/vue.d.ts
+API Extractor completed successfully.
+compiler-dom.global.prod.js min:44.24kb / gzip:17.04kb / brotli:15.46kb
+reactivity.global.prod.js min:8.37kb / gzip:3.24kb / brotli:3.00kb
+runtime-dom.global.prod.js min:68.76kb / gzip:26.44kb / brotli:23.91kb
+size-check.global.prod.js min:39.98kb / gzip:15.95kb / brotli:14.55kb
+vue.global.prod.js min:105.87kb / gzip:40.15kb / brotli:36.04kb
 
 
 
@@ -59,26 +128,100 @@ Use output.globals to specify browser global variable names corresponding to ext
 estree-walker (guessing 'estreeWalker')
 created packages/compiler-dom/dist/compiler-dom.global.prod.js in ?s
 /vue-next/packages/compiler-sfc/src/index.ts → packages/compiler-sfc/dist/compiler-sfc.cjs.js...
-[!] (plugin rpt2) Error: /vue-next/packages/compiler-sfc/src/parse.ts(179,14): semantic error TS2790: The operand of a 'delete' operator must be optional.
-packages/compiler-sfc/src/parse.ts
-Error: /vue-next/packages/compiler-sfc/src/parse.ts(179,14): semantic error TS2790: The operand of a 'delete' operator must be optional.
-    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:5195:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:17740:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18359:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17913:38)
-    at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
-    at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
-    at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
-    at Function.forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9368:14)
-    at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
-    at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:255a2bd,NODE_ENV:production,TARGET:compiler-sfc,TYPES:true
-    at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
-    at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)
-    at async build (/vue-next/scripts/build.js:75:3)
-    at async buildAll (/vue-next/scripts/build.js:54:5)
-    at async run (/vue-next/scripts/build.js:44:5)
-(Use `node --trace-warnings ...` to show where the warning was created)
-(node:17) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
-(node:17) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+created packages/compiler-sfc/dist/compiler-sfc.cjs.js in ?s
+/vue-next/packages/compiler-sfc/src/index.ts → packages/compiler-sfc/dist/compiler-sfc.global.js...
+created packages/compiler-sfc/dist/compiler-sfc.global.js in ?s
+/vue-next/packages/compiler-sfc/src/index.ts → packages/compiler-sfc/dist/compiler-sfc.esm-browser.js...
+created packages/compiler-sfc/dist/compiler-sfc.esm-browser.js in ?s
+/vue-next/packages/compiler-ssr/src/index.ts → packages/compiler-ssr/dist/compiler-ssr.cjs.js...
+created packages/compiler-ssr/dist/compiler-ssr.cjs.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-bundler.js...
+created packages/reactivity/dist/reactivity.esm-bundler.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-browser.js...
+created packages/reactivity/dist/reactivity.esm-browser.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.cjs.js...
+created packages/reactivity/dist/reactivity.cjs.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.global.js...
+created packages/reactivity/dist/reactivity.global.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-browser.prod.js...
+created packages/reactivity/dist/reactivity.esm-browser.prod.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.cjs.prod.js...
+created packages/reactivity/dist/reactivity.cjs.prod.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.global.prod.js...
+created packages/reactivity/dist/reactivity.global.prod.js in ?s
+/vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.esm-bundler.js...
+created packages/runtime-core/dist/runtime-core.esm-bundler.js in ?s
+/vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.cjs.js...
+created packages/runtime-core/dist/runtime-core.cjs.js in ?s
+/vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.cjs.prod.js...
+created packages/runtime-core/dist/runtime-core.cjs.prod.js in ?s
+Warning: dist/packages/runtime-core/src/index.d.ts:33:9 - (TS2717) Subsequent property declarations must have the same type.  Property 'runtimeCoreBailTypes' must be of type 'VNode<RendererNode, RendererElement, { [key: string]: any; }> | { $: ComponentInternalInstance; }', but here has type 'VNode<RendererNode, RendererElement, { [key: string]: any; }> | { $: ComponentInternalInstance; }'.
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.esm-bundler.js...
+created packages/runtime-dom/dist/runtime-dom.esm-bundler.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.esm-browser.js...
+created packages/runtime-dom/dist/runtime-dom.esm-browser.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.cjs.js...
+created packages/runtime-dom/dist/runtime-dom.cjs.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.global.js...
+created packages/runtime-dom/dist/runtime-dom.global.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.esm-browser.prod.js...
+created packages/runtime-dom/dist/runtime-dom.esm-browser.prod.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.cjs.prod.js...
+created packages/runtime-dom/dist/runtime-dom.cjs.prod.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.global.prod.js...
+created packages/runtime-dom/dist/runtime-dom.global.prod.js in ?s
+/vue-next/packages/server-renderer/src/index.ts → packages/server-renderer/dist/server-renderer.cjs.js...
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+stream (imported by packages/server-renderer/src/renderToStream.ts)
+created packages/server-renderer/dist/server-renderer.cjs.js in ?s
+/vue-next/packages/server-renderer/src/index.ts → packages/server-renderer/dist/server-renderer.cjs.prod.js...
+(!) Unresolved dependencies
+https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+stream (imported by packages/server-renderer/src/renderToStream.ts)
+created packages/server-renderer/dist/server-renderer.cjs.prod.js in ?s
+/vue-next/packages/shared/src/index.ts → packages/shared/dist/shared.esm-bundler.js...
+created packages/shared/dist/shared.esm-bundler.js in ?s
+/vue-next/packages/shared/src/index.ts → packages/shared/dist/shared.cjs.js...
+created packages/shared/dist/shared.cjs.js in ?s
+/vue-next/packages/shared/src/index.ts → packages/shared/dist/shared.cjs.prod.js...
+created packages/shared/dist/shared.cjs.prod.js in ?s
+Warning: dist/packages/shared/src/index.d.ts:15:12 - (tsdoc-characters-after-block-tag) The token "@babel" looks like a TSDoc tag but contains an invalid character "/"; if it is not a tag, use a backslash to escape the "@"
+Warning: dist/packages/shared/src/makeMap.d.ts:5:9 - (tsdoc-unnecessary-backslash) A backslash can only be used to escape a punctuation character
+Warning: dist/packages/shared/src/makeMap.d.ts:5:11 - (tsdoc-unnecessary-backslash) A backslash can only be used to escape a punctuation character
+Warning: dist/packages/shared/src/makeMap.d.ts:5:17 - (tsdoc-unnecessary-backslash) A backslash can only be used to escape a punctuation character
+Warning: dist/packages/shared/src/makeMap.d.ts:5:19 - (tsdoc-unnecessary-backslash) A backslash can only be used to escape a punctuation character
+Warning: dist/packages/shared/src/toDisplayString.d.ts:2:36 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/shared/src/toDisplayString.d.ts:2:37 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/shared/src/toDisplayString.d.ts:2:19 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/shared/src/toDisplayString.d.ts:2:20 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+/vue-next/packages/size-check/src/index.ts → packages/size-check/dist/size-check.global.js...
+created packages/size-check/dist/size-check.global.js in ?s
+/vue-next/packages/size-check/src/index.ts → packages/size-check/dist/size-check.global.prod.js...
+created packages/size-check/dist/size-check.global.prod.js in ?s
+/vue-next/packages/template-explorer/src/index.ts → packages/template-explorer/dist/template-explorer.global.js...
+created packages/template-explorer/dist/template-explorer.global.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.esm-bundler.js...
+created packages/vue/dist/vue.esm-bundler.js in ?s
+/vue-next/packages/vue/src/runtime.ts → packages/vue/dist/vue.runtime.esm-bundler.js...
+created packages/vue/dist/vue.runtime.esm-bundler.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.cjs.js...
+created packages/vue/dist/vue.cjs.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.global.js...
+created packages/vue/dist/vue.global.js in ?s
+/vue-next/packages/vue/src/runtime.ts → packages/vue/dist/vue.runtime.global.js...
+created packages/vue/dist/vue.runtime.global.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.esm-browser.js...
+created packages/vue/dist/vue.esm-browser.js in ?s
+/vue-next/packages/vue/src/runtime.ts → packages/vue/dist/vue.runtime.esm-browser.js...
+created packages/vue/dist/vue.runtime.esm-browser.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.cjs.prod.js...
+created packages/vue/dist/vue.cjs.prod.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.global.prod.js...
+created packages/vue/dist/vue.global.prod.js in ?s
+/vue-next/packages/vue/src/runtime.ts → packages/vue/dist/vue.runtime.global.prod.js...
+created packages/vue/dist/vue.runtime.global.prod.js in ?s
+/vue-next/packages/vue/src/index.ts → packages/vue/dist/vue.esm-browser.prod.js...
+created packages/vue/dist/vue.esm-browser.prod.js in ?s
+/vue-next/packages/vue/src/runtime.ts → packages/vue/dist/vue.runtime.esm-browser.prod.js...
+created packages/vue/dist/vue.runtime.esm-browser.prod.js in ?s

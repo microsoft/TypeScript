@@ -86,6 +86,10 @@ namespace ts.server.typingsInstaller {
 
     type ProjectWatchers = ESMap<string, FileWatcher> & { isInvoked?: boolean; };
 
+    function getDetailWatchInfo(projectName: string, watchers: ProjectWatchers) {
+        return `Project: ${projectName} watcher already invoked: ${watchers.isInvoked}`;
+    }
+
     export abstract class TypingsInstaller {
         private readonly packageNameToTypingLocation = new Map<string, JsTyping.CachedTyping>();
         private readonly missingTypingsSet = new Set<string>();
@@ -100,6 +104,8 @@ namespace ts.server.typingsInstaller {
         private inFlightRequestCount = 0;
 
         abstract readonly typesRegistry: ESMap<string, MapLike<string>>;
+        /*@internal*/
+        private readonly watchFactory: WatchFactory<string, ProjectWatchers>;
 
         constructor(
             protected readonly installTypingHost: InstallTypingHost,
@@ -110,9 +116,11 @@ namespace ts.server.typingsInstaller {
             protected readonly log = nullLog) {
             this.toCanonicalFileName = createGetCanonicalFileName(installTypingHost.useCaseSensitiveFileNames);
             this.globalCachePackageJsonPath = combinePaths(globalCachePath, "package.json");
-            if (this.log.isEnabled()) {
+            const isLoggingEnabled = this.log.isEnabled();
+            if (isLoggingEnabled) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
             }
+            this.watchFactory = getWatchFactory(this.installTypingHost as WatchFactoryHost, isLoggingEnabled ? WatchLogLevel.Verbose : WatchLogLevel.None, s => this.log.writeLine(s), getDetailWatchInfo);
             this.processCacheLocation(this.globalCachePath);
         }
 
@@ -431,19 +439,13 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`${projectWatcherType}:: Added:: WatchInfo: ${path}`);
                 }
                 const watcher = projectWatcherType === ProjectWatcherType.FileWatcher ?
-                    this.installTypingHost.watchFile!(path, (f, eventKind) => { // TODO: GH#18217
-                        if (isLoggingEnabled) {
-                            this.log.writeLine(`FileWatcher:: Triggered with ${f} eventKind: ${FileWatcherEventKind[eventKind]}:: WatchInfo: ${path}:: handler is already invoked '${watchers.isInvoked}'`);
-                        }
+                    this.watchFactory.watchFile(path, () => {
                         if (!watchers.isInvoked) {
                             watchers.isInvoked = true;
                             this.sendResponse({ projectName, kind: ActionInvalidate });
                         }
-                    }, /*pollingInterval*/ 2000, options) :
-                    this.installTypingHost.watchDirectory!(path, f => { // TODO: GH#18217
-                        if (isLoggingEnabled) {
-                            this.log.writeLine(`DirectoryWatcher:: Triggered with ${f} :: WatchInfo: ${path} recursive :: handler is already invoked '${watchers.isInvoked}'`);
-                        }
+                    }, PollingInterval.High, options, projectName, watchers) :
+                    this.watchFactory.watchDirectory(path, f => {
                         if (watchers.isInvoked || !fileExtensionIs(f, Extension.Json)) {
                             return;
                         }
@@ -453,7 +455,7 @@ namespace ts.server.typingsInstaller {
                             watchers.isInvoked = true;
                             this.sendResponse({ projectName, kind: ActionInvalidate });
                         }
-                    }, /*recursive*/ true, options);
+                    }, WatchDirectoryFlags.Recursive, options, projectName, watchers);
 
                 watchers.set(canonicalPath, isLoggingEnabled ? {
                     close: () => {

@@ -22,5 +22,5 @@ function a() {
     var _a;
     var x;
     var y;
-    (_a = {}, (x = _a.x, _a), y = __rest(_a, ["x"]));
+    (_a = {}, x = _a.x, y = __rest(_a, ["x"]));
 }

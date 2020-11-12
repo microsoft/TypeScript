@@ -40,6 +40,7 @@ node_modules/debug/dist/debug.js(733,82): error TS2339: Property 'type' does not
 node_modules/debug/dist/debug.js(733,120): error TS2339: Property '__nwjs' does not exist on type 'Process'.
 node_modules/debug/dist/debug.js(744,146): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
 node_modules/debug/dist/debug.js(745,78): error TS2339: Property 'firebug' does not exist on type 'Console'.
+node_modules/debug/dist/debug.js(745,89): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/debug/dist/debug.js(799,156): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[message?: any, ...optionalParams: any[]]'.
 node_modules/debug/dist/debug.js(851,21): error TS2304: Cannot find name 'LocalStorage'.
 node_modules/debug/src/browser.js(3,100): error TS2539: Cannot assign to '_typeof' because it is not a variable.
@@ -48,6 +49,7 @@ node_modules/debug/src/browser.js(34,74): error TS2339: Property 'type' does not
 node_modules/debug/src/browser.js(34,112): error TS2339: Property '__nwjs' does not exist on type 'Process'.
 node_modules/debug/src/browser.js(45,138): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
 node_modules/debug/src/browser.js(46,70): error TS2339: Property 'firebug' does not exist on type 'Console'.
+node_modules/debug/src/browser.js(46,81): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/debug/src/browser.js(100,148): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[message?: any, ...optionalParams: any[]]'.
 node_modules/debug/src/browser.js(152,13): error TS2304: Cannot find name 'LocalStorage'.
 node_modules/debug/src/common.js(51,24): error TS2339: Property 'colors' does not exist on type '{ (namespace: string): Function; debug: ...; default: ...; coerce: (val: any) => any; disable: () => void; enable: (namespaces: string) => void; enabled: (name: string) => boolean; humanize: { ...; }; ... 4 more ...; selectColor: (namespace: string) => string | number; }'.

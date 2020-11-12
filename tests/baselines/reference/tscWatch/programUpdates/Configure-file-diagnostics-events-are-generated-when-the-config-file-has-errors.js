@@ -29,18 +29,15 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
 [96ma/b/tsconfig.json[0m:[93m3[0m:[93m29[0m - [91merror[0m[90m TS5023: [0mUnknown compiler option 'foo'.
 
 [7m3[0m                             "foo": "bar",
 [7m [0m [91m                            ~~~~~[0m
 
-
 [96ma/b/tsconfig.json[0m:[93m4[0m:[93m29[0m - [91merror[0m[90m TS5025: [0mUnknown compiler option 'allowJS'. Did you mean 'allowJs'?
 
 [7m4[0m                             "allowJS": true
 [7m [0m [91m                            ~~~~~~~~~[0m
-
 
 [[90m12:00:18 AM[0m] Found 2 errors. Watching for file changes.
 
@@ -48,6 +45,7 @@ Output::
 
 Program root files: ["/a/b/app.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/app.ts

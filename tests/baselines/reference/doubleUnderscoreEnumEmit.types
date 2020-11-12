@@ -7,11 +7,11 @@ enum Foo {
 >1 : 1
 
     "(Anonymous function)" = 2,
->"(Anonymous function)" : Foo.(Anonymous function)
+>"(Anonymous function)" : typeof Foo["(Anonymous function)"]
 >2 : 2
 
     "(Anonymous class)" = 4,
->"(Anonymous class)" : Foo.(Anonymous class)
+>"(Anonymous class)" : typeof Foo["(Anonymous class)"]
 >4 : 4
 
     "__call" = 10
