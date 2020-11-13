@@ -1893,9 +1893,17 @@ namespace ts.Completions {
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
                 if (instantiatedType === undefined) {
-                    return GlobalsSearch.Fail;
+                    if (objectLikeContainer.flags & (NodeFlags.ThisNodeHasError | NodeFlags.InWithStatement)) {
+                        return GlobalsSearch.Fail;
+                    }
+                    return GlobalsSearch.Continue;
                 }
                 const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
+                if (completionsType) {
+                    if (completionsType.flags & TypeFlags.Any) {
+                        return GlobalsSearch.Continue;
+                    }
+                }
                 isNewIdentifierLocation = hasIndexSignature(completionsType || instantiatedType);
                 typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
