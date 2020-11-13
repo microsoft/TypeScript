@@ -18388,10 +18388,15 @@ namespace ts {
                 return result;
             }
 
-            function eachPropertyRelatedTo(source: Type, target: Type, kind: IndexKind, reportErrors: boolean): Ternary {
+            function eachPropertyRelatedTo(source: Type, target: Type, kind: IndexKind, reportErrors: boolean, detailedPropNames: __String[]): Ternary {
                 let result = Ternary.True;
                 const props = source.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(<IntersectionType>source) : getPropertiesOfObjectType(source);
                 for (const prop of props) {
+                    // When checking { type: T, [index: string]: U }, no need to check if T is assignble to U because
+                    // it is already checked before
+                    if (detailedPropNames.includes(prop.escapedName)) {
+                        continue;
+                    }
                     // Skip over ignored JSX and symbol-named members
                     if (isIgnoredJsxProperty(source, prop)) {
                         continue;
@@ -18443,7 +18448,7 @@ namespace ts {
                 }
                 if (!(intersectionState & IntersectionState.Source) && isObjectTypeWithInferableIndex(source)) {
                     // Intersection constituents are never considered to have an inferred index signature
-                    let related = eachPropertyRelatedTo(source, targetType, kind, reportErrors);
+                    let related = eachPropertyRelatedTo(source, targetType, kind, reportErrors, getPropertiesOfType(target).map(type => type.escapedName));
                     if (related && kind === IndexKind.String) {
                         const numberIndexType = getIndexTypeOfType(source, IndexKind.Number);
                         if (numberIndexType) {
