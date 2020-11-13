@@ -248,6 +248,15 @@ namespace ts.server {
             }
 
             public send(msg: protocol.Message) {
+                if (msg.type === "event" && !this.canUseEvents) {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
+                    }
+                    return;
+                }
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    logger.info(`${msg.type}:${indent(JSON.stringify(msg))}`);
+                }
                 postMessage(msg);
             }
 
