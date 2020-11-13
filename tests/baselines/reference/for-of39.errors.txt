@@ -7,7 +7,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2769: No
             Type 'IteratorYieldResult<[string, number] | [string, true]>' is not assignable to type 'IteratorYieldResult<readonly [string, boolean]>'.
               Type '[string, number] | [string, true]' is not assignable to type 'readonly [string, boolean]'.
                 Type '[string, number]' is not assignable to type 'readonly [string, boolean]'.
-                  Types of property '1' are incompatible.
+                  Type at position 1 in source is not compatible with type at position 1 in target.
                     Type 'number' is not assignable to type 'boolean'.
   Overload 2 of 3, '(entries?: readonly (readonly [string, boolean])[]): Map<string, boolean>', gave the following error.
     Type 'number' is not assignable to type 'boolean'.
@@ -25,7 +25,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,11): error TS2769: No
 !!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, true]>' is not assignable to type 'IteratorYieldResult<readonly [string, boolean]>'.
 !!! error TS2769:               Type '[string, number] | [string, true]' is not assignable to type 'readonly [string, boolean]'.
 !!! error TS2769:                 Type '[string, number]' is not assignable to type 'readonly [string, boolean]'.
-!!! error TS2769:                   Types of property '1' are incompatible.
+!!! error TS2769:                   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2769:                     Type 'number' is not assignable to type 'boolean'.
 !!! error TS2769:   Overload 2 of 3, '(entries?: readonly (readonly [string, boolean])[]): Map<string, boolean>', gave the following error.
 !!! error TS2769:     Type 'number' is not assignable to type 'boolean'.

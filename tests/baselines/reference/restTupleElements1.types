@@ -107,7 +107,7 @@ type T21 = T20[0];
 >T21 : number
 
 type T22 = T20[0 | 1];
->T22 : T22
+>T22 : string | number
 
 type T23 = T20[0 | 1 | 2];
 >T23 : string | number | boolean

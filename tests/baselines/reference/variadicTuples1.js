@@ -641,7 +641,7 @@ declare const sa: string[];
 declare const tc1: [];
 declare const tc2: [string, number];
 declare const tc3: [number, number, number, ...string[]];
-declare const tc4: (string | number)[];
+declare const tc4: [...string[], number, number, number];
 declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
 declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;

@@ -1,10 +1,9 @@
 tests/cases/conformance/types/tuple/restTupleElements1.ts(3,22): error TS1257: A required element cannot follow an optional element.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(8,13): error TS1256: A rest element must be last in a tuple type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(23,31): error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
-  Property '0' is optional in type 'number[]' but required in type '[number, ...number[]]'.
+  Source provides no match for required element at position 0 in target.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(24,31): error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
   Source has 0 element(s) but target requires 1.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(29,18): error TS2344: Type 'number[]' does not satisfy the constraint '[number]'.
@@ -16,16 +15,18 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(32,31): error TS2344: 
 tests/cases/conformance/types/tuple/restTupleElements1.ts(33,31): error TS2344: Type '[string, ...number[]]' does not satisfy the constraint '[number, ...number[]]'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(34,31): error TS2344: Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
-  Types of property '2' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+  Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
+    Type 'string | number' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(35,31): error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
-  Types of property '3' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+  Type at positions 1 through 3 in source is not compatible with type at position 1 in target.
+    Type 'string | number' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'.
   Source has 0 element(s) but target requires 1.
 
 
-==== tests/cases/conformance/types/tuple/restTupleElements1.ts (14 errors) ====
+==== tests/cases/conformance/types/tuple/restTupleElements1.ts (13 errors) ====
     type T00 = [string?];
     type T01 = [string, string?];
     type T02 = [string?, string];  // Error
@@ -36,8 +37,6 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     type T05 = [...[...[...string[]]]];
     type T06 = [string, ...string[]];
     type T07 = [...string[], string];  // Error
-                ~~~~~~~~~~~
-!!! error TS1256: A rest element must be last in a tuple type.
     type T08 = [...string];  // Error
                 ~~~~~~~~~
 !!! error TS2574: A rest element type must be an array type.
@@ -61,7 +60,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     assign<[number, ...number[]], number[]>();  // Error
                                   ~~~~~~~~
 !!! error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
-!!! error TS2344:   Property '0' is optional in type 'number[]' but required in type '[number, ...number[]]'.
+!!! error TS2344:   Source provides no match for required element at position 0 in target.
     assign<[number, ...number[]], []>();  // Error
                                   ~~
 !!! error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
@@ -90,13 +89,15 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     assign<[number, ...number[]], [number, number, string]>();  // Error
                                   ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
-!!! error TS2344:   Types of property '2' are incompatible.
-!!! error TS2344:     Type 'string' is not assignable to type 'number'.
+!!! error TS2344:   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
+!!! error TS2344:     Type 'string | number' is not assignable to type 'number'.
+!!! error TS2344:       Type 'string' is not assignable to type 'number'.
     assign<[number, ...number[]], [number, number, number, string]>();  // Error
                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
-!!! error TS2344:   Types of property '3' are incompatible.
-!!! error TS2344:     Type 'string' is not assignable to type 'number'.
+!!! error TS2344:   Type at positions 1 through 3 in source is not compatible with type at position 1 in target.
+!!! error TS2344:     Type 'string | number' is not assignable to type 'number'.
+!!! error TS2344:       Type 'string' is not assignable to type 'number'.
     
     type T20 = [number, string, ...boolean[]];
     

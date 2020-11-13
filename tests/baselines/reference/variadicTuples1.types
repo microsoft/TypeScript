@@ -25,13 +25,13 @@ type TN3 = TV1<[boolean?]>;
 >TN3 : [string, boolean | undefined, number]
 
 type TN4 = TV1<string[]>;
->TN4 : [string, ...(string | number)[]]
+>TN4 : [string, ...string[], number]
 
 type TN5 = TV1<[boolean] | [symbol, symbol]>;
 >TN5 : [string, boolean, number] | [string, symbol, symbol, number]
 
 type TN6 = TV1<any>;
->TN6 : [string, ...any[]]
+>TN6 : [string, ...any[], number]
 
 type TN7 = TV1<never>;
 >TN7 : never
@@ -108,8 +108,8 @@ const tc3 = concat([1, 2, 3], sa);
 >sa : string[]
 
 const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, number, number]
->tc4 : (string | number)[]
->concat(sa, [1, 2, 3]) : (string | number)[]
+>tc4 : [...string[], number, number, number]
+>concat(sa, [1, 2, 3]) : [...string[], number, number, number]
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
 >sa : string[]
 >[1, 2, 3] : [number, number, number]
@@ -854,16 +854,16 @@ type T22 = Last<[string]>;
 >T22 : string
 
 type T23 = Last<[number, symbol, ...string[]]>;
->T23 : string
+>T23 : unknown
 
 type T24 = Last<[symbol, ...string[]]>;
->T24 : string
+>T24 : unknown
 
 type T25 = Last<[string?]>;
 >T25 : string | undefined
 
 type T26 = Last<string[]>;
->T26 : string
+>T26 : string | undefined
 
 type T27 = Last<[]>;  // unknown, maybe should undefined
 >T27 : unknown
@@ -884,10 +884,10 @@ type T32 = DropLast<[string]>;
 >T32 : []
 
 type T33 = DropLast<[number, symbol, ...string[]]>;
->T33 : [number, symbol, ...string[]]
+>T33 : unknown[]
 
 type T34 = DropLast<[symbol, ...string[]]>;
->T34 : [symbol, ...string[]]
+>T34 : unknown[]
 
 type T35 = DropLast<[string?]>;
 >T35 : []
@@ -956,13 +956,13 @@ type R22 = Last<readonly [string]>;
 >R22 : string
 
 type R23 = Last<readonly [number, symbol, ...string[]]>;
->R23 : string
+>R23 : unknown
 
 type R24 = Last<readonly [symbol, ...string[]]>;
->R24 : string
+>R24 : unknown
 
 type R25 = Last<readonly string[]>;
->R25 : string
+>R25 : string | undefined
 
 type R26 = Last<readonly []>;
 >R26 : unknown
@@ -977,10 +977,10 @@ type R32 = DropLast<readonly [string]>;
 >R32 : []
 
 type R33 = DropLast<readonly [number, symbol, ...string[]]>;
->R33 : [number, symbol, ...string[]]
+>R33 : unknown[]
 
 type R34 = DropLast<readonly [symbol, ...string[]]>;
->R34 : [symbol, ...string[]]
+>R34 : unknown[]
 
 type R35 = DropLast<readonly string[]>;
 >R35 : string[]
@@ -1241,12 +1241,12 @@ call('hello', 32, (a, b) => 42);
 // Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
 
 call(...sa, (...x) => 42);
->call(...sa, (...x) => 42) : [(string | ((...x: any[]) => number))[], number]
+>call(...sa, (...x) => 42) : [string[], number]
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
 >...sa : string
 >sa : string[]
->(...x) => 42 : (...x: any[]) => number
->x : any[]
+>(...x) => 42 : (...x: string[]) => number
+>x : string[]
 >42 : 42
 
 // No inference to ending optional elements (except with identical structure)
@@ -1389,19 +1389,19 @@ type Numbers = number[];
 >Numbers : Numbers
 
 type Unbounded = [...Numbers, boolean];
->Unbounded : (number | boolean)[]
+>Unbounded : [...number[], boolean]
 
 const data: Unbounded = [false, false];
->data : (number | boolean)[]
->[false, false] : false[]
+>data : [...number[], boolean]
+>[false, false] : [false, false]
 >false : false
 >false : false
 
 type U1 = [string, ...Numbers, boolean];
->U1 : [string, ...(number | boolean)[]]
+>U1 : [string, ...number[], boolean]
 
 type U2 = [...[string, ...Numbers], boolean];
->U2 : [string, ...(number | boolean)[]]
+>U2 : [string, ...number[], boolean]
 
 type U3 = [...[string, number], boolean];
 >U3 : [string, number, boolean]
