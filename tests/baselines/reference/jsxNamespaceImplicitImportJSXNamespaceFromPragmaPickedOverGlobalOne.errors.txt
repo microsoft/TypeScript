@@ -1,6 +1,4 @@
 /index.tsx(2,28): error TS2708: Cannot use namespace 'React' as a value.
-/index.tsx(2,32): error TS2322: Type '{ css: string; }' is not assignable to type '{}'.
-  Property 'css' does not exist on type '{}'.
 
 
 ==== /node_modules/react/index.d.ts (0 errors) ====
@@ -63,12 +61,9 @@
         }
     }
     
-==== /index.tsx (2 errors) ====
+==== /index.tsx (1 errors) ====
     /* @jsxImportSource @emotion/react */
     export const Comp = () => <div css="color: hotpink;"></div>;
                                ~~~
 !!! error TS2708: Cannot use namespace 'React' as a value.
-                                   ~~~
-!!! error TS2322: Type '{ css: string; }' is not assignable to type '{}'.
-!!! error TS2322:   Property 'css' does not exist on type '{}'.
     

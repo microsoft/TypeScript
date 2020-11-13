@@ -25183,11 +25183,13 @@ namespace ts {
                 return links.jsxNamespace;
             }
             if (!links || links.jsxNamespace !== false) {
-                const namespaceName = getJsxNamespace(location);
-                let resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
+                let resolvedNamespace = getJsxNamespaceContainerForImplicitImport(location);
+
                 if (!resolvedNamespace || resolvedNamespace === unknownSymbol) {
-                    resolvedNamespace = getJsxNamespaceContainerForImplicitImport(location);
+                    const namespaceName = getJsxNamespace(location);
+                    resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
                 }
+
                 if (resolvedNamespace) {
                     const candidate = resolveSymbol(getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace));
                     if (candidate && candidate !== unknownSymbol) {
