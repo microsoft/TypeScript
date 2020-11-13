@@ -7,26 +7,6 @@ namespace ts.server {
         Web
     };
 
-    const systemKind = typeof process !== "undefined" ? SystemKind.Node : SystemKind.Web;
-    const platform = () => systemKind === SystemKind.Web ? "web" : require("os").platform();
-    setStackTraceLimit();
-    switch (systemKind) {
-        case SystemKind.Node:
-            start(initializeNodeSystem());
-            break;
-        case SystemKind.Web:
-            // Get args from first message
-            const listener = (e: any) => {
-                removeEventListener("message", listener);
-                const args = e.data;
-                start(initializeWebSystem(args));
-            };
-            addEventListener("message", listener);
-            break;
-        default:
-            Debug.assertNever(systemKind, "Unknown system kind");
-    }
-
     function parseStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
@@ -108,5 +88,25 @@ namespace ts.server {
             logger,
             cancellationToken
         );
+    }
+
+    const systemKind = typeof process !== "undefined" ? SystemKind.Node : SystemKind.Web;
+    const platform = () => systemKind === SystemKind.Web ? "web" : require("os").platform();
+    setStackTraceLimit();
+    switch (systemKind) {
+        case SystemKind.Node:
+            start(initializeNodeSystem());
+            break;
+        case SystemKind.Web:
+            // Get args from first message
+            const listener = (e: any) => {
+                removeEventListener("message", listener);
+                const args = e.data;
+                start(initializeWebSystem(args));
+            };
+            addEventListener("message", listener);
+            break;
+        default:
+            Debug.assertNever(systemKind, "Unknown system kind");
     }
 }
