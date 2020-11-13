@@ -174,9 +174,6 @@ namespace ts.moduleSpecifiers {
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
         const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
-        if (!nonRelative) {
-            return relativePath;
-        }
 
         if (relativePreference === RelativePreference.NonRelative) {
             return nonRelative;
