@@ -1350,6 +1350,22 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
+        onExtendedConfigChangedForConfiguredProject(project: ConfiguredProject, extendedConfigFile: string) {
+            const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
+
+            this.logConfigFileWatchUpdate(asNormalizedPath(extendedConfigFile), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
+
+            // Skip refresh if project is not yet loaded
+            if (project.isInitialLoadPending()) return;
+            project.pendingReload = ConfigFileProgramReloadLevel.Full;
+            project.pendingReloadReason = "Change in extended config file detected";
+            this.delayUpdateProjectGraph(project);
+            // As we scheduled the update on configured project graph,
+            // we would need to schedule the project reload for only the root of inferred projects
+            this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);
+        }
+
         /**
          * This is the callback function for the config file add/remove/change at any location
          * that matters to open script info but doesnt have configured project open
@@ -2051,7 +2067,6 @@ namespace ts.server {
                 this,
                 this.documentRegistry,
                 cachedDirectoryStructureHost);
-            // TODO: We probably should also watch the configFiles that are extended
             project.createConfigFileWatcher();
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
@@ -2133,12 +2148,14 @@ namespace ts.server {
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
+                project.stopWatchingExtendedConfigFiles();
                 project.stopWatchingWildCards();
             }
             else {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
+                project.watchExtendedConfigFiles();
                 project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);

@@ -258,14 +258,15 @@ namespace ts {
     }
 
     /**
-     * Updates the extended config file watches with the new set of extended config files after new program is created
+     * Updates the extended config file watches with the new set of extended config files from the config file
+     * after new program is created because the config file was reloaded or program was created first time from the config file
      */
-    export function updateExtendedConfigFilePathsWatch(
-        program: Program,
+    export function updateExtendedConfigFilesWatch(
+        configFile: TsConfigSourceFile,
         extendedConfigFilesMap: ESMap<string, FileWatcher>,
         createExtendedConfigFileWatch: (extendedConfigPath: string) => FileWatcher,
     ) {
-        const extendedSourceFiles = program.getCompilerOptions().configFile?.extendedSourceFiles || emptyArray;
+        const extendedSourceFiles = configFile.extendedSourceFiles || emptyArray;
         // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
         const newExtendedConfigFilesMap = arrayToMap(extendedSourceFiles, identity, returnTrue);
         // Update the extended config files watcher

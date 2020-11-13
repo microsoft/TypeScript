@@ -790,11 +790,14 @@ namespace ts {
         }
 
         function watchExtendedConfigFiles() {
-            updateExtendedConfigFilePathsWatch(
-                builderProgram.getProgram(),
-                extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
-                watchExtendedConfigFile
-            );
+            const configFile = builderProgram.getCompilerOptions().configFile;
+            if (configFile) {
+                updateExtendedConfigFilesWatch(
+                    configFile,
+                    extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
+                    watchExtendedConfigFile
+                );
+            }
         }
 
         function watchExtendedConfigFile(extendedConfigFile: string) {
