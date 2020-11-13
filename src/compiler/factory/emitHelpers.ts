@@ -19,8 +19,7 @@ namespace ts {
         // ES2015 Helpers
         createExtendsHelper(name: Identifier): Expression;
         createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
-        createSpreadHelper(argumentList: readonly Expression[]): Expression;
-        createSpreadArraysHelper(argumentList: readonly Expression[]): Expression;
+        createSpreadArrayHelper(to: Expression, from: Expression): Expression;
         // ES2015 Destructuring Helpers
         createValuesHelper(expression: Expression): Expression;
         createReadHelper(iteratorRecord: Expression, count: number | undefined): Expression;
@@ -58,8 +57,7 @@ namespace ts {
             // ES2015 Helpers
             createExtendsHelper,
             createTemplateObjectHelper,
-            createSpreadHelper,
-            createSpreadArraysHelper,
+            createSpreadArrayHelper,
             // ES2015 Destructuring Helpers
             createValuesHelper,
             createReadHelper,
@@ -284,22 +282,12 @@ namespace ts {
             );
         }
 
-        function createSpreadHelper(argumentList: readonly Expression[]) {
-            context.requestEmitHelper(readHelper);
-            context.requestEmitHelper(spreadHelper);
+        function createSpreadArrayHelper(to: Expression, from: Expression) {
+            context.requestEmitHelper(spreadArrayHelper);
             return factory.createCallExpression(
-                getUnscopedHelperName("__spread"),
+                getUnscopedHelperName("__spreadArray"),
                 /*typeArguments*/ undefined,
-                argumentList
-            );
-        }
-
-        function createSpreadArraysHelper(argumentList: readonly Expression[]) {
-            context.requestEmitHelper(spreadArraysHelper);
-            return factory.createCallExpression(
-                getUnscopedHelperName("__spreadArrays"),
-                /*typeArguments*/ undefined,
-                argumentList
+                [to, from]
             );
         }
 
@@ -629,6 +617,7 @@ namespace ts {
             };`
     };
 
+    /** @deprecated To be removed in TS >= 4.3, as it may be referenced in a tsbuildinfo */
     export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
         importName: "__spread",
@@ -641,6 +630,7 @@ namespace ts {
             };`
     };
 
+    /** @deprecated To be removed in TS >= 4.3, as it may be referenced in a tsbuildinfo */
     export const spreadArraysHelper: UnscopedEmitHelper = {
         name: "typescript:spreadArrays",
         importName: "__spreadArrays",
@@ -652,6 +642,18 @@ namespace ts {
                     for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
                         r[k] = a[j];
                 return r;
+            };`
+    };
+
+    export const spreadArrayHelper: UnscopedEmitHelper = {
+        name: "typescript:spreadArray",
+        importName: "__spreadArray",
+        scoped: false,
+        text: `
+            var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+                for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+                    to[j] = from[i];
+                return to;
             };`
     };
 
@@ -888,6 +890,7 @@ namespace ts {
             templateObjectHelper,
             spreadHelper,
             spreadArraysHelper,
+            spreadArrayHelper,
             valuesHelper,
             readHelper,
             generatorHelper,

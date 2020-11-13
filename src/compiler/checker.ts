@@ -24695,7 +24695,7 @@ namespace ts {
 
         function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
             if (languageVersion < ScriptTarget.ES2015) {
-                checkExternalEmitHelpers(node, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArrays);
+                checkExternalEmitHelpers(node, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
             }
 
             const arrayOrIterableType = checkExpression(node.expression, checkMode);
@@ -24723,7 +24723,7 @@ namespace ts {
                 const e = elements[i];
                 if (e.kind === SyntaxKind.SpreadElement) {
                     if (languageVersion < ScriptTarget.ES2015) {
-                        checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArrays);
+                        checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
                     }
                     const spreadType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
                     if (isArrayLikeType(spreadType)) {
@@ -39048,8 +39048,7 @@ namespace ts {
                 case ExternalEmitHelpers.Generator: return "__generator";
                 case ExternalEmitHelpers.Values: return "__values";
                 case ExternalEmitHelpers.Read: return "__read";
-                case ExternalEmitHelpers.Spread: return "__spread";
-                case ExternalEmitHelpers.SpreadArrays: return "__spreadArrays";
+                case ExternalEmitHelpers.SpreadArray: return "__spreadArray";
                 case ExternalEmitHelpers.Await: return "__await";
                 case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
                 case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
