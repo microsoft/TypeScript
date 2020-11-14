@@ -1,0 +1,294 @@
+tests/cases/conformance/types/tuple/variadicTuples2.ts(7,34): error TS1265: A rest element cannot follow another rest element.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(8,34): error TS1266: An optional element cannot follow a rest element.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(9,30): error TS1257: A required element cannot follow an optional element.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(42,1): error TS2322: Type '[string, string, number, number]' is not assignable to type '[...string[], number]'.
+  Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(48,5): error TS2345: Argument of type '["abc", "def", 5, 6]' is not assignable to parameter of type '[...strs: string[], num: number]'.
+  Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(51,1): error TS2322: Type '[number]' is not assignable to type '[number, ...string[], number]'.
+  Source has 1 element(s) but target requires 2.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(53,1): error TS2322: Type '[number, number, number]' is not assignable to type '[number, ...string[], number]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(56,1): error TS2322: Type '[number, string, number, string]' is not assignable to type '[number, ...string[], number]'.
+  Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(57,8): error TS2322: Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(58,1): error TS2322: Type '[number, string, string, boolean]' is not assignable to type '[number, ...string[], number]'.
+  Type at position 3 in source is not compatible with type at position 2 in target.
+    Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(61,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+  Source has 0 element(s) but target requires 1.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(63,8): error TS2345: Argument of type '[1, 2]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+  Type at position 0 in source is not compatible with type at position 0 in target.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(66,8): error TS2345: Argument of type '["abc", 1, "def"]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+  Type at positions 0 through 1 in source is not compatible with type at position 0 in target.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(67,5): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(68,8): error TS2345: Argument of type '["abc", "def", true]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+  Type at position 2 in source is not compatible with type at position 1 in target.
+    Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(71,5): error TS2322: Type '[number, number]' is not assignable to type '[number, ...T]'.
+  Source provides no match for variadic element at position 1 in target.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(72,5): error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
+  Target requires 2 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(73,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
+  Variadic element at position 1 in source does not match element at position 1 in target.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(74,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'T[number]' is not assignable to type 'number'.
+      Type 'unknown' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(107,16): error TS2345: Argument of type '[1, 2, 3, 4]' is not assignable to parameter of type '[...number[], (...values: number[]) => void]'.
+  Type at position 3 in source is not compatible with type at position 1 in target.
+    Type 'number' is not assignable to type '(...values: number[]) => void'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(108,6): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '[...string[], (...values: string[]) => void]'.
+  Source provides no match for required element at position 1 in target.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(111,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
+  Source has 0 element(s) but target requires 2.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(112,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
+  Source has 1 element(s) but target requires 2.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(117,5): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
+  Source has 0 element(s) but target requires 2.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(118,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
+  Source has 1 element(s) but target requires 2.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(128,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(129,16): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(130,25): error TS2345: Argument of type '["blah2", 1, 2, 3]' is not assignable to parameter of type '[...string[], number]'.
+  Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/tuple/variadicTuples2.ts (28 errors) ====
+    // Declarations
+    
+    type V00 = [number, ...string[]];
+    type V01 = [...string[], number];
+    type V03 = [number, ...string[], number];
+    
+    type V10 = [number, ...string[], ...boolean[]];  // Error
+                                     ~~~~~~~~~~~~
+!!! error TS1265: A rest element cannot follow another rest element.
+    type V11 = [number, ...string[], boolean?];  // Error
+                                     ~~~~~~~~
+!!! error TS1266: An optional element cannot follow a rest element.
+    type V12 = [number, string?, boolean];  // Error
+                                 ~~~~~~~
+!!! error TS1257: A required element cannot follow an optional element.
+    
+    // Normalization
+    
+    type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
+    
+    type V20 = Tup3<[number], string[], [number]>;  // [number, ...string[], number]
+    type V21 = Tup3<[number], [string?], [boolean]>;  // [number, string | undefined, boolean]
+    type V22 = Tup3<[number], string[], boolean[]>;  // [number, (string | boolean)[]]
+    type V23 = Tup3<[number], string[], [boolean?]>;  // [number, (string | boolean | undefined)[]]
+    type V24 = Tup3<[number], [boolean?], string[]>;  // [number, boolean?, ...string[]]
+    type V25 = Tup3<string[], number[], boolean[]>;  // (string | number | boolean)[]
+    type V26 = Tup3<string[], number[], [boolean]>;  // [...(string | number)[], boolean]
+    type V27 = Tup3<[number?], [string], [boolean?]>;  // [number | undefined, string, boolean?]
+    
+    type V30<A extends unknown[]> = Tup3<A, string[], number[]>;  // [...A, ...(string | number)[]]
+    type V31<A extends unknown[]> = Tup3<string[], A, number[]>;  // (string | number | A[number])[]
+    type V32<A extends unknown[]> = Tup3<string[], number[], A>;  // [...(string | number)[], ...A]
+    
+    type V40<A extends unknown[]> = Tup3<A, [string?], number[]>;  // [...A, string?, ...number[]]
+    type V41<A extends unknown[]> = Tup3<[string?], A, number[]>;  // [string?, ...A, ...number[]]
+    type V42<A extends unknown[]> = Tup3<[string?], number[], A>;  // [string?, ...number[], ...A]
+    
+    type V50<A extends unknown[]> = Tup3<A, string[], [number?]>;  // [...A, ...(string | number | undefined)[]]
+    type V51<A extends unknown[]> = Tup3<string[], A, [number?]>;  // (string | number | A[number] | undefined)[]
+    type V52<A extends unknown[]> = Tup3<string[], [number?], A>;  // [...(string | number | undefined)[], ...A]
+    
+    // Assignability
+    
+    declare let tt1: [...string[], number];
+    tt1 = [5];
+    tt1 = ['abc', 5];
+    tt1 = ['abc', 'def', 5];
+    tt1 = ['abc', 'def', 5, 6];  // Error
+    ~~~
+!!! error TS2322: Type '[string, string, number, number]' is not assignable to type '[...string[], number]'.
+!!! error TS2322:   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+    
+    declare function ft1(...args: [...strs: string[], num: number]): void;
+    ft1(5);
+    ft1('abc', 5);
+    ft1('abc', 'def', 5);
+    ft1('abc', 'def', 5, 6);  // Error
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '["abc", "def", 5, 6]' is not assignable to parameter of type '[...strs: string[], num: number]'.
+!!! error TS2345:   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
+!!! error TS2345:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
+    
+    declare let tt2: [number, ...string[], number];
+    tt2 = [0];  // Error
+    ~~~
+!!! error TS2322: Type '[number]' is not assignable to type '[number, ...string[], number]'.
+!!! error TS2322:   Source has 1 element(s) but target requires 2.
+    tt2 = [0, 1];
+    tt2 = [0, 1, 2];  // Error
+    ~~~
+!!! error TS2322: Type '[number, number, number]' is not assignable to type '[number, ...string[], number]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    tt2 = [0, 'abc', 1];
+    tt2 = [0, 'abc', 'def', 1];
+    tt2 = [0, 'abc', 1, 'def'];  // Error
+    ~~~
+!!! error TS2322: Type '[number, string, number, string]' is not assignable to type '[number, ...string[], number]'.
+!!! error TS2322:   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+    tt2 = [true, 'abc', 'def', 1];  // Error
+           ~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+    tt2 = [0, 'abc', 'def', true];  // Error
+    ~~~
+!!! error TS2322: Type '[number, string, string, boolean]' is not assignable to type '[number, ...string[], number]'.
+!!! error TS2322:   Type at position 3 in source is not compatible with type at position 2 in target.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+    
+    declare function ft2(n1: number, ...rest: [...strs: string[], n2: number]): void;
+    ft2(0);  // Error
+    ~~~~~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 1.
+    ft2(0, 1);
+    ft2(0, 1, 2);  // Error
+           ~~~~
+!!! error TS2345: Argument of type '[1, 2]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+!!! error TS2345:   Type at position 0 in source is not compatible with type at position 0 in target.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+    ft2(0, 'abc', 1);
+    ft2(0, 'abc', 'def', 1);
+    ft2(0, 'abc', 1, 'def');  // Error
+           ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '["abc", 1, "def"]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+!!! error TS2345:   Type at positions 0 through 1 in source is not compatible with type at position 0 in target.
+!!! error TS2345:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
+    ft2(true, 'abc', 'def', 1);  // Error
+        ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    ft2(0, 'abc', 'def', true);  // Error
+           ~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '["abc", "def", true]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
+!!! error TS2345:   Type at position 2 in source is not compatible with type at position 1 in target.
+!!! error TS2345:     Type 'boolean' is not assignable to type 'number'.
+    
+    function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
+        x = y;  // Error
+        ~
+!!! error TS2322: Type '[number, number]' is not assignable to type '[number, ...T]'.
+!!! error TS2322:   Source provides no match for variadic element at position 1 in target.
+        x = z;  // Error
+        ~
+!!! error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+        y = x;  // Error
+        ~
+!!! error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
+!!! error TS2322:   Variadic element at position 1 in source does not match element at position 1 in target.
+        z = x;  // Error
+        ~
+!!! error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'T[number]' is not assignable to type 'number'.
+!!! error TS2322:       Type 'unknown' is not assignable to type 'number'.
+    }
+    
+    // Inference
+    
+    function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
+        const callback = args[args.length - 1] as (...values: T) => void;
+        const values = args.slice(0, -1) as unknown as T;
+        callback(...values);
+    }
+    
+    pipe("foo", 123, true, (a, b, c) => {
+        a;  // string
+        b;  // number
+        c;  // boolean
+    })
+    
+    pipe("foo", 123, true, (...x) => {
+        x;  // [string, number, boolean]
+    });
+    
+    declare const sa: string[];
+    
+    pipe(...sa, (...x) => {
+        x;  // string[]
+    });
+    
+    pipe(1, ...sa, 2, (...x) => {
+        x;  // [number, ...string[], number]
+        let qq = x[x.length - 1];
+        let ww = x[0]
+    });
+    
+    pipe<number[]>(1, 2, 3, 4);  // Error
+                   ~~~~~~~~~~
+!!! error TS2345: Argument of type '[1, 2, 3, 4]' is not assignable to parameter of type '[...number[], (...values: number[]) => void]'.
+!!! error TS2345:   Type at position 3 in source is not compatible with type at position 1 in target.
+!!! error TS2345:     Type 'number' is not assignable to type '(...values: number[]) => void'.
+    pipe(...sa);  // Error
+         ~~~~~
+!!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type '[...string[], (...values: string[]) => void]'.
+!!! error TS2345:   Source provides no match for required element at position 1 in target.
+    
+    declare function fn1<T, U>(t: [...unknown[], T, U]): [T, U];
+    fn1([]);  // Error
+        ~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 2.
+    fn1([1]);  // Error
+        ~~~
+!!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[...unknown[], unknown, unknown]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
+    fn1([1, 'abc']);  // [number, string]
+    fn1([1, 'abc', true]);  // [string, boolean]
+    
+    declare function fn2<T, U>(t: [T, ...unknown[], U]): [T, U];
+    fn2([]);  // Error
+        ~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 2.
+    fn2([1]);  // Error
+        ~~~
+!!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[unknown, ...unknown[], unknown]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
+    fn2([1, 'abc']);  // [number, string]
+    fn2([1, 'abc', true]);  // [number, boolean]
+    
+    // Repro from #39595
+    
+    declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
+        
+    const a1 = foo('blah1', 1);
+    const b1 = foo('blah1', 'blah2', 1);
+    const c1 = foo(1);  // Error
+                   ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    const d1 = foo(1, 2);  // Error
+                   ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
+                            ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '["blah2", 1, 2, 3]' is not assignable to parameter of type '[...string[], number]'.
+!!! error TS2345:   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
+!!! error TS2345:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
+    
