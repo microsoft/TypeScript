@@ -140,7 +140,7 @@ namespace ts.refactor {
                     if (symbol) {
                         const declaration = cast(first(symbol.declarations), isTypeParameterDeclaration);
                         if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
-                            result.push(declaration);
+                            pushIfUnique(result, declaration);
                         }
                     }
                 }

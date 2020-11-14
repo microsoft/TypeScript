@@ -111,6 +111,7 @@ namespace ts {
         infer: SyntaxKind.InferKeyword,
         instanceof: SyntaxKind.InstanceOfKeyword,
         interface: SyntaxKind.InterfaceKeyword,
+        intrinsic: SyntaxKind.IntrinsicKeyword,
         is: SyntaxKind.IsKeyword,
         keyof: SyntaxKind.KeyOfKeyword,
         let: SyntaxKind.LetKeyword,
@@ -151,10 +152,6 @@ namespace ts {
         yield: SyntaxKind.YieldKeyword,
         async: SyntaxKind.AsyncKeyword,
         await: SyntaxKind.AwaitKeyword,
-        uppercase: SyntaxKind.UppercaseKeyword,
-        lowercase: SyntaxKind.LowercaseKeyword,
-        capitalize: SyntaxKind.CapitalizeKeyword,
-        uncapitalize: SyntaxKind.UncapitalizeKeyword,
         of: SyntaxKind.OfKeyword,
     };
 

@@ -1,0 +1,19 @@
+=== tests/cases/compiler/instanceofNarrowReadonlyArray.ts ===
+// @strict
+
+function narrow(x: readonly number[] | number): readonly number[] {
+>narrow : Symbol(narrow, Decl(instanceofNarrowReadonlyArray.ts, 0, 0))
+>x : Symbol(x, Decl(instanceofNarrowReadonlyArray.ts, 2, 16))
+
+    if (x instanceof Array) {
+>x : Symbol(x, Decl(instanceofNarrowReadonlyArray.ts, 2, 16))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return x;
+>x : Symbol(x, Decl(instanceofNarrowReadonlyArray.ts, 2, 16))
+
+    } else {
+        return [x];
+>x : Symbol(x, Decl(instanceofNarrowReadonlyArray.ts, 2, 16))
+    }
+}

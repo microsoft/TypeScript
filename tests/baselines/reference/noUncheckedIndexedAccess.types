@@ -351,3 +351,71 @@ symbolMap[s] = undefined; // Should error
 >s : unique symbol
 >undefined : undefined
 
+// Variadic tuples
+declare const nonEmptyStringArray: [string, ...string[]];
+>nonEmptyStringArray : [string, ...string[]]
+
+const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
+>variadicOk1 : string
+>nonEmptyStringArray[0] : string
+>nonEmptyStringArray : [string, ...string[]]
+>0 : 0
+
+const variadicError1: string = nonEmptyStringArray[1]; // Should error
+>variadicError1 : string
+>nonEmptyStringArray[1] : string | undefined
+>nonEmptyStringArray : [string, ...string[]]
+>1 : 1
+
+// Generic index type
+declare const myRecord1: { a: string; b: string };
+>myRecord1 : { a: string; b: string; }
+>a : string
+>b : string
+
+declare const myRecord2: { a: string; b: string, [key: string]: string };
+>myRecord2 : { [key: string]: string; a: string; b: string; }
+>a : string
+>b : string
+>key : string
+
+const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
+>fn1 : <Key extends "a" | "b">(key: Key) => string
+><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends "a" | "b">(key: Key) => string
+>myRecord1 : { a: string; b: string; }
+>key : Key
+>myRecord1[key] : { a: string; b: string; }[Key]
+>myRecord1 : { a: string; b: string; }
+>key : Key
+
+const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
+>fn2 : <Key extends "a" | "b">(key: Key) => string
+><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends "a" | "b">(key: Key) => string
+>myRecord1 : { a: string; b: string; }
+>key : Key
+>myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+>myRecord2 : { [key: string]: string; a: string; b: string; }
+>key : Key
+
+const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+>fn3 : <Key extends string | number>(key: Key) => void
+><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends string | number>(key: Key) => void
+>myRecord2 : { [key: string]: string; a: string; b: string; }
+>key : Key
+
+    myRecord2[key] = undefined; // Should error
+>myRecord2[key] = undefined : undefined
+>myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+>myRecord2 : { [key: string]: string; a: string; b: string; }
+>key : Key
+>undefined : undefined
+
+    const v: string = myRecord2[key]; // Should error
+>v : string
+>myRecord2[key] : { [key: string]: string; a: string; b: string; }[Key]
+>myRecord2 : { [key: string]: string; a: string; b: string; }
+>key : Key
+
+};
+
+

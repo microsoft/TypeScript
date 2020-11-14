@@ -1598,5 +1598,33 @@ import { x } from "../b";`),
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "updates emit on jsx option change",
+            commandLineArgs: ["-w"],
+            sys: () => {
+                const index: File = {
+                    path: `${projectRoot}/index.tsx`,
+                    content: `declare var React: any;\nconst d = <div />;`
+                };
+                const configFile: File = {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            jsx: "preserve"
+                        }
+                    })
+                };
+                return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
+            },
+            changes: [
+                {
+                    caption: "Update 'jsx' to 'react'",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
+                    timeouts: runQueuedTimeoutCallbacks,
+                },
+            ]
+        });
     });
 }

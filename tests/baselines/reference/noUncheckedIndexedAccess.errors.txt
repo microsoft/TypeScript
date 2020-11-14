@@ -49,9 +49,16 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(63,5): error TS2322
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(79,7): error TS2322: Type 'number | boolean | undefined' is not assignable to type 'number | boolean'.
   Type 'undefined' is not assignable to type 'number | boolean'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(85,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(90,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(98,5): error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
+  Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS2322: Type '{ [key: string]: string; a: string; b: string; }[Key]' is not assignable to type 'string'.
+  Type 'string | undefined' is not assignable to type 'string'.
+    Type 'undefined' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (28 errors) ====
+==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (31 errors) ====
     type CheckBooleanOnly<T extends boolean> = any;
     // Validate CheckBooleanOnly works - should error
     type T_ERR1 = CheckBooleanOnly<boolean | undefined>;
@@ -216,4 +223,30 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(85,1): error TS2322
     symbolMap[s] = undefined; // Should error
     ~~~~~~~~~~~~
 !!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    
+    // Variadic tuples
+    declare const nonEmptyStringArray: [string, ...string[]];
+    const variadicOk1: string = nonEmptyStringArray[0];  // Should OK
+    const variadicError1: string = nonEmptyStringArray[1]; // Should error
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    
+    // Generic index type
+    declare const myRecord1: { a: string; b: string };
+    declare const myRecord2: { a: string; b: string, [key: string]: string };
+    const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
+    const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
+    const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
+        myRecord2[key] = undefined; // Should error
+        ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+        const v: string = myRecord2[key]; // Should error
+              ~
+!!! error TS2322: Type '{ [key: string]: string; a: string; b: string; }[Key]' is not assignable to type 'string'.
+!!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+    };
+    
     

@@ -1,6 +1,6 @@
 Exit Code: 2
 Standard output:
-error TS6053: File '../../../tests/cases/user/zone.js/node_modules/zone.js/dist/zone.js.d.ts' not found.
+../../../../node_modules/@types/node/globals.global.d.ts(1,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'global' must be of type 'Global', but here has type 'Global & typeof globalThis'.
 
 
 

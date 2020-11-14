@@ -902,7 +902,7 @@ function [#|f|](): Promise<string> {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen1", `
 function [#|f|]() {
     return Promise.resolve().then(function () {
         return Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
@@ -920,6 +920,26 @@ function [#|f|]() {
                 return fetch("https://github.com");
               })]).then(res => res.toString());
     });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen3", `
+function [#|f|]() {
+    return Promise.resolve().then(() =>
+        Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+            return fetch("https://github.com");
+        }).then(res => res.toString())]));
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_PromiseAllAndThen4", `
+function [#|f|]() {
+    return Promise.resolve().then(() =>
+        Promise.all([fetch("https://typescriptlang.org"), fetch("https://microsoft.com"), Promise.resolve().then(function () {
+            return fetch("https://github.com");
+        })]).then(res => res.toString()));
 }
 `
         );
@@ -1124,6 +1144,27 @@ function [#|bar|]<T>(x: T): Promise<T> {
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return1", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch((error: Error) => {
+        return Promise.reject(error);
+    });
+}`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return2", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch((error: Error) => Promise.reject(error));
+}`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_Return3", `
+function [#|f|](p: Promise<unknown>) {
+    return p.catch(function (error: Error) {
+        return Promise.reject(error);
+    });
+}`
+        );
 
         _testConvertToAsyncFunction("convertToAsyncFunction_LocalReturn", `
 function [#|f|]() {
@@ -1352,7 +1393,7 @@ function [#|f|]() {
 }
 `);
 
-        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs1", `
 function delay(millis: number): Promise<void> {
     throw "no"
 }
@@ -1364,7 +1405,21 @@ function [#|main2|]() {
         .then(() => { console.log("."); return delay(500); })
         .then(() => { console.log("."); return delay(500); })
 }
-`);
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_noArgs2", `
+function delay(millis: number): Promise<void> {
+    throw "no"
+}
+
+function [#|main2|]() {
+    console.log("Please wait. Loading.");
+    return delay(500)
+        .then(() => delay(500))
+        .then(() => delay(500))
+        .then(() => delay(500))
+}
+        `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_exportModifier", `
 export function [#|foo|]() {

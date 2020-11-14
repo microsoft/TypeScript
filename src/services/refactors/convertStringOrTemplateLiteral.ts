@@ -73,10 +73,19 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
     function getParentBinaryExpression(expr: Node) {
-        while (isBinaryExpression(expr.parent) && isNotEqualsOperator(expr.parent)) {
-            expr = expr.parent;
-        }
-        return expr;
+        const container = findAncestor(expr.parent, n => {
+            switch (n.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    return false;
+                case SyntaxKind.BinaryExpression:
+                    return !(isBinaryExpression(n.parent) && isNotEqualsOperator(n.parent));
+                default:
+                    return "quit";
+            }
+        });
+
+        return container || expr;
     }
 
     function isStringConcatenationValid(node: Node): boolean {

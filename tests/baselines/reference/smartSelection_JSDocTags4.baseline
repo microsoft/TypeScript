@@ -1,0 +1,34 @@
+/**
+ * @typedef {object} Foo
+ * @property {string} a
+ * @property {number} b
+ * @property {/**/number} c
+ */
+
+/** @type {Foo} */
+const foo;
+
+
+              number   
+
+
+   @property {number} c
+
+
+/**
+ * @typedef {object} Foo
+ * @property {string} a
+ * @property {number} b
+ * @property {number} c
+ */
+
+
+/**
+ * @typedef {object} Foo
+ * @property {string} a
+ * @property {number} b
+ * @property {number} c
+ */
+
+/** @type {Foo} */
+const foo;

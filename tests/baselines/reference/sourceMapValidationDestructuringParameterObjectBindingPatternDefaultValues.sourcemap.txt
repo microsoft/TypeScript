@@ -87,7 +87,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 3 >         ^^^^
 4 >             ^
 5 >              ^^
-6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
@@ -101,34 +101,40 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 4 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
 5 >Emitted(3, 17) Source(11, 56) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? {} : _a).name, nameA = _b === void 0 ? "<NoName>" : _b;
+>>>    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameA = _c === void 0 ? "<NoName>" : _c;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^^
-4 >                                ^^^^^^^^^^^
-5 >                                           ^^
-6 >                                             ^^^^^
-7 >                                                  ^^^^^^^^^^^^^^^^^^^
-8 >                                                                     ^^^^^^^^^^
-9 >                                                                               ^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+3 >                             ^^
+4 >                               ^^^^^
+5 >                                    ^^
+6 >                                      ^^^^^^^^^^^^
+7 >                                                  ^^
+8 >                                                    ^^^^^
+9 >                                                         ^^^^^^^^^^^^^^^^^^^
+10>                                                                            ^^^^^^^^^^
+11>                                                                                      ^^^^^
 1->
-2 >        name: nameA = "<NoName>" }: Robot = 
-3 >                              { }
-4 >                                
-5 >                                           
-6 >                                             nameA
-7 >                                                   = 
-8 >                                                                     "<NoName>"
-9 >                                                                               
-1->Emitted(4, 9) Source(11, 17) + SourceIndex(0)
-2 >Emitted(4, 31) Source(11, 53) + SourceIndex(0)
-3 >Emitted(4, 33) Source(11, 56) + SourceIndex(0)
-4 >Emitted(4, 44) Source(11, 41) + SourceIndex(0)
-5 >Emitted(4, 46) Source(11, 23) + SourceIndex(0)
-6 >Emitted(4, 51) Source(11, 28) + SourceIndex(0)
-7 >Emitted(4, 70) Source(11, 31) + SourceIndex(0)
-8 >Emitted(4, 80) Source(11, 41) + SourceIndex(0)
-9 >Emitted(4, 85) Source(11, 41) + SourceIndex(0)
+2 >        { name: nameA = "<NoName>" }: Robot = 
+3 >                             { }
+4 >                               
+5 >                                    
+6 >                                      name: nameA = "<NoName>"
+7 >                                                  
+8 >                                                    nameA
+9 >                                                          = 
+10>                                                                            "<NoName>"
+11>                                                                                      
+1->Emitted(4, 9) Source(11, 15) + SourceIndex(0)
+2 >Emitted(4, 30) Source(11, 53) + SourceIndex(0)
+3 >Emitted(4, 32) Source(11, 56) + SourceIndex(0)
+4 >Emitted(4, 37) Source(11, 56) + SourceIndex(0)
+5 >Emitted(4, 39) Source(11, 17) + SourceIndex(0)
+6 >Emitted(4, 51) Source(11, 41) + SourceIndex(0)
+7 >Emitted(4, 53) Source(11, 23) + SourceIndex(0)
+8 >Emitted(4, 58) Source(11, 28) + SourceIndex(0)
+9 >Emitted(4, 77) Source(11, 31) + SourceIndex(0)
+10>Emitted(4, 87) Source(11, 41) + SourceIndex(0)
+11>Emitted(4, 92) Source(11, 41) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -285,7 +291,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 3 >         ^^^^
 4 >             ^
 5 >              ^^
-6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >function 
@@ -298,34 +304,40 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 4 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
 5 >Emitted(11, 17) Source(17, 48) + SourceIndex(0)
 ---
->>>    var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
+>>>    var _b = _a === void 0 ? {} : _a, _c = _b.name, name = _c === void 0 ? "<NoName>" : _c;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^^
-4 >                                ^^^^^^^^^^^
-5 >                                           ^^
-6 >                                             ^^^^
-7 >                                                 ^^^^^^^^^^^^^^^^^^^
-8 >                                                                    ^^^^^^^^^^
-9 >                                                                              ^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+3 >                             ^^
+4 >                               ^^^^^
+5 >                                    ^^
+6 >                                      ^^^^^^^^^^^^
+7 >                                                  ^^
+8 >                                                    ^^^^
+9 >                                                        ^^^^^^^^^^^^^^^^^^^
+10>                                                                           ^^^^^^^^^^
+11>                                                                                     ^^^^^
 1->
-2 >        name = "<NoName>" }: Robot = 
-3 >                              {}
-4 >                                
-5 >                                           
-6 >                                             name
-7 >                                                  = 
-8 >                                                                    "<NoName>"
-9 >                                                                              
-1->Emitted(12, 9) Source(17, 17) + SourceIndex(0)
-2 >Emitted(12, 31) Source(17, 46) + SourceIndex(0)
-3 >Emitted(12, 33) Source(17, 48) + SourceIndex(0)
-4 >Emitted(12, 44) Source(17, 34) + SourceIndex(0)
-5 >Emitted(12, 46) Source(17, 17) + SourceIndex(0)
-6 >Emitted(12, 50) Source(17, 21) + SourceIndex(0)
-7 >Emitted(12, 69) Source(17, 24) + SourceIndex(0)
-8 >Emitted(12, 79) Source(17, 34) + SourceIndex(0)
-9 >Emitted(12, 84) Source(17, 34) + SourceIndex(0)
+2 >        { name = "<NoName>" }: Robot = 
+3 >                             {}
+4 >                               
+5 >                                    
+6 >                                      name = "<NoName>"
+7 >                                                  
+8 >                                                    name
+9 >                                                         = 
+10>                                                                           "<NoName>"
+11>                                                                                     
+1->Emitted(12, 9) Source(17, 15) + SourceIndex(0)
+2 >Emitted(12, 30) Source(17, 46) + SourceIndex(0)
+3 >Emitted(12, 32) Source(17, 48) + SourceIndex(0)
+4 >Emitted(12, 37) Source(17, 48) + SourceIndex(0)
+5 >Emitted(12, 39) Source(17, 17) + SourceIndex(0)
+6 >Emitted(12, 51) Source(17, 34) + SourceIndex(0)
+7 >Emitted(12, 53) Source(17, 17) + SourceIndex(0)
+8 >Emitted(12, 57) Source(17, 21) + SourceIndex(0)
+9 >Emitted(12, 76) Source(17, 24) + SourceIndex(0)
+10>Emitted(12, 86) Source(17, 34) + SourceIndex(0)
+11>Emitted(12, 91) Source(17, 34) + SourceIndex(0)
 ---
 >>>    console.log(name);
 1 >^^^^

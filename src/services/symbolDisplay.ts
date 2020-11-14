@@ -236,7 +236,7 @@ namespace ts.SymbolDisplay {
             else if ((isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) || // name of function declaration
                 (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                 // get the signature from the declaration and write it
-                const functionDeclaration = <FunctionLike>location.parent;
+                const functionDeclaration = <SignatureDeclaration>location.parent;
                 // Use function declaration to write the signatures only if the symbol corresponding to this declaration
                 const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration =>
                     declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));

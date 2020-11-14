@@ -93,6 +93,33 @@ namespace ts {
             });
         });
 
+        describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {
+            it("without statements", () => {
+                const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
+                    files: {
+                        "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\n`
+                    }
+                }));
+                const program = createProgram(["/test.d.ts"], { }, host);
+                const file = program.getSourceFile("/test.d.ts")!;
+                const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed });
+                const output = printer.printFile(file);
+                assert.equal(output.split(/\r?\n/g).length, 3);
+            });
+            it("with statements", () => {
+                const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
+                    files: {
+                        "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`
+                    }
+                }));
+                const program = createProgram(["/test.d.ts"], { }, host);
+                const file = program.getSourceFile("/test.d.ts")!;
+                const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed });
+                const output = printer.printFile(file);
+                assert.equal(output.split(/\r?\n/g).length, 4);
+            });
+        });
+
         describe("printBundle", () => {
             const printsCorrectly = makePrintsCorrectly("printsBundleCorrectly");
             let bundle: Bundle;

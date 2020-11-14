@@ -67,7 +67,7 @@ exports.C = function() {
 === tests/cases/conformance/jsdoc/use.js ===
 /** @type {import('./mod1').Both} */
 var both1 = { type: 'a', x: 1 };
->both1 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
+>both1 : import("tests/cases/conformance/jsdoc/mod1").Both
 >{ type: 'a', x: 1 } : { type: "a"; x: 1; }
 >type : "a"
 >'a' : "a"
@@ -76,13 +76,13 @@ var both1 = { type: 'a', x: 1 };
 
 /** @type {import('./mod2').Both} */
 var both2 = both1;
->both2 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
->both1 : { type: "a"; x: 1; }
+>both2 : import("tests/cases/conformance/jsdoc/mod2").Both
+>both1 : import("tests/cases/conformance/jsdoc/mod1").A
 
 /** @type {import('./mod3').Both} */
 var both3 = both2;
->both3 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
->both2 : { type: "a"; x: 1; }
+>both3 : import("tests/cases/conformance/jsdoc/mod3").Both
+>both2 : import("tests/cases/conformance/jsdoc/mod2").A
 
 
 

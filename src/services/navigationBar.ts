@@ -310,7 +310,7 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.ExportAssignment: {
                 const expression = (<ExportAssignment>node).expression;
-                const child = isObjectLiteralExpression(expression) ? expression :
+                const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
                     isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
                 if (child) {
                     startNode(node);
@@ -843,16 +843,11 @@ namespace ts.NavigationBar {
         }
 
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
-        const result: string[] = [];
-
-        result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
-
+        const result = [getTextOfIdentifierOrLiteral(moduleDeclaration.name)];
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
-
             result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
-
         return result.join(".");
     }
 

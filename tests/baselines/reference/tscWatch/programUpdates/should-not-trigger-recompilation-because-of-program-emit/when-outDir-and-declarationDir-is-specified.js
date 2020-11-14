@@ -98,13 +98,13 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
 Program options: {"target":1,"module":2,"declaration":true,"outDir":"/user/username/projects/myproject/build","strict":true,"esModuleInterop":true,"declarationDir":"/user/username/projects/myproject/decls","skipLibCheck":true,"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
@@ -204,13 +204,13 @@ Output::
 >> Screen clear
 [[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
 Program options: {"target":1,"module":2,"declaration":true,"outDir":"/user/username/projects/myproject/build","strict":true,"esModuleInterop":true,"declarationDir":"/user/username/projects/myproject/decls","skipLibCheck":true,"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
