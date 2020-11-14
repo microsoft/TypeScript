@@ -26926,7 +26926,11 @@ namespace ts {
             }
             if (restType) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined, checkMode);
-                const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
+                const restArgCount = args.length - argCount;
+                const errorNode = !reportErrors ? undefined :
+                    restArgCount === 0 ? node :
+                    restArgCount === 1 ? args[argCount] :
+                    setTextRangePosEnd(createSyntheticExpression(node, spreadType), args[argCount].pos, args[args.length - 1].end);
                 if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
                     maybeAddMissingAwaitInfo(errorNode, spreadType, restType);
