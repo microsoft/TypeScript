@@ -757,6 +757,9 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
+        private sharedExtendedConfigFilesMap = new Map<string, SharedExtendedConfigFileWatcher<Project>>();
+
+        /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
@@ -1384,6 +1387,7 @@ namespace ts.server {
             project.print(/*writeProjectFileNames*/ true);
 
             project.close();
+            removeProjectFromSharedExtendedConfigFilesWatch(project, this.sharedExtendedConfigFilesMap);
             if (Debug.shouldAssert(AssertionLevel.Normal)) {
                 this.filenameToScriptInfo.forEach(info => Debug.assert(
                     !info.isAttached(project),
@@ -2155,15 +2159,24 @@ namespace ts.server {
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
-                project.stopWatchingExtendedConfigFiles();
                 project.stopWatchingWildCards();
+                removeProjectFromSharedExtendedConfigFilesWatch(project, this.sharedExtendedConfigFilesMap);
             }
             else {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
-                project.watchExtendedConfigFiles();
                 project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
+                if (compilerOptions.configFile) {
+                    updateSharedExtendedConfigFilesWatch(
+                        project,
+                        (fileName) => this.onExtendedConfigChangedForConfiguredProject(project, fileName),
+                        compilerOptions.configFile,
+                        this.sharedExtendedConfigFilesMap,
+                        this.watchFactory,
+                        this.hostConfiguration.watchOptions,
+                    );
+                }
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());

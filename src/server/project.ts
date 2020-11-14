@@ -2057,8 +2057,6 @@ namespace ts.server {
     export class ConfiguredProject extends Project {
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
-        /* @internal */
-        private extendedConfigFileWatchers: ESMap<string, FileWatcher> | undefined;
         private directoriesWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
@@ -2269,38 +2267,6 @@ namespace ts.server {
             this.projectErrors = projectErrors;
         }
 
-        /* @internal */
-        createExtendedConfigFileWatcher(extendedConfigFile: string): FileWatcher {
-            return this.projectService.watchFactory.watchFile(
-                extendedConfigFile,
-                (fileName) => this.projectService.onExtendedConfigChangedForConfiguredProject(this, fileName),
-                PollingInterval.High,
-                this.projectService.getWatchOptions(this),
-                WatchType.ExtendedConfigFile,
-                this
-            );
-        }
-
-        /* @internal */
-        watchExtendedConfigFiles() {
-            const configFile = this.getCompilerOptions().configFile;
-            if (configFile) {
-                updateExtendedConfigFilesWatch(
-                    configFile,
-                    this.extendedConfigFileWatchers || (this.extendedConfigFileWatchers = new Map()),
-                    (extendedConfigFile) => this.createExtendedConfigFileWatcher(extendedConfigFile),
-                );
-            }
-        }
-
-        /* @internal */
-        stopWatchingExtendedConfigFiles() {
-            if (this.extendedConfigFileWatchers) {
-                clearMap(this.extendedConfigFileWatchers, closeFileWatcher);
-                this.extendedConfigFileWatchers = undefined;
-            }
-        }
-
         /*@internal*/
         watchWildcards(wildcardDirectories: ESMap<string, WatchDirectoryFlags>) {
             updateWatchingWildcardDirectories(
@@ -2325,7 +2291,6 @@ namespace ts.server {
                 this.configFileWatcher = undefined;
             }
 
-            this.stopWatchingExtendedConfigFiles();
             this.stopWatchingWildCards();
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
