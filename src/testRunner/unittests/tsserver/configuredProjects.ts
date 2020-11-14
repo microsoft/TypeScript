@@ -1097,19 +1097,12 @@ foo();`
         it("should watch the extended configs of multiple projects", () => {
             const alphaExtendedConfig: File = {
                 path: `${tscWatch.projectRoot}/extended/alpha.tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        strict: false,
-                    }
-                })
+                content: "{}"
             };
             const bravoExtendedConfig: File = {
                 path: `${tscWatch.projectRoot}/extended/bravo.tsconfig.json`,
                 content: JSON.stringify({
-                    extends: "./alpha.tsconfig.json",
-                    compilerOptions: {
-                        strictNullChecks: true,
-                    }
+                    extends: "./alpha.tsconfig.json"
                 })
             };
             const aConfig: File = {
@@ -1144,15 +1137,39 @@ foo();`
             projectService.openClientFile(aFile.path);
             projectService.openClientFile(bFile.path);
             checkNumberOfProjects(projectService, { configuredProjects: 2 });
-            checkProjectActualFiles(configuredProjectAt(projectService, 0), [aFile.path, aConfig.path, alphaExtendedConfig.path]);
-            checkProjectActualFiles(configuredProjectAt(projectService, 1), [bFile.path, bConfig.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+            const aProject = configuredProjectAt(projectService, 0);
+            const bProject = configuredProjectAt(projectService, 1);
+            checkProjectActualFiles(aProject, [aFile.path, aConfig.path, alphaExtendedConfig.path]);
+            checkProjectActualFiles(bProject, [bFile.path, bConfig.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+            const aOptions1 = aProject.getCompilerOptions();
+            const bOptions1 = bProject.getCompilerOptions();
+            assert.isUndefined(aOptions1.strict);
+            assert.isUndefined(bOptions1.strict);
 
             checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
 
-            host.writeFile(alphaExtendedConfig.path, alphaExtendedConfig.content);
-            host.checkTimeoutQueueLengthAndRun(3);
-            host.writeFile(bravoExtendedConfig.path, bravoExtendedConfig.content);
+            host.writeFile(alphaExtendedConfig.path, JSON.stringify({
+                compilerOptions: {
+                    strict: true
+                }
+            }));
             host.checkTimeoutQueueLengthAndRun(2);
+            const aOptions2 = aProject.getCompilerOptions();
+            const bOptions2 = bProject.getCompilerOptions();
+            assert.isTrue(aOptions2.strict);
+            assert.isTrue(bOptions2.strict);
+
+            host.writeFile(bravoExtendedConfig.path, JSON.stringify({
+                extends: "./alpha.tsconfig.json",
+                compilerOptions: {
+                    strict: false
+                }
+            }));
+            host.checkTimeoutQueueLengthAndRun(1);
+            const aOptions3 = aProject.getCompilerOptions();
+            const bOptions3 = bProject.getCompilerOptions();
+            assert.isTrue(aOptions3.strict);
+            assert.isFalse(bOptions3.strict);
         });
     });
 

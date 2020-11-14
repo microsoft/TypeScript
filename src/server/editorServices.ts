@@ -1352,18 +1352,13 @@ namespace ts.server {
 
         /*@internal*/
         onExtendedConfigChangedForConfiguredProject(project: ConfiguredProject, extendedConfigFile: string) {
-            const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
-
-            this.logConfigFileWatchUpdate(asNormalizedPath(extendedConfigFile), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingFiles);
+            this.logExtendedConfigFileWatchUpdate(asNormalizedPath(extendedConfigFile), project.canonicalConfigFilePath, ConfigFileWatcherStatus.ReloadingFiles);
 
             // Skip refresh if project is not yet loaded
             if (project.isInitialLoadPending()) return;
             project.pendingReload = ConfigFileProgramReloadLevel.Full;
-            project.pendingReloadReason = "Change in extended config file detected";
+            project.pendingReloadReason = `Change in extended config file ${extendedConfigFile} detected`;
             this.delayUpdateProjectGraph(project);
-            // As we scheduled the update on configured project graph,
-            // we would need to schedule the project reload for only the root of inferred projects
-            this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);
         }
 
         /**
@@ -1687,6 +1682,18 @@ namespace ts.server {
                 watches.push(WatchType.ConfigFile);
             }
             this.logger.info(`ConfigFilePresence:: Current Watches: ${watches}:: File: ${configFileName} Currently impacted open files: RootsOfInferredProjects: ${inferredRoots} OtherOpenFiles: ${otherFiles} Status: ${status}`);
+        }
+
+        /*@internal*/
+        private logExtendedConfigFileWatchUpdate(extendedConfigFile: NormalizedPath, canonicalConfigFilePath: string, status: ConfigFileWatcherStatus) {
+            if (!this.logger.hasLevel(LogLevel.verbose)) {
+                return;
+            }
+            const watches: WatchType[] = [];
+            if (this.configuredProjects.has(canonicalConfigFilePath)) {
+                watches.push(WatchType.ExtendedConfigFile);
+            }
+            this.logger.info(`ExtendedConfigFilePresence:: Current Watches: ${watches}:: File: ${extendedConfigFile} Status: ${status}`);
         }
 
         /**
