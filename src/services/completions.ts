@@ -1899,10 +1899,8 @@ namespace ts.Completions {
                     return GlobalsSearch.Continue;
                 }
                 const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
-                if (completionsType) {
-                    if (completionsType.flags & TypeFlags.Any) {
-                        return GlobalsSearch.Continue;
-                    }
+                if (completionsType && (completionsType?.flags & TypeFlags.Any)) {
+                    return GlobalsSearch.Continue;
                 }
                 isNewIdentifierLocation = hasIndexSignature(completionsType || instantiatedType);
                 typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
