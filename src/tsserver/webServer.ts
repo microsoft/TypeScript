@@ -140,12 +140,17 @@ namespace ts.server {
         return typeof cmdLineVerbosity === "undefined" ? nullLogger : new MainProcessLogger(cmdLineVerbosity);
     }
 
+    interface WebServerHost extends ServerHost {
+        getWebPath: (path: string) => string | undefined;
+    }
+
     function createWebSystem(args: string[]) {
         Debug.assert(ts.sys === undefined);
         const returnEmptyString = () => "";
         // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
         const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, executingDirectoryPath) : undefined;
-        const sys: ServerHost = {
+        const sys: WebServerHost = {
+            getWebPath,
             args,
             newLine: "\r\n", // This can be configured by clients
             useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
@@ -233,10 +238,8 @@ namespace ts.server {
     function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
         class WorkerSession extends Session<{}> {
             constructor() {
-                const host = sys as ServerHost;
-
                 super({
-                    host,
+                    host: sys as WebServerHost,
                     cancellationToken,
                     ...options,
                     typingsInstaller: nullTypingsInstaller,
@@ -248,6 +251,9 @@ namespace ts.server {
             }
 
             public send(msg: protocol.Message) {
+                // Updates to file paths
+                this.updateWebPaths(msg);
+
                 if (msg.type === "event" && !this.canUseEvents) {
                     if (this.logger.hasLevel(LogLevel.verbose)) {
                         this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
@@ -258,6 +264,30 @@ namespace ts.server {
                     logger.info(`${msg.type}:${indent(JSON.stringify(msg))}`);
                 }
                 postMessage(msg);
+            }
+
+            private updateWebPaths(obj: any) {
+                if (isArray(obj)) {
+                    obj.forEach(ele => this.updateWebPaths(ele));
+                }
+                else if (typeof obj === "object") {
+                    for (const id in obj) {
+                        if (hasProperty(obj, id)) {
+                            const value = obj[id];
+                            if ((id === "file" || id === "fileName" || id === "renameFilename") && isString(value)) {
+                                const webpath = (sys as WebServerHost).getWebPath(value);
+                                if (webpath) obj[id] = webpath;
+                            }
+                            else if ((id === "files" || id === "fileNames") && isArray(value) && value.every(isString)) {
+                                obj[id] = value.map(ele => (sys as WebServerHost).getWebPath(ele) || ele);
+                            }
+                            else {
+                                this.updateWebPaths(value);
+                            }
+                        }
+                    }
+
+                }
             }
 
             protected parseMessage(message: {}): protocol.Request {
@@ -279,8 +309,6 @@ namespace ts.server {
                     this.onMessage(message.data);
                 });
             }
-
-            // TODO:: Update all responses to use webPath
         }
 
         const session = new WorkerSession();
