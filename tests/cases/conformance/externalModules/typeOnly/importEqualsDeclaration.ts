@@ -2,13 +2,17 @@
 // @noTypesAndSymbols: true
 
 // @Filename: /a.ts
-type T = {};
-export = T;
+class A { a!: string }
+export = A;
 
 // @Filename: /b.ts
 class SomeClass {}
 export = SomeClass;
 
 // @Filename: /c.ts
-import type T = require('./a'); // Error
+import type A = require('./a'); // Ok
 import type = require('./b');   // Ok
+
+A.prototype; // Error
+const a: A = { a: 'a' };
+export declare const AConstructor: typeof A;

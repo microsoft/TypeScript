@@ -1112,10 +1112,6 @@
         "category": "Message",
         "code": 1369
     },
-    "Only ECMAScript imports may use 'import type'.": {
-        "category": "Error",
-        "code": 1370
-    },
     "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
