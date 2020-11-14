@@ -40,8 +40,8 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Typ
         'U' could be instantiated with an arbitrary type which could be unrelated to 'readonly string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
   Type '"2"' is not assignable to type 'number | "0" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "1"'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(354,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(394,7): error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'boolean' is not assignable to type 'number'.
 
@@ -52,7 +52,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(394,7): error TS2322: Typ
     type TV0<T extends unknown[]> = [string, ...T];
     type TV1<T extends unknown[]> = [string, ...T, number];
     type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-    type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
+    type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
     
     // Normalization
     
@@ -315,11 +315,18 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(394,7): error TS2322: Typ
     
     // Inference between variadic tuple types
     
-    type First<T extends readonly unknown[]> = T[0];
-    type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+    type First<T extends readonly unknown[]> =
+        T extends readonly [unknown, ...unknown[]] ? T[0] :
+        T[0] | undefined;
     
-    type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-    type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+    type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+    
+    type Last<T extends readonly unknown[]> =
+        T extends readonly [...unknown[], infer U] ? U :
+        T extends readonly [unknown, ...unknown[]] ? T[number] :
+        T[number] | undefined;
+    
+    type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
     
     type T00 = First<[number, symbol, string]>;
     type T01 = First<[symbol, string]>;
@@ -350,8 +357,8 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(394,7): error TS2322: Typ
     type T24 = Last<[symbol, ...string[]]>;
     type T25 = Last<[string?]>;
     type T26 = Last<string[]>;
-    type T27 = Last<[]>;  // unknown, maybe should undefined
-    type T28 = Last<any>;  // unknown, maybe should be any
+    type T27 = Last<[]>;
+    type T28 = Last<any>;
     type T29 = Last<never>;
     
     type T30 = DropLast<[number, symbol, string]>;
@@ -449,10 +456,6 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(394,7): error TS2322: Typ
     declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
     
     call('hello', 32, (a, b) => 42);
-    
-    // Would be nice to infer [...string[], (...args: string[]) => number] here
-    // Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-    
     call(...sa, (...x) => 42);
     
     // No inference to ending optional elements (except with identical structure)
@@ -503,7 +506,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(394,7): error TS2322: Typ
     
     type Numbers = number[];
     type Unbounded = [...Numbers, boolean];
-    const data: Unbounded = [false, false];
+    const data: Unbounded = [false, false];  // Error
           ~~~~
 !!! error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
 !!! error TS2322:   Type at position 0 in source is not compatible with type at position 0 in target.
