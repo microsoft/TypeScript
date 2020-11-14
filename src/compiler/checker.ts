@@ -25412,26 +25412,29 @@ namespace ts {
             }
 
             checkJsxPreconditions(node);
-            // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
-            // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const jsxFactoryNamespace = getJsxNamespace(node);
-            const jsxFactoryLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
 
-            // allow null as jsxFragmentFactory
-            let jsxFactorySym: Symbol | undefined;
-            if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
-                jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, jsxFactoryNamespace, /*isUse*/ true);
-            }
+            if (!getJsxNamespaceContainerForImplicitImport(node)) {
+                // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
+                // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
+                const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+                const jsxFactoryNamespace = getJsxNamespace(node);
+                const jsxFactoryLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
 
-            if (jsxFactorySym) {
-                // Mark local symbol as referenced here because it might not have been marked
-                // if jsx emit was not jsxFactory as there wont be error being emitted
-                jsxFactorySym.isReferenced = SymbolFlags.All;
+                // allow null as jsxFragmentFactory
+                let jsxFactorySym: Symbol | undefined;
+                if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
+                    jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, jsxFactoryNamespace, /*isUse*/ true);
+                }
 
-                // If react/jsxFactory symbol is alias, mark it as refereced
-                if (jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
-                    markAliasSymbolAsReferenced(jsxFactorySym);
+                if (jsxFactorySym) {
+                    // Mark local symbol as referenced here because it might not have been marked
+                    // if jsx emit was not jsxFactory as there wont be error being emitted
+                    jsxFactorySym.isReferenced = SymbolFlags.All;
+
+                    // If react/jsxFactory symbol is alias, mark it as refereced
+                    if (jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                        markAliasSymbolAsReferenced(jsxFactorySym);
+                    }
                 }
             }
 

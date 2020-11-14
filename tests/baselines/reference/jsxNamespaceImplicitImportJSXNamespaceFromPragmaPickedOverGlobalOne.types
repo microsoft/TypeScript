@@ -3,7 +3,7 @@ export = React;
 >React : any
 
 export as namespace React;
->React : any
+>React : error
 
 declare namespace React { }
 
