@@ -206,7 +206,8 @@ namespace ts {
                 const foundRequestIndex: number = findIndex(emitNode.helperRequests, existingRequest => existingRequest.helper === request.helper);
                 if (foundRequestIndex === -1) {
                     emitNode.helperRequests = append(emitNode.helperRequests, request);
-                } else {
+                }
+                else {
                     emitNode.helperRequests = replaceElement(emitNode.helperRequests, foundRequestIndex, {
                         ...emitNode.helperRequests[foundRequestIndex],
                         directlyUsed: emitNode.helperRequests[foundRequestIndex].directlyUsed || request.directlyUsed
@@ -268,7 +269,8 @@ namespace ts {
                 const foundRequestIndex: number = findIndex(targetEmitNode.helperRequests, targetRequest => request.helper === targetRequest.helper);
                 if (foundRequestIndex === -1) {
                     targetEmitNode.helperRequests = append(targetEmitNode.helperRequests, request);
-                } else {
+                }
+                else {
                     targetEmitNode.helperRequests = replaceElement(targetEmitNode.helperRequests, foundRequestIndex, {
                         ...targetEmitNode.helperRequests[foundRequestIndex],
                         directlyUsed: request.directlyUsed || targetEmitNode.helperRequests[foundRequestIndex].directlyUsed

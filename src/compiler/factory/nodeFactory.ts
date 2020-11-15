@@ -6395,7 +6395,8 @@ namespace ts {
                 const foundRequestIndex: number = findIndex(destEmitNode.helperRequests, destRequest => request.helper === destRequest.helper);
                 if (foundRequestIndex === -1) {
                     destEmitNode.helperRequests = append(destEmitNode.helperRequests, request);
-                } else {
+                }
+                else {
                     destEmitNode.helperRequests = replaceElement(destEmitNode.helperRequests, foundRequestIndex, {
                         ...destEmitNode.helperRequests[foundRequestIndex],
                         directlyUsed: request.directlyUsed || destEmitNode.helperRequests[foundRequestIndex].directlyUsed

@@ -476,7 +476,7 @@ namespace ts {
             Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
             if (helper.dependencies) {
                 for (const h of helper.dependencies) {
-                    requestEmitHelper(h, false);
+                    requestEmitHelper(h, /*directlyUsed*/ false);
                 }
             }
             emitHelperRequests = append(emitHelperRequests, { helper, directlyUsed });
