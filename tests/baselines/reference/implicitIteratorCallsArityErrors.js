@@ -91,7 +91,42 @@ async function* bar(obj2: {
 
 	}
 
+	const [u] = obj2; // this is fine, just making sure caching works :)
+	return u;
+}
+
+async function* food(obj2: {
+	a: number;
+	b: number;
+	[Symbol.iterator](a: string): Generator<{ a: number }, void, unknown>;
+} & {
+	[Symbol.iterator]<T extends object>(this: T): Generator<{ b: string }>;
+}) {
+	yield* obj2;
+
+	for await (const x of obj2) {
+
+	}
+
 	const [u] = obj2;
+	return u;
+}
+
+
+async function* bark(obj2: {
+	a: number;
+	b: number;
+	[Symbol.iterator](x: string): Generator<number, void, unknown>;
+} & {
+    [Symbol.asyncIterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>;
+}) {
+	yield* obj2;
+
+	for await (const x of obj2) {
+
+	}
+
+	const [u] = obj2; // this is fine, just making sure caching works :)
 	return u;
 }
 
@@ -237,7 +272,47 @@ function bar(obj2) {
             }
             finally { if (e_5) throw e_5.error; }
         }
+        const [u] = obj2; // this is fine, just making sure caching works :)
+        return yield __await(u);
+    });
+}
+function food(obj2) {
+    return __asyncGenerator(this, arguments, function* food_1() {
+        var e_6, _a;
+        yield __await(yield* __asyncDelegator(__asyncValues(obj2)));
+        try {
+            for (var obj2_4 = __asyncValues(obj2), obj2_4_1; obj2_4_1 = yield __await(obj2_4.next()), !obj2_4_1.done;) {
+                const x = obj2_4_1.value;
+            }
+        }
+        catch (e_6_1) { e_6 = { error: e_6_1 }; }
+        finally {
+            try {
+                if (obj2_4_1 && !obj2_4_1.done && (_a = obj2_4.return)) yield __await(_a.call(obj2_4));
+            }
+            finally { if (e_6) throw e_6.error; }
+        }
         const [u] = obj2;
+        return yield __await(u);
+    });
+}
+function bark(obj2) {
+    return __asyncGenerator(this, arguments, function* bark_1() {
+        var e_7, _a;
+        yield __await(yield* __asyncDelegator(__asyncValues(obj2)));
+        try {
+            for (var obj2_5 = __asyncValues(obj2), obj2_5_1; obj2_5_1 = yield __await(obj2_5.next()), !obj2_5_1.done;) {
+                const x = obj2_5_1.value;
+            }
+        }
+        catch (e_7_1) { e_7 = { error: e_7_1 }; }
+        finally {
+            try {
+                if (obj2_5_1 && !obj2_5_1.done && (_a = obj2_5.return)) yield __await(_a.call(obj2_5));
+            }
+            finally { if (e_7) throw e_7.error; }
+        }
+        const [u] = obj2; // this is fine, just making sure caching works :)
         return yield __await(u);
     });
 }

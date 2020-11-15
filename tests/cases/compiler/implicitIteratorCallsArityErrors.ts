@@ -94,6 +94,41 @@ async function* bar(obj2: {
 
 	}
 
+	const [u] = obj2; // this is fine, just making sure caching works :)
+	return u;
+}
+
+async function* food(obj2: {
+	a: number;
+	b: number;
+	[Symbol.iterator](a: string): Generator<{ a: number }, void, unknown>;
+} & {
+	[Symbol.iterator]<T extends object>(this: T): Generator<{ b: string }>;
+}) {
+	yield* obj2;
+
+	for await (const x of obj2) {
+
+	}
+
 	const [u] = obj2;
+	return u;
+}
+
+
+async function* bark(obj2: {
+	a: number;
+	b: number;
+	[Symbol.iterator](x: string): Generator<number, void, unknown>;
+} & {
+    [Symbol.asyncIterator]<T>(this: T): Generator<Extract<keyof T, string>, void, unknown>;
+}) {
+	yield* obj2;
+
+	for await (const x of obj2) {
+
+	}
+
+	const [u] = obj2; // this is fine, just making sure caching works :)
 	return u;
 }
