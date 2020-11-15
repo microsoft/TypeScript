@@ -140,7 +140,7 @@ namespace ts {
      * @param host The emit host object used to interact with the file system.
      * @param options Compiler options to surface in the `TransformationContext`.
      * @param nodes An array of nodes to transform.
-     * @param transforms An array of `TransformerFactory` callbacks.
+     * @param transformers An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
     export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
