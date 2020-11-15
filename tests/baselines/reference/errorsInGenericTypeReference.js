@@ -70,7 +70,6 @@ interface testInterface2 {
 }
 
 
-
 //// [errorsInGenericTypeReference.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {

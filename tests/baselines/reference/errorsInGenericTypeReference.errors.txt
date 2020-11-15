@@ -1,5 +1,4 @@
 tests/cases/compiler/errorsInGenericTypeReference.ts(11,17): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(17,31): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(22,29): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(23,36): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(24,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -22,7 +21,7 @@ tests/cases/compiler/errorsInGenericTypeReference.ts(67,40): error TS2304: Canno
 tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Cannot find name 'V'.
 
 
-==== tests/cases/compiler/errorsInGenericTypeReference.ts (22 errors) ====
+==== tests/cases/compiler/errorsInGenericTypeReference.ts (21 errors) ====
     interface IFoo<T> { }
     
     class Foo<T> { }
@@ -42,8 +41,6 @@ tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Canno
     class testClass2<T> {
     }
     var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
-                                  ~
-!!! error TS2304: Cannot find name 'V'.
     
     
     // in method return type annotation
@@ -136,5 +133,4 @@ tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Canno
                            ~
 !!! error TS2304: Cannot find name 'V'.
     }
-    
     

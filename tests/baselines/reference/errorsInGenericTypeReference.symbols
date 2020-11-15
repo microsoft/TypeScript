@@ -164,4 +164,3 @@ interface testInterface2 {
 >x : Symbol(x, Decl(errorsInGenericTypeReference.ts, 67, 19))
 }
 
-

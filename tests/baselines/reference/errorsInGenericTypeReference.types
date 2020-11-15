@@ -139,4 +139,3 @@ interface testInterface2 {
 >x : any
 }
 
-
