@@ -7516,7 +7516,6 @@ namespace ts {
         /*@internal*/ getEmitHost(): EmitHost;
         /*@internal*/ getEmitHelperFactory(): EmitHelperFactory;
 
-        /*@internal*/ forwardEmitHelperRequest(request: EmitHelperRequest): void;
         /*@internal*/ readEmitHelperRequests(): EmitHelperRequest[] | undefined;
 
         /** Records a request for a non-scoped emit helper in the current context. */

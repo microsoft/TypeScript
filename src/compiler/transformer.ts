@@ -178,7 +178,6 @@ namespace ts {
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             addInitializationStatement,
-            forwardEmitHelperRequest,
             requestEmitHelper,
             readEmitHelpers,
             readEmitHelperRequests,
@@ -471,12 +470,6 @@ namespace ts {
             return lexicalEnvironmentFlags;
         }
 
-        function forwardEmitHelperRequest(request: EmitHelperRequest) {
-            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
-            Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
-            emitHelperRequests = append(emitHelperRequests, request);
-        }
-
         function requestEmitHelper(helper: EmitHelper, directlyUsed = true): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
@@ -547,7 +540,6 @@ namespace ts {
         onSubstituteNode: notImplemented,
         readEmitHelpers: notImplemented,
         readEmitHelperRequests: notImplemented,
-        forwardEmitHelperRequest: noop,
         requestEmitHelper: noop,
         resumeLexicalEnvironment: noop,
         startLexicalEnvironment: noop,
