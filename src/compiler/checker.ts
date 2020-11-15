@@ -18173,7 +18173,6 @@ namespace ts {
                                 return Ternary.False;
                             }
                             result &= related;
-                        
                         }
                         return result;
                     }
@@ -31928,8 +31927,7 @@ namespace ts {
             let seenOptionalElement = false;
             let seenRestElement = false;
             const hasNamedElement = some(elementTypes, isNamedTupleMember);
-            for (let i = 0; i < elementTypes.length; i++) {
-                const e = elementTypes[i];
+            for (const e of elementTypes) {
                 if (e.kind !== SyntaxKind.NamedTupleMember && hasNamedElement) {
                     grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
                     break;
