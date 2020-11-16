@@ -260,17 +260,17 @@ namespace ts.codefix {
             case SyntaxKind.MethodDeclaration:
                 // Don't remove a parameter if this overrides something.
                 const symbol = checker.getSymbolAtLocation(parent.name)!;
-                return !getPropertySymbolsFromBaseTypes(symbol.parent!, symbol!.name, checker, _ => true);
+                return !getPropertySymbolsFromBaseTypes(symbol.parent!, symbol.name, checker, _ => true);
             case SyntaxKind.Constructor:
                 const index = parent.parameters.indexOf(parameter);
-                const references = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, parent, program, sourceFiles, cancellationToken);
-                if (references) {
-                    for (const refwrap of references) {
-                        for (const ref of refwrap.references) {
-                            if (ref.kind === FindAllReferences.EntryKind.Node
-                                && isSuperKeyword(ref.node)
-                                && isCallExpression(ref.node.parent)
-                                && ref.node.parent.arguments.length >= index) {
+                const entries = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, parent, program, sourceFiles, cancellationToken);
+                if (entries) {
+                    for (const entry of entries) {
+                        for (const reference of entry.references) {
+                            if (reference.kind === FindAllReferences.EntryKind.Node
+                                && isSuperKeyword(reference.node)
+                                && isCallExpression(reference.node.parent)
+                                && reference.node.parent.arguments.length > index) {
                                 return false;
                             }
                         }
