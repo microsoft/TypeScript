@@ -208,15 +208,25 @@ namespace ts.server {
             try {
                 if (this.operationHost.isCancellationRequested()) {
                     stop = true;
+                    tracing.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId, early: true });
                 }
                 else {
+                    tracing.push(tracing.Phase.Session, "stepAction", { seq: this.requestId });
                     action(this);
+                    tracing.pop();
                 }
             }
             catch (e) {
+                // Cancellation or an error may have left incomplete events on the tracing stack.
+                tracing.popAll();
+
                 stop = true;
                 // ignore cancellation request
-                if (!(e instanceof OperationCanceledException)) {
+                if (e instanceof OperationCanceledException) {
+                    tracing.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId });
+                }
+                else {
+                    tracing.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (<Error>e).message });
                     this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
                 }
             }
@@ -914,6 +924,7 @@ namespace ts.server {
         }
 
         public event<T extends object>(body: T, eventName: string): void {
+            tracing.instant(tracing.Phase.Session, "event", { eventName });
             this.send(toEvent(eventName, body));
         }
 
@@ -2915,8 +2926,12 @@ namespace ts.server {
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
+                tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
                 perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
+
+                tracing.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
                 const { response, responseRequired } = this.executeCommand(request);
+                tracing.pop();
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
                     const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
@@ -2930,6 +2945,7 @@ namespace ts.server {
 
                 // Note: Log before writing the response, else the editor can complete its activity before the server does
                 perfLogger.logStopCommand("" + request.command, "Success");
+                tracing.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
@@ -2938,15 +2954,20 @@ namespace ts.server {
                 }
             }
             catch (err) {
+                // Cancellation or an error may have left incomplete events on the tracing stack.
+                tracing.popAll();
+
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
                     perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
+                    tracing.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, message, relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
+                tracing.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
 
                 this.doOutput(
                     /*info*/ undefined,
