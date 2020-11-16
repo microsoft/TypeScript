@@ -1192,6 +1192,10 @@
         "category": "Error",
         "code": 1391
     },
+    "An import alias cannot use 'import type'": {
+        "category": "Error",
+        "code": 1392
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200

@@ -2488,7 +2488,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
-            if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false)) {
+            if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false) && !node.isTypeOnly) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
                 const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
                 const message = isExport
@@ -36424,6 +36424,9 @@ namespace ts {
                         if (target.flags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
                         }
+                    }
+                    if (node.isTypeOnly) {
+                        grammarErrorOnNode(node, Diagnostics.An_import_alias_cannot_use_import_type);
                     }
                 }
                 else {
