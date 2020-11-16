@@ -616,7 +616,8 @@ namespace ts.FindAllReferences {
             }
 
             const checker = program.getTypeChecker();
-            const symbol = checker.getSymbolAtLocation(node);
+            // constructors should use the class symbol, detected by name, if present
+            const symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -874,6 +875,7 @@ namespace ts.FindAllReferences {
 
         function getSpecialSearchKind(node: Node): SpecialSearchKind {
             switch (node.kind) {
+                case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructorKeyword:
                     return SpecialSearchKind.Constructor;
                 case SyntaxKind.Identifier:
