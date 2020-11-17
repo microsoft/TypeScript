@@ -627,6 +627,7 @@ namespace ts {
             getESSymbolType: () => esSymbolType,
             getNeverType: () => neverType,
             getOptionalType: () => optionalType,
+            getGlobalObjectType: () => globalObjectType,
             isSymbolAccessible,
             isArrayType,
             isTupleType,
@@ -704,6 +705,9 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
+
+            isTypeSubsetOf,
+            isEmptyObjectType,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
@@ -21162,7 +21166,7 @@ namespace ts {
         }
 
         function isTypeSubsetOf(source: Type, target: Type) {
-            return source === target || target.flags & TypeFlags.Union && isTypeSubsetOfUnion(source, <UnionType>target);
+            return source === target || !!(target.flags & TypeFlags.Union) && isTypeSubsetOfUnion(source, <UnionType>target);
         }
 
         function isTypeSubsetOfUnion(source: Type, target: UnionType) {

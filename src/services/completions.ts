@@ -1892,6 +1892,8 @@ namespace ts.Completions {
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
+
+                // Check completions for Object property value shorthand
                 if (instantiatedType === undefined) {
                     if (objectLikeContainer.flags & (NodeFlags.ThisNodeHasError | NodeFlags.InWithStatement)) {
                         return GlobalsSearch.Fail;
@@ -1899,10 +1901,20 @@ namespace ts.Completions {
                     return GlobalsSearch.Continue;
                 }
                 const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
-                if (completionsType && (completionsType?.flags & TypeFlags.Any)) {
+                if (completionsType && (completionsType?.flags & (TypeFlags.Any | TypeFlags.Unknown))) {
                     return GlobalsSearch.Continue;
                 }
-                isNewIdentifierLocation = hasIndexSignature(completionsType || instantiatedType);
+                const validType = completionsType || instantiatedType;
+                if (typeChecker.isTypeSubsetOf(typeChecker.getGlobalObjectType(), validType) || typeChecker.isEmptyObjectType(validType)) {
+                    return GlobalsSearch.Continue;
+                }
+                const hasStringIndexType = validType.getStringIndexType();
+                const hasNumberIndextype = validType.getNumberIndexType();
+                if (hasStringIndexType) {
+                    return GlobalsSearch.Continue;
+                }
+
+                isNewIdentifierLocation = (!!hasStringIndexType || !!hasNumberIndextype);
                 typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
             }

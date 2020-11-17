@@ -9,7 +9,10 @@
 
 verify.completions({
   marker: "1",
-  exact: []
+  includes: [{
+    name: "Object",
+    sortText: completion.SortText.GlobalsOrKeywords
+  }]
 });
 
 verify.completions({
