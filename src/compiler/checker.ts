@@ -16889,9 +16889,8 @@ namespace ts {
                 if (source === target) return Ternary.True;
 
                 if (relation === identityRelation) {
-                    return isIdenticalTo(source, target);
+                    return isIdenticalTo(source, target, reportErrors);
                 }
-
 
                 // We fastpath comparing a type parameter to exactly its constraint, as this is _super_ common,
                 // and otherwise, for type parameters in large unions, causes us to need to compare the union to itself,
@@ -16950,6 +16949,10 @@ namespace ts {
                             reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, typeToString(source), typeToString(target));
                         }
                     }
+                    return Ternary.False;
+                }
+
+                if (areUnionsOrIntersectionsTooLarge(source, target, reportErrors)) {
                     return Ternary.False;
                 }
 
@@ -17088,9 +17091,28 @@ namespace ts {
                 }
             }
 
-            function isIdenticalTo(source: Type, target: Type): Ternary {
+            function areUnionsOrIntersectionsTooLarge(source: Type, target: Type, reportErrors: boolean) {
+                if ((source.flags & TypeFlags.UnionOrIntersection) && (target.flags & TypeFlags.UnionOrIntersection)) {
+                    const sourceSize = (source as UnionOrIntersectionType).types.length;
+                    const targetSize = (target as UnionOrIntersectionType).types.length;
+                    if (sourceSize * targetSize > 1E7) {
+                        if (reportErrors) {
+                            tracing.instant(tracing.Phase.CheckTypes, "areUnionsOrIntersectionsTooLarge_DepthLimit", { sourceId: source.id, sourceSize, targetId: target.id, targetSize });
+                            reportError(Diagnostics.Expression_requires_comparison_of_excessively_large_unions_or_intersections);
+                        }
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function isIdenticalTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (!(flags & TypeFlags.Substructure)) {
+                    return Ternary.False;
+                }
+                if (areUnionsOrIntersectionsTooLarge(source, target, reportErrors)) {
                     return Ternary.False;
                 }
                 if (flags & TypeFlags.UnionOrIntersection) {
