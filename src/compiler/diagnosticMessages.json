@@ -2293,7 +2293,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'.": {
+    "Property '{0}' does not exist on type '{1}'. Did you mean to access the static member '{2}' instead?": {
         "category": "Error",
         "code": 2576
     },
