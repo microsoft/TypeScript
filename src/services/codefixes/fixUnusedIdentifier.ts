@@ -258,20 +258,28 @@ namespace ts.codefix {
         const { parent } = parameter;
         switch (parent.kind) {
             case SyntaxKind.MethodDeclaration:
-                // Don't remove a parameter if this overrides something.
-                const symbol = checker.getSymbolAtLocation(parent.name)!;
-                return !getPropertySymbolsFromBaseTypes(symbol.parent!, symbol.name, checker, _ => true);
             case SyntaxKind.Constructor:
                 const index = parent.parameters.indexOf(parameter);
-                const entries = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, parent, program, sourceFiles, cancellationToken);
+                const referent = isMethodDeclaration(parent) ? parent.name : parent;
+                const entries = FindAllReferences.Core.getReferencedSymbolsForNode(parent.pos, referent, program, sourceFiles, cancellationToken);
                 if (entries) {
                     for (const entry of entries) {
                         for (const reference of entry.references) {
-                            if (reference.kind === FindAllReferences.EntryKind.Node
-                                && isSuperKeyword(reference.node)
-                                && isCallExpression(reference.node.parent)
-                                && reference.node.parent.arguments.length > index) {
-                                return false;
+                            if (reference.kind === FindAllReferences.EntryKind.Node) {
+                                // argument in super(...)
+                                const isSuperCall = isSuperKeyword(reference.node)
+                                    && isCallExpression(reference.node.parent)
+                                    && reference.node.parent.arguments.length > index;
+                                // argument in super.m(...)
+                                const isSuperMethodCall = isPropertyAccessExpression(reference.node.parent)
+                                    && isSuperKeyword(reference.node.parent.expression)
+                                    && isCallExpression(reference.node.parent.parent)
+                                    && reference.node.parent.parent.arguments.length > index;
+                                // parameter in overridden or overriding method
+                                const isOverriddenMethod = (isMethodDeclaration(reference.node.parent) || isMethodSignature(reference.node.parent))
+                                    && reference.node.parent !== parameter.parent
+                                    && reference.node.parent.parameters.length > index;
+                                if (isSuperCall || isSuperMethodCall || isOverriddenMethod) return false;
                             }
                         }
                     }
