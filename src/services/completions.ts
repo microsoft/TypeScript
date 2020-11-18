@@ -1892,7 +1892,7 @@ namespace ts.Completions {
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
-                
+
                 // Check completions for Object property value shorthand
                 if (instantiatedType === undefined) {
                     if (objectLikeContainer.flags & (NodeFlags.ThisNodeHasError | NodeFlags.InWithStatement)) {
@@ -1904,7 +1904,7 @@ namespace ts.Completions {
                 const hasStringIndexType = (completionsType || instantiatedType).getStringIndexType();
                 const hasNumberIndextype = (completionsType || instantiatedType).getNumberIndexType();
                 isNewIdentifierLocation = !!hasStringIndexType || !!hasNumberIndextype;
-                typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker, /*ignoreGlobalObject*/true);
+                typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker, /*ignoreGlobalObject*/ true);
                 existingMembers = objectLikeContainer.properties;
 
                 if (typeMembers.length === 0) {
@@ -2696,7 +2696,7 @@ namespace ts.Completions {
             ? checker.getUnionType([contextualType, completionsType!])
             : contextualType;
 
-        let properties = type.isUnion()
+        const properties = type.isUnion()
             ? checker.getAllPossiblePropertiesOfTypes(type.types.filter(memberType =>
                 // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
                 !(memberType.flags & TypeFlags.Primitive ||
