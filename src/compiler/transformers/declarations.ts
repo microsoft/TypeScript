@@ -633,6 +633,7 @@ namespace ts {
                 || isTypeAliasDeclaration(node)
                 || isModuleDeclaration(node)
                 || isClassDeclaration(node)
+                || isClassExpression(node)
                 || isInterfaceDeclaration(node)
                 || isFunctionLike(node)
                 || isIndexSignatureDeclaration(node)

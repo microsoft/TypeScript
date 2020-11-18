@@ -1176,6 +1176,10 @@ namespace ts {
             || kind === SyntaxKind.Identifier;
     }
 
+    export function isEntityNameOrClassExpression(node: Node): node is EntityName {
+        return isEntityName(node) || node.kind === SyntaxKind.ClassExpression;
+    }
+
     export function isPropertyName(node: Node): node is PropertyName {
         const kind = node.kind;
         return kind === SyntaxKind.Identifier

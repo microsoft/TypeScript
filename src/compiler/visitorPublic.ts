@@ -491,7 +491,7 @@ namespace ts {
 
             case SyntaxKind.TypeQuery:
                 return factory.updateTypeQueryNode((<TypeQueryNode>node),
-                    nodeVisitor((<TypeQueryNode>node).exprName, visitor, isEntityName));
+                    nodeVisitor((<TypeQueryNode>node).exprName, visitor, isEntityNameOrClassExpression));
 
             case SyntaxKind.TypeLiteral:
                 return factory.updateTypeLiteralNode((<TypeLiteralNode>node),
