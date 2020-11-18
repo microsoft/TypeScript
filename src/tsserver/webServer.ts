@@ -279,8 +279,6 @@ namespace ts.server {
                     this.onMessage(message.data);
                 });
             }
-
-            // TODO:: Update all responses to use webPath
         }
 
         const session = new WorkerSession();
