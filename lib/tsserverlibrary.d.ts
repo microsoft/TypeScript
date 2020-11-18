@@ -2181,10 +2181,7 @@ declare namespace ts {
          * if the cancellation token is triggered. Typically, if it is used for error checking
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
-        runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
-
-        isTypeSubsetOf(source: Type, target: Type): boolean;
-        isEmptyObjectType(type: Type): boolean;
+        runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;;
     }
     export enum NodeBuilderFlags {
         None = 0,

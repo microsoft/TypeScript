@@ -10,13 +10,16 @@
 //// declare function f4(obj: Record<string, any>): void;
 //// declare function f5(obj: Record<number, any>): void;
 //// declare function f6(obj: { [key: string]: number }): void;
-//// declare function f7(obj: { [key: number]: number }): void;
-//// declare function f8(obj: Typed): void;
-//// declare function f9<T extends object>(obj: T): void;
-//// declare function f10<T extends Object>(obj: T): void;
-//// declare function f11<T extends {}>(obj: T): void;
-//// declare function f12<T extends Empty>(obj: T): void;
-//// declare function f13<T extends (Empty | Object | Typed)>(obj: T): void;
+//// declare function f7(obj: { [key: string]: number, prop: number }): void;
+//// declare function f8(obj: { [key: number]: number }): void;
+//// declare function f9(obj: Typed): void;
+//// declare function f10<T>(obj: T): void;
+//// declare function f11<T extends object>(obj: T): void;
+//// declare function f12<T extends Object>(obj: T): void;
+//// declare function f13<T extends {}>(obj: T): void;
+//// declare function f14<T extends Empty>(obj: T): void;
+//// declare function f15<T extends (Empty | Record<string, any> | Object)>(obj: T): void;
+//// declare function f16<T extends (Empty | Object | Typed)>(obj: T): void;
 
 //// f1({f/*1*/});
 //// f2({f/*2*/});
@@ -31,9 +34,12 @@
 //// f11({f/*11*/});
 //// f12({f/*12*/});
 //// f13({f/*13*/});
+//// f14({f/*14*/});
+//// f15({f/*15*/});
+//// f16({f/*16*/});
 
 verify.completions(
-    { marker: ["1", "2", "3", "4", "6", "9", "10", "11", "12", "13"], includes: ["foo"]},
-    { marker: ["5", "7"], excludes: ["foo"], isNewIdentifierLocation: true},
-    { marker: ["8"], excludes: ["foo"]},
+    { marker: ["1", "2", "3", "4", "6", "10", "11", "12", "13", "14", "15"], includes: ["foo"]},
+    { marker: ["5", "7", "8"], excludes: ["foo"], isNewIdentifierLocation: true},
+    { marker: ["9", "16"], excludes: ["foo"]},
 );

@@ -4075,7 +4075,7 @@ namespace ts {
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
         /* @internal */ getOptionalType(): Type;
-        /* @internal */ getGlobalObjectType(): Type;
+        /* @internal */ getGlobalObjectType: () => Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
@@ -4169,9 +4169,6 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
-
-        isTypeSubsetOf(source: Type, target: Type): boolean;
-        isEmptyObjectType(type: Type): boolean;
     }
 
     /* @internal */

@@ -705,9 +705,6 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
-
-            isTypeSubsetOf,
-            isEmptyObjectType,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
