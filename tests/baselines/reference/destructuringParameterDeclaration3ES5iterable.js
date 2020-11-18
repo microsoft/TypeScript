@@ -111,7 +111,7 @@ function a11(_a) {
 var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
 a2(__spreadArray([], __read(array)));
-a1.apply(void 0, array);
+a1.apply(void 0, __spreadArray([], __read(array)));
 a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
 a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
 a10([1, 2, 3, false, true]); // Parameter type is any[]

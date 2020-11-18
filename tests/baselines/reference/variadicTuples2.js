@@ -134,12 +134,10 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 //// [variadicTuples2.js]
 "use strict";
 // Declarations
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 tt1 = [5];
 tt1 = ['abc', 5];
@@ -193,14 +191,14 @@ pipe("foo", 123, true, function () {
     }
     x; // [string, number, boolean]
 });
-pipe.apply(void 0, __spreadArrays(sa, [function () {
+pipe.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
         x; // string[]
     }]));
-pipe.apply(void 0, __spreadArrays([1], sa, [2, function () {
+pipe.apply(void 0, __spreadArray(__spreadArray([1], sa), [2, function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];

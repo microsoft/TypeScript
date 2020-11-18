@@ -617,34 +617,6 @@ namespace ts {
             };`
     };
 
-    /** @deprecated To be removed in TS >= 4.3, as it may be referenced in a tsbuildinfo */
-    export const spreadHelper: UnscopedEmitHelper = {
-        name: "typescript:spread",
-        importName: "__spread",
-        scoped: false,
-        dependencies: [readHelper],
-        text: `
-            var __spread = (this && this.__spread) || function () {
-                for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-                return ar;
-            };`
-    };
-
-    /** @deprecated To be removed in TS >= 4.3, as it may be referenced in a tsbuildinfo */
-    export const spreadArraysHelper: UnscopedEmitHelper = {
-        name: "typescript:spreadArrays",
-        importName: "__spreadArrays",
-        scoped: false,
-        text: `
-            var __spreadArrays = (this && this.__spreadArrays) || function () {
-                for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-                for (var r = Array(s), k = 0, i = 0; i < il; i++)
-                    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                        r[k] = a[j];
-                return r;
-            };`
-    };
-
     export const spreadArrayHelper: UnscopedEmitHelper = {
         name: "typescript:spreadArray",
         importName: "__spreadArray",
@@ -888,8 +860,6 @@ namespace ts {
             awaiterHelper,
             extendsHelper,
             templateObjectHelper,
-            spreadHelper,
-            spreadArraysHelper,
             spreadArrayHelper,
             valuesHelper,
             readHelper,
@@ -920,4 +890,11 @@ namespace ts {
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
             })(name => super[name], (name, value) => super[name] = value);`
     };
+
+    export function isCallToHelper(firstSegment: Expression, helperName: __String) {
+        return isCallExpression(firstSegment)
+            && isIdentifier(firstSegment.expression)
+            && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+            && firstSegment.expression.escapedText === helperName;
+    }
 }

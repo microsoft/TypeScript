@@ -3892,6 +3892,8 @@ namespace ts {
          *
          * @param elements The array of Expression nodes.
          * @param needsUniqueCopy A value indicating whether to ensure that the result is a fresh array.
+         * This should be `true` when spreading into an `ArrayLiteral`, and `false` when spreading into an
+         * argument list.
          * @param multiLine A value indicating whether the result should be emitted on multiple lines.
          */
         function transformAndSpreadElements(elements: NodeArray<Expression>, needsUniqueCopy: boolean, multiLine: boolean, hasTrailingComma: boolean): Expression {
@@ -3916,6 +3918,15 @@ namespace ts {
             //
             // [output]
             //      __spreadArray(__spreadArray([], a), [b])
+            //
+            // NOTE: We use `isPackedArrayLiteral` below rather than just `isArrayLiteral`
+            // because ES2015 spread will replace _missing_ array elements with `undefined`,
+            // so we cannot just use an array as is. For example:
+            //
+            // `[1, ...[2, , 3]]` becomes `[1, 2, undefined, 3]`
+            //
+            // However, for packed array literals (i.e., an array literal with no OmittedExpression
+            // elements), we can use the array as-is.
 
             // Map spans of spread expressions into their expressions and spans of other
             // expressions into an array literal.
@@ -3926,16 +3937,20 @@ namespace ts {
                 )
             );
 
-            const helpers = emitHelpers();
             if (segments.length === 1) {
                 const firstSegment = segments[0];
-                if (!needsUniqueCopy
-                    || isPackedArrayLiteral(firstSegment)
+                // If we don't need a unique copy, then we are spreading into an argument list for
+                // a CallExpression or NewExpression. When using `--downlevelIteration`, we need
+                // to coerce this into an array for use with `apply`, so we will use the code path
+                // that follows instead.
+                if (!needsUniqueCopy && !compilerOptions.downlevelIteration
+                    || isPackedArrayLiteral(firstSegment) // see NOTE (above)
                     || isCallToHelper(firstSegment, "___spreadArray" as __String)) {
                     return segments[0];
                 }
             }
 
+            const helpers = emitHelpers();
             const startsWithSpread = isSpreadElement(elements[0]);
             let expression: Expression =
                 startsWithSpread ? factory.createArrayLiteralExpression() :
@@ -3943,27 +3958,12 @@ namespace ts {
             for (let i = startsWithSpread ? 0 : 1; i < segments.length; i++) {
                 expression = helpers.createSpreadArrayHelper(
                     expression,
-                    compilerOptions.downlevelIteration && !isArrayLiteralExpression(segments[i]) ?
+                    compilerOptions.downlevelIteration && !isPackedArrayLiteral(segments[i]) ? // see NOTE (above)
                         helpers.createReadHelper(segments[i], /*count*/ undefined) :
                         segments[i]);
             }
 
             return expression;
-        }
-
-        function isPackedElement(node: Expression) {
-            return !isOmittedExpression(node);
-        }
-
-        function isPackedArrayLiteral(node: Expression) {
-            return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
-        }
-
-        function isCallToHelper(firstSegment: Expression, helperName: __String) {
-            return isCallExpression(firstSegment)
-                && isIdentifier(firstSegment.expression)
-                && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
-                && firstSegment.expression.escapedText === helperName;
         }
 
         function partitionSpread(node: Expression) {

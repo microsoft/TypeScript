@@ -615,7 +615,8 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
         const content = fs.readFileSync(path, "utf8");
         fs.writeFileSync(path, `${content}
 function ${project}${file}Spread(...b: number[]) { }
-${project}${file}Spread(...[10, 20, 30]);`);
+const ${project}${file}_ar = [20, 30];
+${project}${file}Spread(10, ...${project}${file}_ar);`);
 
         replaceText(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
     "downlevelIteration": true,`);
