@@ -69,6 +69,9 @@ var f;
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 
+/** @type {typeof class { s: string; static n: number }} */
+var ctor2;
+
 // @filename: b.ts
 var S: string;
 var s: string;
@@ -92,3 +95,4 @@ var obj: any;
 var Func: Function;
 var f: (s: string) => number;
 var ctor: new (s: string) => { s: string };
+var ctor2: typeof class { s: string; static n: number };
