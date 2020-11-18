@@ -848,7 +848,7 @@ namespace ts {
                 getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(input as DeclarationDiagnosticProducing);
             }
 
-            if (isTypeQueryNode(input)) {
+            if (isTypeQueryNode(input) && input.exprName.kind !== SyntaxKind.ClassExpression) {
                 checkEntityNameVisibility(input.exprName, enclosingDeclaration);
             }
 

@@ -1733,7 +1733,7 @@ namespace ts {
         }
 
         // @api
-        function createTypeQueryNode(exprName: EntityName) {
+        function createTypeQueryNode(exprName: EntityName | ClassExpression) {
             const node = createBaseNode<TypeQueryNode>(SyntaxKind.TypeQuery);
             node.exprName = exprName;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -1741,7 +1741,7 @@ namespace ts {
         }
 
         // @api
-        function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
+        function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName | ClassExpression) {
             return node.exprName !== exprName
                 ? update(createTypeQueryNode(exprName), node)
                 : node;

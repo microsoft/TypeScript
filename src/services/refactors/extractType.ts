@@ -157,7 +157,7 @@ namespace ts.refactor {
                     return true;
                 }
             }
-            else if (isTypeQueryNode(node)) {
+            else if (isTypeQueryNode(node) && node.exprName.kind !== SyntaxKind.ClassExpression) {
                 if (isIdentifier(node.exprName)) {
                     const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /* excludeGlobals */ false);
                     if (symbol && rangeContainsSkipTrivia(statement, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {

@@ -1543,7 +1543,7 @@ namespace ts {
 
     export interface TypeQueryNode extends TypeNode {
         readonly kind: SyntaxKind.TypeQuery;
-        readonly exprName: EntityName;
+        readonly exprName: EntityName | ClassExpression;
     }
 
     // A TypeLiteral is the declaration node for an anonymous symbol.
@@ -6801,8 +6801,8 @@ namespace ts {
         updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): FunctionTypeNode;
         createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        createTypeQueryNode(exprName: EntityName): TypeQueryNode;
-        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
+        createTypeQueryNode(exprName: EntityName | ClassExpression): TypeQueryNode;
+        updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName | ClassExpression): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
         createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;

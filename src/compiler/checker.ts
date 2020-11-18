@@ -12521,7 +12521,9 @@ namespace ts {
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
-                links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(checkExpression(node.exprName)));
+                links.resolvedType = node.exprName.kind === SyntaxKind.ClassExpression ?
+                    checkClassExpression(node.exprName) :
+                    getRegularTypeOfLiteralType(getWidenedType(checkExpression(node.exprName)));
             }
             return links.resolvedType;
         }
@@ -38978,7 +38980,8 @@ namespace ts {
                         if (flags & ModifierFlags.Abstract) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
                         }
-                        if (node.kind !== SyntaxKind.ClassDeclaration) {
+                        // An abstract modifier is permitted on a class expression in a 'typeof abstract class {}' type
+                        if (node.kind !== SyntaxKind.ClassDeclaration && node.kind !== SyntaxKind.ClassExpression) {
                             if (node.kind !== SyntaxKind.MethodDeclaration &&
                                 node.kind !== SyntaxKind.PropertyDeclaration &&
                                 node.kind !== SyntaxKind.GetAccessor &&
@@ -39092,6 +39095,8 @@ namespace ts {
                         case SyntaxKind.FunctionDeclaration:
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.AsyncKeyword);
                         case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.ClassExpression:
+                            // An abstract modifier is permitted on a class expression in a 'typeof abstract class {}' type
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.AbstractKeyword);
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.VariableStatement:

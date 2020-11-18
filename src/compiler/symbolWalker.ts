@@ -182,8 +182,10 @@ namespace ts {
                     // query node on any of the symbol's declarations and get symbols there
                     if ((d as any).type && (d as any).type.kind === SyntaxKind.TypeQuery) {
                         const query = (d as any).type as TypeQueryNode;
-                        const entity = getResolvedSymbol(getFirstIdentifier(query.exprName));
-                        visitSymbol(entity);
+                        if (query.exprName.kind !== SyntaxKind.ClassExpression) {
+                            const entity = getResolvedSymbol(getFirstIdentifier(query.exprName));
+                            visitSymbol(entity);
+                        }
                     }
                 });
                 return false;

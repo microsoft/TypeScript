@@ -2860,10 +2860,24 @@ namespace ts {
             return type;
         }
 
+        function isStartOfTypeofClassExpression() {
+            return token() === SyntaxKind.ClassKeyword ||
+                token() === SyntaxKind.AbstractKeyword && lookAhead(() => nextToken() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak());
+        }
+
+        function parseTypeofClassExpression(): ClassExpression {
+            const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
+            const modifiers = parseModifiers();
+            return <ClassExpression>parseClassDeclarationOrExpression(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.ClassExpression);
+        }
+
         function parseTypeQuery(): TypeQueryNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.TypeOfKeyword);
-            return finishNode(factory.createTypeQueryNode(parseEntityName(/*allowReservedWords*/ true)), pos);
+            return finishNode(factory.createTypeQueryNode(isStartOfTypeofClassExpression() ?
+                doInsideOfContext(NodeFlags.Ambient, parseTypeofClassExpression) :
+                parseEntityName(/*allowReservedWords*/ true)), pos);
         }
 
         function parseTypeParameter(): TypeParameterDeclaration {
