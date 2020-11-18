@@ -87,6 +87,10 @@ var f;
 var ctor;
 >ctor : new (s: string) => { s: string; }
 
+/** @type {typeof class { s: string; static n: number }} */
+var ctor2;
+>ctor2 : typeof (Anonymous class)
+
 === tests/cases/conformance/jsdoc/b.ts ===
 var S: string;
 >S : string
@@ -159,4 +163,10 @@ var ctor: new (s: string) => { s: string };
 >ctor : new (s: string) => { s: string; }
 >s : string
 >s : string
+
+var ctor2: typeof class { s: string; static n: number };
+>ctor2 : typeof (Anonymous class)
+>class { s: string; static n: number } : typeof (Anonymous class)
+>s : string
+>n : number
 

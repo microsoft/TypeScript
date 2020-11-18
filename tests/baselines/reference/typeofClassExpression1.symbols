@@ -1,0 +1,372 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofClassExpression1.ts ===
+type TC1 = typeof class {
+>TC1 : Symbol(TC1, Decl(typeofClassExpression1.ts, 0, 0))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(typeofClassExpression1.ts, 1, 16))
+
+    static n: number;
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 1, 27))
+
+    s: string;
+>s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 2, 21))
+}
+
+declare let C1: TC1;
+>C1 : Symbol(C1, Decl(typeofClassExpression1.ts, 6, 11))
+>TC1 : Symbol(TC1, Decl(typeofClassExpression1.ts, 0, 0))
+
+C1.n;
+>C1.n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 1, 27))
+>C1 : Symbol(C1, Decl(typeofClassExpression1.ts, 6, 11))
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 1, 27))
+
+let c1 = new C1('hello');
+>c1 : Symbol(c1, Decl(typeofClassExpression1.ts, 8, 3))
+>C1 : Symbol(C1, Decl(typeofClassExpression1.ts, 6, 11))
+
+c1.s;
+>c1.s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 2, 21))
+>c1 : Symbol(c1, Decl(typeofClassExpression1.ts, 8, 3))
+>s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 2, 21))
+
+declare let C2: typeof class {
+>C2 : Symbol(C2, Decl(typeofClassExpression1.ts, 11, 11))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(typeofClassExpression1.ts, 12, 16))
+
+    static n: number;
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 12, 27))
+
+    s: string;
+>s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 13, 21))
+}
+C2.n;
+>C2.n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 12, 27))
+>C2 : Symbol(C2, Decl(typeofClassExpression1.ts, 11, 11))
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 12, 27))
+
+let c2 = new C2('hello');
+>c2 : Symbol(c2, Decl(typeofClassExpression1.ts, 17, 3))
+>C2 : Symbol(C2, Decl(typeofClassExpression1.ts, 11, 11))
+
+c2.s;
+>c2.s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 13, 21))
+>c2 : Symbol(c2, Decl(typeofClassExpression1.ts, 17, 3))
+>s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 13, 21))
+
+declare let C3: typeof class extends Error {
+>C3 : Symbol(C3, Decl(typeofClassExpression1.ts, 20, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(typeofClassExpression1.ts, 21, 16))
+
+    static n: number;
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 21, 27))
+}
+C3.n;
+>C3.n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 21, 27))
+>C3 : Symbol(C3, Decl(typeofClassExpression1.ts, 20, 11))
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 21, 27))
+
+let c3 = new C3('hello');
+>c3 : Symbol(c3, Decl(typeofClassExpression1.ts, 25, 3))
+>C3 : Symbol(C3, Decl(typeofClassExpression1.ts, 20, 11))
+
+c3.message;
+>c3.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>c3 : Symbol(c3, Decl(typeofClassExpression1.ts, 25, 3))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+
+declare let C4: typeof abstract class {
+>C4 : Symbol(C4, Decl(typeofClassExpression1.ts, 28, 11))
+
+    constructor(s: string);
+>s : Symbol(s, Decl(typeofClassExpression1.ts, 29, 16))
+
+    static n: number;
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 29, 27))
+
+    s: string;
+>s : Symbol((Anonymous class).s, Decl(typeofClassExpression1.ts, 30, 21))
+}
+C4.n;
+>C4.n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 29, 27))
+>C4 : Symbol(C4, Decl(typeofClassExpression1.ts, 28, 11))
+>n : Symbol((Anonymous class).n, Decl(typeofClassExpression1.ts, 29, 27))
+
+let c4 = new C4('hello');  // Error
+>c4 : Symbol(c4, Decl(typeofClassExpression1.ts, 34, 3))
+>C4 : Symbol(C4, Decl(typeofClassExpression1.ts, 28, 11))
+
+declare let C5: typeof class<T> {
+>C5 : Symbol(C5, Decl(typeofClassExpression1.ts, 36, 11))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 36, 29))
+
+    constructor(x: T);
+>x : Symbol(x, Decl(typeofClassExpression1.ts, 37, 16))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 36, 29))
+
+    x: T;
+>x : Symbol((Anonymous class).x, Decl(typeofClassExpression1.ts, 37, 22))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 36, 29))
+}
+
+let c51 = new C5('hello');
+>c51 : Symbol(c51, Decl(typeofClassExpression1.ts, 41, 3))
+>C5 : Symbol(C5, Decl(typeofClassExpression1.ts, 36, 11))
+
+c51.x;
+>c51.x : Symbol((Anonymous class).x, Decl(typeofClassExpression1.ts, 37, 22))
+>c51 : Symbol(c51, Decl(typeofClassExpression1.ts, 41, 3))
+>x : Symbol((Anonymous class).x, Decl(typeofClassExpression1.ts, 37, 22))
+
+let c52 = new C5(42);
+>c52 : Symbol(c52, Decl(typeofClassExpression1.ts, 43, 3))
+>C5 : Symbol(C5, Decl(typeofClassExpression1.ts, 36, 11))
+
+c52.x;
+>c52.x : Symbol((Anonymous class).x, Decl(typeofClassExpression1.ts, 37, 22))
+>c52 : Symbol(c52, Decl(typeofClassExpression1.ts, 43, 3))
+>x : Symbol((Anonymous class).x, Decl(typeofClassExpression1.ts, 37, 22))
+
+type BoxFactory<T> = typeof class Box {
+>BoxFactory : Symbol(BoxFactory, Decl(typeofClassExpression1.ts, 44, 6))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 46, 16))
+>Box : Symbol(Box, Decl(typeofClassExpression1.ts, 46, 27))
+
+    static default: T;
+>default : Symbol(Box.default, Decl(typeofClassExpression1.ts, 46, 39))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 46, 16))
+
+    constructor(value?: T);
+>value : Symbol(value, Decl(typeofClassExpression1.ts, 48, 16))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 46, 16))
+
+    value: T;
+>value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 46, 16))
+}
+
+declare let StringBox: BoxFactory<string>;
+>StringBox : Symbol(StringBox, Decl(typeofClassExpression1.ts, 52, 11))
+>BoxFactory : Symbol(BoxFactory, Decl(typeofClassExpression1.ts, 44, 6))
+
+StringBox.default;
+>StringBox.default : Symbol(Box.default, Decl(typeofClassExpression1.ts, 46, 39))
+>StringBox : Symbol(StringBox, Decl(typeofClassExpression1.ts, 52, 11))
+>default : Symbol(Box.default, Decl(typeofClassExpression1.ts, 46, 39))
+
+let sb = new StringBox('hello');
+>sb : Symbol(sb, Decl(typeofClassExpression1.ts, 54, 3))
+>StringBox : Symbol(StringBox, Decl(typeofClassExpression1.ts, 52, 11))
+
+sb.value;
+>sb.value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+>sb : Symbol(sb, Decl(typeofClassExpression1.ts, 54, 3))
+>value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+
+declare let NumberBox: BoxFactory<number>;
+>NumberBox : Symbol(NumberBox, Decl(typeofClassExpression1.ts, 57, 11))
+>BoxFactory : Symbol(BoxFactory, Decl(typeofClassExpression1.ts, 44, 6))
+
+NumberBox.default;
+>NumberBox.default : Symbol(Box.default, Decl(typeofClassExpression1.ts, 46, 39))
+>NumberBox : Symbol(NumberBox, Decl(typeofClassExpression1.ts, 57, 11))
+>default : Symbol(Box.default, Decl(typeofClassExpression1.ts, 46, 39))
+
+let nb = new NumberBox(42);
+>nb : Symbol(nb, Decl(typeofClassExpression1.ts, 59, 3))
+>NumberBox : Symbol(NumberBox, Decl(typeofClassExpression1.ts, 57, 11))
+
+nb.value;
+>nb.value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+>nb : Symbol(nb, Decl(typeofClassExpression1.ts, 59, 3))
+>value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+
+declare const sb1: InstanceType<BoxFactory<string>>;
+>sb1 : Symbol(sb1, Decl(typeofClassExpression1.ts, 62, 13))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>BoxFactory : Symbol(BoxFactory, Decl(typeofClassExpression1.ts, 44, 6))
+
+sb1.value;
+>sb1.value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+>sb1 : Symbol(sb1, Decl(typeofClassExpression1.ts, 62, 13))
+>value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+
+declare const nb1: InstanceType<BoxFactory<number>>;
+>nb1 : Symbol(nb1, Decl(typeofClassExpression1.ts, 65, 13))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>BoxFactory : Symbol(BoxFactory, Decl(typeofClassExpression1.ts, 44, 6))
+
+nb1.value;
+>nb1.value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+>nb1 : Symbol(nb1, Decl(typeofClassExpression1.ts, 65, 13))
+>value : Symbol(Box.value, Decl(typeofClassExpression1.ts, 48, 27))
+
+function Printable1<T extends new (...args: any[]) => object>(Base: T) {
+>Printable1 : Symbol(Printable1, Decl(typeofClassExpression1.ts, 66, 10))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 68, 20))
+>args : Symbol(args, Decl(typeofClassExpression1.ts, 68, 35))
+>Base : Symbol(Base, Decl(typeofClassExpression1.ts, 68, 62))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 68, 20))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(typeofClassExpression1.ts, 68, 62))
+
+        static foo: string;
+>foo : Symbol((Anonymous class).foo, Decl(typeofClassExpression1.ts, 69, 31))
+
+        print() {}
+>print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 70, 27))
+    }
+}
+
+declare function Printable2<T extends new (...args: any[]) => object>(Base: T): typeof class extends Base {
+>Printable2 : Symbol(Printable2, Decl(typeofClassExpression1.ts, 73, 1))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 75, 28))
+>args : Symbol(args, Decl(typeofClassExpression1.ts, 75, 43))
+>Base : Symbol(Base, Decl(typeofClassExpression1.ts, 75, 70))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 75, 28))
+>Base : Symbol(Base, Decl(typeofClassExpression1.ts, 75, 70))
+
+    static foo: string;
+>foo : Symbol((Anonymous class).foo, Decl(typeofClassExpression1.ts, 75, 107))
+
+    print(): void;
+>print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 76, 23))
+
+};
+
+type PrintableMixin = typeof class {
+>PrintableMixin : Symbol(PrintableMixin, Decl(typeofClassExpression1.ts, 78, 2))
+
+    constructor(...args: any[]);  // Indicates class is a mixin
+>args : Symbol(args, Decl(typeofClassExpression1.ts, 81, 16))
+
+    static foo: string;
+>foo : Symbol((Anonymous class).foo, Decl(typeofClassExpression1.ts, 81, 32))
+
+    print(): void;
+>print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 82, 23))
+
+};
+
+declare function Printable3<T extends new (...args: any[]) => object, U>(Base: T): T & PrintableMixin;
+>Printable3 : Symbol(Printable3, Decl(typeofClassExpression1.ts, 84, 2))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 86, 28))
+>args : Symbol(args, Decl(typeofClassExpression1.ts, 86, 43))
+>U : Symbol(U, Decl(typeofClassExpression1.ts, 86, 69))
+>Base : Symbol(Base, Decl(typeofClassExpression1.ts, 86, 73))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 86, 28))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 86, 28))
+>PrintableMixin : Symbol(PrintableMixin, Decl(typeofClassExpression1.ts, 78, 2))
+
+declare function Printable4<T extends new (...args: any[]) => object>(Base: T): T & typeof class Printable {
+>Printable4 : Symbol(Printable4, Decl(typeofClassExpression1.ts, 86, 102))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 88, 28))
+>args : Symbol(args, Decl(typeofClassExpression1.ts, 88, 43))
+>Base : Symbol(Base, Decl(typeofClassExpression1.ts, 88, 70))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 88, 28))
+>T : Symbol(T, Decl(typeofClassExpression1.ts, 88, 28))
+>Printable : Symbol(Printable, Decl(typeofClassExpression1.ts, 88, 90))
+
+    constructor(...args: any[]);  // Indicates class is a mixin
+>args : Symbol(args, Decl(typeofClassExpression1.ts, 89, 16))
+
+    static foo: string;
+>foo : Symbol(Printable.foo, Decl(typeofClassExpression1.ts, 89, 32))
+
+    print(): void;
+>print : Symbol(Printable.print, Decl(typeofClassExpression1.ts, 90, 23))
+
+};
+
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(typeofClassExpression1.ts, 92, 2))
+
+    static bar: number;
+>bar : Symbol(MyClass.bar, Decl(typeofClassExpression1.ts, 94, 15))
+
+    x!: boolean;
+>x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+}
+
+let PC1 = Printable1(MyClass);
+>PC1 : Symbol(PC1, Decl(typeofClassExpression1.ts, 99, 3))
+>Printable1 : Symbol(Printable1, Decl(typeofClassExpression1.ts, 66, 10))
+>MyClass : Symbol(MyClass, Decl(typeofClassExpression1.ts, 92, 2))
+
+let pc1 = new PC1();
+>pc1 : Symbol(pc1, Decl(typeofClassExpression1.ts, 100, 3))
+>PC1 : Symbol(PC1, Decl(typeofClassExpression1.ts, 99, 3))
+
+pc1.x;
+>pc1.x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+>pc1 : Symbol(pc1, Decl(typeofClassExpression1.ts, 100, 3))
+>x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+
+pc1.print;
+>pc1.print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 70, 27))
+>pc1 : Symbol(pc1, Decl(typeofClassExpression1.ts, 100, 3))
+>print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 70, 27))
+
+let PC2 = Printable2(MyClass);
+>PC2 : Symbol(PC2, Decl(typeofClassExpression1.ts, 104, 3))
+>Printable2 : Symbol(Printable2, Decl(typeofClassExpression1.ts, 73, 1))
+>MyClass : Symbol(MyClass, Decl(typeofClassExpression1.ts, 92, 2))
+
+let pc2 = new PC2();
+>pc2 : Symbol(pc2, Decl(typeofClassExpression1.ts, 105, 3))
+>PC2 : Symbol(PC2, Decl(typeofClassExpression1.ts, 104, 3))
+
+pc2.x;
+>pc2.x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+>pc2 : Symbol(pc2, Decl(typeofClassExpression1.ts, 105, 3))
+>x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+
+pc2.print;
+>pc2.print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 76, 23))
+>pc2 : Symbol(pc2, Decl(typeofClassExpression1.ts, 105, 3))
+>print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 76, 23))
+
+let PC3 = Printable3(MyClass);
+>PC3 : Symbol(PC3, Decl(typeofClassExpression1.ts, 109, 3))
+>Printable3 : Symbol(Printable3, Decl(typeofClassExpression1.ts, 84, 2))
+>MyClass : Symbol(MyClass, Decl(typeofClassExpression1.ts, 92, 2))
+
+let pc3 = new PC3();
+>pc3 : Symbol(pc3, Decl(typeofClassExpression1.ts, 110, 3))
+>PC3 : Symbol(PC3, Decl(typeofClassExpression1.ts, 109, 3))
+
+pc3.x;
+>pc3.x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+>pc3 : Symbol(pc3, Decl(typeofClassExpression1.ts, 110, 3))
+>x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+
+pc3.print;
+>pc3.print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 82, 23))
+>pc3 : Symbol(pc3, Decl(typeofClassExpression1.ts, 110, 3))
+>print : Symbol((Anonymous class).print, Decl(typeofClassExpression1.ts, 82, 23))
+
+let PC4 = Printable4(MyClass);
+>PC4 : Symbol(PC4, Decl(typeofClassExpression1.ts, 114, 3))
+>Printable4 : Symbol(Printable4, Decl(typeofClassExpression1.ts, 86, 102))
+>MyClass : Symbol(MyClass, Decl(typeofClassExpression1.ts, 92, 2))
+
+let pc4 = new PC4();
+>pc4 : Symbol(pc4, Decl(typeofClassExpression1.ts, 115, 3))
+>PC4 : Symbol(PC4, Decl(typeofClassExpression1.ts, 114, 3))
+
+pc4.x;
+>pc4.x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+>pc4 : Symbol(pc4, Decl(typeofClassExpression1.ts, 115, 3))
+>x : Symbol(MyClass.x, Decl(typeofClassExpression1.ts, 95, 23))
+
+pc4.print;
+>pc4.print : Symbol(Printable.print, Decl(typeofClassExpression1.ts, 90, 23))
+>pc4 : Symbol(pc4, Decl(typeofClassExpression1.ts, 115, 3))
+>print : Symbol(Printable.print, Decl(typeofClassExpression1.ts, 90, 23))
+

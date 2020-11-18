@@ -67,6 +67,9 @@ var f;
 /** @type {new (s: string) => { s: string }} */
 var ctor;
 
+/** @type {typeof class { s: string; static n: number }} */
+var ctor2;
+
 //// [b.ts]
 var S: string;
 var s: string;
@@ -90,6 +93,7 @@ var obj: any;
 var Func: Function;
 var f: (s: string) => number;
 var ctor: new (s: string) => { s: string };
+var ctor2: typeof class { s: string; static n: number };
 
 
 //// [a.js]
@@ -137,6 +141,8 @@ var Func;
 var f;
 /** @type {new (s: string) => { s: string }} */
 var ctor;
+/** @type {typeof class { s: string; static n: number }} */
+var ctor2;
 //// [b.js]
 var S;
 var s;
@@ -160,3 +166,4 @@ var obj;
 var Func;
 var f;
 var ctor;
+var ctor2;
