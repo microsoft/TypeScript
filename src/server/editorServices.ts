@@ -923,8 +923,7 @@ namespace ts.server {
 
         /*@internal*/
         delayEnsureProjectForOpenFiles() {
-            // If no open files or no external project, do not schedule
-            if (!this.openFiles.size && !this.externalProjects.length && !this.externalProjectToConfiguredProjectMap.size) return;
+            if (!this.openFiles.size) return;
             this.pendingEnsureProjectForOpenFiles = true;
             this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {
