@@ -4075,7 +4075,6 @@ namespace ts {
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
         /* @internal */ getOptionalType(): Type;
-        /* @internal */ getGlobalObjectType: () => Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;

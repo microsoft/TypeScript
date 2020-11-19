@@ -1904,7 +1904,7 @@ namespace ts.Completions {
                 const hasStringIndexType = (completionsType || instantiatedType).getStringIndexType();
                 const hasNumberIndextype = (completionsType || instantiatedType).getNumberIndexType();
                 isNewIdentifierLocation = !!hasStringIndexType || !!hasNumberIndextype;
-                typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker, /*ignoreGlobalObject*/ true);
+                typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
 
                 if (typeMembers.length === 0) {
@@ -2689,8 +2689,7 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker, ignoreGlobalObject?: boolean): Symbol[] {
-        const globalObjectType = checker.getGlobalObjectType();
+    function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
         const hasCompletionsType = completionsType && completionsType !== contextualType;
         const type = hasCompletionsType && !(completionsType!.flags & TypeFlags.AnyOrUnknown)
             ? checker.getUnionType([contextualType, completionsType!])
@@ -2701,14 +2700,10 @@ namespace ts.Completions {
                 // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
                 !(memberType.flags & TypeFlags.Primitive ||
                     checker.isArrayLikeType(memberType) ||
-                    (ignoreGlobalObject && memberType === globalObjectType) ||
                     typeHasCallOrConstructSignatures(memberType, checker) ||
                     checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
             : type.getApparentProperties();
 
-        if (ignoreGlobalObject && type === globalObjectType) {
-            return [];
-        }
         return hasCompletionsType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
 
         // Filter out members whose only declaration is the object literal itself to avoid
