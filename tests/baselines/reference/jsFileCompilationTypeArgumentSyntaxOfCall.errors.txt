@@ -1,19 +1,30 @@
-tests/cases/compiler/a.jsx(1,5): error TS8011: Type arguments can only be used in TypeScript files.
-tests/cases/compiler/a.jsx(2,5): error TS8011: Type arguments can only be used in TypeScript files.
-tests/cases/compiler/a.jsx(3,6): error TS8011: Type arguments can only be used in TypeScript files.
-tests/cases/compiler/a.jsx(4,6): error TS8011: Type arguments can only be used in TypeScript files.
+tests/cases/compiler/a.jsx(1,13): error TS1109: Expression expected.
+tests/cases/compiler/a.jsx(4,5): error TS1003: Identifier expected.
+tests/cases/compiler/a.jsx(4,14): error TS17002: Expected corresponding JSX closing tag for 'number'.
+tests/cases/compiler/a.jsx(4,20): error TS2657: JSX expressions must have one parent element.
+tests/cases/compiler/a.jsx(5,5): error TS1003: Identifier expected.
+tests/cases/compiler/a.jsx(5,6): error TS17008: JSX element 'number' has no corresponding closing tag.
+tests/cases/compiler/a.jsx(6,1): error TS1005: '</' expected.
 
 
-==== tests/cases/compiler/a.jsx (4 errors) ====
+==== tests/cases/compiler/a.jsx (7 errors) ====
     Foo<number>();
-        ~~~~~~
-!!! error TS8011: Type arguments can only be used in TypeScript files.
+                ~
+!!! error TS1109: Expression expected.
+    Foo<number>(1);
     Foo<number>``;
-        ~~~~~~
-!!! error TS8011: Type arguments can only be used in TypeScript files.
     <Foo<number>></Foo>;
-         ~~~~~~
-!!! error TS8011: Type arguments can only be used in TypeScript files.
+        ~
+!!! error TS1003: Identifier expected.
+                 ~~~~~~
+!!! error TS17002: Expected corresponding JSX closing tag for 'number'.
+                       ~
+!!! error TS2657: JSX expressions must have one parent element.
     <Foo<number>/>;
+        ~
+!!! error TS1003: Identifier expected.
          ~~~~~~
-!!! error TS8011: Type arguments can only be used in TypeScript files.
+!!! error TS17008: JSX element 'number' has no corresponding closing tag.
+    
+    
+!!! error TS1005: '</' expected.

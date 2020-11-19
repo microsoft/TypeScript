@@ -1,4 +1,8 @@
-tests/cases/conformance/jsx/file.jsx(4,17): error TS8011: Type arguments can only be used in TypeScript files.
+tests/cases/conformance/jsx/file.jsx(4,9): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.jsx(4,16): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/file.jsx(4,17): error TS2693: 'Prop' only refers to a type, but is being used as a value here.
+tests/cases/conformance/jsx/file.jsx(4,17): error TS17008: JSX element 'Prop' has no corresponding closing tag.
+tests/cases/conformance/jsx/file.jsx(5,1): error TS1005: '</' expected.
 
 
 ==== tests/cases/conformance/jsx/component.d.ts (0 errors) ====
@@ -12,11 +16,19 @@ tests/cases/conformance/jsx/file.jsx(4,17): error TS8011: Type arguments can onl
         b: string
     }
     
-==== tests/cases/conformance/jsx/file.jsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.jsx (5 errors) ====
     import { MyComp, Prop } from "./component";
     import * as React from "react";
     
     let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
+            ~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                   ~
+!!! error TS1003: Identifier expected.
                     ~~~~
-!!! error TS8011: Type arguments can only be used in TypeScript files.
+!!! error TS2693: 'Prop' only refers to a type, but is being used as a value here.
+                    ~~~~
+!!! error TS17008: JSX element 'Prop' has no corresponding closing tag.
     
+    
+!!! error TS1005: '</' expected.
