@@ -3,12 +3,12 @@
 const errors = require("./errors");
 >errors : Symbol(errors, Decl(index.js, 1, 5))
 >require : Symbol(require)
->"./errors" : Symbol("tests/cases/conformance/jsdoc/declarations/utils/errors", Decl(errors.js, 0, 0))
+>"./errors" : Symbol(errors, Decl(errors.js, 0, 0))
 
 module.exports = {
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/utils/index", Decl(index.js, 0, 0))
->module : Symbol(export=, Decl(index.js, 1, 35))
->exports : Symbol(export=, Decl(index.js, 1, 35))
+>module : Symbol(module, Decl(index.js, 1, 35))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/utils/index", Decl(index.js, 0, 0))
 
     errors
 >errors : Symbol(errors, Decl(index.js, 3, 18))
@@ -30,8 +30,8 @@ class FancyError extends Error {
 
 module.exports = {
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/utils/errors", Decl(errors.js, 0, 0))
->module : Symbol(export=, Decl(errors.js, 4, 1))
->exports : Symbol(export=, Decl(errors.js, 4, 1))
+>module : Symbol(module, Decl(errors.js, 4, 1))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/utils/errors", Decl(errors.js, 0, 0))
 
     FancyError
 >FancyError : Symbol(FancyError, Decl(errors.js, 6, 18))

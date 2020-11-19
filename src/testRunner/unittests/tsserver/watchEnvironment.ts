@@ -565,6 +565,202 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
         });
+
+        describe("excludeDirectories", () => {
+            function setupFiles() {
+                const main: File = {
+                    path: `${tscWatch.projectRoot}/src/main.ts`,
+                    content: `import { foo } from "bar"; foo();`
+                };
+                const bar: File = {
+                    path: `${tscWatch.projectRoot}/node_modules/bar/index.d.ts`,
+                    content: `export { foo } from "./foo";`
+                };
+                const foo: File = {
+                    path: `${tscWatch.projectRoot}/node_modules/bar/foo.d.ts`,
+                    content: `export function foo(): string;`
+                };
+                return { main, bar, foo };
+            }
+
+            function setupConfigureHost(service: TestProjectService, configureHost: boolean | undefined) {
+                if (configureHost) {
+                    service.setHostConfiguration({
+                        watchOptions: { excludeDirectories: ["node_modules"] }
+                    });
+                }
+            }
+            function setup(configureHost?: boolean) {
+                const configFile: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } })
+                };
+                const { main, bar, foo } = setupFiles();
+                const files = [libFile, main, bar, foo, configFile];
+                const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
+                const service = createProjectService(host);
+                setupConfigureHost(service, configureHost);
+                service.openClientFile(main.path);
+                return { host, configFile };
+            }
+
+            it("with excludeDirectories option in configFile", () => {
+                const { host, configFile } = setup();
+                checkWatchedFilesDetailed(host, [configFile.path, libFile.path], 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    arrayToMap(
+                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
+                        identity,
+                        f => f === `${tscWatch.projectRoot}/node_modules` ? 1 : 2,
+                    ),
+                    /*recursive*/ true,
+                );
+            });
+
+            it("with excludeDirectories option in configuration", () => {
+                const { host, configFile } = setup(/*configureHost*/ true);
+                checkWatchedFilesDetailed(host, [configFile.path, libFile.path], 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    [`${tscWatch.projectRoot}/src`],
+                    2,
+                    /*recursive*/ true,
+                );
+            });
+
+            function setupExternalProject(configureHost?: boolean) {
+                const { main, bar, foo } = setupFiles();
+                const files = [libFile, main, bar, foo];
+                const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
+                const service = createProjectService(host);
+                setupConfigureHost(service, configureHost);
+                service.openExternalProject(<protocol.ExternalProject>{
+                    projectFileName: `${tscWatch.projectRoot}/project.csproj`,
+                    rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
+                    options: { excludeDirectories: ["node_modules"] }
+                });
+                service.openClientFile(main.path);
+                return host;
+            }
+
+            it("external project watch options", () => {
+                const host = setupExternalProject();
+                checkWatchedFilesDetailed(host, [libFile.path], 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
+                    1,
+                    /*recursive*/ true,
+                );
+            });
+
+            it("external project watch options in host configuration", () => {
+                const host = setupExternalProject(/*configureHost*/ true);
+                checkWatchedFilesDetailed(host, [libFile.path], 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    [`${tscWatch.projectRoot}/src`],
+                    1,
+                    /*recursive*/ true,
+                );
+            });
+
+            it("external project watch options errors", () => {
+                const { main, bar, foo } = setupFiles();
+                const files = [libFile, main, bar, foo];
+                const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
+                const service = createProjectService(host);
+                service.openExternalProject(<protocol.ExternalProject>{
+                    projectFileName: `${tscWatch.projectRoot}/project.csproj`,
+                    rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
+                    options: { excludeDirectories: ["**/../*"] }
+                });
+                service.openClientFile(main.path);
+                const project = service.externalProjects[0];
+                assert.deepEqual(project.getAllProjectErrors(), [
+                    {
+                        messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                        category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                        code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                        reportsDeprecated: undefined,
+                        reportsUnnecessary: undefined,
+                    }
+                ]);
+            });
+
+            function setupInferredProject(configureHost?: boolean) {
+                const { main, bar, foo } = setupFiles();
+                const files = [libFile, main, bar, foo];
+                const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
+                const service = createProjectService(host, {}, { useInferredProjectPerProjectRoot: true });
+                setupConfigureHost(service, configureHost);
+                service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["node_modules"] }, tscWatch.projectRoot);
+                service.openClientFile(main.path, main.content, ScriptKind.TS, tscWatch.projectRoot);
+                return host;
+            }
+
+            it("inferred project watch options", () => {
+                const host = setupInferredProject();
+                checkWatchedFilesDetailed(
+                    host,
+                    [libFile.path, `${tscWatch.projectRoot}/tsconfig.json`, `${tscWatch.projectRoot}/jsconfig.json`, `${tscWatch.projectRoot}/src/tsconfig.json`, `${tscWatch.projectRoot}/src/jsconfig.json`],
+                    1
+                );
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
+                    1,
+                    /*recursive*/ true,
+                );
+            });
+
+            it("inferred project watch options in host configuration", () => {
+                const host = setupInferredProject(/*configureHost*/ true);
+                checkWatchedFilesDetailed(
+                    host,
+                    [libFile.path, `${tscWatch.projectRoot}/tsconfig.json`, `${tscWatch.projectRoot}/jsconfig.json`, `${tscWatch.projectRoot}/src/tsconfig.json`, `${tscWatch.projectRoot}/src/jsconfig.json`],
+                    1
+                );
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    [`${tscWatch.projectRoot}/src`],
+                    1,
+                    /*recursive*/ true,
+                );
+            });
+
+            it("inferred project watch options errors", () => {
+                const { main, bar, foo } = setupFiles();
+                const files = [libFile, main, bar, foo];
+                const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
+                const service = createProjectService(host, {}, { useInferredProjectPerProjectRoot: true });
+                service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["**/../*"] }, tscWatch.projectRoot);
+                service.openClientFile(main.path, main.content, ScriptKind.TS, tscWatch.projectRoot);
+                const project = service.inferredProjects[0];
+                assert.deepEqual(project.getAllProjectErrors(), [
+                    {
+                        messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                        category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                        code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                        reportsDeprecated: undefined,
+                        reportsUnnecessary: undefined,
+                    }
+                ]);
+            });
+        });
     });
 
     describe("unittests:: tsserver:: watchEnvironment:: file names on case insensitive file system", () => {

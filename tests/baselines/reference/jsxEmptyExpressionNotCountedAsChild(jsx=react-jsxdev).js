@@ -22,8 +22,6 @@ const element = (
 exports.__esModule = true;
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild.tsx";
-/// <reference path="react16.d.ts" />
-var React = require("react");
 function Wrapper(props) {
     return jsx_dev_runtime_1.jsxDEV("div", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 9, columnNumber: 11 }, this);
 }

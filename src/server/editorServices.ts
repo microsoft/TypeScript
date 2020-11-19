@@ -11,6 +11,7 @@ namespace ts.server {
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
     export const OpenFileInfoTelemetryEvent = "openFileInfo";
+    const ensureProjectForOpenFileSchedule = "*ensureProjectForOpenFiles*";
 
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
@@ -251,16 +252,18 @@ namespace ts.server {
         return <any>protocolOptions;
     }
 
-    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined {
-        let result: WatchOptions | undefined;
-        watchOptionsConverters.forEach((mappedValues, id) => {
-            const propertyValue = protocolOptions[id];
+    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined {
+        let watchOptions: WatchOptions | undefined;
+        let errors: Diagnostic[] | undefined;
+        optionsForWatch.forEach(option => {
+            const propertyValue = protocolOptions[option.name];
             if (propertyValue === undefined) return;
-            (result || (result = {}))[id] = isString(propertyValue) ?
-                mappedValues.get(propertyValue.toLowerCase()) :
-                propertyValue;
+            const mappedValues = watchOptionsConverters.get(option.name);
+            (watchOptions || (watchOptions = {}))[option.name] = mappedValues ?
+                isString(propertyValue) ? mappedValues.get(propertyValue.toLowerCase()) : propertyValue :
+                convertJsonOption(option, propertyValue, currentDirectory || "", errors || (errors = []));
         });
-        return result;
+        return watchOptions && { watchOptions, errors };
     }
 
     export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined {
@@ -633,6 +636,11 @@ namespace ts.server {
         changes: Iterator<TextChange>;
     }
 
+    export interface WatchOptionsAndErrors {
+        watchOptions: WatchOptions;
+        errors: Diagnostic[] | undefined;
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -691,8 +699,8 @@ namespace ts.server {
 
         private compilerOptionsForInferredProjects: CompilerOptions | undefined;
         private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
-        private watchOptionsForInferredProjects: WatchOptions | undefined;
-        private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
+        private watchOptionsForInferredProjects: WatchOptionsAndErrors | undefined;
+        private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptionsAndErrors | false>();
         private typeAcquisitionForInferredProjects: TypeAcquisition | undefined;
         private typeAcquisitionForInferredProjectsPerProjectRoot = new Map<string, TypeAcquisition | undefined>();
         /**
@@ -819,10 +827,9 @@ namespace ts.server {
             this.watchFactory = this.serverMode !== LanguageServiceMode.Semantic ?
                 {
                     watchFile: returnNoopFileWatcher,
-                    watchFilePath: returnNoopFileWatcher,
                     watchDirectory: returnNoopFileWatcher,
                 } :
-                getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+                getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -923,8 +930,9 @@ namespace ts.server {
 
         /*@internal*/
         delayEnsureProjectForOpenFiles() {
+            if (!this.openFiles.size) return;
             this.pendingEnsureProjectForOpenFiles = true;
-            this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 2500, () => {
+            this.throttledOperations.schedule(ensureProjectForOpenFileSchedule, /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {
                     this.delayEnsureProjectForOpenFiles();
                 }
@@ -1039,7 +1047,7 @@ namespace ts.server {
             Debug.assert(projectRootPath === undefined || this.useInferredProjectPerProjectRoot, "Setting compiler options per project root path is only supported when useInferredProjectPerProjectRoot is enabled");
 
             const compilerOptions = convertCompilerOptions(projectCompilerOptions);
-            const watchOptions = convertWatchOptions(projectCompilerOptions);
+            const watchOptions = convertWatchOptions(projectCompilerOptions, projectRootPath);
             const typeAcquisition = convertTypeAcquisition(projectCompilerOptions);
 
             // always set 'allowNonTsExtensions' for inferred projects since user cannot configure it from the outside
@@ -1070,8 +1078,9 @@ namespace ts.server {
                     project.projectRootPath === canonicalProjectRootPath :
                     !project.projectRootPath || !this.compilerOptionsForInferredProjectsPerProjectRoot.has(project.projectRootPath)) {
                     project.setCompilerOptions(compilerOptions);
-                    project.setWatchOptions(watchOptions);
                     project.setTypeAcquisition(typeAcquisition);
+                    project.setWatchOptions(watchOptions?.watchOptions);
+                    project.setProjectErrors(watchOptions?.errors);
                     project.compileOnSaveEnabled = compilerOptions.compileOnSave!;
                     project.markAsDirty();
                     this.delayUpdateProjectGraph(project);
@@ -1173,26 +1182,20 @@ namespace ts.server {
             return this.hostConfiguration.preferences;
         }
 
-        private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
-            const info = this.getScriptInfoForPath(path);
-            if (!info) {
-                this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
+        private onSourceFileChanged(info: ScriptInfo, eventKind: FileWatcherEventKind) {
+            if (info.containingProjects) {
+                info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
             }
-            else {
-                if (info.containingProjects) {
-                    info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
-                }
-                if (eventKind === FileWatcherEventKind.Deleted) {
-                    // File was deleted
-                    this.handleDeletedFile(info);
-                }
-                else if (!info.isScriptOpen()) {
-                    // file has been changed which might affect the set of referenced files in projects that include
-                    // this file and set of inferred projects
-                    info.delayReloadNonMixedContentFile();
-                    this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
-                    this.handleSourceMapProjects(info);
-                }
+            if (eventKind === FileWatcherEventKind.Deleted) {
+                // File was deleted
+                this.handleDeletedFile(info);
+            }
+            else if (!info.isScriptOpen()) {
+                // file has been changed which might affect the set of referenced files in projects that include
+                // this file and set of inferred projects
+                info.delayReloadNonMixedContentFile();
+                this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
+                this.handleSourceMapProjects(info);
             }
         }
 
@@ -1259,7 +1262,6 @@ namespace ts.server {
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
             const watchOptions = this.getWatchOptions(project);
             return this.watchFactory.watchDirectory(
-                this.host,
                 directory,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
@@ -1683,7 +1685,6 @@ namespace ts.server {
             configFileExistenceInfo.configFileWatcherForRootOfInferredProject =
                 canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
                     this.watchFactory.watchFile(
-                        this.host,
                         configFileName,
                         (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
                         PollingInterval.High,
@@ -1968,7 +1969,7 @@ namespace ts.server {
 
         private createExternalProject(projectFileName: string, files: protocol.ExternalFile[], options: protocol.ExternalProjectCompilerOptions, typeAcquisition: TypeAcquisition, excludedFiles: NormalizedPath[]) {
             const compilerOptions = convertCompilerOptions(options);
-            const watchOptions = convertWatchOptions(options);
+            const watchOptionsAndErrors = convertWatchOptions(options, getDirectoryPath(normalizeSlashes(projectFileName)));
             const project = new ExternalProject(
                 projectFileName,
                 this,
@@ -1978,8 +1979,9 @@ namespace ts.server {
                 options.compileOnSave === undefined ? true : options.compileOnSave,
                 /*projectFilePath*/ undefined,
                 this.currentPluginConfigOverrides,
-                watchOptions
+                watchOptionsAndErrors?.watchOptions
             );
+            project.setProjectErrors(watchOptionsAndErrors?.errors);
             project.excludedFiles = excludedFiles;
 
             this.addFilesToNonInferredProject(project, files, externalFilePropertyReader, typeAcquisition);
@@ -2252,9 +2254,10 @@ namespace ts.server {
          * Read the config file of the project again by clearing the cache and update the project graph
          */
         /* @internal */
-        reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean) {
+        reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean, clearSemanticCache: boolean) {
             // At this point, there is no reason to not have configFile in the host
             const host = project.getCachedDirectoryStructureHost();
+            if (clearSemanticCache) this.clearSemanticCache(project);
 
             // Clear the cache since we are reloading the project from disk
             host.clearCache();
@@ -2266,6 +2269,13 @@ namespace ts.server {
             project.updateGraph();
 
             this.sendConfigFileDiagEvent(project, configFileName);
+        }
+
+        /* @internal */
+        private clearSemanticCache(project: Project) {
+            project.resolutionCache.clear();
+            project.getLanguageService(/*ensureSynchronized*/ false).cleanupSemanticCache();
+            project.markAsDirty();
         }
 
         private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
@@ -2354,19 +2364,21 @@ namespace ts.server {
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
-            let watchOptions: WatchOptions | false | undefined;
+            let watchOptionsAndErrors: WatchOptionsAndErrors | false | undefined;
             let typeAcquisition: TypeAcquisition | undefined;
             if (projectRootPath) {
-                watchOptions = this.watchOptionsForInferredProjectsPerProjectRoot.get(projectRootPath);
+                watchOptionsAndErrors = this.watchOptionsForInferredProjectsPerProjectRoot.get(projectRootPath);
                 typeAcquisition = this.typeAcquisitionForInferredProjectsPerProjectRoot.get(projectRootPath);
             }
-            if (watchOptions === undefined) {
-                watchOptions = this.watchOptionsForInferredProjects;
+            if (watchOptionsAndErrors === undefined) {
+                watchOptionsAndErrors = this.watchOptionsForInferredProjects;
             }
             if (typeAcquisition === undefined) {
                 typeAcquisition = this.typeAcquisitionForInferredProjects;
             }
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptions || undefined, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
+            watchOptionsAndErrors = watchOptionsAndErrors || undefined;
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
+            project.setProjectErrors(watchOptionsAndErrors?.errors);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2450,13 +2462,11 @@ namespace ts.server {
                     !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
                 const indexOfNodeModules = info.path.indexOf("/node_modules/");
                 if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
-                    info.fileWatcher = this.watchFactory.watchFilePath(
-                        this.host,
+                    info.fileWatcher = this.watchFactory.watchFile(
                         info.fileName,
-                        (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
+                        (_fileName, eventKind) => this.onSourceFileChanged(info, eventKind),
                         PollingInterval.Medium,
                         this.hostConfiguration.watchOptions,
-                        info.path,
                         WatchType.ClosedScriptInfo
                     );
                 }
@@ -2477,9 +2487,8 @@ namespace ts.server {
 
             const watchDir = dir + "/node_modules" as Path;
             const watcher = this.watchFactory.watchDirectory(
-                this.host,
                 watchDir,
-                (fileOrDirectory) => {
+                fileOrDirectory => {
                     const fileOrDirectoryPath = removeIgnoredPath(this.toPath(fileOrDirectory));
                     if (!fileOrDirectoryPath) return;
 
@@ -2530,7 +2539,7 @@ namespace ts.server {
             if (mTime !== info.mTime) {
                 const eventKind = getFileWatcherEventKind(info.mTime!, mTime);
                 info.mTime = mTime;
-                this.onSourceFileChanged(info.fileName, eventKind, info.path);
+                this.onSourceFileChanged(info, eventKind);
             }
         }
 
@@ -2715,7 +2724,6 @@ namespace ts.server {
 
         private addMissingSourceMapFile(mapFileName: string, declarationInfoPath: Path) {
             const fileWatcher = this.watchFactory.watchFile(
-                this.host,
                 mapFileName,
                 () => {
                     const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
@@ -2822,7 +2830,7 @@ namespace ts.server {
                 }
 
                 if (args.watchOptions) {
-                    this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions);
+                    this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions)?.watchOptions;
                     this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
                 }
             }
@@ -2851,8 +2859,28 @@ namespace ts.server {
             // (and would separate out below reloading of projects to be called when immediate reload is needed)
             // as there is no need to load contents of the files from the disk
 
+            // Reload script infos
+            this.filenameToScriptInfo.forEach(info => {
+                if (this.openFiles.has(info.path)) return; // Skip open files
+                if (!info.fileWatcher) return; // not watched file
+                // Handle as if file is changed or deleted
+                this.onSourceFileChanged(info, this.host.fileExists(info.fileName) ? FileWatcherEventKind.Changed : FileWatcherEventKind.Deleted);
+            });
+            // Cancel all project updates since we will be updating them now
+            this.pendingProjectUpdates.forEach((_project, projectName) => {
+                this.throttledOperations.cancel(projectName);
+                this.pendingProjectUpdates.delete(projectName);
+            });
+            this.throttledOperations.cancel(ensureProjectForOpenFileSchedule);
+            this.pendingEnsureProjectForOpenFiles = false;
+
             // Reload Projects
-            this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*delayReload*/ false, returnTrue, "User requested reload projects");
+            this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
+            this.externalProjects.forEach(project => {
+                this.clearSemanticCache(project);
+                project.updateGraph();
+            });
+            this.inferredProjects.forEach(project => this.clearSemanticCache(project));
             this.ensureProjectForOpenFiles();
         }
 
@@ -2860,6 +2888,7 @@ namespace ts.server {
             // Get open files to reload projects for
             this.reloadConfiguredProjectForFiles(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
+                /*clearSemanticCache*/ false,
                 /*delayReload*/ true,
                 ignoreIfNotRootOfInferredProject ?
                     isRootOfInferredProject => isRootOfInferredProject : // Reload open files if they are root of inferred project
@@ -2876,12 +2905,12 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = new Map<string, true>();
             const reloadChildProject = (child: ConfiguredProject) => {
                 if (!updatedProjects.has(child.canonicalConfigFilePath)) {
                     updatedProjects.set(child.canonicalConfigFilePath, true);
-                    this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false);
+                    this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false, clearSemanticCache);
                 }
             };
             // try to reload config file for all open files
@@ -2907,11 +2936,12 @@ namespace ts.server {
                         if (delayReload) {
                             project.pendingReload = ConfigFileProgramReloadLevel.Full;
                             project.pendingReloadReason = reason;
+                            if (clearSemanticCache) this.clearSemanticCache(project);
                             this.delayUpdateProjectGraph(project);
                         }
                         else {
                             // reload from the disk
-                            this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false);
+                            this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false, clearSemanticCache);
                             // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
                             if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
@@ -3730,7 +3760,7 @@ namespace ts.server {
                 externalProject.excludedFiles = excludedFiles;
                 if (!tsConfigFiles) {
                     const compilerOptions = convertCompilerOptions(proj.options);
-                    const watchOptions = convertWatchOptions(proj.options);
+                    const watchOptionsAndErrors = convertWatchOptions(proj.options, externalProject.getCurrentDirectory());
                     const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(proj.projectFileName, compilerOptions, proj.rootFiles, externalFilePropertyReader);
                     if (lastFileExceededProgramSize) {
                         externalProject.disableLanguageService(lastFileExceededProgramSize);
@@ -3738,9 +3768,10 @@ namespace ts.server {
                     else {
                         externalProject.enableLanguageService();
                     }
+                    externalProject.setProjectErrors(watchOptionsAndErrors?.errors);
                     // external project already exists and not config files were added - update the project and return;
                     // The graph update here isnt postponed since any file open operation needs all updated external projects
-                    this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, watchOptions);
+                    this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);
                     externalProject.updateGraph();
                     return;
                 }
@@ -3848,7 +3879,7 @@ namespace ts.server {
                         const info = packageJsonCache.getInDirectory(directory);
                         if (info) result.push(info);
                 }
-                if (rootPath && rootPath === this.toPath(directory)) {
+                if (rootPath && rootPath === directory) {
                     return true;
                 }
             };
@@ -3858,12 +3889,25 @@ namespace ts.server {
         }
 
         /*@internal*/
+        getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
+            return forEachAncestorDirectory(fileName, directory => {
+                switch (this.packageJsonCache.directoryHasPackageJson(this.toPath(directory))) {
+                    case Ternary.True: return directory;
+                    case Ternary.False: return undefined;
+                    case Ternary.Maybe:
+                        return this.host.fileExists(combinePaths(directory, "package.json"))
+                            ? directory
+                            : undefined;
+                }
+            });
+        }
+
+        /*@internal*/
         private watchPackageJsonFile(path: Path) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
             if (!watchers.has(path)) {
                 this.invalidateProjectAutoImports(path);
                 watchers.set(path, this.watchFactory.watchFile(
-                    this.host,
                     path,
                     (fileName, eventKind) => {
                         const path = this.toPath(fileName);
