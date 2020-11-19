@@ -17093,8 +17093,16 @@ namespace ts {
 
             function areUnionsOrIntersectionsTooLarge(source: Type, target: Type, reportErrors: boolean) {
                 if ((source.flags & TypeFlags.UnionOrIntersection) && (target.flags & TypeFlags.UnionOrIntersection)) {
-                    const sourceSize = (source as UnionOrIntersectionType).types.length;
-                    const targetSize = (target as UnionOrIntersectionType).types.length;
+                    const sourceUnionOrIntersection = source as UnionOrIntersectionType;
+                    const targetUnionOrIntersection = target as UnionOrIntersectionType;
+
+                    if (sourceUnionOrIntersection.objectFlags & targetUnionOrIntersection.objectFlags & ObjectFlags.PrimitiveUnion) {
+                        // There's a fast path for comparing primitive unions
+                        return false;
+                    }
+
+                    const sourceSize = sourceUnionOrIntersection.types.length;
+                    const targetSize = targetUnionOrIntersection.types.length;
                     if (sourceSize * targetSize > 1E7) {
                         if (reportErrors) {
                             tracing.instant(tracing.Phase.CheckTypes, "areUnionsOrIntersectionsTooLarge_DepthLimit", { sourceId: source.id, sourceSize, targetId: target.id, targetSize });
