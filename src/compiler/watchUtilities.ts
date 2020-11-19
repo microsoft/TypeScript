@@ -258,10 +258,9 @@ namespace ts {
     }
 
     /**
-     * Updates the extended config file watches with the new set of extended config files from the config file
-     * after new program is created because the config file was reloaded or program was created first time from the config file
+     * Updates the map of extended config file watches with a new set of extended config files from a base config file
      */
-    export function updateExtendedConfigFilesWatch(
+    export function updateExtendedConfigFilesMap(
         configFile: TsConfigSourceFile,
         extendedConfigFilesMap: ESMap<string, FileWatcher>,
         createExtendedConfigFileWatch: (extendedConfigPath: string) => FileWatcher,
@@ -280,73 +279,6 @@ namespace ts {
                 onDeleteValue: closeFileWatcher
             }
         );
-    }
-
-    export interface SharedExtendedConfigFileWatcher<P> {
-        watcher: FileWatcher;
-        callbacks: ESMap<P, FileWatcherCallback>;
-    }
-
-    export function updateSharedExtendedConfigFilesWatch<P>(
-        project: P,
-        projectCallback: FileWatcherCallback,
-        configFile: TsConfigSourceFile,
-        sharedExtendedConfigFilesMap: ESMap<string, SharedExtendedConfigFileWatcher<P>>,
-        watchFactory: WatchFactory<WatchType, any>,
-        watchOptions: WatchOptions | undefined
-    ) {
-        const extendedSourceFiles = configFile.extendedSourceFiles || emptyArray;
-        const newSharedExtendedConfigFilesMap = arrayToMap(extendedSourceFiles, identity, returnTrue);
-
-        sharedExtendedConfigFilesMap.forEach((existingWatcher, key) => {
-            if (newSharedExtendedConfigFilesMap.has(key)) {
-                existingWatcher.callbacks.set(project, projectCallback);
-            }
-            else {
-                existingWatcher.callbacks.delete(project);
-                if (existingWatcher.callbacks.size === 0) {
-                    sharedExtendedConfigFilesMap.delete(key);
-                    closeFileWatcherOf(existingWatcher);
-                }
-            }
-        });
-
-        newSharedExtendedConfigFilesMap.forEach((_true, extendedConfigPath) => {
-            if (!sharedExtendedConfigFilesMap.has(extendedConfigPath)) {
-                const newWatcher = createSharedExtendedConfigFileWatcher(extendedConfigPath);
-                sharedExtendedConfigFilesMap.set(extendedConfigPath, newWatcher);
-            }
-        });
-
-        function createSharedExtendedConfigFileWatcher(extendedConfigPath: string) {
-            const callbacks = new Map<P, FileWatcherCallback>();
-            callbacks.set(project, projectCallback);
-            const watcher = watchFactory.watchFile(
-                extendedConfigPath,
-                invokeProjectCallbacks,
-                PollingInterval.High,
-                watchOptions,
-                WatchType.ExtendedConfigFile
-            );
-            return { watcher, callbacks };
-
-            function invokeProjectCallbacks(fileName: string, eventKind: FileWatcherEventKind) {
-                return callbacks.forEach((callback) => callback(fileName, eventKind));
-            }
-        }
-    }
-
-    export function removeProjectFromSharedExtendedConfigFilesWatch<P>(
-        project: P,
-        sharedExtendedConfigFilesMap: ESMap<string, SharedExtendedConfigFileWatcher<P>>
-    ) {
-        sharedExtendedConfigFilesMap.forEach((existingWatcher, key) => {
-            existingWatcher.callbacks.delete(project);
-            if (existingWatcher.callbacks.size === 0) {
-                sharedExtendedConfigFilesMap.delete(key);
-                closeFileWatcherOf(existingWatcher);
-            }
-        });
     }
 
     /**

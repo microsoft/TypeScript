@@ -792,7 +792,7 @@ namespace ts {
         function watchExtendedConfigFiles() {
             const { configFile } = builderProgram.getCompilerOptions();
             if (configFile) {
-                updateExtendedConfigFilesWatch(
+                updateExtendedConfigFilesMap(
                     configFile,
                     extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
                     watchExtendedConfigFile
