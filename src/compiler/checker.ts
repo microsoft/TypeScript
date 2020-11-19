@@ -30172,7 +30172,7 @@ namespace ts {
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                             if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                                checkTestingKnownTruthyCallableType(node.left, leftType);
+                                checkTestingKnownTruthyCallableType(node.left, leftType, isIfStatement(node.parent) ? node.parent.thenStatement : undefined);
                             }
                             checkTruthinessOfType(leftType, node.left);
                         }
@@ -33954,7 +33954,7 @@ namespace ts {
             checkSourceElement(node.elseStatement);
         }
 
-        function checkTestingKnownTruthyCallableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
+        function checkTestingKnownTruthyCallableType(condExpr: Expression, type: Type, body: Statement | Expression | undefined) {
             if (!strictNullChecks) {
                 return;
             }
@@ -33989,9 +33989,8 @@ namespace ts {
                 return;
             }
 
-            const isUsed = isBinaryExpression(condExpr.parent) ? isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                : body ? isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol)
-                : false;
+            const isUsed = isBinaryExpression(condExpr.parent) && isFunctionUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+                || body && isFunctionUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
             if (!isUsed) {
                 error(location, Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead);
             }
@@ -34014,11 +34013,14 @@ namespace ts {
                                 testedExpression.kind === SyntaxKind.ThisKeyword && childExpression.kind === SyntaxKind.ThisKeyword) {
                                 return getSymbolAtLocation(testedExpression) === getSymbolAtLocation(childExpression);
                             }
-
-                            if (isPropertyAccessExpression(testedExpression) && isPropertyAccessExpression(childExpression)) {
+                            else if (isPropertyAccessExpression(testedExpression) && isPropertyAccessExpression(childExpression)) {
                                 if (getSymbolAtLocation(testedExpression.name) !== getSymbolAtLocation(childExpression.name)) {
                                     return false;
                                 }
+                                childExpression = childExpression.expression;
+                                testedExpression = testedExpression.expression;
+                            }
+                            else if (isCallExpression(testedExpression) && isCallExpression(childExpression)) {
                                 childExpression = childExpression.expression;
                                 testedExpression = testedExpression.expression;
                             }
