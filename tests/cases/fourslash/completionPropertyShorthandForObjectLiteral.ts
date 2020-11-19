@@ -18,7 +18,7 @@
 //// declare function f12<T extends Object>(obj: T): void;
 //// declare function f13<T extends {}>(obj: T): void;
 //// declare function f14<T extends Empty>(obj: T): void;
-//// declare function f15<T extends (Empty | Record<string, any> | Object)>(obj: T): void;
+//// declare function f15<T extends (Empty | Record<string, any> | {})>(obj: T): void;
 //// declare function f16<T extends (Empty | Object | Typed)>(obj: T): void;
 
 //// f1({f/*1*/});
@@ -39,7 +39,7 @@
 //// f16({f/*16*/});
 
 verify.completions(
-    { marker: ["1", "2", "3", "4", "6", "10", "11", "12", "13", "14", "15"], includes: ["foo"]},
+    { marker: ["1", "2", "4", "6", "10", "11", "13", "14", "15"], includes: ["foo"]},
     { marker: ["5", "7", "8"], excludes: ["foo"], isNewIdentifierLocation: true},
-    { marker: ["9", "16"], excludes: ["foo"]},
+    { marker: ["3", "9", "12", "16"], excludes: ["foo"]},
 );
