@@ -24001,12 +24001,12 @@ namespace ts {
                 return undefined;
             }
 
-            const basePropType = getTypeOfPropertyOfType(baseType, getTextOfPropertyName(node.name))
+            const basePropType = getTypeOfPropertyOfType(baseType, getTextOfPropertyName(node.name));
             if (!basePropType) {
-                return undefined
+                return undefined;
             }
 
-            return basePropType
+            return basePropType;
         }
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {
