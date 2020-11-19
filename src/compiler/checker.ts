@@ -36521,16 +36521,27 @@ namespace ts {
             });
         }
 
+        function canConvertImportDeclarationToTypeOnly(statement: Statement) {
+            return isImportDeclaration(statement) &&
+                statement.importClause &&
+                !statement.importClause.isTypeOnly &&
+                importClauseContainsReferencedImport(statement.importClause) &&
+                !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true) &&
+                !importClauseContainsConstEnumUsedAsValue(statement.importClause);
+        }
+
+        function canConvertImportEqualsDeclarationToTypeOnly(statement: Statement) {
+            return isImportEqualsDeclaration(statement) &&
+                isExternalModuleReference(statement.moduleReference) &&
+                !statement.isTypeOnly &&
+                getSymbolOfNode(statement).isReferenced &&
+                !isReferencedAliasDeclaration(statement, /*checkChildren*/ false) &&
+                !getSymbolLinks(getSymbolOfNode(statement)).constEnumReferenced;
+        }
+
         function checkImportsForTypeOnlyConversion(sourceFile: SourceFile) {
             for (const statement of sourceFile.statements) {
-                if (
-                    isImportDeclaration(statement) &&
-                    statement.importClause &&
-                    !statement.importClause.isTypeOnly &&
-                    importClauseContainsReferencedImport(statement.importClause) &&
-                    !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true) &&
-                    !importClauseContainsConstEnumUsedAsValue(statement.importClause)
-                ) {
+                if (canConvertImportDeclarationToTypeOnly(statement) || canConvertImportEqualsDeclarationToTypeOnly(statement)) {
                     error(
                         statement,
                         Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is_set_to_error);
