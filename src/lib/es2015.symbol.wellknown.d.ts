@@ -221,10 +221,9 @@ interface String {
     /**
      * Replaces text in a string, using an object that supports replacement within a string.
      * @param searchValue A object can search for and replace matches within a string.
-     * @param replaceValue A string containing the text to replace for successful matches 
-	 * 					   of the searchValue in this string (replaces either first occurrence 
-	 *					   of searchValue in case of using a string or every successful match
-	 *					   in case a regex is used)
+     * @param replaceValue A string or function to be called for some or all matches containing
+     * the text to replace from successful matches of string or RegExp searchValue. If pattern is
+     * a string, only the first occurrence is replaced.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
