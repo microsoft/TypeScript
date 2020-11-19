@@ -930,6 +930,7 @@ namespace ts.server {
 
         /*@internal*/
         delayEnsureProjectForOpenFiles() {
+            if (!this.openFiles.size) return;
             this.pendingEnsureProjectForOpenFiles = true;
             this.throttledOperations.schedule(ensureProjectForOpenFileSchedule, /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {
