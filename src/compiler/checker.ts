@@ -13549,7 +13549,7 @@ namespace ts {
         // conditional type as a constituent. In those cases, we cannot reduce keyof M and need to preserve it as is.
         function isNonDistributiveNameType(type: Type | undefined): boolean {
             return !!(type && (
-                type.flags & TypeFlags.Conditional && !(<ConditionalType>type).root.isDistributive ||
+                type.flags & TypeFlags.Conditional && (!(<ConditionalType>type).root.isDistributive || isNonDistributiveNameType((<ConditionalType>type).checkType)) ||
                 type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && some((<UnionOrIntersectionType | TemplateLiteralType>type).types, isNonDistributiveNameType) ||
                 type.flags & (TypeFlags.Index | TypeFlags.StringMapping) && isNonDistributiveNameType((<IndexType | StringMappingType>type).type) ||
                 type.flags & TypeFlags.IndexedAccess && isNonDistributiveNameType((<IndexedAccessType>type).indexType) ||
