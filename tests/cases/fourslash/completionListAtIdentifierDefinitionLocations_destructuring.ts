@@ -24,9 +24,4 @@
 // @Filename: h.ts
 //// function func2({ a, b/*parameter2*/
 
-verify.completions({ marker: [
-  "variable1", "variable2",
-  "variable3", "variable4",
-  "variable5", "variable6",
-  "parameter1", "parameter2"
-], exact: undefined });
+verify.completions({ marker: test.markers(), exact: undefined });
