@@ -1081,7 +1081,7 @@ namespace ts.server {
 
         private getEncodedSemanticClassifications(args: protocol.EncodedSemanticClassificationsRequestArgs) {
             const { file, project } = this.getFileAndProject(args);
-            return project.getLanguageService().getEncodedSemanticClassifications(file, args);
+            return project.getLanguageService().getEncodedSemanticClassifications(file, args, args.format);
         }
 
         private getProject(projectFileName: string | undefined): Project | undefined {

@@ -838,7 +838,6 @@ namespace ts.server.protocol {
     export interface EncodedSemanticClassificationsRequest extends FileRequest {
         arguments: EncodedSemanticClassificationsRequestArgs;
     }
-
     /**
      * Arguments for EncodedSemanticClassificationsRequest request.
      */
@@ -852,6 +851,10 @@ namespace ts.server.protocol {
          * Length of the span.
          */
         length: number;
+        /**
+         * Optional for backwards compat, use "2020" for modern LSP-like classifications
+         */
+        format?: ts.SemanticClassificationFormat
     }
 
     /**
@@ -3318,6 +3321,8 @@ namespace ts.server.protocol {
         Preserve = "Preserve",
         ReactNative = "ReactNative",
         React = "React",
+        ReactJSX = "ReactJSX",
+        ReactJSXDev = "ReactJSXDev",
     }
 
     export const enum ModuleKind {
@@ -3328,6 +3333,7 @@ namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2020 = "ES2020",
         ESNext = "ESNext"
     }
 
@@ -3351,6 +3357,7 @@ namespace ts.server.protocol {
         ES2018 = "ES2018",
         ES2019 = "ES2019",
         ES2020 = "ES2020",
+        JSON = "JSON",
         ESNext = "ESNext"
     }
 }
