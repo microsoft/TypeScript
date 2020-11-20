@@ -17103,10 +17103,10 @@ namespace ts {
 
                     const sourceSize = sourceUnionOrIntersection.types.length;
                     const targetSize = targetUnionOrIntersection.types.length;
-                    if (sourceSize * targetSize > 1E7) {
+                    if (sourceSize * targetSize > 1E6) {
                         if (reportErrors) {
                             tracing.instant(tracing.Phase.CheckTypes, "areUnionsOrIntersectionsTooLarge_DepthLimit", { sourceId: source.id, sourceSize, targetId: target.id, targetSize });
-                            reportError(Diagnostics.Expression_requires_comparison_of_excessively_large_unions_or_intersections);
+                            reportError(Diagnostics.Expression_requires_comparison_of_excessively_large_union_or_intersection_types);
                         }
                         return true;
                     }

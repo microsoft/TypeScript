@@ -1,7 +1,7 @@
-tests/cases/compiler/largeUnionIntersectionComparisons.ts(334,11): error TS2797: Expression requires comparison of excessively large unions or intersections.
-tests/cases/compiler/largeUnionIntersectionComparisons.ts(335,11): error TS2797: Expression requires comparison of excessively large unions or intersections.
-tests/cases/compiler/largeUnionIntersectionComparisons.ts(338,18): error TS2797: Expression requires comparison of excessively large unions or intersections.
-tests/cases/compiler/largeUnionIntersectionComparisons.ts(339,18): error TS2797: Expression requires comparison of excessively large unions or intersections.
+tests/cases/compiler/largeUnionIntersectionComparisons.ts(334,11): error TS2797: Expression requires comparison of excessively large union or intersection types.
+tests/cases/compiler/largeUnionIntersectionComparisons.ts(335,11): error TS2797: Expression requires comparison of excessively large union or intersection types.
+tests/cases/compiler/largeUnionIntersectionComparisons.ts(338,18): error TS2797: Expression requires comparison of excessively large union or intersection types.
+tests/cases/compiler/largeUnionIntersectionComparisons.ts(339,18): error TS2797: Expression requires comparison of excessively large union or intersection types.
 
 
 ==== tests/cases/compiler/largeUnionIntersectionComparisons.ts (4 errors) ====
@@ -340,15 +340,15 @@ tests/cases/compiler/largeUnionIntersectionComparisons.ts(339,18): error TS2797:
     testUnion({ } as any as Union); // Fine - identity
     testUnion({ } as any as BrandedUnion); // Too large (should be true)
               ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2797: Expression requires comparison of excessively large unions or intersections.
+!!! error TS2797: Expression requires comparison of excessively large union or intersection types.
     testUnion({ } as any as Intersection); // Too large (should be true)
               ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2797: Expression requires comparison of excessively large unions or intersections.
+!!! error TS2797: Expression requires comparison of excessively large union or intersection types.
     
     testIntersection({ } as any as Intersection); // Fine - identity
     testIntersection({ } as any as BrandedIntersection); // Too large (should be true)
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2797: Expression requires comparison of excessively large unions or intersections.
+!!! error TS2797: Expression requires comparison of excessively large union or intersection types.
     testIntersection({ } as any as Union); // Too large (should be false)
                      ~~~~~~~~~~~~~~~~~~~
-!!! error TS2797: Expression requires comparison of excessively large unions or intersections.
+!!! error TS2797: Expression requires comparison of excessively large union or intersection types.

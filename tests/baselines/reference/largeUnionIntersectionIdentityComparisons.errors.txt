@@ -1,11 +1,11 @@
 tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts(338,5): error TS2416: Property 'x' in type 'UnionDerived2' is not assignable to the same property in base type 'UnionBase'.
-  Expression requires comparison of excessively large unions or intersections.
+  Expression requires comparison of excessively large union or intersection types.
 tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts(341,5): error TS2416: Property 'x' in type 'UnionDerived3' is not assignable to the same property in base type 'UnionBase'.
-  Expression requires comparison of excessively large unions or intersections.
+  Expression requires comparison of excessively large union or intersection types.
 tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts(352,5): error TS2416: Property 'x' in type 'IntersectionDerived2' is not assignable to the same property in base type 'IntersectionBase'.
-  Expression requires comparison of excessively large unions or intersections.
+  Expression requires comparison of excessively large union or intersection types.
 tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts(355,5): error TS2416: Property 'x' in type 'IntersectionDerived3' is not assignable to the same property in base type 'IntersectionBase'.
-  Expression requires comparison of excessively large unions or intersections.
+  Expression requires comparison of excessively large union or intersection types.
 
 
 ==== tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts (4 errors) ====
@@ -349,13 +349,13 @@ tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts(355,5): error 
         x: BrandedUnion; // Too large - should fail
         ~
 !!! error TS2416: Property 'x' in type 'UnionDerived2' is not assignable to the same property in base type 'UnionBase'.
-!!! error TS2416:   Expression requires comparison of excessively large unions or intersections.
+!!! error TS2416:   Expression requires comparison of excessively large union or intersection types.
     }
     class UnionDerived3 extends UnionBase {
         x: Intersection; // Too large - should fail
         ~
 !!! error TS2416: Property 'x' in type 'UnionDerived3' is not assignable to the same property in base type 'UnionBase'.
-!!! error TS2416:   Expression requires comparison of excessively large unions or intersections.
+!!! error TS2416:   Expression requires comparison of excessively large union or intersection types.
     }
     
     class IntersectionBase {
@@ -369,11 +369,11 @@ tests/cases/compiler/largeUnionIntersectionIdentityComparisons.ts(355,5): error 
         x: BrandedIntersection; // Too large - should fail
         ~
 !!! error TS2416: Property 'x' in type 'IntersectionDerived2' is not assignable to the same property in base type 'IntersectionBase'.
-!!! error TS2416:   Expression requires comparison of excessively large unions or intersections.
+!!! error TS2416:   Expression requires comparison of excessively large union or intersection types.
     }
     class IntersectionDerived3 extends IntersectionBase {
         x: Union; // Too large - should fail
         ~
 !!! error TS2416: Property 'x' in type 'IntersectionDerived3' is not assignable to the same property in base type 'IntersectionBase'.
-!!! error TS2416:   Expression requires comparison of excessively large unions or intersections.
+!!! error TS2416:   Expression requires comparison of excessively large union or intersection types.
     }

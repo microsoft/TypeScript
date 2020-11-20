@@ -3211,7 +3211,7 @@
         "category": "Error",
         "code": 2796
     },
-    "Expression requires comparison of excessively large unions or intersections.": {
+    "Expression requires comparison of excessively large union or intersection types.": {
         "category": "Error",
         "code": 2797
     },
