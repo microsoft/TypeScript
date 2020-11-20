@@ -18,8 +18,9 @@ namespace ts.tracing {
     const legend: TraceRecord[] = [];
 
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
-    type Arg = string | number | boolean | undefined;
-    type Args = Record<string, Arg | readonly Arg[]>;
+    type Args = {
+        [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
+    };
 
     /** Starts tracing for the given project (unless the `fs` module is unavailable). */
     export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
@@ -51,8 +52,8 @@ namespace ts.tracing {
 
         const countPart =
             mode === Mode.Build ? `.${process.pid}-${++traceCount}` :
-            mode === Mode.Server ? `.${process.pid}` :
-            ``;
+                mode === Mode.Server ? `.${process.pid}` :
+                    ``;
         const tracePath = combinePaths(traceDir, `trace${countPart}.json`);
         const typesPath = combinePaths(traceDir, `types${countPart}.json`);
 
@@ -67,11 +68,11 @@ namespace ts.tracing {
         // Start with a prefix that contains some metadata that the devtools profiler expects (also avoids a warning on import)
         const meta = { cat: "__metadata", ph: "M", ts: 1000 * timestamp(), pid: 1, tid: 1 };
         fs.writeSync(traceFd,
-                     "[\n"
-                     + [{ name: "process_name", args: { name: "tsc" }, ...meta },
-                        { name: "thread_name", args: { name: "Main" }, ...meta },
-                        { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
-                       .map(v => JSON.stringify(v)).join(",\n"));
+            "[\n"
+            + [{ name: "process_name", args: { name: "tsc" }, ...meta },
+            { name: "thread_name", args: { name: "Main" }, ...meta },
+            { name: "TracingStartedInBrowser", ...meta, cat: "disabled-by-default-devtools.timeline" }]
+                .map(v => JSON.stringify(v)).join(",\n"));
     }
 
     /** Stops tracing for the in-progress project and dumps the type catalog (unless the `fs` module is unavailable). */
@@ -157,7 +158,7 @@ namespace ts.tracing {
     }
 
     function writeEvent(eventType: string, phase: Phase, name: string, args: Args | undefined, extras?: string,
-                       time: number = 1000 * timestamp()) {
+        time: number = 1000 * timestamp()) {
         Debug.assert(traceFd);
         Debug.assert(fs);
 
