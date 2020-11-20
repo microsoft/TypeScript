@@ -1112,7 +1112,7 @@
         "category": "Message",
         "code": 1369
     },
-    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
+    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
     },
