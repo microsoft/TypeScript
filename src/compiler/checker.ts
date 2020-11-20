@@ -3777,11 +3777,13 @@ namespace ts {
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
         // Symbol instance and the # character indicates that the name is a PrivateIdentifier.
         function isReservedMemberName(name: __String) {
-            return (name as string).charCodeAt(0) === CharacterCodes._ &&
-                (name as string).charCodeAt(1) === CharacterCodes._ &&
-                (name as string).charCodeAt(2) !== CharacterCodes._ &&
-                (name as string).charCodeAt(2) !== CharacterCodes.at &&
-                (name as string).charCodeAt(2) !== CharacterCodes.hash;
+            const nameString = name as string;
+            return nameString.length > 2 &&
+                nameString.charCodeAt(0) === CharacterCodes._ &&
+                nameString.charCodeAt(1) === CharacterCodes._ &&
+                nameString.charCodeAt(2) !== CharacterCodes._ &&
+                nameString.charCodeAt(2) !== CharacterCodes.at &&
+                nameString.charCodeAt(2) !== CharacterCodes.hash;
         }
 
         function getNamedMembers(members: SymbolTable): Symbol[] {
