@@ -38,12 +38,12 @@ namespace ts {
         if (program.isSourceFileDefaultLibrary(file)) {
             return "Library";
         }
-
-        const path = file.path;
-        if (fileExtensionIs(path, Extension.Dts)) {
+        else if (file.isDeclarationFile) {
             return "Definitions";
         }
-        else if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+
+        const path = file.path;
+        if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
             return "TypeScript";
         }
         else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
