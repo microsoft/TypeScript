@@ -14333,6 +14333,7 @@ namespace ts {
                     // doesn't immediately resolve to 'string' instead of being deferred.
                     if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeDefinitelyAssignableTo(checkType, inferredExtendsType)) {
                         result = instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper);
+                        break;
                     }
                 }
                 // Return a deferred type for a check that is neither definitely true nor definitely false
