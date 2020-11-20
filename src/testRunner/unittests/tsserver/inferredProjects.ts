@@ -450,5 +450,15 @@ namespace ts.projectSystem {
             };
             assert.deepEqual(inferredProject.getTypeAcquisition(), expected, "typeAcquisition should be inferred for inferred projects");
         });
+
+        it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {
+            const host = createServerHost([commonFile1, libFile]);
+            const projectService = createProjectService(host);
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ES2015
+            });
+            host.checkTimeoutQueueLength(0);
+        });
     });
 }

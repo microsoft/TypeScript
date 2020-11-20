@@ -1,4 +1,18 @@
 === tests/cases/compiler/truthinessCallExpressionCoercion2.ts ===
+declare class A {
+>A : A
+
+    static from(): string;
+>from : () => string
+}
+
+declare class B {
+>B : B
+
+    static from(): string;
+>from : () => string
+}
+
 function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
 >test : (required1: () => boolean, required2: () => boolean, optional?: (() => boolean) | undefined) => void
 >required1 : () => boolean
@@ -99,6 +113,23 @@ function test(required1: () => boolean, required2: () => boolean, optional?: () 
 >required1 : () => boolean
 >required2() : boolean
 >required2 : () => boolean
+
+    // ok
+    [].forEach((f: () => void) => f && f.apply(parent, []));
+>[].forEach((f: () => void) => f && f.apply(parent, [])) : void
+>[].forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
+>[] : never[]
+>forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
+>(f: () => void) => f && f.apply(parent, []) : (f: () => void) => any
+>f : () => void
+>f && f.apply(parent, []) : any
+>f : () => void
+>f.apply(parent, []) : any
+>f.apply : (this: Function, thisArg: any, argArray?: any) => any
+>f : () => void
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>parent : Window
+>[] : never[]
 
     // error
     required1 && required2 && required1() && console.log('foo');
@@ -233,6 +264,73 @@ function checksPropertyAccess() {
 >x : { foo: { bar(): boolean; }; }
 >foo : { bar(): boolean; }
 >bar : () => boolean
+
+    // ok
+    const y = A.from && (A.from as Function) !== B.from ? true : false;
+>y : boolean
+>A.from && (A.from as Function) !== B.from ? true : false : boolean
+>A.from && (A.from as Function) !== B.from : boolean
+>A.from : () => string
+>A : typeof A
+>from : () => string
+>(A.from as Function) !== B.from : boolean
+>(A.from as Function) : Function
+>A.from as Function : Function
+>A.from : () => string
+>A : typeof A
+>from : () => string
+>B.from : () => string
+>B : typeof B
+>from : () => string
+>true : true
+>false : false
+
+    y;
+>y : boolean
+
+    const x1 = {
+>x1 : { a: { b: { c: () => void; }; }; }
+>{        a: { b: { c: () => {} } }    } : { a: { b: { c: () => void; }; }; }
+
+        a: { b: { c: () => {} } }
+>a : { b: { c: () => void; }; }
+>{ b: { c: () => {} } } : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>{ c: () => {} } : { c: () => void; }
+>c : () => void
+>() => {} : () => void
+    }
+    const x2 = {
+>x2 : { a: { b: { c: () => void; }; }; }
+>{        a: { b: { c: () => {} } }    } : { a: { b: { c: () => void; }; }; }
+
+        a: { b: { c: () => {} } }
+>a : { b: { c: () => void; }; }
+>{ b: { c: () => {} } } : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>{ c: () => {} } : { c: () => void; }
+>c : () => void
+>() => {} : () => void
+    }
+
+    // error
+    x1.a.b.c && x2.a.b.c();
+>x1.a.b.c && x2.a.b.c() : void
+>x1.a.b.c : () => void
+>x1.a.b : { c: () => void; }
+>x1.a : { b: { c: () => void; }; }
+>x1 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
+>x2.a.b.c() : void
+>x2.a.b.c : () => void
+>x2.a.b : { c: () => void; }
+>x2.a : { b: { c: () => void; }; }
+>x2 : { a: { b: { c: () => void; }; }; }
+>a : { b: { c: () => void; }; }
+>b : { c: () => void; }
+>c : () => void
 }
 
 class Foo {

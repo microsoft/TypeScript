@@ -564,6 +564,9 @@ namespace ts.server {
         exit() {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
+            if (traceDir) {
+                tracing.stopTracing(ts.emptyArray);
+            }
             process.exit(0);
         }
 
@@ -976,6 +979,14 @@ namespace ts.server {
     const serverMode = parseServerMode();
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
     const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
+
+    const commandLineTraceDir = findArgument("--traceDirectory");
+    const traceDir = commandLineTraceDir
+        ? stripQuotes(commandLineTraceDir)
+        : process.env.TSS_TRACE;
+    if (traceDir) {
+        tracing.startTracing(tracing.Mode.Server, traceDir);
+    }
 
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);

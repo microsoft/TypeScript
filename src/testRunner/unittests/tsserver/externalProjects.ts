@@ -529,7 +529,6 @@ namespace ts.projectSystem {
                     [configFile.path]);
 
                 host.deleteFile(configFile.path);
-                host.checkTimeoutQueueLengthAndRun(1);
 
                 knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info!)); // TODO: GH#18217 GH#20039
                 checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
