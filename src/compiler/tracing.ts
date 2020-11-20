@@ -18,7 +18,7 @@ namespace ts.tracing {
     const legend: TraceRecord[] = [];
 
     // The actual constraint is that JSON.stringify be able to serialize it without throwing.
-    type Args = {
+    interface Args {
         [key: string]: string | number | boolean | null | undefined | Args | readonly (string | number | boolean | null | undefined | Args)[];
     };
 
