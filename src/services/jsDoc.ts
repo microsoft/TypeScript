@@ -329,6 +329,7 @@ namespace ts.JsDoc {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.ArrowFunction:
                 const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                 return { commentOwner, parameters };
 

@@ -1,14 +1,14 @@
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(4,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(5,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(16,16): error TS2576: Property 'foo' is a static member of type 'C'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(16,16): error TS2576: Property 'foo' does not exist on type 'C'. Did you mean to access the static member 'C.foo' instead?
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(17,16): error TS2339: Property 'bar' does not exist on type 'C'.
-tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(18,16): error TS2576: Property 'x' is a static member of type 'C'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(18,16): error TS2576: Property 'x' does not exist on type 'C'. Did you mean to access the static member 'C.x' instead?
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(24,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(25,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(27,21): error TS2302: Static members cannot reference class type parameters.
-tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(36,16): error TS2576: Property 'foo' is a static member of type 'C<number, string>'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(36,16): error TS2576: Property 'foo' does not exist on type 'C<number, string>'. Did you mean to access the static member 'C<number, string>.foo' instead?
 tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(37,16): error TS2339: Property 'bar' does not exist on type 'C<number, string>'.
-tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' is a static member of type 'C<number, string>'.
+tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts(38,16): error TS2576: Property 'x' does not exist on type 'C<number, string>'. Did you mean to access the static member 'C<number, string>.x' instead?
 
 
 ==== tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts (11 errors) ====
@@ -33,13 +33,13 @@ tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.
         var r = c.fn();
         var r4 = c.foo; // error
                    ~~~
-!!! error TS2576: Property 'foo' is a static member of type 'C'.
+!!! error TS2576: Property 'foo' does not exist on type 'C'. Did you mean to access the static member 'C.foo' instead?
         var r5 = c.bar; // error
                    ~~~
 !!! error TS2339: Property 'bar' does not exist on type 'C'.
         var r6 = c.x; // error
                    ~
-!!! error TS2576: Property 'x' is a static member of type 'C'.
+!!! error TS2576: Property 'x' does not exist on type 'C'. Did you mean to access the static member 'C.x' instead?
     }
     
     module Generic {
@@ -65,11 +65,11 @@ tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.
         var r = c.fn();
         var r4 = c.foo; // error
                    ~~~
-!!! error TS2576: Property 'foo' is a static member of type 'C<number, string>'.
+!!! error TS2576: Property 'foo' does not exist on type 'C<number, string>'. Did you mean to access the static member 'C<number, string>.foo' instead?
         var r5 = c.bar; // error
                    ~~~
 !!! error TS2339: Property 'bar' does not exist on type 'C<number, string>'.
         var r6 = c.x; // error
                    ~
-!!! error TS2576: Property 'x' is a static member of type 'C<number, string>'.
+!!! error TS2576: Property 'x' does not exist on type 'C<number, string>'. Did you mean to access the static member 'C<number, string>.x' instead?
     }

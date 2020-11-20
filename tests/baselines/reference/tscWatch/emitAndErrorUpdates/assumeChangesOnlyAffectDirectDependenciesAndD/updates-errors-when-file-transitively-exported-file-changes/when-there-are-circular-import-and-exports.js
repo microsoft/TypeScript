@@ -66,6 +66,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
 Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/tools.interface.ts
@@ -271,6 +272,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
 Program options: {"baseUrl":"/user/username/projects/myproject","assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib1/tools/tools.interface.ts

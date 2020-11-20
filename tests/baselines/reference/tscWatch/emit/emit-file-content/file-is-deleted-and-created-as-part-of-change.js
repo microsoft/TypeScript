@@ -30,6 +30,7 @@ Output::
 
 Program root files: ["/home/username/project/app/file.ts"]
 Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
@@ -79,6 +80,7 @@ Output::
 
 Program root files: ["/home/username/project/app/file.ts"]
 Program options: {"watch":true,"configFilePath":"/home/username/project/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts

@@ -36,6 +36,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
 Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","bundledPackageName":"core","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts
@@ -44,6 +45,7 @@ No cached semantic diagnostics in the builder::
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","bundledPackageName":"logic","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
@@ -236,6 +238,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
 Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","bundledPackageName":"core","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts
@@ -331,6 +334,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
 Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","bundledPackageName":"logic","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.d.ts
@@ -474,6 +478,7 @@ Output::
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
 Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","bundledPackageName":"core","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts

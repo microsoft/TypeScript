@@ -58,6 +58,35 @@ const e1: T1 = {
 type T2 = keyof T1;
 const e2: T2 = "foo";
 
+// Repro from #41133
+
+interface Car {
+    name: string;
+    seats: number;
+    engine: Engine;
+    wheels: Wheel[];
+}
+
+interface Engine {
+    manufacturer: string;
+    horsepower: number;
+}
+
+interface Wheel {
+    type: "summer" | "winter";
+    radius: number;
+}
+
+type Primitive = string | number | boolean;
+type OnlyPrimitives<T> = { [K in keyof T as T[K] extends Primitive ? K : never]: T[K] };
+
+let primitiveCar: OnlyPrimitives<Car>;  // { name: string; seats: number; }
+let keys: keyof OnlyPrimitives<Car>;  //  "name" | "seats"
+
+type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
+
+let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
+
 
 //// [mappedTypeAsClauses.js]
 "use strict";
@@ -66,6 +95,9 @@ var e1 = {
     foo: "hello"
 };
 var e2 = "foo";
+var primitiveCar; // { name: string; seats: number; }
+var keys; //  "name" | "seats"
+var carKeys; // "name" | "seats"
 
 
 //// [mappedTypeAsClauses.d.ts]
@@ -135,3 +167,25 @@ declare type T1 = PickByValueType<Example, string>;
 declare const e1: T1;
 declare type T2 = keyof T1;
 declare const e2: T2;
+interface Car {
+    name: string;
+    seats: number;
+    engine: Engine;
+    wheels: Wheel[];
+}
+interface Engine {
+    manufacturer: string;
+    horsepower: number;
+}
+interface Wheel {
+    type: "summer" | "winter";
+    radius: number;
+}
+declare type Primitive = string | number | boolean;
+declare type OnlyPrimitives<T> = {
+    [K in keyof T as T[K] extends Primitive ? K : never]: T[K];
+};
+declare let primitiveCar: OnlyPrimitives<Car>;
+declare let keys: keyof OnlyPrimitives<Car>;
+declare type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
+declare let carKeys: KeysOfPrimitives<Car>;

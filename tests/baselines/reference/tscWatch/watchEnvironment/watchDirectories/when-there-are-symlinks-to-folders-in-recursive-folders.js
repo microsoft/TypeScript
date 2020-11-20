@@ -69,6 +69,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myprojec
 
 Program root files: ["/home/user/projects/myproject/src/file.ts"]
 Program options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /home/user/projects/myproject/node_modules/reala/index.d.ts

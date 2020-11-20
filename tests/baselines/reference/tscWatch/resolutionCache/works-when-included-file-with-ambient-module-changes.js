@@ -44,6 +44,7 @@ Output::
 
 Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts
@@ -107,6 +108,7 @@ Output::
 
 Program root files: ["/a/b/foo.ts","/a/b/bar.d.ts"]
 Program options: {"watch":true}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/foo.ts

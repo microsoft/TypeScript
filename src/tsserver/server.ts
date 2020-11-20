@@ -323,7 +323,11 @@ namespace ts.server {
             this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
             this.installer.on("message", m => this.handleMessage(m));
 
-            this.event({ pid: this.installer.pid }, "typingsInstallerPid");
+            // We have to schedule this event to the next tick
+            // cause this fn will be called during
+            // new IOSession => super(which is Session) => new ProjectService => NodeTypingsInstaller.attach
+            // and if "event" is referencing "this" before super class is initialized, it will be a ReferenceError in ES6 class.
+            this.host.setImmediate(() => this.event({ pid: this.installer.pid }, "typingsInstallerPid"));
 
             process.on("exit", () => {
                 this.installer.kill();
@@ -481,21 +485,12 @@ namespace ts.server {
         private eventPort: number | undefined;
         private eventSocket: NodeSocket | undefined;
         private socketEventQueue: { body: any, eventName: string }[] | undefined;
+        /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
         private constructed: boolean | undefined;
 
         constructor() {
-            const event: Event | undefined = (body: object, eventName: string) => {
-                if (this.constructed) {
-                    this.event(body, eventName);
-                }
-                else {
-                    // It is unsafe to dereference `this` before initialization completes,
-                    // so we defer until the next tick.
-                    //
-                    // Construction should finish before the next tick fires, so we do not need to do this recursively.
-                    // eslint-disable-next-line no-restricted-globals
-                    setImmediate(() => this.event(body, eventName));
-                }
+            const event = (body: object, eventName: string) => {
+                this.event(body, eventName);
             };
 
             const host = sys;
@@ -569,6 +564,9 @@ namespace ts.server {
         exit() {
             this.logger.info("Exiting...");
             this.projectService.closeLog();
+            if (traceDir) {
+                tracing.stopTracing(ts.emptyArray);
+            }
             process.exit(0);
         }
 
@@ -981,6 +979,14 @@ namespace ts.server {
     const serverMode = parseServerMode();
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
     const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
+
+    const commandLineTraceDir = findArgument("--traceDirectory");
+    const traceDir = commandLineTraceDir
+        ? stripQuotes(commandLineTraceDir)
+        : process.env.TSS_TRACE;
+    if (traceDir) {
+        tracing.startTracing(tracing.Mode.Server, traceDir);
+    }
 
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);

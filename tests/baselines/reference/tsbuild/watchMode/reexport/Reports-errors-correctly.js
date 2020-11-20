@@ -88,6 +88,7 @@ Output::
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
@@ -100,6 +101,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts
@@ -262,6 +264,7 @@ Output::
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
@@ -273,6 +276,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts
@@ -396,6 +400,7 @@ Output::
 
 Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
 Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
@@ -407,6 +412,7 @@ Semantic diagnostics in builder refreshed for::
 
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts

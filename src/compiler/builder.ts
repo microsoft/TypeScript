@@ -274,7 +274,7 @@ namespace ts {
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
                     relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath)) :
-                    emptyArray :
+                    [] :
                 undefined;
             return result;
         });
@@ -824,7 +824,7 @@ namespace ts {
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
                     relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r, relativeToBuildInfo)) :
-                    emptyArray :
+                    [] :
                 undefined;
             return result;
         });
@@ -900,7 +900,7 @@ namespace ts {
         /**
          * Computing hash to for signature verification
          */
-        const computeHash = host.createHash || generateDjb2Hash;
+        const computeHash = maybeBind(host, host.createHash);
         let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
         let backupState: BuilderProgramState | undefined;
         newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
@@ -1019,31 +1019,57 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+            let restorePendingEmitOnHandlingNoEmitSuccess = false;
+            let savedAffectedFilesPendingEmit;
+            let savedAffectedFilesPendingEmitKind;
+            let savedAffectedFilesPendingEmitIndex;
+            // Backup and restore affected pendings emit state for non emit Builder if noEmitOnError is enabled and emitBuildInfo could be written in case there are errors
+            // This ensures pending files to emit is updated in tsbuildinfo
+            // Note that when there are no errors, emit proceeds as if everything is emitted as it is callers reponsibility to write the files to disk if at all (because its builder that doesnt track files to emit)
+            if (kind !== BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram &&
+                !targetSourceFile &&
+                !outFile(state.compilerOptions) &&
+                !state.compilerOptions.noEmit &&
+                state.compilerOptions.noEmitOnError) {
+                restorePendingEmitOnHandlingNoEmitSuccess = true;
+                savedAffectedFilesPendingEmit = state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.slice();
+                savedAffectedFilesPendingEmitKind = state.affectedFilesPendingEmitKind && new Map(state.affectedFilesPendingEmitKind);
+                savedAffectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
+            }
+
             if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
-                const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
-                if (result) return result;
-                if (!targetSourceFile) {
-                    // Emit and report any errors we ran into.
-                    let sourceMaps: SourceMapEmitResult[] = [];
-                    let emitSkipped = false;
-                    let diagnostics: Diagnostic[] | undefined;
-                    let emittedFiles: string[] = [];
+            }
+            const result = handleNoEmitOptions(builderProgram, targetSourceFile, writeFile, cancellationToken);
+            if (result) return result;
 
-                    let affectedEmitResult: AffectedFileResult<EmitResult>;
-                    while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
-                        emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
-                        diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
-                        emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
-                        sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
-                    }
-                    return {
-                        emitSkipped,
-                        diagnostics: diagnostics || emptyArray,
-                        emittedFiles,
-                        sourceMaps
-                    };
+            if (restorePendingEmitOnHandlingNoEmitSuccess) {
+                state.affectedFilesPendingEmit = savedAffectedFilesPendingEmit;
+                state.affectedFilesPendingEmitKind = savedAffectedFilesPendingEmitKind;
+                state.affectedFilesPendingEmitIndex = savedAffectedFilesPendingEmitIndex;
+            }
+
+            // Emit only affected files if using builder for emit
+            if (!targetSourceFile && kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                // Emit and report any errors we ran into.
+                let sourceMaps: SourceMapEmitResult[] = [];
+                let emitSkipped = false;
+                let diagnostics: Diagnostic[] | undefined;
+                let emittedFiles: string[] = [];
+
+                let affectedEmitResult: AffectedFileResult<EmitResult>;
+                while (affectedEmitResult = emitNextAffectedFile(writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)) {
+                    emitSkipped = emitSkipped || affectedEmitResult.result.emitSkipped;
+                    diagnostics = addRange(diagnostics, affectedEmitResult.result.diagnostics);
+                    emittedFiles = addRange(emittedFiles, affectedEmitResult.result.emittedFiles);
+                    sourceMaps = addRange(sourceMaps, affectedEmitResult.result.sourceMaps);
                 }
+                return {
+                    emitSkipped,
+                    diagnostics: diagnostics || emptyArray,
+                    emittedFiles,
+                    sourceMaps
+                };
             }
             return Debug.checkDefined(state.program).emit(targetSourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
@@ -1069,7 +1095,8 @@ namespace ts {
                 }
 
                 // Add file to affected file pending emit to handle for later emit time
-                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                // Apart for emit builder do this for tsbuildinfo, do this for non emit builder when noEmit is set as tsbuildinfo is written and reused between emitters
+                if (kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram || state.compilerOptions.noEmit || state.compilerOptions.noEmitOnError) {
                     addToAffectedFilesPendingEmit(state, (affected as SourceFile).resolvedPath, BuilderFileEmit.Full);
                 }
 

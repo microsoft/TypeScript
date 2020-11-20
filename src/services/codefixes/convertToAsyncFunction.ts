@@ -7,11 +7,11 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context: CodeFixContext) {
             codeActionSucceeded = true;
-            const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context));
+            const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
             return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker())),
     });
 
     const enum SynthBindingNameKind {
@@ -43,7 +43,7 @@ namespace ts.codefix {
         readonly isInJSFile: boolean;
     }
 
-    function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
+    function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         // get the function declaration - returns a promise
         const tokenAtPosition = getTokenAtPosition(sourceFile, position);
         let functionToConvert: FunctionLikeDeclaration | undefined;
@@ -64,16 +64,18 @@ namespace ts.codefix {
         const synthNamesMap = new Map<string, SynthIdentifier>();
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
-        const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
+        const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap);
         const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
-
         if (!returnStatements.length) {
             return;
         }
 
-        // add the async keyword
-        changes.insertLastModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
+        const pos = functionToConvert.modifiers ? functionToConvert.modifiers.end :
+            functionToConvert.decorators ? skipTrivia(sourceFile.text, functionToConvert.decorators.end) :
+                functionToConvert.getStart(sourceFile);
+        const options = functionToConvert.modifiers ? { prefix: " " } : { suffix: " " };
+        changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, options);
 
         for (const returnStatement of returnStatements) {
             forEachChild(returnStatement, function visit(node) {
@@ -139,16 +141,12 @@ namespace ts.codefix {
         return !!checker.getPromisedTypeOfPromise(checker.getTypeAtLocation(node));
     }
 
-    function declaredInFile(symbol: Symbol, sourceFile: SourceFile): boolean {
-        return symbol.valueDeclaration && symbol.valueDeclaration.getSourceFile() === sourceFile;
-    }
-
     /*
         Renaming of identifiers may be neccesary as the refactor changes scopes -
         This function collects all existing identifier names and names of identifiers that will be created in the refactor.
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
-    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: ESMap<string, SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
+    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: ESMap<string, SynthIdentifier>): FunctionLikeDeclaration {
         const identsToRenameMap = new Map<string, Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -156,11 +154,8 @@ namespace ts.codefix {
                 forEachChild(node, visit);
                 return;
             }
-
             const symbol = checker.getSymbolAtLocation(node);
-            const isDefinedInFile = symbol && declaredInFile(symbol, sourceFile);
-
-            if (symbol && isDefinedInFile) {
+            if (symbol) {
                 const type = checker.getTypeAtLocation(node);
                 // Note - the choice of the last call signature is arbitrary
                 const lastCallSignature = getLastCallSignature(type, checker);
@@ -199,7 +194,26 @@ namespace ts.codefix {
             }
         });
 
-        return getSynthesizedDeepCloneWithRenames(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker);
+        return getSynthesizedDeepCloneWithReplacements(nodeToRename, /*includeTrivia*/ true, original => {
+            if (isBindingElement(original) && isIdentifier(original.name) && isObjectBindingPattern(original.parent)) {
+                const symbol = checker.getSymbolAtLocation(original.name);
+                const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+                if (renameInfo && renameInfo.text !== (original.name || original.propertyName).getText()) {
+                    return factory.createBindingElement(
+                        original.dotDotDotToken,
+                        original.propertyName || original.name,
+                        renameInfo,
+                        original.initializer);
+                }
+            }
+            else if (isIdentifier(original)) {
+                const symbol = checker.getSymbolAtLocation(original);
+                const renameInfo = symbol && identsToRenameMap.get(String(getSymbolId(symbol)));
+                if (renameInfo) {
+                    return factory.createIdentifier(renameInfo.text);
+                }
+            }
+        });
     }
 
     function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyESMap<string, Symbol[]>): SynthIdentifier {
@@ -289,7 +303,7 @@ namespace ts.codefix {
 
         const tryStatement = factory.createTryStatement(tryBlock, catchClause, /*finallyBlock*/ undefined);
         const destructuredResult = prevArgName && varDeclIdentifier && isSynthBindingPattern(prevArgName)
-            && factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepCloneWithRenames(prevArgName.bindingPattern), /*exclamationToken*/ undefined, /*type*/ undefined, varDeclIdentifier)], NodeFlags.Const));
+            && factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepClone(prevArgName.bindingPattern), /*exclamationToken*/ undefined, /*type*/ undefined, varDeclIdentifier)], NodeFlags.Const));
         return compact([varDeclList, tryStatement, destructuredResult]);
     }
 
