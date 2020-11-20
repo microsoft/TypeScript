@@ -246,7 +246,7 @@ namespace ts.codefix {
         checker: TypeChecker,
         sourceFiles: readonly SourceFile[],
         program: Program,
-        cancellationToken: CancellationToken, 
+        cancellationToken: CancellationToken,
         isFixAll = false): void {
         if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
             if (parameter.modifiers && parameter.modifiers.length > 0 &&
