@@ -55,9 +55,10 @@ namespace ts {
 
     /*@internal*/
     export function isJSDocLikeText(text: string, start: number) {
-        return text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
+        return start + 2 < text.length &&
+            text.charCodeAt(start + 1) === CharacterCodes.asterisk &&
             text.charCodeAt(start + 2) === CharacterCodes.asterisk &&
-            text.charCodeAt(start + 3) !== CharacterCodes.slash;
+            (start + 3 === text.length || text.charCodeAt(start + 3) !== CharacterCodes.slash);
     }
 
     /**
