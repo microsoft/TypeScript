@@ -120,13 +120,16 @@ namespace ts.codefix {
                         else if (token.kind === SyntaxKind.LessThanToken) {
                             deleteTypeParameters(changes, sourceFile, token);
                         }
-                        else if (isObjectBindingPattern(token.parent) || isArrayBindingPattern(token.parent)) {
+                        else if (isObjectBindingPattern(token.parent)) {
                             if (token.parent.parent.initializer) {
                                 break;
                             }
                             else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
                                 changes.delete(sourceFile, token.parent.parent);
                             }
+                        }
+                        else if (isArrayBindingPattern(token.parent.parent) && token.parent.parent.parent.initializer) {
+                            break;
                         }
                         else if (canDeleteEntireVariableStatement(sourceFile, token)) {
                             deleteEntireVariableStatement(changes, sourceFile, <VariableDeclarationList>token.parent);

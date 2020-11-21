@@ -15,6 +15,8 @@
 ////function container(o) {
 ////    const { x, y } = { x: 1, y: 2 }
 ////    const { a, b } = o
+////    const [ z, ka ] = [ 3, 4 ]
+////    const [ c, d ] = o
 ////}
 ////
 ////class C {
@@ -52,6 +54,8 @@ i();
 function container(o) {
     const { x, y } = { x: 1, y: 2 }
     const { a, b } = o
+    const [ z, ka ] = [ 3, 4 ]
+    const [ c, d ] = o
 }
 
 class C {

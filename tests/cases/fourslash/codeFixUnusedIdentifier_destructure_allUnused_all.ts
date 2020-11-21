@@ -23,7 +23,7 @@ a;
 export function f({ fb }) {
     fb;
 }
-export function g([ ga ]) {
+export function g([ ga ],) {
     ga;
 }`,
 });
