@@ -42,7 +42,7 @@ namespace ts.codefix {
                 }
             }
 
-            if (isObjectBindingPattern(token.parent)) {
+            if (isObjectBindingPattern(token.parent) || isArrayBindingPattern(token.parent)) {
                 if (isParameter(token.parent.parent)) {
                     const elements = token.parent.elements;
                     const diagnostic: [DiagnosticMessage, string] = [
@@ -51,7 +51,7 @@ namespace ts.codefix {
                     ];
                     return [
                         createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                            deleteDestructuringElements(t, sourceFile, <ObjectBindingPattern>token.parent)), diagnostic)
+                            deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic)
                     ];
                 }
                 return [
@@ -121,12 +121,15 @@ namespace ts.codefix {
                             deleteTypeParameters(changes, sourceFile, token);
                         }
                         else if (isObjectBindingPattern(token.parent)) {
-                            if (isParameter(token.parent.parent)) {
-                                deleteDestructuringElements(changes, sourceFile, token.parent);
+                            if (token.parent.parent.initializer) {
+                                break;
                             }
-                            else {
+                            else if (!isParameter(token.parent.parent) || isNotProvidedArguments(token.parent.parent, checker, sourceFiles)) {
                                 changes.delete(sourceFile, token.parent.parent);
                             }
+                        }
+                        else if (isArrayBindingPattern(token.parent.parent) && token.parent.parent.parent.initializer) {
+                            break;
                         }
                         else if (canDeleteEntireVariableStatement(sourceFile, token)) {
                             deleteEntireVariableStatement(changes, sourceFile, <VariableDeclarationList>token.parent);
@@ -165,7 +168,7 @@ namespace ts.codefix {
             || token.kind === SyntaxKind.Identifier && (token.parent.kind === SyntaxKind.ImportSpecifier || token.parent.kind === SyntaxKind.ImportClause);
     }
 
-    // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
+    /** Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing. */
     function tryGetFullImport(token: Node): ImportDeclaration | undefined {
         return token.kind === SyntaxKind.ImportKeyword ? tryCast(token.parent, isImportDeclaration) : undefined;
     }
@@ -178,7 +181,7 @@ namespace ts.codefix {
         changes.delete(sourceFile, node.parent.kind === SyntaxKind.VariableStatement ? node.parent : node);
     }
 
-    function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern) {
+    function deleteDestructuringElements(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ObjectBindingPattern | ArrayBindingPattern) {
         forEach(node.elements, n => changes.delete(sourceFile, n));
     }
 
@@ -219,16 +222,14 @@ namespace ts.codefix {
 
     function tryDeleteDeclaration(sourceFile: SourceFile, token: Node, changes: textChanges.ChangeTracker, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean) {
         tryDeleteDeclarationWorker(token, changes, sourceFile, checker, sourceFiles, program, cancellationToken, isFixAll);
-        if (isIdentifier(token)) deleteAssignments(changes, sourceFile, token, checker);
-    }
-
-    function deleteAssignments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier, checker: TypeChecker) {
-        FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
-            if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
-            if (isBinaryExpression(ref.parent) && isExpressionStatement(ref.parent.parent) && ref.parent.left === ref) {
-                changes.delete(sourceFile, ref.parent.parent);
-            }
-        });
+        if (isIdentifier(token)) {
+            FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
+                if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
+                if (!isFixAll && isBinaryExpression(ref.parent) && isExpressionStatement(ref.parent.parent) && ref.parent.left === ref) {
+                    changes.delete(sourceFile, ref.parent.parent);
+                }
+            });
+        }
     }
 
     function tryDeleteDeclarationWorker(token: Node, changes: textChanges.ChangeTracker, sourceFile: SourceFile, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): void {
@@ -236,22 +237,35 @@ namespace ts.codefix {
         if (isParameter(parent)) {
             tryDeleteParameter(changes, sourceFile, parent, checker, sourceFiles, program, cancellationToken, isFixAll);
         }
-        else {
+        else if (!isFixAll || !(isIdentifier(token) && FindAllReferences.Core.isSymbolReferencedInFile(token, checker, sourceFile))) {
             changes.delete(sourceFile, isImportClause(parent) ? token : isComputedPropertyName(parent) ? parent.parent : parent);
         }
     }
 
-    function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll = false): void {
-        if (mayDeleteParameter(checker, sourceFile, p, sourceFiles, program, cancellationToken, isFixAll)) {
-            if (p.modifiers && p.modifiers.length > 0 &&
-                (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
-                p.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
+    function tryDeleteParameter(
+        changes: textChanges.ChangeTracker,
+        sourceFile: SourceFile,
+        parameter: ParameterDeclaration,
+        checker: TypeChecker,
+        sourceFiles: readonly SourceFile[],
+        program: Program,
+        cancellationToken: CancellationToken,
+        isFixAll = false): void {
+        if (mayDeleteParameter(checker, sourceFile, parameter, sourceFiles, program, cancellationToken, isFixAll)) {
+            if (parameter.modifiers && parameter.modifiers.length > 0 &&
+                (!isIdentifier(parameter.name) || FindAllReferences.Core.isSymbolReferencedInFile(parameter.name, checker, sourceFile))) {
+                parameter.modifiers.forEach(modifier => changes.deleteModifier(sourceFile, modifier));
             }
-            else {
-                changes.delete(sourceFile, p);
-                deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
+            else if (!parameter.initializer && isNotProvidedArguments(parameter, checker, sourceFiles)) {
+                changes.delete(sourceFile, parameter);
             }
         }
+    }
+
+    function isNotProvidedArguments(parameter: ParameterDeclaration, checker: TypeChecker, sourceFiles: readonly SourceFile[]) {
+        const index = parameter.parent.parameters.indexOf(parameter);
+        // Just in case the call didn't provide enough arguments.
+        return !FindAllReferences.Core.someSignatureUsage(parameter.parent, sourceFiles, checker, (_, call) => !call || call.arguments.length > index);
     }
 
     function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], program: Program, cancellationToken: CancellationToken, isFixAll: boolean): boolean {
@@ -303,15 +317,6 @@ namespace ts.codefix {
             default:
                 return Debug.failBadSyntaxKind(parent);
         }
-    }
-
-    function deleteUnusedArguments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, deletedParameter: ParameterDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker): void {
-        FindAllReferences.Core.eachSignatureCall(deletedParameter.parent, sourceFiles, checker, call => {
-            const index = deletedParameter.parent.parameters.indexOf(deletedParameter);
-            if (call.arguments.length > index) { // Just in case the call didn't provide enough arguments.
-                changes.delete(sourceFile, call.arguments[index]);
-            }
-        });
     }
 
     function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Identifier): boolean {
