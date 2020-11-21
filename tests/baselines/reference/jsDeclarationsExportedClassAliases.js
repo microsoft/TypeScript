@@ -56,5 +56,5 @@ export class FancyError extends Error {
     constructor(status: any);
 }
 //// [index.d.ts]
-import errors = require("./errors");
 export { errors };
+import errors = require("./errors");

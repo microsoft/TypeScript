@@ -15,10 +15,10 @@ const thing = a + m
 >m : number
 
 module.exports = {
->module.exports = {    thing} : { thing: number; }
->module.exports : { thing: number; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": { thing: number; }; }
->exports : { thing: number; }
+>module.exports = {    thing} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
 >{    thing} : { thing: number; }
 
     thing

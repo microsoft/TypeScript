@@ -989,6 +989,18 @@ namespace ts {
         };
     }
 
+    export function createDiagnosticForFileFromMessageChain(sourceFile: SourceFile, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+        return {
+            file: sourceFile,
+            start: 0,
+            length: 0,
+            code: messageChain.code,
+            category: messageChain.category,
+            messageText: messageChain.next ? messageChain : messageChain.messageText,
+            relatedInformation
+        };
+    }
+
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
         return {
             file: sourceFile,
@@ -3844,7 +3856,7 @@ namespace ts {
 
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
     const indentStrings: string[] = ["", "    "];
@@ -6009,8 +6021,8 @@ namespace ts {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
     }
 
-    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
-        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
         const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
@@ -6018,6 +6030,10 @@ namespace ts {
             jsxImportSourcePragma ?
                 jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
                 undefined;
+    }
+
+    export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
+        return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -6705,9 +6721,11 @@ namespace ts {
         return { pos: getTokenPosOfNode(node), end: node.end };
     }
 
-    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+    export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
         // Include the `<>`
-        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
+        const pos = typeParameters.pos - 1;
+        const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+        return { pos, end };
     }
 
     export interface HostWithIsSourceOfProjectReferenceRedirect {

@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.1";
+    const versionMajorMinor = "4.2";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -81,7 +81,7 @@ declare namespace ts {
             value: T;
             done?: false;
         } | {
-            value: never;
+            value: void;
             done: true;
         };
     }
@@ -2832,6 +2832,7 @@ declare namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -2880,6 +2881,8 @@ declare namespace ts {
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     export interface TypeAcquisition {
@@ -3863,7 +3866,7 @@ declare namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
@@ -7582,6 +7585,8 @@ declare namespace ts.server.protocol {
         watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     /**
@@ -8967,6 +8972,7 @@ declare namespace ts.server.protocol {
         insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
@@ -8998,7 +9004,7 @@ declare namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
@@ -9258,6 +9264,7 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
+        protected projectErrors: Diagnostic[] | undefined;
         protected isInitialLoadPending: () => boolean;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
@@ -9296,7 +9303,11 @@ declare namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[];
+        /**
+         * Get all the project errors
+         */
         getAllProjectErrors(): readonly Diagnostic[];
+        setProjectErrors(projectErrors: Diagnostic[] | undefined): void;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**
@@ -9306,7 +9317,7 @@ declare namespace ts.server {
         enableLanguageService(): void;
         disableLanguageService(lastFileExceededProgramSize?: string): void;
         getProjectName(): string;
-        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): TypeAcquisition;
+        protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
         getExternalFiles(): SortedReadonlyArray<string>;
         getSourceFile(path: Path): SourceFile | undefined;
         close(): void;
@@ -9376,6 +9387,7 @@ declare namespace ts.server {
         private rootFileNames;
         isOrphan(): boolean;
         updateGraph(): boolean;
+        hasRoots(): boolean;
         markAsDirty(): void;
         getScriptFileNames(): string[];
         getLanguageService(): never;
@@ -9395,7 +9407,6 @@ declare namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
-        private projectErrors;
         private projectReferences;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
@@ -9559,7 +9570,7 @@ declare namespace ts.server {
     }
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
-    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined;
+    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
     export function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
@@ -9591,6 +9602,10 @@ declare namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
+    }
+    export interface WatchOptionsAndErrors {
+        watchOptions: WatchOptions;
+        errors: Diagnostic[] | undefined;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;

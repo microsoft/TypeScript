@@ -401,3 +401,20 @@ var aa: '0';
 var aa: '0' & `${number}`;
 >aa : Symbol(aa, Decl(templateLiteralTypesPatterns.ts, 164, 3), Decl(templateLiteralTypesPatterns.ts, 165, 3))
 
+// Remove string literals from unions with matching template literals
+
+let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
+>t1 : Symbol(t1, Decl(templateLiteralTypesPatterns.ts, 169, 3))
+
+let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
+>t2 : Symbol(t2, Decl(templateLiteralTypesPatterns.ts, 170, 3))
+
+let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
+>t3 : Symbol(t3, Decl(templateLiteralTypesPatterns.ts, 171, 3))
+
+var bb: `${number}`;
+>bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
+
+var bb: `${number}` | '0';
+>bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
+

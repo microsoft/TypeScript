@@ -886,6 +886,9 @@ namespace ts.server {
             exit() {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
+                if (traceDir) {
+                    tracing.stopTracing(ts.emptyArray);
+                }
                 process.exit(0);
             }
 
@@ -908,6 +911,13 @@ namespace ts.server {
         const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
         const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
         const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
+        const commandLineTraceDir = findArgument("--traceDirectory");
+        const traceDir = commandLineTraceDir
+            ? stripQuotes(commandLineTraceDir)
+            : process.env.TSS_TRACE;
+        if (traceDir) {
+            tracing.startTracing(tracing.Mode.Server, traceDir);
+        }
 
         const ioSession = new IOSession();
         process.on("uncaughtException", err => {

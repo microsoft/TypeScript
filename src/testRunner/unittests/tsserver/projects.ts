@@ -419,7 +419,7 @@ namespace ts.projectSystem {
                 unresolvedImports: response.unresolvedImports,
             });
 
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             assert.isUndefined(request);
         });
 
@@ -1478,6 +1478,48 @@ namespace ts.projectSystem {
                     fileName: fileB2.path,
                     isSourceOfProjectReferenceRedirect: true
                 }
+            ]);
+        });
+
+        it("synchronizeProjectList returns correct information when base configuration file cannot be resolved", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/index.ts`,
+                content: "export const foo = 5;"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ extends: "./tsconfig_base.json" })
+            };
+            const host = createServerHost([file, config, libFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ false);
+            assert.deepEqual(knownProjects[0].files, [
+                libFile.path,
+                file.path,
+                config.path,
+                `${tscWatch.projectRoot}/tsconfig_base.json`,
+            ]);
+        });
+
+        it("synchronizeProjectList returns correct information when base configuration file cannot be resolved and redirect info is requested", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/index.ts`,
+                content: "export const foo = 5;"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ extends: "./tsconfig_base.json" })
+            };
+            const host = createServerHost([file, config, libFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
+            assert.deepEqual(knownProjects[0].files, [
+                { fileName: libFile.path, isSourceOfProjectReferenceRedirect: false },
+                { fileName: file.path, isSourceOfProjectReferenceRedirect: false },
+                { fileName: config.path, isSourceOfProjectReferenceRedirect: false },
+                { fileName: `${tscWatch.projectRoot}/tsconfig_base.json`, isSourceOfProjectReferenceRedirect: false },
             ]);
         });
 

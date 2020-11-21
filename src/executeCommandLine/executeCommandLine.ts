@@ -4,12 +4,57 @@ namespace ts {
         value: string;
     }
 
-    function countLines(program: Program): number {
-        let count = 0;
+    function countLines(program: Program): Map<number> {
+        const counts = getCountsMap();
         forEach(program.getSourceFiles(), file => {
-            count += getLineStarts(file).length;
+            const key = getCountKey(program, file);
+            const lineCount = getLineStarts(file).length;
+            counts.set(key, counts.get(key)! + lineCount);
         });
-        return count;
+        return counts;
+    }
+
+    function countNodes(program: Program): Map<number> {
+        const counts = getCountsMap();
+        forEach(program.getSourceFiles(), file => {
+            const key = getCountKey(program, file);
+            counts.set(key, counts.get(key)! + file.nodeCount);
+        });
+        return counts;
+    }
+
+    function getCountsMap() {
+        const counts = createMap<number>();
+        counts.set("Library", 0);
+        counts.set("Definitions", 0);
+        counts.set("TypeScript", 0);
+        counts.set("JavaScript", 0);
+        counts.set("JSON", 0);
+        counts.set("Other", 0);
+        return counts;
+    }
+
+    function getCountKey(program: Program, file: SourceFile) {
+        if (program.isSourceFileDefaultLibrary(file)) {
+            return "Library";
+        }
+        else if (file.isDeclarationFile) {
+            return "Definitions";
+        }
+
+        const path = file.path;
+        if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+            return "TypeScript";
+        }
+        else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
+            return "JavaScript";
+        }
+        else if (fileExtensionIs(path, Extension.Json)) {
+            return "JSON";
+        }
+        else {
+            return "Other";
+        }
     }
 
     function updateReportDiagnostic(
@@ -621,7 +666,7 @@ namespace ts {
         }
 
         if (canTrace(system, compilerOptions)) {
-            tracing.startTracing(compilerOptions.configFilePath, compilerOptions.generateTrace!, isBuildMode);
+            tracing.startTracing(isBuildMode ? tracing.Mode.Build : tracing.Mode.Project, compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
     }
 
@@ -637,8 +682,22 @@ namespace ts {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
-            reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", program.getNodeCount());
+
+            const lineCounts = countLines(program);
+            const nodeCounts = countNodes(program);
+            if (compilerOptions.extendedDiagnostics) {
+                for (const key of arrayFrom(lineCounts.keys())) {
+                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                }
+                for (const key of arrayFrom(nodeCounts.keys())) {
+                    reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!);
+                }
+            }
+            else {
+                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+                reportCountStatistic("Nodes", reduceLeftIterator(nodeCounts.values(), (sum, count) => sum + count, 0));
+            }
+
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());

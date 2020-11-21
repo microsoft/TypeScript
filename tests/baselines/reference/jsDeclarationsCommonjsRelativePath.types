@@ -5,16 +5,16 @@
 const Thing = require('./thing').Thing
 >Thing : typeof Thing
 >require('./thing').Thing : typeof Thing
->require('./thing') : { Thing: typeof Thing; }
+>require('./thing') : typeof import("tests/cases/conformance/jsdoc/declarations/thing")
 >require : any
 >'./thing' : "./thing"
 >Thing : typeof Thing
 
 module.exports = { Thing }
->module.exports = { Thing } : { Thing: typeof Thing; }
->module.exports : { Thing: typeof Thing; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/reexport\"": { Thing: typeof Thing; }; }
->exports : { Thing: typeof Thing; }
+>module.exports = { Thing } : typeof import("tests/cases/conformance/jsdoc/declarations/reexport")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/reexport")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/reexport\"": typeof import("tests/cases/conformance/jsdoc/declarations/reexport"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/reexport")
 >{ Thing } : { Thing: typeof Thing; }
 >Thing : typeof Thing
 
@@ -26,10 +26,10 @@ class Thing {}
 >Thing : Thing
 
 module.exports = { Thing }
->module.exports = { Thing } : { Thing: typeof Thing; }
->module.exports : { Thing: typeof Thing; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/thing\"": { Thing: typeof Thing; }; }
->exports : { Thing: typeof Thing; }
+>module.exports = { Thing } : typeof import("tests/cases/conformance/jsdoc/declarations/thing")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/thing")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/thing\"": typeof import("tests/cases/conformance/jsdoc/declarations/thing"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/thing")
 >{ Thing } : { Thing: typeof Thing; }
 >Thing : typeof Thing
 

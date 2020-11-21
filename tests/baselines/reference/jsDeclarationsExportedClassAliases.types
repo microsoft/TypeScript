@@ -1,20 +1,20 @@
 === tests/cases/conformance/jsdoc/declarations/utils/index.js ===
 // issue arises here on compilation
 const errors = require("./errors");
->errors : { FancyError: typeof FancyError; }
->require("./errors") : { FancyError: typeof FancyError; }
+>errors : typeof errors
+>require("./errors") : typeof errors
 >require : any
 >"./errors" : "./errors"
 
 module.exports = {
->module.exports = {    errors} : { errors: { FancyError: typeof FancyError; }; }
->module.exports : { errors: { FancyError: typeof FancyError; }; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/utils/index\"": { errors: { FancyError: typeof FancyError; }; }; }
->exports : { errors: { FancyError: typeof FancyError; }; }
->{    errors} : { errors: { FancyError: typeof FancyError; }; }
+>module.exports = {    errors} : typeof import("tests/cases/conformance/jsdoc/declarations/utils/index")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/index")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/utils/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/utils/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/index")
+>{    errors} : { errors: typeof errors; }
 
     errors
->errors : { FancyError: typeof FancyError; }
+>errors : typeof errors
 
 };
 === tests/cases/conformance/jsdoc/declarations/utils/errors.js ===
@@ -34,10 +34,10 @@ class FancyError extends Error {
 }
 
 module.exports = {
->module.exports = {    FancyError} : { FancyError: typeof FancyError; }
->module.exports : { FancyError: typeof FancyError; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/utils/errors\"": { FancyError: typeof FancyError; }; }
->exports : { FancyError: typeof FancyError; }
+>module.exports = {    FancyError} : typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/utils/errors\"": typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/utils/errors")
 >{    FancyError} : { FancyError: typeof FancyError; }
 
     FancyError
