@@ -35,17 +35,6 @@ namespace ts.server {
         unknownServerMode?: string;
         startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) => void;
     }
-    export interface StartSessionOptions {
-        globalPlugins: SessionOptions["globalPlugins"];
-        pluginProbeLocations: SessionOptions["pluginProbeLocations"];
-        allowLocalPluginLoads: SessionOptions["allowLocalPluginLoads"];
-        useSingleInferredProject: SessionOptions["useSingleInferredProject"];
-        useInferredProjectPerProjectRoot: SessionOptions["useInferredProjectPerProjectRoot"];
-        suppressDiagnosticEvents: SessionOptions["suppressDiagnosticEvents"];
-        noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
-        syntaxOnly: SessionOptions["syntaxOnly"];
-        serverMode: SessionOptions["serverMode"];
-    }
     function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput) {
         const syntaxOnly = hasArgument("--syntaxOnly");
 

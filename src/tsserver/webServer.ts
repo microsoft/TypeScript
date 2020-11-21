@@ -19,91 +19,6 @@ namespace ts.server {
         getLogFileName: returnUndefined,
     };
 
-    type MessageLogLevel = "info" | "perf" | "error";
-
-    interface LoggingMessage {
-        readonly type: "log";
-        readonly level: MessageLogLevel;
-        readonly body: string
-    }
-
-    class MainProcessLogger implements Logger {
-
-        private currentGroupCount = 0;
-        private seq = 0;
-
-        constructor(
-            private readonly level: LogLevel
-        ) { }
-
-        close(): void {
-            // noop
-        }
-
-        hasLevel(level: LogLevel): boolean {
-            return this.level >= level;
-        }
-
-        loggingEnabled(): boolean {
-            return true;
-        }
-
-        perftrc(s: string): void {
-            this.msg(s, Msg.Perf);
-        }
-
-        info(s: string): void {
-            this.msg(s, Msg.Info);
-        }
-
-        err(s: string) {
-            this.msg(s, Msg.Err);
-        }
-
-        startGroup(): void {
-            ++this.currentGroupCount;
-        }
-
-        endGroup(): void {
-            this.currentGroupCount = Math.max(0, this.currentGroupCount - 1);
-        }
-
-        msg(s: string, type: Msg = Msg.Err): void {
-            s = `${type} ${this.seq.toString()} [${nowString()}] ${s}`;
-
-            switch (type) {
-                case Msg.Info:
-                    this.write("info", s);
-                    break;
-
-                case Msg.Perf:
-                    this.write("perf", s);
-                    break;
-
-                case Msg.Err:
-                default:
-                    this.write("error", s);
-                    break;
-            }
-
-            if (this.currentGroupCount === 0) {
-                this.seq++;
-            }
-        }
-
-        getLogFileName(): string | undefined {
-            return undefined;
-        }
-
-        private write(level: MessageLogLevel, body: string) {
-            postMessage(<LoggingMessage>{
-                type: "log",
-                level,
-                body,
-            });
-        }
-    }
-
     let unknownServerMode: string | undefined;
     function parseServerMode(): LanguageServiceMode | undefined {
         const mode = findArgument("--serverMode");
@@ -137,78 +52,33 @@ namespace ts.server {
 
     function createLogger() {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        return typeof cmdLineVerbosity === "undefined" ? nullLogger : new MainProcessLogger(cmdLineVerbosity);
+        return typeof cmdLineVerbosity === "undefined" ? nullLogger : new MainProcessLogger(cmdLineVerbosity, { writeMessage });
+    }
+
+    function writeMessage(s: any) {
+        postMessage(s);
     }
 
     function createWebSystem(args: string[]) {
         Debug.assert(ts.sys === undefined);
-        const returnEmptyString = () => "";
-        // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
-        const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, executingDirectoryPath) : undefined;
-        const sys: ServerHost = {
-            args,
-            newLine: "\r\n", // This can be configured by clients
-            useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
-            readFile: (path: string, _encoding?: string): string | undefined => {
-                const webPath = getWebPath(path);
-                if (!webPath) return undefined;
-
+        const webHost: WebHost = {
+            readFile: webPath => {
                 const request = new XMLHttpRequest();
                 request.open("GET", webPath, /* asynchronous */ false);
                 request.send();
                 return request.status === 200 ? request.responseText : undefined;
             },
-
-            write: postMessage,
-            watchFile: returnNoopFileWatcher,
-            watchDirectory: returnNoopFileWatcher,
-
-            getExecutingFilePath: () => directorySeparator,
-            getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
-
-            /* eslint-disable no-restricted-globals */
-            setTimeout,
-            clearTimeout,
-            setImmediate: x => setTimeout(x, 0),
-            clearImmediate: clearTimeout,
-            /* eslint-enable no-restricted-globals */
-
-            require: () => ({ module: undefined, error: new Error("Not implemented") }),
-            exit: notImplemented,
-
-            // Debugging related
-            getEnvironmentVariable: returnEmptyString, // TODO:: Used to enable debugging info
-            // tryEnableSourceMapsForHost?(): void;
-            // debugMode?: boolean;
-
-            // For semantic server mode
-            fileExists: (path: string): boolean => {
-                const webPath = getWebPath(path);
-                if (!webPath) return false;
-
+            fileExists: webPath => {
                 const request = new XMLHttpRequest();
                 request.open("HEAD", webPath, /* asynchronous */ false);
                 request.send();
                 return request.status === 200;
             },
-            directoryExists: returnFalse, // Module resolution
-            readDirectory: notImplemented, // Configured project, typing installer
-            getDirectories: () => [], // For automatic type reference directives
-            createDirectory: notImplemented, // compile On save
-            writeFile: notImplemented, // compile on save
-            resolvePath: identity, // Plugins
-            // realpath? // Module resolution, symlinks
-            // getModifiedTime // File watching
-            // createSHA256Hash // telemetry of the project
-
-            // Logging related
-            // /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
-            // gc?(): void;
-            // getMemoryUsage?(): number;
+            writeMessage,
         };
-        ts.sys = sys;
         // Do this after sys has been set as findArguments is going to work only then
-        const executingDirectoryPath = ensureTrailingDirectorySeparator(getDirectoryPath(findArgument("--executingFilePath") || location + ""));
+        const sys = server.createWebSystem(webHost, args, () => findArgument("--executingFilePath") || location + "");
+        ts.sys = sys;
         const localeStr = findArgument("--locale");
         if (localeStr) {
             validateLocaleAndSetLanguage(localeStr, sys);
@@ -231,41 +101,10 @@ namespace ts.server {
     }
 
     function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
-        class WorkerSession extends Session<{}> {
+        debugger;
+        class WorkerSession extends server.WorkerSession {
             constructor() {
-                const host = sys as ServerHost;
-
-                super({
-                    host,
-                    cancellationToken,
-                    ...options,
-                    typingsInstaller: nullTypingsInstaller,
-                    byteLength: notImplemented, // Formats the message text in send of Session which is override in this class so not needed
-                    hrtime,
-                    logger,
-                    canUseEvents: false,
-                });
-            }
-
-            public send(msg: protocol.Message) {
-                if (msg.type === "event" && !this.canUseEvents) {
-                    if (this.logger.hasLevel(LogLevel.verbose)) {
-                        this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);
-                    }
-                    return;
-                }
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    logger.info(`${msg.type}:${indent(JSON.stringify(msg))}`);
-                }
-                postMessage(msg);
-            }
-
-            protected parseMessage(message: {}): protocol.Request {
-                return <protocol.Request>message;
-            }
-
-            protected toStringMessage(message: {}) {
-                return JSON.stringify(message, undefined, 2);
+                super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
             }
 
             exit() {
