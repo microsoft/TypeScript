@@ -9719,9 +9719,11 @@ namespace ts {
         }
 
         function isLateBoundName(name: __String): boolean {
-            return (name as string).charCodeAt(0) === CharacterCodes._ &&
-                (name as string).charCodeAt(1) === CharacterCodes._ &&
-                (name as string).charCodeAt(2) === CharacterCodes.at;
+            const nameString = name as string;
+            return nameString.length > 2 &&
+                nameString.charCodeAt(0) === CharacterCodes._ &&
+                nameString.charCodeAt(1) === CharacterCodes._ &&
+                nameString.charCodeAt(2) === CharacterCodes.at;
         }
 
         /**

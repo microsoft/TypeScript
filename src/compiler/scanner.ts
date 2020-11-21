@@ -360,7 +360,7 @@ namespace ts {
             pos++;
             switch (ch) {
                 case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                    if (pos < text.length && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
                 // falls through
@@ -744,7 +744,7 @@ namespace ts {
             const ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
-                    if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
+                    if (pos + 1 < text.length && text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
                 // falls through
