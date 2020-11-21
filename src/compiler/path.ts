@@ -109,9 +109,10 @@ namespace ts {
     }
 
     function getFileUrlVolumeSeparatorEnd(url: string, start: number) {
+        if (start >= url.length) return -1;
         const ch0 = url.charCodeAt(start);
         if (ch0 === CharacterCodes.colon) return start + 1;
-        if (ch0 === CharacterCodes.percent && url.charCodeAt(start + 1) === CharacterCodes._3) {
+        if (ch0 === CharacterCodes.percent && start + 2 < url.length && url.charCodeAt(start + 1) === CharacterCodes._3) {
             const ch2 = url.charCodeAt(start + 2);
             if (ch2 === CharacterCodes.a || ch2 === CharacterCodes.A) return start + 3;
         }
@@ -128,7 +129,7 @@ namespace ts {
 
         // POSIX or UNC
         if (ch0 === CharacterCodes.slash || ch0 === CharacterCodes.backslash) {
-            if (path.charCodeAt(1) !== ch0) return 1; // POSIX: "/" (or non-normalized "\")
+            if (path.length > 1 && path.charCodeAt(1) !== ch0) return 1; // POSIX: "/" (or non-normalized "\")
 
             const p1 = path.indexOf(ch0 === CharacterCodes.slash ? directorySeparator : altDirectorySeparator, 2);
             if (p1 < 0) return path.length; // UNC: "//server" or "\\server"
@@ -137,10 +138,10 @@ namespace ts {
         }
 
         // DOS
-        if (isVolumeCharacter(ch0) && path.charCodeAt(1) === CharacterCodes.colon) {
+        if (isVolumeCharacter(ch0) && path.length > 1 && path.charCodeAt(1) === CharacterCodes.colon) {
+            if (path.length === 2) return 2; // DOS: "c:" (but not "c:d")
             const ch2 = path.charCodeAt(2);
             if (ch2 === CharacterCodes.slash || ch2 === CharacterCodes.backslash) return 3; // DOS: "c:/" or "c:\"
-            if (path.length === 2) return 2; // DOS: "c:" (but not "c:d")
         }
 
         // URL
@@ -155,17 +156,18 @@ namespace ts {
                 const scheme = path.slice(0, schemeEnd);
                 const authority = path.slice(authorityStart, authorityEnd);
                 if (scheme === "file" && (authority === "" || authority === "localhost") &&
+                    authorityEnd + 1 < path.length &&
                     isVolumeCharacter(path.charCodeAt(authorityEnd + 1))) {
                     const volumeSeparatorEnd = getFileUrlVolumeSeparatorEnd(path, authorityEnd + 2);
                     if (volumeSeparatorEnd !== -1) {
-                        if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
-                            // URL: "file:///c:/", "file://localhost/c:/", "file:///c%3a/", "file://localhost/c%3a/"
-                            return ~(volumeSeparatorEnd + 1);
-                        }
                         if (volumeSeparatorEnd === path.length) {
                             // URL: "file:///c:", "file://localhost/c:", "file:///c$3a", "file://localhost/c%3a"
                             // but not "file:///c:d" or "file:///c%3ad"
                             return ~volumeSeparatorEnd;
+                        }
+                        if (path.charCodeAt(volumeSeparatorEnd) === CharacterCodes.slash) {
+                            // URL: "file:///c:/", "file://localhost/c:/", "file:///c%3a/", "file://localhost/c%3a/"
+                            return ~(volumeSeparatorEnd + 1);
                         }
                     }
                 }
