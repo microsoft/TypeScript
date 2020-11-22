@@ -39,7 +39,7 @@ var b: {
 >x : number
 
 } = { 1: '', "2": '' }
->{ 1: '', "2": '' } : { 1: string; 2: string; }
+>{ 1: '', "2": '' } : { 1: string; "2": string; }
 >1 : string
 >'' : ""
 >"2" : string

@@ -40,7 +40,7 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node }: Info): void {
-        const newNode = createNode(SyntaxKind.CommaToken);
+        const newNode = factory.createToken(SyntaxKind.CommaToken);
         changes.replaceNode(sourceFile, node, newNode);
     }
 }

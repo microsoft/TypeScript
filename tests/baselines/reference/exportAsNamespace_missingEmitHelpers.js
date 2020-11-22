@@ -13,4 +13,6 @@ exports.__esModule = true;
 //// [b.js]
 "use strict";
 exports.__esModule = true;
-exports.ns = require("./a"); // Error
+exports.ns = void 0;
+var tslib_1 = require("tslib");
+exports.ns = tslib_1.__importStar(require("./a")); // Error

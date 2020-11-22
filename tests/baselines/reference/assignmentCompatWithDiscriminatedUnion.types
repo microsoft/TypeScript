@@ -464,3 +464,35 @@ namespace GH20889 {
         };
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/39357
+namespace GH39357 {
+>GH39357 : typeof GH39357
+
+    type A = ["a", number] | ["b", number] | ["c", string];
+>A : A
+
+    type B = "a" | "b" | "c";
+>B : "a" | "b" | "c"
+
+    declare const b: B;
+>b : "a" | "b" | "c"
+
+    const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+>a : A
+>b === "a" || b === "b" ? [b, 1] : ["c", ""] : ["a" | "b", number] | ["c", string]
+>b === "a" || b === "b" : boolean
+>b === "a" : boolean
+>b : "a" | "b" | "c"
+>"a" : "a"
+>b === "b" : boolean
+>b : "b" | "c"
+>"b" : "b"
+>[b, 1] : ["a" | "b", number]
+>b : "a" | "b"
+>1 : 1
+>["c", ""] : ["c", string]
+>"c" : "c"
+>"" : ""
+}
+

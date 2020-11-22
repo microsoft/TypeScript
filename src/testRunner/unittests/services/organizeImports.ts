@@ -285,6 +285,7 @@ namespace ts {
             });
         });
 
+
         describe("Baselines", () => {
 
             const libFile = {
@@ -321,6 +322,16 @@ export const Other = 1;
                 const testFile = {
                     path: "/a.ts",
                     content: "declare module '*';",
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
+
+            it("doesn't return any changes when the text would be identical", () => {
+                const testFile = {
+                    path: "/a.ts",
+                    content: `import { f } from 'foo';\nf();`
                 };
                 const languageService = makeLanguageService(testFile);
                 const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
@@ -366,6 +377,16 @@ D();
                 },
                 libFile);
 
+                it("doesn't return any changes when the text would be identical", () => {
+                    const testFile = {
+                        path: "/a.ts",
+                        content: `import { f } from 'foo';\nf();`
+                    };
+                    const languageService = makeLanguageService(testFile);
+                    const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                    assert.isEmpty(changes);
+                });
+
             testOrganizeImports("Unused_All",
                 {
                     path: "/test.ts",
@@ -377,14 +398,17 @@ import D from "lib";
                 },
                 libFile);
 
-            testOrganizeImports("Unused_Empty",
-                {
+            it("Unused_Empty", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { } from "lib";
 `,
-                },
-                libFile);
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("Unused_false_positive_module_augmentation",
                 {
@@ -414,25 +438,33 @@ declare module 'caseless' {
         test(name: KeyType): boolean;
     }
 }`
-                });
+            });
 
-            testOrganizeImports("Unused_false_positive_shorthand_assignment",
-                {
+            it("Unused_false_positive_shorthand_assignment", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
 const o = { x };
 `
-                });
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
-            testOrganizeImports("Unused_false_positive_export_shorthand",
-                {
+            it("Unused_false_positive_export_shorthand", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
 export { x };
 `
-                });
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("MoveToTop",
                 {
@@ -559,6 +591,22 @@ import "lib1";
                 },
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
+
+                testOrganizeImports("SortComments",
+                {
+                    path: "/test.ts",
+                    content: `
+// Header
+import "lib3";
+// Comment2
+import "lib2";
+// Comment1
+import "lib1";
+`,
+                },
+                { path: "/lib1.ts", content: "" },
+                { path: "/lib2.ts", content: "" },
+                { path: "/lib3.ts", content: "" });
 
             testOrganizeImports("AmbientModule",
                 {

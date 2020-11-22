@@ -101,7 +101,7 @@ namespace ts.projectSystem {
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
             installTypingHost: server.ServerHost,
-            readonly typesRegistry = createMap<MapLike<string>>(),
+            readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
             super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
         }
@@ -165,7 +165,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",
@@ -177,7 +177,7 @@ namespace ts.projectSystem {
             "ts2.6": "1.3.0",
             "ts2.7": "1.3.0"
         };
-        const map = createMap<MapLike<string>>();
+        const map = new Map<string, MapLike<string>>();
         for (const l of list) {
             map.set(l, versionMap);
         }
@@ -204,6 +204,7 @@ namespace ts.projectSystem {
         category: DiagnosticCategory;
         code: number;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -448,11 +449,11 @@ namespace ts.projectSystem {
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }
 
     export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -699,8 +700,8 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
     }
 
     export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {

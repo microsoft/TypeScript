@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
-    const fixIdToRegistration = createMap<CodeFixRegistration>();
+    const fixIdToRegistration = new Map<string, CodeFixRegistration>();
 
     export type DiagnosticAndArguments = DiagnosticMessage | [DiagnosticMessage, string] | [DiagnosticMessage, string, string];
     function diagnosticToString(diag: DiagnosticAndArguments): string {

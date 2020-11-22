@@ -38,14 +38,14 @@ namespace ts.codefix {
         // `import type foo, { Bar }` is not allowed, so move `foo` to new declaration
         if (importClause.name && importClause.namedBindings) {
             changes.deleteNodeRangeExcludingEnd(context.sourceFile, importClause.name, importDeclaration.importClause.namedBindings);
-            changes.insertNodeBefore(context.sourceFile, importDeclaration, updateImportDeclaration(
+            changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
                 importDeclaration,
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createImportClause(
+                factory.createImportClause(
+                    /*isTypeOnly*/ true,
                     importClause.name,
-                    /*namedBindings*/ undefined,
-                    /*isTypeOnly*/ true),
+                    /*namedBindings*/ undefined),
                 importDeclaration.moduleSpecifier));
         }
     }

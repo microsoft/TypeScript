@@ -57,7 +57,7 @@ namespace ts.projectSystem {
                 // only file1 exists - expect error
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
             }
-            host.reloadFS([file2, libFile]);
+            host.renameFile(file1.path, file2.path);
             {
                 // only file2 exists - expect error
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
             }
 
-            host.reloadFS([file1, file2, libFile]);
+            host.writeFile(file1.path, file1.content);
             {
                 // both files exist - expect no errors
                 checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -102,7 +102,7 @@ namespace ts.projectSystem {
             let diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
             checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
 
-            host.reloadFS([file1, file2, config, libFile]);
+            host.writeFile(file2.path, file2.content);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             diags = session.executeCommand(compilerOptionsRequest).response as server.protocol.DiagnosticWithLinePosition[];
@@ -143,7 +143,7 @@ namespace ts.projectSystem {
                 assert.equal(projectErrors[0].file!.fileName, corruptedConfig.path);
             }
             // fix config and trigger watcher
-            host.reloadFS([file1, file2, correctConfig]);
+            host.writeFile(correctConfig.path, correctConfig.content);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = find(projectService.synchronizeProjectList([]), f => f.info!.projectName === corruptedConfig.path)!;
@@ -184,7 +184,7 @@ namespace ts.projectSystem {
                 checkProjectErrorsWorker(projectErrors, []);
             }
             // break config and trigger watcher
-            host.reloadFS([file1, file2, corruptedConfig]);
+            host.writeFile(corruptedConfig.path, corruptedConfig.content);
             {
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 const configuredProject = find(projectService.synchronizeProjectList([]), f => f.info!.projectName === corruptedConfig.path)!;
@@ -534,7 +534,8 @@ declare module '@custom/plugin' {
                 messageText: formatStringFromArgs(d.message, didYouMean ? [prop, didYouMean] : [prop]),
                 category: d.category,
                 code: d.code,
-                reportsUnnecessary: undefined
+                reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             };
         }
 
@@ -549,7 +550,8 @@ declare module '@custom/plugin' {
                 messageText: formatStringFromArgs(d.message, [`${getDirectoryPath(configFile.path)}/${relativeFileName}`]),
                 category: d.category,
                 code: d.code,
-                reportsUnnecessary: undefined
+                reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             };
         }
 
@@ -613,7 +615,7 @@ declare module '@custom/plugin' {
                     "haha": 123
                 }
             }`;
-            serverEventManager.host.reloadFS(files);
+            serverEventManager.host.writeFile(configFile.path, configFile.content);
             serverEventManager.host.runQueuedTimeoutCallbacks();
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, [
                 getUnknownCompilerOptionDiagnostic(configFile, "haha")
@@ -622,7 +624,7 @@ declare module '@custom/plugin' {
             configFile.content = `{
                 "compilerOptions": {}
             }`;
-            serverEventManager.host.reloadFS(files);
+            serverEventManager.host.writeFile(configFile.path, configFile.content);
             serverEventManager.host.runQueuedTimeoutCallbacks();
             serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, emptyArray);
         });
@@ -859,7 +861,7 @@ declare module '@custom/plugin' {
             assert.isTrue(diags.length === 3);
 
             configFile.content = configFileContentWithoutCommentLine;
-            host.reloadFS([file, configFile]);
+            host.writeFile(configFile.path, configFile.content);
 
             const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",
@@ -908,6 +910,7 @@ declare module '@custom/plugin' {
                     code: Diagnostics.Unused_label.code,
                     relatedInformation: undefined,
                     reportsUnnecessary: true,
+                    reportsDeprecated: undefined,
                     source: undefined,
                 },
             ]);
@@ -1018,7 +1021,7 @@ console.log(blabla);`
                 { path: `${tscWatch.projectRoot}/node_modules/.staging/@babel/helper-plugin-utils-a06c629f` },
                 { path: `${tscWatch.projectRoot}/node_modules/.staging/core-js-db53158d` },
             ];
-            verifyWhileNpmInstall({ timeouts: 2, semantic: moduleNotFoundErr });
+            verifyWhileNpmInstall({ timeouts: 3, semantic: moduleNotFoundErr });
 
             filesAndFoldersToAdd = [
                 { path: `${tscWatch.projectRoot}/node_modules/.staging/@angular/platform-browser-dynamic-5efaaa1a` },
@@ -1039,18 +1042,21 @@ console.log(blabla);`
             projectFiles.push(moduleFile);
             // Additional watch for watching script infos from node_modules
             expectedRecursiveWatches.set(`${tscWatch.projectRoot}/node_modules`, 2);
-            verifyWhileNpmInstall({ timeouts: 2, semantic: [] });
+            verifyWhileNpmInstall({ timeouts: 3, semantic: [] });
 
             function verifyWhileNpmInstall({ timeouts, semantic }: { timeouts: number; semantic: protocol.Diagnostic[] }) {
                 filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                 if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                    host.checkTimeoutQueueLengthAndRun(timeouts);
+                    host.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
+                    if (timeouts) {
+                        host.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
+                    }
                 }
                 else {
-                    host.checkTimeoutQueueLength(2);
+                    host.checkTimeoutQueueLength(timeouts ? 3 : 2);
                 }
                 verifyProject();
-                verifyErrors(semantic, !npmInstallComplete && !timeoutDuringPartialInstallation ? 2 : undefined);
+                verifyErrors(semantic, !npmInstallComplete && !timeoutDuringPartialInstallation ? timeouts ? 3 : 2 : undefined);
             }
 
             function verifyProject() {

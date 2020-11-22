@@ -1,4 +1,4 @@
-/a/lib/tsc.js -p pkg3 --listFiles
+Input::
 //// [/user/username/projects/myproject/pkg1/dist/index.d.ts]
 export * from './types';
 
@@ -54,6 +54,46 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
+
+/a/lib/tsc.js -p pkg3 --listFiles
+Output::
+[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
+
+[7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
+[7m [0m [91m             ~~~~~[0m
+
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg1/dist/types.d.ts
+/user/username/projects/myproject/pkg1/dist/index.d.ts
+/user/username/projects/myproject/pkg2/dist/types.d.ts
+/user/username/projects/myproject/pkg2/dist/index.d.ts
+/user/username/projects/myproject/pkg3/src/keys.ts
+/user/username/projects/myproject/pkg3/src/index.ts
+
+Found 1 error.
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
+Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","listFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/pkg1/dist/types.d.ts
+/user/username/projects/myproject/pkg1/dist/index.d.ts
+/user/username/projects/myproject/pkg2/dist/types.d.ts
+/user/username/projects/myproject/pkg2/dist/index.d.ts
+/user/username/projects/myproject/pkg3/src/keys.ts
+/user/username/projects/myproject/pkg3/src/index.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 //// [/user/username/projects/myproject/pkg3/dist/keys.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -72,8 +112,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./keys"), exports);
 
@@ -82,48 +122,3 @@ __exportStar(require("./keys"), exports);
 export * from './keys';
 
 
-
-Output::
-[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
-
-[7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
-[7m [0m [91m             ~~~~~[0m
-
-
-/a/lib/lib.d.ts
-
-/user/username/projects/myproject/pkg1/dist/types.d.ts
-
-/user/username/projects/myproject/pkg1/dist/index.d.ts
-
-/user/username/projects/myproject/pkg2/dist/types.d.ts
-
-/user/username/projects/myproject/pkg2/dist/index.d.ts
-
-/user/username/projects/myproject/pkg3/src/keys.ts
-
-/user/username/projects/myproject/pkg3/src/index.ts
-
-
-Found 1 error.
-
-
-
-Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","listFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/pkg1/dist/types.d.ts
-/user/username/projects/myproject/pkg1/dist/index.d.ts
-/user/username/projects/myproject/pkg2/dist/types.d.ts
-/user/username/projects/myproject/pkg2/dist/index.d.ts
-/user/username/projects/myproject/pkg3/src/keys.ts
-/user/username/projects/myproject/pkg3/src/index.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

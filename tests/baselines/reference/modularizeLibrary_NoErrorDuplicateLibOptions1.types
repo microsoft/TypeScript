@@ -138,8 +138,8 @@ async function out() {
     return new Promise(function (resolve, reject) {});
 >new Promise(function (resolve, reject) {}) : Promise<unknown>
 >Promise : PromiseConstructor
->function (resolve, reject) {} : (resolve: (value?: unknown) => void, reject: (reason?: any) => void) => void
->resolve : (value?: unknown) => void
+>function (resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value: unknown) => void
 >reject : (reason?: any) => void
 }
 

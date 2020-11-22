@@ -264,7 +264,7 @@ declare class Hook {
      * @param {HookHandler} handle
      */
     constructor(handle: HookHandler);
-    handle: (arg: import("./context")) => void;
+    handle: HookHandler;
 }
 declare namespace Hook {
     export { HookHandler };

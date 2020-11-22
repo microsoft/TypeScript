@@ -170,6 +170,18 @@ class Foo {
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >undefined : Symbol(undefined)
+
+        // ok
+        if (this.isUser) {
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 52, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 49, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 52, 32))
+
+            this.isUser();
+>this.isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 52, 32))
+>this : Symbol(Foo, Decl(truthinessCallExpressionCoercion1.ts, 49, 1))
+>isUser : Symbol(Foo.isUser, Decl(truthinessCallExpressionCoercion1.ts, 52, 32))
+        }
     }
 }
 

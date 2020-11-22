@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @target: esnext
+
 ////const f: () => number | string = () => {
 ////    await Promise.resolve('foo');
 ////}

@@ -128,6 +128,19 @@ function f01(x: unknown) {
 >!true : false
 >true : true
 
+        assertIsArrayOfStrings(false);
+>assertIsArrayOfStrings(false) : void
+>assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
+>false : false
+
+        x;
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
         assert(x === undefined || typeof x === "string");
 >assert(x === undefined || typeof x === "string") : void
 >assert : (value: unknown) => asserts value

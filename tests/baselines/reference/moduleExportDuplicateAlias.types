@@ -1,0 +1,18 @@
+=== tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias.js ===
+exports.apply = undefined;
+>exports.apply = undefined : undefined
+>exports.apply : undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : undefined
+>undefined : undefined
+
+function a() { }
+>a : () => void
+
+exports.apply = a;
+>exports.apply = a : () => void
+>exports.apply : undefined
+>exports : typeof import("tests/cases/conformance/salsa/moduleExportAliasDuplicateAlias")
+>apply : undefined
+>a : () => void
+

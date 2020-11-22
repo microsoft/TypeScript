@@ -9,7 +9,7 @@
 //// })
 
 verify.codeFixAvailable([
-    { description: 'Add a return statement' },
-    { description: 'Remove block body braces' },
-    { description: 'Remove unused label' },
+    { description: ts.Diagnostics.Add_a_return_statement.message },
+    { description: ts.Diagnostics.Remove_braces_from_arrow_function_body.message },
+    { description: ts.Diagnostics.Remove_unused_label.message }
 ]);

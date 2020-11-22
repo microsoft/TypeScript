@@ -1,0 +1,8 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.3.ts ===
+export {};
+
+// reparse binding pattern as await should fail
+var {await} = {await:1};
+>await : Symbol(await, Decl(topLevelAwaitErrors.3.ts, 3, 5))
+>await : Symbol(await, Decl(topLevelAwaitErrors.3.ts, 3, 15))
+

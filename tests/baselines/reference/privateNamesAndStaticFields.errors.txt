@@ -1,18 +1,18 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(2,5): error TS18019: 'static' modifier cannot be used with a private identifier
-tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(3,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(2,5): error TS18019: 'static' modifier cannot be used with a private identifier.
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(3,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(6,11): error TS18013: Property '#foo' is not accessible outside class 'B' because it has a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(7,11): error TS2339: Property '#bar' does not exist on type 'typeof B'.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(12,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts(12,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts (5 errors) ====
     class A {
         static #foo: number;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         static #bar: number;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         constructor () {
             A.#foo = 3;
             B.#foo; // Error
@@ -27,7 +27,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields
     class B extends A {
         static #foo: string;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         constructor () {
             super();
             B.#foo = "some string";

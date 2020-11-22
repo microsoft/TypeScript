@@ -1,0 +1,6 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.5.ts ===
+// await in exported class name should fail
+export class await {
+>await : Symbol(await, Decl(topLevelAwaitErrors.5.ts, 0, 0))
+}
+

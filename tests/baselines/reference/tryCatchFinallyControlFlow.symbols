@@ -445,3 +445,139 @@ function t1() {
 >x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 247, 9))
 }
 
+// Repro from #39043
+
+type State = { tag: "one" } | { tag: "two" } | { tag: "three" };
+>State : Symbol(State, Decl(tryCatchFinallyControlFlow.ts, 257, 1))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 14))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 31))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+
+function notallowed(arg: number) {
+>notallowed : Symbol(notallowed, Decl(tryCatchFinallyControlFlow.ts, 261, 64))
+>arg : Symbol(arg, Decl(tryCatchFinallyControlFlow.ts, 263, 20))
+
+    let state: State = { tag: "one" };
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>State : Symbol(State, Decl(tryCatchFinallyControlFlow.ts, 257, 1))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 264, 24))
+
+    try {
+        state = { tag: "two" };
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 266, 17))
+
+        try {
+            state = { tag: "three" };
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 268, 21))
+        }
+        finally { }
+    }
+    catch (err) {
+>err : Symbol(err, Decl(tryCatchFinallyControlFlow.ts, 272, 11))
+
+        state.tag;
+>state.tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 14), Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 14), Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+
+        if (state.tag !== "one" && state.tag !== "two") {
+>state.tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 14), Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 14), Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+>state.tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+
+            console.log(state.tag);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>state.tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+>state : Symbol(state, Decl(tryCatchFinallyControlFlow.ts, 264, 7))
+>tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 48))
+        }
+    }
+}
+
+function f20() {
+>f20 : Symbol(f20, Decl(tryCatchFinallyControlFlow.ts, 278, 1))
+
+    let x: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+
+    try {
+        x = 1;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+
+        try {
+            x = 2;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+
+            try {
+                x = 3;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+            }
+            finally {
+                if (!!true) x = 4;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+            }
+            x;  // 3 | 4
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+        }
+        finally {
+            if (!!true) x = 5;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+        }
+        x;  // 3 | 4 | 5
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+    }
+    finally {
+        if (!!true) x = 6;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+    }
+    x;  // 3 | 4 | 5 | 6
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 281, 7))
+}
+
+function f21() {
+>f21 : Symbol(f21, Decl(tryCatchFinallyControlFlow.ts, 303, 1))
+
+    let x: 0 | 1 | 2 | 3 | 4 | 5 = 0;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+
+    try {
+        x = 1;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+
+        try {
+            x = 2;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+
+            try {
+                x = 3;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+            }
+            finally {
+                if (!!true) x = 4;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+            }
+            x;  // 3 | 4
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+        }
+        finally {
+            if (!!true) x = 5;
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+        }
+        x;  // 3 | 4 | 5
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+    }
+    catch (e) {
+>e : Symbol(e, Decl(tryCatchFinallyControlFlow.ts, 324, 11))
+
+        x;  // 0 | 1 | 2 | 3 | 4 | 5
+>x : Symbol(x, Decl(tryCatchFinallyControlFlow.ts, 306, 7))
+    }
+}
+

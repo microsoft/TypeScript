@@ -223,6 +223,19 @@ class Foo {
 >log : (...data: any[]) => void
 >'this.maybeIsUser' : "this.maybeIsUser"
 >undefined : undefined
+
+        // ok
+        if (this.isUser) {
+>this.isUser : () => boolean
+>this : this
+>isUser : () => boolean
+
+            this.isUser();
+>this.isUser() : boolean
+>this.isUser : () => boolean
+>this : this
+>isUser : () => boolean
+        }
     }
 }
 

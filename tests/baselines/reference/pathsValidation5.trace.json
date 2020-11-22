@@ -1,0 +1,21 @@
+[
+    "======== Resolving module 'someModule' from 'tests/cases/compiler/src/main.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "'paths' option is specified, looking for a pattern to match module name 'someModule'.",
+    "Loading module 'someModule' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Directory 'tests/cases/compiler/src/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'tests/cases/compiler/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'tests/cases/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'tests/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'node_modules' does not exist, skipping all lookups in it.",
+    "Directory '/node_modules' does not exist, skipping all lookups in it.",
+    "'paths' option is specified, looking for a pattern to match module name 'someModule'.",
+    "Loading module 'someModule' from 'node_modules' folder, target file type 'JavaScript'.",
+    "Directory 'tests/cases/compiler/src/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'tests/cases/compiler/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'tests/cases/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'tests/node_modules' does not exist, skipping all lookups in it.",
+    "Directory 'node_modules' does not exist, skipping all lookups in it.",
+    "Directory '/node_modules' does not exist, skipping all lookups in it.",
+    "======== Module name 'someModule' was not resolved. ========"
+]

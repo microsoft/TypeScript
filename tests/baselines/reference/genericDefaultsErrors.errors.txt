@@ -6,7 +6,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(6,39): error TS2344: Type 'number'
   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(10,5): error TS2558: Expected 2-3 type arguments, but got 1.
 tests/cases/compiler/genericDefaultsErrors.ts(13,5): error TS2558: Expected 2-3 type arguments, but got 4.
-tests/cases/compiler/genericDefaultsErrors.ts(17,13): error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/genericDefaultsErrors.ts(17,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(19,11): error TS2428: All declarations of 'i00' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(20,11): error TS2428: All declarations of 'i00' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(22,11): error TS2428: All declarations of 'i01' must have identical type parameters.
@@ -59,7 +59,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
     f12<number>(); // ok
     f12<number>("a"); // error
                 ~~~
-!!! error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
     interface i00<T> { } // ok
               ~~~

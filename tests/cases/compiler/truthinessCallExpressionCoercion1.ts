@@ -64,5 +64,10 @@ class Foo {
 
         // ok
         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+
+        // ok
+        if (this.isUser) {
+            this.isUser();
+        }
     }
 }

@@ -3,10 +3,11 @@
 // @allowJs: true
 
 // @Filename: /foo.js
-//// /*moduleDef*/class Blah {
+//// /*moduleDef*/function notExported() { }
+//// class Blah {
 ////    abc = 123;
-////}
-////module.exports.Blah = Blah;
+//// }
+//// module.exports.Blah = Blah;
 
 // @Filename: /bar.js
 ////const [|/*importDef*/BlahModule|] = require("./foo.js");

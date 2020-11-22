@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/foo.js ===
 /** @param {Image} image */
 function process(image) {
->process : (image: Image) => HTMLImageElement
+>process : (image: new (width?: number, height?: number) => HTMLImageElement) => HTMLImageElement
 >image : new (width?: number, height?: number) => HTMLImageElement
 
     return new image(1, 1)

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declarationEmitTupleRestSignatureLeadingVariadic.ts ===
+const f = <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]): void => {};
+>f : Symbol(f, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 5))
+>TFirstArgs : Symbol(TFirstArgs, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 11))
+>TLastArg : Symbol(TLastArg, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 36))
+>args : Symbol(args, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 47))
+>TFirstArgs : Symbol(TFirstArgs, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 11))
+>TLastArg : Symbol(TLastArg, Decl(declarationEmitTupleRestSignatureLeadingVariadic.ts, 0, 36))
+

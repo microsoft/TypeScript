@@ -149,7 +149,7 @@ fnErr();
                             { line: 4, offset: 5 },
                             { line: 4, offset: 10 },
                             Diagnostics.Module_0_has_no_exported_member_1,
-                            [`"../decls/fns"`, "fnErr"],
+                            [`"../dependency/fns"`, "fnErr"],
                             "error",
                         )
                     ],
@@ -166,7 +166,7 @@ fnErr();
                             { line: 6, offset: 12 },
                             { line: 6, offset: 13 },
                             Diagnostics.Type_0_is_not_assignable_to_type_1,
-                            ["10", "string"],
+                            ["number", "string"],
                             "error",
                         )
                     ],
@@ -193,7 +193,7 @@ let x: string = 10;`
             };
             const dependencyConfig: File = {
                 path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js" } })
+                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js", bundledPackageName: "dep" } })
             };
             const usageTs: File = {
                 path: `${usageLocation}/usage.ts`,
@@ -205,7 +205,7 @@ fnErr();
             const usageConfig: File = {
                 path: `${usageLocation}/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { composite: true, outFile: "../usage.js" },
+                    compilerOptions: { composite: true, outFile: "../usage.js", bundledPackageName: "usage" },
                     references: [{ path: "../dependency" }]
                 })
             };
@@ -235,7 +235,7 @@ fnErr();
                             { line: 6, offset: 5 },
                             { line: 6, offset: 6 },
                             Diagnostics.Type_0_is_not_assignable_to_type_1,
-                            ["10", "string"],
+                            ["number", "string"],
                             "error",
                         )
                     ],

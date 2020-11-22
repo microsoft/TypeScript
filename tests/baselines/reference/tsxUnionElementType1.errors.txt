@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type 'true' is not assignable to type 'never'.
+tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type 'boolean' is not assignable to type 'never'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -15,4 +15,4 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type 'true' is not as
     var SFCComp = SFC1 || SFC2;
     <SFCComp x />
              ~
-!!! error TS2322: Type 'true' is not assignable to type 'never'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'never'.

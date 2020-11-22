@@ -1,4 +1,10 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/tests/index.ts]
+const m = 10;
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -23,9 +29,6 @@ declare const m = 10;
 //// [/src/tests/index.js]
 var m = 10;
 
-
-//// [/src/tests/index.ts]
-const m = 10;
 
 //// [/src/tests/tsconfig.tsbuildinfo]
 {

@@ -1,4 +1,138 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/first/first_PART1.ts]
+interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+
+
+//// [/src/first/first_part2.ts]
+console.log(f());
+
+
+//// [/src/first/first_part3.ts]
+function f() {
+    return "JS does hoists";
+}
+
+//// [/src/first/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true, "module": "none",
+    "removeComments": true,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    
+    "skipDefaultLibCheck": true,
+    "bundledPackageName": "first",
+  },
+  "files": [
+    "first_PART1.ts",
+    "first_part2.ts",
+    "first_part3.ts"
+  ],
+  "references": [
+  ]
+}
+
+
+//// [/src/second/second_part1.ts]
+namespace N {
+    // Comment text
+}
+
+namespace N {
+    function f() {
+        console.log('testing');
+    }
+
+    f();
+}
+
+
+//// [/src/second/second_part2.ts]
+class C {
+    doSomething() {
+        console.log("something got done");
+    }
+}
+
+
+//// [/src/second/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true, "module": "none",
+    "removeComments": true,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "declaration": true,
+    "bundledPackageName": "second",
+    
+    "skipDefaultLibCheck": true
+  },
+  "references": [
+  ]
+}
+
+
+//// [/src/third/third_part1.ts]
+var c = new C();
+c.doSomething();
+
+
+//// [/src/third/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "composite": true, "module": "none",
+    "removeComments": true,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "declaration": true,
+    
+    "skipDefaultLibCheck": true,
+    "bundledPackageName": "third",
+  },
+  "files": [
+    "third_part1.ts"
+  ],
+  "references": [
+    { "path": "../first" },
+    { "path": "../second" },
+  ]
+}
+
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
 [[90m12:00:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
@@ -70,28 +204,6 @@ function f() {
 //// [/src/first/first_part3.js.map]
 {"version":3,"file":"first_part3.js","sourceRoot":"","sources":["first_part3.ts"],"names":[],"mappings":"AAAA,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
-//// [/src/first/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es5",
-    "composite": true, "module": "none",
-    "removeComments": true,
-    "strict": false,
-    "sourceMap": true,
-    "declarationMap": true,
-    
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "first_PART1.ts",
-    "first_part2.ts",
-    "first_part3.ts"
-  ],
-  "references": [
-  ]
-}
-
-
 //// [/src/first/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -126,6 +238,7 @@ function f() {
       "sourceMap": true,
       "declarationMap": true,
       "skipDefaultLibCheck": true,
+      "bundledPackageName": "first",
       "configFilePath": "./tsconfig.json"
     },
     "semanticDiagnosticsPerFile": [
@@ -184,24 +297,6 @@ var C = (function () {
 //// [/src/second/second_part2.js.map]
 {"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
-//// [/src/second/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es5",
-    "composite": true, "module": "none",
-    "removeComments": true,
-    "strict": false,
-    "sourceMap": true,
-    "declarationMap": true,
-    "declaration": true,
-    
-    "skipDefaultLibCheck": true
-  },
-  "references": [
-  ]
-}
-
-
 //// [/src/second/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -231,6 +326,7 @@ var C = (function () {
       "sourceMap": true,
       "declarationMap": true,
       "declaration": true,
+      "bundledPackageName": "second",
       "skipDefaultLibCheck": true,
       "configFilePath": "./tsconfig.json"
     },
@@ -257,29 +353,6 @@ c.doSomething();
 
 //// [/src/third/third_part1.js.map]
 {"version":3,"file":"third_part1.js","sourceRoot":"","sources":["third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
-
-//// [/src/third/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es5",
-    "composite": true, "module": "none",
-    "removeComments": true,
-    "strict": false,
-    "sourceMap": true,
-    "declarationMap": true,
-    "declaration": true,
-    
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "third_part1.ts"
-  ],
-  "references": [
-    { "path": "../first" },
-    { "path": "../second" },
-  ]
-}
-
 
 //// [/src/third/tsconfig.tsbuildinfo]
 {
@@ -331,6 +404,7 @@ c.doSomething();
       "declarationMap": true,
       "declaration": true,
       "skipDefaultLibCheck": true,
+      "bundledPackageName": "third",
       "configFilePath": "./tsconfig.json"
     },
     "semanticDiagnosticsPerFile": [

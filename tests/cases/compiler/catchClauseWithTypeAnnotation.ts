@@ -1,3 +1,0 @@
-try {
-} catch (e: any) {
-}

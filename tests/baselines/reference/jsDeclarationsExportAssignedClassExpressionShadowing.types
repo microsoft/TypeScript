@@ -25,9 +25,9 @@ module.exports = class Q {
     constructor() {
         this.x = new A();
 >this.x = new A() : A
->this.x : A
+>this.x : any
 >this : this
->x : A
+>x : any
 >new A() : A
 >A : typeof A
     }

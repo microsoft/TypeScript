@@ -1,4 +1,61 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/main/a.ts]
+import { b } from './b';
+const a = b;
+
+//// [/src/src/main/b.ts]
+export const b = 0;
+
+
+//// [/src/src/main/tsconfig.json]
+{
+  "extends": "../../tsconfig.base.json",
+  "references": [
+    { "path": "../other" }
+  ]
+}
+
+//// [/src/src/other/other.ts]
+export const Other = 0;
+
+
+//// [/src/src/other/tsconfig.json]
+{
+  "extends": "../../tsconfig.base.json"
+}
+
+//// [/src/tsconfig.base.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    
+    "outDir": "./dist/",
+    "skipDefaultLibCheck": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
+
+
+
+Output::
 /lib/tsc --b /src/src/main --verbose
 [[90m12:00:00 AM[0m] Projects in this build: 
     * src/src/other/tsconfig.json
@@ -64,19 +121,5 @@ exports.Other = 0;
     ]
   },
   "version": "FakeTSVersion"
-}
-
-//// [/src/tsconfig.base.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    
-    "outDir": "./dist/",
-    "skipDefaultLibCheck": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
 }
 

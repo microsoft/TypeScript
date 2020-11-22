@@ -314,12 +314,17 @@ namespace ts {
                     `/**
  * {@link first link}
  * Inside {@link link text} thing
- * @see {@link second link text} and {@link Foo|a foo} as well.
  */`);
                 parsesCorrectly("authorTag",
                     `/**
  * @author John Doe <john.doe@example.com>
  * @author John Doe <john.doe@example.com> unexpected comment
+ */`);
+
+                parsesCorrectly("consecutive newline tokens",
+                    `/**
+ * @example
+ * Some\n\n * text\r\n * with newlines.
  */`);
             });
         });

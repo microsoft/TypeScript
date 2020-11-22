@@ -21,6 +21,7 @@ console.log(defaultExport)
 
     "/bar.ts": 
     `import { Exported } from "./has-exports";
+
 export const bar = (logger: Exported) => 0;
 `,
   }

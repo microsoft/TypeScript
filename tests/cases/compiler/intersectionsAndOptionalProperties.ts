@@ -21,3 +21,8 @@ function foo(v: From) {
     x = v;  // Error
     x.field = v.field; // Error
 }
+
+// Repro from #38348
+
+const yy: number[] & [number, ...number[]] = [1];
+const xx: [number, ...number[]] = yy;

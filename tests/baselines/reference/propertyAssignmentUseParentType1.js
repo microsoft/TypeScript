@@ -18,10 +18,13 @@ ignoreJsdoc.extra = 111
 "use strict";
 exports.__esModule = true;
 exports.ignoreJsdoc = exports.inlined = exports.interfaced = void 0;
-exports.interfaced = function () { return true; };
+var interfaced = function () { return true; };
+exports.interfaced = interfaced;
 exports.interfaced.num = 123;
-exports.inlined = function () { return true; };
+var inlined = function () { return true; };
+exports.inlined = inlined;
 exports.inlined.nun = 456;
-exports.ignoreJsdoc = function () { return true; };
+var ignoreJsdoc = function () { return true; };
+exports.ignoreJsdoc = ignoreJsdoc;
 /** @type {string} make sure to ignore jsdoc! */
 exports.ignoreJsdoc.extra = 111;

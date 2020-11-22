@@ -1,4 +1,83 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/app/file3.ts]
+export const z = 30;
+import { x } from "file1";function forappfile3Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}
+
+//// [/src/app/file4.ts]
+const myVar = 30;
+function appfile4Spread(...b: number[]) { }
+appfile4Spread(...[10, 20, 30]);
+
+//// [/src/app/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "strict": false,
+    "downlevelIteration": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"],
+    "references": [
+        { "path": "../lib", "prepend": true }
+    ]
+}
+
+//// [/src/lib/file0.ts]
+const myGlob = 20;
+function libfile0Spread(...b: number[]) { }
+libfile0Spread(...[10, 20, 30]);
+
+//// [/src/lib/file1.ts]
+export const x = 10;function forlibfile1Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}
+
+//// [/src/lib/file2.ts]
+export const y = 20;
+
+//// [/src/lib/global.ts]
+const globalConst = 10;
+
+//// [/src/lib/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "strict": false,
+    "downlevelIteration": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"]
+
+}
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -14,17 +93,6 @@
 
 exitCode:: ExitStatus.Success
 
-
-//// [/src/app/file3.ts]
-export const z = 30;
-import { x } from "file1";function forappfile3Rest() {
-const { b, ...rest } = { a: 10, b: 30, yy: 30 };
-}
-
-//// [/src/app/file4.ts]
-const myVar = 30;
-function appfile4Spread(...b: number[]) { }
-appfile4Spread(...[10, 20, 30]);
 
 //// [/src/app/module.d.ts]
 declare const myGlob = 20;
@@ -1145,34 +1213,6 @@ declare function appfile4Spread(...b: number[]): void;
 
 ======================================================================
 
-//// [/src/app/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "strict": false,
-    "downlevelIteration": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"],
-    "references": [
-        { "path": "../lib", "prepend": true }
-    ]
-}
-
-//// [/src/lib/file0.ts]
-const myGlob = 20;
-function libfile0Spread(...b: number[]) { }
-libfile0Spread(...[10, 20, 30]);
-
-//// [/src/lib/file1.ts]
-export const x = 10;function forlibfile1Rest() {
-const { b, ...rest } = { a: 10, b: 30, yy: 30 };
-}
-
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
@@ -1880,20 +1920,4 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
-
-//// [/src/lib/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "strict": false,
-    "downlevelIteration": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"]
-
-}
 

@@ -297,5 +297,5 @@ exports.wrapSync = exports.selectSeries = exports.selectLimit = exports.select =
 >exports.apply : Symbol(apply, Decl(a.js, 0, 1900))
 >exports : Symbol(apply, Decl(a.js, 0, 1900))
 >apply : Symbol(apply, Decl(a.js, 0, 1900))
->undefined : Symbol(undefined)
+>undefined : Symbol(apply)
 

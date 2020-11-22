@@ -16,12 +16,12 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const fixedNodes = new NodeSet();
+            const fixedNodes = new Set<Node>();
             return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, context.program, fixedNodes));
         },
     });
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: NodeSet<Node>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
         const token = getTokenAtPosition(sourceFile, pos);
         const forInitializer = findAncestor(token, node =>
             isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
@@ -57,8 +57,8 @@ namespace ts.codefix {
         }
     }
 
-    function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: NodeSet<Node>) {
-        if (!fixedNodes || fixedNodes.tryAdd(initializer)) {
+    function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: Set<Node>) {
+        if (!fixedNodes || tryAddToSet(fixedNodes, initializer)) {
             changeTracker.insertModifierBefore(sourceFile, SyntaxKind.ConstKeyword, initializer);
         }
     }

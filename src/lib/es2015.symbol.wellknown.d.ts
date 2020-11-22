@@ -63,6 +63,11 @@ interface SymbolConstructor {
 }
 
 interface Symbol {
+    /**
+     * Converts a Symbol object to a symbol.
+     */
+    [Symbol.toPrimitive](hint: string): symbol;
+
     readonly [Symbol.toStringTag]: string;
 }
 
@@ -254,7 +259,7 @@ interface Int8Array {
 }
 
 interface Uint8Array {
-    readonly [Symbol.toStringTag]: "UInt8Array";
+    readonly [Symbol.toStringTag]: "Uint8Array";
 }
 
 interface Uint8ClampedArray {

@@ -38,7 +38,7 @@ namespace ts.projectSystem {
             assert.equal(events[0].data.project.getProjectName(), config.path, "config path");
             assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
 
-            host.reloadFS([f1, f2, configWithExclude]);
+            host.writeFile(configWithExclude.path, configWithExclude.content);
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.isTrue(project.languageServiceEnabled, "Language service enabled");

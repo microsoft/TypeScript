@@ -1,5 +1,5 @@
 /a.js(3,4): error TS6133: 'V' is declared but its value is never read.
-/a.js(13,4): error TS6205: All type parameters are unused
+/a.js(13,4): error TS6205: All type parameters are unused.
 /a.js(20,16): error TS6133: 'V' is declared but its value is never read.
 /a.js(20,18): error TS6133: 'X' is declared but its value is never read.
 
@@ -21,7 +21,7 @@
     /**
      * @template T,V
        ~~~~~~~~~~~~~
-!!! error TS6205: All type parameters are unused
+!!! error TS6205: All type parameters are unused.
      */
     class C2 {
         constructor() { }

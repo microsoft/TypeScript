@@ -12,11 +12,11 @@ export type IsOptional<T> = undefined | null extends T ? true : undefined extend
 >false : false
 
 export type RequiredKeys<V> = { [K in keyof V]-?: Exclude<V[K], undefined> extends Validator<infer T> ? IsOptional<T> extends true ? never : K : never }[keyof V];
->RequiredKeys : { [K in keyof V]-?: Exclude<V[K], undefined> extends Validator<infer T> ? IsOptional<T> extends true ? never : K : never; }[keyof V]
+>RequiredKeys : RequiredKeys<V>
 >true : true
 
 export type OptionalKeys<V> = Exclude<keyof V, RequiredKeys<V>>;
->OptionalKeys : Exclude<keyof V, { [K in keyof V]-?: Exclude<V[K], undefined> extends Validator<infer T> ? IsOptional<T> extends true ? never : K : never; }[keyof V]>
+>OptionalKeys : Exclude<keyof V, RequiredKeys<V>>
 
 export type InferPropsInner<V> = { [K in keyof V]-?: InferType<V[K]>; };
 >InferPropsInner : InferPropsInner<V>

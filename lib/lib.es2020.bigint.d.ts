@@ -89,13 +89,13 @@ interface BigInt64Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns false,
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns false,
      * or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
+    every(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -109,12 +109,12 @@ interface BigInt64Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: bigint, index: number, array: BigInt64Array) => any, thisArg?: any): BigInt64Array;
+    filter(predicate: (value: bigint, index: number, array: BigInt64Array) => any, thisArg?: any): BigInt64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -260,13 +260,13 @@ interface BigInt64Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls the
-     * callbackfn function for each element in the array until the callbackfn returns true, or until
+     * @param predicate A function that accepts up to three arguments. The some method calls the
+     * predicate function for each element in the array until the predicate returns true, or until
      * the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
+    some(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Sorts the array.
@@ -361,13 +361,13 @@ interface BigUint64Array {
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
-     * @param callbackfn A function that accepts up to three arguments. The every method calls
-     * the callbackfn function for each element in the array until the callbackfn returns false,
+     * @param predicate A function that accepts up to three arguments. The every method calls
+     * the predicate function for each element in the array until the predicate returns false,
      * or until the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every(callbackfn: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
+    every(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -381,12 +381,12 @@ interface BigUint64Array {
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
-     * @param callbackfn A function that accepts up to three arguments. The filter method calls
-     * the callbackfn function one time for each element in the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param predicate A function that accepts up to three arguments. The filter method calls
+     * the predicate function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(callbackfn: (value: bigint, index: number, array: BigUint64Array) => any, thisArg?: any): BigUint64Array;
+    filter(predicate: (value: bigint, index: number, array: BigUint64Array) => any, thisArg?: any): BigUint64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -532,13 +532,13 @@ interface BigUint64Array {
 
     /**
      * Determines whether the specified callback function returns true for any element of an array.
-     * @param callbackfn A function that accepts up to three arguments. The some method calls the
-     * callbackfn function for each element in the array until the callbackfn returns true, or until
+     * @param predicate A function that accepts up to three arguments. The some method calls the
+     * predicate function for each element in the array until the predicate returns true, or until
      * the end of the array.
-     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    some(callbackfn: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
+    some(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
      * Sorts the array.

@@ -66,9 +66,9 @@ function f2() {
 >a4 : string | false | (string | false)[]
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >elOrA : string | false | (string | false)[]
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]
@@ -83,9 +83,9 @@ function f2() {
 >...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >elOrA : string | false | (string | false)[]
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]

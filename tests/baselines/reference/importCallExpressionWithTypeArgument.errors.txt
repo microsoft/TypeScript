@@ -1,5 +1,5 @@
-tests/cases/conformance/dynamicImport/1.ts(2,10): error TS1326: Dynamic import cannot have type arguments
-tests/cases/conformance/dynamicImport/1.ts(3,10): error TS1326: Dynamic import cannot have type arguments
+tests/cases/conformance/dynamicImport/1.ts(2,10): error TS1326: Dynamic import cannot have type arguments.
+tests/cases/conformance/dynamicImport/1.ts(3,10): error TS1326: Dynamic import cannot have type arguments.
 
 
 ==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
@@ -9,7 +9,7 @@ tests/cases/conformance/dynamicImport/1.ts(3,10): error TS1326: Dynamic import c
     "use strict"
     var p1 = import<Promise<any>>("./0");  // error
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1326: Dynamic import cannot have type arguments
+!!! error TS1326: Dynamic import cannot have type arguments.
     var p2 = import<>("./0");  // error
              ~~~~~~~~~~~~~~~
-!!! error TS1326: Dynamic import cannot have type arguments
+!!! error TS1326: Dynamic import cannot have type arguments.

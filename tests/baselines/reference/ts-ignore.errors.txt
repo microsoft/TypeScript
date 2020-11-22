@@ -1,4 +1,4 @@
-tests/cases/conformance/directives/ts-ignore.ts(13,5): error TS2322: Type '"nope"' is not assignable to type 'number'.
+tests/cases/conformance/directives/ts-ignore.ts(13,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/directives/ts-ignore.ts (1 errors) ====
@@ -16,7 +16,7 @@ tests/cases/conformance/directives/ts-ignore.ts(13,5): error TS2322: Type '"nope
     
     var invalidPlain: number = 'nope';
         ~~~~~~~~~~~~
-!!! error TS2322: Type '"nope"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     var validPlain: string = 'nope';
     

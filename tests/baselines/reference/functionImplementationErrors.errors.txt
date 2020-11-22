@@ -1,6 +1,6 @@
 tests/cases/conformance/functions/functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
-tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
 
 
 ==== tests/cases/conformance/functions/functionImplementationErrors.ts (3 errors) ====
@@ -37,14 +37,14 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error 
     // Function signature with parameter initializer referencing in scope local variable
     function f6(n = m) {
                     ~
-!!! error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+!!! error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
         var m = 4;
     }
     
     // Function signature with initializer referencing other parameter to the right
     function f7(n = m, m?) {
                     ~
-!!! error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+!!! error TS2373: Parameter 'n' cannot reference identifier 'm' declared after it.
     }
     
     // FunctionExpression with non -void return type annotation with a throw, no return, and other code

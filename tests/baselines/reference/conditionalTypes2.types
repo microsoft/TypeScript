@@ -489,18 +489,18 @@ declare type IResponse<T> = {
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
 >sendValue : (name: keyof GetAllPropertiesOfType<T, string>) => void
->name : { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends string ? PropertyName : never; }[Extract<keyof T, string>]
+>name : GetPropertyNamesOfType<Required<T>, string>
 
 };
 
 declare type GetPropertyNamesOfType<T, RestrictToType> = {
->GetPropertyNamesOfType : { [PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never; }[Extract<keyof T, string>]
+>GetPropertyNamesOfType : GetPropertyNamesOfType<T, RestrictToType>
 
 	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
 }[Extract<keyof T, string>];
 
 declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
->GetAllPropertiesOfType : Pick<T, { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends RestrictToType ? PropertyName : never; }[Extract<keyof T, string>]>
+>GetAllPropertiesOfType : Pick<T, GetPropertyNamesOfType<Required<T>, RestrictToType>>
 
 	T,
 	GetPropertyNamesOfType<Required<T>, RestrictToType>

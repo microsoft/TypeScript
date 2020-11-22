@@ -25,5 +25,10 @@
 // Only public properties are visible outside the class
 verify.completions({
     marker: ["1", "2"],
-    exact: ["prototype", "publicMethod", "publicProperty", ...completion.functionMembers],
+    exact: [
+        { name: "prototype", sortText: completion.SortText.LocationPriority },
+        { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
+        ...completion.functionMembers
+    ],
 });

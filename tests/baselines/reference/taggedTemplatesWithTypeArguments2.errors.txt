@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,30): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(13,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(15,11): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,11): error TS2347: Untyped function calls may not accept type arguments.
-tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,30): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(17,30): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(35,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,14): error TS2754: 'super' may not use type arguments.
@@ -23,7 +23,7 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34
     
     const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
                                  ~~~~~~~
-!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
     const c = new tag<number> `${100} ${200}`<string>("hello", "world");
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +33,7 @@ tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts(36,34
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
                                  ~~~~~~~
-!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
     /**
      * Testing ASI. This should never parse as

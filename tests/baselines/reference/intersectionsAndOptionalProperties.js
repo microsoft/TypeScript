@@ -21,6 +21,11 @@ function foo(v: From) {
     x.field = v.field; // Error
 }
 
+// Repro from #38348
+
+const yy: number[] & [number, ...number[]] = [1];
+const xx: [number, ...number[]] = yy;
+
 
 //// [intersectionsAndOptionalProperties.js]
 "use strict";
@@ -31,3 +36,6 @@ function foo(v) {
     x = v; // Error
     x.field = v.field; // Error
 }
+// Repro from #38348
+var yy = [1];
+var xx = yy;

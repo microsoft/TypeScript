@@ -18,7 +18,7 @@ exports.n.K = function () {
     this.x = 10;
 >this.x = 10 : 10
 >this.x : any
->this : typeof n
+>this : this
 >x : any
 >10 : 10
 }
@@ -32,9 +32,9 @@ exports.Classic = class {
     constructor() {
         this.p = 1
 >this.p = 1 : 1
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >1 : 1
     }
 }
@@ -58,19 +58,19 @@ k.x
 >x : number
 
 var classic = new s.Classic()
->classic : Classic
->new s.Classic() : Classic
->s.Classic : typeof Classic
+>classic : s.Classic
+>new s.Classic() : s.Classic
+>s.Classic : typeof s.Classic
 >s : typeof s
->Classic : typeof Classic
+>Classic : typeof s.Classic
 
 
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
->f : (c: s.n.K, classic: s.Classic) => void
+>f : (c: K, classic: s.Classic) => void
 >c : K
->classic : Classic
+>classic : s.Classic
 
     c.x
 >c.x : number
@@ -79,7 +79,7 @@ function f(c, classic) {
 
     classic.p
 >classic.p : number
->classic : Classic
+>classic : s.Classic
 >p : number
 }
 

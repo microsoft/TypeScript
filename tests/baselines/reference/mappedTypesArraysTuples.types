@@ -66,7 +66,7 @@ type B = { b: string };
 >b : string
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
->T40 : string | Box<string>[] | Boxified<A> | readonly Box<A>[] | Box<A>[] | [Box<A>, Box<B>]
+>T40 : string | Box<string>[] | Boxified<A> | readonly Box<A>[] | [Box<A>, Box<B>] | Box<A>[]
 
 type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
 >ReadWrite : ReadWrite<T>

@@ -126,7 +126,7 @@ exports.jj = j;
 export function a(): void;
 export function b(): void;
 export namespace b {
-    export const cat: string;
+    const cat: string;
 }
 export function c(): void;
 export namespace c {

@@ -94,13 +94,14 @@ exports.__esModule = true;
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
-exports.MySFC = function (props) { return renderer2_1.predom("p", null,
+var MySFC = function (props) { return renderer2_1.predom("p", null,
     props.x,
     " + ",
     props.y,
     " = ",
     props.x + props.y,
     _this.props.children); };
+exports.MySFC = MySFC;
 var MyClass = /** @class */ (function () {
     function MyClass(props) {
         this.props = props;

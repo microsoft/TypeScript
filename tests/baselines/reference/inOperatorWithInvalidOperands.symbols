@@ -1,135 +1,155 @@
 === tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
+
 enum E { a }
->E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
->a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 0, 8))
+>E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 12))
+>a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
 
 var x: any;
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 // invalid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type
 var a1: boolean;
->a1 : Symbol(a1, Decl(inOperatorWithInvalidOperands.ts, 6, 3))
+>a1 : Symbol(a1, Decl(inOperatorWithInvalidOperands.ts, 7, 3))
 
 var a2: void;
->a2 : Symbol(a2, Decl(inOperatorWithInvalidOperands.ts, 7, 3))
+>a2 : Symbol(a2, Decl(inOperatorWithInvalidOperands.ts, 8, 3))
 
 var a3: {};
->a3 : Symbol(a3, Decl(inOperatorWithInvalidOperands.ts, 8, 3))
+>a3 : Symbol(a3, Decl(inOperatorWithInvalidOperands.ts, 9, 3))
 
-var a4: E
->a4 : Symbol(a4, Decl(inOperatorWithInvalidOperands.ts, 9, 3))
->E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
+var a4: E;
+>a4 : Symbol(a4, Decl(inOperatorWithInvalidOperands.ts, 10, 3))
+>E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 12))
+
+var a5: Foo | string;
+>a5 : Symbol(a5, Decl(inOperatorWithInvalidOperands.ts, 11, 3))
+>Foo : Symbol(Foo, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
+
+var a6: Foo;
+>a6 : Symbol(a6, Decl(inOperatorWithInvalidOperands.ts, 12, 3))
+>Foo : Symbol(Foo, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
 
 var ra1 = a1 in x;
->ra1 : Symbol(ra1, Decl(inOperatorWithInvalidOperands.ts, 11, 3))
->a1 : Symbol(a1, Decl(inOperatorWithInvalidOperands.ts, 6, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra1 : Symbol(ra1, Decl(inOperatorWithInvalidOperands.ts, 14, 3))
+>a1 : Symbol(a1, Decl(inOperatorWithInvalidOperands.ts, 7, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra2 = a2 in x;
->ra2 : Symbol(ra2, Decl(inOperatorWithInvalidOperands.ts, 12, 3))
->a2 : Symbol(a2, Decl(inOperatorWithInvalidOperands.ts, 7, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra2 : Symbol(ra2, Decl(inOperatorWithInvalidOperands.ts, 15, 3))
+>a2 : Symbol(a2, Decl(inOperatorWithInvalidOperands.ts, 8, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra3 = a3 in x;
->ra3 : Symbol(ra3, Decl(inOperatorWithInvalidOperands.ts, 13, 3))
->a3 : Symbol(a3, Decl(inOperatorWithInvalidOperands.ts, 8, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra3 : Symbol(ra3, Decl(inOperatorWithInvalidOperands.ts, 16, 3))
+>a3 : Symbol(a3, Decl(inOperatorWithInvalidOperands.ts, 9, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra4 = a4 in x;
->ra4 : Symbol(ra4, Decl(inOperatorWithInvalidOperands.ts, 14, 3))
->a4 : Symbol(a4, Decl(inOperatorWithInvalidOperands.ts, 9, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra4 : Symbol(ra4, Decl(inOperatorWithInvalidOperands.ts, 17, 3))
+>a4 : Symbol(a4, Decl(inOperatorWithInvalidOperands.ts, 10, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra5 = null in x;
->ra5 : Symbol(ra5, Decl(inOperatorWithInvalidOperands.ts, 15, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra5 : Symbol(ra5, Decl(inOperatorWithInvalidOperands.ts, 18, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra6 = undefined in x;
->ra6 : Symbol(ra6, Decl(inOperatorWithInvalidOperands.ts, 16, 3))
+>ra6 : Symbol(ra6, Decl(inOperatorWithInvalidOperands.ts, 19, 3))
 >undefined : Symbol(undefined)
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra7 = E.a in x;
->ra7 : Symbol(ra7, Decl(inOperatorWithInvalidOperands.ts, 17, 3))
->E.a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 0, 8))
->E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 0))
->a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 0, 8))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra7 : Symbol(ra7, Decl(inOperatorWithInvalidOperands.ts, 20, 3))
+>E.a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
+>E : Symbol(E, Decl(inOperatorWithInvalidOperands.ts, 0, 12))
+>a : Symbol(E.a, Decl(inOperatorWithInvalidOperands.ts, 1, 8))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra8 = false in x;
->ra8 : Symbol(ra8, Decl(inOperatorWithInvalidOperands.ts, 18, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra8 : Symbol(ra8, Decl(inOperatorWithInvalidOperands.ts, 21, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var ra9 = {} in x;
->ra9 : Symbol(ra9, Decl(inOperatorWithInvalidOperands.ts, 19, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>ra9 : Symbol(ra9, Decl(inOperatorWithInvalidOperands.ts, 22, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+
+var ra10 = a5 in x;
+>ra10 : Symbol(ra10, Decl(inOperatorWithInvalidOperands.ts, 23, 3))
+>a5 : Symbol(a5, Decl(inOperatorWithInvalidOperands.ts, 11, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+
+var ra11 = a6 in x;
+>ra11 : Symbol(ra11, Decl(inOperatorWithInvalidOperands.ts, 24, 3))
+>a6 : Symbol(a6, Decl(inOperatorWithInvalidOperands.ts, 12, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 // invalid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
 var b1: number;
->b1 : Symbol(b1, Decl(inOperatorWithInvalidOperands.ts, 23, 3))
+>b1 : Symbol(b1, Decl(inOperatorWithInvalidOperands.ts, 28, 3))
 
 var b2: boolean;
->b2 : Symbol(b2, Decl(inOperatorWithInvalidOperands.ts, 24, 3))
+>b2 : Symbol(b2, Decl(inOperatorWithInvalidOperands.ts, 29, 3))
 
 var b3: string;
->b3 : Symbol(b3, Decl(inOperatorWithInvalidOperands.ts, 25, 3))
+>b3 : Symbol(b3, Decl(inOperatorWithInvalidOperands.ts, 30, 3))
 
 var b4: void;
->b4 : Symbol(b4, Decl(inOperatorWithInvalidOperands.ts, 26, 3))
+>b4 : Symbol(b4, Decl(inOperatorWithInvalidOperands.ts, 31, 3))
 
 var b5: string | number;
->b5 : Symbol(b5, Decl(inOperatorWithInvalidOperands.ts, 27, 3))
+>b5 : Symbol(b5, Decl(inOperatorWithInvalidOperands.ts, 32, 3))
 
 var rb1 = x in b1;
->rb1 : Symbol(rb1, Decl(inOperatorWithInvalidOperands.ts, 29, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
->b1 : Symbol(b1, Decl(inOperatorWithInvalidOperands.ts, 23, 3))
+>rb1 : Symbol(rb1, Decl(inOperatorWithInvalidOperands.ts, 34, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+>b1 : Symbol(b1, Decl(inOperatorWithInvalidOperands.ts, 28, 3))
 
 var rb2 = x in b2;
->rb2 : Symbol(rb2, Decl(inOperatorWithInvalidOperands.ts, 30, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
->b2 : Symbol(b2, Decl(inOperatorWithInvalidOperands.ts, 24, 3))
+>rb2 : Symbol(rb2, Decl(inOperatorWithInvalidOperands.ts, 35, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+>b2 : Symbol(b2, Decl(inOperatorWithInvalidOperands.ts, 29, 3))
 
 var rb3 = x in b3;
->rb3 : Symbol(rb3, Decl(inOperatorWithInvalidOperands.ts, 31, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
->b3 : Symbol(b3, Decl(inOperatorWithInvalidOperands.ts, 25, 3))
+>rb3 : Symbol(rb3, Decl(inOperatorWithInvalidOperands.ts, 36, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+>b3 : Symbol(b3, Decl(inOperatorWithInvalidOperands.ts, 30, 3))
 
 var rb4 = x in b4;
->rb4 : Symbol(rb4, Decl(inOperatorWithInvalidOperands.ts, 32, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
->b4 : Symbol(b4, Decl(inOperatorWithInvalidOperands.ts, 26, 3))
+>rb4 : Symbol(rb4, Decl(inOperatorWithInvalidOperands.ts, 37, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+>b4 : Symbol(b4, Decl(inOperatorWithInvalidOperands.ts, 31, 3))
 
 var rb5 = x in b5;
->rb5 : Symbol(rb5, Decl(inOperatorWithInvalidOperands.ts, 33, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
->b5 : Symbol(b5, Decl(inOperatorWithInvalidOperands.ts, 27, 3))
+>rb5 : Symbol(rb5, Decl(inOperatorWithInvalidOperands.ts, 38, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
+>b5 : Symbol(b5, Decl(inOperatorWithInvalidOperands.ts, 32, 3))
 
 var rb6 = x in 0;
->rb6 : Symbol(rb6, Decl(inOperatorWithInvalidOperands.ts, 34, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>rb6 : Symbol(rb6, Decl(inOperatorWithInvalidOperands.ts, 39, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var rb7 = x in false;
->rb7 : Symbol(rb7, Decl(inOperatorWithInvalidOperands.ts, 35, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>rb7 : Symbol(rb7, Decl(inOperatorWithInvalidOperands.ts, 40, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var rb8 = x in '';
->rb8 : Symbol(rb8, Decl(inOperatorWithInvalidOperands.ts, 36, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>rb8 : Symbol(rb8, Decl(inOperatorWithInvalidOperands.ts, 41, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var rb9 = x in null;
->rb9 : Symbol(rb9, Decl(inOperatorWithInvalidOperands.ts, 37, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>rb9 : Symbol(rb9, Decl(inOperatorWithInvalidOperands.ts, 42, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 
 var rb10 = x in undefined;
->rb10 : Symbol(rb10, Decl(inOperatorWithInvalidOperands.ts, 38, 3))
->x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 2, 3))
+>rb10 : Symbol(rb10, Decl(inOperatorWithInvalidOperands.ts, 43, 3))
+>x : Symbol(x, Decl(inOperatorWithInvalidOperands.ts, 3, 3))
 >undefined : Symbol(undefined)
-
 
 // both operands are invalid
 var rc1 = {} in '';
->rc1 : Symbol(rc1, Decl(inOperatorWithInvalidOperands.ts, 42, 3))
+>rc1 : Symbol(rc1, Decl(inOperatorWithInvalidOperands.ts, 46, 3))
 

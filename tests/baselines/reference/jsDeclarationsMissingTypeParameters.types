@@ -1,0 +1,30 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/**
+  * @param {Array=} y desc
+  */
+function x(y) { }
+>x : (y?: any[] | undefined) => void
+>y : any[]
+
+// @ts-ignore
+/** @param {function (Array)} func Invoked
+ */
+function y(func) { return; }
+>y : (func: (arg0: any[]) => any) => void
+>func : (arg0: any[]) => any
+
+/**
+ * @return {(Array.<> | null)} list of devices
+ */
+function z() { return null ;}
+>z : () => (any[] | null)
+>null : null
+
+/**
+ * 
+ * @return {?Promise} A promise
+ */
+function w() { return null; }
+>w : () => Promise<any> | null
+>null : null
+
