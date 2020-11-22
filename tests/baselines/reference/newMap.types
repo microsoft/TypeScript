@@ -3,3 +3,7 @@ new Map<string>();
 >new Map<string>() : Map<string, unknown>
 >Map : MapConstructor
 
+new WeakMap<object>();
+>new WeakMap<object>() : WeakMap<object, unknown>
+>WeakMap : WeakMapConstructor
+
