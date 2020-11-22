@@ -3,6 +3,7 @@
 // @noEmit: true
 // @lib: es2017
 
+// @filename: extendingCollectionsWithCheckJs.js
 class MySet extends Set {
     constructor() {
         super();
