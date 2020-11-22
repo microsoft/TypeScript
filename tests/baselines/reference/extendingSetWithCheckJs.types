@@ -1,4 +1,4 @@
-=== tests/cases/compiler/extendingSetWithCheckJs.ts ===
+=== tests/cases/compiler/extendingCollectionsWithCheckJs.js ===
 class MySet extends Set {
 >MySet : MySet
 >Set : Set<any>
@@ -34,7 +34,7 @@ class MyMap extends Map {
 
 class MyWeakMap extends WeakMap {
 >MyWeakMap : MyWeakMap
->WeakMap : WeakMap<object, any>
+>WeakMap : WeakMap<any, any>
 
     constructor() {
         super();
@@ -42,3 +42,4 @@ class MyWeakMap extends WeakMap {
 >super : WeakMapConstructor
     }
 }
+

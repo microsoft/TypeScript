@@ -30,7 +30,6 @@ interface WeakMap<K extends object, V> {
 }
 
 interface WeakMapConstructor {
-    new(): WeakMap<object, any>;
     new <K extends object, V>(entries?: readonly [K, V][] | null): WeakMap<K, V>;
     readonly prototype: WeakMap<object, any>;
 }

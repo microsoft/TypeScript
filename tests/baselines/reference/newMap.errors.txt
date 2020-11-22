@@ -1,5 +1,5 @@
 tests/cases/compiler/newMap.ts(1,9): error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
-tests/cases/compiler/newMap.ts(2,13): error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
+tests/cases/compiler/newMap.ts(2,13): error TS2558: Expected 2 type arguments, but got 1.
 
 
 ==== tests/cases/compiler/newMap.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/newMap.ts(2,13): error TS2743: No overload expects 1 type a
 !!! error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
     new WeakMap<object>();
                 ~~~~~~
-!!! error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     
