@@ -38980,7 +38980,6 @@ namespace ts {
                         if (flags & ModifierFlags.Abstract) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
                         }
-                        // An abstract modifier is permitted on a class expression in a 'typeof abstract class {}' type
                         if (node.kind !== SyntaxKind.ClassDeclaration && node.kind !== SyntaxKind.ClassExpression) {
                             if (node.kind !== SyntaxKind.MethodDeclaration &&
                                 node.kind !== SyntaxKind.PropertyDeclaration &&
@@ -38988,7 +38987,7 @@ namespace ts {
                                 node.kind !== SyntaxKind.SetAccessor) {
                                 return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration);
                             }
-                            if (!(node.parent.kind === SyntaxKind.ClassDeclaration && hasSyntacticModifier(node.parent, ModifierFlags.Abstract))) {
+                            if (!((node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.ClassExpression) && hasSyntacticModifier(node.parent, ModifierFlags.Abstract))) {
                                 return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
                             }
                             if (flags & ModifierFlags.Static) {
@@ -39096,7 +39095,6 @@ namespace ts {
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.AsyncKeyword);
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.ClassExpression:
-                            // An abstract modifier is permitted on a class expression in a 'typeof abstract class {}' type
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.AbstractKeyword);
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.VariableStatement:

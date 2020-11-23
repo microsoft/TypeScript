@@ -204,7 +204,7 @@ namespace ts {
 
         function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
             // Types of node whose children might have modifiers.
-            const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration | ObjectLiteralExpression;
+            const container = declaration.parent;
             switch (container.kind) {
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.SourceFile:
@@ -216,22 +216,21 @@ namespace ts {
                         return [...declaration.members, declaration];
                     }
                     else {
-                        return container.statements;
+                        return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
                     }
                 case SyntaxKind.Constructor:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.FunctionDeclaration:
-                    return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
+                    return [...(<ConstructorDeclaration | MethodDeclaration | FunctionDeclaration>container).parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeLiteral:
-                    const nodes = container.members;
-
+                    const nodes = (<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeLiteralNode>container).members;
                     // If we're an accessibility modifier, we're in an instance member and should search
                     // the constructor's parameter list for instance members as well.
                     if (modifierFlag & (ModifierFlags.AccessibilityModifier | ModifierFlags.Readonly)) {
-                        const constructor = find(container.members, isConstructorDeclaration);
+                        const constructor = find(nodes, isConstructorDeclaration);
                         if (constructor) {
                             return [...nodes, ...constructor.parameters];
                         }
@@ -240,13 +239,11 @@ namespace ts {
                         return [...nodes, container];
                     }
                     return nodes;
-
-                // Syntactically invalid positions that the parser might produce anyway
-                case SyntaxKind.ObjectLiteralExpression:
-                    return undefined;
-
                 default:
-                    Debug.assertNever(container, "Invalid container kind.");
+                    if (modifierFlag & ModifierFlags.Abstract && isClassExpression(declaration)) {
+                        return [...declaration.members, declaration];
+                    }
+                    return undefined;
             }
         }
 

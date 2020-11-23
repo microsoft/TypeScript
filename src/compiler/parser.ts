@@ -2861,22 +2861,14 @@ namespace ts {
         }
 
         function isStartOfTypeofClassExpression() {
-            return token() === SyntaxKind.ClassKeyword ||
-                token() === SyntaxKind.AbstractKeyword && lookAhead(() => nextToken() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak());
-        }
-
-        function parseTypeofClassExpression(): ClassExpression {
-            const pos = getNodePos();
-            const hasJSDoc = hasPrecedingJSDocComment();
-            const modifiers = parseModifiers();
-            return <ClassExpression>parseClassDeclarationOrExpression(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.ClassExpression);
+            return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine);
         }
 
         function parseTypeQuery(): TypeQueryNode {
             const pos = getNodePos();
             parseExpected(SyntaxKind.TypeOfKeyword);
             return finishNode(factory.createTypeQueryNode(isStartOfTypeofClassExpression() ?
-                doInsideOfContext(NodeFlags.Ambient, parseTypeofClassExpression) :
+                doInsideOfContext(NodeFlags.Ambient, parseClassExpression) :
                 parseEntityName(/*allowReservedWords*/ true)), pos);
         }
 
@@ -5323,6 +5315,11 @@ namespace ts {
                     }
 
                     return parseFunctionExpression();
+                case SyntaxKind.AbstractKeyword:
+                    if (!lookAhead(nextTokenIsClassKeywordOnSameLine)) {
+                        break;
+                    }
+                    // Fall through
                 case SyntaxKind.ClassKeyword:
                     return parseClassExpression();
                 case SyntaxKind.FunctionKeyword:
@@ -6654,7 +6651,10 @@ namespace ts {
         }
 
         function parseClassExpression(): ClassExpression {
-            return <ClassExpression>parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined, SyntaxKind.ClassExpression);
+            const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
+            const modifiers = parseModifiers();
+            return <ClassExpression>parseClassDeclarationOrExpression(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.ClassExpression);
         }
 
         function parseClassDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ClassDeclaration {
