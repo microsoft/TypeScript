@@ -5,7 +5,7 @@
 ////    [|abstract|] walk(): void;
 ////    [|abstract|] makeSound(): void;
 ////}
-////// abstract cannot appear here, won't get highlighted
+////// abstract can appear on class expressions
 ////let c = /*1*/abstract class Foo {
 ////    /*2*/abstract foo(): void;
 ////    abstract bar(): void;
@@ -14,7 +14,7 @@
 verify.rangesAreOccurrences(false);
 
 goTo.marker("1");
-verify.occurrencesAtPositionCount(0);
+verify.occurrencesAtPositionCount(3);
 
 goTo.marker("2");
-verify.occurrencesAtPositionCount(2);
+verify.occurrencesAtPositionCount(3);
