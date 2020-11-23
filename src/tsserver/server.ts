@@ -679,6 +679,7 @@ namespace ts.server {
         return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
+            // Caller guarantees that `fileName` exists, so there'd be no benefit from throwIfNoEntry
             return fs.statSync(fileName).mtime;
         }
 
