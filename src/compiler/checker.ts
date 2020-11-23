@@ -34342,7 +34342,7 @@ namespace ts {
                 if (type.flags & TypeFlags.Intersection) {
                     let allIterationTypes: IterationTypes[] | undefined;
                     let optimizedUse = use;
-                    let optimizedCacheKey = cacheKey;
+                    let optimizedCacheKey: typeof cacheKey = cacheKey;
 
                     if ((optimizedUse & IterationUse.AllowsSyncOrAsyncIterablesFlag) === IterationUse.AllowsSyncOrAsyncIterablesFlag) {
                         optimizedUse ^= IterationUse.AllowsSyncIterablesFlag;
@@ -34353,7 +34353,7 @@ namespace ts {
                             shouldCache &&= hasProperty(constituent, "iterationTypesOfAsyncIterable");
                         }
                         optimizedUse = use ^ IterationUse.AllowsAsyncIterablesFlag;
-                        optimizedCacheKey = "iterattests/cases/compiler/errorsInGenericTypeReference.tsionTypesOfIterable";
+                        optimizedCacheKey = "iterationTypesOfIterable";
                     }
 
                     if (allIterationTypes === undefined) {
