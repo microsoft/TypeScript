@@ -526,6 +526,9 @@ namespace ts {
 
     export function couldStartTrivia(text: string, pos: number): boolean {
         // Keep in sync with skipTrivia
+        if (pos < 0 || pos >= text.length) {
+            return false;
+        }
         const ch = text.charCodeAt(pos);
         switch (ch) {
             case CharacterCodes.carriageReturn:
@@ -559,6 +562,9 @@ namespace ts {
 
         // Keep in sync with couldStartTrivia
         while (true) {
+            if (pos >= text.length) {
+                return pos;
+            }
             const ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
