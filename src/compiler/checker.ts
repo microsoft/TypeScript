@@ -17377,7 +17377,11 @@ namespace ts {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
-                const flags = source.flags & target.flags;
+
+                const sourceFlags = source.flags;
+                const targetFlags = target.flags;
+
+                const flags = sourceFlags & targetFlags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
                     if (flags & TypeFlags.Index) {
                         return isRelatedTo((<IndexType>source).type, (<IndexType>target).type, /*reportErrors*/ false);
@@ -17417,7 +17421,7 @@ namespace ts {
                 // We limit alias variance probing to only object and conditional types since their alias behavior
                 // is more predictable than other, interned types, which may or may not have an alias depending on
                 // the order in which things were checked.
-                if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
+                if (sourceFlags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
@@ -17437,7 +17441,7 @@ namespace ts {
                     return result;
                 }
 
-                if (target.flags & TypeFlags.TypeParameter) {
+                if (targetFlags & TypeFlags.TypeParameter) {
                     // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && !(<MappedType>source).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
 
@@ -17450,10 +17454,10 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.Index) {
+                else if (targetFlags & TypeFlags.Index) {
                     const targetType = (target as IndexType).type;
                     // A keyof S is related to a keyof T if T is related to S.
-                    if (source.flags & TypeFlags.Index) {
+                    if (sourceFlags & TypeFlags.Index) {
                         if (result = isRelatedTo(targetType, (<IndexType>source).type, /*reportErrors*/ false)) {
                             return result;
                         }
@@ -17480,7 +17484,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.IndexedAccess) {
+                else if (targetFlags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to C, where C is the base
                     // constraint of T[K] for writing.
                     if (relation === assignableRelation || relation === comparableRelation) {
@@ -17540,7 +17544,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (target.flags & TypeFlags.TemplateLiteral && source.flags & TypeFlags.StringLiteral) {
+                else if (targetFlags & TypeFlags.TemplateLiteral && sourceFlags & TypeFlags.StringLiteral) {
                     if (isPatternLiteralType(target)) {
                         // match all non-`string` segments
                         const result = inferLiteralsFromTemplateLiteralType(source as StringLiteralType, target as TemplateLiteralType);
@@ -17550,8 +17554,8 @@ namespace ts {
                     }
                 }
 
-                if (source.flags & TypeFlags.TypeVariable) {
-                    if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
+                if (sourceFlags & TypeFlags.TypeVariable) {
+                    if (sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess) {
                         // A type S[K] is related to a type T[J] if S is related to T and K is related to J.
                         if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
                             result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, reportErrors);
@@ -17563,7 +17567,7 @@ namespace ts {
                     }
                     else {
                         const constraint = getConstraintOfType(<TypeVariable>source);
-                        if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
+                        if (!constraint || (sourceFlags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                             // A type variable with no constraint is not related to the non-primitive object type.
                             if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
                                 resetErrorInfo(saveErrorInfo);
@@ -17582,14 +17586,14 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.Index) {
+                else if (sourceFlags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.TemplateLiteral) {
-                    if (target.flags & TypeFlags.TemplateLiteral &&
+                else if (sourceFlags & TypeFlags.TemplateLiteral) {
+                    if (targetFlags & TypeFlags.TemplateLiteral &&
                         (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
                         (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
                         every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
@@ -17602,8 +17606,8 @@ namespace ts {
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.StringMapping) {
-                    if (target.flags & TypeFlags.StringMapping && (<StringMappingType>source).symbol === (<StringMappingType>target).symbol) {
+                else if (sourceFlags & TypeFlags.StringMapping) {
+                    if (targetFlags & TypeFlags.StringMapping && (<StringMappingType>source).symbol === (<StringMappingType>target).symbol) {
                         if (result = isRelatedTo((<StringMappingType>source).type, (<StringMappingType>target).type, reportErrors)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
@@ -17617,8 +17621,8 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.Conditional) {
-                    if (target.flags & TypeFlags.Conditional) {
+                else if (sourceFlags & TypeFlags.Conditional) {
+                    if (targetFlags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
@@ -17678,7 +17682,7 @@ namespace ts {
                         }
                         return Ternary.False;
                     }
-                    const sourceIsPrimitive = !!(source.flags & TypeFlags.Primitive);
+                    const sourceIsPrimitive = !!(sourceFlags & TypeFlags.Primitive);
                     if (relation !== identityRelation) {
                         source = getApparentType(source);
                     }
@@ -17722,7 +17726,7 @@ namespace ts {
                     // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
-                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                    if (sourceFlags & (TypeFlags.Object | TypeFlags.Intersection) && targetFlags & TypeFlags.Object) {
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo.errorInfo && !sourceIsPrimitive;
                         result = propertiesRelatedTo(source, target, reportStructuralErrors, /*excludedProperties*/ undefined, intersectionState);
@@ -17749,7 +17753,7 @@ namespace ts {
                     // there exists a constituent of T for every combination of the discriminants of S
                     // with respect to T. We do not report errors here, as we will use the existing
                     // error result from checking each constituent of the union.
-                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Union) {
+                    if (sourceFlags & (TypeFlags.Object | TypeFlags.Intersection) && targetFlags & TypeFlags.Union) {
                         const objectOnlyTarget = extractTypesOfKind(target, TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Substitution);
                         if (objectOnlyTarget.flags & TypeFlags.Union) {
                             const result = typeRelatedToDiscriminatedType(source, objectOnlyTarget as UnionType);
