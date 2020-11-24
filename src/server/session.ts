@@ -1250,6 +1250,16 @@ namespace ts.server {
                 result;
         }
 
+        private mapJSDocTagInfo(tags: readonly JSDocTagInfo[], project: Project): readonly protocol.JSDocTogInfo[] {
+            return tags.map(({ name, text, links }) => ({
+                name,
+                text,
+                links: links?.map(link => ({
+                    ...this.toFileSpan(link.fileName, link.textSpan, project),
+                    target: this.toFileSpanWithContext(link.target.fileName, link.target.textSpan, undefined, project),
+                    }))}))
+        }
+
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
             return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
         }
@@ -1666,7 +1676,7 @@ namespace ts.server {
                     end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
                     documentation: docString,
-                    tags: quickInfo.tags || []
+                    tags: quickInfo.tags ? this.mapJSDocTagInfo(quickInfo.tags, project) : []
                 };
             }
             else {
@@ -1800,7 +1810,7 @@ namespace ts.server {
             return res;
         }
 
-        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, simplifiedResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
+        private getCompletionEntryDetails(args: protocol.CompletionDetailsRequestArgs, fullResult: boolean): readonly protocol.CompletionEntryDetails[] | readonly CompletionEntryDetails[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1810,9 +1820,13 @@ namespace ts.server {
                 const { name, source } = typeof entryName === "string" ? { name: entryName, source: undefined } : entryName;
                 return project.getLanguageService().getCompletionEntryDetails(file, position, name, formattingOptions, source, this.getPreferences(file));
             });
-            return simplifiedResult
-                ? result.map(details => ({ ...details, codeActions: map(details.codeActions, action => this.mapCodeAction(action)) }))
-                : result;
+            return fullResult
+                ? result
+                : result.map(details => ({
+                    ...details,
+                    codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
+                    tags: details.tags ? this.mapJSDocTagInfo(details.tags, project) : []
+                }));
         }
 
         private getCompileOnSaveAffectedFileList(args: protocol.FileRequestArgs): readonly protocol.CompileOnSaveAffectedFileListSingleProject[] {
@@ -1880,10 +1894,7 @@ namespace ts.server {
                 const span = helpItems.applicableSpan;
                 return {
                     items: helpItems.items,
-                    applicableSpan: {
-                        start: scriptInfo.positionToLineOffset(span.start),
-                        end: scriptInfo.positionToLineOffset(span.start + span.length)
-                    },
+                    applicableSpan: span,
                     selectedItemIndex: helpItems.selectedItemIndex,
                     argumentIndex: helpItems.argumentIndex,
                     argumentCount: helpItems.argumentCount,
@@ -2664,10 +2675,10 @@ namespace ts.server {
                 return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionsFull));
             },
             [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ true));
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ false));
             },
             [CommandNames.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
-                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*fullResult*/ true));
             },
             [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));

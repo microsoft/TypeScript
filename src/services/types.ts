@@ -1036,8 +1036,9 @@ namespace ts {
         links?: JSDocLink[];
     }
 
-    export interface JSDocLink extends TextSpan {
-        link: DocumentSpan;
+    // TODO: Maybe TextRange/FileRange instead? Or extends DocumentSpan isntead of TextSpan?
+    export interface JSDocLink extends DocumentSpan {
+        target: DocumentSpan;
     }
 
     export interface QuickInfo {
@@ -1046,7 +1047,7 @@ namespace ts {
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        tags?: JSDocTagInfo[];
+        tags?: readonly JSDocTagInfo[];
     }
 
     export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

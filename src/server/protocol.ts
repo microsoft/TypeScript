@@ -955,6 +955,17 @@ namespace ts.server.protocol {
         file: string;
     }
 
+    export interface JSDocTogInfo {
+        name: string;
+        text?: string;
+        links?: readonly JSDocLink[];
+    }
+
+    export interface JSDocLink extends FileSpan {
+        // TODO: Don't think WithContext is really needed
+        target: FileSpanWithContext;
+    }
+
     export interface TextSpanWithContext extends TextSpan {
         contextStart?: Location;
         contextEnd?: Location;
@@ -1937,9 +1948,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags associated with symbol.
          */
-        tags: JSDocTagInfo[]; // TODO: Needs to use location pairs instead of spans. That probalby means no more re-use of JSDocTagInfo
-        // I need to find out how this is handled elsewhere in server.
-        // Also, where to put the handling when I do figure out what it should be.
+        tags: readonly JSDocTogInfo[];
     }
 
     /**
@@ -2245,7 +2254,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags for the symbol.
          */
-        tags?: JSDocTagInfo[];
+        tags?: readonly JSDocTogInfo[];
 
         /**
          * The associated code actions for this entry
@@ -2347,8 +2356,9 @@ namespace ts.server.protocol {
 
         /**
          * The signature's JSDoc tags
+         * TODO: Changing this doesn't cause the build to fail! Need tests and probably a scan of session.ts
          */
-        tags: JSDocTagInfo[];
+        tags: readonly JSDocTogInfo[];
     }
 
     /**
