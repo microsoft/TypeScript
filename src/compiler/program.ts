@@ -407,10 +407,9 @@ namespace ts {
             const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
             let lineContent = file.text.slice(lineStart, lineEnd);
 
-            // Trim from end
+            // Trim from end and replace leading tabs (if any) to single spaces.
             lineContent = lineContent.replace(/\s+$/g, "");
-
-            // Convert all leading tabs to single spaces
+            // Using gy flags to repeatedly match \t at lastIndex (default 0) and replace it until it runs out of \t at lastIndex
             lineContent = lineContent.replace(/\t/gy, " ");
 
             // Output the gutter and the actual contents of the line.
