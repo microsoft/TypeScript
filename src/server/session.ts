@@ -1250,13 +1250,16 @@ namespace ts.server {
                 result;
         }
 
-        private mapJSDocTagInfo(tags: readonly JSDocTagInfo[], project: Project): readonly protocol.JSDocTogInfo[] {
+        private mapJSDocTagInfo(tags: readonly JSDocTagInfo[] | undefined, project: Project): readonly protocol.JSDocTagInfo[] {
+            if (tags === undefined) {
+                return [];
+            }
             return tags.map(({ name, text, links }) => ({
                 name,
                 text,
                 links: links?.map(link => ({
                     ...this.toFileSpan(link.fileName, link.textSpan, project),
-                    target: this.toFileSpanWithContext(link.target.fileName, link.target.textSpan, undefined, project),
+                    target: this.toFileSpan(link.target.fileName, link.target.textSpan, project),
                     }))}))
         }
 
@@ -1676,7 +1679,7 @@ namespace ts.server {
                     end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
                     documentation: docString,
-                    tags: quickInfo.tags ? this.mapJSDocTagInfo(quickInfo.tags, project) : []
+                    tags: this.mapJSDocTagInfo(quickInfo.tags, project)
                 };
             }
             else {
@@ -1825,7 +1828,7 @@ namespace ts.server {
                 : result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
-                    tags: details.tags ? this.mapJSDocTagInfo(details.tags, project) : []
+                    tags: this.mapJSDocTagInfo(details.tags, project)
                 }));
         }
 

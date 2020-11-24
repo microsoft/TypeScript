@@ -955,15 +955,14 @@ namespace ts.server.protocol {
         file: string;
     }
 
-    export interface JSDocTogInfo {
+    export interface JSDocTagInfo {
         name: string;
         text?: string;
         links?: readonly JSDocLink[];
     }
 
     export interface JSDocLink extends FileSpan {
-        // TODO: Don't think WithContext is really needed
-        target: FileSpanWithContext;
+        target: FileSpan;
     }
 
     export interface TextSpanWithContext extends TextSpan {
@@ -1948,7 +1947,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags associated with symbol.
          */
-        tags: readonly JSDocTogInfo[];
+        tags: readonly JSDocTagInfo[];
     }
 
     /**
@@ -2254,7 +2253,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags for the symbol.
          */
-        tags?: readonly JSDocTogInfo[];
+        tags?: readonly JSDocTagInfo[];
 
         /**
          * The associated code actions for this entry
@@ -2358,7 +2357,7 @@ namespace ts.server.protocol {
          * The signature's JSDoc tags
          * TODO: Changing this doesn't cause the build to fail! Need tests and probably a scan of session.ts
          */
-        tags: readonly JSDocTogInfo[];
+        tags: readonly JSDocTagInfo[];
     }
 
     /**

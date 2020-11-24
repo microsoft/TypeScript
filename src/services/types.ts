@@ -1036,7 +1036,6 @@ namespace ts {
         links?: JSDocLink[];
     }
 
-    // TODO: Maybe TextRange/FileRange instead? Or extends DocumentSpan isntead of TextSpan?
     export interface JSDocLink extends DocumentSpan {
         target: DocumentSpan;
     }
