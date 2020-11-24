@@ -1895,7 +1895,7 @@ namespace ts.Completions {
 
                 // Check completions for Object property value shorthand
                 if (instantiatedType === undefined) {
-                    if (objectLikeContainer.flags & (NodeFlags.ThisNodeHasError | NodeFlags.InWithStatement)) {
+                    if (objectLikeContainer.flags & NodeFlags.InWithStatement) {
                         return GlobalsSearch.Fail;
                     }
                     return GlobalsSearch.Continue;
@@ -2326,6 +2326,7 @@ namespace ts.Completions {
             }
 
             return isDeclarationName(contextToken)
+                && !isShorthandPropertyAssignment(contextToken.parent)
                 && !isJsxAttribute(contextToken.parent)
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
                 // If `contextToken !== previousToken`, this is `class C ex/**/`.
