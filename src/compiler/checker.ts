@@ -20021,6 +20021,7 @@ namespace ts {
                         return;
                     }
                     target = getUnionType(targets);
+                    targetFlags = target.flags;
                     if (sources.length === 0) {
                         // All source constituents have been matched and there is nothing further to infer from.
                         // However, simply making no inferences is undesirable because it could ultimately mean
