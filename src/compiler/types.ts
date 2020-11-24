@@ -4843,6 +4843,7 @@ namespace ts {
         resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         switchTypes?: Type[];               // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
+        jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
         contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
@@ -5192,7 +5193,9 @@ namespace ts {
         /* @internal */
         objectFlags: ObjectFlags;
         /* @internal */
-        propertyCache: SymbolTable;       // Cache of resolved properties
+        propertyCache?: SymbolTable;       // Cache of resolved properties
+        /* @internal */
+        propertyCacheWithoutObjectFunctionPropertyAugment?: SymbolTable; // Cache of resolved properties that does not augment function or object type properties
         /* @internal */
         resolvedProperties: Symbol[];
         /* @internal */
@@ -5531,17 +5534,17 @@ namespace ts {
 
     /**
      * Ternary values are defined such that
-     * x & y is False if either x or y is False.
-     * x & y is Maybe if either x or y is Maybe, but neither x or y is False.
-     * x & y is True if both x and y are True.
-     * x | y is False if both x and y are False.
-     * x | y is Maybe if either x or y is Maybe, but neither x or y is True.
-     * x | y is True if either x or y is True.
+     * x & y picks the lesser in the order False < Unknown < Maybe < True, and
+     * x | y picks the greater in the order False < Unknown < Maybe < True.
+     * Generally, Ternary.Maybe is used as the result of a relation that depends on itself, and
+     * Ternary.Unknown is used as the result of a variance check that depends on itself. We make
+     * a distinction because we don't want to cache circular variance check results.
      */
     /* @internal */
     export const enum Ternary {
         False = 0,
-        Maybe = 1,
+        Unknown = 1,
+        Maybe = 3,
         True = -1
     }
 
@@ -5783,6 +5786,7 @@ namespace ts {
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
+        noPropertyAccessFromIndexSignature?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
@@ -5842,6 +5846,8 @@ namespace ts {
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -6013,6 +6019,7 @@ namespace ts {
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
+        extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
 
     /* @internal */
@@ -7854,6 +7861,7 @@ namespace ts {
         realpath?(path: string): string;
         getSymlinkCache?(): SymlinkCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
@@ -8155,7 +8163,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

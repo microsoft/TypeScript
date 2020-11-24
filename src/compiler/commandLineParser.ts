@@ -137,6 +137,30 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
         },
+        {
+            name: "excludeDirectories",
+            type: "list",
+            element: {
+                name: "excludeDirectory",
+                type: "string",
+                isFilePath: true,
+                extraValidation: specToDiagnostic
+            },
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
+        },
+        {
+            name: "excludeFiles",
+            type: "list",
+            element: {
+                name: "excludeFile",
+                type: "string",
+                isFilePath: true,
+                extraValidation: specToDiagnostic
+            },
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_support_recursive_watching_natively,
+        },
     ];
 
     /* @internal */
@@ -387,6 +411,7 @@ namespace ts {
             type: jsxOptionMap,
             affectsSourceFile: true,
             affectsEmit: true,
+            affectsModuleResolution: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -639,6 +664,15 @@ namespace ts {
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
+        {
+            name: "noPropertyAccessFromIndexSignature",
+            type: "boolean",
+            affectsBindDiagnostics: true,
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses
+        },
 
         // Module Resolution
         {
@@ -807,6 +841,9 @@ namespace ts {
         {
             name: "jsxImportSource",
             type: "string",
+            affectsSemanticDiagnostics: true,
+            affectsEmit: true,
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_the_module_specifier_to_be_used_to_import_the_jsx_and_jsxs_factory_functions_from_eg_react
         },
@@ -1223,9 +1260,9 @@ namespace ts {
         const values = value.split(",");
         switch (opt.element.type) {
             case "number":
-                return map(values, parseInt);
+                return mapDefined(values, v => validateJsonOptionValue(opt.element, parseInt(v), errors));
             case "string":
-                return map(values, v => v || "");
+                return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
             default:
                 return mapDefined(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors));
         }
@@ -1355,7 +1392,7 @@ namespace ts {
             }
             else if (opt.type === "boolean") {
                 if (optValue === "false") {
-                    options[opt.name] = false;
+                    options[opt.name] = validateJsonOptionValue(opt, /*value*/ false, errors);
                     i++;
                 }
                 else {
@@ -1377,20 +1414,20 @@ namespace ts {
             if (args[i] !== "null") {
                 switch (opt.type) {
                     case "number":
-                        options[opt.name] = parseInt(args[i]);
+                        options[opt.name] = validateJsonOptionValue(opt, parseInt(args[i]), errors);
                         i++;
                         break;
                     case "boolean":
                         // boolean flag has optional value true, false, others
                         const optValue = args[i];
-                        options[opt.name] = optValue !== "false";
+                        options[opt.name] = validateJsonOptionValue(opt, optValue !== "false", errors);
                         // consume next argument as boolean flag value
                         if (optValue === "false" || optValue === "true") {
                             i++;
                         }
                         break;
                     case "string":
-                        options[opt.name] = args[i] || "";
+                        options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
                         i++;
                         break;
                     case "list":
@@ -1583,7 +1620,7 @@ namespace ts {
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ parseDiagnostics: [textOrDiagnostic] };
+        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ fileName, parseDiagnostics: [textOrDiagnostic] };
     }
 
     /*@internal*/
@@ -1835,9 +1872,10 @@ namespace ts {
         function convertArrayLiteralExpressionToJson(
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
-        ): any[] | void {
+        ) {
             if (!returnValue) {
-                return elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+                elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+                return undefined;
             }
 
             // Filter out invalid values
@@ -1845,18 +1883,19 @@ namespace ts {
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
+            let invalidReported: boolean | undefined;
             switch (valueExpression.kind) {
                 case SyntaxKind.TrueKeyword:
                     reportInvalidOptionValue(option && option.type !== "boolean");
-                    return true;
+                    return validateValue(/*value*/ true);
 
                 case SyntaxKind.FalseKeyword:
                     reportInvalidOptionValue(option && option.type !== "boolean");
-                    return false;
+                    return validateValue(/*value*/ false);
 
                 case SyntaxKind.NullKeyword:
                     reportInvalidOptionValue(option && option.name === "extends"); // "extends" is the only option we don't allow null/undefined for
-                    return null; // eslint-disable-line no-null/no-null
+                    return validateValue(/*value*/ null); // eslint-disable-line no-null/no-null
 
                 case SyntaxKind.StringLiteral:
                     if (!isDoubleQuotedString(valueExpression)) {
@@ -1874,20 +1913,21 @@ namespace ts {
                                     (message, arg0, arg1) => createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, message, arg0, arg1)
                                 )
                             );
+                            invalidReported = true;
                         }
                     }
-                    return text;
+                    return validateValue(text);
 
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return Number((<NumericLiteral>valueExpression).text);
+                    return validateValue(Number((<NumericLiteral>valueExpression).text));
 
                 case SyntaxKind.PrefixUnaryExpression:
                     if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                         break; // not valid JSON syntax
                     }
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return -Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text);
+                    return validateValue(-Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text));
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
@@ -1901,20 +1941,20 @@ namespace ts {
                     // If need arises, we can modify this interface and callbacks as needed
                     if (option) {
                         const { elementOptions, extraKeyDiagnostics, name: optionName } = <TsConfigOnlyOption>option;
-                        return convertObjectLiteralExpressionToJson(objectLiteralExpression,
-                            elementOptions, extraKeyDiagnostics, optionName);
+                        return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression,
+                            elementOptions, extraKeyDiagnostics, optionName));
                     }
                     else {
-                        return convertObjectLiteralExpressionToJson(
+                        return validateValue(convertObjectLiteralExpressionToJson(
                             objectLiteralExpression, /* knownOptions*/ undefined,
-                            /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined);
+                            /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined));
                     }
 
                 case SyntaxKind.ArrayLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "list");
-                    return convertArrayLiteralExpressionToJson(
+                    return validateValue(convertArrayLiteralExpressionToJson(
                         (<ArrayLiteralExpression>valueExpression).elements,
-                        option && (<CommandLineOptionOfListType>option).element);
+                        option && (<CommandLineOptionOfListType>option).element));
             }
 
             // Not in expected format
@@ -1927,9 +1967,21 @@ namespace ts {
 
             return undefined;
 
+            function validateValue(value: CompilerOptionsValue) {
+                if (!invalidReported) {
+                    const diagnostic = option?.extraValidation?.(value);
+                    if (diagnostic) {
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, ...diagnostic));
+                        return undefined;
+                    }
+                }
+                return value;
+            }
+
             function reportInvalidOptionValue(isError: boolean | undefined) {
                 if (isError) {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option!.name, getCompilerOptionValueTypeString(option!)));
+                    invalidReported = true;
                 }
             }
         }
@@ -2838,7 +2890,8 @@ namespace ts {
         return defaultOptions;
     }
 
-    function convertJsonOption(opt: CommandLineOption, value: any, basePath: string, errors: Push<Diagnostic>): CompilerOptionsValue {
+    /*@internal*/
+    export function convertJsonOption(opt: CommandLineOption, value: any, basePath: string, errors: Push<Diagnostic>): CompilerOptionsValue {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
@@ -2847,7 +2900,8 @@ namespace ts {
             else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, <string>value, errors);
             }
-            return normalizeNonListOptionValue(opt, basePath, value);
+            const validatedValue = validateJsonOptionValue(opt, value, errors);
+            return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
         }
         else {
             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.name, getCompilerOptionValueTypeString(opt)));
@@ -2879,12 +2933,20 @@ namespace ts {
         return value;
     }
 
+    function validateJsonOptionValue<T extends CompilerOptionsValue>(opt: CommandLineOption, value: T, errors: Push<Diagnostic>): T | undefined {
+        if (isNullOrUndefined(value)) return undefined;
+        const d = opt.extraValidation?.(value);
+        if (!d) return value;
+        errors.push(createCompilerDiagnostic(...d));
+        return undefined;
+    }
+
     function convertJsonOptionOfCustomType(opt: CommandLineOptionOfCustomType, value: string, errors: Push<Diagnostic>) {
         if (isNullOrUndefined(value)) return undefined;
         const key = value.toLowerCase();
         const val = opt.type.get(key);
         if (val !== undefined) {
-            return val;
+            return validateJsonOptionValue(opt, val, errors);
         }
         else {
             errors.push(createCompilerDiagnosticForInvalidCustomType(opt));
@@ -2986,11 +3048,11 @@ namespace ts {
         // file system.
 
         if (includeSpecs) {
-            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*allowTrailingRecursion*/ false, jsonSourceFile, "include");
+            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, jsonSourceFile, "include");
         }
 
         if (excludeSpecs) {
-            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*allowTrailingRecursion*/ true, jsonSourceFile, "exclude");
+            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, jsonSourceFile, "exclude");
         }
 
         // Wildcard directories (provided as part of a wildcard path) are stored in a
@@ -3134,19 +3196,44 @@ namespace ts {
             }
         }
 
-        const excludePattern = getRegularExpressionForWildcard(validatedExcludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
+        return matchesExcludeWorker(pathToCheck, validatedExcludeSpecs, useCaseSensitiveFileNames, currentDirectory, basePath);
+    }
+
+    /* @internal */
+    export function matchesExclude(
+        pathToCheck: string,
+        excludeSpecs: readonly string[] | undefined,
+        useCaseSensitiveFileNames: boolean,
+        currentDirectory: string
+    ) {
+        return matchesExcludeWorker(
+            pathToCheck,
+            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcardPattern.test(spec)),
+            useCaseSensitiveFileNames,
+            currentDirectory
+        );
+    }
+
+    function matchesExcludeWorker(
+        pathToCheck: string,
+        excludeSpecs: readonly string[] | undefined,
+        useCaseSensitiveFileNames: boolean,
+        currentDirectory: string,
+        basePath?: string
+    ) {
+        const excludePattern = getRegularExpressionForWildcard(excludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
         const excludeRegex = excludePattern && getRegexFromPattern(excludePattern, useCaseSensitiveFileNames);
         if (!excludeRegex) return false;
         if (excludeRegex.test(pathToCheck)) return true;
         return !hasExtension(pathToCheck) && excludeRegex.test(ensureTrailingDirectorySeparator(pathToCheck));
     }
 
-    function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
+    function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, disallowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
         return specs.filter(spec => {
             if (!isString(spec)) return false;
-            const diag = specToDiagnostic(spec, allowTrailingRecursion);
+            const diag = specToDiagnostic(spec, disallowTrailingRecursion);
             if (diag !== undefined) {
-                errors.push(createDiagnostic(diag, spec));
+                errors.push(createDiagnostic(...diag));
             }
             return diag === undefined;
         });
@@ -3159,12 +3246,12 @@ namespace ts {
         }
     }
 
-    function specToDiagnostic(spec: string, allowTrailingRecursion: boolean): DiagnosticMessage | undefined {
-        if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
-            return Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
+    function specToDiagnostic(spec: string, disallowTrailingRecursion?: boolean): [DiagnosticMessage, string] | undefined {
+        if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
+            return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
         else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
-            return Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0;
+            return [Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
     }
 

@@ -14,7 +14,7 @@ abstract class B {
 
 //// [privateNamesIncompatibleModifiers.js]
 "use strict";
-var _foo, _bar, _baz, _qux, _quux;
+var _foo, _bar, _baz, _qux;
 class A {
     constructor() {
         _foo.set(this, 3); // Error
@@ -25,8 +25,4 @@ class A {
 }
 _foo = new WeakMap(), _bar = new WeakMap(), _baz = new WeakMap(), _qux = new WeakMap();
 class B {
-    constructor() {
-        _quux.set(this, 3); // Error
-    }
 }
-_quux = new WeakMap();

@@ -73,10 +73,20 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
     function getParentBinaryExpression(expr: Node) {
-        while (isBinaryExpression(expr.parent) && isNotEqualsOperator(expr.parent)) {
-            expr = expr.parent;
-        }
-        return expr;
+        const container = findAncestor(expr.parent, n => {
+            switch (n.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    return false;
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.BinaryExpression:
+                    return !(isBinaryExpression(n.parent) && isNotEqualsOperator(n.parent));
+                default:
+                    return "quit";
+            }
+        });
+
+        return container || expr;
     }
 
     function isStringConcatenationValid(node: Node): boolean {
@@ -88,7 +98,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         if (isBinaryExpression(current)) {
             const { nodes, operators, containsString: leftHasString, areOperatorsValid: leftOperatorValid } = treeToArray(current.left);
 
-            if (!leftHasString && !isStringLiteral(current.right)) {
+            if (!leftHasString && !isStringLiteral(current.right) && !isTemplateExpression(current.right)) {
                 return { nodes: [current], operators: [], containsString: false, areOperatorsValid: true };
             }
 
@@ -124,20 +134,27 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     };
 
     function concatConsecutiveString(index: number, nodes: readonly Expression[]): [number, string, number[]] {
-        let text = "";
         const indexes = [];
-
-        while (index < nodes.length && isStringLiteral(nodes[index])) {
-            const stringNode = nodes[index] as StringLiteral;
-            text = text + stringNode.text;
-            indexes.push(index);
-            index++;
+        let text = "";
+        while (index < nodes.length) {
+            const node = nodes[index];
+            if (isStringLiteralLike(node)) {
+                text = text + node.text;
+                indexes.push(index);
+                index++;
+            }
+            else if (isTemplateExpression(node)) {
+                text = text + node.head.text;
+                break;
+            }
+            else {
+                break;
+            }
         }
-
         return [index, text, indexes];
     }
 
-    function nodesToTemplate({nodes, operators}: {nodes: readonly Expression[], operators: Token<BinaryOperator>[]}, file: SourceFile) {
+    function nodesToTemplate({ nodes, operators }: { nodes: readonly Expression[], operators: Token<BinaryOperator>[] }, file: SourceFile) {
         const copyOperatorComments = copyTrailingOperatorComments(operators, file);
         const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
         const [begin, headText, headIndexes] = concatConsecutiveString(0, nodes);
@@ -158,10 +175,22 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
             const [newIndex, subsequentText, stringIndexes] = concatConsecutiveString(i + 1, nodes);
             i = newIndex - 1;
+            const isLast = i === nodes.length - 1;
 
-            const templatePart = i === nodes.length - 1 ? factory.createTemplateTail(subsequentText) : factory.createTemplateMiddle(subsequentText);
-            copyCommentFromStringLiterals(stringIndexes, templatePart);
-            templateSpans.push(factory.createTemplateSpan(currentNode, templatePart));
+            if (isTemplateExpression(currentNode)) {
+                const spans = map(currentNode.templateSpans, (span, index) => {
+                    copyExpressionComments(span);
+                    const nextSpan = currentNode.templateSpans[index + 1];
+                    const text = span.literal.text + (nextSpan ? "" : subsequentText);
+                    return factory.createTemplateSpan(span.expression, isLast ? factory.createTemplateTail(text) : factory.createTemplateMiddle(text));
+                });
+                templateSpans.push(...spans);
+            }
+            else {
+                const templatePart = isLast ? factory.createTemplateTail(subsequentText) : factory.createTemplateMiddle(subsequentText);
+                copyCommentFromStringLiterals(stringIndexes, templatePart);
+                templateSpans.push(factory.createTemplateSpan(currentNode, templatePart));
+            }
         }
 
         return factory.createTemplateExpression(templateHead, templateSpans);
@@ -169,7 +198,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     // to copy comments following the opening & closing parentheses
     // "foo" + ( /* comment */ 5 + 5 ) /* comment */ + "bar"
-    function copyCommentsWhenParenthesized(node: ParenthesizedExpression) {
+    function copyExpressionComments(node: ParenthesizedExpression | TemplateSpan) {
         const file = node.getSourceFile();
         copyTrailingComments(node, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         copyTrailingAsLeadingComments(node.expression, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
@@ -177,7 +206,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getExpressionFromParenthesesOrExpression(node: Expression) {
         if (isParenthesizedExpression(node)) {
-            copyCommentsWhenParenthesized(node);
+            copyExpressionComments(node);
             node = node.expression;
         }
         return node;

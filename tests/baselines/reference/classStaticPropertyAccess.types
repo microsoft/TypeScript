@@ -2,6 +2,9 @@
 class A {
 >A : A
 
+    public static "\""() {}
+>"\"" : () => void
+
     public static x: number = 1;
 >x : number
 >1 : 1
@@ -20,17 +23,22 @@ const a = new A();
 >new A() : A
 >A : typeof A
 
-a['y'] // Error
+a["\""] // Error
+>a["\""] : any
+>a : A
+>"\"" : "\""
+
+a['y']  // Error
 >a['y'] : any
 >a : A
 >'y' : "y"
 
-a.y    // Error
+a.y     // Error
 >a.y : any
 >a : A
 >y : any
 
-A._b   // Error
+A._b    // Error
 >A._b : number
 >A : typeof A
 >_b : number

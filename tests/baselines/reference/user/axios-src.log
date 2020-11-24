@@ -27,6 +27,7 @@ lib/axios.js(41,7): error TS2339: Property 'CancelToken' does not exist on type 
 lib/axios.js(42,7): error TS2339: Property 'isCancel' does not exist on type 'Axios'.
 lib/axios.js(45,7): error TS2339: Property 'all' does not exist on type 'Axios'.
 lib/axios.js(48,7): error TS2339: Property 'spread' does not exist on type 'Axios'.
+lib/axios.js(51,7): error TS2339: Property 'isAxiosError' does not exist on type 'Axios'.
 lib/cancel/CancelToken.js(23,15): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(28,11): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(29,26): error TS2339: Property 'reason' does not exist on type 'CancelToken'.

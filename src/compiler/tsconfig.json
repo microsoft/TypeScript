@@ -13,10 +13,10 @@
         "corePublic.ts",
         "core.ts",
         "debug.ts",
+        "semver.ts",
         "performanceCore.ts",
         "performance.ts",
         "perfLogger.ts",
-        "semver.ts",
         "tracing.ts",
 
         "types.ts",

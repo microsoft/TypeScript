@@ -94,14 +94,6 @@ export const testFnTypes: {
     [x: string]: any;
 };
 export namespace testFnTypes {
-    type input = boolean | Function | {
-        /**
-         * - Prop 1.
-         */
-        prop1: string | RegExp | (string | RegExp)[];
-        /**
-         * - Prop 2.
-         */
-        prop2: string;
-    };
+    type input = boolean | Function | myTypes.typeB;
 }
+import { myTypes } from "./file.js";
