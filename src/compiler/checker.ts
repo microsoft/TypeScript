@@ -16816,13 +16816,15 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
+                const sourceFlags = source.flags;
+                const targetFlags = target.flags;
 
                 // We fastpath comparing a type parameter to exactly its constraint, as this is _super_ common,
                 // and otherwise, for type parameters in large unions, causes us to need to compare the union to itself,
                 // as we break down the _target_ union first, _then_ get the source constraint - so for every
                 // member of the target, we attempt to find a match in the source. This avoids that in cases where
                 // the target is exactly the constraint.
-                if (source.flags & TypeFlags.TypeParameter && getConstraintOfType(source) === target) {
+                if (sourceFlags & TypeFlags.TypeParameter && getConstraintOfType(source) === target) {
                     return Ternary.True;
                 }
 
@@ -16835,7 +16837,7 @@ namespace ts {
                 //    since we don't want to end up with a worse error like "`Foo` is not assignable to `NonNullable<T>`"
                 //    when dealing with generics.
                 //  * We also don't deal with primitive source types, since we already halt elaboration below.
-                if (target.flags & TypeFlags.Union && source.flags & TypeFlags.Object &&
+                if (targetFlags & TypeFlags.Union && sourceFlags & TypeFlags.Object &&
                     (target as UnionType).types.length <= 3 && maybeTypeOfKind(target, TypeFlags.Nullable)) {
                     const nullStrippedTarget = extractTypesOfKind(target, ~TypeFlags.Nullable);
                     if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
@@ -16844,7 +16846,7 @@ namespace ts {
                     }
                 }
 
-                if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                if (relation === comparableRelation && !(targetFlags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
@@ -16859,8 +16861,8 @@ namespace ts {
                 }
 
                 const isPerformingCommonPropertyChecks = relation !== comparableRelation && !(intersectionState & IntersectionState.Target) &&
-                    source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
-                    target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
+                    sourceFlags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
+                    targetFlags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
                 if (isPerformingCommonPropertyChecks && !hasCommonProperties(source, target, isComparingJsxAttributes)) {
                     if (reportErrors) {
@@ -16883,19 +16885,19 @@ namespace ts {
                 // Note that these checks are specifically ordered to produce correct results. In particular,
                 // we need to deconstruct unions before intersections (because unions are always at the top),
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
-                if (source.flags & TypeFlags.Union) {
+                if (sourceFlags & TypeFlags.Union) {
                     result = relation === comparableRelation ?
-                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
-                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
+                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(sourceFlags & TypeFlags.Primitive), intersectionState) :
+                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(sourceFlags & TypeFlags.Primitive), intersectionState);
                 }
                 else {
-                    if (target.flags & TypeFlags.Union) {
-                        result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
+                    if (targetFlags & TypeFlags.Union) {
+                        result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(sourceFlags & TypeFlags.Primitive) && !(targetFlags & TypeFlags.Primitive));
                     }
-                    else if (target.flags & TypeFlags.Intersection) {
+                    else if (targetFlags & TypeFlags.Intersection) {
                         result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
                     }
-                    else if (source.flags & TypeFlags.Intersection) {
+                    else if (sourceFlags & TypeFlags.Intersection) {
                         // Check to see if any constituents of the intersection are immediately related to the target.
                         //
                         // Don't report errors though. Checking whether a constituent is related to the source is not actually
@@ -16911,13 +16913,13 @@ namespace ts {
                         //          breaking the intersection apart.
                         result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
                     }
-                    if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
+                    if (!result && (sourceFlags & TypeFlags.StructuredOrInstantiable || targetFlags & TypeFlags.StructuredOrInstantiable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                         }
                     }
                 }
-                if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
+                if (!result && sourceFlags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
                     // The combined constraint of an intersection type is the intersection of the constraints of
                     // the constituents. When an intersection type contains instantiable types with union type
                     // constraints, there are situations where we need to examine the combined constraint. One is
@@ -16931,8 +16933,8 @@ namespace ts {
                     // needs to have its constraint hoisted into an intersection with said type parameter, this way
                     // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
                     // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
-                    const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types: [source], !!(target.flags & TypeFlags.Union));
-                    if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
+                    const constraint = getEffectiveConstraintOfIntersection(sourceFlags & TypeFlags.Intersection ? (<IntersectionType>source).types: [source], !!(targetFlags & TypeFlags.Union));
+                    if (constraint && (sourceFlags & TypeFlags.Intersection || targetFlags & TypeFlags.Union)) {
                         if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
@@ -16958,8 +16960,8 @@ namespace ts {
                 // We suppress recursive intersection property checks because they can generate lots of work when relating
                 // recursive intersections that are structurally similar but not exactly identical. See #37854.
                 if (result && !inPropertyCheck && (
-                    target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
-                    isNonGenericObjectType(target) && !isArrayType(target) && !isTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                    targetFlags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
+                    isNonGenericObjectType(target) && !isArrayType(target) && !isTupleType(target) && sourceFlags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
                     inPropertyCheck = true;
                     result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck);
                     inPropertyCheck = false;
@@ -16976,20 +16978,20 @@ namespace ts {
                         if (maybeSuppress) {
                             overrideNextErrorInfo--;
                         }
-                        if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
+                        if (sourceFlags & TypeFlags.Object && targetFlags & TypeFlags.Object) {
                             const currentError = errorInfo;
                             tryElaborateArrayLikeErrors(source, target, reportErrors);
                             if (errorInfo !== currentError) {
                                 maybeSuppress = !!errorInfo;
                             }
                         }
-                        if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
+                        if (sourceFlags & TypeFlags.Object && targetFlags & TypeFlags.Primitive) {
                             tryElaborateErrorsForPrimitivesAndObjects(source, target);
                         }
-                        else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
+                        else if (source.symbol && sourceFlags & TypeFlags.Object && globalObjectType === source) {
                             reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                         }
-                        else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
+                        else if (isComparingJsxAttributes && targetFlags & TypeFlags.Intersection) {
                             const targetTypes = (target as IntersectionType).types;
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                             const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
