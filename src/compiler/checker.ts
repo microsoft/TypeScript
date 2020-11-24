@@ -19997,7 +19997,8 @@ namespace ts {
                     inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
                     return;
                 }
-                if (source === target && source.flags & TypeFlags.UnionOrIntersection) {
+                const sourceFlags = source.flags;
+                if (source === target && sourceFlags & TypeFlags.UnionOrIntersection) {
                     // When source and target are the same union or intersection type, just relate each constituent
                     // type to itself.
                     for (const t of (<UnionOrIntersectionType>source).types) {
@@ -20005,10 +20006,11 @@ namespace ts {
                     }
                     return;
                 }
-                if (target.flags & TypeFlags.Union) {
+                const targetFlags = target.flags;
+                if (targetFlags & TypeFlags.Union) {
                     // First, infer between identically matching source and target constituents and remove the
                     // matching types.
-                    const [tempSources, tempTargets] = inferFromMatchingTypes(source.flags & TypeFlags.Union ? (<UnionType>source).types : [source], (<UnionType>target).types, isTypeOrBaseIdenticalTo);
+                    const [tempSources, tempTargets] = inferFromMatchingTypes(sourceFlags & TypeFlags.Union ? (<UnionType>source).types : [source], (<UnionType>target).types, isTypeOrBaseIdenticalTo);
                     // Next, infer between closely matching source and target constituents and remove
                     // the matching types. Types closely match when they are instantiations of the same
                     // object type or instantiations of the same type alias.
@@ -20028,7 +20030,7 @@ namespace ts {
                     }
                     source = getUnionType(sources);
                 }
-                else if (target.flags & TypeFlags.Intersection && some((<IntersectionType>target).types,
+                else if (targetFlags & TypeFlags.Intersection && some((<IntersectionType>target).types,
                     t => !!getInferenceInfoForType(t) || (isGenericMappedType(t) && !!getInferenceInfoForType(getHomomorphicTypeVariable(t) || neverType)))) {
                     // We reduce intersection types only when they contain naked type parameters. For example, when
                     // inferring from 'string[] & { extra: any }' to 'string[] & T' we want to remove string[] and
@@ -20036,9 +20038,9 @@ namespace ts {
                     // string[] on the source side and infer string for T.
                     // Likewise, we consider a homomorphic mapped type constrainted to the target type parameter as similar to a "naked type variable"
                     // in such scenarios.
-                    if (!(source.flags & TypeFlags.Union)) {
+                    if (!(sourceFlags & TypeFlags.Union)) {
                         // Infer between identically matching source and target constituents and remove the matching types.
-                        const [sources, targets] = inferFromMatchingTypes(source.flags & TypeFlags.Intersection ? (<IntersectionType>source).types : [source], (<IntersectionType>target).types, isTypeIdenticalTo);
+                        const [sources, targets] = inferFromMatchingTypes(sourceFlags & TypeFlags.Intersection ? (<IntersectionType>source).types : [source], (<IntersectionType>target).types, isTypeIdenticalTo);
                         if (sources.length === 0 || targets.length === 0) {
                             return;
                         }
@@ -20046,10 +20048,10 @@ namespace ts {
                         target = getIntersectionType(targets);
                     }
                 }
-                else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
+                else if (targetFlags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
                     target = getActualTypeVariable(target);
                 }
-                if (target.flags & TypeFlags.TypeVariable) {
+                if (targetFlags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
                     // Because the anyFunctionType is internal, it should not be exposed to the user by adding
@@ -20085,7 +20087,7 @@ namespace ts {
                                     clearCachedInferences(inferences);
                                 }
                             }
-                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && inference.topLevel && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                            if (!(priority & InferencePriority.ReturnType) && targetFlags & TypeFlags.TypeParameter && inference.topLevel && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
                                 clearCachedInferences(inferences);
                             }
@@ -20099,7 +20101,7 @@ namespace ts {
                         if (simplified !== target) {
                             invokeOnce(source, simplified, inferFromTypes);
                         }
-                        else if (target.flags & TypeFlags.IndexedAccess) {
+                        else if (targetFlags & TypeFlags.IndexedAccess) {
                             const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
                             // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
                             // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
@@ -20118,45 +20120,45 @@ namespace ts {
                     // If source and target are references to the same generic type, infer from type arguments
                     inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target));
                 }
-                else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
+                else if (sourceFlags & TypeFlags.Index && targetFlags & TypeFlags.Index) {
                     contravariant = !contravariant;
                     inferFromTypes((<IndexType>source).type, (<IndexType>target).type);
                     contravariant = !contravariant;
                 }
-                else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
+                else if ((isLiteralType(source) || sourceFlags & TypeFlags.String) && targetFlags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
                     contravariant = !contravariant;
                     inferWithPriority(empty, (target as IndexType).type, InferencePriority.LiteralKeyof);
                     contravariant = !contravariant;
                 }
-                else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
+                else if (sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess) {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
                     inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
                 }
-                else if (source.flags & TypeFlags.StringMapping && target.flags & TypeFlags.StringMapping) {
+                else if (sourceFlags & TypeFlags.StringMapping && targetFlags & TypeFlags.StringMapping) {
                     if ((<StringMappingType>source).symbol === (<StringMappingType>target).symbol) {
                         inferFromTypes((<StringMappingType>source).type, (<StringMappingType>target).type);
                     }
                 }
-                else if (target.flags & TypeFlags.Conditional) {
+                else if (targetFlags & TypeFlags.Conditional) {
                     invokeOnce(source, target, inferToConditionalType);
                 }
-                else if (target.flags & TypeFlags.UnionOrIntersection) {
-                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
+                else if (targetFlags & TypeFlags.UnionOrIntersection) {
+                    inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, targetFlags);
                 }
-                else if (source.flags & TypeFlags.Union) {
+                else if (sourceFlags & TypeFlags.Union) {
                     // Source is a union or intersection type, infer from each constituent type
                     const sourceTypes = (<UnionOrIntersectionType>source).types;
                     for (const sourceType of sourceTypes) {
                         inferFromTypes(sourceType, target);
                     }
                 }
-                else if (target.flags & TypeFlags.TemplateLiteral) {
+                else if (targetFlags & TypeFlags.TemplateLiteral) {
                     inferToTemplateLiteralType(source, <TemplateLiteralType>target);
                 }
                 else {
                     source = getReducedType(source);
-                    if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
+                    if (!(priority & InferencePriority.NoConstraints && sourceFlags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
                         const apparentSource = getApparentType(source);
                         // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
                         // If that occurs and it doesn't simplify to an object or intersection, we'll need to restart `inferFromTypes`
@@ -20174,11 +20176,11 @@ namespace ts {
                         }
                         source = apparentSource;
                     }
-                    if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
+                    if (sourceFlags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         invokeOnce(source, target, inferFromObjectTypes);
                     }
                 }
-                if (source.flags & TypeFlags.Simplifiable) {
+                if (sourceFlags & TypeFlags.Simplifiable) {
                     const simplified = getSimplifiedType(source, contravariant);
                     if (simplified !== source) {
                         inferFromTypes(simplified, target);
