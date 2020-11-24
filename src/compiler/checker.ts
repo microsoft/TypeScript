@@ -16817,7 +16817,7 @@ namespace ts {
                 }
 
                 const sourceFlags = source.flags;
-                const targetFlags = target.flags;
+                let targetFlags = target.flags;
 
                 // We fastpath comparing a type parameter to exactly its constraint, as this is _super_ common,
                 // and otherwise, for type parameters in large unions, causes us to need to compare the union to itself,
@@ -16843,6 +16843,7 @@ namespace ts {
                     if (!(nullStrippedTarget.flags & (TypeFlags.Union | TypeFlags.Never))) {
                         if (source === nullStrippedTarget) return Ternary.True;
                         target = nullStrippedTarget;
+                        targetFlags = target.flags;
                     }
                 }
 
@@ -17378,7 +17379,7 @@ namespace ts {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
 
-                const sourceFlags = source.flags;
+                let sourceFlags = source.flags;
                 const targetFlags = target.flags;
 
                 const flags = sourceFlags & targetFlags;
@@ -17685,6 +17686,7 @@ namespace ts {
                     const sourceIsPrimitive = !!(sourceFlags & TypeFlags.Primitive);
                     if (relation !== identityRelation) {
                         source = getApparentType(source);
+                        sourceFlags = source.flags;
                     }
                     else if (isGenericMappedType(source)) {
                         return Ternary.False;
@@ -19997,7 +19999,7 @@ namespace ts {
                     inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
                     return;
                 }
-                const sourceFlags = source.flags;
+                let sourceFlags = source.flags;
                 if (source === target && sourceFlags & TypeFlags.UnionOrIntersection) {
                     // When source and target are the same union or intersection type, just relate each constituent
                     // type to itself.
@@ -20006,7 +20008,7 @@ namespace ts {
                     }
                     return;
                 }
-                const targetFlags = target.flags;
+                let targetFlags = target.flags;
                 if (targetFlags & TypeFlags.Union) {
                     // First, infer between identically matching source and target constituents and remove the
                     // matching types.
@@ -20029,6 +20031,7 @@ namespace ts {
                         return;
                     }
                     source = getUnionType(sources);
+                    sourceFlags = source.flags;
                 }
                 else if (targetFlags & TypeFlags.Intersection && some((<IntersectionType>target).types,
                     t => !!getInferenceInfoForType(t) || (isGenericMappedType(t) && !!getInferenceInfoForType(getHomomorphicTypeVariable(t) || neverType)))) {
@@ -20046,10 +20049,13 @@ namespace ts {
                         }
                         source = getIntersectionType(sources);
                         target = getIntersectionType(targets);
+                        sourceFlags = source.flags;
+                        targetFlags = target.flags;
                     }
                 }
                 else if (targetFlags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
                     target = getActualTypeVariable(target);
+                    targetFlags = target.flags;
                 }
                 if (targetFlags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
