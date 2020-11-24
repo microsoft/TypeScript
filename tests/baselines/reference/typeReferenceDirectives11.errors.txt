@@ -4,6 +4,7 @@
 ==== /mod2.ts (0 errors) ====
     import {foo} from "./mod1";
     export const bar = foo();
+    
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     

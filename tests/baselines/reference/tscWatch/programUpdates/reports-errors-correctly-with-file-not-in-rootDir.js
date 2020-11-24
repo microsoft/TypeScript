@@ -27,12 +27,10 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [96ma.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m1[0m import { x } from "../b";
 [7m [0m [91m                  ~~~~~~[0m
-
 
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
@@ -40,6 +38,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts
@@ -96,12 +95,10 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma.ts[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/b.ts' is not under 'rootDir' '/user/username/projects/myproject'. 'rootDir' is expected to contain all source files.
 
 [7m3[0m import { x } from "../b";
 [7m [0m [91m                  ~~~~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -109,6 +106,7 @@ Output::
 
 Program root files: ["/user/username/projects/myproject/a.ts"]
 Program options: {"rootDir":"/user/username/projects/myproject","outDir":"/user/username/projects/myproject/lib","watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/b.ts

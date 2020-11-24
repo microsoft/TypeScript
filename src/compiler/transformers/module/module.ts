@@ -1763,7 +1763,7 @@ namespace ts {
                 return node;
             }
 
-            if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
+            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(

@@ -35,7 +35,8 @@ interface Symbol {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "outFile": "common.js"
+        "outFile": "common.js",
+        "bundledPackageName": "common"
     },
     "include": ["nominal.js"]
 }
@@ -52,7 +53,8 @@ const c = /** @type {*} */(null);
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "outFile": "sub-project.js"
+        "outFile": "sub-project.js",
+        "bundledPackageName": "sub"
     },
     "references": [
         { "path": "../common", "prepend": true }
@@ -78,7 +80,8 @@ function getVar() {
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "outFile": "sub-project-2.js"
+        "outFile": "sub-project-2.js",
+        "bundledPackageName": "sub-2"
     },
     "references": [
         { "path": "../sub-project", "prepend": true }

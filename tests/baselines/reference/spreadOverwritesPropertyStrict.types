@@ -78,14 +78,14 @@ function h(obj: { x: number } | { x: string }) {
 >obj : { x: number; } | { x: string; }
 }
 function i(b: boolean, t: { command: string, ok: string }) {
->i : (b: boolean, t: {    command: string;    ok: string;}) => { command: string; ok: string; } | { command: string; }
+>i : (b: boolean, t: {    command: string;    ok: string;}) => { command: string; ok?: string; }
 >b : boolean
 >t : { command: string; ok: string; }
 >command : string
 >ok : string
 
     return { command: "hi", ...(b ? t : {}) } // ok
->{ command: "hi", ...(b ? t : {}) } : { command: string; ok: string; } | { command: string; }
+>{ command: "hi", ...(b ? t : {}) } : { command: string; ok?: string; }
 >command : string
 >"hi" : "hi"
 >(b ? t : {}) : { command: string; ok: string; } | {}

@@ -23,12 +23,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var A = /** @class */ (function () {
     function A() {
-        Object.defineProperty(this, "p", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: 'yep'
-        });
     }
     return A;
 }());

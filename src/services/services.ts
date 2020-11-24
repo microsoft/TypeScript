@@ -1126,16 +1126,22 @@ namespace ts {
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true, sourceFile.scriptKind);
     }
 
+    const NoopCancellationToken: CancellationToken = {
+        isCancellationRequested: returnFalse,
+        throwIfCancellationRequested: noop,
+    };
+
     class CancellationTokenObject implements CancellationToken {
-        constructor(private cancellationToken: HostCancellationToken | undefined) {
+        constructor(private cancellationToken: HostCancellationToken) {
         }
 
         public isCancellationRequested(): boolean {
-            return !!this.cancellationToken && this.cancellationToken.isCancellationRequested();
+            return this.cancellationToken.isCancellationRequested();
         }
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
+                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "CancellationTokenObject" });
                 throw new OperationCanceledException();
             }
         }
@@ -1166,6 +1172,7 @@ namespace ts {
 
         public throwIfCancellationRequested(): void {
             if (this.isCancellationRequested()) {
+                tracing.instant(tracing.Phase.Session, "cancellationThrown", { kind: "ThrottledCancellationToken" });
                 throw new OperationCanceledException();
             }
         }
@@ -1233,7 +1240,9 @@ namespace ts {
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
 
-        const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
+        const cancellationToken = host.getCancellationToken
+            ? new CancellationTokenObject(host.getCancellationToken())
+            : NoopCancellationToken;
 
         const currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
@@ -1598,7 +1607,7 @@ namespace ts {
             );
             return {
                 kind: symbolKind,
-                kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
+                kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,
@@ -1827,22 +1836,37 @@ namespace ts {
             return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
             }
             synchronizeHostData();
-            return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
+                return classifier.v2020.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            }
+            else {
+                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            }
         }
 
-        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return { spans: [], endOfLineState: EndOfLineState.None };
             }
             synchronizeHostData();
-            return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.Original) {
+                return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            }
+            else {
+                return classifier.v2020.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+            }
         }
 
         function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -2062,6 +2086,11 @@ namespace ts {
 
             // Push all text changes.
             for (let i = firstLine; i <= lastLine; i++) {
+                // If the range is multiline and ends on a beginning of a line, don't comment/uncomment.
+                if (firstLine !== lastLine && lineStarts[i] === textRange.end) {
+                    continue;
+                }
+
                 const lineTextStart = lineTextStarts.get(i.toString());
 
                 // If the line is not an empty line; otherwise no-op.

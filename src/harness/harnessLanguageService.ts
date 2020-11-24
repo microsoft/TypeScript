@@ -461,14 +461,15 @@ namespace Harness.LanguageService {
         getSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
             return unwrapJSONCallResult(this.shim.getSyntacticClassifications(fileName, span.start, span.length));
         }
-        getSemanticClassifications(fileName: string, span: ts.TextSpan): ts.ClassifiedSpan[] {
-            return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length));
+        getSemanticClassifications(fileName: string, span: ts.TextSpan, format?: ts.SemanticClassificationFormat): ts.ClassifiedSpan[] {
+            return unwrapJSONCallResult(this.shim.getSemanticClassifications(fileName, span.start, span.length, format));
         }
         getEncodedSyntacticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
             return unwrapJSONCallResult(this.shim.getEncodedSyntacticClassifications(fileName, span.start, span.length));
         }
-        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan): ts.Classifications {
-            return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length));
+        getEncodedSemanticClassifications(fileName: string, span: ts.TextSpan, format?: ts.SemanticClassificationFormat): ts.Classifications {
+            const responseFormat = format || ts.SemanticClassificationFormat.Original;
+            return unwrapJSONCallResult(this.shim.getEncodedSemanticClassifications(fileName, span.start, span.length, responseFormat));
         }
         getCompletionsAtPosition(fileName: string, position: number, preferences: ts.UserPreferences | undefined): ts.CompletionInfo {
             return unwrapJSONCallResult(this.shim.getCompletionsAtPosition(fileName, position, preferences));

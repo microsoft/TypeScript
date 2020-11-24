@@ -179,7 +179,7 @@ namespace ts.JsDoc {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0",
+                sortText: Completions.SortText.LocationPriority,
             };
         }));
     }
@@ -192,7 +192,7 @@ namespace ts.JsDoc {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0"
+                sortText: Completions.SortText.LocationPriority
             };
         }));
     }
@@ -227,7 +227,7 @@ namespace ts.JsDoc {
                 return undefined;
             }
 
-            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
         });
     }
 
@@ -344,6 +344,7 @@ namespace ts.JsDoc {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.ArrowFunction:
                 const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                 return { commentOwner, parameters };
 

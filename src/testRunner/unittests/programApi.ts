@@ -204,4 +204,20 @@ namespace ts {
             assert.isEmpty(program.getSemanticDiagnostics());
         });
     });
+
+    describe("unittests:: programApi:: CompilerOptions relative paths", () => {
+        it("resolves relative paths by getCurrentDirectory", () => {
+            const main = new documents.TextDocument("/main.ts", "import \"module\";");
+            const mod = new documents.TextDocument("/lib/module.ts", "declare const foo: any;");
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
+            const program = createProgram(["./main.ts"], {
+                paths: { "*": ["./lib/*"] }
+            }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            assert.isEmpty(program.getConfigFileParsingDiagnostics());
+            assert.isEmpty(program.getGlobalDiagnostics());
+            assert.isEmpty(program.getSemanticDiagnostics());
+        });
+    });
 }

@@ -193,7 +193,7 @@ let x: string = 10;`
             };
             const dependencyConfig: File = {
                 path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js" } })
+                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js", bundledPackageName: "dep" } })
             };
             const usageTs: File = {
                 path: `${usageLocation}/usage.ts`,
@@ -205,7 +205,7 @@ fnErr();
             const usageConfig: File = {
                 path: `${usageLocation}/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { composite: true, outFile: "../usage.js" },
+                    compilerOptions: { composite: true, outFile: "../usage.js", bundledPackageName: "usage" },
                     references: [{ path: "../dependency" }]
                 })
             };

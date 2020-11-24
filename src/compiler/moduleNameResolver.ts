@@ -789,12 +789,15 @@ namespace ts {
 
     function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
         const { baseUrl, paths } = state.compilerOptions;
-        if (baseUrl && paths && !pathIsRelative(moduleName)) {
+        if (paths && !pathIsRelative(moduleName)) {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
+                if (baseUrl) {
+                    trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
+                }
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            return tryLoadModuleUsingPaths(extensions, moduleName, baseUrl, paths, loader, /*onlyRecordFailures*/ false, state);
+            const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
@@ -1368,6 +1371,7 @@ namespace ts {
             }
             const resolved = forEach(paths[matchedPatternText], subst => {
                 const path = matchedStar ? subst.replace("*", matchedStar) : subst;
+                // When baseUrl is not specified, the command line parser resolves relative paths to the config file location.
                 const candidate = normalizePath(combinePaths(baseDirectory, path));
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);

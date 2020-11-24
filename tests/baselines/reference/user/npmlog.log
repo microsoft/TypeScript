@@ -23,7 +23,7 @@ node_modules/npmlog/log.js(207,18): error TS2339: Property 'maxRecordSize' does 
 node_modules/npmlog/log.js(208,11): error TS2532: Object is possibly 'undefined'.
 node_modules/npmlog/log.js(211,19): error TS2532: Object is possibly 'undefined'.
 node_modules/npmlog/log.js(214,8): error TS2339: Property 'emitLog' does not exist on type '(Anonymous function)'.
-node_modules/npmlog/log.js(218,12): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+node_modules/npmlog/log.js(218,12): error TS2551: Property '_paused' does not exist on type '{ addListener(event: string | symbol, listener: (...args: any[]) => void): EventEmitter; on(event: string | symbol, listener: (...args: any[]) => void): EventEmitter; ... 42 more ...; disp: {}; }'. Did you mean 'pause'?
 node_modules/npmlog/log.js(271,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buffer: string | Uint8Array, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | Uint8Array'.

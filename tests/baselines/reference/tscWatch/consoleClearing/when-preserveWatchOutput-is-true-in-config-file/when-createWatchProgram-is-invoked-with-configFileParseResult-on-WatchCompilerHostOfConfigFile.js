@@ -23,13 +23,13 @@ interface Array<T> { length: number; [n: number]: T; }
 Output::
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /f.ts
 /a/lib/lib.d.ts
@@ -68,13 +68,13 @@ Input::
 Output::
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:23 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /f.ts
 /a/lib/lib.d.ts

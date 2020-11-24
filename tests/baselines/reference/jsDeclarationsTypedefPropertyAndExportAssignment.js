@@ -155,7 +155,7 @@ declare namespace MainThreadTasks {
     export { TaskGroup, TaskNode, PriorTaskData };
 }
 type TaskGroup = {
-    id: "parseHTML" | "styleLayout";
+    id: import("./module.js").TaskGroupIds;
     label: string;
     traceEventNames: string[];
 };

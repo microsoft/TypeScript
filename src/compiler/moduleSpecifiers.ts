@@ -1,7 +1,7 @@
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
 namespace ts.moduleSpecifiers {
-    const enum RelativePreference { Relative, NonRelative, Auto }
+    const enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
     // See UserPreferences#importPathEnding
     const enum Ending { Minimal, Index, JsExtension }
 
@@ -13,7 +13,11 @@ namespace ts.moduleSpecifiers {
 
     function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
         return {
-            relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
+            relativePreference:
+                importModuleSpecifierPreference === "relative" ? RelativePreference.Relative :
+                importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
+                importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
+                RelativePreference.Shortest,
             ending: getEnding(),
         };
         function getEnding(): Ending {
@@ -82,7 +86,7 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host);
         return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions)) ||
-            getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences);
+            getLocalModuleSpecifier(toFileName, info, compilerOptions, host, preferences);
     }
 
     /** Returns an import for each symlink and for the realpath. */
@@ -121,7 +125,7 @@ namespace ts.moduleSpecifiers {
             }
 
             if (!specifier && !modulePath.isRedirect) {
-                const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, preferences);
+                const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, host, preferences);
                 if (pathIsBareSpecifier(local)) {
                     pathsSpecifiers = append(pathsSpecifiers, local);
                 }
@@ -147,38 +151,80 @@ namespace ts.moduleSpecifiers {
 
     interface Info {
         readonly getCanonicalFileName: GetCanonicalFileName;
+        readonly importingSourceFileName: Path
         readonly sourceDirectory: Path;
     }
     // importingSourceFileName is separate because getEditsForFileRename may need to specify an updated path
     function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
         const sourceDirectory = getDirectoryPath(importingSourceFileName);
-        return { getCanonicalFileName, sourceDirectory };
+        return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
     }
 
-    function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
-        const { baseUrl, paths, rootDirs } = compilerOptions;
+    function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
+        const { baseUrl, paths, rootDirs, bundledPackageName } = compilerOptions;
+        const { sourceDirectory, getCanonicalFileName } = info;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
-        if (!baseUrl || relativePreference === RelativePreference.Relative) {
+        if (!baseUrl && !paths || relativePreference === RelativePreference.Relative) {
             return relativePath;
         }
 
-        const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
+        const baseDirectory = getPathsBasePath(compilerOptions, host) || baseUrl!;
+        const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseDirectory, getCanonicalFileName);
         if (!relativeToBaseUrl) {
             return relativePath;
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
+        const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
+        const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
+        if (!nonRelative) {
+            return relativePath;
+        }
 
         if (relativePreference === RelativePreference.NonRelative) {
             return nonRelative;
         }
 
-        if (relativePreference !== RelativePreference.Auto) Debug.assertNever(relativePreference);
+        if (relativePreference === RelativePreference.ExternalNonRelative) {
+            const projectDirectory = host.getCurrentDirectory();
+            const modulePath = toPath(moduleFileName, projectDirectory, getCanonicalFileName);
+            const sourceIsInternal = startsWith(sourceDirectory, projectDirectory);
+            const targetIsInternal = startsWith(modulePath, projectDirectory);
+            if (sourceIsInternal && !targetIsInternal || !sourceIsInternal && targetIsInternal) {
+                // 1. The import path crosses the boundary of the tsconfig.json-containing directory.
+                //
+                //      src/
+                //        tsconfig.json
+                //        index.ts -------
+                //      lib/              | (path crosses tsconfig.json)
+                //        imported.ts <---
+                //
+                return nonRelative;
+            }
+
+            const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
+            const nearestSourcePackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
+            if (nearestSourcePackageJson !== nearestTargetPackageJson) {
+                // 2. The importing and imported files are part of different packages.
+                //
+                //      packages/a/
+                //        package.json
+                //        index.ts --------
+                //      packages/b/        | (path crosses package.json)
+                //        package.json     |
+                //        component.ts <---
+                //
+                return nonRelative;
+            }
+
+            return relativePath;
+        }
+
+        if (relativePreference !== RelativePreference.Shortest) Debug.assertNever(relativePreference);
 
         // Prefer a relative import over a baseUrl import if it has fewer components.
         return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
@@ -208,6 +254,15 @@ namespace ts.moduleSpecifiers {
         );
     }
 
+    function getNearestAncestorDirectoryWithPackageJson(host: ModuleSpecifierResolutionHost, fileName: string) {
+        if (host.getNearestAncestorDirectoryWithPackageJson) {
+            return host.getNearestAncestorDirectoryWithPackageJson(fileName);
+        }
+        return !!forEachAncestorDirectory(fileName, directory => {
+            return host.fileExists(combinePaths(directory, "package.json")) ? true : undefined;
+        });
+    }
+
     export function forEachFileNameOfModule<T>(
         importingFileName: string,
         importedFileName: string,
@@ -230,7 +285,7 @@ namespace ts.moduleSpecifiers {
             : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
         const symlinkedDirectories = links.getSymlinkedDirectories();
-        const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
+        const useCaseSensitiveFileNames = !host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames();
         const result = symlinkedDirectories && forEachEntry(symlinkedDirectories, (resolved, path) => {
             if (resolved === false) return undefined;
             if (startsWithDirectory(importingFileName, resolved.realPath, getCanonicalFileName)) {
@@ -238,7 +293,7 @@ namespace ts.moduleSpecifiers {
             }
 
             return forEach(targets, target => {
-                if (compareStrings(target.slice(0, resolved.real.length), resolved.real) !== Comparison.EqualTo) {
+                if (!containsPath(resolved.real, target, !useCaseSensitiveFileNames)) {
                     return;
                 }
 
@@ -278,7 +333,7 @@ namespace ts.moduleSpecifiers {
                 const isInNodeModules = pathContainsNodeModules(path);
                 allFileNames.set(path, { path: getCanonicalFileName(path), isRedirect, isInNodeModules });
                 importedFileFromNodeModules = importedFileFromNodeModules || isInNodeModules;
-                // dont return value, so we collect everything
+                // don't return value, so we collect everything
             }
         );
 

@@ -1900,7 +1900,7 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
-            if (node.flags & NodeFlags.Ambient) {
+            if (node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract)) {
                 return undefined;
             }
             const updated = factory.updatePropertyDeclaration(
