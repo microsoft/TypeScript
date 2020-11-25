@@ -126,7 +126,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "",
+      "kindModifiers": "export",
       "textSpan": {
         "start": 20,
         "length": 4
