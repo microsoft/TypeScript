@@ -19,7 +19,15 @@
 // @Filename: some/path/whatever.ts
 //// export var x = 9;
 
-verify.completions({ marker: ["first"], exact: ["test0", "some", "module1/path1"], isNewIdentifierLocation: true });
+verify.completions({ marker: ["first"], exact: ["test0", "some", {
+    name: "module1/path1",
+    replacementSpan: {
+        fileName: "foo",
+        pos: 23,
+        end: 24
+    }
+}], isNewIdentifierLocation: true });
+
 verify.completions({
     marker: ["second"], exact: [{
         name: "module1/path1",
@@ -28,5 +36,5 @@ verify.completions({
             pos: 48,
             end: 58
         }
-    },], isNewIdentifierLocation: true
+    }], isNewIdentifierLocation: true
 });
