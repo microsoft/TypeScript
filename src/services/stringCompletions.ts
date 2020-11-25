@@ -277,10 +277,11 @@ namespace ts.Completions.StringCompletions {
         return nameAndKind(name, ScriptElementKind.directory, /*extension*/ undefined);
     }
 
-    function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[], tsConfigPaths?: string[]): readonly PathCompletion[] {
+    function addReplacementSpans(text: string, textStart: number, names: readonly NameAndKind[]): readonly PathCompletion[] {
         const span = getDirectoryFragmentTextSpan(text, textStart);
-        const pathSpan = getWholeFragmentTextSpan(text, textStart);
-        return names.map(({ name, kind, extension }): PathCompletion => tsConfigPaths?.some(path => path === name) ? { name, kind, extension, span: pathSpan } : { name, kind, extension, span });
+        const wholeSpan = text.length === 0 ? undefined : createTextSpan(textStart, text.length);
+        return names.map(({ name, kind, extension }): PathCompletion =>
+            Math.max(name.indexOf(directorySeparator), name.indexOf(altDirectorySeparator)) !== -1 ? { name, kind, extension, span: wholeSpan } : { name, kind, extension, span });
     }
 
     function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly PathCompletion[] {
@@ -689,12 +690,6 @@ namespace ts.Completions.StringCompletions {
         // If the range is an identifier, span is unnecessary.
         const length = text.length - offset;
         return length === 0 || isIdentifierText(text.substr(offset, length), ScriptTarget.ESNext) ? undefined : createTextSpan(textStart + offset, length);
-    }
-
-    // Replace everything as long as the directory separator appears
-    function getWholeFragmentTextSpan(text: string, textStart: number): TextSpan | undefined {
-        const index = Math.max(text.lastIndexOf(directorySeparator), text.lastIndexOf(altDirectorySeparator));
-        return index === -1 ? undefined : createTextSpan(textStart, text.length);
     }
 
     // Returns true if the path is explicitly relative to the script (i.e. relative to . or ..)
