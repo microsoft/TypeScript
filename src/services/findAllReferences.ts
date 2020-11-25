@@ -1206,8 +1206,13 @@ namespace ts.FindAllReferences {
                     return undefined;
                 }
 
-                // The search scope is the container node
                 scope = container;
+                if (isFunctionExpression(scope)) {
+                    let next: Node | undefined;
+                    while (next = getNextJSDocCommentLocation(scope)) {
+                        scope = next;
+                    }
+                }
             }
 
             // If symbol.parent, this means we are in an export of an external module. (Otherwise we would have returned `undefined` above.)

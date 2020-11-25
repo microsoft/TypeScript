@@ -2547,7 +2547,7 @@ namespace ts {
         return result || emptyArray;
     }
 
-    function getNextJSDocCommentLocation(node: Node) {
+    export function getNextJSDocCommentLocation(node: Node) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.PropertyAssignment ||
             parent.kind === SyntaxKind.ExportAssignment ||
