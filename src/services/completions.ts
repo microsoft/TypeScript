@@ -1086,6 +1086,7 @@ namespace ts.Completions {
         const semanticStart = timestamp();
         let completionKind = CompletionKind.None;
         let isNewIdentifierLocation = false;
+        let isNonContextualObjectLiteral = false;
         let keywordFilters = KeywordCompletionFilters.None;
         // This also gets mutated in nested-functions after the return
         let symbols: Symbol[] = [];
@@ -1471,6 +1472,8 @@ namespace ts.Completions {
         }
 
         function shouldOfferImportCompletions(): boolean {
+            // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
+            if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
             if (!preferences.includeCompletionsForModuleExports) return false;
             // If already using ES6 modules, OK to continue using them.
@@ -1898,6 +1901,7 @@ namespace ts.Completions {
                     if (objectLikeContainer.flags & NodeFlags.InWithStatement) {
                         return GlobalsSearch.Fail;
                     }
+                    isNonContextualObjectLiteral = true;
                     return GlobalsSearch.Continue;
                 }
                 const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
@@ -1910,6 +1914,7 @@ namespace ts.Completions {
                 if (typeMembers.length === 0) {
                     // Edge case: If NumberIndexType exists
                     if (!hasNumberIndextype) {
+                        isNonContextualObjectLiteral = true;
                         return GlobalsSearch.Continue;
                     }
                 }
