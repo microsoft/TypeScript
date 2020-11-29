@@ -708,7 +708,7 @@ namespace ts.NavigationBar {
                     return "default";
                 }
                 // We may get a string with newlines or other whitespace in the case of an object dereference
-                // (eg: "app\n.onactivated"), so we should remove the whitespace for readabiltiy in the
+                // (eg: "app\n.onactivated"), so we should remove the whitespace for readability in the
                 // navigation bar.
                 return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
             case SyntaxKind.Constructor:
