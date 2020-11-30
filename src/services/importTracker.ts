@@ -148,14 +148,12 @@ namespace ts.FindAllReferences {
 
         function handleImportCall(importCall: ImportCall) {
             const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
-            const exported = isExported(importCall, top);
-            if (exported) addIndirectUser(top, /** addTransitiveDependencies */ true);
-            else addIndirectUser(top);
+            addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, true));
         }
 
-        function isExported(node: Node, top: SourceFileLike = node.getSourceFile()) {
+        function isExported(node: Node, stopAtAmbientModule = false) {
             return findAncestor(node, node => {
-                if (node === top) return "quit";
+                if (stopAtAmbientModule && isAmbientModuleDeclaration(node)) return "quit";
                 return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
             });
         }
