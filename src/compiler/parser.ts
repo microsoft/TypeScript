@@ -7307,6 +7307,7 @@ namespace ts {
                         state = JSDocState.BeginningOfLine;
                         indent = 0;
                     }
+                    // TODO: Need to parse link tags in the initial comment text too
                     loop: while (true) {
                         switch (token()) {
                             case SyntaxKind.AtToken:
@@ -7520,6 +7521,7 @@ namespace ts {
                     return parseTagComments(margin, indentText.slice(margin));
                 }
 
+                // TODO: Also needs to parse link tags
                 function parseTagComments(indent: number, initialMargin?: string): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;

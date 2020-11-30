@@ -525,8 +525,7 @@ namespace ts.server {
             return tags.map(tag => ({
                 ...tag,
                 links: tag.links?.map(link => ({
-                    textSpan: this.decodeSpan(link),
-                    fileName: link.file,
+                    ...link,
                     target: {
                         textSpan: this.decodeSpan(link.target),
                         fileName: link.target.file,

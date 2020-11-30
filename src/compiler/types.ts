@@ -375,6 +375,7 @@ namespace ts {
         JSDocComment,
         JSDocTypeLiteral,
         JSDocSignature,
+        JSDocLink,
         JSDocTag,
         JSDocAugmentsTag,
         JSDocImplementsTag,
@@ -3144,6 +3145,13 @@ namespace ts {
         readonly parent: JSDoc | JSDocTypeLiteral;
         readonly tagName: Identifier;
         readonly comment?: string;
+        readonly links?: JSDocLinkNode[];
+    }
+
+    // TODO: Decide on a taxonomy (preferably ditch the -Node suffix here)
+    export interface JSDocLinkNode extends Node {
+        readonly kind: SyntaxKind.JSDocLink;
+        readonly name?: JSDocNameReference;
     }
 
     export interface JSDocUnknownTag extends JSDocTag {

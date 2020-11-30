@@ -1258,7 +1258,7 @@ namespace ts.server {
                 name,
                 text,
                 links: links?.map(link => ({
-                    ...this.toFileSpan(link.fileName, link.textSpan, project),
+                    ...link,
                     target: this.toFileSpan(link.target.fileName, link.target.textSpan, project),
                     }))}))
         }

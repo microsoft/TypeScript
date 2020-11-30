@@ -312,8 +312,11 @@ namespace ts {
 */`);
                 parsesCorrectly("@link tags",
                     `/**
- * {@link first link}
+ * {@link first }
  * Inside {@link link text} thing
+ * @param foo See also {@link A.Reference}
+ * @param bar Or see {@link http://www.zombocom.com }
+ * {@link Standalone.Complex }
  */`);
                 parsesCorrectly("authorTag",
                     `/**

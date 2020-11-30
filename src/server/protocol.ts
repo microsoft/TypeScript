@@ -961,7 +961,7 @@ namespace ts.server.protocol {
         links?: readonly JSDocLink[];
     }
 
-    export interface JSDocLink extends FileSpan {
+    export interface JSDocLink extends DocumentSpan {
         target: FileSpan;
     }
 

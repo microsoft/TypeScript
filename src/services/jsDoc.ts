@@ -130,8 +130,8 @@ namespace ts.JsDoc {
         const symbol = checker.getSymbolAtLocation(see.name)
         if (!symbol || !symbol.valueDeclaration) return
         return [{
-            fileName: getSourceFileOfNode(see.name).fileName,
-            textSpan: createTextSpanFromNode(see.name),
+            fileName: getSourceFileOfNode(see).fileName,
+            textSpan: createTextSpanFromNode(see),
             target: {
                 fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
                 textSpan: createTextSpanFromNode(symbol.valueDeclaration)
