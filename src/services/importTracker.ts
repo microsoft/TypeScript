@@ -148,7 +148,7 @@ namespace ts.FindAllReferences {
 
         function handleImportCall(importCall: ImportCall) {
             const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
-            addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, true));
+            addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /** stopAtAmbientModule */ true));
         }
 
         function isExported(node: Node, stopAtAmbientModule = false) {
