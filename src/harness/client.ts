@@ -176,7 +176,7 @@ namespace ts.server {
                 textSpan: this.decodeSpan(body, fileName),
                 displayParts: [{ kind: "text", text: body.displayString }],
                 documentation: [{ kind: "text", text: body.documentation }],
-                tags: body.tags
+                tags: this.decodeLink(body.tags)
             };
         }
 
@@ -223,7 +223,8 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body!.length === 1, "Unexpected length of completion details response body.");
             const convertedCodeActions = map(response.body![0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
-            return { ...response.body![0], codeActions: convertedCodeActions };
+            const tags = response.body![0].tags ? this.decodeLink(response.body![0].tags) : undefined;
+            return { ...response.body![0], tags, codeActions: convertedCodeActions };
         }
 
         getCompletionEntrySymbol(_fileName: string, _position: number, _entryName: string): Symbol {
@@ -520,6 +521,20 @@ namespace ts.server {
                 this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
+        private decodeLink(tags: readonly protocol.JSDocTagInfo[]): readonly JSDocTagInfo[] {
+            return tags.map(tag => ({
+                ...tag,
+                links: tag.links?.map(link => ({
+                    textSpan: this.decodeSpan(link),
+                    fileName: link.file,
+                    target: {
+                        textSpan: this.decodeSpan(link.target),
+                        fileName: link.target.file,
+                    }
+                }))
+            }))
+        }
+
         getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
             return notImplemented();
         }
@@ -538,9 +553,10 @@ namespace ts.server {
                 return undefined;
             }
 
-            const { items, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
+            const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
 
             const applicableSpan = this.decodeSpan(encodedApplicableSpan, fileName);
+            const items = encodedItems.map(item => ({ ...item, tags: this.decodeLink(item.tags) }))
 
             return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
         }

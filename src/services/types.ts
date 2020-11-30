@@ -1033,7 +1033,7 @@ namespace ts {
     export interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: JSDocLink[];
+        links?: readonly JSDocLink[];
     }
 
     export interface JSDocLink extends DocumentSpan {
@@ -1098,7 +1098,7 @@ namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
-        tags: JSDocTagInfo[];
+        tags: readonly JSDocTagInfo[];
     }
 
     /**
@@ -1156,7 +1156,8 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        tags?: JSDocTagInfo[];
+        // TODO: Find out if readonly arrays are really De Stijl hier
+        tags?: readonly JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
     }
