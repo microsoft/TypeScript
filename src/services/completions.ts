@@ -2266,6 +2266,7 @@ namespace ts.Completions {
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
+                case SyntaxKind.InferKeyword:
                 case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
 

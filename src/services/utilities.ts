@@ -1723,6 +1723,7 @@ namespace ts {
         SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,
+        SyntaxKind.InferKeyword,
         SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
         SyntaxKind.NullKeyword,
