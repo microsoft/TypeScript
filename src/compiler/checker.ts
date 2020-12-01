@@ -15276,7 +15276,9 @@ namespace ts {
                     });
                 }
             }
-            return instantiateAnonymousType(type, mapper);
+            // If the constraint type of the instantiation is the wildcard type, return the wildcard type.
+            const result = <MappedType>instantiateAnonymousType(type, mapper);
+            return getConstraintTypeFromMappedType(result) === wildcardType ? wildcardType : result;
         }
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
