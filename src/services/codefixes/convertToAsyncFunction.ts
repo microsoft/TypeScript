@@ -142,7 +142,7 @@ namespace ts.codefix {
     }
 
     /*
-        Renaming of identifiers may be neccesary as the refactor changes scopes -
+        Renaming of identifiers may be necessary as the refactor changes scopes -
         This function collects all existing identifier names and names of identifiers that will be created in the refactor.
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
