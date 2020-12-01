@@ -1,0 +1,135 @@
+=== tests/cases/compiler/es5-yieldFunctionObjectLiterals.ts ===
+// mainly to verify indentation of emitted code
+
+function g() { return "g"; }
+>g : Symbol(g, Decl(es5-yieldFunctionObjectLiterals.ts, 0, 0))
+
+function* objectLiteral1() {
+>objectLiteral1 : Symbol(objectLiteral1, Decl(es5-yieldFunctionObjectLiterals.ts, 2, 28))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 5, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 5, 15))
+
+        b: yield 2,
+>b : Symbol(b, Decl(es5-yieldFunctionObjectLiterals.ts, 6, 13))
+
+        c: 3,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 7, 19))
+    }
+}
+
+function* objectLiteral2() {
+>objectLiteral2 : Symbol(objectLiteral2, Decl(es5-yieldFunctionObjectLiterals.ts, 10, 1))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 13, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 13, 15))
+
+        [g()]: yield 2,
+>[g()] : Symbol([g()], Decl(es5-yieldFunctionObjectLiterals.ts, 14, 13))
+>g : Symbol(g, Decl(es5-yieldFunctionObjectLiterals.ts, 0, 0))
+
+        c: 3,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 15, 23))
+    }
+}
+
+function* objectLiteral3() {
+>objectLiteral3 : Symbol(objectLiteral3, Decl(es5-yieldFunctionObjectLiterals.ts, 18, 1))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 21, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 21, 15))
+
+        b: yield 2,
+>b : Symbol(b, Decl(es5-yieldFunctionObjectLiterals.ts, 22, 13))
+
+        [g()]: 3,
+>[g()] : Symbol([g()], Decl(es5-yieldFunctionObjectLiterals.ts, 23, 19))
+>g : Symbol(g, Decl(es5-yieldFunctionObjectLiterals.ts, 0, 0))
+
+        c: 4,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 24, 17))
+    }
+}
+
+function* objectLiteral4() {
+>objectLiteral4 : Symbol(objectLiteral4, Decl(es5-yieldFunctionObjectLiterals.ts, 27, 1))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 30, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 30, 15))
+
+        [g()]: 2,
+>[g()] : Symbol([g()], Decl(es5-yieldFunctionObjectLiterals.ts, 31, 13))
+>g : Symbol(g, Decl(es5-yieldFunctionObjectLiterals.ts, 0, 0))
+
+        b: yield 3,
+>b : Symbol(b, Decl(es5-yieldFunctionObjectLiterals.ts, 32, 17))
+
+        c: 4,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 33, 19))
+    }
+}
+
+function* objectLiteral5() {
+>objectLiteral5 : Symbol(objectLiteral5, Decl(es5-yieldFunctionObjectLiterals.ts, 36, 1))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 39, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 39, 15))
+
+        [g()]: yield 2,
+>[g()] : Symbol([g()], Decl(es5-yieldFunctionObjectLiterals.ts, 40, 13))
+>g : Symbol(g, Decl(es5-yieldFunctionObjectLiterals.ts, 0, 0))
+
+        c: 4,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 41, 23))
+    }
+}
+
+function* objectLiteral6() {
+>objectLiteral6 : Symbol(objectLiteral6, Decl(es5-yieldFunctionObjectLiterals.ts, 44, 1))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 47, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 47, 15))
+
+        [yield]: 2,
+>[yield] : Symbol([yield], Decl(es5-yieldFunctionObjectLiterals.ts, 48, 13))
+
+        c: 4,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 49, 19))
+    }
+}
+
+function* objectLiteral7() {
+>objectLiteral7 : Symbol(objectLiteral7, Decl(es5-yieldFunctionObjectLiterals.ts, 52, 1))
+
+    const x = {
+>x : Symbol(x, Decl(es5-yieldFunctionObjectLiterals.ts, 55, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(es5-yieldFunctionObjectLiterals.ts, 55, 15))
+
+        [yield]: yield 2,
+>[yield] : Symbol([yield], Decl(es5-yieldFunctionObjectLiterals.ts, 56, 13))
+
+        c: 4,
+>c : Symbol(c, Decl(es5-yieldFunctionObjectLiterals.ts, 57, 25))
+    }
+}
+

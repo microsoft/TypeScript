@@ -27,7 +27,7 @@ switch (x) {
     default:
 }
 
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 class C { id: number; }
 class D extends C { name: string }
 
@@ -60,7 +60,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -99,7 +99,7 @@ switch (x) {
     case (function (x) { return ''; })(2):
     default:
 }
-// basic assignable check, rest covered in tests for 'assignement compatibility'
+// basic assignable check, rest covered in tests for 'assignment compatibility'
 var C = /** @class */ (function () {
     function C() {
     }

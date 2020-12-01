@@ -5,10 +5,12 @@
 // @noImplicitThis: true
 
 // @Filename: /a.js
-////function f() {
-////    this.x = 1;
-////}
 ////class C {
+////    q() {
+////        function i() {
+////            this;
+////        }
+////    }
 ////    m() {
 ////        function h() {
 ////            this;
@@ -20,13 +22,12 @@ verify.codeFixAll({
     fixId: "fixImplicitThis",
     fixAllDescription: "Fix all implicit-'this' errors",
     newFileContent:
-`/**
- * @class
- */
-function f() {
-    this.x = 1;
-}
-class C {
+`class C {
+    q() {
+        const i = () => {
+            this;
+        }
+    }
     m() {
         const h = () => {
             this;

@@ -1,0 +1,121 @@
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(9,32): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(10,32): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(10,45): error TS1005: '>' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(10,50): error TS1005: ',' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(10,51): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(11,32): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(11,60): error TS1005: '>' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(11,65): error TS1005: ',' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(11,66): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(12,32): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(12,53): error TS1005: '>' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(12,58): error TS1005: ',' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(12,59): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(13,32): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(13,68): error TS1005: '>' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(13,73): error TS1005: ',' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(13,74): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(23,21): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,26): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,27): error TS1003: Identifier expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,29): error TS1005: '...' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,21): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,22): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,25): error TS1005: ',' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,30): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,38): error TS1005: ':' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,41): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,42): error TS1109: Expression expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(27,24): error TS1003: Identifier expected.
+
+
+==== tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx (29 errors) ====
+    declare var React: any;
+    
+    var justElement1 = <a:element />;
+    var justElement2 = <a:element></a:element>;
+    var justElement3 = <a:element attr={"value"}></a:element>;
+    var justElement4 = <a:element>{"text"}</a:element>;
+    var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
+    
+    var tooManySeparators1 = <a:ele:ment />;
+                                   ~
+!!! error TS1003: Identifier expected.
+    var tooManySeparators2 = <a:ele:ment></a:ele:ment>;
+                                   ~
+!!! error TS1003: Identifier expected.
+                                                ~
+!!! error TS1005: '>' expected.
+                                                     ~
+!!! error TS1005: ',' expected.
+                                                      ~
+!!! error TS1109: Expression expected.
+    var tooManySeparators3 = <a:ele:ment attr={"value"}></a:ele:ment>;
+                                   ~
+!!! error TS1003: Identifier expected.
+                                                               ~
+!!! error TS1005: '>' expected.
+                                                                    ~
+!!! error TS1005: ',' expected.
+                                                                     ~
+!!! error TS1109: Expression expected.
+    var tooManySeparators4 = <a:ele:ment>{"text"}</a:ele:ment>;
+                                   ~
+!!! error TS1003: Identifier expected.
+                                                        ~
+!!! error TS1005: '>' expected.
+                                                             ~
+!!! error TS1005: ',' expected.
+                                                              ~
+!!! error TS1109: Expression expected.
+    var tooManySeparators5 = <a:ele:ment attr={"value"}>{"text"}</a:ele:ment>;
+                                   ~
+!!! error TS1003: Identifier expected.
+                                                                       ~
+!!! error TS1005: '>' expected.
+                                                                            ~
+!!! error TS1005: ',' expected.
+                                                                             ~
+!!! error TS1109: Expression expected.
+    
+    var justAttribute1 = <element a:attr={"value"} />;
+    var justAttribute2 = <element a:attr={"value"}></element>;
+    var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
+    
+    var both1 = <a:element a:attr={"value"} />;
+    var both2 = <a:element k:attr={"value"}></a:element>;
+    var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
+    
+    var endOfIdent1 = <a: attr={"value"} />;
+                        ~
+!!! error TS1003: Identifier expected.
+    var endOfIdent2 = <a attr:={"value"} />;
+                             ~
+!!! error TS1003: Identifier expected.
+                              ~
+!!! error TS1003: Identifier expected.
+                                ~~~~~~~
+!!! error TS1005: '...' expected.
+    
+    var beginOfIdent1 = <:a attr={"value"} />;
+                        ~
+!!! error TS1109: Expression expected.
+                         ~
+!!! error TS1109: Expression expected.
+                            ~~~~
+!!! error TS1005: ',' expected.
+                                 ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                                         ~
+!!! error TS1005: ':' expected.
+                                            ~
+!!! error TS1109: Expression expected.
+                                             ~
+!!! error TS1109: Expression expected.
+    var beginOfIdent2 = <a :attr={"value"} />;
+                           ~
+!!! error TS1003: Identifier expected.
+    
+    var upcaseComponent1 = <ns:Upcase />;  // Parsed as intrinsic
+    var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
+    

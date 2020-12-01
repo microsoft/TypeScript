@@ -41,9 +41,9 @@ function onlyErrorsWhenUnusedInBody() {
 
         console.log('test');
 >console.log('test') : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'test' : "test"
     }
     
@@ -52,9 +52,9 @@ function onlyErrorsWhenUnusedInBody() {
 
         console.log(test);
 >console.log(test) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >test : () => boolean
     }
 
@@ -177,3 +177,74 @@ class Foo {
     }
 }
 
+// Test for GH-35557 where ids were not assigned for a symbol.
+function A(stats: StatsBase<any>) {
+>A : (stats: StatsBase<any>) => void
+>stats : StatsBase<any>
+
+    if (stats.isDirectory) { // err
+>stats.isDirectory : () => boolean
+>stats : StatsBase<any>
+>isDirectory : () => boolean
+
+        console.log(`[Directory] ${stats.ctime}`)
+>console.log(`[Directory] ${stats.ctime}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`[Directory] ${stats.ctime}` : string
+>stats.ctime : number
+>stats : StatsBase<any>
+>ctime : number
+    }
+}
+
+function B(a: Nested, b: Nested) {
+>B : (a: Nested, b: Nested) => void
+>a : Nested
+>b : Nested
+
+    if (a.stats.isDirectory) { // err
+>a.stats.isDirectory : () => boolean
+>a.stats : StatsBase<any>
+>a : Nested
+>stats : StatsBase<any>
+>isDirectory : () => boolean
+
+        b.stats.isDirectory(); 
+>b.stats.isDirectory() : boolean
+>b.stats.isDirectory : () => boolean
+>b.stats : StatsBase<any>
+>b : Nested
+>stats : StatsBase<any>
+>isDirectory : () => boolean
+    }
+    if (a.stats.isDirectory) { // ok
+>a.stats.isDirectory : () => boolean
+>a.stats : StatsBase<any>
+>a : Nested
+>stats : StatsBase<any>
+>isDirectory : () => boolean
+
+        a.stats.isDirectory();
+>a.stats.isDirectory() : boolean
+>a.stats.isDirectory : () => boolean
+>a.stats : StatsBase<any>
+>a : Nested
+>stats : StatsBase<any>
+>isDirectory : () => boolean
+    }
+} 
+
+interface StatsBase<T> {
+    isDirectory(): boolean;
+>isDirectory : () => boolean
+
+    ctime: number;
+>ctime : number
+}
+
+interface Nested {
+    stats: StatsBase<any>;
+>stats : StatsBase<any>
+}

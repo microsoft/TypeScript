@@ -40,6 +40,8 @@
         },
         "length": 2,
         "pos": 7,
-        "end": 110
+        "end": 110,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

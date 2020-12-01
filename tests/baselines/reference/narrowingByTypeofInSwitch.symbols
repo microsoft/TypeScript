@@ -404,9 +404,9 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
 
         case 'number': return x.toString(2);
->x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 2 more)
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 2 more)
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
->toString : Symbol(toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 2 more)
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 2 more)
 
         case 'string': return x;
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
@@ -715,144 +715,192 @@ function narrowingNarrows(x: {} | undefined) {
     }
 }
 
+function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
+>narrowingNarrows2 : Symbol(narrowingNarrows2, Decl(narrowingByTypeofInSwitch.ts, 249, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+    switch (typeof x) {
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'number': assertNumber(x); return;
+>assertNumber : Symbol(assertNumber, Decl(narrowingByTypeofInSwitch.ts, 2, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'boolean': assertBoolean(x); return;
+>assertBoolean : Symbol(assertBoolean, Decl(narrowingByTypeofInSwitch.ts, 6, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'function': assertNever(x); return;
+>assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'symbol': assertNever(x); return;
+>assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'object': const _: {} = assertNever(x); return;
+>_ : Symbol(_, Decl(narrowingByTypeofInSwitch.ts, 257, 28))
+>assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'string': assertString(x); return;
+>assertString : Symbol(assertString, Decl(narrowingByTypeofInSwitch.ts, 10, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'undefined': assertUndefined(x); return;
+>assertUndefined : Symbol(assertUndefined, Decl(narrowingByTypeofInSwitch.ts, 30, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        case 'number': assertNever(x); return;
+>assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+
+        default: const _y: {} = assertNever(x); return;
+>_y : Symbol(_y, Decl(narrowingByTypeofInSwitch.ts, 261, 22))
+>assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 251, 27))
+    }
+}
+
 /* Template literals */
 
 function testUnionWithTempalte(x: Basic) {
->testUnionWithTempalte : Symbol(testUnionWithTempalte, Decl(narrowingByTypeofInSwitch.ts, 249, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>testUnionWithTempalte : Symbol(testUnionWithTempalte, Decl(narrowingByTypeofInSwitch.ts, 263, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 >Basic : Symbol(Basic, Decl(narrowingByTypeofInSwitch.ts, 46, 1))
 
     switch (typeof x) {
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `number`: assertNumber(x); return;
 >assertNumber : Symbol(assertNumber, Decl(narrowingByTypeofInSwitch.ts, 2, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `boolean`: assertBoolean(x); return;
 >assertBoolean : Symbol(assertBoolean, Decl(narrowingByTypeofInSwitch.ts, 6, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `function`: assertFunction(x); return;
 >assertFunction : Symbol(assertFunction, Decl(narrowingByTypeofInSwitch.ts, 18, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `symbol`: assertSymbol(x); return;
 >assertSymbol : Symbol(assertSymbol, Decl(narrowingByTypeofInSwitch.ts, 14, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `object`: assertObject(x); return;
 >assertObject : Symbol(assertObject, Decl(narrowingByTypeofInSwitch.ts, 22, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `string`: assertString(x); return;
 >assertString : Symbol(assertString, Decl(narrowingByTypeofInSwitch.ts, 10, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 
         case `undefined`: assertUndefined(x); return;
 >assertUndefined : Symbol(assertUndefined, Decl(narrowingByTypeofInSwitch.ts, 30, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
     }
     assertNever(x);
 >assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 253, 31))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 267, 31))
 }
 
 function fallThroughTestWithTempalte(x: string | number | boolean | object) {
->fallThroughTestWithTempalte : Symbol(fallThroughTestWithTempalte, Decl(narrowingByTypeofInSwitch.ts, 264, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 266, 37))
+>fallThroughTestWithTempalte : Symbol(fallThroughTestWithTempalte, Decl(narrowingByTypeofInSwitch.ts, 278, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 280, 37))
 
     switch (typeof x) {
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 266, 37))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 280, 37))
 
         case `number`:
             assertNumber(x)
 >assertNumber : Symbol(assertNumber, Decl(narrowingByTypeofInSwitch.ts, 2, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 266, 37))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 280, 37))
 
         case `string`:
             assertStringOrNumber(x)
 >assertStringOrNumber : Symbol(assertStringOrNumber, Decl(narrowingByTypeofInSwitch.ts, 38, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 266, 37))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 280, 37))
 
             break;
         default:
             assertObject(x);
 >assertObject : Symbol(assertObject, Decl(narrowingByTypeofInSwitch.ts, 22, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 266, 37))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 280, 37))
 
         case `number`:
         case `boolean`:
             assertBooleanOrObject(x);
 >assertBooleanOrObject : Symbol(assertBooleanOrObject, Decl(narrowingByTypeofInSwitch.ts, 42, 1))
->x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 266, 37))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 280, 37))
 
             break;
     }
 }
 
 function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
->keyofNarrowingWithTemplate : Symbol(keyofNarrowingWithTemplate, Decl(narrowingByTypeofInSwitch.ts, 280, 1))
->S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 282, 36))
->K : Symbol(K, Decl(narrowingByTypeofInSwitch.ts, 282, 49))
->S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 282, 36))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
->S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 282, 36))
+>keyofNarrowingWithTemplate : Symbol(keyofNarrowingWithTemplate, Decl(narrowingByTypeofInSwitch.ts, 294, 1))
+>S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 296, 36))
+>K : Symbol(K, Decl(narrowingByTypeofInSwitch.ts, 296, 49))
+>S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 296, 36))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
+>S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 296, 36))
 
     function assertKeyofS(k1: keyof S) { }
->assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 282, 87))
->k1 : Symbol(k1, Decl(narrowingByTypeofInSwitch.ts, 283, 26))
->S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 282, 36))
+>assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 296, 87))
+>k1 : Symbol(k1, Decl(narrowingByTypeofInSwitch.ts, 297, 26))
+>S : Symbol(S, Decl(narrowingByTypeofInSwitch.ts, 296, 36))
 
     switch (typeof k) {
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
 
         case `number`: assertNumber(k); assertKeyofS(k); return;
 >assertNumber : Symbol(assertNumber, Decl(narrowingByTypeofInSwitch.ts, 2, 1))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
->assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 282, 87))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
+>assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 296, 87))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
 
         case `symbol`: assertSymbol(k); assertKeyofS(k); return;
 >assertSymbol : Symbol(assertSymbol, Decl(narrowingByTypeofInSwitch.ts, 14, 1))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
->assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 282, 87))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
+>assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 296, 87))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
 
         case `string`: assertString(k); assertKeyofS(k); return;
 >assertString : Symbol(assertString, Decl(narrowingByTypeofInSwitch.ts, 10, 1))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
->assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 282, 87))
->k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 282, 74))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
+>assertKeyofS : Symbol(assertKeyofS, Decl(narrowingByTypeofInSwitch.ts, 296, 87))
+>k : Symbol(k, Decl(narrowingByTypeofInSwitch.ts, 296, 74))
     }
 }
 
 /* Both string literals and template literals */
 
 function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuseWithBoth : Symbol(multipleGenericFuseWithBoth, Decl(narrowingByTypeofInSwitch.ts, 289, 1))
->X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 293, 37))
+>multipleGenericFuseWithBoth : Symbol(multipleGenericFuseWithBoth, Decl(narrowingByTypeofInSwitch.ts, 303, 1))
+>X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 307, 37))
 >L : Symbol(L, Decl(narrowingByTypeofInSwitch.ts, 132, 1))
->Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 293, 58))
+>Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 307, 58))
 >R : Symbol(R, Decl(narrowingByTypeofInSwitch.ts, 134, 31))
->xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 293, 81))
->X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 293, 37))
->Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 293, 58))
->X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 293, 37))
->Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 293, 58))
->X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 293, 37))
->Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 293, 58))
+>xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 307, 81))
+>X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 307, 37))
+>Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 307, 58))
+>X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 307, 37))
+>Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 307, 58))
+>X : Symbol(X, Decl(narrowingByTypeofInSwitch.ts, 307, 37))
+>Y : Symbol(Y, Decl(narrowingByTypeofInSwitch.ts, 307, 58))
 
     switch (typeof xy) {
->xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 293, 81))
+>xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 307, 81))
 
         case `function`: return [xy, 1];
->xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 293, 81))
+>xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 307, 81))
 
         case 'object': return [xy, 'two'];
->xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 293, 81))
+>xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 307, 81))
 
         case `number`: return [xy]
->xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 293, 81))
+>xy : Symbol(xy, Decl(narrowingByTypeofInSwitch.ts, 307, 81))
     }
 }
+

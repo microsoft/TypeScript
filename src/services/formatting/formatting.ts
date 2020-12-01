@@ -3,6 +3,7 @@ namespace ts.formatting {
     export interface FormatContext {
         readonly options: FormatCodeSettings;
         readonly getRules: RulesMap;
+        readonly host: FormattingHost;
     }
 
     export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
@@ -70,7 +71,7 @@ namespace ts.formatting {
          * Formatter calls this function when rule adds or deletes new lines from the text
          * so indentation scope can adjust values of indentation and delta.
          */
-        recomputeIndentation(lineAddedByFormatting: boolean): void;
+        recomputeIndentation(lineAddedByFormatting: boolean, parent: Node): void;
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
@@ -394,7 +395,7 @@ namespace ts.formatting {
         initialIndentation: number,
         delta: number,
         formattingScanner: FormattingScanner,
-        { options, getRules }: FormatContext,
+        { options, getRules, host }: FormatContext,
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
@@ -567,8 +568,8 @@ namespace ts.formatting {
                     !suppressDelta && shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
                 getIndentation: () => indentation,
                 getDelta,
-                recomputeIndentation: lineAdded => {
-                    if (node.parent && SmartIndenter.shouldIndentChildNode(options, node.parent, node, sourceFile)) {
+                recomputeIndentation: (lineAdded, parent) => {
+                    if (SmartIndenter.shouldIndentChildNode(options, parent, node, sourceFile)) {
                         indentation += lineAdded ? options.indentSize! : -options.indentSize!;
                         delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
                     }
@@ -719,6 +720,9 @@ namespace ts.formatting {
                     // proceed any parent tokens that are located prior to child.getStart()
                     const tokenInfo = formattingScanner.readTokenInfo(node);
                     if (tokenInfo.token.end > childStartPos) {
+                        if (tokenInfo.token.pos > childStartPos) {
+                            formattingScanner.skipToStartOf(child);
+                        }
                         // stop when formatting scanner advances past the beginning of the child
                         break;
                     }
@@ -730,13 +734,15 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                // JSX text shouldn't affect indenting
-                if (isToken(child) && child.kind !== SyntaxKind.JsxText) {
+                if (isToken(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     const tokenInfo = formattingScanner.readTokenInfo(child);
-                    Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
-                    consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
-                    return inheritedIndentation;
+                    // JSX text shouldn't affect indenting
+                    if (child.kind !== SyntaxKind.JsxText) {
+                        Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
+                        consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
+                        return inheritedIndentation;
+                    }
                 }
 
                 const effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
@@ -996,7 +1002,7 @@ namespace ts.formatting {
                             // Handle the case where the next line is moved to be the end of this line.
                             // In this case we don't indent the next line in the next pass.
                             if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false);
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ false, contextNode);
                             }
                             break;
                         case LineAction.LineAdded:
@@ -1004,7 +1010,7 @@ namespace ts.formatting {
                             // In this case we indent token2 in the next pass but we set
                             // sameLineIndent flag to notify the indenter that the indentation is within the line.
                             if (currentParent.getStart(sourceFile) === currentItem.pos) {
-                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true);
+                                dynamicIndentation.recomputeIndentation(/*lineAddedByFormatting*/ true, contextNode);
                             }
                             break;
                         default:
@@ -1090,10 +1096,6 @@ namespace ts.formatting {
 
             const nonWhitespaceColumnInFirstPart =
                 SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(startLinePos, parts[0].pos, sourceFile, options);
-
-            if (indentation === nonWhitespaceColumnInFirstPart.column && !jsxTextStyleIndent) {
-                return;
-            }
 
             let startIndex = 0;
             if (firstLineIsIndented) {
@@ -1193,7 +1195,7 @@ namespace ts.formatting {
             previousRange: TextRangeWithKind,
             previousStartLine: number,
             currentRange: TextRangeWithKind,
-            currentStartLine: number,
+            currentStartLine: number
         ): LineAction {
             const onLaterLine = currentStartLine !== previousStartLine;
             switch (rule.action) {
@@ -1221,7 +1223,7 @@ namespace ts.formatting {
                     // edit should not be applied if we have one line feed between elements
                     const lineDelta = currentStartLine - previousStartLine;
                     if (lineDelta !== 1) {
-                        recordReplace(previousRange.end, currentRange.pos - previousRange.end, options.newLineCharacter!);
+                        recordReplace(previousRange.end, currentRange.pos - previousRange.end, getNewLineOrDefaultFromHost(host, options));
                         return onLaterLine ? LineAction.None : LineAction.LineAdded;
                     }
                     break;

@@ -8,7 +8,7 @@ type ComputedOf<T> = {
 }
 
 declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & ThisType<P & C>): void;
->foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void
+>foo : <P, C>(options: {    props: P;    computed: ComputedOf<C>;} & ThisType<P & C>) => void
 >options : { props: P; computed: ComputedOf<C>; } & ThisType<P & C>
 >props : P
 >computed : ComputedOf<C>

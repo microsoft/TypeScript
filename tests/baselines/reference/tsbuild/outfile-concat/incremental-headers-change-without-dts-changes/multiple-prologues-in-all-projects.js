@@ -1,4 +1,23 @@
-//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+Input::
+//// [/src/first/first_PART1.ts]
+"myPrologue5"
+"myPrologue"
+interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
 [[90m12:12:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
@@ -485,22 +504,6 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ======================================================================
-
-//// [/src/first/first_PART1.ts]
-"myPrologue5"
-"myPrologue"
-interface TheFirst {
-    none: any;
-}
-
-const s = "Hello, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
 {"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAEA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACVD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;ACHD,QAAA,IAAI,CAAC,GAAU,CAAC"}

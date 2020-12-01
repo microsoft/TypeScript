@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty35.ts ===
 interface I1 {
     [Symbol.toStringTag](): { x: string }
->[Symbol.toStringTag] : () => { x: string; }
+>[Symbol.toStringTag] : () => {    x: string;}
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
@@ -9,7 +9,7 @@ interface I1 {
 }
 interface I2 {
     [Symbol.toStringTag](): { x: number }
->[Symbol.toStringTag] : () => { x: number; }
+>[Symbol.toStringTag] : () => {    x: number;}
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

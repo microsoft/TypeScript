@@ -14,5 +14,5 @@ var a;
 
 /** @type {B<number>} */
 var b;
->b : { b: number; }
+>b : B<number>
 

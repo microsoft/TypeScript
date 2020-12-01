@@ -19,7 +19,7 @@ module Editor {
         }
 
         public static MakeHead(): List<T> { // should error
->MakeHead : () => List<any>
+>MakeHead : () => List<T>
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<any>

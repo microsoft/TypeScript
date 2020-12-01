@@ -12,7 +12,7 @@ declare module "file1" {
 >v : number
     }
     export = foo;
->foo : foo
+>foo : import("tests/cases/compiler/file1.d.ts")
 }
 
 

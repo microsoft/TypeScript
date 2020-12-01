@@ -1,0 +1,13 @@
+=== tests/cases/compiler/templateLiteralsAndDecoratorMetadata.ts ===
+declare var format: any;
+>format : Symbol(format, Decl(templateLiteralsAndDecoratorMetadata.ts, 0, 11))
+
+export class Greeter {
+>Greeter : Symbol(Greeter, Decl(templateLiteralsAndDecoratorMetadata.ts, 0, 24))
+
+  @format("Hello, %s")
+>format : Symbol(format, Decl(templateLiteralsAndDecoratorMetadata.ts, 0, 11))
+
+  greeting: `boss` | `employee` = `employee`;  //template literals on this line cause the issue
+>greeting : Symbol(Greeter.greeting, Decl(templateLiteralsAndDecoratorMetadata.ts, 1, 22))
+}

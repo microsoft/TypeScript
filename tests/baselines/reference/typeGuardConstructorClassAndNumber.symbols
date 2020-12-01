@@ -277,3 +277,29 @@ else {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 
+// Repro from #37660
+
+function foo(instance: Function | object) {
+>foo : Symbol(foo, Decl(typeGuardConstructorClassAndNumber.ts, 118, 1))
+>instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    if (typeof instance === 'function') {
+>instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
+
+        if (instance.prototype == null || instance.prototype.constructor == null) {
+>instance.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>instance.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+            return instance.length;
+>instance.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+

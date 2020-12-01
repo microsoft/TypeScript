@@ -191,9 +191,9 @@ type T44 = X2<{ a: number, b: string, c: boolean }>;  // string | number
 
 type X3<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U : never;
 >X3 : X3<T>
->a : (x: U) => void
+>a : (x: infer U) => void
 >x : U
->b : (x: U) => void
+>b : (x: infer U) => void
 >x : U
 
 type T50 = X3<{}>;  // never
@@ -303,7 +303,7 @@ type Jsonified<T> =
 
     : T extends undefined | Function ? never // undefined and functions are removed
     : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
->toJSON : () => R
+>toJSON : () => infer R
 
     : T extends object ? JsonifiedObject<T>
     : "what is this";
@@ -324,7 +324,7 @@ type Example = {
 >customClass : MyClass
 
     obj: {
->obj : { prop: "property"; clz: MyClass; nested: { attr: Date; }; }
+>obj : { prop: "property"; clz: MyClass; nested: {    attr: Date;}; }
 
         prop: "property",
 >prop : "property"

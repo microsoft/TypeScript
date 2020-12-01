@@ -1,6 +1,6 @@
 === /node_modules/foo/index.d.ts ===
 export = foo;
->foo : any
+>foo : typeof import("/node_modules/foo/index.d.ts")
 
 declare namespace foo {
     export type T = number;
@@ -15,7 +15,7 @@ declare module "foo" {
 >"foo" : typeof foo
 
     export function f(): T; // OK
->f : () => number
+>f : () => T
 }
 
 === /b.ts ===
@@ -26,7 +26,7 @@ declare module "foo" {
 >"foo" : typeof foo
 
     export function g(): foo.T; // OK
->g : () => number
+>g : () => foo.T
 >foo : any
 }
 

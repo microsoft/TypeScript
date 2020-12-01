@@ -19,25 +19,35 @@ and limitations under the License.
 
 
 declare namespace Intl {
+
+    // http://cldr.unicode.org/index/cldr-spec/plural-rules#TOC-Determining-Plural-Categories
+    type LDMLPluralRule = "zero" | "one" | "two" | "few" | "many" | "other";
+    type PluralRuleType = "cardinal" | "ordinal";
+
     interface PluralRulesOptions {
         localeMatcher?: "lookup" | "best fit";
-        type?: "cardinal" | "ordinal";
+        type?: PluralRuleType;
+        minimumIntegerDigits?: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
+        minimumSignificantDigits?: number;
+        maximumSignificantDigits?: number;
     }
 
     interface ResolvedPluralRulesOptions {
         locale: string;
-        pluralCategories: string[];
-        type: "cardinal" | "ordinal";
+        pluralCategories: LDMLPluralRule[];
+        type: PluralRuleType;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
-        minimumSignificantDigits: number;
-        maximumSignificantDigits: number;
+        minimumSignificantDigits?: number;
+        maximumSignificantDigits?: number;
     }
 
     interface PluralRules {
         resolvedOptions(): ResolvedPluralRulesOptions;
-        select(n: number): string;
+        select(n: number): LDMLPluralRule;
     }
 
     const PluralRules: {

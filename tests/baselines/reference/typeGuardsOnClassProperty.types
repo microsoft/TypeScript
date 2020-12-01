@@ -58,7 +58,7 @@ class D {
 }
 
 var o: {
->o : { prop1: string | number; prop2: string | boolean; }
+>o : { prop1: number | string; prop2: boolean | string; }
 
     prop1: number|string;
 >prop1 : string | number

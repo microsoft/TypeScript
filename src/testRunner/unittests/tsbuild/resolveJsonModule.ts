@@ -51,32 +51,32 @@ export default hello.hello`);
             commandLineArgs: ["--b", "/src/tsconfig_withIncludeAndFiles.json"],
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "sourcemap",
             fs: () => projFs,
             commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose"],
             modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"composite": true,`, `"composite": true, "sourceMap": true,`),
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "without outDir",
             fs: () => projFs,
             commandLineArgs: ["--b", "src/tsconfig_withFiles.json", "--verbose"],
             modifyFs: fs => replaceText(fs, "src/tsconfig_withFiles.json", `"outDir": "dist",`, ""),
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
     });
 
     describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "importing json module from project reference",
             fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),
             commandLineArgs: ["--b", "src/tsconfig.json", "--verbose"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
     });
 }

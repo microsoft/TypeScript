@@ -20,18 +20,18 @@ axios.m()
 >m : () => void
 
 module.exports = axios;
->module.exports = axios : typeof Axios
->module.exports : typeof Axios
->module : { "\"tests/cases/conformance/salsa/axios\"": typeof Axios; }
->exports : typeof Axios
+>module.exports = axios : { m(): void; default: Axios; }
+>module.exports : { m(): void; default: Axios; }
+>module : { "\"tests/cases/conformance/salsa/axios\"": { m(): void; default: Axios; }; }
+>exports : { m(): void; default: Axios; }
 >axios : Axios
 
 module.exports.default = axios;
 >module.exports.default = axios : Axios
 >module.exports.default : Axios
->module.exports : typeof Axios
->module : { "\"tests/cases/conformance/salsa/axios\"": typeof Axios; }
->exports : typeof Axios
+>module.exports : { m(): void; default: Axios; }
+>module : { "\"tests/cases/conformance/salsa/axios\"": { m(): void; default: Axios; }; }
+>exports : { m(): void; default: Axios; }
 >default : Axios
 >axios : Axios
 

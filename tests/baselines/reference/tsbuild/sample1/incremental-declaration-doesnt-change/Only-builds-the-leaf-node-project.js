@@ -1,4 +1,10 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/tests/index.ts]
+const m = 10;
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -24,20 +30,19 @@ declare const m = 10;
 var m = 10;
 
 
-//// [/src/tests/index.ts]
-const m = 10;
-
 //// [/src/tests/tsconfig.tsbuildinfo]
 {
   "program": {
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
       },
       "./index.ts": {
         "version": "3708260210-const m = 10;",
-        "signature": "1073907769-declare const m = 10;\r\n"
+        "signature": "1073907769-declare const m = 10;\r\n",
+        "affectsGlobalScope": true
       }
     },
     "options": {

@@ -43,6 +43,9 @@ class C3 {
 
     static c!: number;
 >c : number
+
+    d!;
+>d : any
 }
 
 // Definite assignment assertion not permitted in ambient context

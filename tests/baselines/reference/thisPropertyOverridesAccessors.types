@@ -23,9 +23,9 @@ class Bar extends Foo {
 
         this.p = 2
 >this.p = 2 : 2
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >2 : 2
     }
 }

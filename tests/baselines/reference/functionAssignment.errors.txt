@@ -1,4 +1,4 @@
-tests/cases/compiler/functionAssignment.ts(22,5): error TS2322: Type '4' is not assignable to type 'string'.
+tests/cases/compiler/functionAssignment.ts(22,5): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/functionAssignment.ts(34,17): error TS2339: Property 'length' does not exist on type 'number'.
 
 
@@ -26,7 +26,7 @@ tests/cases/compiler/functionAssignment.ts(34,17): error TS2339: Property 'lengt
         var n = '';
         n = 4;
         ~
-!!! error TS2322: Type '4' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     });
     
     function f3(a: { a: number; b: number; }) { }

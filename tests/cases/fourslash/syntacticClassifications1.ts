@@ -18,7 +18,7 @@
 ////     }
 //// }
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("// comment"),
     c.keyword("module"), c.moduleName("M"), c.punctuation("{"),
@@ -33,3 +33,17 @@ verify.syntacticClassificationsAre(
         c.keyword("module"), c.moduleName("M1"), c.punctuation("."), c.moduleName("M2"), c.punctuation("{"),
         c.punctuation("}"),
     c.punctuation("}"));
+
+    
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("namespace.declaration", "M"), 
+    c2.semanticToken("variable.declaration.local", "v"), 
+    c2.semanticToken("variable.declaration.local", "s"), 
+    c2.semanticToken("class.declaration", "C"), 
+    c2.semanticToken("typeParameter.declaration", "T"), 
+    c2.semanticToken("enum.declaration", "E"), 
+    c2.semanticToken("interface.declaration", "I"), 
+    c2.semanticToken("namespace.declaration", "M1"), 
+    c2.semanticToken("namespace.declaration", "M2"), 
+);

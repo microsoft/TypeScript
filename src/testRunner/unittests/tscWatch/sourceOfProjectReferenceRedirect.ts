@@ -17,7 +17,10 @@ namespace ts.tscWatch {
                 solutionBuilder.close();
                 sys.clearOutput();
             }
-            const host = createWatchCompilerHostOfConfigFile(config, {}, /*watchOptionsToExtend*/ undefined, sys);
+            const host = createWatchCompilerHostOfConfigFile({
+                configFileName: config,
+                system: sys
+            });
             host.useSourceOfProjectReferenceRedirect = returnTrue;
             const watch = createWatchProgram(host);
             checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFiles);

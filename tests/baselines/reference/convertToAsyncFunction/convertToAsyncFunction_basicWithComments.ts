@@ -14,6 +14,6 @@ async function f(): Promise<void>{
 
     // a
     /*b*/ const result /*g*/ = await fetch(/*d*/ 'https://typescriptlang.org' /*e*/);
-    console.log(result); /*k*/
+    console.log(/*i*/ result /*j*/); /*k*/
     // m
 }

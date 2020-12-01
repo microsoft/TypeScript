@@ -16,7 +16,8 @@ verify.completions({
         {
             name: "Test2",
             text: "(alias) function Test2(): void\nimport Test2",
-            kind: "alias"
+            kind: "alias",
+            kindModifiers: "export"
         },
         completion.globalThisEntry,
         completion.undefinedVarEntry,
@@ -39,6 +40,6 @@ verify.applyCodeActionFromCompletion("", {
     name: "Test1",
     source: "/a",
     description: `Add 'Test1' to existing import declaration from "./a"`,
-    newFileContent: `import { Test2, Test1 } from "./a";
+    newFileContent: `import { Test1, Test2 } from "./a";
 t`,
 });

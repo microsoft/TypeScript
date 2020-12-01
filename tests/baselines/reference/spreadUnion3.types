@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/spread/spreadUnion3.ts ===
 function f(x: { y: string } | undefined): { y: string } {
->f : (x: { y: string; } | undefined) => { y: string; }
+>f : (x: {    y: string;} | undefined) => {    y: string;}
 >x : { y: string; } | undefined
 >y : string
 >y : string

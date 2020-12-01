@@ -22,9 +22,9 @@ class C {
 
         console.log(this.#a);
 >console.log(this.#a) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this.#a : number
 >this : this
 
@@ -36,9 +36,9 @@ class C {
 
         console.log(this.#b);
 >console.log(this.#b) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this.#b : any
 >this : this
     }
@@ -54,17 +54,17 @@ class C {
 
         console.log(this.#m);
 >console.log(this.#m) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this.#m : string
 >this : typeof C
 
         console.log(this.#x = "test");
 >console.log(this.#x = "test") : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this.#x = "test" : "test"
 >this.#x : any
 >this : typeof C

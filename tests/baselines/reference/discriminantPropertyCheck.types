@@ -424,7 +424,7 @@ export function foo(obj: Obj) {
 }
 
 function onlyPlus(arg: '+') {
->onlyPlus : (arg: "+") => "+"
+>onlyPlus : (arg: '+') => "+"
 >arg : "+"
 
   return arg;
@@ -463,7 +463,7 @@ type TypeBar2 = { type: BarEnum.bar2 };
 >BarEnum : any
 
 function func3(value: Partial<UnionOfBar>) {
->func3 : (value: Partial<TypeBar1> | Partial<TypeBar2>) => void
+>func3 : (value: Partial<UnionOfBar>) => void
 >value : Partial<TypeBar1> | Partial<TypeBar2>
 
     if (value.type !== undefined) {
@@ -500,4 +500,162 @@ function func3(value: Partial<UnionOfBar>) {
         }
     }
 }
+
+// Repro from #30557
+
+interface TypeA {
+    Name: "TypeA";
+>Name : "TypeA"
+
+    Value1: "Cool stuff!";
+>Value1 : "Cool stuff!"
+}
+
+interface TypeB {
+    Name: "TypeB";
+>Name : "TypeB"
+
+    Value2: 0;
+>Value2 : 0
+}
+
+type Type = TypeA | TypeB;
+>Type : Type
+
+declare function isType(x: unknown): x is Type;
+>isType : (x: unknown) => x is Type
+>x : unknown
+
+function WorksProperly(data: Type) {
+>WorksProperly : (data: Type) => void
+>data : Type
+
+    if (data.Name === "TypeA") {
+>data.Name === "TypeA" : boolean
+>data.Name : "TypeA" | "TypeB"
+>data : Type
+>Name : "TypeA" | "TypeB"
+>"TypeA" : "TypeA"
+
+        const value1 = data.Value1;
+>value1 : "Cool stuff!"
+>data.Value1 : "Cool stuff!"
+>data : TypeA
+>Value1 : "Cool stuff!"
+    }
+}
+
+function DoesNotWork(data: unknown) {
+>DoesNotWork : (data: unknown) => void
+>data : unknown
+
+    if (isType(data)) {
+>isType(data) : boolean
+>isType : (x: unknown) => x is Type
+>data : unknown
+
+        if (data.Name === "TypeA") {
+>data.Name === "TypeA" : boolean
+>data.Name : "TypeA" | "TypeB"
+>data : Type
+>Name : "TypeA" | "TypeB"
+>"TypeA" : "TypeA"
+
+            const value1 = data.Value1;
+>value1 : "Cool stuff!"
+>data.Value1 : "Cool stuff!"
+>data : TypeA
+>Value1 : "Cool stuff!"
+        }
+    }
+}
+
+// Repro from #36777
+
+type TestA = {
+>TestA : TestA
+
+    type: 'testA';
+>type : "testA"
+
+    bananas: 3;
+>bananas : 3
+}
+  
+type TestB = {
+>TestB : TestB
+
+    type: 'testB';
+>type : "testB"
+
+    apples: 5;
+>apples : 5
+}
+  
+type AllTests = TestA | TestB;
+>AllTests : AllTests
+
+type MapOfAllTests = Record<string, AllTests>;
+>MapOfAllTests : Record<string, AllTests>
+
+const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
+>doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void
+>(mapOfTests: MapOfAllTests, ids: string[]) => {    ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    });} : (mapOfTests: MapOfAllTests, ids: string[]) => void
+>mapOfTests : Record<string, AllTests>
+>ids : string[]
+
+    ids.forEach(id => {
+>ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    }) : void
+>ids.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>ids : string[]
+>forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    } : (id: string) => void
+>id : string
+
+        let test;
+>test : any
+
+        test = mapOfTests[id];
+>test = mapOfTests[id] : AllTests
+>test : any
+>mapOfTests[id] : AllTests
+>mapOfTests : Record<string, AllTests>
+>id : string
+
+        if (test.type === 'testA') {
+>test.type === 'testA' : boolean
+>test.type : "testA" | "testB"
+>test : AllTests
+>type : "testA" | "testB"
+>'testA' : "testA"
+
+            console.log(test.bananas);
+>console.log(test.bananas) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>test.bananas : 3
+>test : TestA
+>bananas : 3
+        }
+        switch (test.type) {
+>test.type : "testA" | "testB"
+>test : AllTests
+>type : "testA" | "testB"
+
+            case 'testA': {
+>'testA' : "testA"
+
+                console.log(test.bananas);
+>console.log(test.bananas) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>test.bananas : 3
+>test : TestA
+>bananas : 3
+            }
+        }
+    });
+};
 

@@ -1,4 +1,21 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/first/first_PART1.ts]
+interface TheFirst {
+    none: any;
+}
+
+const s = "Hola, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
@@ -466,20 +483,6 @@ declare const first_part2Const: firstfirst_part2;
 declare function f(): string;
 
 ======================================================================
-
-//// [/src/first/first_PART1.ts]
-interface TheFirst {
-    none: any;
-}
-
-const s = "Hola, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 /// <reference path="../../tripleRef.d.ts" />

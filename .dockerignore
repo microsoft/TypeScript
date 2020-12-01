@@ -43,7 +43,6 @@ yarn-error.log
 .parallelperf.*
 .failed-tests
 TEST-results.xml
-package-lock.json
 tests
 .vscode
 .git

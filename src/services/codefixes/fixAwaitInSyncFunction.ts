@@ -16,7 +16,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seen = createMap<true>();
+            const seen = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file, diag.start);
                 if (!nodes || !addToSeen(seen, getNodeId(nodes.insertBefore))) return;
@@ -73,7 +73,7 @@ namespace ts.codefix {
         if (returnType) {
             const entityName = getEntityNameFromTypeNode(returnType);
             if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {
-                changes.replaceNode(sourceFile, returnType, createTypeReferenceNode("Promise", createNodeArray([returnType])));
+                changes.replaceNode(sourceFile, returnType, factory.createTypeReferenceNode("Promise", factory.createNodeArray([returnType])));
             }
         }
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, insertBefore);

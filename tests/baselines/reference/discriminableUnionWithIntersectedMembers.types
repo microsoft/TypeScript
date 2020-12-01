@@ -17,7 +17,7 @@ type X =
 // error
 const x: X = 4 as any as { x: 'x' | 'y', y: number };
 >x : X
->4 as any as { x: 'x' | 'y', y: number } : { x: "x" | "y"; y: number; }
+>4 as any as { x: 'x' | 'y', y: number } : { x: 'x' | 'y'; y: number; }
 >4 as any : any
 >4 : 4
 >x : "x" | "y"
@@ -38,7 +38,7 @@ type Y =
 // no  error
 const y: Y = 4 as any as { x: 'x' | 'y', y: number };
 >y : Y
->4 as any as { x: 'x' | 'y', y: number } : { x: "x" | "y"; y: number; }
+>4 as any as { x: 'x' | 'y', y: number } : { x: 'x' | 'y'; y: number; }
 >4 as any : any
 >4 : 4
 >x : "x" | "y"

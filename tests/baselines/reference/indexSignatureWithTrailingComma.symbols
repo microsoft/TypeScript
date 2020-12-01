@@ -1,0 +1,23 @@
+=== tests/cases/compiler/indexSignatureWithTrailingComma.ts ===
+type A = {
+>A : Symbol(A, Decl(indexSignatureWithTrailingComma.ts, 0, 0))
+
+    [key: string,]: string;
+>key : Symbol(key, Decl(indexSignatureWithTrailingComma.ts, 1, 5))
+
+};
+
+interface B {
+>B : Symbol(B, Decl(indexSignatureWithTrailingComma.ts, 2, 2))
+
+    [key: string,]: string;
+>key : Symbol(key, Decl(indexSignatureWithTrailingComma.ts, 5, 5))
+}
+
+class C {
+>C : Symbol(C, Decl(indexSignatureWithTrailingComma.ts, 6, 1))
+
+    [key: string,]: null;
+>key : Symbol(key, Decl(indexSignatureWithTrailingComma.ts, 9, 5))
+}
+

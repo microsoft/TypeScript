@@ -3,7 +3,7 @@ class Foo{};
 >Foo : Foo
 
 function bar(x: {new(): Foo;}){}
->bar : (x: new () => Foo) => void
+>bar : (x: {    new (): Foo;}) => void
 >x : new () => Foo
 
 bar(Foo); // Error, but should be allowed

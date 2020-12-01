@@ -13,13 +13,13 @@ function a1([a, b, [[c]]]: [number, number, string[][]]) { }
 >c : string
 
 function a2(o: { x: number, a: number }) { }
->a2 : (o: { x: number; a: number; }) => void
+>a2 : (o: {    x: number;    a: number;}) => void
 >o : { x: number; a: number; }
 >x : number
 >a : number
 
 function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boolean, n: number }, q: (number|string)[] }) { };
->a3 : ({ j, k, l: { m, n }, q: [a, b, c] }: { j: number; k: string; l: { m: boolean; n: number; }; q: (string | number)[]; }) => void
+>a3 : ({ j, k, l: { m, n }, q: [a, b, c] }: {    j: number;    k: string;    l: {        m: boolean;        n: number;    };    q: (number | string)[];}) => void
 >j : number
 >k : string
 >l : any
@@ -37,7 +37,7 @@ function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boo
 >q : (string | number)[]
 
 function a4({x, a}: { x: number, a: number }) { }
->a4 : ({ x, a }: { x: number; a: number; }) => void
+>a4 : ({ x, a }: {    x: number;    a: number;}) => void
 >x : number
 >a : number
 >x : number
@@ -196,7 +196,7 @@ function c2({z = 10}) { }
 >10 : 10
 
 function c3({b}: { b: number|string} = { b: "hello" }) { }
->c3 : ({ b }?: { b: string | number; }) => void
+>c3 : ({ b }?: {    b: number | string;}) => void
 >b : string | number
 >b : string | number
 >{ b: "hello" } : { b: string; }
@@ -381,12 +381,12 @@ function e1({x: number}) { }  // x has type any NOT number
 >number : any
 
 function e2({x}: { x: number }) { }  // x is type number
->e2 : ({ x }: { x: number; }) => void
+>e2 : ({ x }: {    x: number;}) => void
 >x : number
 >x : number
 
 function e3({x}: { x?: number }) { }  // x is an optional with type number
->e3 : ({ x }: { x?: number; }) => void
+>e3 : ({ x }: {    x?: number;}) => void
 >x : number
 >x : number
 
@@ -398,7 +398,7 @@ function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
 >any : any
 
 function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
->e5 : ({ x: [a, b, c] }: { x: [number, number, number]; }) => void
+>e5 : ({ x: [a, b, c] }: {    x: [number, number, number];}) => void
 >x : any
 >a : number
 >b : number

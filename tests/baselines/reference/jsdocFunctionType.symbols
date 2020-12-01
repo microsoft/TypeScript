@@ -141,3 +141,22 @@ var y3 = id2(E);
 >id2 : Symbol(id2, Decl(functions.js, 8, 53))
 >E : Symbol(E, Decl(functions.js, 59, 3))
 
+// Repro from #39229
+
+/**
+ * @type {(...args: [string, string] | [number, string, string]) => void}
+ */
+function foo(...args) {
+>foo : Symbol(foo, Decl(functions.js, 64, 16))
+>args : Symbol(args, Decl(functions.js, 71, 13))
+
+  args;
+>args : Symbol(args, Decl(functions.js, 71, 13))
+}
+
+foo('abc', 'def');
+>foo : Symbol(foo, Decl(functions.js, 64, 16))
+
+foo(42, 'abc', 'def');
+>foo : Symbol(foo, Decl(functions.js, 64, 16))
+

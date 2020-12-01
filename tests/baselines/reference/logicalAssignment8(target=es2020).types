@@ -1,0 +1,61 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment8.ts ===
+declare const bar: { value?: number[] } | undefined
+>bar : { value?: number[] | undefined; } | undefined
+>value : number[] | undefined
+
+function foo1(results: number[] | undefined) {
+>foo1 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results ||= bar?.value ?? []).push(100);
+>(results ||= bar?.value ?? []).push(100) : number
+>(results ||= bar?.value ?? []).push : (...items: number[]) => number
+>(results ||= bar?.value ?? []) : number[]
+>results ||= bar?.value ?? [] : number[]
+>results : number[] | undefined
+>bar?.value ?? [] : number[]
+>bar?.value : number[] | undefined
+>bar : { value?: number[] | undefined; } | undefined
+>value : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo2(results: number[] | undefined) {
+>foo2 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results ??= bar?.value ?? []).push(100);
+>(results ??= bar?.value ?? []).push(100) : number
+>(results ??= bar?.value ?? []).push : (...items: number[]) => number
+>(results ??= bar?.value ?? []) : number[]
+>results ??= bar?.value ?? [] : number[]
+>results : number[] | undefined
+>bar?.value ?? [] : number[]
+>bar?.value : number[] | undefined
+>bar : { value?: number[] | undefined; } | undefined
+>value : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo3(results: number[] | undefined) {
+>foo3 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results &&= bar?.value ?? []).push(100);
+>(results &&= bar?.value ?? []).push(100) : number
+>(results &&= bar?.value ?? []).push : (...items: number[]) => number
+>(results &&= bar?.value ?? []) : number[] | undefined
+>results &&= bar?.value ?? [] : number[] | undefined
+>results : number[] | undefined
+>bar?.value ?? [] : number[]
+>bar?.value : number[] | undefined
+>bar : { value?: number[] | undefined; } | undefined
+>value : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}

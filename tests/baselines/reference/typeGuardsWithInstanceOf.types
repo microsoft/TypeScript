@@ -2,10 +2,10 @@
 interface I { global: string; }
 >global : string
 
-var result: I;
+var result!: I;
 >result : I
 
-var result2: I;
+var result2!: I;
 >result2 : I
 
 if (!(result instanceof RegExp)) {
@@ -26,3 +26,62 @@ if (!(result instanceof RegExp)) {
 >result : never
 >global : any
 }
+
+// Repro from #31155
+
+interface OnChanges {
+    onChanges(changes: Record<string, unknown>): void
+>onChanges : (changes: Record<string, unknown>) => void
+>changes : Record<string, unknown>
+}
+interface Validator {
+    validate(): null | Record<string, unknown>;
+>validate : () => null | Record<string, unknown>
+>null : null
+}
+
+class C {
+>C : C
+
+    validate() {
+>validate : () => {}
+
+        return {}
+>{} : {}
+    }
+}
+
+function foo() {
+>foo : () => void
+
+    let v: Validator & Partial<OnChanges> = null as any;
+>v : Validator & Partial<OnChanges>
+>null as any : any
+>null : null
+
+    if (v instanceof C) {
+>v instanceof C : boolean
+>v : Validator & Partial<OnChanges>
+>C : typeof C
+
+        v // Validator & Partial<OnChanges> & C
+>v : Validator & Partial<OnChanges> & C
+    }
+    v // Validator & Partial<OnChanges> via subtype reduction
+>v : Validator & Partial<OnChanges>
+
+    if (v.onChanges) {
+>v.onChanges : ((changes: Record<string, unknown>) => void) | undefined
+>v : Validator & Partial<OnChanges>
+>onChanges : ((changes: Record<string, unknown>) => void) | undefined
+
+        v.onChanges({});
+>v.onChanges({}) : void
+>v.onChanges : (changes: Record<string, unknown>) => void
+>v : Validator & Partial<OnChanges>
+>onChanges : (changes: Record<string, unknown>) => void
+>{} : {}
+    }
+}
+
+

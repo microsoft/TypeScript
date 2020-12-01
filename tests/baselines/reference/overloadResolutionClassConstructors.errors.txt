@@ -6,14 +6,14 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(60,9): error TS2558: Expected 3 type arguments, but got 1.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(61,9): error TS2558: Expected 3 type arguments, but got 2.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(65,9): error TS2558: Expected 3 type arguments, but got 4.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(73,25): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(73,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(74,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(75,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(79,9): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(80,9): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(79,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(80,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(84,9): error TS2344: Type 'boolean' does not satisfy the constraint 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(87,9): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(88,15): error TS2345: Argument of type 'true' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(87,9): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(88,15): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(96,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(98,18): error TS2339: Property 'blah' does not exist on type 'string'.
 
@@ -105,7 +105,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     new fn4<string, number>('', 3);
     new fn4<string, number>(3, ''); // Error
                             ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4<number, string>('', 3); // Error
             ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
@@ -117,10 +117,10 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     new fn4('', 3);
     new fn4(3, ''); // Error
             ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4(3, undefined); // Error
             ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new fn4('', null);
     
     // Generic overloads with constraints called with type arguments that do not satisfy the constraints
@@ -131,10 +131,10 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     // Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
     new fn4(true, null); // Error
             ~~~~
-!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
     new fn4(null, true); // Error
                   ~~~~
-!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
     
     // Non - generic overloads where contextual typing of function arguments has errors
     class fn5 {

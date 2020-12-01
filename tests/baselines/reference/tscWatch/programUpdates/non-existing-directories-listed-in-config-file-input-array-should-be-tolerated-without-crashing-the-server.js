@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/file1.ts]
 let t = 10;
 
@@ -22,13 +22,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/a/b/tsconfig.json'. Specified 'include' paths were '["app/*","test/**/*","something"]' and 'exclude' paths were '[]'.
-
 
 [[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
 
@@ -36,6 +35,7 @@ Output::
 
 Program root files: []
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
 Program files::
 
 No cached semantic diagnostics in the builder::
@@ -57,3 +57,4 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/something","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

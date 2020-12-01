@@ -45,7 +45,7 @@ class NumCoercible {
  * Return the min and max simultaneously.
  */
 export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
->extent : <T extends Numeric>(array: (string | number | boolean | Date | T)[]) => [string | number | boolean | Date | T, string | number | boolean | Date | T] | [undefined, undefined]
+>extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
 >array : (string | number | boolean | Date | T)[]
 
     return [undefined, undefined];

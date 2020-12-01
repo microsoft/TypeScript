@@ -23,12 +23,12 @@ export class ObjectTypeComposer<TSource, TContext> {
 >ObjectTypeComposer : ObjectTypeComposer<TSource, TContext>
 
   public setFields(fields: ObjMapReadOnly<Resolver>): this;
->setFields : (fields: Readonly<{ [key: string]: Readonly<Resolver>; }>) => this
+>setFields : (fields: ObjMapReadOnly<Resolver>) => this
 >fields : Readonly<{ [key: string]: Readonly<Resolver>; }>
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
->addResolver : <TResolverSource>(opts: { type?: Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>>; }) => this
->opts : { type?: Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>>; }
+>addResolver : <TResolverSource>(opts: {    type?: Thunk<ComposeOutputTypeDefinition>;}) => this
+>opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >type : Thunk<Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>>
 }
 
@@ -47,8 +47,8 @@ export class Resolver {
   ): void;
 
   public wrapType(cb: () => ComposeOutputTypeDefinition): void;
->wrapType : (cb: () => Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>) => void
->cb : () => Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>
+>wrapType : (cb: () => ComposeOutputTypeDefinition) => void
+>cb : () => ComposeOutputTypeDefinition
 }
 
 

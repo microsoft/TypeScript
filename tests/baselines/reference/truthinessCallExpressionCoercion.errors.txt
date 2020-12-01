@@ -3,9 +3,11 @@ tests/cases/compiler/truthinessCallExpressionCoercion.ts(18,9): error TS2774: Th
 tests/cases/compiler/truthinessCallExpressionCoercion.ts(36,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion.ts(50,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion.ts(66,13): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(76,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion.ts(82,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 
 
-==== tests/cases/compiler/truthinessCallExpressionCoercion.ts (5 errors) ====
+==== tests/cases/compiler/truthinessCallExpressionCoercion.ts (7 errors) ====
     function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
         if (required) { // error
             ~~~~~~~~
@@ -89,3 +91,31 @@ tests/cases/compiler/truthinessCallExpressionCoercion.ts(66,13): error TS2774: T
         }
     }
     
+    // Test for GH-35557 where ids were not assigned for a symbol.
+    function A(stats: StatsBase<any>) {
+        if (stats.isDirectory) { // err
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+            console.log(`[Directory] ${stats.ctime}`)
+        }
+    }
+    
+    function B(a: Nested, b: Nested) {
+        if (a.stats.isDirectory) { // err
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+            b.stats.isDirectory(); 
+        }
+        if (a.stats.isDirectory) { // ok
+            a.stats.isDirectory();
+        }
+    } 
+    
+    interface StatsBase<T> {
+        isDirectory(): boolean;
+        ctime: number;
+    }
+    
+    interface Nested {
+        stats: StatsBase<any>;
+    }

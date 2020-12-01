@@ -23,6 +23,6 @@ declare module ng {
 
     interface IQService {
         all(promises: IPromise < any > []): IPromise<
->all : (promises: any[]) => any
+>all : (promises: IPromise<any>[]) => any
 >promises : any[]
 

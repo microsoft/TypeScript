@@ -1,0 +1,28 @@
+=== tests/cases/conformance/salsa/assignmentToVoidZero1.js ===
+// #38552
+exports.y = exports.x = void 0;
+>exports.y = exports.x = void 0 : undefined
+>exports.y : number
+>exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero1")
+>y : number
+>exports.x = void 0 : undefined
+>exports.x : number
+>exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero1")
+>x : number
+>void 0 : undefined
+>0 : 0
+
+exports.x = 1;
+>exports.x = 1 : 1
+>exports.x : number
+>exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero1")
+>x : number
+>1 : 1
+
+exports.y = 2;
+>exports.y = 2 : 2
+>exports.y : number
+>exports : typeof import("tests/cases/conformance/salsa/assignmentToVoidZero1")
+>y : number
+>2 : 2
+

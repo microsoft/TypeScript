@@ -49,6 +49,21 @@ function checksPropertyAccess() {
 
     // ok
     x.foo.bar ? x.foo.bar : undefined;
+
+    var chrome = {
+        platformKeys: {
+            subtleCrypto() {
+                return {
+                    sign() {},
+                    exportKey() { return true }
+                }
+            }
+        }
+    }
+    // ok
+    if (chrome.platformKeys.subtleCrypto().exportKey) {
+        chrome.platformKeys.subtleCrypto().exportKey
+    }
 }
 
 class Foo {
@@ -64,5 +79,10 @@ class Foo {
 
         // ok
         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+
+        // ok
+        if (this.isUser) {
+            this.isUser();
+        }
     }
 }

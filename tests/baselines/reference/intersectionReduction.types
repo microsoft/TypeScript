@@ -183,7 +183,7 @@ type E = { kind: 'e', foo: unknown };
 >foo : unknown
 
 declare function f10<T>(x: { foo: T }): T;
->f10 : <T>(x: { foo: T; }) => T
+>f10 : <T>(x: {    foo: T;}) => T
 >x : { foo: T; }
 >foo : T
 
@@ -283,8 +283,8 @@ t2 = t1;
 // Repro from #36736
 
 const f1 = (t: "a" | ("b" & "c")): "a" => t;
->f1 : (t: "a") => "a"
->(t: "a" | ("b" & "c")): "a" => t : (t: "a") => "a"
+>f1 : (t: "a" | ("b" & "c")) => "a"
+>(t: "a" | ("b" & "c")): "a" => t : (t: "a" | ("b" & "c")) => "a"
 >t : "a"
 >t : "a"
 
@@ -296,22 +296,84 @@ type Container<Type extends string> = {
 }
 
 const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t;
->f2 : (t: Container<"a">) => Container<"a">
->(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a">) => Container<"a">
+>f2 : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
+>(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
 >t : Container<"a">
 >t : Container<"a">
 
 const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
->f3 : (t: Container<"a">) => Container<"a">
->(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a">) => Container<"a">
+>f3 : (t: Container<"a"> | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => Container<"a">
+>(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => Container<"a">
 >t : Container<"a">
 >dataB : boolean
 >t : Container<"a">
 
 const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
->f4 : (t: number) => number
->(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number) => number
+>f4 : (t: number | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => number
+>(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | (Container<"b"> & {    dataB: boolean;} & Container<"a">)) => number
 >t : number
 >dataB : boolean
 >t : number
+
+// Repro from #38549
+
+interface A2 {
+    kind: "A";
+>kind : "A"
+
+    a: number;
+>a : number
+}
+
+interface B2 {
+    kind: "B";
+>kind : "B"
+
+    b: number;
+>b : number
+}
+
+declare const shouldBeB: (A2 | B2) & B2;
+>shouldBeB : B2
+
+const b: B2 = shouldBeB; // works
+>b : B2
+>shouldBeB : B2
+
+function inGeneric<T extends A2 | B2>(alsoShouldBeB: T & B2) {
+>inGeneric : <T extends A2 | B2>(alsoShouldBeB: T & B2) => void
+>alsoShouldBeB : T & B2
+
+    const b: B2 = alsoShouldBeB;
+>b : B2
+>alsoShouldBeB : T & B2
+}
+
+// Repro from #38542
+
+interface ABI {
+    kind: 'a' | 'b';
+>kind : "a" | "b"
+}
+
+declare class CA { kind: 'a'; a: string; x: number };
+>CA : CA
+>kind : "a"
+>a : string
+>x : number
+
+declare class CB { kind: 'b'; b: string; y: number };
+>CB : CB
+>kind : "b"
+>b : string
+>y : number
+
+function bar<T extends CA | CB>(x: T & CA) {
+>bar : <T extends CA | CB>(x: T & CA) => void
+>x : T & CA
+
+    let ab: ABI = x;
+>ab : ABI
+>x : T & CA
+}
 

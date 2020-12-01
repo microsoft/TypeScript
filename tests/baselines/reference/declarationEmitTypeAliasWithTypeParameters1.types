@@ -6,8 +6,8 @@ export type Foo<Y> = Bar<any, Y>;
 >Foo : Bar<any, Y>
 
 export const y = (x: Foo<string>) => 1
->y : (x: Bar<any, string>) => number
->(x: Foo<string>) => 1 : (x: Bar<any, string>) => number
+>y : (x: Foo<string>) => number
+>(x: Foo<string>) => 1 : (x: Foo<string>) => number
 >x : Bar<any, string>
 >1 : 1
 

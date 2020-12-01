@@ -1,0 +1,18 @@
+tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts(10,3): error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'.
+
+
+==== tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts (1 errors) ====
+    type Selector<S, R> = (state: S) => R;
+    
+    declare function createStructuredSelector<S, T>(
+      selectors: {[K in keyof T]: Selector<S, T[K]>},
+    ): Selector<S, T>;
+    
+    const editable = () => ({});
+    
+    const mapStateToProps = createStructuredSelector({
+      editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
+      ~~~~~~~~
+!!! error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'.
+!!! related TS6500 tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts:10:3: The expected type comes from property 'editable' which is declared here on type '{ editable: Selector<unknown, {}>; }'
+    });

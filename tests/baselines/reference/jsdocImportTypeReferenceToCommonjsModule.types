@@ -11,7 +11,7 @@ export = config;
 === tests/cases/conformance/jsdoc/test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
->demo : (a: { fix: boolean; }) => void
+>demo : (a: import('./ex')) => void
 >a : { fix: boolean; }
 
     a.fix

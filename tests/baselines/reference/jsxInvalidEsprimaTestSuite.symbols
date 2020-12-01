@@ -22,14 +22,9 @@ No type information for this code.=== tests/cases/conformance/jsx/7.tsx ===
 
 === tests/cases/conformance/jsx/8.tsx ===
 <a:b></b>;
->b : Symbol(b, Decl(8.tsx, 0, 3))
-
-=== tests/cases/conformance/jsx/9.tsx ===
+No type information for this code.=== tests/cases/conformance/jsx/9.tsx ===
 <a:b.c></a:b.c>;
->b : Symbol(b, Decl(9.tsx, 0, 3))
->c : Symbol(c, Decl(9.tsx, 0, 5))
-
-=== tests/cases/conformance/jsx/10.tsx ===
+No type information for this code.=== tests/cases/conformance/jsx/10.tsx ===
 <a.b:c></a.b:c>;
 >c : Symbol(c, Decl(10.tsx, 0, 5))
 
@@ -50,7 +45,7 @@ No type information for this code.=== tests/cases/conformance/jsx/17.tsx ===
 >b : Symbol(b, Decl(17.tsx, 0, 2))
 
 === tests/cases/conformance/jsx/18.tsx ===
-var x = <div>one</div><div>two</div>;;
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
 >x : Symbol(x, Decl(18.tsx, 0, 3), Decl(19.tsx, 0, 3))
 
 === tests/cases/conformance/jsx/19.tsx ===

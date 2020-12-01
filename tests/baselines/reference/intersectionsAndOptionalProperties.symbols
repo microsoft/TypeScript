@@ -62,3 +62,12 @@ function foo(v: From) {
 >field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))
 }
 
+// Repro from #38348
+
+const yy: number[] & [number, ...number[]] = [1];
+>yy : Symbol(yy, Decl(intersectionsAndOptionalProperties.ts, 24, 5))
+
+const xx: [number, ...number[]] = yy;
+>xx : Symbol(xx, Decl(intersectionsAndOptionalProperties.ts, 25, 5))
+>yy : Symbol(yy, Decl(intersectionsAndOptionalProperties.ts, 24, 5))
+

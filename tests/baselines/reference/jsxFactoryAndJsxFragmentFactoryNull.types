@@ -1,0 +1,20 @@
+=== tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryNull.tsx ===
+declare var h: any;
+>h : any
+
+<></>;
+><></> : error
+
+<><span>1</span><><span>2.1</span><span>2.2</span></></>;
+><><span>1</span><><span>2.1</span><span>2.2</span></></> : error
+><span>1</span> : error
+>span : any
+>span : any
+><><span>2.1</span><span>2.2</span></> : error
+><span>2.1</span> : error
+>span : any
+>span : any
+><span>2.2</span> : error
+>span : any
+>span : any
+

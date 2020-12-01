@@ -20,6 +20,20 @@ class C {
 >this : this
 >bar : string
 
+    quench = this.m1() // ok
+>quench : void
+>this.m1() : void
+>this.m1 : () => void
+>this : this
+>m1 : () => void
+
+    quanch = this.m3() // should error
+>quanch : void
+>this.m3() : void
+>this.m3 : () => void
+>this : this
+>m3 : () => void
+
     m1() {
 >m1 : () => void
 
@@ -28,6 +42,10 @@ class C {
 >this : this
 >foo : string
     }
+    m3 = function() { }
+>m3 : () => void
+>function() { } : () => void
+
     constructor(public foo: string) {}
 >foo : string
 

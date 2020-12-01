@@ -6,15 +6,24 @@ declare var dec: any;
 >dec : Symbol(dec, Decl(a.ts, 0, 11))
 >A : Symbol(A, Decl(a.ts, 0, 21))
 
+    #x: number = 1;
+>#x : Symbol(A.#x, Decl(a.ts, 1, 21))
+
+    async f() { this.#x = await this.#x; }
+>f : Symbol(A.f, Decl(a.ts, 2, 19))
+>this.#x : Symbol(A.#x, Decl(a.ts, 1, 21))
+>this : Symbol(A, Decl(a.ts, 0, 21))
+>this.#x : Symbol(A.#x, Decl(a.ts, 1, 21))
+>this : Symbol(A, Decl(a.ts, 0, 21))
 }
 
 const o = { a: 1 };
->o : Symbol(o, Decl(a.ts, 5, 5))
->a : Symbol(a, Decl(a.ts, 5, 11))
+>o : Symbol(o, Decl(a.ts, 6, 5))
+>a : Symbol(a, Decl(a.ts, 6, 11))
 
 const y = { ...o };
->y : Symbol(y, Decl(a.ts, 6, 5))
->o : Symbol(o, Decl(a.ts, 5, 5))
+>y : Symbol(y, Decl(a.ts, 7, 5))
+>o : Symbol(o, Decl(a.ts, 6, 5))
 
 === tests/cases/compiler/tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
@@ -53,4 +62,10 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >generator : Symbol(generator, Decl(tslib.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export declare function __classPrivateFieldGet(): any;
+>__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, --, --))
+
+export declare function __classPrivateFieldSet(): any;
+>__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, --, --))
 

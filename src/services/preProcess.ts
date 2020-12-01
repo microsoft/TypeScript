@@ -101,6 +101,21 @@ namespace ts {
                     return true;
                 }
                 else {
+                    if (token === SyntaxKind.TypeKeyword) {
+                        const skipTypeKeyword = scanner.lookAhead(() => {
+                            const token = scanner.scan();
+                            return token !== SyntaxKind.FromKeyword && (
+                                token === SyntaxKind.AsteriskToken ||
+                                token === SyntaxKind.OpenBraceToken ||
+                                token === SyntaxKind.Identifier ||
+                                isKeyword(token)
+                            );
+                        });
+                        if (skipTypeKeyword) {
+                            token = nextToken();
+                        }
+                    }
+
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
                         token = nextToken();
                         if (token === SyntaxKind.FromKeyword) {
@@ -176,6 +191,16 @@ namespace ts {
             if (token === SyntaxKind.ExportKeyword) {
                 markAsExternalModuleIfTopLevel();
                 token = nextToken();
+                if (token === SyntaxKind.TypeKeyword) {
+                    const skipTypeKeyword = scanner.lookAhead(() => {
+                        const token = scanner.scan();
+                        return token === SyntaxKind.AsteriskToken ||
+                            token === SyntaxKind.OpenBraceToken;
+                    });
+                    if (skipTypeKeyword) {
+                        token = nextToken();
+                    }
+                }
                 if (token === SyntaxKind.OpenBraceToken) {
                     token = nextToken();
                     // consume "{ a as B, c, d as D}" clauses
@@ -208,6 +233,16 @@ namespace ts {
                 }
                 else if (token === SyntaxKind.ImportKeyword) {
                     token = nextToken();
+                    if (token === SyntaxKind.TypeKeyword) {
+                        const skipTypeKeyword = scanner.lookAhead(() => {
+                            const token = scanner.scan();
+                            return token === SyntaxKind.Identifier ||
+                                isKeyword(token);
+                        });
+                        if (skipTypeKeyword) {
+                            token = nextToken();
+                        }
+                    }
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
                         token = nextToken();
                         if (token === SyntaxKind.EqualsToken) {
