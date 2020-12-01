@@ -27448,9 +27448,9 @@ namespace ts {
                 const oldCandidateForArgumentArityError = candidateForArgumentArityError;
                 const oldCandidateForTypeArgumentError = candidateForTypeArgumentError;
 
-                const declCount = length(failed.declaration?.symbol.declarations);
-                const isOverload = declCount > 1;
-                const implDecl = isOverload ? find(failed.declaration?.symbol.declarations || emptyArray, d => isFunctionLikeDeclaration(d) && nodeIsPresent(d.body)) : undefined;
+                const failedSignatureDeclarations = failed.declaration?.symbol?.declarations || emptyArray;
+                const isOverload = failedSignatureDeclarations.length > 1;
+                const implDecl = isOverload ? find(failedSignatureDeclarations, d => isFunctionLikeDeclaration(d) && nodeIsPresent(d.body)) : undefined;
                 if (implDecl) {
                     const candidate = getSignatureFromDeclaration(implDecl as FunctionLikeDeclaration);
                     const isSingleNonGenericCandidate = !candidate.typeParameters;
