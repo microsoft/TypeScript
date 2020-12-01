@@ -2824,7 +2824,8 @@ namespace ts {
             }
             pos = writeTokenText(token, writer, pos);
             if (isSimilarNode && contextNode.end !== pos) {
-                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+                const isJsxExprContex = contextNode.kind === SyntaxKind.JsxExpression;
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContex, /*forceNoNewline*/ isJsxExprContex);
             }
             return pos;
         }
@@ -3378,8 +3379,8 @@ namespace ts {
         }
 
         function emitJsxExpression(node: JsxExpression) {
-            if (node.expression) {
-                writePunctuation("{");
+            if (node.expression || (!commentsDisabled && !nodeIsSynthesized(node) && getTextOfNode(node).length > 2 && getTextOfNode(node).indexOf("/*") > -1)) { // preserve empty expressions if they contain comments!
+                emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
                 emit(node.dotDotDotToken);
                 emitExpression(node.expression);
                 writePunctuation("}");
@@ -5230,21 +5231,25 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean, forceNoNewline?: boolean) {
             if (commentsDisabled) {
                 return;
             }
             enterComment();
-            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition);
             exitComment();
         }
 
-        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+        function emitTrailingCommentOfPositionNoNewline(commentPos: number, commentEnd: number) {
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
             emitPos(commentPos);
             writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
             emitPos(commentEnd);
+        }
+
+        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            emitTrailingCommentOfPositionNoNewline(commentPos, commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();

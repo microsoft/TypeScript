@@ -1,0 +1,24 @@
+=== tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx ===
+// file is interntionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
+namespace JSX {
+>JSX : Symbol(JSX, Decl(commentsOnJSXExpressionsArePreserved.tsx, 0, 0))
+
+    interface IntrsinsicElements { [index: string]: any }
+>IntrsinsicElements : Symbol(IntrsinsicElements, Decl(commentsOnJSXExpressionsArePreserved.tsx, 1, 15))
+>index : Symbol(index, Decl(commentsOnJSXExpressionsArePreserved.tsx, 2, 36))
+
+    type JSXElement = any;
+>JSXElement : Symbol(JSXElement, Decl(commentsOnJSXExpressionsArePreserved.tsx, 2, 57))
+}
+class Component {
+>Component : Symbol(Component, Decl(commentsOnJSXExpressionsArePreserved.tsx, 4, 1))
+
+    render() {
+>render : Symbol(Component.render, Decl(commentsOnJSXExpressionsArePreserved.tsx, 5, 17))
+
+        return <div>
+            {/* missing */}
+            {null/* preserved */}
+        </div>;
+    }
+}

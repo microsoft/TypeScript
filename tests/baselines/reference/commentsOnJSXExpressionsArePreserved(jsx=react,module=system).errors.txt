@@ -1,0 +1,19 @@
+tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx(8,17): error TS2304: Cannot find name 'React'.
+
+
+==== tests/cases/compiler/commentsOnJSXExpressionsArePreserved.tsx (1 errors) ====
+    // file is interntionally not a module - this tests for a crash in the module/system transforms alongside the `react-jsx` and `react-jsxdev` outputs
+    namespace JSX {
+        interface IntrsinsicElements { [index: string]: any }
+        type JSXElement = any;
+    }
+    class Component {
+        render() {
+            return <div>
+                    ~~~
+!!! error TS2304: Cannot find name 'React'.
+                {/* missing */}
+                {null/* preserved */}
+            </div>;
+        }
+    }
