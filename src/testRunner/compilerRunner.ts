@@ -141,7 +141,7 @@ namespace Harness {
         private justName: string;
         private configuredName: string;
         private lastUnit: TestCaseParser.TestUnitData;
-        private harnessSettings: TestCaseParser.CompilerSettings;
+        private harnessSettings: TestCaseParser.CompilerSettings & Compiler.HarnessOptions;
         private hasNonDtsFiles: boolean;
         private result: compiler.CompilationResult;
         private options: ts.CompilerOptions;
