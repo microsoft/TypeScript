@@ -923,7 +923,7 @@ namespace Harness {
             Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
         }
 
-        function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
+        function fileOutput(file: documents.TextDocument, harnessSettings: HarnessOptions): string {
             const fileName = harnessSettings.fullEmitPaths ? Utils.removeTestPathPrefixes(file.file) : ts.getBaseFileName(file.file);
             return "//// [" + fileName + "]\r\n" + Utils.removeTestPathPrefixes(file.text);
         }
