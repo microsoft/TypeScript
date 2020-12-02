@@ -586,7 +586,7 @@ namespace ts {
 
                 return function (d, b) {
                     if (typeof b !== "function" && b !== null)
-                        throw new TypeError("Class extends value " + b + " is not a constructor or null");
+                        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
                     extendStatics(d, b);
                     function __() { this.constructor = d; }
                     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
