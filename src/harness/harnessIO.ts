@@ -292,13 +292,12 @@ namespace Harness {
             baselineFile?: string;
             libFiles?: string;
             noTypesAndSymbols?: boolean;
+            currentDirectory?: string;
+            fullEmitPaths?: boolean;
         }
 
-        // Ensure that each value has a corresponding property in HarnessOptions
-        type ValidOption = keyof HarnessOptions | keyof ts.CompilerOptions;
-
         // Additional options not already in ts.optionDeclarations
-        const harnessOptionDeclarations: Array<ts.CommandLineOption & { name: ValidOption }> = [
+        const harnessOptionDeclarations: ts.CommandLineOption[] = [
             { name: "allowNonTsExtensions", type: "boolean" },
             { name: "useCaseSensitiveFileNames", type: "boolean" },
             { name: "baselineFile", type: "string" },
