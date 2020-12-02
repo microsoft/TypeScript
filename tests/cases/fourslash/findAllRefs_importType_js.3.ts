@@ -4,8 +4,8 @@
 // @checkJs: true
 
 // @Filename: /a.js
-/////**/module.exports = class C {};
-////module.exports.D = class D {};
+////module.exports = class C {};
+////module.exports.D = class /**/D {};
 
 // @Filename: /b.js
 /////** @type {import("./a")} */
