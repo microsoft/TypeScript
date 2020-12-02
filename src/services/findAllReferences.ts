@@ -1240,8 +1240,13 @@ namespace ts.FindAllReferences {
             }
         }
 
-        export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker, cb: (call: CallExpression) => void): void {
-            if (!signature.name || !isIdentifier(signature.name)) return;
+        export function someSignatureUsage(
+            signature: SignatureDeclaration,
+            sourceFiles: readonly SourceFile[],
+            checker: TypeChecker,
+            cb: (name: Identifier, call?: CallExpression) => boolean
+        ): boolean {
+            if (!signature.name || !isIdentifier(signature.name)) return false;
 
             const symbol = Debug.checkDefined(checker.getSymbolAtLocation(signature.name));
 
@@ -1249,14 +1254,16 @@ namespace ts.FindAllReferences {
                 for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
                     if (!isIdentifier(name) || name === signature.name || name.escapedText !== signature.name.escapedText) continue;
                     const called = climbPastPropertyAccess(name);
-                    const call = called.parent;
-                    if (!isCallExpression(call) || call.expression !== called) continue;
+                    const call = isCallExpression(called.parent) && called.parent.expression === called ? called.parent : undefined;
                     const referenceSymbol = checker.getSymbolAtLocation(name);
                     if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
-                        cb(call);
+                        if (cb(name, call)) {
+                            return true;
+                        }
                     }
                 }
             }
+            return false;
         }
 
         function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {

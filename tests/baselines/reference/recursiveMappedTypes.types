@@ -119,7 +119,7 @@ export interface ListWidget {
 >"collapsable" : boolean
 
     "each": Child<ListWidget>;
->"each" : Child<ListWidget>
+>"each" : any
 }
 
 type ListChild = Child<ListWidget>

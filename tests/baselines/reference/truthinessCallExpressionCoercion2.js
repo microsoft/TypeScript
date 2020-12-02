@@ -7,7 +7,7 @@ declare class B {
     static from(): string;
 }
 
-function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
+function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
     // error
     required1 && console.log('required');
 
@@ -40,6 +40,14 @@ function test(required1: () => boolean, required2: () => boolean, optional?: () 
 
     // error
     required1 && required2 && required1() && console.log('foo');
+
+    // error
+    if (required1 && b) {
+    }
+    // ok
+    if (required1 && b) {
+        required1()
+    }
 }
 
 function checksConsole() {
@@ -107,7 +115,7 @@ class Foo {
 
 
 //// [truthinessCallExpressionCoercion2.js]
-function test(required1, required2, optional) {
+function test(required1, required2, b, optional) {
     // error
     required1 && console.log('required');
     // error
@@ -130,6 +138,13 @@ function test(required1, required2, optional) {
     [].forEach(function (f) { return f && f.apply(parent, []); });
     // error
     required1 && required2 && required1() && console.log('foo');
+    // error
+    if (required1 && b) {
+    }
+    // ok
+    if (required1 && b) {
+        required1();
+    }
 }
 function checksConsole() {
     // error
