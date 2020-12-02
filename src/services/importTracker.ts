@@ -135,7 +135,9 @@ namespace ts.FindAllReferences {
 
                         case SyntaxKind.ImportType:
                             // Only check for typeof import('xyz')
-                            if (direct.isTypeOf && !direct.qualifier && isExported(direct)) addIndirectUser(direct.getSourceFile(), /** addTransitiveDependencies */ true);
+                            if (direct.isTypeOf && !direct.qualifier && isExported(direct)) {
+                                addIndirectUser(direct.getSourceFile(), /** addTransitiveDependencies */ true);
+                            }
                             directImports.push(direct);
                             break;
 
