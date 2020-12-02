@@ -1149,7 +1149,7 @@ namespace ts {
             // If there was no super() call found, consider all statements to be in the main 'body'
             if (!originalSuperStatement) {
                 return {
-                    bodyStatements: originalBodyStatements,
+                    bodyStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length)),
                     existingPrologue,
                     preSuperStatements: [],
                 };
