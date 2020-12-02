@@ -138,9 +138,9 @@ function fn12() { }
 var cls = /** @class */ (function () {
     function cls() {
     }
-    var proto_1 = cls.prototype;
-    proto_1.f = function () { };
-    proto_1.g = function () { };
+    var cls_prototype = cls.prototype;
+    cls_prototype.f = function () { };
+    cls_prototype.g = function () { };
     return cls;
 }());
 //Function overloads with differing export

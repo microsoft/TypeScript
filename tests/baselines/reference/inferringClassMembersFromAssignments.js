@@ -153,8 +153,8 @@ var C = /** @class */ (function () {
         }
         this.inMultiple = 0;
     }
-    var proto_1 = C.prototype;
-    proto_1.method = function () {
+    var C_prototype = C.prototype;
+    C_prototype.method = function () {
         var _this = this;
         if (Math.random()) {
             this.inMethod = 0;
@@ -175,7 +175,7 @@ var C = /** @class */ (function () {
             }
         };
     };
-    proto_1.get = function () {
+    C_prototype.get = function () {
         if (Math.random()) {
             this.inGetter = 0;
         }
@@ -185,7 +185,7 @@ var C = /** @class */ (function () {
         this.inMultiple = false;
         this.inMultipleMethods = false;
     };
-    proto_1.set = function () {
+    C_prototype.set = function () {
         if (Math.random()) {
             this.inSetter = 0;
         }

@@ -70,8 +70,8 @@ var C3 = /** @class */ (function () {
 var C5 = /** @class */ (function () {
     function C5() {
     }
-    var proto_1 = C5.prototype;
-    proto_1.foo = function () {
+    var C5_prototype = C5.prototype;
+    C5_prototype.foo = function () {
         var _this = this;
         var f1 = function (x) { return _this; };
         var f2 = function (x) { return _this; };
@@ -83,7 +83,7 @@ var C5 = /** @class */ (function () {
             return g(_this);
         };
     };
-    proto_1.bar = function () {
+    C5_prototype.bar = function () {
         var x1 = undefined;
         var x2 = undefined;
     };

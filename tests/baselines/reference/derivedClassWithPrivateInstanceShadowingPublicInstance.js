@@ -49,11 +49,11 @@ var __extends = (this && this.__extends) || (function () {
 var Base = /** @class */ (function () {
     function Base() {
     }
-    var proto_1 = Base.prototype;
-    proto_1.fn = function () {
+    var Base_prototype = Base.prototype;
+    Base_prototype.fn = function () {
         return '';
     };
-    Object.defineProperty(proto_1, "a", {
+    Object.defineProperty(Base_prototype, "a", {
         get: function () { return 1; },
         set: function (v) { },
         enumerable: false,
@@ -67,11 +67,11 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_2 = Derived.prototype;
-    proto_2.fn = function () {
+    var Derived_prototype = Derived.prototype;
+    Derived_prototype.fn = function () {
         return '';
     };
-    Object.defineProperty(proto_2, "a", {
+    Object.defineProperty(Derived_prototype, "a", {
         get: function () { return 1; },
         set: function (v) { },
         enumerable: false,

@@ -57,9 +57,9 @@ var Test;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.getX = function () { return this.x; };
-    proto_1.clone = function (other) {
+    var C_prototype = C.prototype;
+    C_prototype.getX = function () { return this.x; };
+    C_prototype.clone = function (other) {
         this.x = other.x;
     };
     return C;

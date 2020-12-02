@@ -30,6 +30,7 @@ var X = /** @class */ (function () {
 var After = /** @class */ (function () {
     function After() {
     }
+    var After_prototype = After.prototype;
     After.method = function () { };
     ;
     After.data = 12;

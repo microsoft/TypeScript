@@ -1094,9 +1094,9 @@ var N;
 var normalC = (function () {
     function normalC() {
     }
-    var proto_1 = normalC.prototype;
-    proto_1.method = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var normalC_prototype = normalC.prototype;
+    normalC_prototype.method = function () { };
+    Object.defineProperty(normalC_prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
         enumerable: false,
@@ -1190,7 +1190,7 @@ var C = (function () {
 //# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.js.map]
-{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../first/first_PART1.ts","../first/first_part2.ts","../first/first_part3.ts","../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../first/first_PART1.ts","../first/first_part2.ts","../first/first_part3.ts","../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"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"}
 
 //// [/src/2/second-output.js.map.baseline.txt]
 ===================================================================
@@ -1491,62 +1491,61 @@ sourceFile:../second/second_part1.ts
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->constructor() { 
 2 >    }
 1->Emitted(16, 5) Source(14, 35) + SourceIndex(3)
 2 >Emitted(16, 6) Source(14, 36) + SourceIndex(3)
 ---
->>>    var proto_1 = normalC.prototype;
->>>    proto_1.method = function () { };
+>>>    var normalC_prototype = normalC.prototype;
+>>>    normalC_prototype.method = function () { };
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^
-4 >                     ^^^^^^^^^^^^^^
-5 >                                   ^
-6 >                                    ^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                            ^^^
+4 >                               ^^^^^^^^^^^^^^
+5 >                                             ^
+6 >                                              ^^^^^^->
 1->
   >    /*@internal*/ prop: string;
   >    /*@internal*/ 
 2 >    method
-3 >                  
-4 >                     method() { 
-5 >                                   }
+3 >                            
+4 >                               method() { 
+5 >                                             }
 1->Emitted(18, 5) Source(16, 19) + SourceIndex(3)
-2 >Emitted(18, 19) Source(16, 25) + SourceIndex(3)
-3 >Emitted(18, 22) Source(16, 19) + SourceIndex(3)
-4 >Emitted(18, 36) Source(16, 30) + SourceIndex(3)
-5 >Emitted(18, 37) Source(16, 31) + SourceIndex(3)
+2 >Emitted(18, 29) Source(16, 25) + SourceIndex(3)
+3 >Emitted(18, 32) Source(16, 19) + SourceIndex(3)
+4 >Emitted(18, 46) Source(16, 30) + SourceIndex(3)
+5 >Emitted(18, 47) Source(16, 31) + SourceIndex(3)
 ---
->>>    Object.defineProperty(proto_1, "c", {
+>>>    Object.defineProperty(normalC_prototype, "c", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^
-4 >                                      ^^^->
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >    /*@internal*/ 
 2 >    get 
 3 >                          c
 1->Emitted(19, 5) Source(17, 19) + SourceIndex(3)
 2 >Emitted(19, 27) Source(17, 23) + SourceIndex(3)
-3 >Emitted(19, 39) Source(17, 24) + SourceIndex(3)
+3 >Emitted(19, 49) Source(17, 24) + SourceIndex(3)
 ---
 >>>        get: function () { return 10; },
-1->^^^^^^^^^^^^^
+1 >^^^^^^^^^^^^^
 2 >             ^^^^^^^^^^^^^^
 3 >                           ^^^^^^^
 4 >                                  ^^
 5 >                                    ^
 6 >                                     ^
 7 >                                      ^
-1->
+1 >
 2 >             get c() { 
 3 >                           return 
 4 >                                  10
 5 >                                    ;
 6 >                                      
 7 >                                      }
-1->Emitted(20, 14) Source(17, 19) + SourceIndex(3)
+1 >Emitted(20, 14) Source(17, 19) + SourceIndex(3)
 2 >Emitted(20, 28) Source(17, 29) + SourceIndex(3)
 3 >Emitted(20, 35) Source(17, 36) + SourceIndex(3)
 4 >Emitted(20, 37) Source(17, 38) + SourceIndex(3)
@@ -2800,7 +2799,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 110,
-          "end": 3181,
+          "end": 3211,
           "kind": "text"
         }
       ]
@@ -2881,7 +2880,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3181)
+text: (110-3211)
 var N;
 (function (N) {
     function f() {
@@ -2892,9 +2891,9 @@ var N;
 var normalC = (function () {
     function normalC() {
     }
-    var proto_1 = normalC.prototype;
-    proto_1.method = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var normalC_prototype = normalC.prototype;
+    normalC_prototype.method = function () { };
+    Object.defineProperty(normalC_prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
         enumerable: false,
@@ -3747,9 +3746,9 @@ var N;
 var normalC = (function () {
     function normalC() {
     }
-    var proto_1 = normalC.prototype;
-    proto_1.method = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var normalC_prototype = normalC.prototype;
+    normalC_prototype.method = function () { };
+    Object.defineProperty(normalC_prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
         enumerable: false,
@@ -3845,7 +3844,7 @@ c.doSomething();
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"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"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -4146,62 +4145,61 @@ sourceFile:../../../second/second_part1.ts
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->constructor() { 
 2 >    }
 1->Emitted(16, 5) Source(14, 35) + SourceIndex(3)
 2 >Emitted(16, 6) Source(14, 36) + SourceIndex(3)
 ---
->>>    var proto_1 = normalC.prototype;
->>>    proto_1.method = function () { };
+>>>    var normalC_prototype = normalC.prototype;
+>>>    normalC_prototype.method = function () { };
 1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^
-4 >                     ^^^^^^^^^^^^^^
-5 >                                   ^
-6 >                                    ^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                            ^^^
+4 >                               ^^^^^^^^^^^^^^
+5 >                                             ^
+6 >                                              ^^^^^^->
 1->
   >    /*@internal*/ prop: string;
   >    /*@internal*/ 
 2 >    method
-3 >                  
-4 >                     method() { 
-5 >                                   }
+3 >                            
+4 >                               method() { 
+5 >                                             }
 1->Emitted(18, 5) Source(16, 19) + SourceIndex(3)
-2 >Emitted(18, 19) Source(16, 25) + SourceIndex(3)
-3 >Emitted(18, 22) Source(16, 19) + SourceIndex(3)
-4 >Emitted(18, 36) Source(16, 30) + SourceIndex(3)
-5 >Emitted(18, 37) Source(16, 31) + SourceIndex(3)
+2 >Emitted(18, 29) Source(16, 25) + SourceIndex(3)
+3 >Emitted(18, 32) Source(16, 19) + SourceIndex(3)
+4 >Emitted(18, 46) Source(16, 30) + SourceIndex(3)
+5 >Emitted(18, 47) Source(16, 31) + SourceIndex(3)
 ---
->>>    Object.defineProperty(proto_1, "c", {
+>>>    Object.defineProperty(normalC_prototype, "c", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^
-4 >                                      ^^^->
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >    /*@internal*/ 
 2 >    get 
 3 >                          c
 1->Emitted(19, 5) Source(17, 19) + SourceIndex(3)
 2 >Emitted(19, 27) Source(17, 23) + SourceIndex(3)
-3 >Emitted(19, 39) Source(17, 24) + SourceIndex(3)
+3 >Emitted(19, 49) Source(17, 24) + SourceIndex(3)
 ---
 >>>        get: function () { return 10; },
-1->^^^^^^^^^^^^^
+1 >^^^^^^^^^^^^^
 2 >             ^^^^^^^^^^^^^^
 3 >                           ^^^^^^^
 4 >                                  ^^
 5 >                                    ^
 6 >                                     ^
 7 >                                      ^
-1->
+1 >
 2 >             get c() { 
 3 >                           return 
 4 >                                  10
 5 >                                    ;
 6 >                                      
 7 >                                      }
-1->Emitted(20, 14) Source(17, 19) + SourceIndex(3)
+1 >Emitted(20, 14) Source(17, 19) + SourceIndex(3)
 2 >Emitted(20, 28) Source(17, 29) + SourceIndex(3)
 3 >Emitted(20, 35) Source(17, 36) + SourceIndex(3)
 4 >Emitted(20, 37) Source(17, 38) + SourceIndex(3)
@@ -5494,20 +5492,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3181,
+          "end": 3211,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3181,
+              "end": 3211,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3181,
-          "end": 3217,
+          "pos": 3211,
+          "end": 3247,
           "kind": "text"
         }
       ]
@@ -5542,9 +5540,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3181):: ../../../2/second-output.js texts:: 1
+prepend: (0-3211):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3181)
+text: (0-3211)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -5561,9 +5559,9 @@ var N;
 var normalC = (function () {
     function normalC() {
     }
-    var proto_1 = normalC.prototype;
-    proto_1.method = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var normalC_prototype = normalC.prototype;
+    normalC_prototype.method = function () { };
+    Object.defineProperty(normalC_prototype, "c", {
         get: function () { return 10; },
         set: function (val) { },
         enumerable: false,
@@ -5656,7 +5654,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3181-3217)
+text: (3211-3247)
 var c = new C();
 c.doSomething();
 

@@ -42,13 +42,13 @@ var B = /** @class */ (function (_super) {
     function B() {
         return _super.call(this) || this;
     }
-    var proto_1 = B.prototype;
-    proto_1.foo = function () {
+    var B_prototype = B.prototype;
+    B_prototype.foo = function () {
         return function () {
             _super.prototype.x;
         };
     };
-    proto_1.bar = function () {
+    B_prototype.bar = function () {
         return function () {
             _super.prototype["x"];
         };

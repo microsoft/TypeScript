@@ -37,14 +37,14 @@ var M;
         function C(x) {
             this.x = x;
         }
-        var proto_1 = C.prototype;
-        proto_1.works = function () {
+        var C_prototype = C.prototype;
+        C_prototype.works = function () {
             return ({ anything: 1 });
         };
-        proto_1.doesntWork = function () {
+        C_prototype.doesntWork = function () {
             return { anything: 1, oneI: this };
         };
-        proto_1.worksToo = function () {
+        C_prototype.worksToo = function () {
             return ({ oneI: this });
         };
         return C;

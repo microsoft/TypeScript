@@ -45,8 +45,8 @@ var C = /** @class */ (function (_super) {
         var ll = x * w;
         return _this;
     }
-    var proto_1 = C.prototype;
-    proto_1.liftxyz = function () { return x + z + this.y; };
-    proto_1.liftxylocllz = function () { return x + z + this.y + this.ll; };
+    var C_prototype = C.prototype;
+    C_prototype.liftxyz = function () { return x + z + this.y; };
+    C_prototype.liftxylocllz = function () { return x + z + this.y + this.ll; };
     return C;
 }(B));

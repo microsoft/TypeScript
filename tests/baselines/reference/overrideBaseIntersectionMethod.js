@@ -72,14 +72,14 @@ var Foo = /** @class */ (function (_super) {
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = Foo.prototype;
-    proto_1.calculate = function () {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.calculate = function () {
         return this.x + this.y;
     };
-    proto_1.getLocation = function () {
+    Foo_prototype.getLocation = function () {
         return _super.prototype.getLocation.call(this);
     };
-    proto_1.whereAmI = function () {
+    Foo_prototype.whereAmI = function () {
         return this.getLocation();
     };
     return Foo;

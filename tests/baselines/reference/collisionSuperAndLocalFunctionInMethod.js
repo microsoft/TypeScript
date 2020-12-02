@@ -47,12 +47,12 @@ function _super() {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    proto_1.x = function () {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.x = function () {
         function _super() {
         }
     };
-    proto_1._super = function () {
+    Foo_prototype._super = function () {
     };
     return Foo;
 }());
@@ -61,12 +61,12 @@ var b = /** @class */ (function (_super_1) {
     function b() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
-    var proto_2 = b.prototype;
-    proto_2.foo = function () {
+    var b_prototype = b.prototype;
+    b_prototype.foo = function () {
         function _super() {
         }
     };
-    proto_2._super = function () {
+    b_prototype._super = function () {
     };
     return b;
 }(Foo));
@@ -75,14 +75,14 @@ var c = /** @class */ (function (_super_1) {
     function c() {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
-    var proto_3 = c.prototype;
-    proto_3.foo = function () {
+    var c_prototype = c.prototype;
+    c_prototype.foo = function () {
         var x = function () {
             function _super() {
             }
         };
     };
-    proto_3._super = function () {
+    c_prototype._super = function () {
     };
     return c;
 }(Foo));

@@ -44,7 +44,7 @@ sourceFile:out-flag.ts
 >>>    }
 1->^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->class MyClass
   >{
   >    // my function comments
@@ -62,27 +62,27 @@ sourceFile:out-flag.ts
 1->Emitted(5, 5) Source(16, 1) + SourceIndex(0)
 2 >Emitted(5, 6) Source(16, 2) + SourceIndex(0)
 ---
->>>    var proto_1 = MyClass.prototype;
+>>>    var MyClass_prototype = MyClass.prototype;
 >>>    // my function comments
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                           ^^^^^^^->
+3 >                           ^^^^^^^^^^^^^^^^^->
 1->
 2 >    // my function comments
 1->Emitted(7, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(7, 28) Source(6, 28) + SourceIndex(0)
 ---
->>>    proto_1.Count = function () {
+>>>    MyClass_prototype.Count = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^
-3 >                 ^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
 1->
   >    public 
 2 >    Count
-3 >                 
+3 >                           
 1->Emitted(8, 5) Source(7, 12) + SourceIndex(0)
-2 >Emitted(8, 18) Source(7, 17) + SourceIndex(0)
-3 >Emitted(8, 21) Source(7, 5) + SourceIndex(0)
+2 >Emitted(8, 28) Source(7, 17) + SourceIndex(0)
+3 >Emitted(8, 31) Source(7, 5) + SourceIndex(0)
 ---
 >>>        return 42;
 1 >^^^^^^^^
@@ -103,31 +103,31 @@ sourceFile:out-flag.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    }
 1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
 ---
->>>    proto_1.SetCount = function (value) {
+>>>    MyClass_prototype.SetCount = function (value) {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^
-3 >                    ^^^
-4 >                       ^^^^^^^^^^
-5 >                                 ^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^^
+4 >                                 ^^^^^^^^^^
+5 >                                           ^^^^^
 1->
   >
   >    public 
 2 >    SetCount
-3 >                    
-4 >                       public SetCount(
-5 >                                 value: number
+3 >                              
+4 >                                 public SetCount(
+5 >                                           value: number
 1->Emitted(11, 5) Source(12, 12) + SourceIndex(0)
-2 >Emitted(11, 21) Source(12, 20) + SourceIndex(0)
-3 >Emitted(11, 24) Source(12, 5) + SourceIndex(0)
-4 >Emitted(11, 34) Source(12, 21) + SourceIndex(0)
-5 >Emitted(11, 39) Source(12, 34) + SourceIndex(0)
+2 >Emitted(11, 31) Source(12, 20) + SourceIndex(0)
+3 >Emitted(11, 34) Source(12, 5) + SourceIndex(0)
+4 >Emitted(11, 44) Source(12, 21) + SourceIndex(0)
+5 >Emitted(11, 49) Source(12, 34) + SourceIndex(0)
 ---
 >>>        //
 1 >^^^^^^^^

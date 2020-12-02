@@ -79,20 +79,20 @@ var __extends = (this && this.__extends) || (function () {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    proto_1.a = function () {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.a = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    proto_1.b = function (_super) {
+    Foo_prototype.b = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Object.defineProperty(proto_1, "c", {
+    Object.defineProperty(Foo_prototype, "c", {
         set: function (_super) {
         },
         enumerable: false,
@@ -110,20 +110,20 @@ var Foo2 = /** @class */ (function (_super_1) {
         };
         return _this;
     }
-    var proto_2 = Foo2.prototype;
-    proto_2.x = function () {
+    var Foo2_prototype = Foo2.prototype;
+    Foo2_prototype.x = function () {
         var _this = this;
         var lamda = function (_super) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    proto_2.y = function (_super) {
+    Foo2_prototype.y = function (_super) {
         var _this = this;
         var lambda = function () {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
-    Object.defineProperty(proto_2, "z", {
+    Object.defineProperty(Foo2_prototype, "z", {
         set: function (_super) {
         },
         enumerable: false,

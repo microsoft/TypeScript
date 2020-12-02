@@ -76,13 +76,13 @@ var __extends = (this && this.__extends) || (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "X", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "X", {
         get: function () { return 1; },
         enumerable: false,
         configurable: true
     });
-    proto_1.foo = function () {
+    C_prototype.foo = function () {
         return 1;
     };
     Object.defineProperty(C, "Y", {
@@ -102,15 +102,15 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_2 = D.prototype;
-    Object.defineProperty(proto_2, "X", {
+    var D_prototype = D.prototype;
+    Object.defineProperty(D_prototype, "X", {
         get: function () {
             return null;
         },
         enumerable: false,
         configurable: true
     });
-    proto_2.foo = function () {
+    D_prototype.foo = function () {
         return 1;
     };
     Object.defineProperty(D, "Y", {
@@ -131,13 +131,13 @@ var E = /** @class */ (function (_super) {
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_3 = E.prototype;
-    Object.defineProperty(proto_3, "X", {
+    var E_prototype = E.prototype;
+    Object.defineProperty(E_prototype, "X", {
         get: function () { return ''; },
         enumerable: false,
         configurable: true
     });
-    proto_3.foo = function () {
+    E_prototype.foo = function () {
         return '';
     };
     Object.defineProperty(E, "Y", {

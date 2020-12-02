@@ -180,11 +180,11 @@ function checksPropertyAccess() {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    proto_1.required = function () {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.required = function () {
         return true;
     };
-    proto_1.test = function () {
+    Foo_prototype.test = function () {
         // error
         this.required && console.log('required');
         // error

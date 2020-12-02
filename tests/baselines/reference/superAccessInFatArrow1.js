@@ -44,10 +44,10 @@ var test;
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        var proto_1 = B.prototype;
-        proto_1.bar = function (callback) {
+        var B_prototype = B.prototype;
+        B_prototype.bar = function (callback) {
         };
-        proto_1.runme = function () {
+        B_prototype.runme = function () {
             var _this = this;
             this.bar(function () {
                 _super.prototype.foo.call(_this);

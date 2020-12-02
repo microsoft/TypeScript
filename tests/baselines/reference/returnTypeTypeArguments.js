@@ -101,24 +101,24 @@ function B3() { return null; }
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.A1 = function () { return null; };
-    proto_1.A2 = function () { return null; };
-    proto_1.A3 = function () { return null; };
-    proto_1.B1 = function () { return null; };
-    proto_1.B2 = function () { return null; };
-    proto_1.B3 = function () { return null; };
+    var C_prototype = C.prototype;
+    C_prototype.A1 = function () { return null; };
+    C_prototype.A2 = function () { return null; };
+    C_prototype.A3 = function () { return null; };
+    C_prototype.B1 = function () { return null; };
+    C_prototype.B2 = function () { return null; };
+    C_prototype.B3 = function () { return null; };
     return C;
 }());
 var D = /** @class */ (function () {
     function D() {
     }
-    var proto_2 = D.prototype;
-    proto_2.A2 = function () { return null; };
-    proto_2.A3 = function () { return null; };
-    proto_2.B1 = function () { return null; };
-    proto_2.B2 = function () { return null; };
-    proto_2.B3 = function () { return null; };
+    var D_prototype = D.prototype;
+    D_prototype.A2 = function () { return null; };
+    D_prototype.A3 = function () { return null; };
+    D_prototype.B1 = function () { return null; };
+    D_prototype.B2 = function () { return null; };
+    D_prototype.B3 = function () { return null; };
     return D;
 }());
 var Y = /** @class */ (function () {

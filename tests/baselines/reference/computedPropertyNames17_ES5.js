@@ -14,8 +14,8 @@ var b;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, b, {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, b, {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
@@ -25,12 +25,12 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, [], {
+    Object.defineProperty(C_prototype, [], {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, {}, {
+    Object.defineProperty(C_prototype, {}, {
         set: function (v) { },
         enumerable: false,
         configurable: true
@@ -40,7 +40,7 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, null, {
+    Object.defineProperty(C_prototype, null, {
         set: function (v) { },
         enumerable: false,
         configurable: true

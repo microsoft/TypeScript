@@ -41,11 +41,11 @@ var DeclarationWithOne = /** @class */ (function () {
 var DeclarationWithTwo = /** @class */ (function () {
     function DeclarationWithTwo() {
     }
-    var proto_1 = DeclarationWithTwo.prototype;
-    proto_1.memberOne = function () {
+    var DeclarationWithTwo_prototype = DeclarationWithTwo.prototype;
+    DeclarationWithTwo_prototype.memberOne = function () {
         return this;
     };
-    proto_1.memberTwo = function () {
+    DeclarationWithTwo_prototype.memberTwo = function () {
         return this;
     };
     return DeclarationWithTwo;
@@ -53,11 +53,11 @@ var DeclarationWithTwo = /** @class */ (function () {
 var Expression = /** @class */ (function () {
     function Expression() {
     }
-    var proto_2 = Expression.prototype;
-    proto_2.memberOne = function () {
+    var proto_1 = Expression.prototype;
+    proto_1.memberOne = function () {
         return this;
     };
-    proto_2.memberTwo = function () {
+    proto_1.memberTwo = function () {
         return this;
     };
     return Expression;

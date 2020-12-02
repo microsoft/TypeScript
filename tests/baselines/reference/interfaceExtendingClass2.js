@@ -19,9 +19,9 @@ interface I2 extends Foo { // error
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    proto_1.y = function () { };
-    Object.defineProperty(proto_1, "Z", {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.y = function () { };
+    Object.defineProperty(Foo_prototype, "Z", {
         get: function () {
             return 1;
         },

@@ -223,6 +223,7 @@ var n1;
     var Foo = /** @class */ (function () {
         function Foo() {
         }
+        var Foo_prototype = Foo.prototype;
         Foo.f1 = function (x) { throw "wat"; };
         Foo.f2 = function (x) { throw "wat"; };
         ;

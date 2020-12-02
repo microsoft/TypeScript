@@ -115,13 +115,13 @@ var B = /** @class */ (function (_super) {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.f = function () {
+    var C_prototype = C.prototype;
+    C_prototype.f = function () {
         var x;
         var a = x['foo'](); // should be string
         return a + x.foo();
     };
-    proto_1.g = function (x) {
+    C_prototype.g = function (x) {
         var a = x['foo'](); // should be string
         return a + x.foo();
     };

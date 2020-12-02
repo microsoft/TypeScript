@@ -103,11 +103,11 @@ var c = (function () {
     function c() {
         this.b = 10;
     }
-    var proto_1 = c.prototype;
-    proto_1.myFoo = function () {
+    var c_prototype = c.prototype;
+    c_prototype.myFoo = function () {
         return this.b;
     };
-    Object.defineProperty(proto_1, "prop1", {
+    Object.defineProperty(c_prototype, "prop1", {
         get: function () {
             return this.b;
         },
@@ -117,7 +117,7 @@ var c = (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.foo1 = function (aOrb) {
+    c_prototype.foo1 = function (aOrb) {
         return aOrb.toString();
     };
     return c;

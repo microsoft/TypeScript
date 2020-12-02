@@ -123,14 +123,14 @@ var Dummy = /** @class */ (function () {
         var unused2 = 22;
         this.greeting = "Dummy Message";
     }
-    var proto_1 = Dummy.prototype;
-    proto_1.greeter = function (person) {
+    var Dummy_prototype = Dummy.prototype;
+    Dummy_prototype.greeter = function (person) {
         var unused = 20;
         this.usedPrivateFunction();
     };
-    proto_1.usedPrivateFunction = function () {
+    Dummy_prototype.usedPrivateFunction = function () {
     };
-    proto_1.unUsedPrivateFunction = function () {
+    Dummy_prototype.unUsedPrivateFunction = function () {
     };
     return Dummy;
 }());
@@ -143,11 +143,11 @@ var Validation;
     var LettersOnlyValidator = /** @class */ (function () {
         function LettersOnlyValidator() {
         }
-        var proto_2 = LettersOnlyValidator.prototype;
-        proto_2.isAcceptable = function (s2) {
+        var LettersOnlyValidator_prototype = LettersOnlyValidator.prototype;
+        LettersOnlyValidator_prototype.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
         };
-        proto_2.unUsedPrivateFunction = function () {
+        LettersOnlyValidator_prototype.unUsedPrivateFunction = function () {
         };
         return LettersOnlyValidator;
     }());

@@ -45,9 +45,9 @@ var __extends = (this && this.__extends) || (function () {
 var MyBase = /** @class */ (function () {
     function MyBase() {
     }
-    var proto_1 = MyBase.prototype;
-    proto_1.getValue = function () { return 1; };
-    Object.defineProperty(proto_1, "value", {
+    var MyBase_prototype = MyBase.prototype;
+    MyBase_prototype.getValue = function () { return 1; };
+    Object.defineProperty(MyBase_prototype, "value", {
         get: function () { return 1; },
         enumerable: false,
         configurable: true

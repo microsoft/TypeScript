@@ -127,14 +127,14 @@ var D = /** @class */ (function () {
 var E = /** @class */ (function () {
     function E() {
     }
-    var proto_1 = E.prototype;
-    proto_1.method = function () { };
-    Object.defineProperty(proto_1, "getter", {
+    var E_prototype = E.prototype;
+    E_prototype.method = function () { };
+    Object.defineProperty(E_prototype, "getter", {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "setter", {
+    Object.defineProperty(E_prototype, "setter", {
         set: function (a) { },
         enumerable: false,
         configurable: true

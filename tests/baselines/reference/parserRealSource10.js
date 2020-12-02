@@ -804,17 +804,17 @@ var TypeScript;
         function Token(tokenId) {
             this.tokenId = tokenId;
         }
-        var proto_1 = Token.prototype;
-        proto_1.toString = function () {
+        var Token_prototype = Token.prototype;
+        Token_prototype.toString = function () {
             return "token: " + this.tokenId + " " + this.getText() + " (" + TokenID._map[this.tokenId] + ")";
         };
-        proto_1.print = function (line, outfile) {
+        Token_prototype.print = function (line, outfile) {
             outfile.WriteLine(this.toString() + ",on line" + line);
         };
-        proto_1.getText = function () {
+        Token_prototype.getText = function () {
             return TypeScript.tokenTable[this.tokenId].text;
         };
-        proto_1.classification = function () {
+        Token_prototype.classification = function () {
             if (this.tokenId <= TokenID.LimKeyword) {
                 return TokenClass.Keyword;
             }
@@ -840,11 +840,11 @@ var TypeScript;
             _this.hasEmptyFraction = hasEmptyFraction;
             return _this;
         }
-        var proto_2 = NumberLiteralToken.prototype;
-        proto_2.getText = function () {
+        var NumberLiteralToken_prototype = NumberLiteralToken.prototype;
+        NumberLiteralToken_prototype.getText = function () {
             return this.hasEmptyFraction ? this.value.toString() + ".0" : this.value.toString();
         };
-        proto_2.classification = function () {
+        NumberLiteralToken_prototype.classification = function () {
             return TokenClass.Literal;
         };
         return NumberLiteralToken;
@@ -857,11 +857,11 @@ var TypeScript;
             _this.value = value;
             return _this;
         }
-        var proto_3 = StringLiteralToken.prototype;
-        proto_3.getText = function () {
+        var StringLiteralToken_prototype = StringLiteralToken.prototype;
+        StringLiteralToken_prototype.getText = function () {
             return this.value;
         };
-        proto_3.classification = function () {
+        StringLiteralToken_prototype.classification = function () {
             return TokenClass.Literal;
         };
         return StringLiteralToken;
@@ -875,11 +875,11 @@ var TypeScript;
             _this.hasEscapeSequence = hasEscapeSequence;
             return _this;
         }
-        var proto_4 = IdentifierToken.prototype;
-        proto_4.getText = function () {
+        var IdentifierToken_prototype = IdentifierToken.prototype;
+        IdentifierToken_prototype.getText = function () {
             return this.value;
         };
-        proto_4.classification = function () {
+        IdentifierToken_prototype.classification = function () {
             return TokenClass.Identifier;
         };
         return IdentifierToken;
@@ -892,11 +892,11 @@ var TypeScript;
             _this.value = value;
             return _this;
         }
-        var proto_5 = WhitespaceToken.prototype;
-        proto_5.getText = function () {
+        var WhitespaceToken_prototype = WhitespaceToken.prototype;
+        WhitespaceToken_prototype.getText = function () {
             return this.value;
         };
-        proto_5.classification = function () {
+        WhitespaceToken_prototype.classification = function () {
             return TokenClass.Whitespace;
         };
         return WhitespaceToken;
@@ -913,11 +913,11 @@ var TypeScript;
             _this.endsLine = endsLine;
             return _this;
         }
-        var proto_6 = CommentToken.prototype;
-        proto_6.getText = function () {
+        var CommentToken_prototype = CommentToken.prototype;
+        CommentToken_prototype.getText = function () {
             return this.value;
         };
-        proto_6.classification = function () {
+        CommentToken_prototype.classification = function () {
             return TokenClass.Comment;
         };
         return CommentToken;
@@ -930,11 +930,11 @@ var TypeScript;
             _this.regex = regex;
             return _this;
         }
-        var proto_7 = RegularExpressionLiteralToken.prototype;
-        proto_7.getText = function () {
+        var RegularExpressionLiteralToken_prototype = RegularExpressionLiteralToken.prototype;
+        RegularExpressionLiteralToken_prototype.getText = function () {
             return this.regex.toString();
         };
-        proto_7.classification = function () {
+        RegularExpressionLiteralToken_prototype.classification = function () {
             return TokenClass.Literal;
         };
         return RegularExpressionLiteralToken;

@@ -19,14 +19,14 @@ for (var v of new StringIterator) { }
 var StringIterator = /** @class */ (function () {
     function StringIterator() {
     }
-    var proto_1 = StringIterator.prototype;
-    proto_1.next = function () {
+    var StringIterator_prototype = StringIterator.prototype;
+    StringIterator_prototype.next = function () {
         return {
             done: true,
             value: ""
         };
     };
-    proto_1[Symbol.iterator] = function () {
+    StringIterator_prototype[Symbol.iterator] = function () {
         return this;
     };
     return StringIterator;

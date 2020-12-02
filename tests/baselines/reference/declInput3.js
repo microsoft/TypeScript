@@ -14,10 +14,10 @@ class bar {
 var bar = /** @class */ (function () {
     function bar() {
     }
-    var proto_1 = bar.prototype;
-    proto_1.f = function () { return ''; };
-    proto_1.g = function () { return { a: null, b: undefined, c: void 4 }; };
-    proto_1.h = function (x, y, z) {
+    var bar_prototype = bar.prototype;
+    bar_prototype.f = function () { return ''; };
+    bar_prototype.g = function () { return { a: null, b: undefined, c: void 4 }; };
+    bar_prototype.h = function (x, y, z) {
         if (x === void 0) { x = 4; }
         if (y === void 0) { y = null; }
         if (z === void 0) { z = ''; }

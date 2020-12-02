@@ -105,11 +105,11 @@ var M;
             function someInnerFunc() { return 2; }
             var someInnerVar = 3;
         }
-        var proto_1 = C.prototype;
-        proto_1.someMethodThatCallsAnOuterMethod = function () { return OuterInnerAlias.someExportedOuterInnerFunc(); };
-        proto_1.someMethodThatCallsAnInnerMethod = function () { return InnerMod.someExportedInnerFunc(); };
-        proto_1.someMethodThatCallsAnOuterInnerMethod = function () { return OuterMod.someExportedOuterFunc(); };
-        proto_1.someMethod = function () { return 0; };
+        var C_prototype = C.prototype;
+        C_prototype.someMethodThatCallsAnOuterMethod = function () { return OuterInnerAlias.someExportedOuterInnerFunc(); };
+        C_prototype.someMethodThatCallsAnInnerMethod = function () { return InnerMod.someExportedInnerFunc(); };
+        C_prototype.someMethodThatCallsAnOuterInnerMethod = function () { return OuterMod.someExportedOuterFunc(); };
+        C_prototype.someMethod = function () { return 0; };
         return C;
     }());
     M.C = C;

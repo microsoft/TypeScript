@@ -33,8 +33,8 @@ var strOrNum;
 var C1 = /** @class */ (function () {
     function C1() {
     }
-    var proto_1 = C1.prototype;
-    Object.defineProperty(proto_1, "pp3", {
+    var C1_prototype = C1.prototype;
+    Object.defineProperty(C1_prototype, "pp3", {
         // Inside public accessor getter
         get: function () {
             return strOrNum;
@@ -42,7 +42,7 @@ var C1 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.method = function () {
+    C1_prototype.method = function () {
         strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
         strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number

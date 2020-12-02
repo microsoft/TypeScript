@@ -13,10 +13,10 @@ var C = /** @class */ (function () {
     var _a;
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.bar = function () {
+    var C_prototype = C.prototype;
+    C_prototype.bar = function () {
         return 0;
     };
-    proto_1[(_a = {}, _a[this.bar()] = 1, _a)[0]] = function () { };
+    C_prototype[(_a = {}, _a[this.bar()] = 1, _a)[0]] = function () { };
     return C;
 }());

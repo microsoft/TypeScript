@@ -22,9 +22,9 @@ function f2(a, b) { return null; }
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.f = function () { };
-    proto_1.f2 = function (a, b) { return null; };
+    var C_prototype = C.prototype;
+    C_prototype.f = function () { };
+    C_prototype.f2 = function (a, b) { return null; };
     return C;
 }());
 var m = {

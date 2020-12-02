@@ -12,11 +12,11 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1["hello"] = function () {
+    var C_prototype = C.prototype;
+    C_prototype["hello"] = function () {
         debugger;
     };
-    Object.defineProperty(proto_1, "goodbye", {
+    Object.defineProperty(C_prototype, "goodbye", {
         get: function () {
             return 0;
         },

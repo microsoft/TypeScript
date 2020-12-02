@@ -120,9 +120,9 @@ var Foo = /** @class */ (function (_super) {
         _this.gar = 5;
         return _this;
     }
-    var proto_1 = Foo.prototype;
-    proto_1.bar = function () { return 0; };
-    proto_1.boo = function (x) { return x; };
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.bar = function () { return 0; };
+    Foo_prototype.boo = function (x) { return x; };
     Foo.statVal = 0;
     return Foo;
 }(Bar));

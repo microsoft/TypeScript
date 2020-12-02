@@ -24,8 +24,8 @@ var _this = 2;
 var a = /** @class */ (function () {
     function a() {
     }
-    var proto_1 = a.prototype;
-    proto_1.method1 = function () {
+    var a_prototype = a.prototype;
+    a_prototype.method1 = function () {
         return {
             doStuff: function (callback) { return function () {
                 var _this = 2;
@@ -33,7 +33,7 @@ var a = /** @class */ (function () {
             }; }
         };
     };
-    proto_1.method2 = function () {
+    a_prototype.method2 = function () {
         var _this = 2;
         return {
             doStuff: function (callback) { return function () {

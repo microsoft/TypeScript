@@ -341,22 +341,22 @@ function f24(x) {
 var Test = /** @class */ (function () {
     function Test() {
     }
-    var proto_1 = Test.prototype;
-    proto_1.fail = function (message) {
+    var Test_prototype = Test.prototype;
+    Test_prototype.fail = function (message) {
         throw new Error(message);
     };
-    proto_1.f1 = function (x) {
+    Test_prototype.f1 = function (x) {
         if (x === undefined)
             this.fail("undefined argument");
         x.length; // string
     };
-    proto_1.f2 = function (x) {
+    Test_prototype.f2 = function (x) {
         if (x >= 0)
             return x;
         this.fail("negative number");
         x; // Unreachable
     };
-    proto_1.f3 = function (x) {
+    Test_prototype.f3 = function (x) {
         x; // string
         this.fail();
         x; // Unreachable
@@ -474,11 +474,11 @@ var SuperThrowable = /** @class */ (function (_super) {
     function SuperThrowable() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_2 = SuperThrowable.prototype;
-    proto_2.err = function (msg) {
+    var SuperThrowable_prototype = SuperThrowable.prototype;
+    SuperThrowable_prototype.err = function (msg) {
         _super.prototype["throw"].call(this);
     };
-    proto_2.ok = function () {
+    SuperThrowable_prototype.ok = function () {
         this["throw"]();
     };
     return SuperThrowable;

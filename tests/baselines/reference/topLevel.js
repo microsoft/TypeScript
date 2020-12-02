@@ -33,13 +33,13 @@ var Point = /** @class */ (function () {
         this.x = x;
         this.y = y;
     }
-    var proto_1 = Point.prototype;
-    proto_1.move = function (xo, yo) {
+    var Point_prototype = Point.prototype;
+    Point_prototype.move = function (xo, yo) {
         this.x += xo;
         this.y += yo;
         return this;
     };
-    proto_1.toString = function () {
+    Point_prototype.toString = function () {
         return ("(" + this.x + "," + this.y + ")");
     };
     return Point;

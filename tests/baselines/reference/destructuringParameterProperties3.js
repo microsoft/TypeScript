@@ -41,14 +41,14 @@ var C1 = /** @class */ (function () {
             this.a = a || k;
         }
     }
-    var proto_1 = C1.prototype;
-    proto_1.getA = function () {
+    var C1_prototype = C1.prototype;
+    C1_prototype.getA = function () {
         return this.a;
     };
-    proto_1.getB = function () {
+    C1_prototype.getB = function () {
         return this.b;
     };
-    proto_1.getC = function () {
+    C1_prototype.getC = function () {
         return this.c;
     };
     return C1;

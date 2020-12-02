@@ -257,8 +257,8 @@ function foo2() {
 var A = /** @class */ (function () {
     function A() {
     }
-    var proto_1 = A.prototype;
-    proto_1.m1 = function () {
+    var A_prototype = A.prototype;
+    A_prototype.m1 = function () {
         var x = 1;
         use(x);
         var y = [1][0];
@@ -266,7 +266,7 @@ var A = /** @class */ (function () {
         var z = { a: 1 }.a;
         use(z);
     };
-    proto_1.m2 = function () {
+    A_prototype.m2 = function () {
         {
             var x_2 = 1;
             use(x_2);
@@ -282,8 +282,8 @@ var A = /** @class */ (function () {
 var B = /** @class */ (function () {
     function B() {
     }
-    var proto_2 = B.prototype;
-    proto_2.m1 = function () {
+    var B_prototype = B.prototype;
+    B_prototype.m1 = function () {
         var x = 1;
         use(x);
         var y = [1][0];
@@ -291,7 +291,7 @@ var B = /** @class */ (function () {
         var z = { a: 1 }.a;
         use(z);
     };
-    proto_2.m2 = function () {
+    B_prototype.m2 = function () {
         {
             var x_3 = 1;
             use(x_3);

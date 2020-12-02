@@ -193,11 +193,11 @@ var GetSetMonster = /** @class */ (function () {
         this.name = name;
         this._health = _health;
     }
-    var proto_1 = GetSetMonster.prototype;
-    proto_1.attack = function (target) {
+    var GetSetMonster_prototype = GetSetMonster.prototype;
+    GetSetMonster_prototype.attack = function (target) {
         // WScript.Echo("Attacks " + target);
     };
-    Object.defineProperty(proto_1, "isAlive", {
+    Object.defineProperty(GetSetMonster_prototype, "isAlive", {
         // The contextual keyword "get" followed by an identifier and
         // a curly body defines a getter in the same way that "get"
         // defines one in an object literal.
@@ -207,7 +207,7 @@ var GetSetMonster = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "health", {
+    Object.defineProperty(GetSetMonster_prototype, "health", {
         // Likewise, "set" can be used to define setters.
         set: function (value) {
             if (value < 0) {
@@ -267,10 +267,10 @@ var PrototypeMonster = /** @class */ (function () {
 var SuperParent = /** @class */ (function () {
     function SuperParent(a) {
     }
-    var proto_2 = SuperParent.prototype;
-    proto_2.b = function (b) {
+    var SuperParent_prototype = SuperParent.prototype;
+    SuperParent_prototype.b = function (b) {
     };
-    proto_2.c = function () {
+    SuperParent_prototype.c = function () {
     };
     return SuperParent;
 }());
@@ -279,11 +279,11 @@ var SuperChild = /** @class */ (function (_super) {
     function SuperChild() {
         return _super.call(this, 1) || this;
     }
-    var proto_3 = SuperChild.prototype;
-    proto_3.b = function () {
+    var SuperChild_prototype = SuperChild.prototype;
+    SuperChild_prototype.b = function () {
         _super.prototype.b.call(this, 'str');
     };
-    proto_3.c = function () {
+    SuperChild_prototype.c = function () {
         _super.prototype.c.call(this);
     };
     return SuperChild;
@@ -310,9 +310,9 @@ var Visibility = /** @class */ (function () {
         this.x = 1;
         this.y = 2;
     }
-    var proto_4 = Visibility.prototype;
-    proto_4.foo = function () { };
-    proto_4.bar = function () { };
+    var Visibility_prototype = Visibility.prototype;
+    Visibility_prototype.foo = function () { };
+    Visibility_prototype.bar = function () { };
     return Visibility;
 }());
 var BaseClassWithConstructor = /** @class */ (function () {

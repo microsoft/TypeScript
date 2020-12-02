@@ -53,38 +53,38 @@ var B = /** @class */ (function (_super) {
 var LanguageSpec_section_4_5_inference = /** @class */ (function () {
     function LanguageSpec_section_4_5_inference() {
     }
-    var proto_1 = LanguageSpec_section_4_5_inference.prototype;
-    Object.defineProperty(proto_1, "InferredGetterFromSetterAnnotation", {
+    var LanguageSpec_section_4_5_inference_prototype = LanguageSpec_section_4_5_inference.prototype;
+    Object.defineProperty(LanguageSpec_section_4_5_inference_prototype, "InferredGetterFromSetterAnnotation", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "InferredGetterFromSetterAnnotation_GetterFirst", {
+    Object.defineProperty(LanguageSpec_section_4_5_inference_prototype, "InferredGetterFromSetterAnnotation_GetterFirst", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "InferredFromGetter", {
+    Object.defineProperty(LanguageSpec_section_4_5_inference_prototype, "InferredFromGetter", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "InferredFromGetter_SetterFirst", {
+    Object.defineProperty(LanguageSpec_section_4_5_inference_prototype, "InferredFromGetter_SetterFirst", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "InferredSetterFromGetterAnnotation", {
+    Object.defineProperty(LanguageSpec_section_4_5_inference_prototype, "InferredSetterFromGetterAnnotation", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "InferredSetterFromGetterAnnotation_GetterFirst", {
+    Object.defineProperty(LanguageSpec_section_4_5_inference_prototype, "InferredSetterFromGetterAnnotation_GetterFirst", {
         get: function () { return new B(); },
         set: function (a) { },
         enumerable: false,

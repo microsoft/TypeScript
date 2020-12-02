@@ -22,10 +22,10 @@ var M;
             this.x = 1;
             this.y = 2;
         }
-        var proto_1 = Visibility.prototype;
-        proto_1.foo = function () { };
+        var Visibility_prototype = Visibility.prototype;
+        Visibility_prototype.foo = function () { };
         ;
-        proto_1.bar = function () { };
+        Visibility_prototype.bar = function () { };
         ;
         return Visibility;
     }());

@@ -15,9 +15,9 @@ var p3;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1[p1] = function () { };
-    proto_1[p2] = function () { };
-    proto_1[p3] = function () { };
+    var C_prototype = C.prototype;
+    C_prototype[p1] = function () { };
+    C_prototype[p2] = function () { };
+    C_prototype[p3] = function () { };
     return C;
 }());

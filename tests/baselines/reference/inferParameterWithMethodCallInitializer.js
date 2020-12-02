@@ -27,11 +27,11 @@ function getNumber() {
 var Example = /** @class */ (function () {
     function Example() {
     }
-    var proto_1 = Example.prototype;
-    proto_1.getNumber = function () {
+    var Example_prototype = Example.prototype;
+    Example_prototype.getNumber = function () {
         return 1;
     };
-    proto_1.doSomething = function (a) {
+    Example_prototype.doSomething = function (a) {
         if (a === void 0) { a = this.getNumber(); }
         return a;
     };

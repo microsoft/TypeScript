@@ -48,12 +48,12 @@ class a {
 var a = /** @class */ (function () {
     function a() {
     }
-    var proto_1 = a.prototype;
-    proto_1.b = function () {
+    var a_prototype = a.prototype;
+    a_prototype.b = function () {
     };
-    proto_1.b = function () {
+    a_prototype.b = function () {
     };
-    Object.defineProperty(proto_1, "x", {
+    Object.defineProperty(a_prototype, "x", {
         get: function () {
             return 10;
         },
@@ -62,7 +62,7 @@ var a = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "y", {
+    Object.defineProperty(a_prototype, "y", {
         get: function () {
             return "Hello";
         },
@@ -71,9 +71,9 @@ var a = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.z = function () {
+    a_prototype.z = function () {
     };
-    Object.defineProperty(proto_1, "z", {
+    Object.defineProperty(a_prototype, "z", {
         get: function () {
             return "Hello";
         },
@@ -82,7 +82,7 @@ var a = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "x2", {
+    Object.defineProperty(a_prototype, "x2", {
         get: function () {
             return 10;
         },
@@ -91,7 +91,7 @@ var a = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "z2", {
+    Object.defineProperty(a_prototype, "z2", {
         get: function () {
             return "Hello";
         },
@@ -100,7 +100,7 @@ var a = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.z2 = function () {
+    a_prototype.z2 = function () {
     };
     return a;
 }());

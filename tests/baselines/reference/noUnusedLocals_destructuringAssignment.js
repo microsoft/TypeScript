@@ -21,13 +21,13 @@ var C = /** @class */ (function () {
     function C() {
         this.x = 0;
     }
-    var proto_1 = C.prototype;
-    proto_1.m = function () {
+    var C_prototype = C.prototype;
+    C_prototype.m = function () {
         var x;
         (x = this.x);
         return x;
     };
-    proto_1.f = function () {
+    C_prototype.f = function () {
         var f;
         (f = this.f);
         return f;

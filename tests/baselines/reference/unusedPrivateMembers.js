@@ -68,10 +68,10 @@ class Test6 {
 var Test1 = /** @class */ (function () {
     function Test1() {
     }
-    var proto_1 = Test1.prototype;
-    proto_1.initializeInternal = function () {
+    var Test1_prototype = Test1.prototype;
+    Test1_prototype.initializeInternal = function () {
     };
-    proto_1.test = function () {
+    Test1_prototype.test = function () {
         var x = new Test1();
         x.initializeInternal();
     };
@@ -90,15 +90,15 @@ var Test2 = /** @class */ (function () {
 var Test3 = /** @class */ (function () {
     function Test3() {
     }
-    var proto_2 = Test3.prototype;
-    Object.defineProperty(proto_2, "x", {
+    var Test3_prototype = Test3.prototype;
+    Object.defineProperty(Test3_prototype, "x", {
         get: function () {
             return 0;
         },
         enumerable: false,
         configurable: true
     });
-    proto_2.test = function () {
+    Test3_prototype.test = function () {
         var x = new Test3();
         x.x;
     };
@@ -107,15 +107,15 @@ var Test3 = /** @class */ (function () {
 var Test4 = /** @class */ (function () {
     function Test4() {
     }
-    var proto_3 = Test4.prototype;
-    Object.defineProperty(proto_3, "x", {
+    var Test4_prototype = Test4.prototype;
+    Object.defineProperty(Test4_prototype, "x", {
         set: function (v) {
             v;
         },
         enumerable: false,
         configurable: true
     });
-    proto_3.test = function () {
+    Test4_prototype.test = function () {
         var x = new Test4();
         x.x;
     };
@@ -134,8 +134,8 @@ var Test6 = /** @class */ (function () {
     function Test6() {
         this.b = 0;
     }
-    var proto_4 = Test6.prototype;
-    Object.defineProperty(proto_4, "a", {
+    var Test6_prototype = Test6.prototype;
+    Object.defineProperty(Test6_prototype, "a", {
         get: function () {
             return 0;
         },
@@ -145,7 +145,7 @@ var Test6 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_4.test = function () {
+    Test6_prototype.test = function () {
         var x = new Test6();
         x.a++;
         x.b++;

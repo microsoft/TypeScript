@@ -36,12 +36,12 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 var D = /** @class */ (function () {
     function D() {
     }
-    var proto_1 = D.prototype;
-    proto_1.getData = function () {
+    var D_prototype = D.prototype;
+    D_prototype.getData = function () {
         var data = this.data;
         return typeof data === "string" ? data : data.join(" ");
     };
-    proto_1.getData1 = function () {
+    D_prototype.getData1 = function () {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
     };
     return D;

@@ -20,11 +20,11 @@ class None<T> implements IOption<T>{
 var None = /** @class */ (function () {
     function None() {
     }
-    var proto_1 = None.prototype;
-    proto_1.get = function () {
+    var None_prototype = None.prototype;
+    None_prototype.get = function () {
         throw null;
     };
-    proto_1.flatten = function () {
+    None_prototype.flatten = function () {
         return new None();
     };
     return None;

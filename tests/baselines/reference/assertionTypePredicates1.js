@@ -294,30 +294,30 @@ function f10(x) {
 var Test = /** @class */ (function () {
     function Test() {
     }
-    var proto_1 = Test.prototype;
-    proto_1.assert = function (value) {
+    var Test_prototype = Test.prototype;
+    Test_prototype.assert = function (value) {
         if (value)
             return;
         throw new Error();
     };
-    proto_1.isTest2 = function () {
+    Test_prototype.isTest2 = function () {
         return this instanceof Test2;
     };
-    proto_1.assertIsTest2 = function () {
+    Test_prototype.assertIsTest2 = function () {
         if (this instanceof Test2)
             return;
         throw new Error();
     };
-    proto_1.assertThis = function () {
+    Test_prototype.assertThis = function () {
         if (!this)
             return;
         throw new Error();
     };
-    proto_1.bar = function () {
+    Test_prototype.bar = function () {
         this.assertThis();
         this;
     };
-    proto_1.foo = function (x) {
+    Test_prototype.foo = function (x) {
         this.assert(typeof x === "string");
         x.length;
         if (this.isTest2()) {
@@ -326,7 +326,7 @@ var Test = /** @class */ (function () {
         this.assertIsTest2();
         this.z;
     };
-    proto_1.baz = function (x) {
+    Test_prototype.baz = function (x) {
         this.assert(false);
         x; // Unreachable
     };
@@ -346,12 +346,12 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_2 = Derived.prototype;
-    proto_2.foo = function (x) {
+    var Derived_prototype = Derived.prototype;
+    Derived_prototype.foo = function (x) {
         _super.prototype.assert.call(this, typeof x === "string");
         x.length;
     };
-    proto_2.baz = function (x) {
+    Derived_prototype.baz = function (x) {
         _super.prototype.assert.call(this, false);
         x; // Unreachable
     };

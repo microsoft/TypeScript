@@ -223,12 +223,12 @@ var c1 = /** @class */ (function () {
     /** Constructor method*/
     function c1() {
     }
-    var proto_1 = c1.prototype;
+    var c1_prototype = c1.prototype;
     /** sum with property*/
-    proto_1.p2 = function (/** number to add*/ b) {
+    c1_prototype.p2 = function (/** number to add*/ b) {
         return this.p1 + b;
     }; /* trailing comment of method*/
-    Object.defineProperty(proto_1, "p3", {
+    Object.defineProperty(c1_prototype, "p3", {
         /** getter property*/
         get: function () {
             return this.p2(this.p1);
@@ -243,10 +243,10 @@ var c1 = /** @class */ (function () {
         configurable: true
     });
     /** sum with property*/
-    proto_1.pp2 = function (/** number to add*/ b) {
+    c1_prototype.pp2 = function (/** number to add*/ b) {
         return this.p1 + b;
     }; // trailing comment of method
-    Object.defineProperty(proto_1, "pp3", {
+    Object.defineProperty(c1_prototype, "pp3", {
         /** getter property*/
         get: function () {
             return this.pp2(this.pp1);
@@ -274,10 +274,10 @@ var c1 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.nc_p2 = function (b) {
+    c1_prototype.nc_p2 = function (b) {
         return this.nc_p1 + b;
     };
-    Object.defineProperty(proto_1, "nc_p3", {
+    Object.defineProperty(c1_prototype, "nc_p3", {
         get: function () {
             return this.nc_p2(this.nc_p1);
         },
@@ -287,10 +287,10 @@ var c1 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.nc_pp2 = function (b) {
+    c1_prototype.nc_pp2 = function (b) {
         return this.nc_pp1 + b;
     };
-    Object.defineProperty(proto_1, "nc_pp3", {
+    Object.defineProperty(c1_prototype, "nc_pp3", {
         get: function () {
             return this.nc_pp2(this.nc_pp1);
         },
@@ -314,10 +314,10 @@ var c1 = /** @class */ (function () {
         configurable: true
     });
     // sum with property
-    proto_1.a_p2 = function (b) {
+    c1_prototype.a_p2 = function (b) {
         return this.a_p1 + b;
     };
-    Object.defineProperty(proto_1, "a_p3", {
+    Object.defineProperty(c1_prototype, "a_p3", {
         // getter property
         get: function () {
             return this.a_p2(this.a_p1);
@@ -330,10 +330,10 @@ var c1 = /** @class */ (function () {
         configurable: true
     });
     // sum with property
-    proto_1.a_pp2 = function (b) {
+    c1_prototype.a_pp2 = function (b) {
         return this.a_p1 + b;
     };
-    Object.defineProperty(proto_1, "a_pp3", {
+    Object.defineProperty(c1_prototype, "a_pp3", {
         // getter property
         get: function () {
             return this.a_pp2(this.a_pp1);
@@ -362,10 +362,10 @@ var c1 = /** @class */ (function () {
         configurable: true
     });
     /** sum with property */
-    proto_1.b_p2 = function (b) {
+    c1_prototype.b_p2 = function (b) {
         return this.b_p1 + b;
     };
-    Object.defineProperty(proto_1, "b_p3", {
+    Object.defineProperty(c1_prototype, "b_p3", {
         /** getter property */
         get: function () {
             return this.b_p2(this.b_p1);
@@ -378,10 +378,10 @@ var c1 = /** @class */ (function () {
         configurable: true
     });
     /** sum with property */
-    proto_1.b_pp2 = function (b) {
+    c1_prototype.b_pp2 = function (b) {
         return this.b_p1 + b;
     };
-    Object.defineProperty(proto_1, "b_pp3", {
+    Object.defineProperty(c1_prototype, "b_pp3", {
         /** getter property */
         get: function () {
             return this.b_pp2(this.b_pp1);
@@ -441,8 +441,8 @@ var cProperties = /** @class */ (function () {
         this.x = 10; /*trailing comment for property*/
         this.y = 10; // trailing comment of // style
     }
-    var proto_2 = cProperties.prototype;
-    Object.defineProperty(proto_2, "p1", {
+    var cProperties_prototype = cProperties.prototype;
+    Object.defineProperty(cProperties_prototype, "p1", {
         /** getter only property*/
         get: function () {
             return this.val;
@@ -451,14 +451,14 @@ var cProperties = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_2, "nc_p1", {
+    Object.defineProperty(cProperties_prototype, "nc_p1", {
         get: function () {
             return this.val;
         },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_2, "p2", {
+    Object.defineProperty(cProperties_prototype, "p2", {
         /**setter only property*/
         set: function (value) {
             this.val = value;
@@ -466,7 +466,7 @@ var cProperties = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_2, "nc_p2", {
+    Object.defineProperty(cProperties_prototype, "nc_p2", {
         set: function (value) {
             this.val = value;
         } /* trailing comment of setter only*/,

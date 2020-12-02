@@ -270,15 +270,15 @@ var D = /** @class */ (function () {
     function D(p1) {
         return true;
     }
-    var proto_1 = D.prototype;
-    Object.defineProperty(proto_1, "m1", {
+    var D_prototype = D.prototype;
+    Object.defineProperty(D_prototype, "m1", {
         get: function (p1) {
             return true;
         },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "m2", {
+    Object.defineProperty(D_prototype, "m2", {
         set: function (p1) {
             return true;
         },

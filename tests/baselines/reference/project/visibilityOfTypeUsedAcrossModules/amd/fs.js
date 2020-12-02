@@ -5,14 +5,14 @@ define(["require", "exports"], function (require, exports) {
     var RM = /** @class */ (function () {
         function RM() {
         }
-        var proto_1 = RM.prototype;
-        proto_1.getName = function () {
+        var RM_prototype = RM.prototype;
+        RM_prototype.getName = function () {
             return 'rm';
         };
-        proto_1.getDescription = function () {
+        RM_prototype.getDescription = function () {
             return "\t\t\tDelete file";
         };
-        proto_1.run = function (configuration) {
+        RM_prototype.run = function (configuration) {
             var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
         };
         return RM;

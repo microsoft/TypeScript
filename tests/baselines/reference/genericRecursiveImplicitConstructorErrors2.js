@@ -53,11 +53,11 @@ var TypeScript2;
     var PullSymbol = /** @class */ (function () {
         function PullSymbol(name, declKind) {
         }
-        var proto_1 = PullSymbol.prototype;
+        var PullSymbol_prototype = PullSymbol.prototype;
         // link methods
-        proto_1.addOutgoingLink = function (linkTo, kind) {
+        PullSymbol_prototype.addOutgoingLink = function (linkTo, kind) {
         };
-        proto_1.getType = function () {
+        PullSymbol_prototype.getType = function () {
             return undefined;
         };
         return PullSymbol;

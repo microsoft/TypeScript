@@ -877,7 +877,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 110,
-          "end": 3545,
+          "end": 3575,
           "kind": "text"
         }
       ]
@@ -953,7 +953,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (110-3545)
+text: (110-3575)
 var N;
 (function (N) {
     function f() {
@@ -964,9 +964,9 @@ var N;
 var normalC = /** @class */ (function () {
     /*@internal*/ function normalC() {
     }
-    var proto_1 = normalC.prototype;
-    /*@internal*/ proto_1.method = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var normalC_prototype = normalC.prototype;
+    /*@internal*/ normalC_prototype.method = function () { };
+    Object.defineProperty(normalC_prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
         enumerable: false,
@@ -1821,20 +1821,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3545,
+          "end": 3575,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3545,
+              "end": 3575,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3545,
-          "end": 3581,
+          "pos": 3575,
+          "end": 3611,
           "kind": "text"
         }
       ]
@@ -1869,9 +1869,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3545):: ../../../2/second-output.js texts:: 1
+prepend: (0-3575):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3545)
+text: (0-3575)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
@@ -1888,9 +1888,9 @@ var N;
 var normalC = /** @class */ (function () {
     /*@internal*/ function normalC() {
     }
-    var proto_1 = normalC.prototype;
-    /*@internal*/ proto_1.method = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var normalC_prototype = normalC.prototype;
+    /*@internal*/ normalC_prototype.method = function () { };
+    Object.defineProperty(normalC_prototype, "c", {
         /*@internal*/ get: function () { return 10; },
         /*@internal*/ set: function (val) { },
         enumerable: false,
@@ -1983,7 +1983,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3545-3581)
+text: (3575-3611)
 var c = new C();
 c.doSomething();
 

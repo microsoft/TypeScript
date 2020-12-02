@@ -22,21 +22,21 @@ var C = /** @class */ (function () {
     function C(t, z, x, y) {
         if (y === void 0) { y = "hello"; }
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function (x, t) {
+    var C_prototype = C.prototype;
+    C_prototype.foo = function (x, t) {
         if (t === void 0) { t = false; }
     };
-    proto_1.foo1 = function (x, t) {
+    C_prototype.foo1 = function (x, t) {
         if (t === void 0) { t = false; }
         var rest = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             rest[_i - 2] = arguments[_i];
         }
     };
-    proto_1.bar = function (t) {
+    C_prototype.bar = function (t) {
         if (t === void 0) { t = false; }
     };
-    proto_1.boo = function (t) {
+    C_prototype.boo = function (t) {
         if (t === void 0) { t = false; }
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {

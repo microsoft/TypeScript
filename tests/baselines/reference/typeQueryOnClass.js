@@ -64,7 +64,7 @@ var C = /** @class */ (function () {
         this.ia = 1;
         this.ib = function () { return _this.ia; };
     }
-    var proto_1 = C.prototype;
+    var C_prototype = C.prototype;
     C.foo = function (x) { };
     C.bar = function (x) { };
     Object.defineProperty(C, "sc", {
@@ -83,8 +83,8 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_1.baz = function (x) { return ''; };
-    Object.defineProperty(proto_1, "ic", {
+    C_prototype.baz = function (x) { return ''; };
+    Object.defineProperty(C_prototype, "ic", {
         get: function () {
             return 1;
         },
@@ -93,7 +93,7 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "id", {
+    Object.defineProperty(C_prototype, "id", {
         get: function () {
             return 1;
         },

@@ -14,9 +14,9 @@ var r2b = i.get(1);
 var BiMap = /** @class */ (function () {
     function BiMap() {
     }
-    var proto_1 = BiMap.prototype;
-    proto_1.get = function (key) { return null; };
-    proto_1.inverse = function () { return null; };
+    var BiMap_prototype = BiMap.prototype;
+    BiMap_prototype.get = function (key) { return null; };
+    BiMap_prototype.inverse = function () { return null; };
     return BiMap;
 }());
 var b = new BiMap();

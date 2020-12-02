@@ -218,17 +218,17 @@ var B = /** @class */ (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.explicitThis = function (m) {
+    var C_prototype = C.prototype;
+    C_prototype.explicitThis = function (m) {
         return this.n + m;
     };
-    proto_1.explicitC = function (m) {
+    C_prototype.explicitC = function (m) {
         return this.n + m;
     };
-    proto_1.explicitProperty = function (m) {
+    C_prototype.explicitProperty = function (m) {
         return this.n + m;
     };
-    proto_1.explicitVoid = function (m) {
+    C_prototype.explicitVoid = function (m) {
         return m + 1;
     };
     return C;
@@ -337,9 +337,9 @@ c.explicitVoid = function (n) { return n; };
 var Base1 = /** @class */ (function () {
     function Base1() {
     }
-    var proto_2 = Base1.prototype;
-    proto_2.polymorphic = function () { return this.x; };
-    proto_2.explicit = function () { return this.x; };
+    var Base1_prototype = Base1.prototype;
+    Base1_prototype.polymorphic = function () { return this.x; };
+    Base1_prototype.explicit = function () { return this.x; };
     Base1.explicitStatic = function () { return this.y; };
     return Base1;
 }());
@@ -353,9 +353,9 @@ var Derived1 = /** @class */ (function (_super) {
 var Base2 = /** @class */ (function () {
     function Base2() {
     }
-    var proto_3 = Base2.prototype;
-    proto_3.polymorphic = function () { return this.y; };
-    proto_3.explicit = function () { return this.x; };
+    var Base2_prototype = Base2.prototype;
+    Base2_prototype.polymorphic = function () { return this.y; };
+    Base2_prototype.explicit = function () { return this.x; };
     return Base2;
 }());
 var Derived2 = /** @class */ (function (_super) {

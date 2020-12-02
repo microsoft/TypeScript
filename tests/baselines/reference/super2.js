@@ -68,11 +68,11 @@ var __extends = (this && this.__extends) || (function () {
 var Base5 = /** @class */ (function () {
     function Base5() {
     }
-    var proto_1 = Base5.prototype;
-    proto_1.x = function () {
+    var Base5_prototype = Base5.prototype;
+    Base5_prototype.x = function () {
         return "BaseX";
     };
-    proto_1.y = function () {
+    Base5_prototype.y = function () {
         return "BaseY";
     };
     return Base5;
@@ -92,11 +92,11 @@ var SubSub5 = /** @class */ (function (_super) {
     function SubSub5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_2 = SubSub5.prototype;
-    proto_2.x = function () {
+    var SubSub5_prototype = SubSub5.prototype;
+    SubSub5_prototype.x = function () {
         return _super.prototype.x.call(this);
     };
-    proto_2.y = function () {
+    SubSub5_prototype.y = function () {
         return _super.prototype.y.call(this);
     };
     return SubSub5;

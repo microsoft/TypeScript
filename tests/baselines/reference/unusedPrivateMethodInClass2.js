@@ -15,12 +15,12 @@ class greeter {
 var greeter = /** @class */ (function () {
     function greeter() {
     }
-    var proto_1 = greeter.prototype;
-    proto_1.function1 = function () {
+    var greeter_prototype = greeter.prototype;
+    greeter_prototype.function1 = function () {
         var y = 10;
         y++;
     };
-    proto_1.function2 = function () {
+    greeter_prototype.function2 = function () {
         var y = 10;
         y++;
     };

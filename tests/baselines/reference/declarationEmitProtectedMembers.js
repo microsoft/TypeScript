@@ -67,11 +67,11 @@ var __extends = (this && this.__extends) || (function () {
 var C1 = /** @class */ (function () {
     function C1() {
     }
-    var proto_1 = C1.prototype;
-    proto_1.f = function () {
+    var C1_prototype = C1.prototype;
+    C1_prototype.f = function () {
         return this.x;
     };
-    Object.defineProperty(proto_1, "accessor", {
+    Object.defineProperty(C1_prototype, "accessor", {
         get: function () { return 0; },
         set: function (a) { },
         enumerable: false,

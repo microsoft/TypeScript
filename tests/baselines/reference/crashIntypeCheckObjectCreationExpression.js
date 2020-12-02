@@ -16,11 +16,11 @@ define(["require", "exports"], function (require, exports) {
     var BuildWorkspaceService = /** @class */ (function () {
         function BuildWorkspaceService() {
         }
-        var proto_1 = BuildWorkspaceService.prototype;
-        proto_1.injectRequestService = function (service) {
+        var BuildWorkspaceService_prototype = BuildWorkspaceService.prototype;
+        BuildWorkspaceService_prototype.injectRequestService = function (service) {
             this.injectBuildService(new X(service));
         };
-        proto_1.injectBuildService = function (service) {
+        BuildWorkspaceService_prototype.injectBuildService = function (service) {
         };
         return BuildWorkspaceService;
     }());

@@ -23,17 +23,17 @@ var a;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1[s] = function () { };
-    proto_1[n] = function () { };
+    var C_prototype = C.prototype;
+    C_prototype[s] = function () { };
+    C_prototype[n] = function () { };
     C[s + s] = function () { };
-    proto_1[s + n] = function () { };
-    proto_1[+s] = function () { };
+    C_prototype[s + n] = function () { };
+    C_prototype[+s] = function () { };
     C[""] = function () { };
-    proto_1[0] = function () { };
-    proto_1[a] = function () { };
+    C_prototype[0] = function () { };
+    C_prototype[a] = function () { };
     C[true] = function () { };
-    proto_1["hello bye"] = function () { };
+    C_prototype["hello bye"] = function () { };
     C["hello " + a + " bye"] = function () { };
     return C;
 }());

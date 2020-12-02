@@ -89,9 +89,9 @@ var y;
 var Base = /** @class */ (function () {
     function Base(a) {
     }
-    var proto_1 = Base.prototype;
-    proto_1.b = function (a) { };
-    Object.defineProperty(proto_1, "c", {
+    var Base_prototype = Base.prototype;
+    Base_prototype.b = function (a) { };
+    Object.defineProperty(Base_prototype, "c", {
         get: function () { return x; },
         set: function (v) { },
         enumerable: false,

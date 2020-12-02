@@ -53,10 +53,10 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = D.prototype;
-    proto_1.foo = function (x) { return x; };
-    proto_1.other = function (x) { return x; };
-    proto_1.bar = function () { };
+    var D_prototype = D.prototype;
+    D_prototype.foo = function (x) { return x; };
+    D_prototype.other = function (x) { return x; };
+    D_prototype.bar = function () { };
     return D;
 }(C));
 var c;

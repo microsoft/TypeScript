@@ -130,14 +130,14 @@ function d2(_a) {
 var C4 = /** @class */ (function () {
     function C4() {
     }
-    var proto_1 = C4.prototype;
-    proto_1.d3 = function (_a) {
+    var C4_prototype = C4.prototype;
+    C4_prototype.d3 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     }; // Error, binding pattern can't be optional in implementation signature
-    proto_1.d4 = function (_a) {
+    C4_prototype.d4 = function (_a) {
         var x = _a.x, y = _a.y, c = _a.c;
     };
-    proto_1.e0 = function (_a) {
+    C4_prototype.e0 = function (_a) {
         var a = _a[0], b = _a[1], q = _a[2];
     };
     return C4;

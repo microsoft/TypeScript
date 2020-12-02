@@ -121,14 +121,14 @@ var WrongTypeAccessorImpl2 = /** @class */ (function (_super) {
 var AbstractAccessorMismatch = /** @class */ (function () {
     function AbstractAccessorMismatch() {
     }
-    var proto_1 = AbstractAccessorMismatch.prototype;
-    Object.defineProperty(proto_1, "p1", {
+    var AbstractAccessorMismatch_prototype = AbstractAccessorMismatch.prototype;
+    Object.defineProperty(AbstractAccessorMismatch_prototype, "p1", {
         set: function (val) { },
         enumerable: false,
         configurable: true
     });
     ;
-    Object.defineProperty(proto_1, "p2", {
+    Object.defineProperty(AbstractAccessorMismatch_prototype, "p2", {
         get: function () { return "should work"; },
         enumerable: false,
         configurable: true

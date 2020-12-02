@@ -307,11 +307,11 @@ function f12() {
 var C2 = /** @class */ (function () {
     function C2() {
     }
-    var proto_1 = C2.prototype;
-    proto_1.foo = function () {
+    var C2_prototype = C2.prototype;
+    C2_prototype.foo = function () {
         return 0;
     };
-    proto_1.bar = function () {
+    C2_prototype.bar = function () {
         return cond ? 0 : 1;
     };
     return C2;

@@ -103,8 +103,8 @@ var Test;
         function FileSystemObject(path) {
             this.path = path;
         }
-        var proto_1 = FileSystemObject.prototype;
-        Object.defineProperty(proto_1, "isFile", {
+        var FileSystemObject_prototype = FileSystemObject.prototype;
+        Object.defineProperty(FileSystemObject_prototype, "isFile", {
             get: function () {
                 return this instanceof File;
             },
@@ -114,7 +114,7 @@ var Test;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "isDirectory", {
+        Object.defineProperty(FileSystemObject_prototype, "isDirectory", {
             get: function () {
                 return this instanceof Directory;
             },

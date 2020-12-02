@@ -71,12 +71,12 @@ var Editor;
     var List = /** @class */ (function () {
         function List() {
         }
-        var proto_1 = List.prototype;
-        proto_1.add = function (data) {
+        var List_prototype = List.prototype;
+        List_prototype.add = function (data) {
             this.next = ListMakeEntry(data);
             return this.next;
         };
-        proto_1.popEntry = function (head) {
+        List_prototype.popEntry = function (head) {
             return (ListRemoveEntry(this.next));
         };
         return List;

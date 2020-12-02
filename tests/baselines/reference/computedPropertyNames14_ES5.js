@@ -14,12 +14,12 @@ var b;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1[b] = function () { };
+    var C_prototype = C.prototype;
+    C_prototype[b] = function () { };
     C[true] = function () { };
-    proto_1[[]] = function () { };
+    C_prototype[[]] = function () { };
     C[{}] = function () { };
-    proto_1[undefined] = function () { };
+    C_prototype[undefined] = function () { };
     C[null] = function () { };
     return C;
 }());

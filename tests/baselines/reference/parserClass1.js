@@ -16,13 +16,13 @@ exports.NullLogger = void 0;
 var NullLogger = /** @class */ (function () {
     function NullLogger() {
     }
-    var proto_1 = NullLogger.prototype;
-    proto_1.information = function () { return false; };
-    proto_1.debug = function () { return false; };
-    proto_1.warning = function () { return false; };
-    proto_1.error = function () { return false; };
-    proto_1.fatal = function () { return false; };
-    proto_1.log = function (s) {
+    var NullLogger_prototype = NullLogger.prototype;
+    NullLogger_prototype.information = function () { return false; };
+    NullLogger_prototype.debug = function () { return false; };
+    NullLogger_prototype.warning = function () { return false; };
+    NullLogger_prototype.error = function () { return false; };
+    NullLogger_prototype.fatal = function () { return false; };
+    NullLogger_prototype.log = function (s) {
     };
     return NullLogger;
 }());

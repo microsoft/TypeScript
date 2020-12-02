@@ -28,11 +28,11 @@ var Foo = /** @class */ (function () {
     function Foo(store) {
         this._store = store; // no repro if this is first line in class body
     }
-    var proto_1 = Foo.prototype;
-    proto_1.foo = function () {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.foo = function () {
         return this._store.length; // shouldn't be an error
     };
-    proto_1.bar = function () { return this.store; }; // should be an error
+    Foo_prototype.bar = function () { return this.store; }; // should be an error
     return Foo;
 }());
 var Bar = /** @class */ (function () {

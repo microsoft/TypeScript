@@ -33,8 +33,8 @@ var Derived = /** @class */ (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = Derived.prototype;
-    proto_1.method1 = function () { var _a; return (_a = _super.prototype.method) === null || _a === void 0 ? void 0 : _a.call(this); };
-    proto_1.method2 = function () { var _a; return (_a = _super.prototype["method"]) === null || _a === void 0 ? void 0 : _a.call(this); };
+    var Derived_prototype = Derived.prototype;
+    Derived_prototype.method1 = function () { var _a; return (_a = _super.prototype.method) === null || _a === void 0 ? void 0 : _a.call(this); };
+    Derived_prototype.method2 = function () { var _a; return (_a = _super.prototype["method"]) === null || _a === void 0 ? void 0 : _a.call(this); };
     return Derived;
 }(Base));

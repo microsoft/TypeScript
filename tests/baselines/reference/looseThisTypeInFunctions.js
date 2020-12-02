@@ -52,14 +52,14 @@ i.explicitThis = function(m) {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.explicitThis = function (m) {
+    var C_prototype = C.prototype;
+    C_prototype.explicitThis = function (m) {
         return this.n + m;
     };
-    proto_1.implicitThis = function (m) {
+    C_prototype.implicitThis = function (m) {
         return this.n + m;
     };
-    proto_1.explicitVoid = function (m) {
+    C_prototype.explicitVoid = function (m) {
         return m + 1;
     };
     return C;

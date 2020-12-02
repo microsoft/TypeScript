@@ -77,14 +77,14 @@ testSet.transform(
 var SetOf = /** @class */ (function () {
     function SetOf() {
     }
-    var proto_1 = SetOf.prototype;
-    proto_1.add = function (a) {
+    var SetOf_prototype = SetOf.prototype;
+    SetOf_prototype.add = function (a) {
         this._store.push(a);
     };
-    proto_1.transform = function (transformer) {
+    SetOf_prototype.transform = function (transformer) {
         return transformer(this);
     };
-    proto_1.forEach = function (fn) {
+    SetOf_prototype.forEach = function (fn) {
         this._store.forEach(function (a, i) { return fn(a, i); });
     };
     return SetOf;

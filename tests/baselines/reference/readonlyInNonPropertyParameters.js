@@ -13,9 +13,9 @@ class X {
 var X = /** @class */ (function () {
     function X() {
     }
-    var proto_1 = X.prototype;
-    proto_1.method = function (x) { };
-    Object.defineProperty(proto_1, "x", {
+    var X_prototype = X.prototype;
+    X_prototype.method = function (x) { };
+    Object.defineProperty(X_prototype, "x", {
         set: function (value) { },
         enumerable: false,
         configurable: true

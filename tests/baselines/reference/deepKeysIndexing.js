@@ -60,10 +60,10 @@ bar.workaround("a", "1", true); // ok - true is not allowed
 var Bar = /** @class */ (function () {
     function Bar() {
     }
-    var proto_1 = Bar.prototype;
-    proto_1.broken = function (k1, k2, value) { };
-    proto_1.working = function (k1, k2, value) { };
-    proto_1.workaround = function (k1, k2, value) { };
+    var Bar_prototype = Bar.prototype;
+    Bar_prototype.broken = function (k1, k2, value) { };
+    Bar_prototype.working = function (k1, k2, value) { };
+    Bar_prototype.workaround = function (k1, k2, value) { };
     return Bar;
 }());
 var bar = new Bar();

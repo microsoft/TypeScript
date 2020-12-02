@@ -592,20 +592,20 @@ var TypeScript;
             this.childrenWalkers = [];
             this.initChildrenWalkers();
         }
-        var proto_1 = AstWalkerFactory.prototype;
-        proto_1.walk = function (ast, pre, post, options, state) {
+        var AstWalkerFactory_prototype = AstWalkerFactory.prototype;
+        AstWalkerFactory_prototype.walk = function (ast, pre, post, options, state) {
             return this.getWalker(pre, post, options, state).walk(ast, null);
         };
-        proto_1.getWalker = function (pre, post, options, state) {
+        AstWalkerFactory_prototype.getWalker = function (pre, post, options, state) {
             return this.getSlowWalker(pre, post, options, state);
         };
-        proto_1.getSlowWalker = function (pre, post, options, state) {
+        AstWalkerFactory_prototype.getSlowWalker = function (pre, post, options, state) {
             if (!options) {
                 options = new AstWalkOptions();
             }
             return new AstWalker(this.childrenWalkers, pre, post, options, state);
         };
-        proto_1.initChildrenWalkers = function () {
+        AstWalkerFactory_prototype.initChildrenWalkers = function () {
             this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;

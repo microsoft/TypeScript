@@ -82,13 +82,13 @@ var C = /** @class */ (function () {
             _this.c = 1; // Error
         };
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "c", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "c", {
         get: function () { return 1; },
         enumerable: false,
         configurable: true
     });
-    proto_1.foo = function () {
+    C_prototype.foo = function () {
         this.a = 1; // Error
         this.b = 1; // Error
         this.c = 1; // Error

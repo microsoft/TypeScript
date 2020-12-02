@@ -52,39 +52,39 @@ class c3 {
 var c1 = /** @class */ (function () {
     function c1() {
     }
-    var proto_1 = c1.prototype;
-    proto_1.foo = function (i) {
+    var c1_prototype = c1.prototype;
+    c1_prototype.foo = function (i) {
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
-    proto_1.foo1 = function (arguments) {
+    c1_prototype.foo1 = function (arguments) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
         var arguments = 10; // no error
     };
-    proto_1.fooNoError = function (arguments) {
+    c1_prototype.fooNoError = function (arguments) {
         var arguments = 10; // no error
     };
-    proto_1.f4 = function (i) {
+    c1_prototype.f4 = function (i) {
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             arguments[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
-    proto_1.f41 = function (arguments) {
+    c1_prototype.f41 = function (arguments) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
         var arguments; // no error
     };
-    proto_1.f4NoError = function (arguments) {
+    c1_prototype.f4NoError = function (arguments) {
         var arguments; // no error
     };
     return c1;
@@ -92,15 +92,15 @@ var c1 = /** @class */ (function () {
 var c3 = /** @class */ (function () {
     function c3() {
     }
-    var proto_2 = c3.prototype;
-    proto_2.foo = function () {
+    var c3_prototype = c3.prototype;
+    c3_prototype.foo = function () {
         var restParameters = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             restParameters[_i] = arguments[_i];
         }
         var arguments = 10; // no error
     };
-    proto_2.fooNoError = function () {
+    c3_prototype.fooNoError = function () {
         var arguments = 10; // no error
     };
     return c3;

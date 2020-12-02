@@ -104,12 +104,12 @@ var c = /** @class */ (function () {
         /** property comment */
         this.b = 10;
     }
-    var proto_1 = c.prototype;
+    var c_prototype = c.prototype;
     /** function comment */
-    proto_1.myFoo = function () {
+    c_prototype.myFoo = function () {
         return this.b;
     };
-    Object.defineProperty(proto_1, "prop1", {
+    Object.defineProperty(c_prototype, "prop1", {
         /** getter comment*/
         get: function () {
             return this.b;
@@ -122,7 +122,7 @@ var c = /** @class */ (function () {
         configurable: true
     });
     /** overload implementation signature*/
-    proto_1.foo1 = function (aOrb) {
+    c_prototype.foo1 = function (aOrb) {
         return aOrb.toString();
     };
     return c;

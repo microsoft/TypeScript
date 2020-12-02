@@ -112,8 +112,8 @@ var var1;
 var ClassWithAccessors = /** @class */ (function () {
     function ClassWithAccessors() {
     }
-    var proto_1 = ClassWithAccessors.prototype;
-    Object.defineProperty(proto_1, "p1", {
+    var ClassWithAccessors_prototype = ClassWithAccessors.prototype;
+    Object.defineProperty(ClassWithAccessors_prototype, "p1", {
         // Inside public accessor getter
         get: function () {
             // global vars in function declaration
@@ -136,7 +136,7 @@ var ClassWithAccessors = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "pp1", {
+    Object.defineProperty(ClassWithAccessors_prototype, "pp1", {
         // Inside private accessor getter
         get: function () {
             // global vars in function declaration

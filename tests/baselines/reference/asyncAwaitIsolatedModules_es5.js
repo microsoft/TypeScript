@@ -150,18 +150,18 @@ var o = {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.m1 = function () {
+    var C_prototype = C.prototype;
+    C_prototype.m1 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });
     };
-    proto_1.m2 = function () {
+    C_prototype.m2 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });
     };
-    proto_1.m3 = function () {
+    C_prototype.m3 = function () {
         return __awaiter(this, void 0, missing_1.MyPromise, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

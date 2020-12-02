@@ -16,11 +16,11 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function () {
+    var C_prototype = C.prototype;
+    C_prototype.foo = function () {
         C.prototype.foo = function () { };
     };
-    proto_1.bar = function (x) {
+    C_prototype.bar = function (x) {
         C.prototype.bar = function () { }; // error
         C.prototype.bar = function (x) { return x; }; // ok
         C.prototype.bar = function (x) { return 1; }; // ok

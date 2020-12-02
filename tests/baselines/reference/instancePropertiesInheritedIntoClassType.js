@@ -63,8 +63,8 @@ var NonGeneric;
             this.a = a;
             this.b = b;
         }
-        var proto_1 = C.prototype;
-        Object.defineProperty(proto_1, "y", {
+        var C_prototype = C.prototype;
+        Object.defineProperty(C_prototype, "y", {
             get: function () {
                 return 1;
             },
@@ -72,7 +72,7 @@ var NonGeneric;
             enumerable: false,
             configurable: true
         });
-        proto_1.fn = function () { return this; };
+        C_prototype.fn = function () { return this; };
         return C;
     }());
     var D = /** @class */ (function (_super) {
@@ -96,8 +96,8 @@ var Generic;
             this.a = a;
             this.b = b;
         }
-        var proto_2 = C.prototype;
-        Object.defineProperty(proto_2, "y", {
+        var C_prototype_1 = C.prototype;
+        Object.defineProperty(C_prototype_1, "y", {
             get: function () {
                 return null;
             },
@@ -105,7 +105,7 @@ var Generic;
             enumerable: false,
             configurable: true
         });
-        proto_2.fn = function () { return this; };
+        C_prototype_1.fn = function () { return this; };
         return C;
     }());
     var D = /** @class */ (function (_super) {

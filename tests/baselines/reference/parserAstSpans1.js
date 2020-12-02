@@ -236,16 +236,16 @@ var __extends = (this && this.__extends) || (function () {
 var c1 = /** @class */ (function () {
     function c1() {
     }
-    var proto_1 = c1.prototype;
-    proto_1.i1_f1 = function () {
+    var c1_prototype = c1.prototype;
+    c1_prototype.i1_f1 = function () {
     };
-    proto_1.i1_nc_f1 = function () {
+    c1_prototype.i1_nc_f1 = function () {
     };
     /** c1_f1*/
-    proto_1.f1 = function () {
+    c1_prototype.f1 = function () {
     };
     /** c1_nc_f1*/
-    proto_1.nc_f1 = function () {
+    c1_prototype.nc_f1 = function () {
     };
     return c1;
 }());
@@ -282,11 +282,11 @@ var c2 = /** @class */ (function () {
     function c2(a) {
         this.c2_p1 = a;
     }
-    var proto_2 = c2.prototype;
+    var c2_prototype = c2.prototype;
     /** c2 c2_f1*/
-    proto_2.c2_f1 = function () {
+    c2_prototype.c2_f1 = function () {
     };
-    Object.defineProperty(proto_2, "c2_prop", {
+    Object.defineProperty(c2_prototype, "c2_prop", {
         /** c2 c2_prop*/
         get: function () {
             return 10;
@@ -294,9 +294,9 @@ var c2 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_2.c2_nc_f1 = function () {
+    c2_prototype.c2_nc_f1 = function () {
     };
-    Object.defineProperty(proto_2, "c2_nc_prop", {
+    Object.defineProperty(c2_prototype, "c2_nc_prop", {
         get: function () {
             return 10;
         },
@@ -304,9 +304,9 @@ var c2 = /** @class */ (function () {
         configurable: true
     });
     /** c2 f1*/
-    proto_2.f1 = function () {
+    c2_prototype.f1 = function () {
     };
-    Object.defineProperty(proto_2, "prop", {
+    Object.defineProperty(c2_prototype, "prop", {
         /** c2 prop*/
         get: function () {
             return 10;
@@ -314,9 +314,9 @@ var c2 = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    proto_2.nc_f1 = function () {
+    c2_prototype.nc_f1 = function () {
     };
-    Object.defineProperty(proto_2, "nc_prop", {
+    Object.defineProperty(c2_prototype, "nc_prop", {
         get: function () {
             return 10;
         },
@@ -332,11 +332,11 @@ var c3 = /** @class */ (function (_super) {
         _this.p1 = _super.prototype.c2_p1;
         return _this;
     }
-    var proto_3 = c3.prototype;
+    var c3_prototype = c3.prototype;
     /** c3 f1*/
-    proto_3.f1 = function () {
+    c3_prototype.f1 = function () {
     };
-    Object.defineProperty(proto_3, "prop", {
+    Object.defineProperty(c3_prototype, "prop", {
         /** c3 prop*/
         get: function () {
             return 10;
@@ -344,9 +344,9 @@ var c3 = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
-    proto_3.nc_f1 = function () {
+    c3_prototype.nc_f1 = function () {
     };
-    Object.defineProperty(proto_3, "nc_prop", {
+    Object.defineProperty(c3_prototype, "nc_prop", {
         get: function () {
             return 10;
         },

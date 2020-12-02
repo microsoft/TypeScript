@@ -47,10 +47,10 @@ var X = /** @class */ (function () {
         this.m = this.m.bind(this);
         this.mistake = 'frankly, complete nonsense';
     }
-    var proto_1 = X.prototype;
-    proto_1.m = function () {
+    var X_prototype = X.prototype;
+    X_prototype.m = function () {
     };
-    proto_1.mistake = function () {
+    X_prototype.mistake = function () {
     };
     return X;
 }());
@@ -63,10 +63,10 @@ var Y = /** @class */ (function () {
         this.m = this.m.bind(this);
         this.mistake = 'even more nonsense';
     }
-    var proto_2 = Y.prototype;
-    proto_2.mistake = function () {
+    var Y_prototype = Y.prototype;
+    Y_prototype.mistake = function () {
     };
-    proto_2.m = function () {
+    Y_prototype.m = function () {
     };
     return Y;
 }());

@@ -21,8 +21,8 @@ var C = /** @class */ (function () {
     function C() {
         this.Foo = 0; // error - duplicate identifier Foo - confirmed
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "Foo", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "Foo", {
         get: function () { return "foo"; } // ok
         ,
         set: function (foo) { } // ok
@@ -30,7 +30,7 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "Goo", {
+    Object.defineProperty(C_prototype, "Goo", {
         get: function (v) { return null; } // error - getters must not have a parameter
         ,
         set: function (v) { } // error - setters must not specify a return type

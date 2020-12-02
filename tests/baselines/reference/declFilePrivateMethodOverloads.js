@@ -26,11 +26,11 @@ declare class c2 {
 var c1 = /** @class */ (function () {
     function c1() {
     }
-    var proto_1 = c1.prototype;
-    proto_1._forEachBindingContext = function (context, fn) {
+    var c1_prototype = c1.prototype;
+    c1_prototype._forEachBindingContext = function (context, fn) {
         // Function here
     };
-    proto_1.overloadWithArityDifference = function (context) {
+    c1_prototype.overloadWithArityDifference = function (context) {
         // Function here
     };
     return c1;

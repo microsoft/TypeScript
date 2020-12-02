@@ -44,16 +44,16 @@ var __extends = (this && this.__extends) || (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function () { };
-    Object.defineProperty(proto_1, "x", {
+    var C_prototype = C.prototype;
+    C_prototype.foo = function () { };
+    Object.defineProperty(C_prototype, "x", {
         get: function () {
             return 1;
         },
         enumerable: false,
         configurable: true
     });
-    proto_1.bar = function () { };
+    C_prototype.bar = function () { };
     return C;
 }());
 var D = /** @class */ (function (_super) {
@@ -64,12 +64,12 @@ var D = /** @class */ (function (_super) {
         _super.prototype.x; // error
         return _this;
     }
-    var proto_2 = D.prototype;
-    proto_2.foo = function () {
+    var D_prototype = D.prototype;
+    D_prototype.foo = function () {
         _super.prototype.bar.call(this);
         _super.prototype.x; // error
     };
-    Object.defineProperty(proto_2, "y", {
+    Object.defineProperty(D_prototype, "y", {
         get: function () {
             _super.prototype.bar.call(this);
             _super.prototype.x; // error

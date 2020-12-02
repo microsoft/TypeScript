@@ -257,9 +257,9 @@ define("file1", ["require", "exports"], function (require, exports) {
     var normalC = /** @class */ (function () {
         /*@internal*/ function normalC() {
         }
-        var proto_1 = normalC.prototype;
-        /*@internal*/ proto_1.method = function () { };
-        Object.defineProperty(proto_1, "c", {
+        var normalC_prototype = normalC.prototype;
+        /*@internal*/ normalC_prototype.method = function () { };
+        Object.defineProperty(normalC_prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
             enumerable: false,
@@ -363,7 +363,7 @@ var myVar = 30;
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"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"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -460,50 +460,50 @@ sourceFile:../lib/file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
 2 >Emitted(9, 10) Source(3, 36) + SourceIndex(1)
 ---
->>>        var proto_1 = normalC.prototype;
->>>        /*@internal*/ proto_1.method = function () { };
+>>>        var normalC_prototype = normalC.prototype;
+>>>        /*@internal*/ normalC_prototype.method = function () { };
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^^^^^^^^^^
-5 >                                    ^^^
-6 >                                       ^^^^^^^^^^^^^^
-7 >                                                     ^
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                              ^^^
+6 >                                                 ^^^^^^^^^^^^^^
+7 >                                                               ^
 1->
   >    /*@internal*/ prop: string;
   >    
 2 >        /*@internal*/
 3 >                      
 4 >                      method
-5 >                                    
-6 >                                       method() { 
-7 >                                                     }
+5 >                                              
+6 >                                                 method() { 
+7 >                                                               }
 1->Emitted(11, 9) Source(5, 5) + SourceIndex(1)
 2 >Emitted(11, 22) Source(5, 18) + SourceIndex(1)
 3 >Emitted(11, 23) Source(5, 19) + SourceIndex(1)
-4 >Emitted(11, 37) Source(5, 25) + SourceIndex(1)
-5 >Emitted(11, 40) Source(5, 19) + SourceIndex(1)
-6 >Emitted(11, 54) Source(5, 30) + SourceIndex(1)
-7 >Emitted(11, 55) Source(5, 31) + SourceIndex(1)
+4 >Emitted(11, 47) Source(5, 25) + SourceIndex(1)
+5 >Emitted(11, 50) Source(5, 19) + SourceIndex(1)
+6 >Emitted(11, 64) Source(5, 30) + SourceIndex(1)
+7 >Emitted(11, 65) Source(5, 31) + SourceIndex(1)
 ---
->>>        Object.defineProperty(proto_1, "c", {
+>>>        Object.defineProperty(normalC_prototype, "c", {
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^^^^^^^^^^^^
-4 >                                          ^^^^^^^^^^^^^^^^^->
+3 >                              ^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                    ^^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
 3 >                              c
 1 >Emitted(12, 9) Source(6, 19) + SourceIndex(1)
 2 >Emitted(12, 31) Source(6, 23) + SourceIndex(1)
-3 >Emitted(12, 43) Source(6, 24) + SourceIndex(1)
+3 >Emitted(12, 53) Source(6, 24) + SourceIndex(1)
 ---
 >>>            /*@internal*/ get: function () { return 10; },
 1->^^^^^^^^^^^^
@@ -1909,20 +1909,20 @@ sourceFile:file4.ts
       "sections": [
         {
           "pos": 0,
-          "end": 4418,
+          "end": 4448,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
               "pos": 0,
-              "end": 4418,
+              "end": 4448,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 4418,
-          "end": 4644,
+          "pos": 4448,
+          "end": 4674,
           "kind": "text"
         }
       ]
@@ -1957,9 +1957,9 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prepend: (0-4418):: ../lib/module.js texts:: 1
+prepend: (0-4448):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-4418)
+text: (0-4448)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1969,9 +1969,9 @@ define("file1", ["require", "exports"], function (require, exports) {
     var normalC = /** @class */ (function () {
         /*@internal*/ function normalC() {
         }
-        var proto_1 = normalC.prototype;
-        /*@internal*/ proto_1.method = function () { };
-        Object.defineProperty(proto_1, "c", {
+        var normalC_prototype = normalC.prototype;
+        /*@internal*/ normalC_prototype.method = function () { };
+        Object.defineProperty(normalC_prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
             enumerable: false,
@@ -2067,7 +2067,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (4418-4644)
+text: (4448-4674)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2853,9 +2853,9 @@ define("file1", ["require", "exports"], function (require, exports) {
     var normalC = /** @class */ (function () {
         /*@internal*/ function normalC() {
         }
-        var proto_1 = normalC.prototype;
-        /*@internal*/ proto_1.method = function () { };
-        Object.defineProperty(proto_1, "c", {
+        var normalC_prototype = normalC.prototype;
+        /*@internal*/ normalC_prototype.method = function () { };
+        Object.defineProperty(normalC_prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
             enumerable: false,
@@ -2952,7 +2952,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"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"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -3049,50 +3049,50 @@ sourceFile:file1.ts
 >>>        }
 1 >^^^^^^^^
 2 >        ^
-3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >        }
 1 >Emitted(9, 9) Source(3, 35) + SourceIndex(1)
 2 >Emitted(9, 10) Source(3, 36) + SourceIndex(1)
 ---
->>>        var proto_1 = normalC.prototype;
->>>        /*@internal*/ proto_1.method = function () { };
+>>>        var normalC_prototype = normalC.prototype;
+>>>        /*@internal*/ normalC_prototype.method = function () { };
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^
 3 >                     ^
-4 >                      ^^^^^^^^^^^^^^
-5 >                                    ^^^
-6 >                                       ^^^^^^^^^^^^^^
-7 >                                                     ^
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                              ^^^
+6 >                                                 ^^^^^^^^^^^^^^
+7 >                                                               ^
 1->
   >    /*@internal*/ prop: string;
   >    
 2 >        /*@internal*/
 3 >                      
 4 >                      method
-5 >                                    
-6 >                                       method() { 
-7 >                                                     }
+5 >                                              
+6 >                                                 method() { 
+7 >                                                               }
 1->Emitted(11, 9) Source(5, 5) + SourceIndex(1)
 2 >Emitted(11, 22) Source(5, 18) + SourceIndex(1)
 3 >Emitted(11, 23) Source(5, 19) + SourceIndex(1)
-4 >Emitted(11, 37) Source(5, 25) + SourceIndex(1)
-5 >Emitted(11, 40) Source(5, 19) + SourceIndex(1)
-6 >Emitted(11, 54) Source(5, 30) + SourceIndex(1)
-7 >Emitted(11, 55) Source(5, 31) + SourceIndex(1)
+4 >Emitted(11, 47) Source(5, 25) + SourceIndex(1)
+5 >Emitted(11, 50) Source(5, 19) + SourceIndex(1)
+6 >Emitted(11, 64) Source(5, 30) + SourceIndex(1)
+7 >Emitted(11, 65) Source(5, 31) + SourceIndex(1)
 ---
->>>        Object.defineProperty(proto_1, "c", {
+>>>        Object.defineProperty(normalC_prototype, "c", {
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
-3 >                              ^^^^^^^^^^^^
-4 >                                          ^^^^^^^^^^^^^^^^^->
+3 >                              ^^^^^^^^^^^^^^^^^^^^^^
+4 >                                                    ^^^^^^^->
 1 >
   >    /*@internal*/ 
 2 >        get 
 3 >                              c
 1 >Emitted(12, 9) Source(6, 19) + SourceIndex(1)
 2 >Emitted(12, 31) Source(6, 23) + SourceIndex(1)
-3 >Emitted(12, 43) Source(6, 24) + SourceIndex(1)
+3 >Emitted(12, 53) Source(6, 24) + SourceIndex(1)
 ---
 >>>            /*@internal*/ get: function () { return 10; },
 1->^^^^^^^^^^^^
@@ -4446,7 +4446,7 @@ sourceFile:global.ts
       "sections": [
         {
           "pos": 0,
-          "end": 4418,
+          "end": 4448,
           "kind": "text"
         }
       ]
@@ -4513,7 +4513,7 @@ sourceFile:global.ts
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-text: (0-4418)
+text: (0-4448)
 /*@internal*/ var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -4523,9 +4523,9 @@ define("file1", ["require", "exports"], function (require, exports) {
     var normalC = /** @class */ (function () {
         /*@internal*/ function normalC() {
         }
-        var proto_1 = normalC.prototype;
-        /*@internal*/ proto_1.method = function () { };
-        Object.defineProperty(proto_1, "c", {
+        var normalC_prototype = normalC.prototype;
+        /*@internal*/ normalC_prototype.method = function () { };
+        Object.defineProperty(normalC_prototype, "c", {
             /*@internal*/ get: function () { return 10; },
             /*@internal*/ set: function (val) { },
             enumerable: false,

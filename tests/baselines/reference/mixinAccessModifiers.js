@@ -294,17 +294,17 @@ var C6 = /** @class */ (function (_super) {
 var ProtectedGeneric = /** @class */ (function () {
     function ProtectedGeneric() {
     }
-    var proto_1 = ProtectedGeneric.prototype;
-    proto_1.privateMethod = function () { };
-    proto_1.protectedMethod = function () { };
+    var ProtectedGeneric_prototype = ProtectedGeneric.prototype;
+    ProtectedGeneric_prototype.privateMethod = function () { };
+    ProtectedGeneric_prototype.protectedMethod = function () { };
     return ProtectedGeneric;
 }());
 var ProtectedGeneric2 = /** @class */ (function () {
     function ProtectedGeneric2() {
     }
-    var proto_2 = ProtectedGeneric2.prototype;
-    proto_2.privateMethod = function () { };
-    proto_2.protectedMethod = function () { };
+    var ProtectedGeneric2_prototype = ProtectedGeneric2.prototype;
+    ProtectedGeneric2_prototype.privateMethod = function () { };
+    ProtectedGeneric2_prototype.protectedMethod = function () { };
     return ProtectedGeneric2;
 }());
 function f7(x) {

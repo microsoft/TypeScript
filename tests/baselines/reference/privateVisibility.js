@@ -32,9 +32,9 @@ var Foo = /** @class */ (function () {
         this.pubProp = 0;
         this.privProp = 0;
     }
-    var proto_1 = Foo.prototype;
-    proto_1.pubMeth = function () { this.privMeth(); };
-    proto_1.privMeth = function () { };
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.pubMeth = function () { this.privMeth(); };
+    Foo_prototype.privMeth = function () { };
     return Foo;
 }());
 var f = new Foo();

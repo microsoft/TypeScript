@@ -86,11 +86,11 @@ var Bar = /** @class */ (function () {
         this.e = e;
         this.c = 2;
     }
-    var proto_1 = Bar.prototype;
-    proto_1.f = function () {
+    var Bar_prototype = Bar.prototype;
+    Bar_prototype.f = function () {
         return 1;
     };
-    proto_1.h = function () {
+    Bar_prototype.h = function () {
         return 2;
     };
     return Bar;

@@ -9,8 +9,8 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.f = function () { };
+    var C_prototype = C.prototype;
+    C_prototype.f = function () { };
     ;
     return C;
 }());

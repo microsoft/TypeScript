@@ -9,10 +9,10 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function () { };
+    var C_prototype = C.prototype;
+    C_prototype.foo = function () { };
     // @internal
-    proto_1.bar = function () { };
+    C_prototype.bar = function () { };
     return C;
 }());
 

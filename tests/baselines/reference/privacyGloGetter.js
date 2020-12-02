@@ -107,8 +107,8 @@ var m1;
     var C3_public = /** @class */ (function () {
         function C3_public() {
         }
-        var proto_1 = C3_public.prototype;
-        Object.defineProperty(proto_1, "p1_private", {
+        var C3_public_prototype = C3_public.prototype;
+        Object.defineProperty(C3_public_prototype, "p1_private", {
             get: function () {
                 return new C1_public();
             },
@@ -117,7 +117,7 @@ var m1;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "p2_private", {
+        Object.defineProperty(C3_public_prototype, "p2_private", {
             get: function () {
                 return new C1_public();
             },
@@ -126,7 +126,7 @@ var m1;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "p3_private", {
+        Object.defineProperty(C3_public_prototype, "p3_private", {
             get: function () {
                 return new C2_private();
             },
@@ -135,7 +135,7 @@ var m1;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "p4_public", {
+        Object.defineProperty(C3_public_prototype, "p4_public", {
             get: function () {
                 return new C2_private(); //error
             },
@@ -150,8 +150,8 @@ var m1;
     var C4_private = /** @class */ (function () {
         function C4_private() {
         }
-        var proto_2 = C4_private.prototype;
-        Object.defineProperty(proto_2, "p1_private", {
+        var C4_private_prototype = C4_private.prototype;
+        Object.defineProperty(C4_private_prototype, "p1_private", {
             get: function () {
                 return new C1_public();
             },
@@ -160,7 +160,7 @@ var m1;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_2, "p2_private", {
+        Object.defineProperty(C4_private_prototype, "p2_private", {
             get: function () {
                 return new C1_public();
             },
@@ -169,7 +169,7 @@ var m1;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_2, "p3_private", {
+        Object.defineProperty(C4_private_prototype, "p3_private", {
             get: function () {
                 return new C2_private();
             },
@@ -178,7 +178,7 @@ var m1;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_2, "p4_public", {
+        Object.defineProperty(C4_private_prototype, "p4_public", {
             get: function () {
                 return new C2_private();
             },
@@ -198,8 +198,8 @@ var C6_public = /** @class */ (function () {
 var C7_public = /** @class */ (function () {
     function C7_public() {
     }
-    var proto_3 = C7_public.prototype;
-    Object.defineProperty(proto_3, "p1_private", {
+    var C7_public_prototype = C7_public.prototype;
+    Object.defineProperty(C7_public_prototype, "p1_private", {
         get: function () {
             return new C6_public();
         },
@@ -208,7 +208,7 @@ var C7_public = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_3, "p2_private", {
+    Object.defineProperty(C7_public_prototype, "p2_private", {
         get: function () {
             return new C6_public();
         },

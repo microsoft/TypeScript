@@ -31,11 +31,11 @@ function B() {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.A = function () {
+    var C_prototype = C.prototype;
+    C_prototype.A = function () {
         return "";
     };
-    proto_1.B = function () {
+    C_prototype.B = function () {
         var someLocal = {};
         return someLocal;
     };

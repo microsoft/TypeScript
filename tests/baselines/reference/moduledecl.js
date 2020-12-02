@@ -306,11 +306,11 @@ var exportTests;
     var C1_public = /** @class */ (function () {
         function C1_public() {
         }
-        var proto_1 = C1_public.prototype;
-        proto_1.f2 = function () {
+        var C1_public_prototype = C1_public.prototype;
+        C1_public_prototype.f2 = function () {
             return 30;
         };
-        proto_1.f3 = function () {
+        C1_public_prototype.f3 = function () {
             return "string";
         };
         return C1_public;
@@ -319,11 +319,11 @@ var exportTests;
     var C2_private = /** @class */ (function () {
         function C2_private() {
         }
-        var proto_2 = C2_private.prototype;
-        proto_2.f2 = function () {
+        var C2_private_prototype = C2_private.prototype;
+        C2_private_prototype.f2 = function () {
             return 30;
         };
-        proto_2.f3 = function () {
+        C2_private_prototype.f3 = function () {
             return "string";
         };
         return C2_private;
@@ -331,25 +331,25 @@ var exportTests;
     var C3_public = /** @class */ (function () {
         function C3_public() {
         }
-        var proto_3 = C3_public.prototype;
-        proto_3.getC2_private = function () {
+        var C3_public_prototype = C3_public.prototype;
+        C3_public_prototype.getC2_private = function () {
             return new C2_private();
         };
-        proto_3.setC2_private = function (arg) {
+        C3_public_prototype.setC2_private = function (arg) {
         };
-        Object.defineProperty(proto_3, "c2", {
+        Object.defineProperty(C3_public_prototype, "c2", {
             get: function () {
                 return new C2_private();
             },
             enumerable: false,
             configurable: true
         });
-        proto_3.getC1_public = function () {
+        C3_public_prototype.getC1_public = function () {
             return new C1_public();
         };
-        proto_3.setC1_public = function (arg) {
+        C3_public_prototype.setC1_public = function (arg) {
         };
-        Object.defineProperty(proto_3, "c1", {
+        Object.defineProperty(C3_public_prototype, "c1", {
             get: function () {
                 return new C1_public();
             },

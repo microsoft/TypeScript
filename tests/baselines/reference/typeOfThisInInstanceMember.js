@@ -41,11 +41,11 @@ var C = /** @class */ (function () {
         t.z;
         var r = t.foo();
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function () {
+    var C_prototype = C.prototype;
+    C_prototype.foo = function () {
         return this;
     };
-    Object.defineProperty(proto_1, "y", {
+    Object.defineProperty(C_prototype, "y", {
         get: function () {
             return this;
         },

@@ -53,9 +53,9 @@ var r4 = D.bar(''); // error
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function (x, y) { };
-    proto_1.bar = function (x, y) { };
+    var C_prototype = C.prototype;
+    C_prototype.foo = function (x, y) { };
+    C_prototype.bar = function (x, y) { };
     C.foo = function (x, y) { };
     C.bar = function (x, y) { };
     return C;
@@ -63,9 +63,9 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function () {
     function D() {
     }
-    var proto_2 = D.prototype;
-    proto_2.foo = function (x, y) { };
-    proto_2.bar = function (x, y) { };
+    var D_prototype = D.prototype;
+    D_prototype.foo = function (x, y) { };
+    D_prototype.bar = function (x, y) { };
     D.foo = function (x, y) { };
     D.bar = function (x, y) { };
     return D;

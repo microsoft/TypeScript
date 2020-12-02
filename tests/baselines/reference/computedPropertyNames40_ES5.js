@@ -24,9 +24,9 @@ var Foo2 = /** @class */ (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
+    var C_prototype = C.prototype;
     // Computed properties
-    proto_1[""] = function () { return new Foo; };
-    proto_1[""] = function () { return new Foo2; };
+    C_prototype[""] = function () { return new Foo; };
+    C_prototype[""] = function () { return new Foo2; };
     return C;
 }());

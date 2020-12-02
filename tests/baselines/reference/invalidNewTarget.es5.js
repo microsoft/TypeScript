@@ -33,13 +33,13 @@ var C = /** @class */ (function () {
         var _newTarget = this.constructor;
         this.f = function () { return _newTarget; };
     }
-    var proto_1 = C.prototype;
-    proto_1[_newTarget] = function () { };
-    proto_1.c = function () {
+    var C_prototype = C.prototype;
+    C_prototype[_newTarget] = function () { };
+    C_prototype.c = function () {
         var _newTarget = void 0;
         return _newTarget;
     };
-    Object.defineProperty(proto_1, "d", {
+    Object.defineProperty(C_prototype, "d", {
         get: function () {
             var _newTarget = void 0;
             return _newTarget;
@@ -47,7 +47,7 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "e", {
+    Object.defineProperty(C_prototype, "e", {
         set: function (_) {
             var _newTarget = void 0;
             _ = _newTarget;

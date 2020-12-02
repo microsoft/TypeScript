@@ -17,11 +17,11 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.public = function () { };
-    proto_1.static = function () { };
-    proto_1.public = function () { };
-    proto_1.static = function () { };
+    var C_prototype = C.prototype;
+    C_prototype.public = function () { };
+    C_prototype.static = function () { };
+    C_prototype.public = function () { };
+    C_prototype.static = function () { };
     C.public = function () { };
     C.static = function () { };
     C.public = function () { };

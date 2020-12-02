@@ -130,15 +130,15 @@ var schema;
     var T = /** @class */ (function () {
         function T() {
         }
-        var proto_1 = T.prototype;
-        Object.defineProperty(proto_1, "createValidator9", {
+        var T_prototype = T.prototype;
+        Object.defineProperty(T_prototype, "createValidator9", {
             get: function () {
                 return undefined;
             },
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "createValidator10", {
+        Object.defineProperty(T_prototype, "createValidator10", {
             set: function (v) {
             },
             enumerable: false,

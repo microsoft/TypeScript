@@ -21,10 +21,10 @@ function f3() { }
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.m1 = function () { };
-    proto_1.m2 = function () { };
-    proto_1.m2 = function () { };
-    proto_1.m3 = function () { };
+    var C_prototype = C.prototype;
+    C_prototype.m1 = function () { };
+    C_prototype.m2 = function () { };
+    C_prototype.m2 = function () { };
+    C_prototype.m3 = function () { };
     return C;
 }());

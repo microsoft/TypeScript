@@ -13,13 +13,13 @@ class Employee {
 var Employee = /** @class */ (function () {
     function Employee() {
     }
-    var proto_1 = Employee.prototype;
-    Object.defineProperty(proto_1, "p", {
+    var Employee_prototype = Employee.prototype;
+    Object.defineProperty(Employee_prototype, "p", {
         set: function (_) { },
         enumerable: false,
         configurable: true
     });
-    proto_1.m = function () {
+    Employee_prototype.m = function () {
         this.p = 0;
     };
     return Employee;

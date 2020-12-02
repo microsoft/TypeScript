@@ -57,35 +57,35 @@ function g() {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "b1", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "b1", {
         get: function () { return 1; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "b2", {
+    Object.defineProperty(C_prototype, "b2", {
         get: function () { return 1; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "b3", {
+    Object.defineProperty(C_prototype, "b3", {
         get: function () { return 1; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "c1", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(proto_1, "c2", {
+    Object.defineProperty(C_prototype, "c1", {
         get: function () { return 1; },
         set: function (value) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "c3", {
+    Object.defineProperty(C_prototype, "c2", {
+        get: function () { return 1; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(C_prototype, "c3", {
         get: function () { return 1; },
         set: function (value) { },
         enumerable: false,

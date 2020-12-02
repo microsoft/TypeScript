@@ -38,13 +38,13 @@ var M;
     var D = /** @class */ (function () {
         function D() {
         }
-        var proto_1 = D.prototype;
-        proto_1.m232 = function () { return null; };
-        proto_1.m242 = function () { return null; };
-        proto_1.m252 = function () { return null; }; // don't generate
-        proto_1.m26 = function (i) { };
-        proto_1.m262 = function (i) { };
-        proto_1.m3 = function () { return new C(); };
+        var D_prototype = D.prototype;
+        D_prototype.m232 = function () { return null; };
+        D_prototype.m242 = function () { return null; };
+        D_prototype.m252 = function () { return null; }; // don't generate
+        D_prototype.m26 = function (i) { };
+        D_prototype.m262 = function (i) { };
+        D_prototype.m3 = function () { return new C(); };
         return D;
     }());
     M.D = D;

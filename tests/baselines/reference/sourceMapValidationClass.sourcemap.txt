@@ -107,25 +107,25 @@ sourceFile:sourceMapValidationClass.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >    }
 1 >Emitted(9, 5) Source(3, 5) + SourceIndex(0)
 2 >Emitted(9, 6) Source(3, 6) + SourceIndex(0)
 ---
->>>    var proto_1 = Greeter.prototype;
->>>    proto_1.greet = function () {
+>>>    var Greeter_prototype = Greeter.prototype;
+>>>    Greeter_prototype.greet = function () {
 1->^^^^
-2 >    ^^^^^^^^^^^^^
-3 >                 ^^^
-4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^
+4 >                              ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
 2 >    greet
-3 >                 
+3 >                           
 1->Emitted(11, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(11, 18) Source(4, 10) + SourceIndex(0)
-3 >Emitted(11, 21) Source(4, 5) + SourceIndex(0)
+2 >Emitted(11, 28) Source(4, 10) + SourceIndex(0)
+3 >Emitted(11, 31) Source(4, 5) + SourceIndex(0)
 ---
 >>>        return "<h1>" + this.greeting + "</h1>";
 1->^^^^^^^^
@@ -163,27 +163,27 @@ sourceFile:sourceMapValidationClass.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    }
 1 >Emitted(13, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(13, 6) Source(6, 6) + SourceIndex(0)
 ---
->>>    proto_1.fn = function () {
+>>>    Greeter_prototype.fn = function () {
 1->^^^^
-2 >    ^^^^^^^^^^
-3 >              ^^^
-4 >                 ^^^^^^^^^^^^^->
+2 >    ^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^
+4 >                           ^^^->
 1->
   >    private x: string;
   >    private x1: number = 10;
   >    private 
 2 >    fn
-3 >              
+3 >                        
 1->Emitted(14, 5) Source(9, 13) + SourceIndex(0)
-2 >Emitted(14, 15) Source(9, 15) + SourceIndex(0)
-3 >Emitted(14, 18) Source(9, 5) + SourceIndex(0)
+2 >Emitted(14, 25) Source(9, 15) + SourceIndex(0)
+3 >Emitted(14, 28) Source(9, 5) + SourceIndex(0)
 ---
 >>>        return this.greeting;
 1->^^^^^^^^
@@ -209,24 +209,24 @@ sourceFile:sourceMapValidationClass.ts
 >>>    };
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >    
 2 >    }
 1 >Emitted(16, 5) Source(11, 5) + SourceIndex(0)
 2 >Emitted(16, 6) Source(11, 6) + SourceIndex(0)
 ---
->>>    Object.defineProperty(proto_1, "greetings", {
+>>>    Object.defineProperty(Greeter_prototype, "greetings", {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
   >    
 2 >    get 
 3 >                          greetings
 1->Emitted(17, 5) Source(12, 5) + SourceIndex(0)
 2 >Emitted(17, 27) Source(12, 9) + SourceIndex(0)
-3 >Emitted(17, 47) Source(12, 18) + SourceIndex(0)
+3 >Emitted(17, 57) Source(12, 18) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^

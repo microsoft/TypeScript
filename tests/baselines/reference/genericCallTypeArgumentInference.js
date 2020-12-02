@@ -111,31 +111,31 @@ var C = /** @class */ (function () {
         this.t = t;
         this.u = u;
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function (t, u) {
+    var C_prototype = C.prototype;
+    C_prototype.foo = function (t, u) {
         return t;
     };
-    proto_1.foo2 = function (t, u) {
+    C_prototype.foo2 = function (t, u) {
         return u;
     };
-    proto_1.foo3 = function (t, u) {
+    C_prototype.foo3 = function (t, u) {
         return t;
     };
-    proto_1.foo4 = function (t, u) {
+    C_prototype.foo4 = function (t, u) {
         return t;
     };
-    proto_1.foo5 = function (t, u) {
+    C_prototype.foo5 = function (t, u) {
         return t;
     };
-    proto_1.foo6 = function () {
+    C_prototype.foo6 = function () {
         var x;
         return x;
     };
-    proto_1.foo7 = function (u) {
+    C_prototype.foo7 = function (u) {
         var x;
         return x;
     };
-    proto_1.foo8 = function () {
+    C_prototype.foo8 = function () {
         var x;
         return x;
     };

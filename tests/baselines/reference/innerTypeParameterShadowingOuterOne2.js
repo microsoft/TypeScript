@@ -43,12 +43,12 @@ class C2<T extends Date, U extends Date> {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.g = function () {
+    var C_prototype = C.prototype;
+    C_prototype.g = function () {
         var x;
         x.toFixed();
     };
-    proto_1.h = function () {
+    C_prototype.h = function () {
         var x;
         x.getDate();
     };
@@ -57,12 +57,12 @@ var C = /** @class */ (function () {
 var C2 = /** @class */ (function () {
     function C2() {
     }
-    var proto_2 = C2.prototype;
-    proto_2.g = function () {
+    var C2_prototype = C2.prototype;
+    C2_prototype.g = function () {
         var x;
         x.toFixed();
     };
-    proto_2.h = function () {
+    C2_prototype.h = function () {
         var x;
         x.getDate();
     };

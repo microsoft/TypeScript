@@ -32,10 +32,10 @@ class TestClass2 {
 var TestClass = /** @class */ (function () {
     function TestClass() {
     }
-    var proto_1 = TestClass.prototype;
-    proto_1.bar = function (x) {
+    var TestClass_prototype = TestClass.prototype;
+    TestClass_prototype.bar = function (x) {
     };
-    proto_1.foo = function (x) {
+    TestClass_prototype.foo = function (x) {
         this.bar(x); // should not error
     };
     return TestClass;
@@ -43,11 +43,11 @@ var TestClass = /** @class */ (function () {
 var TestClass2 = /** @class */ (function () {
     function TestClass2() {
     }
-    var proto_2 = TestClass2.prototype;
-    proto_2.bar = function (x) {
+    var TestClass2_prototype = TestClass2.prototype;
+    TestClass2_prototype.bar = function (x) {
         return 0;
     };
-    proto_2.foo = function (x) {
+    TestClass2_prototype.foo = function (x) {
         return this.bar(x); // should not error
     };
     return TestClass2;

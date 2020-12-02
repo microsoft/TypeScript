@@ -70,12 +70,12 @@ var TypeScript;
             _this._elementType = null;
             return _this;
         }
-        var proto_1 = PullTypeSymbol.prototype;
-        proto_1.toString = function (scopeSymbol, useConstraintInName) {
+        var PullTypeSymbol_prototype = PullTypeSymbol.prototype;
+        PullTypeSymbol_prototype.toString = function (scopeSymbol, useConstraintInName) {
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
             return s;
         };
-        proto_1.getScopedNameEx = function (scopeSymbol, useConstraintInName, getPrettyTypeName, getTypeParamMarkerInfo) {
+        PullTypeSymbol_prototype.getScopedNameEx = function (scopeSymbol, useConstraintInName, getPrettyTypeName, getTypeParamMarkerInfo) {
             if (this.isArray()) {
                 var elementMemberName = this._elementType ?
                     (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?

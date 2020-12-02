@@ -53,15 +53,15 @@ var RegisteredUser = /** @class */ (function (_super) {
     function RegisteredUser() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = RegisteredUser.prototype;
-    proto_1.f = function () {
+    var RegisteredUser_prototype = RegisteredUser.prototype;
+    RegisteredUser_prototype.f = function () {
         (function () {
             function inner() {
                 _super.sayHello.call(this);
             }
         });
     };
-    proto_1.g = function () {
+    RegisteredUser_prototype.g = function () {
         function inner() {
             var _this = this;
             (function () {
@@ -69,7 +69,7 @@ var RegisteredUser = /** @class */ (function (_super) {
             });
         }
     };
-    proto_1.h = function () {
+    RegisteredUser_prototype.h = function () {
         function inner() {
             _super.sayHello.call(this);
         }

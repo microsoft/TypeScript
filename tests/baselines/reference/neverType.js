@@ -134,17 +134,17 @@ function check(x) {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.void1 = function () {
+    var C_prototype = C.prototype;
+    C_prototype.void1 = function () {
         throw new Error();
     };
-    proto_1.void2 = function () {
+    C_prototype.void2 = function () {
         while (true) { }
     };
-    proto_1.never1 = function () {
+    C_prototype.never1 = function () {
         throw new Error();
     };
-    proto_1.never2 = function () {
+    C_prototype.never2 = function () {
         while (true) { }
     };
     return C;

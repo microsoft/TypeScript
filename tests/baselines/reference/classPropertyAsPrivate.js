@@ -27,14 +27,14 @@ C.foo();
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "y", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "y", {
         get: function () { return null; },
         set: function (x) { },
         enumerable: false,
         configurable: true
     });
-    proto_1.foo = function () { };
+    C_prototype.foo = function () { };
     Object.defineProperty(C, "b", {
         get: function () { return null; },
         set: function (x) { },

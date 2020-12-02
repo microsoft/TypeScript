@@ -76,11 +76,11 @@ var __extends = (this && this.__extends) || (function () {
 var RoyalGuard = /** @class */ (function () {
     function RoyalGuard() {
     }
-    var proto_1 = RoyalGuard.prototype;
-    proto_1.isLeader = function () {
+    var RoyalGuard_prototype = RoyalGuard.prototype;
+    RoyalGuard_prototype.isLeader = function () {
         return this instanceof LeadGuard;
     };
-    proto_1.isFollower = function () {
+    RoyalGuard_prototype.isFollower = function () {
         return this instanceof FollowerGuard;
     };
     return RoyalGuard;
@@ -90,8 +90,8 @@ var LeadGuard = /** @class */ (function (_super) {
     function LeadGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_2 = LeadGuard.prototype;
-    proto_2.lead = function () { };
+    var LeadGuard_prototype = LeadGuard.prototype;
+    LeadGuard_prototype.lead = function () { };
     ;
     return LeadGuard;
 }(RoyalGuard));
@@ -100,8 +100,8 @@ var FollowerGuard = /** @class */ (function (_super) {
     function FollowerGuard() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_3 = FollowerGuard.prototype;
-    proto_3.follow = function () { };
+    var FollowerGuard_prototype = FollowerGuard.prototype;
+    FollowerGuard_prototype.follow = function () { };
     ;
     return FollowerGuard;
 }(RoyalGuard));

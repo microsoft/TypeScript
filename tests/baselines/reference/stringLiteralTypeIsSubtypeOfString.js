@@ -114,33 +114,33 @@ function f9(x) { }
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.toString = function () { return null; };
-    proto_1.charAt = function (pos) { return null; };
-    proto_1.charCodeAt = function (index) { return null; };
-    proto_1.concat = function () {
+    var C_prototype = C.prototype;
+    C_prototype.toString = function () { return null; };
+    C_prototype.charAt = function (pos) { return null; };
+    C_prototype.charCodeAt = function (index) { return null; };
+    C_prototype.concat = function () {
         var strings = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             strings[_i] = arguments[_i];
         }
         return null;
     };
-    proto_1.indexOf = function (searchString, position) { return null; };
-    proto_1.lastIndexOf = function (searchString, position) { return null; };
-    proto_1.localeCompare = function (that) { return null; };
-    proto_1.match = function (regexp) { return null; };
-    proto_1.replace = function (searchValue, replaceValue) { return null; };
-    proto_1.search = function (regexp) { return null; };
-    proto_1.slice = function (start, end) { return null; };
-    proto_1.split = function (separator, limit) { return null; };
-    proto_1.substring = function (start, end) { return null; };
-    proto_1.toLowerCase = function () { return null; };
-    proto_1.toLocaleLowerCase = function () { return null; };
-    proto_1.toUpperCase = function () { return null; };
-    proto_1.toLocaleUpperCase = function () { return null; };
-    proto_1.trim = function () { return null; };
-    proto_1.substr = function (from, length) { return null; };
-    proto_1.valueOf = function () { return null; };
+    C_prototype.indexOf = function (searchString, position) { return null; };
+    C_prototype.lastIndexOf = function (searchString, position) { return null; };
+    C_prototype.localeCompare = function (that) { return null; };
+    C_prototype.match = function (regexp) { return null; };
+    C_prototype.replace = function (searchValue, replaceValue) { return null; };
+    C_prototype.search = function (regexp) { return null; };
+    C_prototype.slice = function (start, end) { return null; };
+    C_prototype.split = function (separator, limit) { return null; };
+    C_prototype.substring = function (start, end) { return null; };
+    C_prototype.toLowerCase = function () { return null; };
+    C_prototype.toLocaleLowerCase = function () { return null; };
+    C_prototype.toUpperCase = function () { return null; };
+    C_prototype.toLocaleUpperCase = function () { return null; };
+    C_prototype.trim = function () { return null; };
+    C_prototype.substr = function (from, length) { return null; };
+    C_prototype.valueOf = function () { return null; };
     return C;
 }());
 function f10(x) { }

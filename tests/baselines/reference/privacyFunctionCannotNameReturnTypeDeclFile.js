@@ -222,7 +222,7 @@ var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
     function publicClassWithWithPrivateParmeterTypes() {
     }
-    var proto_1 = publicClassWithWithPrivateParmeterTypes.prototype;
+    var publicClassWithWithPrivateParmeterTypes_prototype = publicClassWithWithPrivateParmeterTypes.prototype;
     publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget1();
     };
@@ -230,11 +230,11 @@ var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         return exporter.createExportedWidget1();
         ;
     };
-    proto_1.myPublicMethod = function () {
+    publicClassWithWithPrivateParmeterTypes_prototype.myPublicMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
-    proto_1.myPrivateMethod = function () {
+    publicClassWithWithPrivateParmeterTypes_prototype.myPrivateMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
@@ -245,11 +245,11 @@ var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         return exporter.createExportedWidget3();
         ;
     };
-    proto_1.myPublicMethod1 = function () {
+    publicClassWithWithPrivateParmeterTypes_prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
-    proto_1.myPrivateMethod1 = function () {
+    publicClassWithWithPrivateParmeterTypes_prototype.myPrivateMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
@@ -259,7 +259,7 @@ exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParm
 var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
     function privateClassWithWithPrivateParmeterTypes() {
     }
-    var proto_2 = privateClassWithWithPrivateParmeterTypes.prototype;
+    var privateClassWithWithPrivateParmeterTypes_prototype = privateClassWithWithPrivateParmeterTypes.prototype;
     privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget1();
     };
@@ -267,11 +267,11 @@ var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         return exporter.createExportedWidget1();
         ;
     };
-    proto_2.myPublicMethod = function () {
+    privateClassWithWithPrivateParmeterTypes_prototype.myPublicMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
-    proto_2.myPrivateMethod = function () {
+    privateClassWithWithPrivateParmeterTypes_prototype.myPrivateMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
@@ -282,11 +282,11 @@ var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         return exporter.createExportedWidget3();
         ;
     };
-    proto_2.myPublicMethod1 = function () {
+    privateClassWithWithPrivateParmeterTypes_prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
-    proto_2.myPrivateMethod1 = function () {
+    privateClassWithWithPrivateParmeterTypes_prototype.myPrivateMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
@@ -309,17 +309,17 @@ function privateFunctionWithPrivateParmeterTypes1() {
 var publicClassWithPrivateModuleReturnTypes = /** @class */ (function () {
     function publicClassWithPrivateModuleReturnTypes() {
     }
-    var proto_3 = publicClassWithPrivateModuleReturnTypes.prototype;
+    var publicClassWithPrivateModuleReturnTypes_prototype = publicClassWithPrivateModuleReturnTypes.prototype;
     publicClassWithPrivateModuleReturnTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget2();
     };
-    proto_3.myPublicMethod = function () {
+    publicClassWithPrivateModuleReturnTypes_prototype.myPublicMethod = function () {
         return exporter.createExportedWidget2();
     };
     publicClassWithPrivateModuleReturnTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget4();
     };
-    proto_3.myPublicMethod1 = function () {
+    publicClassWithPrivateModuleReturnTypes_prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
     };
     return publicClassWithPrivateModuleReturnTypes;
@@ -336,17 +336,17 @@ exports.publicFunctionWithPrivateModuleReturnTypes1 = publicFunctionWithPrivateM
 var privateClassWithPrivateModuleReturnTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleReturnTypes() {
     }
-    var proto_4 = privateClassWithPrivateModuleReturnTypes.prototype;
+    var privateClassWithPrivateModuleReturnTypes_prototype = privateClassWithPrivateModuleReturnTypes.prototype;
     privateClassWithPrivateModuleReturnTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget2();
     };
-    proto_4.myPublicMethod = function () {
+    privateClassWithPrivateModuleReturnTypes_prototype.myPublicMethod = function () {
         return exporter.createExportedWidget2();
     };
     privateClassWithPrivateModuleReturnTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget4();
     };
-    proto_4.myPublicMethod1 = function () {
+    privateClassWithPrivateModuleReturnTypes_prototype.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
     };
     return privateClassWithPrivateModuleReturnTypes;

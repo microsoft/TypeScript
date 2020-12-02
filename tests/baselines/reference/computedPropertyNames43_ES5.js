@@ -46,14 +46,14 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = D.prototype;
-    Object.defineProperty(proto_1, "get1", {
+    var D_prototype = D.prototype;
+    Object.defineProperty(D_prototype, "get1", {
         // Computed properties
         get: function () { return new Foo; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "set1", {
+    Object.defineProperty(D_prototype, "set1", {
         set: function (p) { },
         enumerable: false,
         configurable: true

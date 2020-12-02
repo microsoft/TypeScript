@@ -42,25 +42,25 @@ class c3 {
 var c1 = /** @class */ (function () {
     function c1() {
     }
-    var proto_1 = c1.prototype;
-    proto_1.foo = function (_i) {
+    var c1_prototype = c1.prototype;
+    c1_prototype.foo = function (_i) {
         var restParameters = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             restParameters[_a - 1] = arguments[_a];
         }
         var _i = 10; // no error
     };
-    proto_1.fooNoError = function (_i) {
+    c1_prototype.fooNoError = function (_i) {
         var _i = 10; // no error
     };
-    proto_1.f4 = function (_i) {
+    c1_prototype.f4 = function (_i) {
         var rest = [];
         for (var _a = 1; _a < arguments.length; _a++) {
             rest[_a - 1] = arguments[_a];
         }
         var _i; // no error
     };
-    proto_1.f4NoError = function (_i) {
+    c1_prototype.f4NoError = function (_i) {
         var _i; // no error
     };
     return c1;
@@ -68,15 +68,15 @@ var c1 = /** @class */ (function () {
 var c3 = /** @class */ (function () {
     function c3() {
     }
-    var proto_2 = c3.prototype;
-    proto_2.foo = function () {
+    var c3_prototype = c3.prototype;
+    c3_prototype.foo = function () {
         var restParameters = [];
         for (var _a = 0; _a < arguments.length; _a++) {
             restParameters[_a] = arguments[_a];
         }
         var _i = 10; // no error
     };
-    proto_2.fooNoError = function () {
+    c3_prototype.fooNoError = function () {
         var _i = 10; // no error
     };
     return c3;

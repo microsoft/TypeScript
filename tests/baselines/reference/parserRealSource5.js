@@ -82,14 +82,14 @@ var TypeScript;
             this.indentStrings = [];
             this.indentAmt = 0;
         }
-        var proto_1 = PrintContext.prototype;
-        proto_1.increaseIndent = function () {
+        var PrintContext_prototype = PrintContext.prototype;
+        PrintContext_prototype.increaseIndent = function () {
             this.indentAmt++;
         };
-        proto_1.decreaseIndent = function () {
+        PrintContext_prototype.decreaseIndent = function () {
             this.indentAmt--;
         };
-        proto_1.startLine = function () {
+        PrintContext_prototype.startLine = function () {
             if (this.builder.length > 0) {
                 CompilerDiagnostics.Alert(this.builder);
             }
@@ -103,10 +103,10 @@ var TypeScript;
             }
             this.builder += indentString;
         };
-        proto_1.write = function (s) {
+        PrintContext_prototype.write = function (s) {
             this.builder += s;
         };
-        proto_1.writeLine = function (s) {
+        PrintContext_prototype.writeLine = function (s) {
             this.builder += s;
             this.outfile.WriteLine(this.builder);
             this.builder = "";

@@ -15,9 +15,9 @@ class arrTest {
 var arrTest = /** @class */ (function () {
     function arrTest() {
     }
-    var proto_1 = arrTest.prototype;
-    proto_1.test = function (arg1) { };
-    proto_1.callTest = function () {
+    var arrTest_prototype = arrTest.prototype;
+    arrTest_prototype.test = function (arg1) { };
+    arrTest_prototype.callTest = function () {
         this.test([1, 2, 3, 5]);
         this.test(["hi"]);
         this.test([]);

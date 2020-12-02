@@ -306,11 +306,11 @@ var Opt = /** @class */ (function () {
 var Vector = /** @class */ (function () {
     function Vector() {
     }
-    var proto_1 = Vector.prototype;
-    proto_1.tail = function () {
+    var Vector_prototype = Vector.prototype;
+    Vector_prototype.tail = function () {
         return undefined;
     };
-    proto_1.partition2 = function (predicate) {
+    Vector_prototype.partition2 = function (predicate) {
         return undefined;
     };
     return Vector;

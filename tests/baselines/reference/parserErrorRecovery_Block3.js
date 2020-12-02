@@ -10,10 +10,10 @@ class C  {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.a = function () {
+    var C_prototype = C.prototype;
+    C_prototype.a = function () {
     };
-    proto_1.b = function () {
+    C_prototype.b = function () {
     };
     return C;
 }());

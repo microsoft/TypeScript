@@ -55,11 +55,11 @@ var Base = /** @class */ (function () {
     function Base() {
         var x;
     }
-    var proto_1 = Base.prototype;
-    proto_1.foo = function () {
+    var Base_prototype = Base.prototype;
+    Base_prototype.foo = function () {
         return "base";
     };
-    proto_1.bar = function () {
+    Base_prototype.bar = function () {
         return "basebar";
     };
     return Base;

@@ -12,9 +12,9 @@ var C = /** @class */ (function () {
     function C() {
         this.p1 = 0;
     }
-    var proto_1 = C.prototype;
-    proto_1.callback = function (cb) { cb(); };
-    proto_1.doit = function () {
+    var C_prototype = C.prototype;
+    C_prototype.callback = function (cb) { cb(); };
+    C_prototype.doit = function () {
         var _this = this;
         this.callback(function () { _this.p1 + 1; });
     };

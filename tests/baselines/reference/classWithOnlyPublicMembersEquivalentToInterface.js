@@ -30,9 +30,9 @@ i = c;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.y = function (a) { return null; };
-    Object.defineProperty(proto_1, "z", {
+    var C_prototype = C.prototype;
+    C_prototype.y = function (a) { return null; };
+    Object.defineProperty(C_prototype, "z", {
         get: function () { return 1; },
         set: function (v) { },
         enumerable: false,

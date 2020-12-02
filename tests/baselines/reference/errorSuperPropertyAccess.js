@@ -179,9 +179,9 @@ var SomeBase = /** @class */ (function () {
         this.privateMember = 0;
         this.publicMember = 0;
     }
-    var proto_1 = SomeBase.prototype;
-    proto_1.privateFunc = function () { };
-    proto_1.publicFunc = function () { };
+    var SomeBase_prototype = SomeBase.prototype;
+    SomeBase_prototype.privateFunc = function () { };
+    SomeBase_prototype.publicFunc = function () { };
     SomeBase.privateStaticFunc = function () { };
     SomeBase.publicStaticFunc = function () { };
     SomeBase.privateStaticMember = 0;
@@ -199,11 +199,11 @@ var SomeDerived1 = /** @class */ (function (_super) {
         _super.prototype.publicMember = 1;
         return _this;
     }
-    var proto_2 = SomeDerived1.prototype;
-    proto_2.fn = function () {
+    var SomeDerived1_prototype = SomeDerived1.prototype;
+    SomeDerived1_prototype.fn = function () {
         var x = _super.prototype.publicMember;
     };
-    Object.defineProperty(proto_2, "a", {
+    Object.defineProperty(SomeDerived1_prototype, "a", {
         get: function () {
             var x = _super.prototype.publicMember;
             return undefined;
@@ -214,7 +214,7 @@ var SomeDerived1 = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
-    proto_2.fn2 = function () {
+    SomeDerived1_prototype.fn2 = function () {
         function inner() {
             _super.publicFunc.call(this);
         }
@@ -234,11 +234,11 @@ var SomeDerived2 = /** @class */ (function (_super) {
         _super.prototype.privateMember = 1;
         return _this;
     }
-    var proto_3 = SomeDerived2.prototype;
-    proto_3.fn = function () {
+    var SomeDerived2_prototype = SomeDerived2.prototype;
+    SomeDerived2_prototype.fn = function () {
         var x = _super.prototype.privateMember;
     };
-    Object.defineProperty(proto_3, "a", {
+    Object.defineProperty(SomeDerived2_prototype, "a", {
         get: function () {
             var x = _super.prototype.privateMember;
             return undefined;

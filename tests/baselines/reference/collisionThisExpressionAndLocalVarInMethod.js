@@ -22,8 +22,8 @@ class a {
 var a = /** @class */ (function () {
     function a() {
     }
-    var proto_1 = a.prototype;
-    proto_1.method1 = function () {
+    var a_prototype = a.prototype;
+    a_prototype.method1 = function () {
         var _this_1 = this;
         return {
             doStuff: function (callback) { return function () {
@@ -32,7 +32,7 @@ var a = /** @class */ (function () {
             }; }
         };
     };
-    proto_1.method2 = function () {
+    a_prototype.method2 = function () {
         var _this_1 = this;
         var _this = 2;
         return {

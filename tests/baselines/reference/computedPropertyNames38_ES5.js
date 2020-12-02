@@ -24,14 +24,14 @@ var Foo2 = /** @class */ (function () {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, 1 << 6, {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, 1 << 6, {
         // Computed properties
         get: function () { return new Foo; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, 1 << 6, {
+    Object.defineProperty(C_prototype, 1 << 6, {
         set: function (p) { },
         enumerable: false,
         configurable: true

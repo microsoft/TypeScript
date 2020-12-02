@@ -41,9 +41,9 @@ var __extends = (this && this.__extends) || (function () {
 var K = /** @class */ (function () {
     function K() {
     }
-    var proto_1 = K.prototype;
-    proto_1.privateMethod = function () { };
-    proto_1.m = function () {
+    var K_prototype = K.prototype;
+    K_prototype.privateMethod = function () { };
+    K_prototype.m = function () {
         var _a = this, a = _a.priv, b = _a.prot; // ok
         var _b = new K(), priv = _b.priv, prot = _b.prot; // ok
     };

@@ -13,14 +13,14 @@ class Foo {
 var Foo = /** @class */ (function () {
     function Foo() {
     }
-    var proto_1 = Foo.prototype;
-    proto_1.f1 = function () {
+    var Foo_prototype = Foo.prototype;
+    Foo_prototype.f1 = function () {
         if ()
             ;
     };
-    proto_1.f2 = function () {
+    Foo_prototype.f2 = function () {
     };
-    proto_1.f3 = function () {
+    Foo_prototype.f3 = function () {
     };
     return Foo;
 }());

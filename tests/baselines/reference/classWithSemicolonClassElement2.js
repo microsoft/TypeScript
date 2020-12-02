@@ -8,6 +8,7 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
+    var C_prototype = C.prototype;
     ;
     ;
     return C;

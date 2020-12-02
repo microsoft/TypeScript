@@ -54,11 +54,11 @@ function getFoo1() {
     return /** @class */ (function () {
         function class_1() {
         }
-        var proto_1 = class_1.prototype;
-        proto_1.method1 = function (arg) {
+        var proto = class_1.prototype;
+        proto.method1 = function (arg) {
             arg.numProp = 10;
         };
-        proto_1.method2 = function (arg) {
+        proto.method2 = function (arg) {
             arg.strProp = "hello";
         };
         return class_1;

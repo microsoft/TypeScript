@@ -230,8 +230,8 @@ define(["require", "exports"], function (require, exports) {
         var C3_public = /** @class */ (function () {
             function C3_public() {
             }
-            var proto_1 = C3_public.prototype;
-            Object.defineProperty(proto_1, "p1_private", {
+            var C3_public_prototype = C3_public.prototype;
+            Object.defineProperty(C3_public_prototype, "p1_private", {
                 get: function () {
                     return new C1_public();
                 },
@@ -240,7 +240,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_1, "p2_private", {
+            Object.defineProperty(C3_public_prototype, "p2_private", {
                 get: function () {
                     return new C1_public();
                 },
@@ -249,7 +249,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_1, "p3_private", {
+            Object.defineProperty(C3_public_prototype, "p3_private", {
                 get: function () {
                     return new C2_private();
                 },
@@ -258,7 +258,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_1, "p4_public", {
+            Object.defineProperty(C3_public_prototype, "p4_public", {
                 get: function () {
                     return new C2_private(); //error
                 },
@@ -273,8 +273,8 @@ define(["require", "exports"], function (require, exports) {
         var C4_private = /** @class */ (function () {
             function C4_private() {
             }
-            var proto_2 = C4_private.prototype;
-            Object.defineProperty(proto_2, "p1_private", {
+            var C4_private_prototype = C4_private.prototype;
+            Object.defineProperty(C4_private_prototype, "p1_private", {
                 get: function () {
                     return new C1_public();
                 },
@@ -283,7 +283,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_2, "p2_private", {
+            Object.defineProperty(C4_private_prototype, "p2_private", {
                 get: function () {
                     return new C1_public();
                 },
@@ -292,7 +292,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_2, "p3_private", {
+            Object.defineProperty(C4_private_prototype, "p3_private", {
                 get: function () {
                     return new C2_private();
                 },
@@ -301,7 +301,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_2, "p4_public", {
+            Object.defineProperty(C4_private_prototype, "p4_public", {
                 get: function () {
                     return new C2_private();
                 },
@@ -331,8 +331,8 @@ define(["require", "exports"], function (require, exports) {
         var m2_C3_public = /** @class */ (function () {
             function m2_C3_public() {
             }
-            var proto_3 = m2_C3_public.prototype;
-            Object.defineProperty(proto_3, "p1_private", {
+            var m2_C3_public_prototype = m2_C3_public.prototype;
+            Object.defineProperty(m2_C3_public_prototype, "p1_private", {
                 get: function () {
                     return new m2_C1_public();
                 },
@@ -341,7 +341,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_3, "p2_private", {
+            Object.defineProperty(m2_C3_public_prototype, "p2_private", {
                 get: function () {
                     return new m2_C1_public();
                 },
@@ -350,7 +350,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_3, "p3_private", {
+            Object.defineProperty(m2_C3_public_prototype, "p3_private", {
                 get: function () {
                     return new m2_C2_private();
                 },
@@ -359,7 +359,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_3, "p4_public", {
+            Object.defineProperty(m2_C3_public_prototype, "p4_public", {
                 get: function () {
                     return new m2_C2_private();
                 },
@@ -374,8 +374,8 @@ define(["require", "exports"], function (require, exports) {
         var m2_C4_private = /** @class */ (function () {
             function m2_C4_private() {
             }
-            var proto_4 = m2_C4_private.prototype;
-            Object.defineProperty(proto_4, "p1_private", {
+            var m2_C4_private_prototype = m2_C4_private.prototype;
+            Object.defineProperty(m2_C4_private_prototype, "p1_private", {
                 get: function () {
                     return new m2_C1_public();
                 },
@@ -384,7 +384,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_4, "p2_private", {
+            Object.defineProperty(m2_C4_private_prototype, "p2_private", {
                 get: function () {
                     return new m2_C1_public();
                 },
@@ -393,7 +393,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_4, "p3_private", {
+            Object.defineProperty(m2_C4_private_prototype, "p3_private", {
                 get: function () {
                     return new m2_C2_private();
                 },
@@ -402,7 +402,7 @@ define(["require", "exports"], function (require, exports) {
                 enumerable: false,
                 configurable: true
             });
-            Object.defineProperty(proto_4, "p4_public", {
+            Object.defineProperty(m2_C4_private_prototype, "p4_public", {
                 get: function () {
                     return new m2_C2_private();
                 },
@@ -430,8 +430,8 @@ define(["require", "exports"], function (require, exports) {
     var C7_public = /** @class */ (function () {
         function C7_public() {
         }
-        var proto_5 = C7_public.prototype;
-        Object.defineProperty(proto_5, "p1_private", {
+        var C7_public_prototype = C7_public.prototype;
+        Object.defineProperty(C7_public_prototype, "p1_private", {
             get: function () {
                 return new C6_public();
             },
@@ -440,7 +440,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_5, "p2_private", {
+        Object.defineProperty(C7_public_prototype, "p2_private", {
             get: function () {
                 return new C6_public();
             },
@@ -449,7 +449,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_5, "p3_private", {
+        Object.defineProperty(C7_public_prototype, "p3_private", {
             get: function () {
                 return new C5_private();
             },
@@ -458,7 +458,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_5, "p4_public", {
+        Object.defineProperty(C7_public_prototype, "p4_public", {
             get: function () {
                 return new C5_private(); //error
             },
@@ -473,8 +473,8 @@ define(["require", "exports"], function (require, exports) {
     var C8_private = /** @class */ (function () {
         function C8_private() {
         }
-        var proto_6 = C8_private.prototype;
-        Object.defineProperty(proto_6, "p1_private", {
+        var C8_private_prototype = C8_private.prototype;
+        Object.defineProperty(C8_private_prototype, "p1_private", {
             get: function () {
                 return new C6_public();
             },
@@ -483,7 +483,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_6, "p2_private", {
+        Object.defineProperty(C8_private_prototype, "p2_private", {
             get: function () {
                 return new C6_public();
             },
@@ -492,7 +492,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_6, "p3_private", {
+        Object.defineProperty(C8_private_prototype, "p3_private", {
             get: function () {
                 return new C5_private();
             },
@@ -501,7 +501,7 @@ define(["require", "exports"], function (require, exports) {
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_6, "p4_public", {
+        Object.defineProperty(C8_private_prototype, "p4_public", {
             get: function () {
                 return new C5_private();
             },

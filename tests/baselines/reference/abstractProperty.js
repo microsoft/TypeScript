@@ -48,13 +48,13 @@ var C = /** @class */ (function (_super) {
         _this.ro = "readonly please";
         return _this;
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "prop", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "prop", {
         get: function () { return "foo"; },
         set: function (v) { },
         enumerable: false,
         configurable: true
     });
-    proto_1.m = function () { };
+    C_prototype.m = function () { };
     return C;
 }(B));

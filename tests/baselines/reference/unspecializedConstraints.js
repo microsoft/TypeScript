@@ -179,8 +179,8 @@ var ts;
         function Type() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        var proto_1 = Type.prototype;
-        proto_1.equals = function (that) {
+        var Type_prototype = Type.prototype;
+        Type_prototype.equals = function (that) {
             if (this === that)
                 return true;
             if (!(this.isObjectType() && that.isObjectType()))
@@ -205,37 +205,37 @@ var ts;
             }
             return true;
         };
-        proto_1.getProperties = function () {
+        Type_prototype.getProperties = function () {
             return [];
         };
-        proto_1.getProperty = function (index) {
+        Type_prototype.getProperty = function (index) {
             return undefined;
         };
-        proto_1.getPropertyByName = function (name) {
+        Type_prototype.getPropertyByName = function (name) {
             return undefined;
         };
-        proto_1.getPropertyCount = function () {
+        Type_prototype.getPropertyCount = function () {
             return 0;
         };
-        proto_1.getSignature = function (index) {
+        Type_prototype.getSignature = function (index) {
             return undefined;
         };
-        proto_1.getSignatureCount = function () {
+        Type_prototype.getSignatureCount = function () {
             return 0;
         };
-        proto_1.getSignatures = function () {
+        Type_prototype.getSignatures = function () {
             return [];
         };
-        proto_1.isPrimitive = function () {
+        Type_prototype.isPrimitive = function () {
             return false;
         };
-        proto_1.isObjectType = function () {
+        Type_prototype.isObjectType = function () {
             return false;
         };
-        proto_1.isTypeParameter = function () {
+        Type_prototype.isTypeParameter = function () {
             return false;
         };
-        proto_1.isSubTypeOf = function (type) {
+        Type_prototype.isSubTypeOf = function (type) {
         };
         return Type;
     }(Symbol));
@@ -269,14 +269,14 @@ var ts;
             _this.returnType = returnType;
             return _this;
         }
-        var proto_2 = Signature.prototype;
-        proto_2.equalsNoReturn = function (other) {
+        var Signature_prototype = Signature.prototype;
+        Signature_prototype.equalsNoReturn = function (other) {
             return this.parameters.length === other.parameters.length &&
                 this.typeParameters.length === other.typeParameters.length &&
                 arrayEquals(this.parameters, other.parameters) &&
                 arrayEquals(this.typeParameters, other.typeParameters);
         };
-        proto_2.equals = function (other) {
+        Signature_prototype.equals = function (other) {
             return this.equalsNoReturn(other) &&
                 this.returnType.equals(other.returnType);
         };

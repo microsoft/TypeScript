@@ -76,9 +76,9 @@ var __extends = (this && this.__extends) || (function () {
 var C1 = /** @class */ (function () {
     function C1() {
     }
-    var proto_1 = C1.prototype;
-    proto_1.IM1 = function () { return null; };
-    proto_1.C1M1 = function () { return null; };
+    var C1_prototype = C1.prototype;
+    C1_prototype.IM1 = function () { return null; };
+    C1_prototype.C1M1 = function () { return null; };
     return C1;
 }());
 var C2 = /** @class */ (function (_super) {

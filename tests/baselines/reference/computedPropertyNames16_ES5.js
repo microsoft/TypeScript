@@ -23,13 +23,13 @@ var a;
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, s, {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, s, {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, n, {
+    Object.defineProperty(C_prototype, n, {
         set: function (v) { },
         enumerable: false,
         configurable: true
@@ -39,12 +39,12 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, s + n, {
+    Object.defineProperty(C_prototype, s + n, {
         set: function (v) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, +s, {
+    Object.defineProperty(C_prototype, +s, {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
@@ -54,12 +54,12 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, 0, {
+    Object.defineProperty(C_prototype, 0, {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, a, {
+    Object.defineProperty(C_prototype, a, {
         set: function (v) { },
         enumerable: false,
         configurable: true
@@ -69,12 +69,12 @@ var C = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "hello bye", {
+    Object.defineProperty(C_prototype, "hello bye", {
         set: function (v) { },
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(proto_1, "hello " + a + " bye", {
+    Object.defineProperty(C_prototype, "hello " + a + " bye", {
         get: function () { return 0; },
         enumerable: false,
         configurable: true

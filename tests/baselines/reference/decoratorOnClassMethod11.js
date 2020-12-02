@@ -20,9 +20,9 @@ var M;
     var C = /** @class */ (function () {
         function C() {
         }
-        var proto_1 = C.prototype;
-        proto_1.decorator = function (target, key) { };
-        proto_1.method = function () { };
+        var C_prototype = C.prototype;
+        C_prototype.decorator = function (target, key) { };
+        C_prototype.method = function () { };
         __decorate([
             this.decorator
         ], C.prototype, "method", null);

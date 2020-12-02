@@ -39,18 +39,18 @@ exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
     function publicClassWithWithPrivateTypeParameters() {
     }
-    var proto_1 = publicClassWithWithPrivateTypeParameters.prototype;
+    var publicClassWithWithPrivateTypeParameters_prototype = publicClassWithWithPrivateTypeParameters.prototype;
     publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
     };
-    proto_1.myPrivateMethod1 = function () {
+    publicClassWithWithPrivateTypeParameters_prototype.myPrivateMethod1 = function () {
     };
     publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod2 = function () {
     };
-    proto_1.myPrivateMethod2 = function () {
+    publicClassWithWithPrivateTypeParameters_prototype.myPrivateMethod2 = function () {
     };
     publicClassWithWithPrivateTypeParameters.myPublicStaticMethod = function () {
     };
-    proto_1.myPublicMethod = function () {
+    publicClassWithWithPrivateTypeParameters_prototype.myPublicMethod = function () {
     };
     return publicClassWithWithPrivateTypeParameters;
 }());

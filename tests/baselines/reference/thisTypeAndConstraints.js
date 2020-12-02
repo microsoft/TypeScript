@@ -40,11 +40,11 @@ function f(x) {
 var B = /** @class */ (function () {
     function B() {
     }
-    var proto_1 = B.prototype;
-    proto_1.foo = function (x) {
+    var B_prototype = B.prototype;
+    B_prototype.foo = function (x) {
         x = x.self();
     };
-    proto_1.bar = function (x) {
+    B_prototype.bar = function (x) {
         x = x.self();
     };
     return B;

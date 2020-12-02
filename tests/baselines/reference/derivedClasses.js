@@ -59,9 +59,9 @@ var Red = /** @class */ (function (_super) {
 var Color = /** @class */ (function () {
     function Color() {
     }
-    var proto_1 = Color.prototype;
-    proto_1.shade = function () { return "some shade"; };
-    proto_1.hue = function () { return "some hue"; };
+    var Color_prototype = Color.prototype;
+    Color_prototype.shade = function () { return "some shade"; };
+    Color_prototype.hue = function () { return "some hue"; };
     return Color;
 }());
 var Blue = /** @class */ (function (_super) {

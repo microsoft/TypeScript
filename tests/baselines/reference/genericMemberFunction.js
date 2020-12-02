@@ -39,11 +39,11 @@ define(["require", "exports"], function (require, exports) {
     var FileWithErrors = /** @class */ (function () {
         function FileWithErrors() {
         }
-        var proto_1 = FileWithErrors.prototype;
-        proto_1.errors = function () {
+        var FileWithErrors_prototype = FileWithErrors.prototype;
+        FileWithErrors_prototype.errors = function () {
             return undefined;
         };
-        proto_1.parent = function () {
+        FileWithErrors_prototype.parent = function () {
             return undefined;
         };
         return FileWithErrors;

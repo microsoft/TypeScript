@@ -19,12 +19,12 @@ function compare</**type*/T>(a: T, b: T) {
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.method = function (a) {
+    var C_prototype = C.prototype;
+    C_prototype.method = function (a) {
     };
     C.staticmethod = function (a) {
     };
-    proto_1.privatemethod = function (a) {
+    C_prototype.privatemethod = function (a) {
     };
     C.privatestaticmethod = function (a) {
     };

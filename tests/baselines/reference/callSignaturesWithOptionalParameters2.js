@@ -70,9 +70,9 @@ foo2(1, 2);
 var C = /** @class */ (function () {
     function C() {
     }
-    var proto_1 = C.prototype;
-    proto_1.foo = function (x) { };
-    proto_1.foo2 = function (x, y) { };
+    var C_prototype = C.prototype;
+    C_prototype.foo = function (x) { };
+    C_prototype.foo2 = function (x, y) { };
     return C;
 }());
 var c;

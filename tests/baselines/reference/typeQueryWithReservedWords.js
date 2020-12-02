@@ -19,12 +19,12 @@ interface IScope {
 var Controller = /** @class */ (function () {
     function Controller() {
     }
-    var proto_1 = Controller.prototype;
-    proto_1.create = function () {
+    var Controller_prototype = Controller.prototype;
+    Controller_prototype.create = function () {
     };
-    proto_1["delete"] = function () {
+    Controller_prototype["delete"] = function () {
     };
-    proto_1["var"] = function () {
+    Controller_prototype["var"] = function () {
     };
     return Controller;
 }());

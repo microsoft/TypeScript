@@ -125,8 +125,8 @@ var m;
     var c = /** @class */ (function () {
         function c() {
         }
-        var proto_1 = c.prototype;
-        Object.defineProperty(proto_1, "foo1", {
+        var c_prototype = c.prototype;
+        Object.defineProperty(c_prototype, "foo1", {
             // getter with annotation
             get: function () {
                 return;
@@ -134,7 +134,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo2", {
+        Object.defineProperty(c_prototype, "foo2", {
             // getter without annotation
             get: function () {
                 return new private1();
@@ -142,14 +142,14 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo3", {
+        Object.defineProperty(c_prototype, "foo3", {
             // setter with annotation
             set: function (param) {
             },
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo4", {
+        Object.defineProperty(c_prototype, "foo4", {
             // Both - getter without annotation, setter with annotation
             get: function () {
                 return new private1();
@@ -159,7 +159,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo5", {
+        Object.defineProperty(c_prototype, "foo5", {
             // Both - with annotation
             get: function () {
                 return;
@@ -169,7 +169,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo11", {
+        Object.defineProperty(c_prototype, "foo11", {
             // getter with annotation
             get: function () {
                 return;
@@ -177,7 +177,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo12", {
+        Object.defineProperty(c_prototype, "foo12", {
             // getter without annotation
             get: function () {
                 return new public1();
@@ -185,14 +185,14 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo13", {
+        Object.defineProperty(c_prototype, "foo13", {
             // setter with annotation
             set: function (param) {
             },
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo14", {
+        Object.defineProperty(c_prototype, "foo14", {
             // Both - getter without annotation, setter with annotation
             get: function () {
                 return new public1();
@@ -202,7 +202,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo15", {
+        Object.defineProperty(c_prototype, "foo15", {
             // Both - with annotation
             get: function () {
                 return;
@@ -212,7 +212,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo111", {
+        Object.defineProperty(c_prototype, "foo111", {
             // getter with annotation
             get: function () {
                 return;
@@ -220,7 +220,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo112", {
+        Object.defineProperty(c_prototype, "foo112", {
             // getter without annotation
             get: function () {
                 return new m2.public2();
@@ -228,14 +228,14 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo113", {
+        Object.defineProperty(c_prototype, "foo113", {
             // setter with annotation
             set: function (param) {
             },
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo114", {
+        Object.defineProperty(c_prototype, "foo114", {
             // Both - getter without annotation, setter with annotation
             get: function () {
                 return new m2.public2();
@@ -245,7 +245,7 @@ var m;
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(proto_1, "foo115", {
+        Object.defineProperty(c_prototype, "foo115", {
             // Both - with annotation
             get: function () {
                 return;

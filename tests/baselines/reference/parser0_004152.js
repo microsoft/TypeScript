@@ -12,6 +12,7 @@ var Game = /** @class */ (function () {
     function Game() {
         this.position = new DisplayPosition([]);
     }
+    var Game_prototype = Game.prototype;
     ;
     return Game;
 }());

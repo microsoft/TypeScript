@@ -61,14 +61,14 @@ var C = /** @class */ (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = C.prototype;
-    Object.defineProperty(proto_1, "y", {
+    var C_prototype = C.prototype;
+    Object.defineProperty(C_prototype, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
         enumerable: false,
         configurable: true
     });
-    proto_1.foo = function () { return this.x; };
+    C_prototype.foo = function () { return this.x; };
     Object.defineProperty(C, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
@@ -77,7 +77,7 @@ var C = /** @class */ (function (_super) {
     });
     C.foo = function () { return this.x; };
     C.bar = function () { this.foo(); };
-    proto_1.bar = function () {
+    C_prototype.bar = function () {
         var D = /** @class */ (function () {
             function D() {
             }

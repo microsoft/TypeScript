@@ -22,20 +22,20 @@ c2.b();
 var CalcButton = /** @class */ (function () {
     function CalcButton() {
     }
-    var proto_1 = CalcButton.prototype;
-    proto_1.a = function () { this.onClick(); };
-    proto_1.onClick = function () { };
+    var CalcButton_prototype = CalcButton.prototype;
+    CalcButton_prototype.a = function () { this.onClick(); };
+    CalcButton_prototype.onClick = function () { };
     return CalcButton;
 }());
 var CalcButton2 = /** @class */ (function () {
     function CalcButton2() {
     }
-    var proto_2 = CalcButton2.prototype;
-    proto_2.b = function () {
+    var CalcButton2_prototype = CalcButton2.prototype;
+    CalcButton2_prototype.b = function () {
         var _this = this;
         (function () { return _this.onClick(); });
     };
-    proto_2.onClick = function () { };
+    CalcButton2_prototype.onClick = function () { };
     return CalcButton2;
 }());
 var c = new CalcButton();

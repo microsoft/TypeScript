@@ -12,9 +12,9 @@ class A {
 var A = /** @class */ (function () {
     function A() {
     }
-    var proto_1 = A.prototype;
-    proto_1.f = function () { };
-    proto_1.m1 = function (a) {
+    var A_prototype = A.prototype;
+    A_prototype.f = function () { };
+    A_prototype.m1 = function (a) {
     };
     return A;
 }());

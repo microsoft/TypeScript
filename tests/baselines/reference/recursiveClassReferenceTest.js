@@ -129,9 +129,9 @@ var Sample;
                 var StartFindAction = /** @class */ (function () {
                     function StartFindAction() {
                     }
-                    var proto_1 = StartFindAction.prototype;
-                    proto_1.getId = function () { return "yo"; };
-                    proto_1.run = function (Thing) {
+                    var StartFindAction_prototype = StartFindAction.prototype;
+                    StartFindAction_prototype.getId = function () { return "yo"; };
+                    StartFindAction_prototype.run = function (Thing) {
                         return true;
                     };
                     return StartFindAction;
@@ -153,14 +153,14 @@ var Sample;
                     // scenario 1
                     codeThing.addWidget("addWidget", this);
                 }
-                var proto_2 = FindWidget.prototype;
-                proto_2.gar = function (runner) { if (true) {
+                var FindWidget_prototype = FindWidget.prototype;
+                FindWidget_prototype.gar = function (runner) { if (true) {
                     return runner(this);
                 } };
-                proto_2.getDomNode = function () {
+                FindWidget_prototype.getDomNode = function () {
                     return domNode;
                 };
-                proto_2.destroy = function () {
+                FindWidget_prototype.destroy = function () {
                 };
                 return FindWidget;
             }());
@@ -185,14 +185,14 @@ var AbstractMode = /** @class */ (function () {
                     function State(mode) {
                         this.mode = mode;
                     }
-                    var proto_3 = State.prototype;
-                    proto_3.clone = function () {
+                    var State_prototype = State.prototype;
+                    State_prototype.clone = function () {
                         return this;
                     };
-                    proto_3.equals = function (other) {
+                    State_prototype.equals = function (other) {
                         return this === other;
                     };
-                    proto_3.getMode = function () { return mode; };
+                    State_prototype.getMode = function () { return mode; };
                     return State;
                 }());
                 PlainText.State = State;

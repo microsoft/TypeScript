@@ -1579,8 +1579,34 @@ namespace ts {
                 return;
             }
 
-            const prototypeStoragePlacement = statements.length;
+            const originalPrototypeAccess = factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
             let prototypeStorageName: Identifier | PropertyAccessExpression;
+
+            // If the class has multiple non-static member names, it'll store that prototype as a variable that can be minified:
+            //  var ClassName_prototype = ClassName.prototype;
+            //  ClassName_prototype.memberOne = ...
+            //  ClassName_prototype.memberTwo = ...
+            if (membersContainMultipleUniqueNames(node.members)) {
+                prototypeStorageName = factory.createUniqueName(node.name ? `${node.name.escapedText}_prototype` : "proto", GeneratedIdentifierFlags.Optimistic);
+                statements.push(
+                    factory.createVariableStatement(
+                        /*modifiers*/ undefined,
+                        factory.createVariableDeclarationList([
+                            factory.createVariableDeclaration(
+                                prototypeStorageName,
+                                /*exclamationToken*/ undefined,
+                                /*type*/ undefined,
+                                originalPrototypeAccess
+                            )
+                        ])
+                    )
+                );
+            }
+            // Since the class has exactly one non-static member, it'll access that prototype member directly on itself:
+            //   ClassName.prototype.member = ...
+            else {
+                prototypeStorageName = originalPrototypeAccess;
+            }
 
             for (const member of node.members) {
                 switch (member.kind) {
@@ -1589,14 +1615,14 @@ namespace ts {
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member, getPrototypeStorageName), <MethodDeclaration>member, node));
+                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member, prototypeStorageName), <MethodDeclaration>member, node));
                         break;
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         const accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member, getPrototypeStorageName), accessors, node));
+                            statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member, prototypeStorageName), accessors, node));
                         }
 
                         break;
@@ -1610,55 +1636,13 @@ namespace ts {
                         break;
                 }
             }
-
-            /**
-             * Lazily creates the way class members will access the class prototype.
-             */
-            function getPrototypeStorageName() {
-                if (prototypeStorageName) {
-                    return prototypeStorageName;
-                }
-
-                const originalPrototypeAccess = factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
-
-                // If the class has exactly one non-static member, it'll access prototype members on itself:
-                //   ClassName.prototype.member = ...
-                if (!membersContainMultipleUniqueNames(node.members.filter(classMemberAssignsToPrototype))) {
-                    prototypeStorageName = originalPrototypeAccess;
-                    return prototypeStorageName;
-                }
-
-                // Since it has multiple non-static members, it'll store that prototype as a variable that can be minified:
-                //  var proto = ClassName.prototype;
-                //  proto.memberOne = ...
-                //  proto.memberTwo = ...
-                prototypeStorageName = factory.createUniqueName("proto");
-
-                statements.splice(
-                    prototypeStoragePlacement,
-                    0,
-                    factory.createVariableStatement(
-                        /*modifiers*/ undefined,
-                        factory.createVariableDeclarationList([
-                            factory.createVariableDeclaration(
-                                prototypeStorageName,
-                                /*exclamationToken*/ undefined,
-                                /*type*/ undefined,
-                                originalPrototypeAccess
-                            )
-                        ])
-                    )
-                );
-
-                return prototypeStorageName;
-            }
         }
 
         function classMemberAssignsToPrototype(node: ClassElement) {
             return !(getEffectiveModifierFlags(node) & ModifierFlags.Static) && !isConstructorDeclaration(node);
         }
 
-        function membersContainMultipleUniqueNames(members: ClassElement[]) {
+        function membersContainMultipleUniqueNames(members: NodeArray<ClassElement>) {
             if (members.length <= 1) {
                 return false;
             }
@@ -1666,6 +1650,10 @@ namespace ts {
             let foundName: string | undefined;
 
             for (const member of members) {
+                if (!classMemberAssignsToPrototype(member)) {
+                    continue;
+                }
+
                 // If a name isn't immediately identifiable, we assume it's unique
                 if (!member.name || !isPropertyNameLiteral(member.name)) {
                     return true;
@@ -4393,10 +4381,10 @@ namespace ts {
             return node;
         }
 
-        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement, getPrototypeStorageName: () => LeftHandSideExpression) {
+        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement, prototypeStorageName: LeftHandSideExpression) {
             return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? factory.getInternalName(node)
-                : getPrototypeStorageName();
+                : prototypeStorageName;
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration | undefined, hasExtendsClause: boolean) {

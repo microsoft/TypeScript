@@ -57,9 +57,9 @@ var __extends = (this && this.__extends) || (function () {
 var Base = /** @class */ (function () {
     function Base(x) {
     }
-    var proto_1 = Base.prototype;
-    proto_1.b = function () { };
-    Object.defineProperty(proto_1, "c", {
+    var Base_prototype = Base.prototype;
+    Base_prototype.b = function () { };
+    Object.defineProperty(Base_prototype, "c", {
         get: function () { return ''; },
         set: function (v) { },
         enumerable: false,

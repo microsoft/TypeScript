@@ -230,7 +230,7 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                    }
 1->^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->export class StartFindAction implements Sample.Thing.IAction {
   >		
   >		public getId() { return "yo"; }
@@ -244,54 +244,54 @@ sourceFile:recursiveClassReferenceTest.ts
 1->Emitted(26, 21) Source(41, 2) + SourceIndex(0)
 2 >Emitted(26, 22) Source(41, 3) + SourceIndex(0)
 ---
->>>                    var proto_1 = StartFindAction.prototype;
->>>                    proto_1.getId = function () { return "yo"; };
+>>>                    var StartFindAction_prototype = StartFindAction.prototype;
+>>>                    StartFindAction_prototype.getId = function () { return "yo"; };
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^
-3 >                                 ^^^
-4 >                                    ^^^^^^^^^^^^^^
-5 >                                                  ^^^^^^^
-6 >                                                         ^^^^
-7 >                                                             ^
-8 >                                                              ^
-9 >                                                               ^
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                   ^^^
+4 >                                                      ^^^^^^^^^^^^^^
+5 >                                                                    ^^^^^^^
+6 >                                                                           ^^^^
+7 >                                                                               ^
+8 >                                                                                ^
+9 >                                                                                 ^
 1->
 2 >                    getId
-3 >                                 
-4 >                                    public getId() { 
-5 >                                                  return 
-6 >                                                         "yo"
-7 >                                                             ;
-8 >                                                               
-9 >                                                               }
+3 >                                                   
+4 >                                                      public getId() { 
+5 >                                                                    return 
+6 >                                                                           "yo"
+7 >                                                                               ;
+8 >                                                                                 
+9 >                                                                                 }
 1->Emitted(28, 21) Source(35, 10) + SourceIndex(0)
-2 >Emitted(28, 34) Source(35, 15) + SourceIndex(0)
-3 >Emitted(28, 37) Source(35, 3) + SourceIndex(0)
-4 >Emitted(28, 51) Source(35, 20) + SourceIndex(0)
-5 >Emitted(28, 58) Source(35, 27) + SourceIndex(0)
-6 >Emitted(28, 62) Source(35, 31) + SourceIndex(0)
-7 >Emitted(28, 63) Source(35, 32) + SourceIndex(0)
-8 >Emitted(28, 64) Source(35, 33) + SourceIndex(0)
-9 >Emitted(28, 65) Source(35, 34) + SourceIndex(0)
+2 >Emitted(28, 52) Source(35, 15) + SourceIndex(0)
+3 >Emitted(28, 55) Source(35, 3) + SourceIndex(0)
+4 >Emitted(28, 69) Source(35, 20) + SourceIndex(0)
+5 >Emitted(28, 76) Source(35, 27) + SourceIndex(0)
+6 >Emitted(28, 80) Source(35, 31) + SourceIndex(0)
+7 >Emitted(28, 81) Source(35, 32) + SourceIndex(0)
+8 >Emitted(28, 82) Source(35, 33) + SourceIndex(0)
+9 >Emitted(28, 83) Source(35, 34) + SourceIndex(0)
 ---
->>>                    proto_1.run = function (Thing) {
+>>>                    StartFindAction_prototype.run = function (Thing) {
 1 >^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^
-3 >                               ^^^
-4 >                                  ^^^^^^^^^^
-5 >                                            ^^^^^
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                 ^^^
+4 >                                                    ^^^^^^^^^^
+5 >                                                              ^^^^^
 1 >
   >		
   >		public 
 2 >                    run
-3 >                               
-4 >                                  public run(
-5 >                                            Thing:Sample.Thing.ICodeThing
+3 >                                                 
+4 >                                                    public run(
+5 >                                                              Thing:Sample.Thing.ICodeThing
 1 >Emitted(29, 21) Source(37, 10) + SourceIndex(0)
-2 >Emitted(29, 32) Source(37, 13) + SourceIndex(0)
-3 >Emitted(29, 35) Source(37, 3) + SourceIndex(0)
-4 >Emitted(29, 45) Source(37, 14) + SourceIndex(0)
-5 >Emitted(29, 50) Source(37, 43) + SourceIndex(0)
+2 >Emitted(29, 50) Source(37, 13) + SourceIndex(0)
+3 >Emitted(29, 53) Source(37, 3) + SourceIndex(0)
+4 >Emitted(29, 63) Source(37, 14) + SourceIndex(0)
+5 >Emitted(29, 68) Source(37, 43) + SourceIndex(0)
 ---
 >>>                        return true;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -738,42 +738,42 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                }
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >		
 2 >                }
 1 >Emitted(50, 17) Source(53, 3) + SourceIndex(0)
 2 >Emitted(50, 18) Source(53, 4) + SourceIndex(0)
 ---
->>>                var proto_2 = FindWidget.prototype;
->>>                proto_2.gar = function (runner) { if (true) {
+>>>                var FindWidget_prototype = FindWidget.prototype;
+>>>                FindWidget_prototype.gar = function (runner) { if (true) {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^
-3 >                           ^^^
-4 >                              ^^^^^^^^^^
-5 >                                        ^^^^^^
-6 >                                              ^^^^
-7 >                                                  ^^^^
-8 >                                                      ^^^^
-9 >                                                          ^^
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                        ^^^
+4 >                                           ^^^^^^^^^^
+5 >                                                     ^^^^^^
+6 >                                                           ^^^^
+7 >                                                               ^^^^
+8 >                                                                   ^^^^
+9 >                                                                       ^^
 1->
 2 >                gar
-3 >                           
-4 >                              public gar(
-5 >                                        runner:(widget:Sample.Thing.IWidget)=>any
-6 >                                              ) { 
-7 >                                                  if (
-8 >                                                      true
-9 >                                                          ) 
+3 >                                        
+4 >                                           public gar(
+5 >                                                     runner:(widget:Sample.Thing.IWidget)=>any
+6 >                                                           ) { 
+7 >                                                               if (
+8 >                                                                   true
+9 >                                                                       ) 
 1->Emitted(52, 17) Source(47, 10) + SourceIndex(0)
-2 >Emitted(52, 28) Source(47, 13) + SourceIndex(0)
-3 >Emitted(52, 31) Source(47, 3) + SourceIndex(0)
-4 >Emitted(52, 41) Source(47, 14) + SourceIndex(0)
-5 >Emitted(52, 47) Source(47, 55) + SourceIndex(0)
-6 >Emitted(52, 51) Source(47, 59) + SourceIndex(0)
-7 >Emitted(52, 55) Source(47, 63) + SourceIndex(0)
-8 >Emitted(52, 59) Source(47, 67) + SourceIndex(0)
-9 >Emitted(52, 61) Source(47, 69) + SourceIndex(0)
+2 >Emitted(52, 41) Source(47, 13) + SourceIndex(0)
+3 >Emitted(52, 44) Source(47, 3) + SourceIndex(0)
+4 >Emitted(52, 54) Source(47, 14) + SourceIndex(0)
+5 >Emitted(52, 60) Source(47, 55) + SourceIndex(0)
+6 >Emitted(52, 64) Source(47, 59) + SourceIndex(0)
+7 >Emitted(52, 68) Source(47, 63) + SourceIndex(0)
+8 >Emitted(52, 72) Source(47, 67) + SourceIndex(0)
+9 >Emitted(52, 74) Source(47, 69) + SourceIndex(0)
 ---
 >>>                    return runner(this);
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -802,7 +802,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1 >^^^^^^^^^^^^^^^^^
 2 >                 ^
 3 >                  ^
-4 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >}
 2 >                 
 3 >                  }
@@ -810,10 +810,10 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >Emitted(54, 19) Source(47, 91) + SourceIndex(0)
 3 >Emitted(54, 20) Source(47, 92) + SourceIndex(0)
 ---
->>>                proto_2.getDomNode = function () {
+>>>                FindWidget_prototype.getDomNode = function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^
-3 >                                  ^^^
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                               ^^^
 1->
   >			
   >		private domNode:any = null;
@@ -824,10 +824,10 @@ sourceFile:recursiveClassReferenceTest.ts
   >		
   >		public 
 2 >                getDomNode
-3 >                                  
+3 >                                               
 1->Emitted(55, 17) Source(55, 10) + SourceIndex(0)
-2 >Emitted(55, 35) Source(55, 20) + SourceIndex(0)
-3 >Emitted(55, 38) Source(55, 3) + SourceIndex(0)
+2 >Emitted(55, 48) Source(55, 20) + SourceIndex(0)
+3 >Emitted(55, 51) Source(55, 3) + SourceIndex(0)
 ---
 >>>                    return domNode;
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -847,25 +847,25 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                };
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
-3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >		
 2 >                }
 1 >Emitted(57, 17) Source(57, 3) + SourceIndex(0)
 2 >Emitted(57, 18) Source(57, 4) + SourceIndex(0)
 ---
->>>                proto_2.destroy = function () {
+>>>                FindWidget_prototype.destroy = function () {
 1->^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^
-3 >                               ^^^
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                            ^^^
 1->
   >		
   >		public 
 2 >                destroy
-3 >                               
+3 >                                            
 1->Emitted(58, 17) Source(59, 10) + SourceIndex(0)
-2 >Emitted(58, 32) Source(59, 17) + SourceIndex(0)
-3 >Emitted(58, 35) Source(59, 3) + SourceIndex(0)
+2 >Emitted(58, 45) Source(59, 17) + SourceIndex(0)
+3 >Emitted(58, 48) Source(59, 3) + SourceIndex(0)
 ---
 >>>                };
 1 >^^^^^^^^^^^^^^^^
@@ -1386,37 +1386,36 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                    }
 1 >^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >                    }
 1 >Emitted(82, 21) Source(79, 44) + SourceIndex(0)
 2 >Emitted(82, 22) Source(79, 45) + SourceIndex(0)
 ---
->>>                    var proto_3 = State.prototype;
->>>                    proto_3.clone = function () {
+>>>                    var State_prototype = State.prototype;
+>>>                    State_prototype.clone = function () {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^
-3 >                                 ^^^
-4 >                                    ^->
+2 >                    ^^^^^^^^^^^^^^^^^^^^^
+3 >                                         ^^^
 1->
   >		public 
 2 >                    clone
-3 >                                 
+3 >                                         
 1->Emitted(84, 21) Source(80, 10) + SourceIndex(0)
-2 >Emitted(84, 34) Source(80, 15) + SourceIndex(0)
-3 >Emitted(84, 37) Source(80, 3) + SourceIndex(0)
+2 >Emitted(84, 42) Source(80, 15) + SourceIndex(0)
+3 >Emitted(84, 45) Source(80, 3) + SourceIndex(0)
 ---
 >>>                        return this;
-1->^^^^^^^^^^^^^^^^^^^^^^^^
+1 >^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                        ^^^^^^^
 3 >                               ^^^^
 4 >                                   ^
-1->public clone():IState {
+1 >public clone():IState {
   >			
 2 >                        return 
 3 >                               this
 4 >                                   ;
-1->Emitted(85, 25) Source(81, 4) + SourceIndex(0)
+1 >Emitted(85, 25) Source(81, 4) + SourceIndex(0)
 2 >Emitted(85, 32) Source(81, 11) + SourceIndex(0)
 3 >Emitted(85, 36) Source(81, 15) + SourceIndex(0)
 4 >Emitted(85, 37) Source(81, 16) + SourceIndex(0)
@@ -1424,31 +1423,31 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >		
 2 >                    }
 1 >Emitted(86, 21) Source(82, 3) + SourceIndex(0)
 2 >Emitted(86, 22) Source(82, 4) + SourceIndex(0)
 ---
->>>                    proto_3.equals = function (other) {
+>>>                    State_prototype.equals = function (other) {
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^
-3 >                                  ^^^
-4 >                                     ^^^^^^^^^^
-5 >                                               ^^^^^
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^
+3 >                                          ^^^
+4 >                                             ^^^^^^^^^^
+5 >                                                       ^^^^^
 1->
   >
   >		public 
 2 >                    equals
-3 >                                  
-4 >                                     public equals(
-5 >                                               other:IState
+3 >                                          
+4 >                                             public equals(
+5 >                                                       other:IState
 1->Emitted(87, 21) Source(84, 10) + SourceIndex(0)
-2 >Emitted(87, 35) Source(84, 16) + SourceIndex(0)
-3 >Emitted(87, 38) Source(84, 3) + SourceIndex(0)
-4 >Emitted(87, 48) Source(84, 17) + SourceIndex(0)
-5 >Emitted(87, 53) Source(84, 29) + SourceIndex(0)
+2 >Emitted(87, 43) Source(84, 16) + SourceIndex(0)
+3 >Emitted(87, 46) Source(84, 3) + SourceIndex(0)
+4 >Emitted(87, 56) Source(84, 17) + SourceIndex(0)
+5 >Emitted(87, 61) Source(84, 29) + SourceIndex(0)
 ---
 >>>                        return this === other;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1474,43 +1473,43 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>                    };
 1 >^^^^^^^^^^^^^^^^^^^^
 2 >                    ^
-3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >		
 2 >                    }
 1 >Emitted(89, 21) Source(86, 3) + SourceIndex(0)
 2 >Emitted(89, 22) Source(86, 4) + SourceIndex(0)
 ---
->>>                    proto_3.getMode = function () { return mode; };
+>>>                    State_prototype.getMode = function () { return mode; };
 1->^^^^^^^^^^^^^^^^^^^^
-2 >                    ^^^^^^^^^^^^^^^
-3 >                                   ^^^
-4 >                                      ^^^^^^^^^^^^^^
-5 >                                                    ^^^^^^^
-6 >                                                           ^^^^
-7 >                                                               ^
-8 >                                                                ^
-9 >                                                                 ^
+2 >                    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                           ^^^
+4 >                                              ^^^^^^^^^^^^^^
+5 >                                                            ^^^^^^^
+6 >                                                                   ^^^^
+7 >                                                                       ^
+8 >                                                                        ^
+9 >                                                                         ^
 1->
   >		
   >		public 
 2 >                    getMode
-3 >                                   
-4 >                                      public getMode(): IMode { 
-5 >                                                    return 
-6 >                                                           mode
-7 >                                                               ;
-8 >                                                                 
-9 >                                                                 }
+3 >                                           
+4 >                                              public getMode(): IMode { 
+5 >                                                            return 
+6 >                                                                   mode
+7 >                                                                       ;
+8 >                                                                         
+9 >                                                                         }
 1->Emitted(90, 21) Source(88, 10) + SourceIndex(0)
-2 >Emitted(90, 36) Source(88, 17) + SourceIndex(0)
-3 >Emitted(90, 39) Source(88, 3) + SourceIndex(0)
-4 >Emitted(90, 53) Source(88, 29) + SourceIndex(0)
-5 >Emitted(90, 60) Source(88, 36) + SourceIndex(0)
-6 >Emitted(90, 64) Source(88, 40) + SourceIndex(0)
-7 >Emitted(90, 65) Source(88, 41) + SourceIndex(0)
-8 >Emitted(90, 66) Source(88, 42) + SourceIndex(0)
-9 >Emitted(90, 67) Source(88, 43) + SourceIndex(0)
+2 >Emitted(90, 44) Source(88, 17) + SourceIndex(0)
+3 >Emitted(90, 47) Source(88, 3) + SourceIndex(0)
+4 >Emitted(90, 61) Source(88, 29) + SourceIndex(0)
+5 >Emitted(90, 68) Source(88, 36) + SourceIndex(0)
+6 >Emitted(90, 72) Source(88, 40) + SourceIndex(0)
+7 >Emitted(90, 73) Source(88, 41) + SourceIndex(0)
+8 >Emitted(90, 74) Source(88, 42) + SourceIndex(0)
+9 >Emitted(90, 75) Source(88, 43) + SourceIndex(0)
 ---
 >>>                    return State;
 1 >^^^^^^^^^^^^^^^^^^^^

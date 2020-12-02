@@ -363,14 +363,14 @@ var TestRunner = /** @class */ (function () {
     function TestRunner() {
         this.tests = [];
     }
-    var proto_1 = TestRunner.prototype;
+    var TestRunner_prototype = TestRunner.prototype;
     TestRunner.arrayCompare = function (arg1, arg2) {
         return (arg1.every(function (val, index) { return val === arg2[index]; }));
     };
-    proto_1.addTest = function (test) {
+    TestRunner_prototype.addTest = function (test) {
         this.tests.push(test);
     };
-    proto_1.run = function () {
+    TestRunner_prototype.run = function () {
         var success = true;
         for (var test in this.tests) {
             var exception = false;

@@ -98,9 +98,9 @@ var Portal;
             var Validator = /** @class */ (function () {
                 function Validator(message) {
                 }
-                var proto_1 = Validator.prototype;
-                proto_1.destroy = function () { };
-                proto_1._validate = function (value) { return 0; };
+                var Validator_prototype = Validator.prototype;
+                Validator_prototype.destroy = function () { };
+                Validator_prototype._validate = function (value) { return 0; };
                 return Validator;
             }());
             Validators.Validator = Validator;

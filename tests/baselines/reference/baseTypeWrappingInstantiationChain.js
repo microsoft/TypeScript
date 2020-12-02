@@ -69,13 +69,13 @@ var C = /** @class */ (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var proto_1 = C.prototype;
-    proto_1.works = function () {
+    var C_prototype = C.prototype;
+    C_prototype.works = function () {
         new CBaseBase(this);
     };
-    proto_1.alsoWorks = function () {
+    C_prototype.alsoWorks = function () {
         new CBase(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
     };
-    proto_1.method = function (t) { };
+    C_prototype.method = function (t) { };
     return C;
 }(CBase));
