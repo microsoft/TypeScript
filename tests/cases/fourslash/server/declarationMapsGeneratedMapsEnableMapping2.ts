@@ -36,7 +36,7 @@
 ////instance.[|/*1*/methodName|]({member: 12});
 
 // @Filename: /dist/index.js.map
-////{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;;IAPG,kBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,mBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE;YACrB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;SAClB;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
+////{"version":3,"file":"index.js","sourceRoot":"/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE;YACrB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;SAClB;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
 
 // @Filename: /dist/index.js
 ////"use strict";
@@ -45,9 +45,9 @@
 ////var Foo = /** @class */ (function () {
 ////    function Foo() {
 ////    }
-////    var proto_1 = Foo.prototype;
-////    proto_1.methodName = function (propName) { return propName; };
-////    proto_1.otherMethod = function () {
+////    var Foo_prototype = Foo.prototype;
+////    Foo_prototype.methodName = function (propName) { return propName; };
+////    Foo_prototype.otherMethod = function () {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }
