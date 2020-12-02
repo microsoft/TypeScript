@@ -4406,7 +4406,7 @@ interface DocumentEventMap extends GlobalEventHandlersEventMap, DocumentAndEleme
     "fullscreenerror": Event;
     "pointerlockchange": Event;
     "pointerlockerror": Event;
-    "readystatechange": Event;
+    "readystatechange": ProgressEvent<Document>;
     "visibilitychange": Event;
 }
 
