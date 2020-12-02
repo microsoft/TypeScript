@@ -286,7 +286,7 @@ namespace Harness {
             return fileName;
         }
 
-        interface HarnessOptions {
+        export interface HarnessOptions {
             useCaseSensitiveFileNames?: boolean;
             includeBuiltFile?: string;
             baselineFile?: string;
