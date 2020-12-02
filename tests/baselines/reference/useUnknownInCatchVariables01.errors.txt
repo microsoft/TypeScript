@@ -30,6 +30,18 @@ tests/cases/compiler/useUnknownInCatchVariables01.ts(8,10): error TS2349: This e
             e.stack?.toUpperCase();
         }
         if (typeof e === "number") {
+            e.toExponential();
             e++;
         }
+    }
+    
+    
+    try {
+        // ...
+    }
+    catch (e: any) {
+        // All are allowed.
+        void e.toUpperCase();
+        void e.toExponential();
+        void e();
     }
