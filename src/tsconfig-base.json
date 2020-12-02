@@ -18,7 +18,7 @@
         "strictPropertyInitialization": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noPropertyAccessFromIndexSignature": true
+        "noPropertyAccessFromIndexSignature": true,
 
         "skipLibCheck": true,
 
