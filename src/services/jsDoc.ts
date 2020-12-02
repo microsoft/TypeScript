@@ -93,7 +93,7 @@ namespace ts.JsDoc {
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                pushIfUnique(documentationComment, comment);
+                pushIfUnique(documentationComment, comment.text);
             }
         });
         return intersperse(map(documentationComment, textPart), lineBreakPart());
@@ -156,9 +156,9 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment;
+                return name ? withNode(name) : comment?.text;
             default:
-                return comment;
+                return comment?.text;
         }
 
         function withNode(node: Node) {

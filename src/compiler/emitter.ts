@@ -1560,6 +1560,7 @@ namespace ts {
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
                     case SyntaxKind.JSDocClassTag:
                     case SyntaxKind.JSDocTag:
+                    case SyntaxKind.JSDocAuthorTag:
                         return emitJSDocSimpleTag(node as JSDocTag);
                     case SyntaxKind.JSDocSeeTag:
                         return emitJSDocSeeTag(node as JSDocSeeTag);
@@ -3508,7 +3509,7 @@ namespace ts {
         function emitJSDoc(node: JSDoc) {
             write("/**");
             if (node.comment) {
-                const lines = node.comment.split(/\r\n?|\n/g);
+                const lines = node.comment.text.split(/\r\n?|\n/g);
                 for (const line of lines) {
                     writeLine();
                     writeSpace();
@@ -3647,10 +3648,10 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: string | undefined) {
+        function emitJSDocComment(comment: JSDocComment | undefined) {
             if (comment) {
                 writeSpace();
-                write(comment);
+                write(comment.text);
             }
         }
 

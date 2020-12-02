@@ -20,7 +20,10 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": "hi\n< > still part of the previous comment",
+            "comment": {
+                "links": [],
+                "text": "hi\n< > still part of the previous comment"
+            },
             "name": {
                 "kind": "Identifier",
                 "pos": 14,

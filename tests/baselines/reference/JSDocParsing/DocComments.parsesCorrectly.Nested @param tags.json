@@ -20,7 +20,10 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
-            "comment": "Doc doc",
+            "comment": {
+                "links": [],
+                "text": "Doc doc"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
@@ -48,7 +51,10 @@
                                 "transformFlags": 0,
                                 "escapedText": "param"
                             },
-                            "comment": "Doc for f",
+                            "comment": {
+                                "links": [],
+                                "text": "Doc for f"
+                            },
                             "typeExpression": {
                                 "kind": "JSDocTypeExpression",
                                 "pos": 41,

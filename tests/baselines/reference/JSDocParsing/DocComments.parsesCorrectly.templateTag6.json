@@ -20,7 +20,10 @@
                 "transformFlags": 0,
                 "escapedText": "template"
             },
-            "comment": "Description of type parameters.",
+            "comment": {
+                "links": [],
+                "text": "Description of type parameters."
+            },
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",

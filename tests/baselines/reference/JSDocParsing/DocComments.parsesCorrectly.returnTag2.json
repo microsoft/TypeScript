@@ -21,7 +21,10 @@
                 "originalKeywordKind": "ReturnKeyword",
                 "escapedText": "return"
             },
-            "comment": "Description text follows",
+            "comment": {
+                "links": [],
+                "text": "Description text follows"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 16,

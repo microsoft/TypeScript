@@ -1,9 +1,154 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 63,
+    "end": 187,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": "{@link first link}\nInside {@link link text} thing"
+    "comment": {
+        "links": [],
+        "text": "{@link first }\nInside {@link link text} thing"
+    },
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 59,
+            "end": 102,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 60,
+                "end": 65,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": {
+                "links": [
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 79,
+                        "end": 98,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "FirstNode",
+                            "pos": 86,
+                            "end": 97,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "left": {
+                                "kind": "Identifier",
+                                "pos": 86,
+                                "end": 87,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "A"
+                            },
+                            "right": {
+                                "kind": "Identifier",
+                                "pos": 88,
+                                "end": 97,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "Reference"
+                            }
+                        }
+                    }
+                ],
+                "text": "See also {@link A.Reference}"
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 66,
+                "end": 69,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "foo"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "1": {
+            "kind": "JSDocParameterTag",
+            "pos": 102,
+            "end": 185,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 103,
+                "end": 108,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": {
+                "links": [
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 120,
+                        "end": 152,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 127,
+                            "end": 131,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "http"
+                        }
+                    },
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 156,
+                        "end": 183,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "FirstNode",
+                            "pos": 163,
+                            "end": 181,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "left": {
+                                "kind": "Identifier",
+                                "pos": 163,
+                                "end": 173,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "Standalone"
+                            },
+                            "right": {
+                                "kind": "Identifier",
+                                "pos": 174,
+                                "end": 181,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "Complex"
+                            }
+                        }
+                    }
+                ],
+                "text": "Or see {@link http://www.zombocom.com }\n{@link Standalone.Complex }"
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 109,
+                "end": 112,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "bar"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "length": 2,
+        "pos": 59,
+        "end": 185,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
 }

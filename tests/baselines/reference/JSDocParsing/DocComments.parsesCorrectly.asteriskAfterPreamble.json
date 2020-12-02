@@ -5,5 +5,8 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": "* @type {number}"
+    "comment": {
+        "links": [],
+        "text": "* @type {number}"
+    }
 }

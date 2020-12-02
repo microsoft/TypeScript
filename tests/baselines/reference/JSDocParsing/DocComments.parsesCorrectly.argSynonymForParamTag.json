@@ -20,7 +20,10 @@
                 "transformFlags": 0,
                 "escapedText": "arg"
             },
-            "comment": "Description",
+            "comment": {
+                "links": [],
+                "text": "Description"
+            },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 13,

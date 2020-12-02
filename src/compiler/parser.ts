@@ -7383,7 +7383,8 @@ namespace ts {
                 }
 
                 function createJSDocComment(): JSDoc {
-                    const comment = comments.length ? comments.join("") : undefined;
+                    // TODO: Parse links too!
+                    const comment = comments.length ? { links: [], text: comments.join("") } : undefined;
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     return finishNode(factory.createJSDocComment(comment, tagsArray), start, end);
                 }
@@ -7522,8 +7523,9 @@ namespace ts {
                 }
 
                 // TODO: Also needs to parse link tags
-                function parseTagComments(indent: number, initialMargin?: string): string | undefined {
+                function parseTagComments(indent: number, initialMargin?: string): JSDocComment | undefined {
                     const comments: string[] = [];
+                    const links: JSDocLinkNode[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
                     function pushComment(text: string) {
@@ -7574,13 +7576,17 @@ namespace ts {
                                 break;
                             case SyntaxKind.OpenBraceToken:
                                 state = JSDocState.SavingComments;
+                                // TODO: test margins
+                                // TODO: Put a manual `tok = nextTokenJSDoc()` here and only call `lookAhead` if its AtToken.
+                                // THat means I'll have to save getTextPos *before* the nextTokenJSDoc and unconditionally `continue` afterward
                                 if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
-                                    pushComment(scanner.getTokenText());
-                                    nextTokenJSDoc();
-                                    pushComment(scanner.getTokenText());
-                                    nextTokenJSDoc();
+                                    const link = parseLink(scanner.getTextPos() - 1)
+                                    links.push(link)
+                                    pushComment(scanner.getText().slice(link.pos, link.end))
                                 }
-                                pushComment(scanner.getTokenText());
+                                else {
+                                    pushComment(scanner.getTokenText());
+                                }
                                 break;
                             case SyntaxKind.BacktickToken:
                                 if (state === JSDocState.SavingBackticks) {
@@ -7612,7 +7618,23 @@ namespace ts {
 
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
-                    return comments.length === 0 ? undefined : comments.join("");
+                    return comments.length === 0 ? undefined : { links, text: comments.join("") };
+                }
+
+                function parseLink(start: number) {
+                    nextTokenJSDoc(); // @
+                    nextTokenJSDoc(); // link
+                    nextTokenJSDoc(); // ' '
+                    nextTokenJSDoc(); // first token
+                    const name = tokenIsIdentifierOrKeyword(token()) ? parseEntityName(/*allowReservedWords*/ true) : createMissingNode<Identifier>(SyntaxKind.Identifier, false);  // don't try to parseEntityName, it'll assert
+                    // TODO: I'm pretty sure you getting a MissingIdentifier for a bad parse, or soething like that
+                    // in any case, most of the time you'll have `http` as the first identifier and you'll be fine
+                    // now skip past everything including a close brace.
+                    // .. also stop at newlines (TODO: Measure this (it's probably fine, and the penalty for being wrong is just a too-small span), and then write tests)
+                    while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia) {
+                        nextTokenJSDoc();
+                    }
+                    return finishNode(factory.createJSDocLinkNode(name), start, scanner.getTextPos())
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {
@@ -7753,13 +7775,14 @@ namespace ts {
 
                     let comments = authorInfoWithEmail;
                     if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
+                        // TODO: This is wrong, there could be links in there
                         const comment = parseTagComments(indent);
                         if (comment) {
-                            comments += comment;
+                            comments += comment.text;
                         }
                     }
 
-                    return finishNode(factory.createJSDocAuthorTag(tagName, comments), start);
+                    return finishNode(factory.createJSDocAuthorTag(tagName, { links: [], text: comments }), start);
                 }
 
                 function tryParseAuthorNameAndEmail(): string | undefined {
@@ -7839,7 +7862,7 @@ namespace ts {
                     return node;
                 }
 
-                function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: string) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
+                function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: JSDocComment) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
                     const end = getNodePos();
                     return finishNode(createTag(tagName, parseTrailingTagComments(start, end, margin, indentText)), start, end);
                 }

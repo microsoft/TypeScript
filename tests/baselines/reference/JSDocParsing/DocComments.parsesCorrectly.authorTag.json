@@ -20,7 +20,10 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": "John Doe <john.doe@example.com>"
+            "comment": {
+                "links": [],
+                "text": "John Doe <john.doe@example.com>"
+            }
         },
         "1": {
             "kind": "JSDocAuthorTag",
@@ -36,7 +39,10 @@
                 "transformFlags": 0,
                 "escapedText": "author"
             },
-            "comment": "John Doe <john.doe@example.com> unexpected comment"
+            "comment": {
+                "links": [],
+                "text": "John Doe <john.doe@example.com> unexpected comment"
+            }
         },
         "length": 2,
         "pos": 7,
