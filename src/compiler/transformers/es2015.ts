@@ -982,7 +982,7 @@ namespace ts {
 
             // In derived classes, there may be code before the necessary super() call
             // We'll remove pre-super statements to be tacked on after the rest of the body
-            const { bodyStatements, originalSuperStatement, preSuperStatements } = splitConstructorBodyStatementTypes(constructor.body.statements);
+            const { bodyStatements, existingPrologue, originalSuperStatement, preSuperStatements } = splitConstructorBodyStatementTypes(constructor.body.statements);
 
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
@@ -1103,6 +1103,7 @@ namespace ts {
                 setTextRange(
                     factory.createNodeArray(
                         [
+                            ...existingPrologue,
                             ...prologue,
                             ...visitNodes(factory.createNodeArray(preSuperStatements), visitor, isStatement),
                             ...statements
@@ -1118,11 +1119,21 @@ namespace ts {
         }
 
         function splitConstructorBodyStatementTypes(originalBodyStatements: NodeArray<Statement>) {
+            const existingPrologue: Statement[] = [];
             const preSuperStatements: Statement[] = [];
             let originalSuperStatement: SuperCall | undefined;
             let i: number;
 
             for (i = 0; i < originalBodyStatements.length; i += 1) {
+                if (isPrologueDirective(originalBodyStatements[i])) {
+                    existingPrologue.push(originalBodyStatements[i]);
+                }
+                else {
+                    break;
+                }
+            }
+
+            for (i; i < originalBodyStatements.length; i += 1) {
                 const statement = originalBodyStatements[i];
                 const foundSuperStatement = getWrappedSuperCallExpression(skipOuterExpressions(statement));
 
@@ -1139,6 +1150,7 @@ namespace ts {
             if (!originalSuperStatement) {
                 return {
                     bodyStatements: originalBodyStatements,
+                    existingPrologue,
                     preSuperStatements: [],
                 };
             }
@@ -1148,6 +1160,7 @@ namespace ts {
 
             return {
                 bodyStatements,
+                existingPrologue,
                 originalSuperStatement,
                 preSuperStatements: factory.createNodeArray(preSuperStatements),
             };
