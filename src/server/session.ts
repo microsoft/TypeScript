@@ -689,7 +689,7 @@ namespace ts.server {
         typesMapLocation?: string;
     }
 
-    export class Session<MessageType = string> implements EventSender {
+    export class Session<TMessage = string> implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -2907,7 +2907,7 @@ namespace ts.server {
             }
         }
 
-        public onMessage(message: MessageType) {
+        public onMessage(message: TMessage) {
             this.gcTimer.scheduleCollect();
 
             this.performanceData = undefined;
@@ -2978,11 +2978,11 @@ namespace ts.server {
             }
         }
 
-        protected parseMessage(message: MessageType): protocol.Request {
+        protected parseMessage(message: TMessage): protocol.Request {
             return <protocol.Request>JSON.parse(message as any as string);
         }
 
-        protected toStringMessage(message: MessageType): string {
+        protected toStringMessage(message: TMessage): string {
             return message as any as string;
         }
 

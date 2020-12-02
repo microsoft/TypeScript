@@ -72,12 +72,9 @@ namespace ts.server {
         }
     }
 
-    let unknownServerMode: string | undefined;
-    function parseServerMode(): LanguageServiceMode | undefined {
+    function parseServerMode(): LanguageServiceMode | string | undefined {
         const mode = findArgument("--serverMode");
-        if (mode === undefined) {
-            return undefined;
-        }
+        if (!mode) return undefined;
 
         switch (mode.toLowerCase()) {
             case "semantic":
@@ -87,8 +84,7 @@ namespace ts.server {
             case "syntactic":
                 return LanguageServiceMode.Syntactic;
             default:
-                unknownServerMode = mode;
-                return undefined;
+                return mode;
         }
     }
 
@@ -130,15 +126,14 @@ namespace ts.server {
             stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
         } = require("fs");
 
-        class Logger implements server.Logger { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+        class Logger extends BaseLogger {
             private fd = -1;
-            private seq = 0;
-            private inGroup = false;
-            private firstInGroup = true;
-
-            constructor(private readonly logFilename: string,
+            constructor(
+                private readonly logFilename: string,
                 private readonly traceToConsole: boolean,
-                private readonly level: LogLevel) {
+                level: LogLevel
+            ) {
+                super(level);
                 if (this.logFilename) {
                     try {
                         this.fd = fs.openSync(this.logFilename, "w");
@@ -147,10 +142,6 @@ namespace ts.server {
                         // swallow the error and keep logging disabled if file cannot be opened
                     }
                 }
-            }
-
-            static padStringRight(str: string, padding: string) {
-                return (str + padding).slice(0, padding.length);
             }
 
             close() {
@@ -163,66 +154,15 @@ namespace ts.server {
                 return this.logFilename;
             }
 
-            perftrc(s: string) {
-                this.msg(s, Msg.Perf);
-            }
-
-            info(s: string) {
-                this.msg(s, Msg.Info);
-            }
-
-            err(s: string) {
-                this.msg(s, Msg.Err);
-            }
-
-            startGroup() {
-                this.inGroup = true;
-                this.firstInGroup = true;
-            }
-
-            endGroup() {
-                this.inGroup = false;
-            }
-
             loggingEnabled() {
                 return !!this.logFilename || this.traceToConsole;
             }
 
-            hasLevel(level: LogLevel) {
-                return this.loggingEnabled() && this.level >= level;
-            }
-
-            msg(s: string, type: Msg = Msg.Err) {
-                switch (type) {
-                    case Msg.Info:
-                        perfLogger.logInfoEvent(s);
-                        break;
-                    case Msg.Perf:
-                        perfLogger.logPerfEvent(s);
-                        break;
-                    default: // Msg.Err
-                        perfLogger.logErrEvent(s);
-                        break;
-                }
-
-                if (!this.canWrite) return;
-
-                s = `[${nowString()}] ${s}\n`;
-                if (!this.inGroup || this.firstInGroup) {
-                    const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
-                    s = prefix + s;
-                }
-                this.write(s);
-                if (!this.inGroup) {
-                    this.seq++;
-                }
-            }
-
-            private get canWrite() {
+            protected canWrite() {
                 return this.fd >= 0 || this.traceToConsole;
             }
 
-            private write(s: string) {
+            protected write(s: string, _type: Msg) {
                 if (this.fd >= 0) {
                     const buf = sys.bufferFrom!(s);
                     // eslint-disable-next-line no-null/no-null
@@ -349,7 +289,13 @@ namespace ts.server {
             validateLocaleAndSetLanguage(localeStr, sys);
         }
 
-        const serverMode = parseServerMode();
+        const modeOrUnknown = parseServerMode();
+        let serverMode: LanguageServiceMode | undefined;
+        let unknownServerMode: string | undefined;
+        if (modeOrUnknown !== undefined) {
+            if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
+            else unknownServerMode = modeOrUnknown;
+        }
         return {
             args: process.argv,
             logger,

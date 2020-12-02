@@ -9909,7 +9909,7 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
     }
-    class Session<MessageType = string> implements EventSender {
+    class Session<TMessage = string> implements EventSender {
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
@@ -10067,9 +10067,9 @@ declare namespace ts.server {
         private resetCurrentRequest;
         executeWithRequestId<T>(requestId: number, f: () => T): T;
         executeCommand(request: protocol.Request): HandlerResponse;
-        onMessage(message: MessageType): void;
-        protected parseMessage(message: MessageType): protocol.Request;
-        protected toStringMessage(message: MessageType): string;
+        onMessage(message: TMessage): void;
+        protected parseMessage(message: TMessage): protocol.Request;
+        protected toStringMessage(message: TMessage): string;
         private getFormatOptions;
         private getPreferences;
         private getHostFormatOptions;

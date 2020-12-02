@@ -2,12 +2,7 @@
 namespace ts.server {
     declare const addEventListener: any;
     declare const removeEventListener: any;
-    const enum SystemKind {
-        Node,
-        Web
-    };
-
-    function parseStringArray(argName: string): readonly string[] {
+    function findArgumentStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
             return emptyArray;
@@ -35,13 +30,13 @@ namespace ts.server {
         unknownServerMode?: string;
         startSession: (option: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) => void;
     }
-    function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput) {
+    function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
         const syntaxOnly = hasArgument("--syntaxOnly");
 
         logger.info(`Starting TS Server`);
         logger.info(`Version: ${version}`);
         logger.info(`Arguments: ${args.join(" ")}`);
-        logger.info(`Platform: ${platform()} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+        logger.info(`Platform: ${platform} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
         logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
 
         setStackTraceLimit();
@@ -64,8 +59,8 @@ namespace ts.server {
 
         startServer(
             {
-                globalPlugins: parseStringArray("--globalPlugins"),
-                pluginProbeLocations: parseStringArray("--pluginProbeLocations"),
+                globalPlugins: findArgumentStringArray("--globalPlugins"),
+                pluginProbeLocations: findArgumentStringArray("--pluginProbeLocations"),
                 allowLocalPluginLoads: hasArgument("--allowLocalPluginLoads"),
                 useSingleInferredProject: hasArgument("--useSingleInferredProject"),
                 useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
@@ -79,23 +74,18 @@ namespace ts.server {
         );
     }
 
-    const systemKind = typeof process !== "undefined" ? SystemKind.Node : SystemKind.Web;
-    const platform = () => systemKind === SystemKind.Web ? "web" : require("os").platform();
     setStackTraceLimit();
-    switch (systemKind) {
-        case SystemKind.Node:
-            start(initializeNodeSystem());
-            break;
-        case SystemKind.Web:
-            // Get args from first message
-            const listener = (e: any) => {
-                removeEventListener("message", listener);
-                const args = e.data;
-                start(initializeWebSystem(args));
-            };
-            addEventListener("message", listener);
-            break;
-        default:
-            Debug.assertNever(systemKind, "Unknown system kind");
+    // Cannot check process var directory in webworker so has to be typeof check here
+    if (typeof process !== "undefined") {
+        start(initializeNodeSystem(), require("os").platform());
+    }
+    else {
+        // Get args from first message
+        const listener = (e: any) => {
+            removeEventListener("message", listener);
+            const args = e.data;
+            start(initializeWebSystem(args), "web");
+        };
+        addEventListener("message", listener);
     }
 }

@@ -1,7 +1,7 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: webServer", () => {
         class TestWorkerSession extends server.WorkerSession {
-            constructor(host: server.ServerHost, webHost: server.HostWithPostMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
+            constructor(host: server.ServerHost, webHost: server.HostWithWriteMessage, options: Partial<server.StartSessionOptions>, logger: server.Logger) {
                 super(
                     host,
                     webHost,

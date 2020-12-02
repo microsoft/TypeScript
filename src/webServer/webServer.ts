@@ -1,11 +1,79 @@
 /*@internal*/
 namespace ts.server {
-    export interface HostWithPostMessage {
+    export interface HostWithWriteMessage {
         writeMessage(s: any): void;
     }
-    export interface WebHost extends HostWithPostMessage {
+    export interface WebHost extends HostWithWriteMessage {
         readFile(path: string): string | undefined;
         fileExists(path: string): boolean;
+    }
+
+    export class BaseLogger implements Logger {
+        private seq = 0;
+        private inGroup = false;
+        private firstInGroup = true;
+        constructor(protected readonly level: LogLevel) {
+        }
+        static padStringRight(str: string, padding: string) {
+            return (str + padding).slice(0, padding.length);
+        }
+        close() {
+        }
+        getLogFileName(): string | undefined {
+            return undefined;
+        }
+        perftrc(s: string) {
+            this.msg(s, Msg.Perf);
+        }
+        info(s: string) {
+            this.msg(s, Msg.Info);
+        }
+        err(s: string) {
+            this.msg(s, Msg.Err);
+        }
+        startGroup() {
+            this.inGroup = true;
+            this.firstInGroup = true;
+        }
+        endGroup() {
+            this.inGroup = false;
+        }
+        loggingEnabled() {
+            return true;
+        }
+        hasLevel(level: LogLevel) {
+            return this.loggingEnabled() && this.level >= level;
+        }
+        msg(s: string, type: Msg = Msg.Err) {
+            switch (type) {
+                case Msg.Info:
+                    perfLogger.logInfoEvent(s);
+                    break;
+                case Msg.Perf:
+                    perfLogger.logPerfEvent(s);
+                    break;
+                default: // Msg.Err
+                    perfLogger.logErrEvent(s);
+                    break;
+            }
+
+            if (!this.canWrite()) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!this.inGroup || this.firstInGroup) {
+                const prefix = BaseLogger.padStringRight(type + " " + this.seq.toString(), "          ");
+                s = prefix + s;
+            }
+            this.write(s, type);
+            if (!this.inGroup) {
+                this.seq++;
+            }
+        }
+        protected canWrite() {
+            return true;
+        }
+        protected write(_s: string, _type: Msg) {
+        }
     }
 
     export type MessageLogLevel = "info" | "perf" | "error";
@@ -14,70 +82,25 @@ namespace ts.server {
         readonly level: MessageLogLevel;
         readonly body: string
     }
-    export class MainProcessLogger implements Logger {
-        private currentGroupCount = 0;
-        private seq = 0;
-        close = noop;
-
-        constructor(private readonly level: LogLevel, private host: HostWithPostMessage) {
+    export class MainProcessLogger extends BaseLogger {
+        constructor(level: LogLevel, private host: HostWithWriteMessage) {
+            super(level);
         }
-
-        hasLevel(level: LogLevel): boolean {
-            return this.level >= level;
-        }
-
-        loggingEnabled(): boolean {
-            return true;
-        }
-
-        perftrc(s: string): void {
-            this.msg(s, Msg.Perf);
-        }
-
-        info(s: string): void {
-            this.msg(s, Msg.Info);
-        }
-
-        err(s: string) {
-            this.msg(s, Msg.Err);
-        }
-
-        startGroup(): void {
-            ++this.currentGroupCount;
-        }
-
-        endGroup(): void {
-            this.currentGroupCount = Math.max(0, this.currentGroupCount - 1);
-        }
-
-        msg(s: string, type: Msg = Msg.Err): void {
-            s = `${type} ${this.seq.toString()} [${nowString()}] ${s}`;
-
+        protected write(body: string, type: Msg) {
+            let level: MessageLogLevel;
             switch (type) {
                 case Msg.Info:
-                    this.write("info", s);
+                    level = "info";
                     break;
-
                 case Msg.Perf:
-                    this.write("perf", s);
+                    level = "perf";
                     break;
-
                 case Msg.Err:
-                default:
-                    this.write("error", s);
+                    level = "error";
                     break;
+                default:
+                    Debug.assertNever(type);
             }
-
-            if (this.currentGroupCount === 0) {
-                this.seq++;
-            }
-        }
-
-        getLogFileName(): string | undefined {
-            return undefined;
-        }
-
-        private write(level: MessageLogLevel, body: string) {
             this.host.writeMessage(<LoggingMessage>{
                 type: "log",
                 level,
@@ -156,13 +179,13 @@ namespace ts.server {
         serverMode: SessionOptions["serverMode"];
     }
     export class WorkerSession extends Session<{}> {
-        constructor(host: ServerHost, private webHost: HostWithPostMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
+        constructor(host: ServerHost, private webHost: HostWithWriteMessage, options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken, hrtime: SessionOptions["hrtime"]) {
             super({
                 host,
                 cancellationToken,
                 ...options,
                 typingsInstaller: nullTypingsInstaller,
-                byteLength: notImplemented, // Formats the message text in send of Session which is override in this class so not needed
+                byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
                 hrtime,
                 logger,
                 canUseEvents: false,

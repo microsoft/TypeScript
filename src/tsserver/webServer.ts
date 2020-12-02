@@ -19,32 +19,32 @@ namespace ts.server {
         getLogFileName: returnUndefined,
     };
 
-    let unknownServerMode: string | undefined;
-    function parseServerMode(): LanguageServiceMode | undefined {
+    function parseServerMode(): LanguageServiceMode | string | undefined {
         const mode = findArgument("--serverMode");
-        if (mode !== undefined) {
-            switch (mode.toLowerCase()) {
-                case "partialsemantic":
-                    return LanguageServiceMode.PartialSemantic;
-                case "syntactic":
-                    return LanguageServiceMode.Syntactic;
-                default:
-                    unknownServerMode = mode;
-                    break;
-            }
+        if (!mode) return undefined;
+        switch (mode.toLowerCase()) {
+            case "partialsemantic":
+                return LanguageServiceMode.PartialSemantic;
+            case "syntactic":
+                return LanguageServiceMode.Syntactic;
+            default:
+                return mode;
         }
-        // Webserver defaults to partial semantic mode
-        return hasArgument("--syntaxOnly") ? LanguageServiceMode.Syntactic : LanguageServiceMode.PartialSemantic;
     }
 
     export function initializeWebSystem(args: string[]): StartInput {
         createWebSystem(args);
-        const serverMode = parseServerMode();
+        const modeOrUnknown = parseServerMode();
+        let serverMode: LanguageServiceMode | undefined;
+        let unknownServerMode: string | undefined;
+        if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
+        else unknownServerMode = modeOrUnknown;
         return {
             args,
             logger: createLogger(),
             cancellationToken: nullCancellationToken,
-            serverMode,
+            // Webserver defaults to partial semantic mode
+            serverMode: serverMode ?? LanguageServiceMode.PartialSemantic,
             unknownServerMode,
             startSession: startWebSession
         };
@@ -52,7 +52,7 @@ namespace ts.server {
 
     function createLogger() {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
-        return typeof cmdLineVerbosity === "undefined" ? nullLogger : new MainProcessLogger(cmdLineVerbosity, { writeMessage });
+        return cmdLineVerbosity !== undefined ? new MainProcessLogger(cmdLineVerbosity, { writeMessage }) : nullLogger;
     }
 
     function writeMessage(s: any) {
@@ -89,7 +89,7 @@ namespace ts.server {
         const now = self.performance.now(performance) * 1e-3;
         let seconds = Math.floor(now);
         let nanoseconds = Math.floor((now % 1) * 1e9);
-        if (typeof previous === "number") {
+        if (previous) {
             seconds = seconds - previous[0];
             nanoseconds = nanoseconds - previous[1];
             if (nanoseconds < 0) {
@@ -101,7 +101,6 @@ namespace ts.server {
     }
 
     function startWebSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
-        debugger;
         class WorkerSession extends server.WorkerSession {
             constructor() {
                 super(sys as ServerHost, { writeMessage }, options, logger, cancellationToken, hrtime);
