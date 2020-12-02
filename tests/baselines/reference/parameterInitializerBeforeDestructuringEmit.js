@@ -43,8 +43,6 @@ var C = /** @class */ (function () {
     function C(_a) {
         "use strict";
         "Some other prologue";
-        "use strict";
-        "Some other prologue";
         if (_a === void 0) { _a = {}; }
         var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
         opts.baz(bar);
