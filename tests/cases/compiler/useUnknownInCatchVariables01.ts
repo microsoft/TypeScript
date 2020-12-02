@@ -18,6 +18,18 @@ catch (e) {
         e.stack?.toUpperCase();
     }
     if (typeof e === "number") {
+        e.toExponential();
         e++;
     }
+}
+
+
+try {
+    // ...
+}
+catch (e: any) {
+    // All are allowed.
+    void e.toUpperCase();
+    void e.toExponential();
+    void e();
 }
