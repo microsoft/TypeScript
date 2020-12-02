@@ -1951,7 +1951,7 @@ namespace ts {
             // Add existing statements before the initial super call
             let statementOffset = indexOfFirstStatementAfterSuper - 1;
             statements = [
-                ...visitNodes(constructor.body!.statements, visitor, isStatement, indexAfterLastPrologueStatement, statementOffset - indexAfterLastPrologueStatement),
+                ...visitNodes(body.statements, visitor, isStatement, indexAfterLastPrologueStatement, statementOffset - indexAfterLastPrologueStatement),
                 ...statements,
             ];
 
@@ -1967,10 +1967,7 @@ namespace ts {
             //      this.y = y;
             //  }
             //
-            const parameterPropertyAssignments = filter(
-                map(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment),
-                (statement): statement is ExpressionStatement => statement !== undefined,
-            );
+            const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
 
             // If there is a super() call, the parameter properties go immediately after it
             if (foundSuperStatement) {

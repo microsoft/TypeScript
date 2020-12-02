@@ -491,11 +491,14 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 4 >Emitted(44, 25) Source(31, 25) + SourceIndex(0)
 ---
 >>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^->
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^->
 1 >
-  >    }
-1 >Emitted(45, 6) Source(32, 6) + SourceIndex(0)
+  >    
+2 >    }
+1 >Emitted(45, 5) Source(32, 5) + SourceIndex(0)
+2 >Emitted(45, 6) Source(32, 6) + SourceIndex(0)
 ---
 >>>    return D;
 1->^^^^

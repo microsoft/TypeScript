@@ -31838,13 +31838,7 @@ namespace ts {
         }
 
         function superCallIsRootLevelInConstructor(superCall: Node, body: Block) {
-            let expressionParent = superCall.parent;
-
-            while (isParenthesizedExpression(expressionParent)) {
-                expressionParent = expressionParent.parent;
-            }
-
-            return expressionParent.parent === body;
+            return walkUpParenthesizedExpressions(superCall.parent).parent === body;
         }
 
         function nodeImmediatelyReferencesSuperOrThis(node: Node): boolean {
@@ -31852,7 +31846,7 @@ namespace ts {
                 return true;
             }
 
-            if (isNewOrDelayedThisScope(node)) {
+            if (isThisContainerOrFunctionBlock(node)) {
                 return false;
             }
 

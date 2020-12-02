@@ -1108,7 +1108,7 @@ namespace ts {
                             ...statements
                         ]
                     ),
-                    /*location*/ bodyStatements
+                    /*location*/ constructor.body.statements
                 ),
                 /*multiLine*/ true
             );
