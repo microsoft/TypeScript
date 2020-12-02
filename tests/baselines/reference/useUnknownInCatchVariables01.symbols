@@ -42,7 +42,30 @@ catch (e) {
     if (typeof e === "number") {
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
 
+        e.toExponential();
+>e.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
         e++;
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
     }
+}
+
+
+try {
+    // ...
+}
+catch (e: any) {
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+
+    // All are allowed.
+    void e.toUpperCase();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+
+    void e.toExponential();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
+
+    void e();
+>e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 27, 7))
 }

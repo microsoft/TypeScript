@@ -60,8 +60,42 @@ catch (e) {
 >e : unknown
 >"number" : "number"
 
+        e.toExponential();
+>e.toExponential() : string
+>e.toExponential : (fractionDigits?: number) => string
+>e : number
+>toExponential : (fractionDigits?: number) => string
+
         e++;
 >e++ : number
 >e : number
     }
+}
+
+
+try {
+    // ...
+}
+catch (e: any) {
+>e : any
+
+    // All are allowed.
+    void e.toUpperCase();
+>void e.toUpperCase() : undefined
+>e.toUpperCase() : any
+>e.toUpperCase : any
+>e : any
+>toUpperCase : any
+
+    void e.toExponential();
+>void e.toExponential() : undefined
+>e.toExponential() : any
+>e.toExponential : any
+>e : any
+>toExponential : any
+
+    void e();
+>void e() : undefined
+>e() : any
+>e : any
 }
