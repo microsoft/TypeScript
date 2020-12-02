@@ -874,3 +874,143 @@ class DerivedWithObjectMethod extends Base {
     }
 }
 
+let a, b;
+>a : any
+>b : any
+
+const DerivedWithLoops = [
+>DerivedWithLoops : (typeof (Anonymous class))[]
+>[    class extends Base {        prop = true;        constructor() {            for(super();;) {}        }    },    class extends Base {        prop = true;        constructor() {            for(a; super();) {}        }    },    class extends Base {        prop = true;        constructor() {            for(a; b; super()) {}        }    },    class extends Base {        prop = true;        constructor() {            for(; ; super()) { break; }        }    },    class extends Base {        prop = true;        constructor() {            for (const x of super()) {}        }    },    class extends Base {        prop = true;        constructor() {            while (super()) {}        }    },    class extends Base {        prop = true;        constructor() {            do {} while (super());        }    },    class extends Base {        prop = true;        constructor() {            if (super()) {}        }    },    class extends Base {        prop = true;        constructor() {            switch (super()) {}        }    },] : (typeof (Anonymous class))[]
+
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            for(super();;) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            for(super();;) {}
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            for(a; super();) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            for(a; super();) {}
+>a : any
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            for(a; b; super()) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            for(a; b; super()) {}
+>a : any
+>b : any
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            for(; ; super()) { break; }        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            for(; ; super()) { break; }
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            for (const x of super()) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            for (const x of super()) {}
+>x : any
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            while (super()) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            while (super()) {}
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            do {} while (super());        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            do {} while (super());
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            if (super()) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            if (super()) {}
+>super() : void
+>super : typeof Base
+        }
+    },
+    class extends Base {
+>class extends Base {        prop = true;        constructor() {            switch (super()) {}        }    } : typeof (Anonymous class)
+>Base : Base
+
+        prop = true;
+>prop : boolean
+>true : true
+
+        constructor() {
+            switch (super()) {}
+>super() : void
+>super : typeof Base
+        }
+    },
+]
+

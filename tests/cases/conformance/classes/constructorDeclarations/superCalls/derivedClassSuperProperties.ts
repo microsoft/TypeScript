@@ -342,3 +342,62 @@ class DerivedWithObjectMethod extends Base {
         super();
     }
 }
+
+let a, b;
+
+const DerivedWithLoops = [
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(super();;) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(a; super();) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(a; b; super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(; ; super()) { break; }
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for (const x of super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            while (super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            do {} while (super());
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            if (super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            switch (super()) {}
+        }
+    },
+]

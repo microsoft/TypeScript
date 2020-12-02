@@ -341,6 +341,65 @@ class DerivedWithObjectMethod extends Base {
     }
 }
 
+let a, b;
+
+const DerivedWithLoops = [
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(super();;) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(a; super();) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(a; b; super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for(; ; super()) { break; }
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            for (const x of super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            while (super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            do {} while (super());
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            if (super()) {}
+        }
+    },
+    class extends Base {
+        prop = true;
+        constructor() {
+            switch (super()) {}
+        }
+    },
+]
+
 
 //// [derivedClassSuperProperties.js]
 var __extends = (this && this.__extends) || (function () {
@@ -844,3 +903,101 @@ var DerivedWithObjectMethod = /** @class */ (function (_super) {
     }
     return DerivedWithObjectMethod;
 }(Base));
+var a, b;
+var DerivedWithLoops = [
+    /** @class */ (function (_super) {
+        __extends(class_7, _super);
+        function class_7() {
+            var _this = this;
+            _this.prop = true;
+            for (_this = _super.call(this) || this;;) { }
+            return _this;
+        }
+        return class_7;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_8, _super);
+        function class_8() {
+            var _this = this;
+            _this.prop = true;
+            for (a; _this = _super.call(this) || this;) { }
+            return _this;
+        }
+        return class_8;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_9, _super);
+        function class_9() {
+            var _this = this;
+            _this.prop = true;
+            for (a; b; _this = _super.call(this) || this) { }
+            return _this;
+        }
+        return class_9;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_10, _super);
+        function class_10() {
+            var _this = this;
+            _this.prop = true;
+            for (;; _this = _super.call(this) || this) {
+                break;
+            }
+            return _this;
+        }
+        return class_10;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_11, _super);
+        function class_11() {
+            var _this = this;
+            _this.prop = true;
+            for (var _i = 0, _a = _this = _super.call(this) || this; _i < _a.length; _i++) {
+                var x = _a[_i];
+            }
+            return _this;
+        }
+        return class_11;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_12, _super);
+        function class_12() {
+            var _this = this;
+            _this.prop = true;
+            while (_this = _super.call(this) || this) { }
+            return _this;
+        }
+        return class_12;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_13, _super);
+        function class_13() {
+            var _this = this;
+            _this.prop = true;
+            do { } while (_this = _super.call(this) || this);
+            return _this;
+        }
+        return class_13;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_14, _super);
+        function class_14() {
+            var _this = this;
+            _this.prop = true;
+            if (_this = _super.call(this) || this) { }
+            return _this;
+        }
+        return class_14;
+    }(Base)),
+    /** @class */ (function (_super) {
+        __extends(class_15, _super);
+        function class_15() {
+            var _this = this;
+            _this.prop = true;
+            switch (_this = _super.call(this) || this) {
+            }
+            return _this;
+        }
+        return class_15;
+    }(Base)),
+];

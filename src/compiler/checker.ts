@@ -31838,7 +31838,8 @@ namespace ts {
         }
 
         function superCallIsRootLevelInConstructor(superCall: Node, body: Block) {
-            return walkUpParenthesizedExpressions(superCall.parent).parent === body;
+            const superCallParent = walkUpParenthesizedExpressions(superCall.parent);
+            return isExpressionStatement(superCallParent) && superCallParent.parent === body;
         }
 
         function nodeImmediatelyReferencesSuperOrThis(node: Node): boolean {
