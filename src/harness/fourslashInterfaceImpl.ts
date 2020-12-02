@@ -336,6 +336,10 @@ namespace FourSlashInterface {
             this.state.verifyBaselineFindAllReferences(markerName);
         }
 
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
+        }
+
         public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(starts, parts);
         }

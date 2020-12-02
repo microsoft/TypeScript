@@ -1116,21 +1116,41 @@ namespace FourSlash {
                 : ts.emptyArray;
 
             // Write input files
+            let baselineContent = this.getBaselineContentForGroupedReferences(refsByFile, markerName);
+
+            // Write response JSON
+            baselineContent += JSON.stringify(references, undefined, 2);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+        }
+
+        public verifyBaselineGetFileReferences(fileName: string) {
+            const references = this.languageService.getFileReferences(fileName);
+            const refsByFile = references
+                ? ts.group(ts.sort(references, (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                : ts.emptyArray;
+
+            // Write input files
+            let baselineContent = this.getBaselineContentForGroupedReferences(refsByFile);
+
+            // Write response JSON
+            baselineContent += JSON.stringify(references, undefined, 2);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+        }
+
+        private getBaselineContentForGroupedReferences(refsByFile: readonly (readonly ts.ReferenceEntry[])[], markerName?: string) {
+            const marker = markerName !== undefined && this.getMarkerByName(markerName);
             let baselineContent = "";
             for (const group of refsByFile) {
                 baselineContent += getBaselineContentForFile(group[0].fileName, this.getFileContent(group[0].fileName));
                 baselineContent += "\n\n";
             }
-
-            // Write response JSON
-            baselineContent += JSON.stringify(references, undefined, 2);
-            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+            return baselineContent;
 
             function getBaselineContentForFile(fileName: string, content: string) {
                 let newContent = `=== ${fileName} ===\n`;
                 let pos = 0;
                 for (const { textSpan } of refsByFile.find(refs => refs[0].fileName === fileName) ?? ts.emptyArray) {
-                    if (fileName === marker.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                    if (marker && fileName === marker.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
                         newContent += "/*FIND ALL REFS*/";
                     }
                     const end = textSpan.start + textSpan.length;

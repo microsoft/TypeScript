@@ -1728,6 +1728,13 @@ namespace ts {
             return FindAllReferences.findReferencedSymbols(program, cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
+        function getFileReferences(fileName: string): ReferenceEntry[] {
+            synchronizeHostData();
+            return flatMapToMutable(
+                FindAllReferences.Core.getReferencedSymbolsForFileName(fileName, program, program.getSourceFiles()),
+                symbolAndEntries => symbolAndEntries.references.map(FindAllReferences.toReferenceEntry));
+        }
+
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {
             synchronizeHostData();
             const sourceFiles = fileName ? [getValidSourceFile(fileName)] : program.getSourceFiles();
@@ -2526,6 +2533,7 @@ namespace ts {
             getTypeDefinitionAtPosition,
             getReferencesAtPosition,
             findReferences,
+            getFileReferences,
             getOccurrencesAtPosition,
             getDocumentHighlights,
             getNameOrDottedNameSpan,

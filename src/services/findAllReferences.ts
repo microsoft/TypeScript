@@ -642,6 +642,12 @@ namespace ts.FindAllReferences {
             return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
         }
 
+        export function getReferencedSymbolsForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
+            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
+            if (!moduleSymbol) return undefined;
+            return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+        }
+
         function getMergedAliasedSymbolOfNamespaceExportDeclaration(node: Node, symbol: Symbol, checker: TypeChecker) {
             if (node.parent && isNamespaceExportDeclaration(node.parent)) {
                 const aliasedSymbol = checker.getAliasedSymbol(symbol);
