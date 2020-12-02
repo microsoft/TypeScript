@@ -684,6 +684,7 @@ export declare module eaM {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.eM = exports.eC = exports.eF = exports.eV = void 0;
     /*
         Prefixes
         p -> public
@@ -709,38 +710,38 @@ define(["require", "exports"], function (require, exports) {
         proto_1.pgF = function () { };
         Object.defineProperty(proto_1, "pgF", {
             get: function () { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_1.psF = function (param) { };
         Object.defineProperty(proto_1, "psF", {
             set: function (param) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_1.rgF = function () { };
         Object.defineProperty(proto_1, "rgF", {
             get: function () { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_1.rsF = function (param) { };
         Object.defineProperty(proto_1, "rsF", {
             set: function (param) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         C.tF = function () { };
         C.tsF = function (param) { };
         Object.defineProperty(C, "tsF", {
             set: function (param) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         C.tgF = function () { };
         Object.defineProperty(C, "tgF", {
             get: function () { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C;
@@ -759,38 +760,38 @@ define(["require", "exports"], function (require, exports) {
             proto_2.pgF = function () { };
             Object.defineProperty(proto_2, "pgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_2.psF = function (param) { };
             Object.defineProperty(proto_2, "psF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_2.rgF = function () { };
             Object.defineProperty(proto_2, "rgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_2.rsF = function (param) { };
             Object.defineProperty(proto_2, "rsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             C.tF = function () { };
             C.tsF = function (param) { };
             Object.defineProperty(C, "tsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             C.tgF = function () { };
             Object.defineProperty(C, "tgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return C;
@@ -836,38 +837,38 @@ define(["require", "exports"], function (require, exports) {
             proto_3.pgF = function () { };
             Object.defineProperty(proto_3, "pgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_3.psF = function (param) { };
             Object.defineProperty(proto_3, "psF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_3.rgF = function () { };
             Object.defineProperty(proto_3, "rgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_3.rsF = function (param) { };
             Object.defineProperty(proto_3, "rsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             eC.tF = function () { };
             eC.tsF = function (param) { };
             Object.defineProperty(eC, "tsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             eC.tgF = function () { };
             Object.defineProperty(eC, "tgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return eC;
@@ -916,38 +917,38 @@ define(["require", "exports"], function (require, exports) {
         proto_4.pgF = function () { };
         Object.defineProperty(proto_4, "pgF", {
             get: function () { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_4.psF = function (param) { };
         Object.defineProperty(proto_4, "psF", {
             set: function (param) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_4.rgF = function () { };
         Object.defineProperty(proto_4, "rgF", {
             get: function () { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_4.rsF = function (param) { };
         Object.defineProperty(proto_4, "rsF", {
             set: function (param) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         eC.tF = function () { };
         eC.tsF = function (param) { };
         Object.defineProperty(eC, "tsF", {
             set: function (param) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         eC.tgF = function () { };
         Object.defineProperty(eC, "tgF", {
             get: function () { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return eC;
@@ -967,38 +968,38 @@ define(["require", "exports"], function (require, exports) {
             proto_5.pgF = function () { };
             Object.defineProperty(proto_5, "pgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_5.psF = function (param) { };
             Object.defineProperty(proto_5, "psF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_5.rgF = function () { };
             Object.defineProperty(proto_5, "rgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_5.rsF = function (param) { };
             Object.defineProperty(proto_5, "rsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             C.tF = function () { };
             C.tsF = function (param) { };
             Object.defineProperty(C, "tsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             C.tgF = function () { };
             Object.defineProperty(C, "tgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return C;
@@ -1044,38 +1045,38 @@ define(["require", "exports"], function (require, exports) {
             proto_6.pgF = function () { };
             Object.defineProperty(proto_6, "pgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_6.psF = function (param) { };
             Object.defineProperty(proto_6, "psF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_6.rgF = function () { };
             Object.defineProperty(proto_6, "rgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_6.rsF = function (param) { };
             Object.defineProperty(proto_6, "rsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             eC.tF = function () { };
             eC.tsF = function (param) { };
             Object.defineProperty(eC, "tsF", {
                 set: function (param) { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             eC.tgF = function () { };
             Object.defineProperty(eC, "tgF", {
                 get: function () { },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return eC;

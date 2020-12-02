@@ -1,0 +1,18 @@
+=== tests/cases/compiler/staticVisibility2.ts ===
+class Square {
+>Square : Square
+
+    static sideLength;
+>sideLength : any
+
+    constructor(sideLength: number) {
+>sideLength : number
+
+        this.sideLength = sideLength;
+>this.sideLength = sideLength : number
+>this.sideLength : any
+>this : this
+>sideLength : any
+>sideLength : number
+    }
+}

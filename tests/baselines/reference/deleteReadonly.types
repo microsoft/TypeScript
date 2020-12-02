@@ -26,7 +26,7 @@ interface B {
 
 var b: B = {
 >b : B
->{  'test': 'test'} : { 'test': string; }
+>{  'test': 'test'} : { test: string; }
 
   'test': 'test'
 >'test' : string

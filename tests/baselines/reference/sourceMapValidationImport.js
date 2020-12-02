@@ -11,6 +11,7 @@ var y = new b();
 //// [sourceMapValidationImport.js]
 "use strict";
 exports.__esModule = true;
+exports.b = exports.m = void 0;
 var m;
 (function (m) {
     var c = /** @class */ (function () {

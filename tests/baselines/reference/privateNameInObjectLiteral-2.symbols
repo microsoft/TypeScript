@@ -1,0 +1,10 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-2.ts ===
+const obj = {
+>obj : Symbol(obj, Decl(privateNameInObjectLiteral-2.ts, 0, 5))
+
+    #foo() {
+>#foo : Symbol(#foo, Decl(privateNameInObjectLiteral-2.ts, 0, 13))
+
+    }
+};
+

@@ -40,22 +40,22 @@ let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
 >secondarySkillA : string
 >multiRobotA : MultiSkilledRobot
 
-let [nameMC] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC] = ["roomba", ["vacuum", "mopping"]];
 >nameMC : string
->["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >"roomba" : "roomba"
->["vaccum", "mopping"] : string[]
->"vaccum" : "vaccum"
+>["vacuum", "mopping"] : string[]
+>"vacuum" : "vacuum"
 >"mopping" : "mopping"
 
-let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vacuum", "mopping"]];
 >nameMC2 : string
 >primarySkillC : string
 >secondarySkillC : string
->["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >"roomba" : "roomba"
->["vaccum", "mopping"] : [string, string]
->"vaccum" : "vaccum"
+>["vacuum", "mopping"] : [string, string]
+>"vacuum" : "vacuum"
 >"mopping" : "mopping"
 
 let [...multiRobotAInfo] = multiRobotA;

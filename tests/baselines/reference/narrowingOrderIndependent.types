@@ -1,0 +1,95 @@
+=== tests/cases/compiler/narrowingOrderIndependent.ts ===
+// Repro from #36709
+
+class A {
+>A : A
+
+    constructor(public stringOrUndefined: string | undefined) {}
+>stringOrUndefined : string | undefined
+}
+
+class B {
+>B : B
+
+    constructor(public str: string) {}
+>str : string
+}
+
+const a = new A("123");
+>a : A
+>new A("123") : A
+>A : typeof A
+>"123" : "123"
+
+if (a instanceof A && a.stringOrUndefined) {
+>a instanceof A && a.stringOrUndefined : string | false | undefined
+>a instanceof A : boolean
+>a : A
+>A : typeof A
+>a.stringOrUndefined : string | undefined
+>a : A
+>stringOrUndefined : string | undefined
+
+    new B(a.stringOrUndefined)
+>new B(a.stringOrUndefined) : B
+>B : typeof B
+>a.stringOrUndefined : string
+>a : A
+>stringOrUndefined : string
+}
+
+if (a.stringOrUndefined && a instanceof A) {
+>a.stringOrUndefined && a instanceof A : boolean | "" | undefined
+>a.stringOrUndefined : string | undefined
+>a : A
+>stringOrUndefined : string | undefined
+>a instanceof A : boolean
+>a : A
+>A : typeof A
+
+    new B(a.stringOrUndefined)
+>new B(a.stringOrUndefined) : B
+>B : typeof B
+>a.stringOrUndefined : string
+>a : A
+>stringOrUndefined : string
+}
+
+if (a instanceof A) {
+>a instanceof A : boolean
+>a : A
+>A : typeof A
+
+    if (a.stringOrUndefined) {
+>a.stringOrUndefined : string | undefined
+>a : A
+>stringOrUndefined : string | undefined
+
+        new B(a.stringOrUndefined)
+>new B(a.stringOrUndefined) : B
+>B : typeof B
+>a.stringOrUndefined : string
+>a : A
+>stringOrUndefined : string
+    }
+}
+
+if (a.stringOrUndefined) {
+>a.stringOrUndefined : string | undefined
+>a : A
+>stringOrUndefined : string | undefined
+
+    if (a instanceof A) {
+>a instanceof A : boolean
+>a : A
+>A : typeof A
+
+        new B(a.stringOrUndefined)
+>new B(a.stringOrUndefined) : B
+>B : typeof B
+>a.stringOrUndefined : string
+>a : A
+>stringOrUndefined : string
+    }
+}
+

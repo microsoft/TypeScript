@@ -125,7 +125,7 @@ var m1;
                 },
                 set: function (arg1) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_1.f55 = function () {

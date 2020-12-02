@@ -83,6 +83,7 @@ export function g(pair: [number, string?]): string {
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty.js]
 "use strict";
 exports.__esModule = true;
+exports.g = void 0;
 function area(s) {
     switch (s['dash-ok']) {
         case "square": return s['square-size'] * s['square-size'];

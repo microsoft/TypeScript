@@ -170,7 +170,7 @@ for (obj?.a.b of []);
 
 [...obj?.a] = [];
 >[...obj?.a] = [] : never[]
->[...obj?.a] : never[]
+>[...obj?.a] : any[]
 >...obj?.a : any
 >obj?.a : any
 >obj : any
@@ -179,7 +179,7 @@ for (obj?.a.b of []);
 
 [...obj?.a.b] = [];
 >[...obj?.a.b] = [] : never[]
->[...obj?.a.b] : never[]
+>[...obj?.a.b] : any[]
 >...obj?.a.b : any
 >obj?.a.b : any
 >obj?.a : any

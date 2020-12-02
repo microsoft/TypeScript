@@ -4,7 +4,7 @@ namespace ts {
         verifyTsc({
             scenario: "exitCodeOnBogusFile",
             subScenario: `test exit code`,
-            fs: () => loadProjectFromFiles({}, symbolLibContent),
+            fs: () => loadProjectFromFiles({}),
             commandLineArgs: ["-b", "bogus.json"]
         });
     });

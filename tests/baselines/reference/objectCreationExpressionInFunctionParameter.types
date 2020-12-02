@@ -7,9 +7,9 @@ class A {
     }
 }
 function foo(x = new A(123)) { //should error, 123 is not string
->foo : (x?: any) => void
->x : any
->new A(123) : any
+>foo : (x?: A) => void
+>x : A
+>new A(123) : A
 >A : typeof A
 >123 : 123
 

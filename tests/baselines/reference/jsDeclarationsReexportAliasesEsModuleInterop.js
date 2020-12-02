@@ -25,10 +25,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foob = exports.x = void 0;
 var cls_1 = __importDefault(require("./cls"));
 exports.x = new cls_1.default();
 var cls_2 = require("./cls");
-exports.Foob = cls_2.default;
+Object.defineProperty(exports, "Foob", { enumerable: true, get: function () { return __importDefault(cls_2).default; } });
 
 
 //// [cls.d.ts]

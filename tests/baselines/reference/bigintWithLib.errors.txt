@@ -1,5 +1,5 @@
 tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/bigintWithLib.ts(16,33): error TS2769: No overload matches this call.
+tests/cases/compiler/bigintWithLib.ts(19,33): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
@@ -9,21 +9,21 @@ tests/cases/compiler/bigintWithLib.ts(16,33): error TS2769: No overload matches 
           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<bigint, any>'.
             Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<bigint>'.
               Type 'number' is not assignable to type 'bigint'.
-  Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
+  Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
+    Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
       Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
-tests/cases/compiler/bigintWithLib.ts(21,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(28,35): error TS2769: No overload matches this call.
+tests/cases/compiler/bigintWithLib.ts(24,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+tests/cases/compiler/bigintWithLib.ts(31,35): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-  Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
-    Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
+  Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
+    Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
       Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
-tests/cases/compiler/bigintWithLib.ts(33,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(40,25): error TS2345: Argument of type '-1' is not assignable to parameter of type 'bigint'.
-tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '123' is not assignable to parameter of type 'bigint'.
+tests/cases/compiler/bigintWithLib.ts(36,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+tests/cases/compiler/bigintWithLib.ts(43,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
+tests/cases/compiler/bigintWithLib.ts(46,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
 
 
 ==== tests/cases/compiler/bigintWithLib.ts (7 errors) ====
@@ -39,6 +39,9 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     let stringVal: string = bigintVal.toString();
     stringVal = bigintVal.toString(2);
     stringVal = bigintVal.toLocaleString();
+    stringVal = bigintVal.toLocaleString('de-DE');
+    stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
+    stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
     
     // Test BigInt64Array
     let bigIntArray: BigInt64Array = new BigInt64Array();
@@ -56,8 +59,8 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
 !!! error TS2769:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<bigint, any>'.
 !!! error TS2769:             Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<bigint>'.
 !!! error TS2769:               Type 'number' is not assignable to type 'bigint'.
-!!! error TS2769:   Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
+!!! error TS2769:   Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
+!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
 !!! error TS2769:       Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
     bigIntArray = new BigInt64Array(new ArrayBuffer(80));
     bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
@@ -79,8 +82,8 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
 !!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
 !!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
-!!! error TS2769:   Overload 3 of 3, '(buffer: ArrayBuffer | SharedArrayBuffer, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
-!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
+!!! error TS2769:   Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
+!!! error TS2769:     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
 !!! error TS2769:       Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
     bigUintArray = new BigUint64Array(new ArrayBuffer(80));
     bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
@@ -97,12 +100,12 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     dataView.setBigInt64(1, -1n, true);
     dataView.setBigInt64(1, -1); // should error
                             ~~
-!!! error TS2345: Argument of type '-1' is not assignable to parameter of type 'bigint'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
     dataView.setBigUint64(2, 123n);
     dataView.setBigUint64(2, 123n, true);
     dataView.setBigUint64(2, 123); // should error
                              ~~~
-!!! error TS2345: Argument of type '123' is not assignable to parameter of type 'bigint'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
     bigintVal = dataView.getBigInt64(1);
     bigintVal = dataView.getBigInt64(1, true);
     bigintVal = dataView.getBigUint64(2);
@@ -113,3 +116,8 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     const x = -12n; // should emit as const x = -12n
     const y: 12n = 12n; // should emit type 12n
     let z = 12n; // should emit type bigint in declaration file
+    
+    // Test Intl methods with new parameter type
+    new Intl.NumberFormat("fr").format(3000n);
+    new Intl.NumberFormat("fr").format(bigintVal);
+    

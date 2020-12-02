@@ -16,6 +16,7 @@ function foo2(y = class {[x] = x}, x = 1) {
 
 //// [capturedParametersInInitializers2.js]
 function foo(y, x, z) {
+    var _a;
     if (y === void 0) { y = (_a = /** @class */ (function () {
             function class_1() {
                 x;
@@ -23,7 +24,7 @@ function foo(y, x, z) {
             var proto_1 = class_1.prototype;
             Object.defineProperty(proto_1, x, {
                 get: function () { return x; },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             proto_1[z] = function () { return z; };
@@ -33,10 +34,10 @@ function foo(y, x, z) {
         _a); }
     if (x === void 0) { x = 1; }
     if (z === void 0) { z = 2; }
-    var _a;
     y.c;
 }
 function foo2(y, x) {
+    var _a, _b;
     if (y === void 0) { y = (_b = /** @class */ (function () {
             function class_2() {
                 this[_a] = x;
@@ -46,5 +47,4 @@ function foo2(y, x) {
         _a = x,
         _b); }
     if (x === void 0) { x = 1; }
-    var _a, _b;
 }

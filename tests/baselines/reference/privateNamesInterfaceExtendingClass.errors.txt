@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts(10,7): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts (1 errors) ====
+    class C {
+        #prop;
+        func(x: I) {
+            x.#prop = 123;
+        }
+    }
+    interface I extends C {}
+    
+    function func(x: I) {
+        x.#prop = 123;
+          ~~~~~
+!!! error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.
+    }
+    
+    

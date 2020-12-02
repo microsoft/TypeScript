@@ -1,0 +1,25 @@
+tests/cases/compiler/tsconfig.json(5,26): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+tests/cases/compiler/tsconfig.json(6,19): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+tests/cases/compiler/tsconfig.json(7,23): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+
+
+==== tests/cases/compiler/tsconfig.json (3 errors) ====
+    {
+      "compilerOptions": {
+          "traceResolution": true,
+          "paths": {
+            "@interface/*": ["src/interface/*"],
+                             ~~~~~~~~~~~~~~~~~
+!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+            "@blah": ["blah"],
+                      ~~~~~~
+!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+            "@humbug/*": ["*/generated"]
+                          ~~~~~~~~~~~~~
+!!! error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+          }
+      }
+    }
+    
+==== tests/cases/compiler/src/main.ts (0 errors) ====
+    import 'someModule';

@@ -1,0 +1,19 @@
+=== /a.ts ===
+export class A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== /b.ts ===
+export type { A } from './a';
+>A : Symbol(A, Decl(b.ts, 0, 13))
+
+=== /c.ts ===
+import { A } from './b';
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+declare const a: A;
+>a : Symbol(a, Decl(c.ts, 1, 13))
+>A : Symbol(A, Decl(c.ts, 0, 8))
+
+new A();
+>A : Symbol(A, Decl(c.ts, 0, 8))
+

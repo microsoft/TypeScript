@@ -3,7 +3,7 @@ declare global {
 >global : Symbol(global, Decl(extension.d.ts, 0, 0))
 
     namespace globalThis  {
->globalThis : Symbol(globalThis)
+>globalThis : Symbol(globalThis, Decl(extension.d.ts, 0, 16))
 
         var test: string;
 >test : Symbol(test, Decl(extension.d.ts, 2, 11))
@@ -16,7 +16,7 @@ export {}
 import "./extention";
 
 globalThis.tests = "a-b";
->globalThis : Symbol(globalThis)
+>globalThis : Symbol(globalThis, Decl(extension.d.ts, 0, 16))
 
 console.log(globalThis.test.split("-"));
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -24,7 +24,7 @@ console.log(globalThis.test.split("-"));
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >globalThis.test.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
 >globalThis.test : Symbol(test, Decl(extension.d.ts, 2, 11))
->globalThis : Symbol(globalThis)
+>globalThis : Symbol(globalThis, Decl(extension.d.ts, 0, 16))
 >test : Symbol(test, Decl(extension.d.ts, 2, 11))
 >split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
 

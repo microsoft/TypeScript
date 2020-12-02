@@ -23,6 +23,7 @@ export module Database {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.Models = void 0;
     var Models;
     (function (Models) {
         var Person = /** @class */ (function () {
@@ -37,6 +38,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
     "use strict";
     exports.__esModule = true;
+    exports.Database = void 0;
     var Database;
     (function (Database) {
         var DB = /** @class */ (function () {

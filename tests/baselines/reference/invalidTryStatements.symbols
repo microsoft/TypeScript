@@ -2,23 +2,28 @@
 function fn() {
 >fn : Symbol(fn, Decl(invalidTryStatements.ts, 0, 0))
 
-    try {
-    } catch (x) {
->x : Symbol(x, Decl(invalidTryStatements.ts, 2, 13))
+    catch(x) { } // error missing try
+>x : Symbol(x, Decl(invalidTryStatements.ts, 1, 10))
 
-        var x: string; // ensure x is 'Any'
->x : Symbol(x, Decl(invalidTryStatements.ts, 3, 11))
-    }
+    finally { } // potential error; can be absorbed by the 'catch'
 
-    // no type annotation allowed
-    try { } catch (z: any) { }
->z : Symbol(z, Decl(invalidTryStatements.ts, 7, 19))
-
-    try { } catch (a: number) { }
->a : Symbol(a, Decl(invalidTryStatements.ts, 8, 19))
-
-    try { } catch (y: string) { }
->y : Symbol(y, Decl(invalidTryStatements.ts, 9, 19))
+    try { }; // error missing finally
 }
 
+function fn2() {
+>fn2 : Symbol(fn2, Decl(invalidTryStatements.ts, 6, 1))
 
+    finally { } // error missing try
+    catch (x) { } // error missing try
+>x : Symbol(x, Decl(invalidTryStatements.ts, 10, 11))
+    
+    try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
+
+    finally { } // error missing try
+    
+    catch (x) { } // error missing try
+>x : Symbol(x, Decl(invalidTryStatements.ts, 16, 11))
+
+    try { } catch () { } // error missing catch binding
+> : Symbol((Missing), Decl(invalidTryStatements.ts, 18, 19))
+}

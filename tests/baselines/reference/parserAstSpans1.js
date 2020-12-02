@@ -224,7 +224,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -291,7 +291,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_2.c2_nc_f1 = function () {
@@ -300,7 +300,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** c2 f1*/
@@ -311,7 +311,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_2.nc_f1 = function () {
@@ -320,7 +320,7 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c2;
@@ -341,7 +341,7 @@ var c3 = /** @class */ (function (_super) {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_3.nc_f1 = function () {
@@ -350,7 +350,7 @@ var c3 = /** @class */ (function (_super) {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c3;

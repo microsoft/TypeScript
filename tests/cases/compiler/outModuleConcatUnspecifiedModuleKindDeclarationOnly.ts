@@ -1,6 +1,7 @@
 // @target: ES5
 // @outFile: out.js
-// @declaration: true
+// @declaration: true,
+// @bundledPackageName: lib
 // @emitDeclarationOnly: true
 
 // @Filename: a.ts

@@ -2,4 +2,4 @@
 
 ////await a
 
-verify.not.codeFixAvailable();
+verify.not.codeFixAvailable("addMissingAwait");

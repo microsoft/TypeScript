@@ -15,6 +15,7 @@ import r = require("./b");
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.Member = void 0;
 var Member = /** @class */ (function () {
     function Member() {
     }

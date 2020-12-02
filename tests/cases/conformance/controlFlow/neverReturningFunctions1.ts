@@ -233,3 +233,34 @@ const Component = registerComponent('test-component', {
 		return f * this.data.num * this.system!.data.counter;
 	}
 });
+
+// Repro from #36147
+
+class MyThrowable {
+    throw(): never {
+        throw new Error();
+    }
+}
+
+class SuperThrowable extends MyThrowable {
+    err(msg: string): never {
+        super.throw()
+    }
+    ok(): never {
+        this.throw()
+    }
+}
+
+// Repro from #40346
+
+interface Services {
+    panic(message: string): never;
+}
+
+function foo(services: Readonly<Services>, s: string | null): string {
+    if (s === null) {
+        services.panic("ouch");
+    } else {
+        return s;
+    }
+}

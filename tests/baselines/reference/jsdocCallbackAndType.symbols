@@ -1,0 +1,15 @@
+=== /a.js ===
+/**
+ * @template T
+ * @callback B
+ */
+/** @type {B<string>} */
+let b;
+>b : Symbol(b, Decl(a.js, 5, 3))
+
+b();
+>b : Symbol(b, Decl(a.js, 5, 3))
+
+b(1);
+>b : Symbol(b, Decl(a.js, 5, 3))
+

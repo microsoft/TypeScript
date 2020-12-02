@@ -40,14 +40,14 @@ var C = /** @class */ (function () {
     Object.defineProperty(proto_1, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.foo = function () { return this.foo; };
     Object.defineProperty(C, "y", {
         get: function () { return this.x; },
         set: function (x) { this.y = this.x; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.foo = function () { return this.foo; };
@@ -69,7 +69,7 @@ var C2 = /** @class */ (function () {
             var _this = this;
             (function () { _this.y = _this.x; });
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_2.foo = function () {
@@ -86,7 +86,7 @@ var C2 = /** @class */ (function () {
             var _this = this;
             (function () { _this.y = _this.x; });
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C2.foo = function () {

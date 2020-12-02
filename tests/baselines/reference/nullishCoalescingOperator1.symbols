@@ -123,3 +123,38 @@ const dd4 = d4 ?? {b: 1};
 >d4 : Symbol(d4, Decl(nullishCoalescingOperator1.ts, 19, 13))
 >b : Symbol(b, Decl(nullishCoalescingOperator1.ts, 39, 19))
 
+// Repro from #34635
+
+declare function foo(): void;
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+
+const maybeBool = false;
+>maybeBool : Symbol(maybeBool, Decl(nullishCoalescingOperator1.ts, 45, 5))
+
+if (!(maybeBool ?? true)) {
+>maybeBool : Symbol(maybeBool, Decl(nullishCoalescingOperator1.ts, 45, 5))
+
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+
+if (maybeBool ?? true) {
+>maybeBool : Symbol(maybeBool, Decl(nullishCoalescingOperator1.ts, 45, 5))
+
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+else {
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+
+if (false ?? true) {
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+else {
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+

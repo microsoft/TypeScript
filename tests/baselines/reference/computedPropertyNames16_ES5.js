@@ -26,57 +26,57 @@ var C = /** @class */ (function () {
     var proto_1 = C.prototype;
     Object.defineProperty(proto_1, s, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, n, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, s + s, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, s + n, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, +s, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, 0, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, a, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, true, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "hello bye", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "hello " + a + " bye", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

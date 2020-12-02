@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJs.js ===
+// classes
+class C {
+>C : Symbol(C, Decl(uniqueSymbolsDeclarationsInJs.js, 0, 0))
+
+    /**
+     * @readonly
+     */
+    static readonlyStaticCall = Symbol();
+>readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbolsDeclarationsInJs.js, 1, 9))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyStaticType;
+>readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbolsDeclarationsInJs.js, 5, 41))
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyStaticTypeAndCall = Symbol();
+>readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbolsDeclarationsInJs.js, 10, 30))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    static readwriteStaticCall = Symbol();
+>readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbolsDeclarationsInJs.js, 15, 48))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    /**
+     * @readonly
+     */
+    readonlyCall = Symbol();
+>readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbolsDeclarationsInJs.js, 16, 42))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+    readwriteCall = Symbol();
+>readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbolsDeclarationsInJs.js, 21, 28))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+}
+

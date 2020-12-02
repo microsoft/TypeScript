@@ -51,6 +51,7 @@ export function ff(s) {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ff = exports.consume = exports.Fs = exports.Second = exports.Target = void 0;
 /** @enum {string} */
 exports.Target = {
     START: "start",
@@ -107,24 +108,24 @@ exports.ff = ff;
  * @param {Second} s
  * @param {Fs} f
  */
-export function consume(t: string, s: number, f: (arg0: number) => number): void;
+export function consume(t: Target, s: Second, f: Fs): void;
 /** @param {string} s */
 export function ff(s: string): any;
 export type Target = string;
 export namespace Target {
-    export const START: string;
-    export const MIDDLE: string;
-    export const END: string;
-    export const OK_I_GUESS: number;
+    const START: string;
+    const MIDDLE: string;
+    const END: string;
+    const OK_I_GUESS: number;
 }
 export type Second = number;
 export namespace Second {
-    export const OK: number;
-    export const FINE: number;
+    const OK: number;
+    const FINE: number;
 }
 export type Fs = (arg0: number) => number;
 export namespace Fs {
-    export function ADD1(n: any): any;
-    export function ID(n: any): any;
-    export function SUB1(n: any): number;
+    function ADD1(n: any): any;
+    function ID(n: any): any;
+    function SUB1(n: any): number;
 }

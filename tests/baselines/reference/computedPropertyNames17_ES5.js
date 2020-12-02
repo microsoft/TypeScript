@@ -17,32 +17,32 @@ var C = /** @class */ (function () {
     var proto_1 = C.prototype;
     Object.defineProperty(proto_1, b, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, true, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, [], {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, {}, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, undefined, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, null, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

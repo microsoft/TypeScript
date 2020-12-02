@@ -1,0 +1,28 @@
+=== tests/cases/compiler/evolvingArrayTypeInAssert.ts ===
+export function unsafeCast<T>(_value: unknown): asserts _value is T { }
+>unsafeCast : <T>(_value: unknown) => asserts _value is T
+>_value : unknown
+
+function yadda() {
+>yadda : () => number[]
+
+    let out = [];
+>out : any[]
+>[] : never[]
+
+    out.push(100)
+>out.push(100) : number
+>out.push : (...items: any[]) => number
+>out : any[]
+>push : (...items: any[]) => number
+>100 : 100
+
+    unsafeCast<any>(out);
+>unsafeCast<any>(out) : void
+>unsafeCast : <T>(_value: unknown) => asserts _value is T
+>out : number[]
+
+    return out;
+>out : number[]
+}
+

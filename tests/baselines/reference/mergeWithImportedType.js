@@ -10,6 +10,7 @@ export type E = E;
 //// [f1.js]
 "use strict";
 exports.__esModule = true;
+exports.E = void 0;
 var E;
 (function (E) {
     E[E["X"] = 0] = "X";

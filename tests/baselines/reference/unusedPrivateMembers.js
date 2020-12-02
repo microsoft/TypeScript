@@ -47,6 +47,22 @@ class Test5<T> {
     }
 }
 
+class Test6 {
+    private get a() {
+        return 0;
+    }
+    private set a(v) {
+        v;
+    }
+    private b = 0;
+
+    public test() {
+        var x = new Test6();
+        x.a++;
+        x.b++;
+    }
+}
+
 
 //// [unusedPrivateMembers.js]
 var Test1 = /** @class */ (function () {
@@ -79,7 +95,7 @@ var Test3 = /** @class */ (function () {
         get: function () {
             return 0;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_2.test = function () {
@@ -96,7 +112,7 @@ var Test4 = /** @class */ (function () {
         set: function (v) {
             v;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_3.test = function () {
@@ -113,4 +129,26 @@ var Test5 = /** @class */ (function () {
         x.p;
     };
     return Test5;
+}());
+var Test6 = /** @class */ (function () {
+    function Test6() {
+        this.b = 0;
+    }
+    var proto_4 = Test6.prototype;
+    Object.defineProperty(proto_4, "a", {
+        get: function () {
+            return 0;
+        },
+        set: function (v) {
+            v;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    proto_4.test = function () {
+        var x = new Test6();
+        x.a++;
+        x.b++;
+    };
+    return Test6;
 }());

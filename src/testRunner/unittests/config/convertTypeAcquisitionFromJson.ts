@@ -111,8 +111,8 @@ namespace ts {
                     },
                     errors: [
                         {
-                            category: Diagnostics.Unknown_type_acquisition_option_0.category,
-                            code: Diagnostics.Unknown_type_acquisition_option_0.code,
+                            category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                            code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                             file: undefined,
                             start: 0,
                             length: 0,
@@ -206,8 +206,8 @@ namespace ts {
                     },
                     errors: [
                         {
-                            category: Diagnostics.Unknown_type_acquisition_option_0.category,
-                            code: Diagnostics.Unknown_type_acquisition_option_0.code,
+                            category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                            code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                             file: undefined,
                             start: 0,
                             length: 0,

@@ -2,11 +2,11 @@
 
 
 ////class A {
-////    [|[|{| "contextRangeIndex": 0 |}constructor|](s: string) {}|]
+////    [|[|{| "contextRangeIndex": 0, "isDefinition": true |}constructor|](s: string) {}|]
 ////}
 ////class B extends A { }
 ////class C extends B {
-////    [|[|{| "contextRangeIndex": 2 |}constructor|]() {
+////    [|[|{| "contextRangeIndex": 2, "isDefinition": true |}constructor|]() {
 ////        [|super|]("");
 ////    }|]
 ////}

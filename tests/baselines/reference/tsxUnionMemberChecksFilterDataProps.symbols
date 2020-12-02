@@ -1,0 +1,30 @@
+=== tests/cases/compiler/tsxUnionMemberChecksFilterDataProps.tsx ===
+/// <reference path="react16.d.ts" />
+import React, { ReactElement } from "react";
+>React : Symbol(React, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 6))
+>ReactElement : Symbol(ReactElement, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 15))
+
+declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
+>NotHappy : Symbol(NotHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 44))
+>props : Symbol(props, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 3, 26))
+>fixed : Symbol(fixed, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 3, 35))
+>value : Symbol(value, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 3, 57))
+>ReactElement : Symbol(ReactElement, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 15))
+
+declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
+>Happy : Symbol(Happy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 3, 96))
+>props : Symbol(props, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 4, 23))
+>fixed : Symbol(fixed, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 4, 31))
+>value : Symbol(value, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 4, 48))
+>ReactElement : Symbol(ReactElement, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 15))
+
+const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
+>RootNotHappy : Symbol(RootNotHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 6, 5))
+>NotHappy : Symbol(NotHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 44))
+>data-testid : Symbol(data-testid, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 6, 37))
+
+const RootHappy = () => (<Happy data-testid="my-test-id" />);
+>RootHappy : Symbol(RootHappy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 7, 5))
+>Happy : Symbol(Happy, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 3, 96))
+>data-testid : Symbol(data-testid, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 7, 31))
+

@@ -89,17 +89,14 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment: SymbolDisplayPart[] = [];
+        const documentationComment: string[] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                if (documentationComment.length) {
-                    documentationComment.push(lineBreakPart());
-                }
-                documentationComment.push(textPart(comment));
+                pushIfUnique(documentationComment, comment);
             }
         });
-        return documentationComment;
+        return intersperse(map(documentationComment, textPart), lineBreakPart());
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -129,6 +126,8 @@ namespace ts.JsDoc {
     function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
+            case SyntaxKind.JSDocImplementsTag:
+                return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
@@ -139,7 +138,8 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
-                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
+            case SyntaxKind.JSDocSeeTag:
+                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
                 return name ? withNode(name) : comment;
             default:
                 return comment;
@@ -164,7 +164,7 @@ namespace ts.JsDoc {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0",
+                sortText: Completions.SortText.LocationPriority,
             };
         }));
     }
@@ -177,7 +177,7 @@ namespace ts.JsDoc {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0"
+                sortText: Completions.SortText.LocationPriority
             };
         }));
     }
@@ -212,7 +212,7 @@ namespace ts.JsDoc {
                 return undefined;
             }
 
-            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
         });
     }
 
@@ -251,7 +251,6 @@ namespace ts.JsDoc {
      * @param position The (character-indexed) position in the file where the check should
      * be performed.
      */
-
     export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion | undefined {
         const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const existingDocComment = findAncestor(tokenAtPos, isJSDoc);
@@ -330,6 +329,7 @@ namespace ts.JsDoc {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.Constructor:
             case SyntaxKind.MethodSignature:
+            case SyntaxKind.ArrowFunction:
                 const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                 return { commentOwner, parameters };
 
@@ -362,6 +362,8 @@ namespace ts.JsDoc {
                 // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
                 return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
+            case SyntaxKind.ExpressionStatement:
+                return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression);
             case SyntaxKind.BinaryExpression: {
                 const be = commentOwner as BinaryExpression;
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
@@ -370,6 +372,11 @@ namespace ts.JsDoc {
                 const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
                 return { commentOwner, parameters };
             }
+            case SyntaxKind.PropertyDeclaration:
+                const init = (commentOwner as PropertyDeclaration).initializer;
+                if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
+                    return { commentOwner, parameters: init.parameters };
+                }
         }
     }
 

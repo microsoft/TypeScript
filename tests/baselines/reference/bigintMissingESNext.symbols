@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es2020/bigintMissingESNext.ts ===
+declare function test<A, B extends A>(): void;
+>test : Symbol(test, Decl(bigintMissingESNext.ts, 0, 0))
+>A : Symbol(A, Decl(bigintMissingESNext.ts, 0, 22))
+>B : Symbol(B, Decl(bigintMissingESNext.ts, 0, 24))
+>A : Symbol(A, Decl(bigintMissingESNext.ts, 0, 22))
+
+test<{t?: string}, object>();
+>test : Symbol(test, Decl(bigintMissingESNext.ts, 0, 0))
+>t : Symbol(t, Decl(bigintMissingESNext.ts, 2, 6))
+
+test<{t?: string}, bigint>();
+>test : Symbol(test, Decl(bigintMissingESNext.ts, 0, 0))
+>t : Symbol(t, Decl(bigintMissingESNext.ts, 3, 6))
+
+// should have global error when bigint is used but ES2020 lib is not present
+

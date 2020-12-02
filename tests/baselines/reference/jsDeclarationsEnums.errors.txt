@@ -1,15 +1,15 @@
-tests/cases/conformance/jsdoc/declarations/index.js(4,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(6,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(10,6): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(14,6): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(18,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(22,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(24,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(30,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(35,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(41,19): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(47,13): error TS8015: 'enum declarations' can only be used in a .ts file.
-tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8015: 'enum declarations' can only be used in a .ts file.
+tests/cases/conformance/jsdoc/declarations/index.js(4,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(6,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(10,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(14,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(18,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(22,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(24,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(30,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(35,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(41,19): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(47,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8006: 'enum' declarations can only be used in TypeScript files.
 
 
 ==== tests/cases/conformance/jsdoc/declarations/index.js (12 errors) ====
@@ -18,39 +18,39 @@ tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8015: 'enum 
     
     export enum A {}
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
     
     export enum B {
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         Member
     }
     
     enum C {}
          ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
     
     export { C };
     
     enum DD {}
          ~~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
     
     export { DD as D };
     
     export enum E {}
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
     export { E as EE };
     
     export { F as FF };
     export enum F {}
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
     
     export enum G {
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         A = 1,
         B,
         C
@@ -58,14 +58,14 @@ tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8015: 'enum 
     
     export enum H {
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         A = "a",
         B = "b"
     }
     
     export enum I {
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         A = "a",
         B = 0,
         C
@@ -73,7 +73,7 @@ tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8015: 'enum 
     
     export const enum J {
                       ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         A = 1,
         B,
         C
@@ -81,7 +81,7 @@ tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8015: 'enum 
     
     export enum K {
                 ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         None   = 0,
         A = 1 << 0,
         B = 1 << 1,
@@ -91,7 +91,7 @@ tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8015: 'enum 
     
     export const enum L {
                       ~
-!!! error TS8015: 'enum declarations' can only be used in a .ts file.
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
         None   = 0,
         A = 1 << 0,
         B = 1 << 1,

@@ -16,7 +16,7 @@ var Employee = /** @class */ (function () {
     var proto_1 = Employee.prototype;
     Object.defineProperty(proto_1, "p", {
         set: function (_) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.m = function () {

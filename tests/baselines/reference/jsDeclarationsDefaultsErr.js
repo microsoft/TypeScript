@@ -59,6 +59,7 @@ exports.default = C;
 //// [index3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = void 0;
 // merge type alias and variable (behavior is borked, see #32366)
 var x = 12;
 exports.default = x;

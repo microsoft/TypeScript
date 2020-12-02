@@ -523,7 +523,7 @@ function switchTestLiterals(x: unknown) {
 }
 
 function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
->switchTestObjects : (x: unknown, y: () => void, z: { prop: number; }) => void
+>switchTestObjects : (x: unknown, y: () => void, z: {    prop: number;}) => void
 >x : unknown
 >y : () => void
 >z : { prop: number; }

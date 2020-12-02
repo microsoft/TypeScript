@@ -19,22 +19,22 @@ var C = /** @class */ (function () {
     C[function () { }] = function () { };
     Object.defineProperty(proto_1, delete id, {
         get: function () { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, [0, 1], {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "", {
         get: function () { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, id.toString(), {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

@@ -13,12 +13,12 @@ var C = /** @class */ (function () {
     proto_1["" + ""] = function () { };
     Object.defineProperty(proto_1, "" + "", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "" + "", {
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

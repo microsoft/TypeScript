@@ -6,7 +6,7 @@
 module.exports = C
 >module.exports = C : typeof C
 >module.exports : typeof C
->module : { "tests/cases/conformance/jsdoc/mod1": typeof C; }
+>module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof C; }
 >exports : typeof C
 >C : typeof C
 
@@ -16,7 +16,7 @@ function C() {
     this.p = 1
 >this.p = 1 : 1
 >this.p : any
->this : any
+>this : this
 >p : any
 >1 : 1
 }
@@ -24,7 +24,7 @@ function C() {
 === tests/cases/conformance/jsdoc/use.js ===
 /** @param {import('./mod1').Con} k */
 function f(k) {
->f : (k: import("tests/cases/conformance/jsdoc/mod1").Con) => any
+>f : (k: import('./mod1').Con) => any
 >k : import("tests/cases/conformance/jsdoc/mod1").Con
 
     if (1 === 2 - 1) {

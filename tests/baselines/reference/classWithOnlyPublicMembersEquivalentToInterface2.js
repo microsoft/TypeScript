@@ -37,7 +37,7 @@ var C = /** @class */ (function () {
     Object.defineProperty(proto_1, "z", {
         get: function () { return 1; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

@@ -9,6 +9,7 @@ export class User {
 //// [declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.js]
 "use strict";
 exports.__esModule = true;
+exports.User = void 0;
 var _data = Symbol('data');
 var User = /** @class */ (function () {
     function User() {

@@ -1,0 +1,39 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts ===
+class Parent {
+>Parent : Parent
+
+    #foo = 3;
+>#foo : number
+>3 : 3
+
+    static #bar = 5;
+>#bar : number
+>5 : 5
+
+    accessChildProps() {
+>accessChildProps : () => void
+
+        new Child().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
+>new Child().#foo : number
+>new Child() : Child
+>Child : typeof Child
+
+        Child.#bar;       // Error: not found
+>Child.#bar : any
+>Child : typeof Child
+    }
+}
+
+class Child extends Parent {
+>Child : Child
+>Parent : Parent
+
+    #foo = "foo";       // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
+>#foo : string
+>"foo" : "foo"
+
+    #bar = "bar";       // OK
+>#bar : string
+>"bar" : "bar"
+}
+

@@ -192,8 +192,7 @@ namespace ts.projectSystem {
                 // Send an initial compileOnSave request
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
 
-                file1Consumer1.content = `let y = 10;`;
-                host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+                host.writeFile(file1Consumer1.path, `let y = 10;`);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -209,7 +208,7 @@ namespace ts.projectSystem {
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
-                host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
+                host.deleteFile(file1Consumer2.path);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
@@ -225,7 +224,7 @@ namespace ts.projectSystem {
                     path: "/a/b/file1Consumer3.ts",
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
-                host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
+                host.writeFile(file1Consumer3.path, file1Consumer3.content);
                 host.runQueuedTimeoutCallbacks();
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
@@ -475,7 +474,7 @@ namespace ts.projectSystem {
                 const session = createSession(host);
 
                 openFilesForSession([referenceFile1], session);
-                host.reloadFS([referenceFile1, configFile]);
+                host.deleteFile(moduleFile1.path);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [
@@ -714,7 +713,7 @@ namespace ts.projectSystem {
 
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nexports.Foo = void 0;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
         it("shoud not emit js files in external projects", () => {
@@ -799,23 +798,230 @@ namespace ts.projectSystem {
                 assert.isTrue(stringContains(content, str), `Expected "${content}" to have "${str}"`);
             }
         });
+
+        describe("compile on save emit with and without richResponse", () => {
+            it("without rich Response", () => {
+                verify(/*richRepsonse*/ undefined);
+            });
+            it("with rich Response set to false", () => {
+                verify(/*richRepsonse*/ false);
+            });
+            it("with rich Repsonse", () => {
+                verify(/*richRepsonse*/ true);
+            });
+
+            function verify(richResponse: boolean | undefined) {
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compileOnSave: true,
+                        compilerOptions: {
+                            outDir: "test",
+                            noEmitOnError: true,
+                            declaration: true,
+                        },
+                        exclude: ["node_modules"]
+                    })
+                };
+                const file1: File = {
+                    path: `${tscWatch.projectRoot}/file1.ts`,
+                    content: "const x = 1;"
+                };
+                const file2: File = {
+                    path: `${tscWatch.projectRoot}/file2.ts`,
+                    content: "const y = 2;"
+                };
+                const host = createServerHost([file1, file2, config, libFile]);
+                const session = createSession(host);
+                openFilesForSession([file1], session);
+
+                const affectedFileResponse = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: { file: file1.path }
+                }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
+                assert.deepEqual(affectedFileResponse, [
+                    { fileNames: [file1.path, file2.path], projectFileName: config.path, projectUsesOutFile: false }
+                ]);
+                const file1SaveResponse = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                    arguments: { file: file1.path, richResponse }
+                }).response;
+                if (richResponse) {
+                    assert.deepEqual(file1SaveResponse, { emitSkipped: false, diagnostics: emptyArray });
+                }
+                else {
+                    assert.isTrue(file1SaveResponse);
+                }
+                assert.strictEqual(host.readFile(`${tscWatch.projectRoot}/test/file1.d.ts`), "declare const x = 1;\n");
+                const file2SaveResponse = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                    arguments: { file: file2.path, richResponse }
+                }).response;
+                if (richResponse) {
+                    assert.deepEqual(file2SaveResponse, {
+                        emitSkipped: true,
+                        diagnostics: [{
+                            start: undefined,
+                            end: undefined,
+                            fileName: undefined,
+                            text: formatStringFromArgs(Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.message, [`${tscWatch.projectRoot}/test/file1.d.ts`]),
+                            code: Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.code,
+                            category: diagnosticCategoryName(Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file),
+                            reportsUnnecessary: undefined,
+                            reportsDeprecated: undefined,
+                            relatedInformation: undefined,
+                            source: undefined
+                        }]
+                    });
+                }
+                else {
+                    assert.isFalse(file2SaveResponse);
+                }
+                assert.isFalse(host.fileExists(`${tscWatch.projectRoot}/test/file2.d.ts`));
+            }
+        });
+
+        describe("compile on save in global files", () => {
+            describe("when program contains module", () => {
+                it("when d.ts emit is enabled", () => {
+                    verifyGlobalSave(/*declaration*/ true, /*hasModule*/ true);
+                });
+                it("when d.ts emit is not enabled", () => {
+                    verifyGlobalSave(/*declaration*/ false, /*hasModule*/ true);
+                });
+            });
+            describe("when program doesnt have module", () => {
+                it("when d.ts emit is enabled", () => {
+                    verifyGlobalSave(/*declaration*/ true, /*hasModule*/ false);
+                });
+                it("when d.ts emit is not enabled", () => {
+                    verifyGlobalSave(/*declaration*/ false, /*hasModule*/ false);
+                });
+            });
+            function verifyGlobalSave(declaration: boolean,hasModule: boolean) {
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compileOnSave: true,
+                        compilerOptions: {
+                            declaration,
+                            module: hasModule ? undefined : "none"
+                        },
+                    })
+                };
+                const file1: File = {
+                    path: `${tscWatch.projectRoot}/file1.ts`,
+                    content: `const x = 1;
+function foo() {
+    return "hello";
+}`
+                };
+                const file2: File = {
+                    path: `${tscWatch.projectRoot}/file2.ts`,
+                    content: `const y = 2;
+function bar() {
+    return "world";
+}`
+                };
+                const file3: File = {
+                    path: `${tscWatch.projectRoot}/file3.ts`,
+                    content: "const xy = 3;"
+                };
+                const module: File = {
+                    path: `${tscWatch.projectRoot}/module.ts`,
+                    content: "export const xyz = 4;"
+                };
+                const files = [file1, file2, file3, ...(hasModule ? [module] : emptyArray)];
+                const host = createServerHost([...files, config, libFile]);
+                const session = createSession(host);
+                openFilesForSession([file1, file2], session);
+
+                const affectedFileResponse = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: { file: file1.path }
+                }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
+                assert.deepEqual(affectedFileResponse, [
+                    { fileNames: files.map(f => f.path), projectFileName: config.path, projectUsesOutFile: false }
+                ]);
+                verifyFileSave(file1);
+                verifyFileSave(file2);
+                verifyFileSave(file3);
+                if (hasModule) {
+                    verifyFileSave(module);
+                }
+
+                // Change file1 get affected file list
+                verifyLocalEdit(file1, "hello", "world");
+
+                // Change file2 get affected file list = will return only file2 if --declaration otherwise all files
+                verifyLocalEdit(file2, "world", "hello", /*returnsAllFilesAsAffected*/ !declaration);
+
+                function verifyFileSave(file: File) {
+                    const response = session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                        command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                        arguments: { file: file.path }
+                    }).response;
+                    assert.isTrue(response);
+                    assert.strictEqual(
+                        host.readFile(changeExtension(file.path, ".js")),
+                        file === module ?
+                            `"use strict";\nexports.__esModule = true;\nexports.xyz = void 0;\nexports.xyz = 4;\n` :
+                            `${file.content.replace("const", "var")}\n`
+                    );
+                    if (declaration) {
+                        assert.strictEqual(
+                            host.readFile(changeExtension(file.path, ".d.ts")),
+                            (file.content.substr(0, file.content.indexOf(" {") === -1 ? file.content.length : file.content.indexOf(" {"))
+                                .replace("const ", "declare const ")
+                                .replace("function ", "declare function ")
+                                .replace(")", "): string;")) + "\n"
+                        );
+                    }
+                }
+
+                function verifyLocalEdit(file: File, oldText: string, newText: string, returnsAllFilesAsAffected?: boolean) {
+                    // Change file1 get affected file list
+                    session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                        command: protocol.CommandTypes.UpdateOpen,
+                        arguments: {
+                            changedFiles: [{
+                                fileName: file.path,
+                                textChanges: [{
+                                    newText,
+                                    ...protocolTextSpanFromSubstring(file.content, oldText)
+                                }]
+                            }]
+                        }
+                    });
+                    const affectedFileResponse = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                        arguments: { file: file.path }
+                    }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
+                    assert.deepEqual(affectedFileResponse, [
+                        { fileNames: [file.path, ...(returnsAllFilesAsAffected ? files.filter(f => f !== file).map(f => f.path) : emptyArray)], projectFileName: config.path, projectUsesOutFile: false }
+                    ]);
+                    file.content = file.content.replace(oldText, newText);
+                    verifyFileSave(file);
+                }
+            }
+        });
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
         const core: File = {
-            path: `${projectRoot}/core/core.ts`,
+            path: `${tscWatch.projectRoot}/core/core.ts`,
             content: "let z = 10;"
         };
         const app1: File = {
-            path: `${projectRoot}/app1/app.ts`,
+            path: `${tscWatch.projectRoot}/app1/app.ts`,
             content: "let x = 10;"
         };
         const app2: File = {
-            path: `${projectRoot}/app2/app.ts`,
+            path: `${tscWatch.projectRoot}/app2/app.ts`,
             content: "let y = 10;"
         };
         const app1Config: File = {
-            path: `${projectRoot}/app1/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },
@@ -823,7 +1029,7 @@ namespace ts.projectSystem {
             })
         };
         const app2Config: File = {
-            path: `${projectRoot}/app2/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
             content: JSON.stringify({
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },

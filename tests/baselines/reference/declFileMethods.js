@@ -192,6 +192,7 @@ interface I2 {
 //// [declFileMethods_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.c1 = void 0;
 var c1 = /** @class */ (function () {
     function c1() {
     }

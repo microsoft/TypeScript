@@ -1,0 +1,39 @@
+tests/cases/conformance/jsx/file.tsx(8,17): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/file.tsx(20,32): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+tests/cases/conformance/jsx/file.tsx(24,25): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { isElement; }
+    }
+    
+    var T: any, T1: any, T2: any;
+    
+    // This is an element
+    var x1 = <T>() => {}</T>;
+                    ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    x1.isElement;
+    
+    // This is a generic function
+    var x2 = <T extends {}>() => {};
+    x2();
+    
+    // This is a generic function
+    var x3 = <T, T1>() => {};
+    x3();
+    
+    // This is an element
+    var x4 = <T extends={true}>() => {}</T>;
+                                   ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    x4.isElement;
+    
+    // This is an element
+    var x5 = <T extends>() => {}</T>;
+                            ~
+!!! error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+    x5.isElement;
+    
+    

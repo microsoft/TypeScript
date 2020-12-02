@@ -133,7 +133,7 @@ var ClassWithAccessors = /** @class */ (function () {
             var var2;
             num = typeof var2 === "string" && var2.length; // string
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "pp1", {
@@ -156,7 +156,7 @@ var ClassWithAccessors = /** @class */ (function () {
             var var2;
             num = typeof var2 === "string" && var2.length; // string
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(ClassWithAccessors, "s1", {
@@ -179,7 +179,7 @@ var ClassWithAccessors = /** @class */ (function () {
             var var2;
             num = typeof var2 === "string" && var2.length; // string
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(ClassWithAccessors, "ss1", {
@@ -202,7 +202,7 @@ var ClassWithAccessors = /** @class */ (function () {
             var var2;
             num = typeof var2 === "string" && var2.length; // string
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return ClassWithAccessors;

@@ -1,25 +1,42 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/first/first_PART1.ts]
+/**@internal*/ interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+console.log(s);
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:04:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-12:04:00 AM - Building project '/src/first/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-12:04:00 AM - Updating output of project '/src/second/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-12:04:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
 
-12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+[[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-12:04:00 AM - Updating output of project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-12:04:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -47,7 +64,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(proto_1, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -570,7 +587,7 @@ sourceFile:../second/second_part1.ts
 6 >Emitted(22, 46) Source(18, 41) + SourceIndex(3)
 7 >Emitted(22, 47) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -1875,7 +1892,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 127,
-          "end": 3579,
+          "end": 3580,
           "kind": "text"
         }
       ]
@@ -1957,7 +1974,7 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-text: (127-3579)
+text: (127-3580)
 var N;
 (function (N) {
     function f() {
@@ -1973,7 +1990,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(proto_1, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2409,20 +2426,6 @@ declare function f(): string;
 
 ======================================================================
 
-//// [/src/first/first_PART1.ts]
-/**@internal*/ interface TheFirst {
-    none: any;
-}
-
-const s = "Hello, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-console.log(s);
-
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hello, world";
 console.log(s);
@@ -2446,7 +2449,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(proto_1, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -2971,7 +2974,7 @@ sourceFile:../../../second/second_part1.ts
 6 >Emitted(22, 46) Source(18, 41) + SourceIndex(3)
 7 >Emitted(22, 47) Source(18, 42) + SourceIndex(3)
 ---
->>>        enumerable: true,
+>>>        enumerable: false,
 >>>        configurable: true
 >>>    });
 1 >^^^^^^^
@@ -4315,20 +4318,20 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 3579,
+          "end": 3580,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 3579,
+              "end": 3580,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 3579,
-          "end": 3615,
+          "pos": 3580,
+          "end": 3616,
           "kind": "text"
         }
       ]
@@ -4363,9 +4366,9 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3579):: ../../../2/second-output.js texts:: 1
+prepend: (0-3580):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-3579)
+text: (0-3580)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -4388,7 +4391,7 @@ var normalC = /** @class */ (function () {
     Object.defineProperty(proto_1, "c", {
         /**@internal*/ get: function () { return 10; },
         /**@internal*/ set: function (val) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return normalC;
@@ -4478,7 +4481,7 @@ var C = /** @class */ (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (3579-3615)
+text: (3580-3616)
 var c = new C();
 c.doSomething();
 

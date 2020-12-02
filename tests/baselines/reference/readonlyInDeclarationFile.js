@@ -60,68 +60,68 @@ var C = /** @class */ (function () {
     var proto_1 = C.prototype;
     Object.defineProperty(proto_1, "b1", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "b2", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "b3", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "c1", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "c2", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "c3", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "t1", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "t2", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "t3", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "u1", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "u2", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "u3", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

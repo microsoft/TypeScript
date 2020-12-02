@@ -38,7 +38,7 @@ var C = /** @class */ (function () {
             return "string"; // Error; get contextual type by set accessor parameter type annotation
         },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "Y", {
@@ -46,7 +46,7 @@ var C = /** @class */ (function () {
             return true;
         },
         set: function (y) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "W", {
@@ -54,7 +54,7 @@ var C = /** @class */ (function () {
             return true;
         },
         set: function (w) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "Z", {
@@ -62,7 +62,7 @@ var C = /** @class */ (function () {
             return 1;
         },
         set: function (z) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

@@ -72,3 +72,4 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2746: This JSX tag's 'childr
             <div> My Div </div>
             <div> My Div </div>
         </Comp>;
+    

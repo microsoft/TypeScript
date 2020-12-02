@@ -12,6 +12,7 @@ namespace ts.formatting {
         getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
+        skipToStartOf(node: Node): void;
     }
 
     const enum ScanAction {
@@ -21,6 +22,7 @@ namespace ts.formatting {
         RescanTemplateToken,
         RescanJsxIdentifier,
         RescanJsxText,
+        RescanJsxAttributeValue,
     }
 
     export function getFormattingScanner<T>(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
@@ -46,6 +48,7 @@ namespace ts.formatting {
             getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             skipToEndOf,
+            skipToStartOf,
         });
 
         lastTokenInfo = undefined;
@@ -121,7 +124,13 @@ namespace ts.formatting {
         }
 
         function shouldRescanJsxText(node: Node): boolean {
-            return node.kind === SyntaxKind.JsxText;
+            const isJSXText = isJsxText(node);
+            if (isJSXText) {
+                const containingElement = findAncestor(node.parent, p => isJsxElement(p));
+                if (!containingElement) return false; // should never happen
+                return !isParenthesizedExpression(containingElement.parent);
+            }
+            return false;
         }
 
         function shouldRescanSlashToken(container: Node): boolean {
@@ -131,6 +140,10 @@ namespace ts.formatting {
         function shouldRescanTemplateToken(container: Node): boolean {
             return container.kind === SyntaxKind.TemplateMiddle ||
                 container.kind === SyntaxKind.TemplateTail;
+        }
+
+        function shouldRescanJsxAttributeValue(node: Node): boolean {
+            return node.parent && isJsxAttribute(node.parent) && node.parent.initializer === node;
         }
 
         function startsWithSlashToken(t: SyntaxKind): boolean {
@@ -147,6 +160,7 @@ namespace ts.formatting {
                 shouldRescanTemplateToken(n) ? ScanAction.RescanTemplateToken :
                 shouldRescanJsxIdentifier(n) ? ScanAction.RescanJsxIdentifier :
                 shouldRescanJsxText(n) ? ScanAction.RescanJsxText :
+                shouldRescanJsxAttributeValue(n) ? ScanAction.RescanJsxAttributeValue :
                 ScanAction.Scan;
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
@@ -230,7 +244,7 @@ namespace ts.formatting {
                 case ScanAction.RescanTemplateToken:
                     if (token === SyntaxKind.CloseBraceToken) {
                         lastScanAction = ScanAction.RescanTemplateToken;
-                        return scanner.reScanTemplateToken();
+                        return scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
                     }
                     break;
                 case ScanAction.RescanJsxIdentifier:
@@ -239,6 +253,9 @@ namespace ts.formatting {
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
                     return scanner.reScanJsxToken();
+                case ScanAction.RescanJsxAttributeValue:
+                    lastScanAction = ScanAction.RescanJsxAttributeValue;
+                    return scanner.reScanJsxAttributeValue();
                 case ScanAction.Scan:
                     break;
                 default:
@@ -276,6 +293,16 @@ namespace ts.formatting {
 
         function skipToEndOf(node: Node): void {
             scanner.setTextPos(node.end);
+            savedPos = scanner.getStartPos();
+            lastScanAction = undefined;
+            lastTokenInfo = undefined;
+            wasNewLine = false;
+            leadingTrivia = undefined;
+            trailingTrivia = undefined;
+        }
+
+        function skipToStartOf(node: Node): void {
+            scanner.setTextPos(node.pos);
             savedPos = scanner.getStartPos();
             lastScanAction = undefined;
             lastTokenInfo = undefined;

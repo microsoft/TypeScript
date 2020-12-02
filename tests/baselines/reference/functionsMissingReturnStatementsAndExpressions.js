@@ -217,7 +217,7 @@ var C = /** @class */ (function () {
         get: function () {
             // Errors; get accessors must return a value.
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "m2", {
@@ -225,14 +225,14 @@ var C = /** @class */ (function () {
             // Permissible; returns undefined.
             return;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "m3", {
         get: function () {
             return "Okay, because this is a return expression.";
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "m4", {
@@ -240,7 +240,7 @@ var C = /** @class */ (function () {
             // Fine since this consists of a single throw statement.
             throw null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "m5", {
@@ -251,7 +251,7 @@ var C = /** @class */ (function () {
             throw undefined.
             ;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

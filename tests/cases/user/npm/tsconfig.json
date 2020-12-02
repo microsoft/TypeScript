@@ -7,8 +7,17 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom", "scripthost"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom",
+            "scripthost"
+        ]
     },
-    "include": ["node_modules/npm"]
+    "include": [
+        "node_modules/npm",
+        "index.ts"
+    ]
 }

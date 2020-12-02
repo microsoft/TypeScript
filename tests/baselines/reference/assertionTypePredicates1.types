@@ -128,6 +128,19 @@ function f01(x: unknown) {
 >!true : false
 >true : true
 
+        assertIsArrayOfStrings(false);
+>assertIsArrayOfStrings(false) : void
+>assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
+>false : false
+
+        x;
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
         assert(x === undefined || typeof x === "string");
 >assert(x === undefined || typeof x === "string") : void
 >assert : (value: unknown) => asserts value
@@ -463,6 +476,77 @@ class Test2 extends Test {
 >0 : 0
 }
 
+class Derived extends Test {
+>Derived : Derived
+>Test : Test
+
+    foo(x: unknown) {
+>foo : (x: unknown) => void
+>x : unknown
+
+        super.assert(typeof x === "string");
+>super.assert(typeof x === "string") : void
+>super.assert : (value: unknown) => asserts value
+>super : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    baz(x: number) {
+>baz : (x: number) => void
+>x : number
+
+        super.assert(false);
+>super.assert(false) : void
+>super.assert : (value: unknown) => asserts value
+>super : Test
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : number
+    }
+}
+
+function f11(items: Test[]) {
+>f11 : (items: Test[]) => void
+>items : Test[]
+
+    for (let item of items) {
+>item : Test
+>items : Test[]
+
+        if (item.isTest2()) {
+>item.isTest2() : boolean
+>item.isTest2 : () => this is Test2
+>item : Test
+>isTest2 : () => this is Test2
+
+            item.z;
+>item.z : number
+>item : Test2
+>z : number
+        }
+        item.assertIsTest2();
+>item.assertIsTest2() : void
+>item.assertIsTest2 : () => asserts this is Test2
+>item : Test
+>assertIsTest2 : () => asserts this is Test2
+
+        item.z;
+>item.z : number
+>item : Test2
+>z : number
+    }
+}
+
 // Invalid constructs
 
 declare let Q1: new (x: unknown) => x is string;
@@ -556,5 +640,42 @@ function f20(x: unknown) {
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : unknown
 >"string" : "string"
+}
+
+// Repro from #35940
+
+interface Thing {
+    good: boolean;
+>good : boolean
+
+    isGood(): asserts this is GoodThing;
+>isGood : () => asserts this is GoodThing
+}
+
+interface GoodThing {
+    good: true;
+>good : true
+>true : true
+}
+
+function example1(things: Thing[]) {
+>example1 : (things: Thing[]) => void
+>things : Thing[]
+
+    for (let thing of things) {
+>thing : Thing
+>things : Thing[]
+
+        thing.isGood();
+>thing.isGood() : void
+>thing.isGood : () => asserts this is GoodThing
+>thing : Thing
+>isGood : () => asserts this is GoodThing
+
+        thing.good;
+>thing.good : true
+>thing : Thing & GoodThing
+>good : true
+    }
 }
 

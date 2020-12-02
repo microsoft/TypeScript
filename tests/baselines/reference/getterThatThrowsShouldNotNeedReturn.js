@@ -18,7 +18,7 @@ var Greeter = /** @class */ (function () {
         get: function () {
             throw ''; // should not raise an error
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.greeting = function () {

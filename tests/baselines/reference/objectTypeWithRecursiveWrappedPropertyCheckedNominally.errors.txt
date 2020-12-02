@@ -15,7 +15,7 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts(42,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
     Type 'MyList<number>' is not assignable to type 'T'.
-      'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'MyList<number>'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts (5 errors) ====
@@ -83,7 +83,7 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
 !!! error TS2322:     Type 'MyList<number>' is not assignable to type 'T'.
-!!! error TS2322:       'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
+!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'MyList<number>'.
         u = t; // was error, ok after constraint made illegal, doesn't matter
     
         var a: List<number>;

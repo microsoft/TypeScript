@@ -256,7 +256,7 @@ Object.defineProperty(module.exports, "thing", { value: "yes", writable: true })
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "tests/cases/conformance/jsdoc/mod2": typeof import("tests/cases/conformance/jsdoc/mod2"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod2")
 >"thing" : "thing"
 >{ value: "yes", writable: true } : { value: string; writable: true; }
@@ -271,7 +271,7 @@ Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "tests/cases/conformance/jsdoc/mod2": typeof import("tests/cases/conformance/jsdoc/mod2"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod2")
 >"readonlyProp" : "readonlyProp"
 >{ value: "Smith", writable: false } : { value: string; writable: false; }
@@ -286,7 +286,7 @@ Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, s
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "tests/cases/conformance/jsdoc/mod2": typeof import("tests/cases/conformance/jsdoc/mod2"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod2")
 >"rwAccessors" : "rwAccessors"
 >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
@@ -301,7 +301,7 @@ Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "tests/cases/conformance/jsdoc/mod2": typeof import("tests/cases/conformance/jsdoc/mod2"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod2")
 >"readonlyAccessor" : "readonlyAccessor"
 >{ get() { return 21.75 } } : { get(): number; }
@@ -314,7 +314,7 @@ Object.defineProperty(module.exports, "setonlyAccessor", {
 >Object : ObjectConstructor
 >defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod2")
->module : { "tests/cases/conformance/jsdoc/mod2": typeof import("tests/cases/conformance/jsdoc/mod2"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof import("tests/cases/conformance/jsdoc/mod2"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod2")
 >"setonlyAccessor" : "setonlyAccessor"
 >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }

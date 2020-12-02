@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts(6,5): error TS2610: Class 'Animal' defines instance member accessor 'sound', but extended class 'Lion' defines it as instance member property.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts(6,5): error TS2610: 'sound' is defined as an accessor in class 'Animal', but is overridden here in 'Lion' as an instance property.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts (1 errors) ====
@@ -9,6 +9,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAcce
     class Lion extends Animal {
         sound = 'RAWR!' // error here
         ~~~~~
-!!! error TS2610: Class 'Animal' defines instance member accessor 'sound', but extended class 'Lion' defines it as instance member property.
+!!! error TS2610: 'sound' is defined as an accessor in class 'Animal', but is overridden here in 'Lion' as an instance property.
     }
     

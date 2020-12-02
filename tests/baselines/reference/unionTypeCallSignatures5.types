@@ -18,7 +18,7 @@ declare const fn: A | B | C;
 >fn : A | B | C
 
 fn(0);
->fn(0) : any
+>fn(0) : void
 >fn : A | B | C
 >0 : 0
 

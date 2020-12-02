@@ -23,13 +23,13 @@ function foo4([...multiRobotAInfo]: Robot) {
 }
 
 foo1(robotA);
-foo1(["roomba", ["vaccum", "mopping"]]);
+foo1(["roomba", ["vacuum", "mopping"]]);
 
 foo2(robotA);
-foo2(["roomba", ["vaccum", "mopping"]]);
+foo2(["roomba", ["vacuum", "mopping"]]);
 
 foo3(robotA);
-foo3(["roomba", ["vaccum", "mopping"]]);
+foo3(["roomba", ["vacuum", "mopping"]]);
 
 foo4(robotA);
-foo4(["roomba", ["vaccum", "mopping"]]);
+foo4(["roomba", ["vacuum", "mopping"]]);

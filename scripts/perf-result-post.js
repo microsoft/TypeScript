@@ -1,7 +1,7 @@
 // @ts-check
 /// <reference lib="esnext.asynciterable" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const fs = require("fs");
 
 const requester = process.env.requesting_user;
@@ -12,13 +12,11 @@ const outputTableText = fs.readFileSync(process.argv[3], { encoding: "utf8" });
 console.log(`Fragment contents:
 ${outputTableText}`);
 
-const gh = new Octokit();
-gh.authenticate({
-    type: "token",
-    token: process.argv[2]
+const gh = new Octokit({
+    auth: process.argv[2]
 });
 gh.issues.createComment({
-    number: +source,
+    issue_number: +source,
     owner: "Microsoft",
     repo: "TypeScript",
     body: `@${requester}

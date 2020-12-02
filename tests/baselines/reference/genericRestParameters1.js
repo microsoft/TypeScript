@@ -20,7 +20,7 @@ f1(42, ...t2);
 f1(42, "hello", ...t1);
 f1(42, "hello", true, ...t0);
 f1(ns[0], ns[1], true);
-f1(...ns, true);  // Error, tuple spread only expanded when last
+f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 
 f2(42, "hello", true);
 f2(t3[0], t3[1], t3[2]);
@@ -29,7 +29,7 @@ f2(42, ...t2);
 f2(42, "hello", ...t1);
 f2(42, "hello", true, ...t0);
 f2(ns[0], ns[1], true);
-f2(...ns, true);  // Error, tuple spread only expanded when last
+f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 
 declare function f10<T extends unknown[]>(...args: T): T;
 
@@ -183,7 +183,7 @@ f1.apply(void 0, __spreadArrays([42], t2));
 f1.apply(void 0, __spreadArrays([42, "hello"], t1));
 f1.apply(void 0, __spreadArrays([42, "hello", true], t0));
 f1(ns[0], ns[1], true);
-f1.apply(void 0, __spreadArrays(ns, [true])); // Error, tuple spread only expanded when last
+f1.apply(void 0, __spreadArrays(ns, [true])); // FIXME: Error, since ...ns is considered as string|number here
 f2(42, "hello", true);
 f2(t3[0], t3[1], t3[2]);
 f2.apply(void 0, t3);
@@ -191,7 +191,7 @@ f2.apply(void 0, __spreadArrays([42], t2));
 f2.apply(void 0, __spreadArrays([42, "hello"], t1));
 f2.apply(void 0, __spreadArrays([42, "hello", true], t0));
 f2(ns[0], ns[1], true);
-f2.apply(void 0, __spreadArrays(ns, [true])); // Error, tuple spread only expanded when last
+f2.apply(void 0, __spreadArrays(ns, [true])); // FIXME: Error, since ...ns is considered as string|number here
 var x10 = f10(42, "hello", true); // [number, string, boolean]
 var x11 = f10(42, "hello"); // [number, string]
 var x12 = f10(42); // [number]
@@ -296,7 +296,7 @@ declare const x14: [number, string, boolean];
 declare const x15: [number, string, boolean];
 declare const x16: [number, string, boolean];
 declare const x17: [number, string, boolean];
-declare const x18: (string | number | boolean)[];
+declare const x18: [number, string, boolean];
 declare function g10<U extends string[], V extends [number, number]>(u: U, v: V): void;
 declare function f11<T extends (string | number | boolean)[]>(...args: T): T;
 declare const z10: [42, "hello", true];
@@ -307,7 +307,7 @@ declare const z14: [number, string, boolean];
 declare const z15: [42, string, boolean];
 declare const z16: [42, "hello", boolean];
 declare const z17: [42, "hello", true];
-declare const z18: (string | number | true)[];
+declare const z18: [number, string, true];
 declare function g11<U extends string[], V extends [number, number]>(u: U, v: V): void;
 declare function call<T extends unknown[], U>(f: (...args: T) => U, ...args: T): U;
 declare function callr<T extends unknown[], U>(args: T, f: (...args: T) => U): U;

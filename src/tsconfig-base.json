@@ -3,6 +3,7 @@
         "pretty": true,
         "lib": ["es2015.iterable", "es2015.generator", "es5"],
         "target": "es5",
+        "moduleResolution": "classic",
         "rootDir": ".",
 
         "declaration": true,

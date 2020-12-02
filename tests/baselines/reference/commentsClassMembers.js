@@ -239,7 +239,7 @@ var c1 = /** @class */ (function () {
             this.p1 = this.p2(value);
         } // trailing comment Setter
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** sum with property*/
@@ -255,7 +255,7 @@ var c1 = /** @class */ (function () {
         set: function (/** this is value*/ value) {
             this.pp1 = this.pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** static sum with property*/
@@ -271,7 +271,7 @@ var c1 = /** @class */ (function () {
         set: function (/** this is value*/ value) {
             c1.s1 = c1.s2(value);
         } /*trailing comment 2 */ /*setter*/,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.nc_p2 = function (b) {
@@ -284,7 +284,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.nc_p1 = this.nc_p2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.nc_pp2 = function (b) {
@@ -297,7 +297,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.nc_pp1 = this.nc_pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     c1.nc_s2 = function (b) {
@@ -310,7 +310,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             c1.nc_s1 = c1.nc_s2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // sum with property
@@ -326,7 +326,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.a_p1 = this.a_p2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // sum with property
@@ -342,7 +342,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.a_pp1 = this.a_pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // static sum with property
@@ -358,7 +358,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             c1.a_s1 = c1.a_s2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** sum with property */
@@ -374,7 +374,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.b_p1 = this.b_p2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** sum with property */
@@ -390,7 +390,7 @@ var c1 = /** @class */ (function () {
         set: function (value) {
             this.b_pp1 = this.b_pp2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     /** static sum with property */
@@ -409,7 +409,7 @@ var c1 = /** @class */ (function () {
             /** setter */
             c1.b_s1 = c1.b_s2(value);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c1;
@@ -448,14 +448,14 @@ var cProperties = /** @class */ (function () {
             return this.val;
         } // trailing comment of only getter
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_2, "nc_p1", {
         get: function () {
             return this.val;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_2, "p2", {
@@ -463,14 +463,14 @@ var cProperties = /** @class */ (function () {
         set: function (value) {
             this.val = value;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_2, "nc_p2", {
         set: function (value) {
             this.val = value;
         } /* trailing comment of setter only*/,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return cProperties;

@@ -15,13 +15,13 @@ var A = /** @class */ (function () {
     Object.defineProperty(proto_1, "aa", {
         get: function () { return 1; } // error
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "bb", {
         set: function (x) { } // error
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return A;

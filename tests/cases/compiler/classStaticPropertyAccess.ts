@@ -2,6 +2,7 @@
 // @target: ES5
 
 class A {
+    public static "\""() {}
     public static x: number = 1;
     public static y: number = 1;
     private static _b: number = 2;
@@ -9,7 +10,8 @@ class A {
 
 const a = new A();
 
-a['y'] // Error
-a.y    // Error
-A._b   // Error
+a["\""] // Error
+a['y']  // Error
+a.y     // Error
+A._b    // Error
 A.a

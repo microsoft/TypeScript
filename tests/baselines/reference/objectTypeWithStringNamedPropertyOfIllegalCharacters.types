@@ -87,7 +87,7 @@ var r4 = i["~!@#$%^&*()_+{}|:'<>?\/.,`"];
 
 
 var a: {
->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 
     "   ": number;
 >"   " : number
@@ -102,31 +102,31 @@ var a: {
 var r = a["   "];
 >r : number
 >a["   "] : number
->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"   " : "   "
 
 var r2 = a["    "];
 >r2 : error
 >a["    "] : error
->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"    " : "    "
 
 var r3 = a["a   b"];
 >r3 : string
 >a["a   b"] : string
->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"a   b" : "a   b"
 
 // BUG 817263
 var r4 = a["~!@#$%^&*()_+{}|:'<>?\/.,`"];
 >r4 : number
 >a["~!@#$%^&*()_+{}|:'<>?\/.,`"] : number
->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"~!@#$%^&*()_+{}|:'<>?\/.,`" : "~!@#$%^&*()_+{}|:'<>?/.,`"
 
 var b = {
->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
->{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
+>{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 
     "   ": 1,
 >"   " : number
@@ -144,25 +144,25 @@ var b = {
 var r = b["   "];
 >r : number
 >b["   "] : number
->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"   " : "   "
 
 var r2 = b["    "];
 >r2 : error
 >b["    "] : error
->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"    " : "    "
 
 var r3 = b["a   b"];
 >r3 : string
 >b["a   b"] : string
->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"a   b" : "a   b"
 
 // BUG 817263
 var r4 = b["~!@#$%^&*()_+{}|:'<>?\/.,`"];
 >r4 : number
 >b["~!@#$%^&*()_+{}|:'<>?\/.,`"] : number
->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
+>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 >"~!@#$%^&*()_+{}|:'<>?\/.,`" : "~!@#$%^&*()_+{}|:'<>?/.,`"
 

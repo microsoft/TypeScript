@@ -6,7 +6,7 @@
  */
 var isArray = Array.isArray;
 >isArray : Function
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 

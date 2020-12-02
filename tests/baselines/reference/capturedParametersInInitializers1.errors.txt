@@ -1,6 +1,6 @@
-tests/cases/compiler/capturedParametersInInitializers1.ts(18,20): error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
-tests/cases/compiler/capturedParametersInInitializers1.ts(22,26): error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
-tests/cases/compiler/capturedParametersInInitializers1.ts(38,21): error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
+tests/cases/compiler/capturedParametersInInitializers1.ts(18,20): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+tests/cases/compiler/capturedParametersInInitializers1.ts(22,26): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+tests/cases/compiler/capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
 
 
 ==== tests/cases/compiler/capturedParametersInInitializers1.ts (3 errors) ====
@@ -23,13 +23,13 @@ tests/cases/compiler/capturedParametersInInitializers1.ts(38,21): error TS2373: 
     // error - used before declaration
     function foo4(y = {z}, z = 1) {
                        ~
-!!! error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
+!!! error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
     }
     
     // error - used before declaration, IIFEs are inlined
     function foo5(y = (() => z)(), z = 1) {
                              ~
-!!! error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
+!!! error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
     }
     
     // ok - IIFE inside another function
@@ -47,6 +47,6 @@ tests/cases/compiler/capturedParametersInInitializers1.ts(38,21): error TS2373: 
     // error - used as computed name of method
     function foo9(y = {[z]() { return z; }}, z = 1) {
                         ~
-!!! error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
+!!! error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
     }
     

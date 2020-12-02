@@ -50,11 +50,11 @@ function foo4(x: any) { }
 >x : any
 
 function foo5(x: 'a');
->foo5 : { (x: "a"): any; (x: "a"): any; (x: string): any; }
+>foo5 : { (x: 'a'): any; (x: "a"): any; (x: string): any; }
 >x : "a"
 
 function foo5(x: 'a');
->foo5 : { (x: "a"): any; (x: "a"): any; (x: string): any; }
+>foo5 : { (x: "a"): any; (x: 'a'): any; (x: string): any; }
 >x : "a"
 
 function foo5(x: string);

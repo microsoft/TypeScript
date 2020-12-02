@@ -39,7 +39,7 @@ var C1 = /** @class */ (function () {
         get: function () {
             return strOrNum;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.method = function () {

@@ -133,7 +133,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -169,7 +169,7 @@ var NoBase = /** @class */ (function () {
         set: function (n) {
             _super.hasOwnProperty.call(this, '');
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return NoBase;
@@ -211,7 +211,7 @@ var SomeDerived1 = /** @class */ (function (_super) {
         set: function (n) {
             n = _super.prototype.publicMember;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_2.fn2 = function () {
@@ -246,7 +246,7 @@ var SomeDerived2 = /** @class */ (function (_super) {
         set: function (n) {
             n = _super.prototype.privateMember;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SomeDerived2;
@@ -277,7 +277,7 @@ var SomeDerived3 = /** @class */ (function (_super) {
             _super.privateStaticMember = 3;
             _super.privateStaticFunc.call(this);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return SomeDerived3;

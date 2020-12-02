@@ -47,7 +47,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -69,7 +69,7 @@ var NonGeneric;
                 return 1;
             },
             set: function (v) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_1.fn = function () { return this; };
@@ -102,7 +102,7 @@ var Generic;
                 return null;
             },
             set: function (v) { },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         proto_2.fn = function () { return this; };

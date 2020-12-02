@@ -14,7 +14,7 @@ var person = { name, id };
 >id : number
 
 function foo(p: { a: string; id: number }) { }
->foo : (p: { a: string; id: number; }) => void
+>foo : (p: {    a: string;    id: number;}) => void
 >p : { a: string; id: number; }
 >a : string
 >id : number

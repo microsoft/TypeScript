@@ -1,5 +1,5 @@
 foo(): Bar { }
-function Foo      () #   { }
+function Foo      () ¬   { }
 4+:5
 module M {
 function a(

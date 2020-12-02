@@ -17,7 +17,7 @@ var X = /** @class */ (function () {
     proto_1.method = function (x) { };
     Object.defineProperty(proto_1, "x", {
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return X;

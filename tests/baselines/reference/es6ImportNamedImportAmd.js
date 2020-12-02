@@ -44,6 +44,7 @@ import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.aaaa = exports.z2 = exports.z1 = exports.x1 = exports.a1 = exports.m = exports.x = exports.a = void 0;
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;

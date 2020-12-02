@@ -131,7 +131,7 @@ var m;
             get: function () {
                 return;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo2", {
@@ -139,14 +139,14 @@ var m;
             get: function () {
                 return new private1();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo3", {
             // setter with annotation
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo4", {
@@ -156,7 +156,7 @@ var m;
             },
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo5", {
@@ -166,7 +166,7 @@ var m;
             },
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo11", {
@@ -174,7 +174,7 @@ var m;
             get: function () {
                 return;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo12", {
@@ -182,14 +182,14 @@ var m;
             get: function () {
                 return new public1();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo13", {
             // setter with annotation
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo14", {
@@ -199,7 +199,7 @@ var m;
             },
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo15", {
@@ -209,7 +209,7 @@ var m;
             },
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo111", {
@@ -217,7 +217,7 @@ var m;
             get: function () {
                 return;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo112", {
@@ -225,14 +225,14 @@ var m;
             get: function () {
                 return new m2.public2();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo113", {
             // setter with annotation
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo114", {
@@ -242,7 +242,7 @@ var m;
             },
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "foo115", {
@@ -252,7 +252,7 @@ var m;
             },
             set: function (param) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return c;

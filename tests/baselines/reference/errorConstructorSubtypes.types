@@ -1,0 +1,33 @@
+=== tests/cases/compiler/errorConstructorSubtypes.ts ===
+// In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
+interface ErrorConstructor {
+  captureStackTrace(targetObject: Object, constructorOpt?: Function): void;
+>captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
+>targetObject : Object
+>constructorOpt : Function
+}
+
+declare var x: ErrorConstructor
+>x : ErrorConstructor
+
+x = Error; // OK
+>x = Error : ErrorConstructor
+>x : ErrorConstructor
+>Error : ErrorConstructor
+
+x = RangeError;
+>x = RangeError : RangeErrorConstructor
+>x : ErrorConstructor
+>RangeError : RangeErrorConstructor
+
+new x().message
+>new x().message : string
+>new x() : Error
+>x : ErrorConstructor
+>message : string
+
+x.captureStackTrace
+>x.captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
+>x : ErrorConstructor
+>captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
+

@@ -492,3 +492,26 @@ namespace GH20889 {
         };
     }
 }
+
+// https://github.com/microsoft/TypeScript/issues/39357
+namespace GH39357 {
+>GH39357 : Symbol(GH39357, Decl(assignmentCompatWithDiscriminatedUnion.ts, 192, 1))
+
+    type A = ["a", number] | ["b", number] | ["c", string];
+>A : Symbol(A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 195, 19))
+
+    type B = "a" | "b" | "c";
+>B : Symbol(B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 196, 59))
+
+    declare const b: B;
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+>B : Symbol(B, Decl(assignmentCompatWithDiscriminatedUnion.ts, 196, 59))
+
+    const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+>a : Symbol(a, Decl(assignmentCompatWithDiscriminatedUnion.ts, 199, 9))
+>A : Symbol(A, Decl(assignmentCompatWithDiscriminatedUnion.ts, 195, 19))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+>b : Symbol(b, Decl(assignmentCompatWithDiscriminatedUnion.ts, 198, 17))
+}
+

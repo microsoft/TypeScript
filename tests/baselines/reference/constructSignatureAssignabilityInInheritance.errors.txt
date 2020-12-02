@@ -4,7 +4,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   The types returned by 'new a2(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'T'.
-      'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts (2 errors) ====
@@ -83,7 +83,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
 !!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
 !!! error TS2430:   The types returned by 'new a2(...)' are incompatible between these types.
 !!! error TS2430:     Type 'string' is not assignable to type 'T'.
-!!! error TS2430:       'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
             // N's
             a2: new <T>(x: T) => string; // error because base returns non-void;
         }

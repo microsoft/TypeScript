@@ -46,6 +46,7 @@ class C extends B {
 
 // Ok to go down the chain, but error to try to climb back up
 (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
+>(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then : Symbol(Chain.then, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 1, 36))
 >(new Chain(new A)).then(a => new B).then(b => new C).then : Symbol(Chain.then, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 1, 36))
 >(new Chain(new A)).then(a => new B).then : Symbol(Chain.then, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 1, 36))
 >(new Chain(new A)).then : Symbol(Chain.then, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 1, 36))
@@ -60,6 +61,7 @@ class C extends B {
 >then : Symbol(Chain.then, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 1, 36))
 >c : Symbol(c, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 18, 58))
 >B : Symbol(B, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 9, 1))
+>then : Symbol(Chain.then, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 1, 36))
 >b : Symbol(b, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 18, 75))
 >A : Symbol(A, Decl(chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts, 5, 1))
 

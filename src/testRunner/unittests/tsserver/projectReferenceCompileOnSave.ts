@@ -1,7 +1,7 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and compile on save", () => {
-        const dependecyLocation = `${projectRoot}/dependency`;
-        const usageLocation = `${projectRoot}/usage`;
+        const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
+        const usageLocation = `${tscWatch.projectRoot}/usage`;
         const dependencyTs: File = {
             path: `${dependecyLocation}/fns.ts`,
             content: `export function fn1() { }
@@ -58,7 +58,7 @@ fn2();
                         arguments: { file: dependencyTs.path }
                     });
                     const { file, insertString } = change();
-                    if (session.getProjectService().openFiles.has(file.path)) {
+                    if (session.getProjectService().openFiles.has(file.path as Path)) {
                         const toLocation = protocolToLocation(file.content);
                         const location = toLocation(file.content.length);
                         session.executeCommandSeq<protocol.ChangeRequest>({
@@ -95,7 +95,7 @@ fn2();
                 assert.equal(host.writtenFiles.size, expectedFiles.length);
                 for (const file of expectedFiles) {
                     assert.equal(host.readFile(file.path), file.content, `Expected to write ${file.path}`);
-                    assert.isTrue(host.writtenFiles.has(file.path), `${file.path} is newly written`);
+                    assert.isTrue(host.writtenFiles.has(file.path as Path), `${file.path} is newly written`);
                 }
 
                 // Verify EmitOutput
@@ -236,7 +236,7 @@ exports.fn3 = fn3;`;
                 expectedFiles: [{
                     path: `${usageLocation}/usage.js`,
                     content: `"use strict";
-exports.__esModule = true;
+exports.__esModule = true;${appendJsText === changeJs ? "\nexports.fn3 = void 0;" : ""}
 var fns_1 = require("../decls/fns");
 fns_1.fn1();
 fns_1.fn2();
@@ -252,7 +252,8 @@ ${appendJs}`
                     text: content,
                     writeByteOrderMark: false
                 })),
-                emitSkipped: false
+                emitSkipped: false,
+                diagnostics: emptyArray
             };
         }
 
@@ -270,7 +271,8 @@ ${appendJs}`
         function noEmitOutput(): EmitOutput {
             return {
                 emitSkipped: true,
-                outputFiles: []
+                outputFiles: [],
+                diagnostics: emptyArray
             };
         }
 
@@ -286,6 +288,7 @@ ${appendJs}`
                         path: `${dependecyLocation}/fns.js`,
                         content: `"use strict";
 exports.__esModule = true;
+${appendJsText === changeJs ? "exports.fn3 = " : ""}exports.fn2 = exports.fn1 = void 0;
 function fn1() { }
 exports.fn1 = fn1;
 function fn2() { }
@@ -293,7 +296,7 @@ exports.fn2 = fn2;
 ${appendJs}`
                     },
                     {
-                        path: `${projectRoot}/decls/fns.d.ts`,
+                        path: `${tscWatch.projectRoot}/decls/fns.d.ts`,
                         content: `export declare function fn1(): void;
 export declare function fn2(): void;
 ${appendDts}`
@@ -404,6 +407,83 @@ ${appendDts}`
                     scenarioDetailsOfDependencyWhenOpen(),
                 ]
             });
+        });
+    });
+
+    describe("unittests:: tsserver:: with project references and compile on save with external projects", () => {
+        it("compile on save emits same output as project build", () => {
+            const tsbaseJson: File = {
+                path: `${tscWatch.projectRoot}/tsbase.json`,
+                content: JSON.stringify({
+                    compileOnSave: true,
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
+                    }
+                })
+            };
+            const buttonClass = `${tscWatch.projectRoot}/buttonClass`;
+            const buttonConfig: File = {
+                path: `${buttonClass}/tsconfig.json`,
+                content: JSON.stringify({
+                    extends: "../tsbase.json",
+                    compilerOptions: {
+                        outFile: "Source.js"
+                    },
+                    files: ["Source.ts"]
+                })
+            };
+            const buttonSource: File = {
+                path: `${buttonClass}/Source.ts`,
+                content: `module Hmi {
+    export class Button {
+        public static myStaticFunction() {
+        }
+    }
+}`
+            };
+
+            const siblingClass = `${tscWatch.projectRoot}/SiblingClass`;
+            const siblingConfig: File = {
+                path: `${siblingClass}/tsconfig.json`,
+                content: JSON.stringify({
+                    extends: "../tsbase.json",
+                    references: [{
+                        path: "../buttonClass/"
+                    }],
+                    compilerOptions: {
+                        outFile: "Source.js"
+                    },
+                    files: ["Source.ts"]
+                })
+            };
+            const siblingSource: File = {
+                path: `${siblingClass}/Source.ts`,
+                content: `module Hmi {
+    export class Sibling {
+        public mySiblingFunction() {
+        }
+    }
+}`
+            };
+            const host = createServerHost([libFile, tsbaseJson, buttonConfig, buttonSource, siblingConfig, siblingSource], { useCaseSensitiveFileNames: true });
+
+            // ts build should succeed
+            tscWatch.ensureErrorFreeBuild(host, [siblingConfig.path]);
+            const sourceJs = changeExtension(siblingSource.path, ".js");
+            const expectedSiblingJs = host.readFile(sourceJs);
+
+            const session = createSession(host);
+            openFilesForSession([siblingSource], session);
+
+            session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
+                command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                arguments: {
+                    file: siblingSource.path,
+                    projectFileName: siblingConfig.path
+                }
+            });
+            assert.equal(host.readFile(sourceJs), expectedSiblingJs);
         });
     });
 }

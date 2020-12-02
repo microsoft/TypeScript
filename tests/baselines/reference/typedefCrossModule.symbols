@@ -18,6 +18,8 @@ function C() {
 >C : Symbol(C, Decl(mod1.js, 4, 18))
 
     this.p = 1
+>this.p : Symbol(C.p, Decl(mod1.js, 5, 14))
+>this : Symbol(C, Decl(mod1.js, 4, 18))
 >p : Symbol(C.p, Decl(mod1.js, 5, 14))
 }
 
@@ -31,6 +33,8 @@ export function C() {
 >C : Symbol(C, Decl(mod2.js, 0, 0))
 
     this.p = 1
+>this.p : Symbol(C.p, Decl(mod2.js, 5, 21))
+>this : Symbol(C, Decl(mod2.js, 0, 0))
 >p : Symbol(C.p, Decl(mod2.js, 5, 21))
 }
 
@@ -46,6 +50,8 @@ exports.C = function() {
 >C : Symbol(C, Decl(mod3.js, 0, 0))
 
     this.p = 1
+>this.p : Symbol(C.p, Decl(mod3.js, 5, 24))
+>this : Symbol(C, Decl(mod3.js, 5, 11))
 >p : Symbol(C.p, Decl(mod3.js, 5, 24))
 }
 

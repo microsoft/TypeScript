@@ -43,7 +43,6 @@ foo({
             let z = this.bar;
 >z : Symbol(z, Decl(mappedTypeInferenceErrors.ts, 12, 15))
 >this.bar : Symbol(bar, Decl(mappedTypeInferenceErrors.ts, 10, 15))
->this : Symbol(__object, Decl(mappedTypeInferenceErrors.ts, 10, 13))
 >bar : Symbol(bar, Decl(mappedTypeInferenceErrors.ts, 10, 15))
 
             return 42;

@@ -1,0 +1,35 @@
+=== tests/cases/compiler/errorConstructorSubtypes.ts ===
+// In Node, ErrorConstructor is augmented with extra properties. Excerpted below.
+interface ErrorConstructor {
+>ErrorConstructor : Symbol(ErrorConstructor, Decl(lib.es5.d.ts, --, --), Decl(errorConstructorSubtypes.ts, 0, 0))
+
+  captureStackTrace(targetObject: Object, constructorOpt?: Function): void;
+>captureStackTrace : Symbol(ErrorConstructor.captureStackTrace, Decl(errorConstructorSubtypes.ts, 1, 28))
+>targetObject : Symbol(targetObject, Decl(errorConstructorSubtypes.ts, 2, 20))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>constructorOpt : Symbol(constructorOpt, Decl(errorConstructorSubtypes.ts, 2, 41))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+declare var x: ErrorConstructor
+>x : Symbol(x, Decl(errorConstructorSubtypes.ts, 5, 11))
+>ErrorConstructor : Symbol(ErrorConstructor, Decl(lib.es5.d.ts, --, --), Decl(errorConstructorSubtypes.ts, 0, 0))
+
+x = Error; // OK
+>x : Symbol(x, Decl(errorConstructorSubtypes.ts, 5, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+x = RangeError;
+>x : Symbol(x, Decl(errorConstructorSubtypes.ts, 5, 11))
+>RangeError : Symbol(RangeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+new x().message
+>new x().message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(errorConstructorSubtypes.ts, 5, 11))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+
+x.captureStackTrace
+>x.captureStackTrace : Symbol(ErrorConstructor.captureStackTrace, Decl(errorConstructorSubtypes.ts, 1, 28))
+>x : Symbol(x, Decl(errorConstructorSubtypes.ts, 5, 11))
+>captureStackTrace : Symbol(ErrorConstructor.captureStackTrace, Decl(errorConstructorSubtypes.ts, 1, 28))
+

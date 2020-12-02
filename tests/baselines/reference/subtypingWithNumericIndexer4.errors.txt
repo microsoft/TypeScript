@@ -9,6 +9,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts (4 errors) ====
@@ -52,6 +53,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
 !!! error TS2415:   Index signatures are incompatible.
 !!! error TS2415:     Type 'string' is not assignable to type 'T'.
+!!! error TS2415:       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
             [x: number]: string; // error
         }
     }

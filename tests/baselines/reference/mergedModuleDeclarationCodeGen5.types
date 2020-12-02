@@ -13,7 +13,7 @@ module M.buz.plop {
 module M.buz.plop {
 >M : typeof M
 >buz : typeof buz
->plop : typeof M.buz.plop
+>plop : typeof globalThis.M.buz.plop
 
     function gunk() { }
 >gunk : () => void

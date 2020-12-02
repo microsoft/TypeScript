@@ -1,0 +1,165 @@
+╭ name: f
+├ kind: function
+├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+├ span:
+│ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:1:1-1:16
+│ │ 1: function f() {}
+│ │    ^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:1:10-1:11
+│ │ 1: function f() {}
+│ │             ^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: sameName
+│ │ ├ kind: method
+│ │ ├ containerName: A
+│ │ ├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:4:3-6:4
+│ │ │ │ 4:   static sameName() {
+│ │ │ │      ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:     f();
+│ │ │ │    ^^^^^^^^
+│ │ │ │ 6:   }
+│ │ │ │    ^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:4:10-4:18
+│ │ │ │ 4:   static sameName() {
+│ │ │ │             ^^^^^^^^
+│ │ │ ╰
+│ │ ├ incoming:
+│ │ │ ╭ from:
+│ │ │ │ ╭ name: sameName
+│ │ │ │ ├ kind: method
+│ │ │ │ ├ containerName: B
+│ │ │ │ ├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:10:3-12:4
+│ │ │ │ │ │ 10:   sameName() {
+│ │ │ │ │ │       ^^^^^^^^^^^^
+│ │ │ │ │ │ 11:     A.sameName();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 12:   }
+│ │ │ │ │ │     ^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:10:3-10:11
+│ │ │ │ │ │ 10:   sameName() {
+│ │ │ │ │ │       ^^^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ incoming:
+│ │ │ │ │ ╭ from:
+│ │ │ │ │ │ ╭ name: sameName
+│ │ │ │ │ │ ├ kind: getter
+│ │ │ │ │ │ ├ containerName: Obj
+│ │ │ │ │ │ ├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+│ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:16:3-18:4
+│ │ │ │ │ │ │ │ 16:   get sameName() {
+│ │ │ │ │ │ │ │       ^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 17:     return new B().sameName;
+│ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ 18:   }
+│ │ │ │ │ │ │ │     ^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:16:7-16:15
+│ │ │ │ │ │ │ │ 16:   get sameName() {
+│ │ │ │ │ │ │ │           ^^^^^^^^
+│ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ ├ incoming:
+│ │ │ │ │ │ │ ╭ from:
+│ │ │ │ │ │ │ │ ╭ name: sameName
+│ │ │ │ │ │ │ │ ├ kind: function
+│ │ │ │ │ │ │ │ ├ containerName: Foo
+│ │ │ │ │ │ │ │ ├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+│ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:22:3-24:4
+│ │ │ │ │ │ │ │ │ │ 22:   function sameName() {
+│ │ │ │ │ │ │ │ │ │       ^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 23:     return Obj.sameName;
+│ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ 24:   }
+│ │ │ │ │ │ │ │ │ │     ^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:22:12-22:20
+│ │ │ │ │ │ │ │ │ │ 22:   function sameName() {
+│ │ │ │ │ │ │ │ │ │                ^^^^^^^^
+│ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ ├ incoming:
+│ │ │ │ │ │ │ │ │ ╭ from:
+│ │ │ │ │ │ │ │ │ │ ╭ name: C
+│ │ │ │ │ │ │ │ │ │ ├ kind: class
+│ │ │ │ │ │ │ │ │ │ ├ containerName: Foo
+│ │ │ │ │ │ │ │ │ │ ├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+│ │ │ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:26:3-30:4
+│ │ │ │ │ │ │ │ │ │ │ │ 26:   export class C {
+│ │ │ │ │ │ │ │ │ │ │ │       ^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 27:     constructor() {
+│ │ │ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 28:       sameName();
+│ │ │ │ │ │ │ │ │ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 29:     }
+│ │ │ │ │ │ │ │ │ │ │ │     ^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ 30:   }
+│ │ │ │ │ │ │ │ │ │ │ │     ^^^
+│ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:26:16-26:17
+│ │ │ │ │ │ │ │ │ │ │ │ 26:   export class C {
+│ │ │ │ │ │ │ │ │ │ │ │                    ^
+│ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ │ │ ├ incoming:
+│ │ │ │ │ │ │ │ │ │ │ ╭ from:
+│ │ │ │ │ │ │ │ │ │ │ │ ╭ name: sameName
+│ │ │ │ │ │ │ │ │ │ │ │ ├ kind: function
+│ │ │ │ │ │ │ │ │ │ │ │ ├ containerName: Bar
+│ │ │ │ │ │ │ │ │ │ │ │ ├ file: /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts
+│ │ │ │ │ │ │ │ │ │ │ │ ├ span:
+│ │ │ │ │ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:34:20-34:37
+│ │ │ │ │ │ │ │ │ │ │ │ │ │ 34:   const sameName = () => new Foo.C();
+│ │ │ │ │ │ │ │ │ │ │ │ │ │                        ^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ │ │ │ │ ├ selectionSpan:
+│ │ │ │ │ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:34:9-34:17
+│ │ │ │ │ │ │ │ │ │ │ │ │ │ 34:   const sameName = () => new Foo.C();
+│ │ │ │ │ │ │ │ │ │ │ │ │ │             ^^^^^^^^
+│ │ │ │ │ │ │ │ │ │ │ │ │ ╰
+│ │ │ │ │ │ │ │ │ │ │ │ ╰ incoming: none
+│ │ │ │ │ │ │ │ │ │ │ ├ fromSpans:
+│ │ │ │ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:34:34-34:35
+│ │ │ │ │ │ │ │ │ │ │ │ │ 34:   const sameName = () => new Foo.C();
+│ │ │ │ │ │ │ │ │ │ │ │ │                                      ^
+│ │ │ │ │ │ │ │ │ │ ╰ ╰ ╰
+│ │ │ │ │ │ │ │ │ ├ fromSpans:
+│ │ │ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:28:7-28:15
+│ │ │ │ │ │ │ │ │ │ │ 28:       sameName();
+│ │ │ │ │ │ │ │ │ │ │           ^^^^^^^^
+│ │ │ │ │ │ │ │ ╰ ╰ ╰
+│ │ │ │ │ │ │ ├ fromSpans:
+│ │ │ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:23:16-23:24
+│ │ │ │ │ │ │ │ │ 23:     return Obj.sameName;
+│ │ │ │ │ │ │ │ │                    ^^^^^^^^
+│ │ │ │ │ │ ╰ ╰ ╰
+│ │ │ │ │ ├ fromSpans:
+│ │ │ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:17:20-17:28
+│ │ │ │ │ │ │ 17:     return new B().sameName;
+│ │ │ │ │ │ │                        ^^^^^^^^
+│ │ │ │ ╰ ╰ ╰
+│ │ │ ├ fromSpans:
+│ │ │ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:11:7-11:15
+│ │ │ │ │ 11:     A.sameName();
+│ │ │ │ │           ^^^^^^^^
+│ │ ╰ ╰ ╰
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/server/callHierarchyContainerNameServer.ts:5:5-5:6
+│ │ │ 5:     f();
+│ │ │        ^
+│ ╰ ╰
+╰ outgoing: none

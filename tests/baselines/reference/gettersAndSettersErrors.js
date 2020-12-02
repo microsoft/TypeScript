@@ -27,7 +27,7 @@ var C = /** @class */ (function () {
         ,
         set: function (foo) { } // ok
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "Goo", {
@@ -35,7 +35,7 @@ var C = /** @class */ (function () {
         ,
         set: function (v) { } // error - setters must not specify a return type
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -47,7 +47,7 @@ var E = /** @class */ (function () {
         get: function () { return 0; },
         set: function (n) { } // error - accessors do not agree in visibility
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return E;

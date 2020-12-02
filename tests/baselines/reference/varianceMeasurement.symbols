@@ -1,0 +1,220 @@
+=== tests/cases/compiler/varianceMeasurement.ts ===
+// The type below should be invariant in T but is measured as covariant because
+// we don't analyze recursive references.
+
+interface Foo1<T> {
+>Foo1 : Symbol(Foo1, Decl(varianceMeasurement.ts, 0, 0))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 3, 15))
+
+  x: T;
+>x : Symbol(Foo1.x, Decl(varianceMeasurement.ts, 3, 19))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 3, 15))
+
+  y: Foo1<(arg: T) => void>;
+>y : Symbol(Foo1.y, Decl(varianceMeasurement.ts, 4, 7))
+>Foo1 : Symbol(Foo1, Decl(varianceMeasurement.ts, 0, 0))
+>arg : Symbol(arg, Decl(varianceMeasurement.ts, 5, 11))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 3, 15))
+}
+
+declare const f10: Foo1<string>;
+>f10 : Symbol(f10, Decl(varianceMeasurement.ts, 8, 13))
+>Foo1 : Symbol(Foo1, Decl(varianceMeasurement.ts, 0, 0))
+
+const f11: Foo1<'a'> = f10;
+>f11 : Symbol(f11, Decl(varianceMeasurement.ts, 9, 5))
+>Foo1 : Symbol(Foo1, Decl(varianceMeasurement.ts, 0, 0))
+>f10 : Symbol(f10, Decl(varianceMeasurement.ts, 8, 13))
+
+const f12: Foo1<unknown> = f10;
+>f12 : Symbol(f12, Decl(varianceMeasurement.ts, 10, 5))
+>Foo1 : Symbol(Foo1, Decl(varianceMeasurement.ts, 0, 0))
+>f10 : Symbol(f10, Decl(varianceMeasurement.ts, 8, 13))
+
+// The type below is invariant in T and is measured as such.
+
+interface Foo2<T> {
+>Foo2 : Symbol(Foo2, Decl(varianceMeasurement.ts, 10, 31))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+
+  x: T;
+>x : Symbol(Foo2.x, Decl(varianceMeasurement.ts, 14, 19))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+
+  y: { x: (arg: T) => void, y: Foo2<(arg: T) => void>; }
+>y : Symbol(Foo2.y, Decl(varianceMeasurement.ts, 15, 7))
+>x : Symbol(x, Decl(varianceMeasurement.ts, 16, 6))
+>arg : Symbol(arg, Decl(varianceMeasurement.ts, 16, 11))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+>y : Symbol(y, Decl(varianceMeasurement.ts, 16, 27))
+>Foo2 : Symbol(Foo2, Decl(varianceMeasurement.ts, 10, 31))
+>arg : Symbol(arg, Decl(varianceMeasurement.ts, 16, 37))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 14, 15))
+}
+
+declare const f20: Foo2<string>;
+>f20 : Symbol(f20, Decl(varianceMeasurement.ts, 19, 13))
+>Foo2 : Symbol(Foo2, Decl(varianceMeasurement.ts, 10, 31))
+
+const f21: Foo2<'a'> = f20;
+>f21 : Symbol(f21, Decl(varianceMeasurement.ts, 20, 5))
+>Foo2 : Symbol(Foo2, Decl(varianceMeasurement.ts, 10, 31))
+>f20 : Symbol(f20, Decl(varianceMeasurement.ts, 19, 13))
+
+const f22: Foo2<unknown> = f20;
+>f22 : Symbol(f22, Decl(varianceMeasurement.ts, 21, 5))
+>Foo2 : Symbol(Foo2, Decl(varianceMeasurement.ts, 10, 31))
+>f20 : Symbol(f20, Decl(varianceMeasurement.ts, 19, 13))
+
+// The type below should be invariant in T but is measured as covariant because
+// we don't analyze recursive references.
+
+type Foo3<T> = {
+>Foo3 : Symbol(Foo3, Decl(varianceMeasurement.ts, 21, 31))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 26, 10))
+
+  x: T;
+>x : Symbol(x, Decl(varianceMeasurement.ts, 26, 16))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 26, 10))
+
+  y: Foo3<(arg: T) => void>;
+>y : Symbol(y, Decl(varianceMeasurement.ts, 27, 7))
+>Foo3 : Symbol(Foo3, Decl(varianceMeasurement.ts, 21, 31))
+>arg : Symbol(arg, Decl(varianceMeasurement.ts, 28, 11))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 26, 10))
+}
+
+declare const f30: Foo3<string>;
+>f30 : Symbol(f30, Decl(varianceMeasurement.ts, 31, 13))
+>Foo3 : Symbol(Foo3, Decl(varianceMeasurement.ts, 21, 31))
+
+const f31: Foo3<'a'> = f30;
+>f31 : Symbol(f31, Decl(varianceMeasurement.ts, 32, 5))
+>Foo3 : Symbol(Foo3, Decl(varianceMeasurement.ts, 21, 31))
+>f30 : Symbol(f30, Decl(varianceMeasurement.ts, 31, 13))
+
+const f32: Foo3<unknown> = f30;
+>f32 : Symbol(f32, Decl(varianceMeasurement.ts, 33, 5))
+>Foo3 : Symbol(Foo3, Decl(varianceMeasurement.ts, 21, 31))
+>f30 : Symbol(f30, Decl(varianceMeasurement.ts, 31, 13))
+
+// The type below is invariant in T and is measured as such.
+
+type Foo4<T> = {
+>Foo4 : Symbol(Foo4, Decl(varianceMeasurement.ts, 33, 31))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))
+
+  x: T;
+>x : Symbol(x, Decl(varianceMeasurement.ts, 37, 16))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))
+
+  y: { x: (arg: T) => void, y: Foo4<(arg: T) => void>; }
+>y : Symbol(y, Decl(varianceMeasurement.ts, 38, 7))
+>x : Symbol(x, Decl(varianceMeasurement.ts, 39, 6))
+>arg : Symbol(arg, Decl(varianceMeasurement.ts, 39, 11))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))
+>y : Symbol(y, Decl(varianceMeasurement.ts, 39, 27))
+>Foo4 : Symbol(Foo4, Decl(varianceMeasurement.ts, 33, 31))
+>arg : Symbol(arg, Decl(varianceMeasurement.ts, 39, 37))
+>T : Symbol(T, Decl(varianceMeasurement.ts, 37, 10))
+}
+
+declare const f40: Foo4<string>;
+>f40 : Symbol(f40, Decl(varianceMeasurement.ts, 42, 13))
+>Foo4 : Symbol(Foo4, Decl(varianceMeasurement.ts, 33, 31))
+
+const f41: Foo4<'a'> = f40;
+>f41 : Symbol(f41, Decl(varianceMeasurement.ts, 43, 5))
+>Foo4 : Symbol(Foo4, Decl(varianceMeasurement.ts, 33, 31))
+>f40 : Symbol(f40, Decl(varianceMeasurement.ts, 42, 13))
+
+const f42: Foo4<unknown> = f40;
+>f42 : Symbol(f42, Decl(varianceMeasurement.ts, 44, 5))
+>Foo4 : Symbol(Foo4, Decl(varianceMeasurement.ts, 33, 31))
+>f40 : Symbol(f40, Decl(varianceMeasurement.ts, 42, 13))
+
+// Repro from #3580
+
+interface Fn<A, B> {
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>A : Symbol(A, Decl(varianceMeasurement.ts, 48, 13))
+>B : Symbol(B, Decl(varianceMeasurement.ts, 48, 15))
+
+  (a: A): B;
+>a : Symbol(a, Decl(varianceMeasurement.ts, 49, 3))
+>A : Symbol(A, Decl(varianceMeasurement.ts, 48, 13))
+>B : Symbol(B, Decl(varianceMeasurement.ts, 48, 15))
+
+  then<C>(next: Fn<B, C>): Fn<A, C>;
+>then : Symbol(Fn.then, Decl(varianceMeasurement.ts, 49, 12))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 50, 7))
+>next : Symbol(next, Decl(varianceMeasurement.ts, 50, 10))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>B : Symbol(B, Decl(varianceMeasurement.ts, 48, 15))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 50, 7))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>A : Symbol(A, Decl(varianceMeasurement.ts, 48, 13))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 50, 7))
+}
+
+declare const fn: Fn<string, number>;
+>fn : Symbol(fn, Decl(varianceMeasurement.ts, 53, 13))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+
+// Contravariant in A
+const fn1: Fn<unknown, number> = fn;  // Error
+>fn1 : Symbol(fn1, Decl(varianceMeasurement.ts, 56, 5))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>fn : Symbol(fn, Decl(varianceMeasurement.ts, 53, 13))
+
+const fn2: Fn<'a', number> = fn;
+>fn2 : Symbol(fn2, Decl(varianceMeasurement.ts, 57, 5))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>fn : Symbol(fn, Decl(varianceMeasurement.ts, 53, 13))
+
+// Covariant in B
+const fn3: Fn<string, unknown> = fn;
+>fn3 : Symbol(fn3, Decl(varianceMeasurement.ts, 60, 5))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>fn : Symbol(fn, Decl(varianceMeasurement.ts, 53, 13))
+
+const fn4: Fn<string, 0> = fn;  // Error
+>fn4 : Symbol(fn4, Decl(varianceMeasurement.ts, 61, 5))
+>Fn : Symbol(Fn, Decl(varianceMeasurement.ts, 44, 31))
+>fn : Symbol(fn, Decl(varianceMeasurement.ts, 53, 13))
+
+// Repro from #39947
+
+interface I<Dummy, V> {
+>I : Symbol(I, Decl(varianceMeasurement.ts, 61, 30))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 65, 12))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 65, 18))
+
+  c: C<Dummy, V>;
+>c : Symbol(I.c, Decl(varianceMeasurement.ts, 65, 23))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 65, 12))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 65, 18))
+}
+
+class C<Dummy, V> {
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 69, 8))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+
+  declare sub: I<Dummy, V>;
+>sub : Symbol(C.sub, Decl(varianceMeasurement.ts, 69, 19))
+>I : Symbol(I, Decl(varianceMeasurement.ts, 61, 30))
+>Dummy : Symbol(Dummy, Decl(varianceMeasurement.ts, 69, 8))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+
+  declare covariance: V;
+>covariance : Symbol(C.covariance, Decl(varianceMeasurement.ts, 70, 27))
+>V : Symbol(V, Decl(varianceMeasurement.ts, 69, 14))
+}
+
+const c1: C<unknown, string> = new C<unknown, number>();  // Error
+>c1 : Symbol(c1, Decl(varianceMeasurement.ts, 74, 5))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+>C : Symbol(C, Decl(varianceMeasurement.ts, 67, 1))
+

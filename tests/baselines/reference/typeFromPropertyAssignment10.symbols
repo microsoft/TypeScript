@@ -87,9 +87,12 @@ Outer.app.Application = (function () {
 
         var me = this;
 >me : Symbol(me, Decl(application.js, 7, 11))
+>this : Symbol(Application, Decl(application.js, 6, 21))
 
         me.view = new Outer.app.SomeView();
->me : Symbol(me, Decl(application.js, 7, 11))
+>me.view : Symbol(Application.view, Decl(application.js, 7, 22))
+>me : Symbol(Application.view, Decl(application.js, 7, 22))
+>view : Symbol(Application.view, Decl(application.js, 7, 22))
 >Outer.app.SomeView : Symbol(Outer.app.SomeView, Decl(someview.js, 0, 0))
 >Outer.app : Symbol(Outer.app, Decl(module.js, 0, 24), Decl(someview.js, 0, 6), Decl(someview.js, 6, 6), Decl(someview.js, 15, 6), Decl(application.js, 0, 6))
 >Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 24), Decl(someview.js, 0, 0), Decl(someview.js, 5, 5), Decl(someview.js, 13, 10) ... and 1 more)

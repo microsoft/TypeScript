@@ -1,0 +1,38 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldDerivedClasses.ts ===
+class Base {
+>Base : Symbol(Base, Decl(privateNameFieldDerivedClasses.ts, 0, 0))
+
+    #prop: number = 123;
+>#prop : Symbol(Base.#prop, Decl(privateNameFieldDerivedClasses.ts, 0, 12))
+
+    static method(x: Derived) {
+>method : Symbol(Base.method, Decl(privateNameFieldDerivedClasses.ts, 1, 24))
+>x : Symbol(x, Decl(privateNameFieldDerivedClasses.ts, 2, 18))
+>Derived : Symbol(Derived, Decl(privateNameFieldDerivedClasses.ts, 5, 1))
+
+        console.log(x.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x.#prop : Symbol(Base.#prop, Decl(privateNameFieldDerivedClasses.ts, 0, 12))
+>x : Symbol(x, Decl(privateNameFieldDerivedClasses.ts, 2, 18))
+    }
+}
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(privateNameFieldDerivedClasses.ts, 5, 1))
+>Base : Symbol(Base, Decl(privateNameFieldDerivedClasses.ts, 0, 0))
+
+    static method(x: Derived) {
+>method : Symbol(Derived.method, Decl(privateNameFieldDerivedClasses.ts, 6, 28))
+>x : Symbol(x, Decl(privateNameFieldDerivedClasses.ts, 7, 18))
+>Derived : Symbol(Derived, Decl(privateNameFieldDerivedClasses.ts, 5, 1))
+
+        console.log(x.#prop);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(privateNameFieldDerivedClasses.ts, 7, 18))
+    }
+}
+
+

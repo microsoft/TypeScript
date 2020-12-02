@@ -16,7 +16,7 @@
 //// }
 verify.quickInfoAt('1', '(property) high-top: boolean', 'some-comments');
 
-verify.quickInfoAt('2', 'type Product = {\n    title: string;\n    high-top: boolean;\n}');
+verify.quickInfoAt('2', 'type Product = {\n    title: string;\n    "high-top": boolean;\n}');
 
 verify.completions({
   marker: ['3'],

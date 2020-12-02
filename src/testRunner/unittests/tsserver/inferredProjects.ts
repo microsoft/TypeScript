@@ -2,7 +2,7 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: Inferred projects", () => {
         it("create inferred project", () => {
             const appFile: File = {
-                path: `${projectRoot}/app.ts`,
+                path: `${tscWatch.projectRoot}/app.ts`,
                 content: `
                 import {f} from "./module"
                 console.log(f)
@@ -10,7 +10,7 @@ namespace ts.projectSystem {
             };
 
             const moduleFile: File = {
-                path: `${projectRoot}/module.d.ts`,
+                path: `${tscWatch.projectRoot}/module.d.ts`,
                 content: `export let x: number`
             };
             const host = createServerHost([appFile, moduleFile, libFile]);
@@ -24,18 +24,18 @@ namespace ts.projectSystem {
             const project = projectService.inferredProjects[0];
 
             checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
-            checkWatchedFiles(host, getConfigFilesToWatch(projectRoot).concat(libFile.path, moduleFile.path));
-            checkWatchedDirectories(host, [projectRoot], /*recursive*/ false);
-            checkWatchedDirectories(host, [combinePaths(projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
+            checkWatchedFiles(host, getConfigFilesToWatch(tscWatch.projectRoot).concat(libFile.path, moduleFile.path));
+            checkWatchedDirectories(host, [tscWatch.projectRoot], /*recursive*/ false);
+            checkWatchedDirectories(host, [combinePaths(tscWatch.projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
             const file1 = {
-                path: `${projectRoot}/a/b/main.ts`,
+                path: `${tscWatch.projectRoot}/a/b/main.ts`,
                 content: "let x =1;"
             };
             const configFile: File = {
-                path: `${projectRoot}/a/b/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/a/b/tsconfig.json`,
                 content: `{
                     "compilerOptions": {
                         "target": "es6"
@@ -44,12 +44,12 @@ namespace ts.projectSystem {
                 }`
             };
             const file2 = {
-                path: `${projectRoot}/a/c/main.ts`,
+                path: `${tscWatch.projectRoot}/a/c/main.ts`,
                 content: "let x =1;"
             };
 
             const file3 = {
-                path: `${projectRoot}/a/d/main.ts`,
+                path: `${tscWatch.projectRoot}/a/d/main.ts`,
                 content: "let x =1;"
             };
 
@@ -64,7 +64,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
 
 
-            host.reloadFS([file1, configFile, file2, file3, libFile]);
+            host.writeFile(configFile.path, configFile.content);
             host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 1);
@@ -346,27 +346,27 @@ namespace ts.projectSystem {
 
         it("should still retain configured project created while opening the file", () => {
             const appFile: File = {
-                path: `${projectRoot}/app.ts`,
+                path: `${tscWatch.projectRoot}/app.ts`,
                 content: `const app = 20;`
             };
             const config: File = {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
             const jsFile1: File = {
-                path: `${projectRoot}/jsFile1.js`,
+                path: `${tscWatch.projectRoot}/jsFile1.js`,
                 content: `const jsFile1 = 10;`
             };
             const jsFile2: File = {
-                path: `${projectRoot}/jsFile2.js`,
+                path: `${tscWatch.projectRoot}/jsFile2.js`,
                 content: `const jsFile2 = 10;`
             };
             const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
             const projectService = createProjectService(host);
             const originalSet = projectService.configuredProjects.set;
             const originalDelete = projectService.configuredProjects.delete;
-            const configuredCreated = createMap<true>();
-            const configuredRemoved = createMap<true>();
+            const configuredCreated = new Map<string, true>();
+            const configuredRemoved = new Map<string, true>();
             projectService.configuredProjects.set = (key, value) => {
                 assert.isFalse(configuredCreated.has(key));
                 configuredCreated.set(key, true);
@@ -428,6 +428,37 @@ namespace ts.projectSystem {
                 assert.isTrue(configuredRemoved.has(config.path));
                 configuredRemoved.clear();
             }
+        });
+
+        it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
+            const file1 = { path: "/a/file1.js", content: "" };
+            const host = createServerHost([file1]);
+
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const inferredProject = projectService.inferredProjects[0];
+            checkProjectActualFiles(inferredProject, [file1.path]);
+            inferredProject.setTypeAcquisition(undefined);
+
+            const expected = {
+                enable: true,
+                include: [],
+                exclude: []
+            };
+            assert.deepEqual(inferredProject.getTypeAcquisition(), expected, "typeAcquisition should be inferred for inferred projects");
+        });
+
+        it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {
+            const host = createServerHost([commonFile1, libFile]);
+            const projectService = createProjectService(host);
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                target: ScriptTarget.ES2015
+            });
+            host.checkTimeoutQueueLength(0);
         });
     });
 }

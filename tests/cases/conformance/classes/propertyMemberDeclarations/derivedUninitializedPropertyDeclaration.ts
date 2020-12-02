@@ -65,3 +65,18 @@ class K extends J {
     q!: 1 | 2 | 3 // ok, extends a property from an interface
     r!: 4 | 5 // error, from class
 }
+
+// #35327
+class L {
+    a: any;
+    constructor(arg: any) {
+        this.a = arg;
+    }
+}
+class M extends L {
+    declare a: number;
+    constructor(arg: number) {
+        super(arg);
+        console.log(this.a);  // should be OK, M.a is ambient
+    }
+}

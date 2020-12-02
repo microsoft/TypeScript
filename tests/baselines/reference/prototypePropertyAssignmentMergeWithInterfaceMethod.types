@@ -3,12 +3,12 @@
 declare namespace lf {
   export interface Transaction {
     attach(query: query.Builder): Promise<Array<Object>>
->attach : (query: any) => Promise<Object[]>
+>attach : (query: any) => Promise<Array<Object>>
 >query : any
 >query : any
 
     begin(scope: Array<schema.Table>): Promise<void>
->begin : (scope: any[]) => Promise<void>
+>begin : (scope: Array<schema.Table>) => Promise<void>
 >scope : any[]
 >schema : any
 
@@ -16,7 +16,7 @@ declare namespace lf {
 >commit : () => Promise<void>
 
     exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
->exec : (queries: any[]) => Promise<Object[][]>
+>exec : (queries: Array<query.Builder>) => Promise<Array<Array<Object>>>
 >queries : any[]
 >query : any
 
@@ -40,7 +40,7 @@ lf.Transaction = function() {};
  * @return {!IThenable}
  */
 lf.Transaction.prototype.begin = function(scope) {};
->lf.Transaction.prototype.begin = function(scope) {} : (scope: any[]) => any
+>lf.Transaction.prototype.begin = function(scope) {} : (scope: Array<any>) => any
 >lf.Transaction.prototype.begin : any
 >lf.Transaction.prototype : any
 >lf.Transaction : typeof Transaction
@@ -48,6 +48,6 @@ lf.Transaction.prototype.begin = function(scope) {};
 >Transaction : typeof Transaction
 >prototype : any
 >begin : any
->function(scope) {} : (scope: any[]) => any
+>function(scope) {} : (scope: Array<any>) => any
 >scope : any[]
 

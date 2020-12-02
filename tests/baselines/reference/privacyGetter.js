@@ -211,6 +211,7 @@ class C8_private {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.C7_public = exports.C6_public = exports.m1 = void 0;
     var m1;
     (function (m1) {
         var C1_public = /** @class */ (function () {
@@ -236,7 +237,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p1_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_1, "p2_private", {
@@ -245,7 +246,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p2_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_1, "p3_private", {
@@ -254,7 +255,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p3_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_1, "p4_public", {
@@ -263,7 +264,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p4_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return C3_public;
@@ -279,7 +280,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p1_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_2, "p2_private", {
@@ -288,7 +289,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p2_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_2, "p3_private", {
@@ -297,7 +298,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p3_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_2, "p4_public", {
@@ -306,7 +307,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m1_c3_p4_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return C4_private;
@@ -337,7 +338,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p1_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_3, "p2_private", {
@@ -346,7 +347,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p2_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_3, "p3_private", {
@@ -355,7 +356,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p3_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_3, "p4_public", {
@@ -364,7 +365,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p4_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return m2_C3_public;
@@ -380,7 +381,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p1_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_4, "p2_private", {
@@ -389,7 +390,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p2_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_4, "p3_private", {
@@ -398,7 +399,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p3_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             Object.defineProperty(proto_4, "p4_public", {
@@ -407,7 +408,7 @@ define(["require", "exports"], function (require, exports) {
                 },
                 set: function (m2_c3_p4_arg) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             return m2_C4_private;
@@ -436,7 +437,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p1_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_5, "p2_private", {
@@ -445,7 +446,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p2_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_5, "p3_private", {
@@ -454,7 +455,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p3_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_5, "p4_public", {
@@ -463,7 +464,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p4_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C7_public;
@@ -479,7 +480,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p1_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_6, "p2_private", {
@@ -488,7 +489,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p2_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_6, "p3_private", {
@@ -497,7 +498,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p3_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_6, "p4_public", {
@@ -506,7 +507,7 @@ define(["require", "exports"], function (require, exports) {
             },
             set: function (m1_c3_p4_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C8_private;

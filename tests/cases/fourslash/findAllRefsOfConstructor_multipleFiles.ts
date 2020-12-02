@@ -3,7 +3,7 @@
 // @Filename: f.ts
 
 ////class A {
-////    [|[|{| "contextRangeIndex": 0 |}constructor|](s: string) {}|]
+////    [|[|{| "contextRangeIndex": 0, "isDefinition": true |}constructor|](s: string) {}|]
 ////}
 ////class B extends A { }
 ////[|export { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}A|], [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}B|] };|]

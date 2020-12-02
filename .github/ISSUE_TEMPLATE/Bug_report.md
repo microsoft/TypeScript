@@ -1,10 +1,13 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Bug
+about: Create a report to help us improve TypeScript
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
-<!-- 🚨 STOP 🚨 𝗦𝗧𝗢𝗣 🚨 𝑺𝑻𝑶𝑷 🚨
+<!-- 🚨 STOP 🚨 STOP 🚨 STOP 🚨
 
 Half of all issues filed here are duplicates, answered in the FAQ, or not appropriate for the bug tracker. Even if you think you've found a *bug*, please read the FAQ first, especially the Common "Bugs" That Aren't Bugs section!
 

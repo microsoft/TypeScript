@@ -34,6 +34,7 @@ let y = x.map(x => x + 1);
 //// [observable.js]
 "use strict";
 exports.__esModule = true;
+exports.Observable = void 0;
 var Observable;
 (function (Observable) {
     var someValue;

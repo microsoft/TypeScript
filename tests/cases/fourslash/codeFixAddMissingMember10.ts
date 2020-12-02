@@ -3,9 +3,9 @@
 //// class C {}
 //// const n: number = new C().add(1, 2);
 
-verify.codeFixAll({
-    fixId: "addMissingMember",
-    fixAllDescription: "Add all missing members",
+verify.codeFix({
+    index: 0,
+    description: ignoreInterpolations(ts.Diagnostics.Declare_method_0),
     newFileContent:
 `class C {
     add(arg0: number, arg1: number): number {

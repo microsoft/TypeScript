@@ -19,21 +19,21 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInv
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(25,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(26,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(28,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(28,9): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(28,9): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(29,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(29,9): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(29,9): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(30,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(30,9): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(30,9): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(31,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(31,9): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(31,9): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(33,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(33,14): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(33,14): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(34,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(34,14): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(34,14): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(35,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(35,14): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(35,14): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,14): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,14): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
 ==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts (36 errors) ====
@@ -108,40 +108,40 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInv
     ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
             ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     (delete ++temp) ** 3;
     ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
             ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     (delete temp--) ** 3;
     ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
             ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     (delete temp++) ** 3;
     ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
             ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     
     1 ** (delete --temp) ** 3;
          ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                  ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     1 ** (delete ++temp) ** 3;
          ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                  ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     1 ** (delete temp--) ** 3;
          ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                  ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     1 ** (delete temp++) ** 3;
          ~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                  ~~~~~~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.

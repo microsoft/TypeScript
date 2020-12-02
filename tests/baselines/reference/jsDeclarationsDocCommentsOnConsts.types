@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+/**
+ * const doc comment
+ */
+const x = (a) => {
+>x : (a: any) => string
+>(a) => {    return '';} : (a: any) => string
+>a : any
+
+    return '';
+>'' : ""
+
+};
+
+/**
+ * function doc comment
+ */
+function b() {
+>b : () => number
+
+    return 0;
+>0 : 0
+}
+
+module.exports = {x, b}
+>module.exports = {x, b} : typeof import("tests/cases/conformance/jsdoc/declarations/index1")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index1")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index1\"": typeof import("tests/cases/conformance/jsdoc/declarations/index1"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index1")
+>{x, b} : { x: (a: any) => string; b: () => number; }
+>x : (a: any) => string
+>b : () => number
+

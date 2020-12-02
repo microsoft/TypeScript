@@ -5,7 +5,7 @@ function Outer() {
     this.y = 2
 >this.y = 2 : 2
 >this.y : any
->this : any
+>this : this
 >y : any
 >2 : 2
 }
@@ -20,9 +20,9 @@ Outer.Inner = class I {
     constructor() {
         this.x = 1
 >this.x = 1 : 1
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >1 : 1
     }
 }

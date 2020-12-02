@@ -1,0 +1,41 @@
+=== /a.ts ===
+class A { a!: string }
+>A : A
+>a : string
+
+export type { A as B };
+>A : typeof A
+>B : A
+
+export type Z = A;
+>Z : A
+
+=== /b.ts ===
+import { Z as Y } from './a';
+>Z : any
+>Y : any
+
+export { B as C } from './a';
+>B : typeof import("/a").B
+>C : typeof import("/a").B
+
+=== /c.ts ===
+import type { C } from './b';
+>C : C
+
+export { C as D };
+>C : typeof C
+>D : typeof C
+
+=== /d.ts ===
+import { D } from './c';
+>D : typeof D
+
+new D();
+>new D() : D
+>D : typeof D
+
+const d: D = {};
+>d : D
+>{} : {}
+

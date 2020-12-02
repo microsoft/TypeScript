@@ -135,13 +135,13 @@ var schema;
             get: function () {
                 return undefined;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "createValidator10", {
             set: function (v) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return T;

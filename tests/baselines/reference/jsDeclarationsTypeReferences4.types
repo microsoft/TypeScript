@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/// <reference types="node" />
+export const Something = 2; // to show conflict that can occur
+>Something : 2
+>2 : 2
+
+// @ts-ignore
+export namespace A {
+>A : typeof A
+
+    // @ts-ignore
+    export namespace B {
+>B : typeof B
+
+        const Something = require("fs").Something;
+>Something : typeof Something
+>require("fs").Something : typeof Something
+>require("fs") : typeof import("fs")
+>require : any
+>"fs" : "fs"
+>Something : typeof Something
+
+        const thing = new Something();
+>thing : Something
+>new Something() : Something
+>Something : typeof Something
+
+        // @ts-ignore
+        export { thing };
+>thing : Something
+    }
+}
+
+=== tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : typeof import("fs")
+
+    export class Something {}
+>Something : Something
+}

@@ -44,7 +44,7 @@ var C = /** @class */ (function () {
             var _newTarget = void 0;
             return _newTarget;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "e", {
@@ -52,7 +52,7 @@ var C = /** @class */ (function () {
             var _newTarget = void 0;
             _ = _newTarget;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C[_newTarget] = function () { };
@@ -65,7 +65,7 @@ var C = /** @class */ (function () {
             var _newTarget = void 0;
             return _newTarget;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "i", {
@@ -73,7 +73,7 @@ var C = /** @class */ (function () {
             var _newTarget = void 0;
             _ = _newTarget;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.j = function () { return _newTarget; };
@@ -90,7 +90,7 @@ var O = (_a = {},
             var _newTarget = void 0;
             return _newTarget;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, "m", {
@@ -98,7 +98,7 @@ var O = (_a = {},
             var _newTarget = void 0;
             _ = _newTarget;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     _a.n = _newTarget,

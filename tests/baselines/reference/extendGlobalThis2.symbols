@@ -1,0 +1,11 @@
+=== tests/cases/compiler/extendGlobalThis2.ts ===
+namespace globalThis {
+>globalThis : Symbol(globalThis, Decl(extendGlobalThis2.ts, 0, 0))
+
+    export function foo() { console.log("x"); }
+>foo : Symbol(foo, Decl(extendGlobalThis2.ts, 0, 22))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+

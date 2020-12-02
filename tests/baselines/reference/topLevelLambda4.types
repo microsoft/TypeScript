@@ -1,8 +1,8 @@
 === tests/cases/compiler/topLevelLambda4.ts ===
 export var x = () => this.window;
->x : () => Window & typeof globalThis
->() => this.window : () => Window & typeof globalThis
->this.window : Window & typeof globalThis
->this : typeof globalThis
->window : Window & typeof globalThis
+>x : () => any
+>() => this.window : () => any
+>this.window : any
+>this : undefined
+>window : any
 

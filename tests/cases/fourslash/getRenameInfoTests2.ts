@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-/////**/class C {
+////class C /**/extends null {
 ////
 ////}
 

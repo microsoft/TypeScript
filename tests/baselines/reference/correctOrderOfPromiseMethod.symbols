@@ -43,7 +43,7 @@ async function countEverything(): Promise<number> {
         providerB(),
 >providerB : Symbol(providerB, Decl(correctOrderOfPromiseMethod.ts, 11, 9))
 
-    ] as const);
+    ]);
 
     const dataA: A[] = resultA;
 >dataA : Symbol(dataA, Decl(correctOrderOfPromiseMethod.ts, 18, 9))
@@ -69,4 +69,14 @@ async function countEverything(): Promise<number> {
     }
     return 0;
 }
+
+// #31179
+
+const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
+>expected : Symbol(expected, Decl(correctOrderOfPromiseMethod.ts, 28, 5))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --) ... and 6 more)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --) ... and 6 more)
+>undefined : Symbol(undefined)
 

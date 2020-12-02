@@ -56,8 +56,8 @@ const a6 = f1(true, false);  // boolean
 >false : false
 
 const a7 = f1("hello", 1);  // Error
->a7 : any
->f1("hello", 1) : any
+>a7 : "hello"
+>f1("hello", 1) : "hello"
 >f1 : <T>(x: T, y: string | T) => T
 >"hello" : "hello"
 >1 : 1
@@ -126,8 +126,8 @@ const d2 = f4(s);
 >s : string
 
 const d3 = f4(42);  // Error
->d3 : any
->f4(42) : any
+>d3 : 42
+>f4(42) : 42
 >f4 : <T>(x: string & T) => T
 >42 : 42
 

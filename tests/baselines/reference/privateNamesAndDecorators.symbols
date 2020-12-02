@@ -1,0 +1,24 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndDecorators.ts ===
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(privateNamesAndDecorators.ts, 0, 0))
+>T : Symbol(T, Decl(privateNamesAndDecorators.ts, 0, 21))
+>target : Symbol(target, Decl(privateNamesAndDecorators.ts, 0, 24))
+>T : Symbol(T, Decl(privateNamesAndDecorators.ts, 0, 21))
+>T : Symbol(T, Decl(privateNamesAndDecorators.ts, 0, 21))
+
+class A {
+>A : Symbol(A, Decl(privateNamesAndDecorators.ts, 0, 38))
+
+    @dec                // Error
+>dec : Symbol(dec, Decl(privateNamesAndDecorators.ts, 0, 0))
+
+    #foo = 1;
+>#foo : Symbol(A.#foo, Decl(privateNamesAndDecorators.ts, 2, 9))
+
+    @dec                // Error
+>dec : Symbol(dec, Decl(privateNamesAndDecorators.ts, 0, 0))
+
+    #bar(): void { }
+>#bar : Symbol(A.#bar, Decl(privateNamesAndDecorators.ts, 4, 13))
+}
+

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/a.ts ===
+class Foo {}
+>Foo : Foo
+
+export = Foo;
+>Foo : Foo
+
+=== tests/cases/compiler/b.js ===
+import { Foo } from './a';
+>Foo : any
+

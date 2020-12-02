@@ -114,7 +114,7 @@ var m1;
             },
             set: function (m1_c3_p1_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "p2_private", {
@@ -123,7 +123,7 @@ var m1;
             },
             set: function (m1_c3_p2_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "p3_private", {
@@ -132,7 +132,7 @@ var m1;
             },
             set: function (m1_c3_p3_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_1, "p4_public", {
@@ -141,7 +141,7 @@ var m1;
             },
             set: function (m1_c3_p4_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C3_public;
@@ -157,7 +157,7 @@ var m1;
             },
             set: function (m1_c3_p1_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_2, "p2_private", {
@@ -166,7 +166,7 @@ var m1;
             },
             set: function (m1_c3_p2_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_2, "p3_private", {
@@ -175,7 +175,7 @@ var m1;
             },
             set: function (m1_c3_p3_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(proto_2, "p4_public", {
@@ -184,7 +184,7 @@ var m1;
             },
             set: function (m1_c3_p4_arg) {
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C4_private;
@@ -205,7 +205,7 @@ var C7_public = /** @class */ (function () {
         },
         set: function (m1_c3_p1_arg) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_3, "p2_private", {
@@ -214,7 +214,7 @@ var C7_public = /** @class */ (function () {
         },
         set: function (m1_c3_p2_arg) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C7_public;

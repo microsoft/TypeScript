@@ -82,7 +82,7 @@ var p = Geometry.Origin;
 >Origin : A.Point
 
 var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
->line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
+>line : { start: {    x: number;    y: number;}; end: {    x: number;    y: number;}; }
 >start : { x: number; y: number; }
 >x : number
 >y : number

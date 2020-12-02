@@ -17,8 +17,7 @@ function my_print (resp): Promise<void> {
 async function f() {
     try {
         return my_print(fetch("https://typescriptlang.org").then(res => console.log(res)));
-    }
-    catch (err) {
+    } catch (err) {
         return console.log("Error!", err);
     }
 }

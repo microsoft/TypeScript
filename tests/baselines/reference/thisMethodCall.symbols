@@ -1,0 +1,16 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/thisMethodCall.ts ===
+class C {
+>C : Symbol(C, Decl(thisMethodCall.ts, 0, 0))
+
+    method?() {}
+>method : Symbol(C.method, Decl(thisMethodCall.ts, 0, 9))
+
+    other() {
+>other : Symbol(C.other, Decl(thisMethodCall.ts, 1, 16))
+
+        this.method?.();
+>this.method : Symbol(C.method, Decl(thisMethodCall.ts, 0, 9))
+>this : Symbol(C, Decl(thisMethodCall.ts, 0, 0))
+>method : Symbol(C.method, Decl(thisMethodCall.ts, 0, 9))
+    }
+}

@@ -35,6 +35,7 @@ C.B = B;
 //// [foo.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -51,6 +52,7 @@ Example.Foo = foo_1.Foo;
 //// [index2.js]
 "use strict";
 exports.__esModule = true;
+exports.Foo = void 0;
 var foo_1 = require("./foo");
 exports.Foo = foo_1.Foo;
 function Example() { }
@@ -59,6 +61,7 @@ Example.Foo = foo_1.Foo;
 //// [index3.js]
 "use strict";
 exports.__esModule = true;
+exports.Bar = void 0;
 var Bar = /** @class */ (function () {
     function Bar() {
     }
@@ -71,6 +74,7 @@ Example.Bar = Bar;
 //// [index4.js]
 "use strict";
 exports.__esModule = true;
+exports.C = void 0;
 function A() { }
 function B() { }
 function C() {

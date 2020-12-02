@@ -1,0 +1,52 @@
+=== tests/cases/compiler/spliceTuples.ts ===
+declare const sb: [string, boolean];
+>sb : Symbol(sb, Decl(spliceTuples.ts, 0, 13))
+
+let k1: [number, string, boolean];
+>k1 : Symbol(k1, Decl(spliceTuples.ts, 2, 3))
+
+k1 = [1, ...sb];
+>k1 : Symbol(k1, Decl(spliceTuples.ts, 2, 3))
+>sb : Symbol(sb, Decl(spliceTuples.ts, 0, 13))
+
+let k2: [number, string, boolean, number];
+>k2 : Symbol(k2, Decl(spliceTuples.ts, 5, 3))
+
+k2 = [1, ...sb, 1];
+>k2 : Symbol(k2, Decl(spliceTuples.ts, 5, 3))
+>sb : Symbol(sb, Decl(spliceTuples.ts, 0, 13))
+
+declare const sb_: [string, ...boolean[]];
+>sb_ : Symbol(sb_, Decl(spliceTuples.ts, 8, 13))
+
+let k3: [number, string, ...boolean[]];
+>k3 : Symbol(k3, Decl(spliceTuples.ts, 10, 3))
+
+k3 = [1, ...sb_];
+>k3 : Symbol(k3, Decl(spliceTuples.ts, 10, 3))
+>sb_ : Symbol(sb_, Decl(spliceTuples.ts, 8, 13))
+
+declare const sbb_: [string, boolean, ...boolean[]];
+>sbb_ : Symbol(sbb_, Decl(spliceTuples.ts, 13, 13))
+
+let k4: [number, string, ...boolean[]];
+>k4 : Symbol(k4, Decl(spliceTuples.ts, 15, 3))
+
+k4 = [1, ...sbb_];
+>k4 : Symbol(k4, Decl(spliceTuples.ts, 15, 3))
+>sbb_ : Symbol(sbb_, Decl(spliceTuples.ts, 13, 13))
+
+let k5: [number, string, boolean, ...boolean[]];
+>k5 : Symbol(k5, Decl(spliceTuples.ts, 18, 3))
+
+k5 = [1, ...sbb_];
+>k5 : Symbol(k5, Decl(spliceTuples.ts, 18, 3))
+>sbb_ : Symbol(sbb_, Decl(spliceTuples.ts, 13, 13))
+
+let k6: [number, string, boolean, boolean, ...boolean[]];
+>k6 : Symbol(k6, Decl(spliceTuples.ts, 21, 3))
+
+k6 = [1, ...sbb_];
+>k6 : Symbol(k6, Decl(spliceTuples.ts, 21, 3))
+>sbb_ : Symbol(sbb_, Decl(spliceTuples.ts, 13, 13))
+

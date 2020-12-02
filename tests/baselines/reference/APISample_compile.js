@@ -53,6 +53,7 @@ compile(process.argv.slice(2), {
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;
+exports.compile = void 0;
 var ts = require("typescript");
 function compile(fileNames, options) {
     var program = ts.createProgram(fileNames, options);

@@ -1,0 +1,8 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics1.ts':
+/tests/cases/fourslash/a.js(1,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+
+
+==== /tests/cases/fourslash/a.js (1 errors) ====
+    import a = b;
+    ~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.

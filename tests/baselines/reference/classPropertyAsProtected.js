@@ -31,14 +31,14 @@ var C = /** @class */ (function () {
     Object.defineProperty(proto_1, "y", {
         get: function () { return null; },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.foo = function () { };
     Object.defineProperty(C, "b", {
         get: function () { return null; },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.foo = function () { };

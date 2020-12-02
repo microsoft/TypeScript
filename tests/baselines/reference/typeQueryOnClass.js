@@ -73,14 +73,14 @@ var C = /** @class */ (function () {
         },
         set: function (x) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "sd", {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     proto_1.baz = function (x) { return ''; };
@@ -90,14 +90,14 @@ var C = /** @class */ (function () {
         },
         set: function (x) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(proto_1, "id", {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.sa = 1;

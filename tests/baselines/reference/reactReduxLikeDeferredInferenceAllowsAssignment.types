@@ -226,11 +226,11 @@ const simpleAction = (payload: boolean) => ({
 
 });
 const thunkAction = (param1: number, param2: string) => async (
->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
->(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
+>(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
 >param1 : number
 >param2 : string
->async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
+>async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
 
   dispatch: Dispatch,
 >dispatch : Dispatch<AnyAction>

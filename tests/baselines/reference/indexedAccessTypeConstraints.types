@@ -72,7 +72,7 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
 // Repro from #14557
 
 function foo<C, T extends { content: C }>(x: C, y: T['content']) {
->foo : <C, T extends { content: C; }>(x: C, y: T["content"]) => void
+>foo : <C, T extends { content: C; }>(x: C, y: T['content']) => void
 >content : C
 >x : C
 >y : T["content"]
