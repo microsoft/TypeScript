@@ -28,7 +28,7 @@ namespace ts {
     // See https://github.com/microsoft/typescript-etw for more information
     let etwModule;
     try {
-        const etwModulePath = process.env.TS_ETW_MODULE_PATH ?? "./node_modules/@microsoft/typescript-etw";
+        const etwModulePath = process.env["TS_ETW_MODULE_PATH"] ?? "./node_modules/@microsoft/typescript-etw";
 
         // require() will throw an exception if the module is not found
         // It may also return undefined if not installed properly
