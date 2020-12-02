@@ -294,8 +294,11 @@ namespace Harness {
             noTypesAndSymbols?: boolean;
         }
 
+        // Ensure that each value has a corresponding property in HarnessOptions
+        type ValidOption = keyof HarnessOptions | keyof ts.CompilerOptions;
+
         // Additional options not already in ts.optionDeclarations
-        const harnessOptionDeclarations: ts.CommandLineOption[] = [
+        const harnessOptionDeclarations: Array<ts.CommandLineOption & { name: ValidOption }> = [
             { name: "allowNonTsExtensions", type: "boolean" },
             { name: "useCaseSensitiveFileNames", type: "boolean" },
             { name: "baselineFile", type: "string" },
@@ -462,7 +465,7 @@ namespace Harness {
             if (options.declaration && result.diagnostics.length === 0 && result.dts.size > 0) {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
+                return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: (currentDirectory ?? harnessSettings.currentDirectory) || "" };
             }
 
             function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
