@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/bug28014.js ===
 exports.version = 1
->exports.version : Symbol(version)
+>exports.version : Symbol(version, Decl(bug28014.js, 0, 0))
 >exports : Symbol(version, Decl(bug28014.js, 0, 0))
 >version : Symbol(version, Decl(bug28014.js, 0, 0))
 

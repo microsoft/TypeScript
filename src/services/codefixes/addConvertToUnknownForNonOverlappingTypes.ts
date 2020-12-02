@@ -14,10 +14,10 @@ namespace ts.codefix {
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const token = getTokenAtPosition(sourceFile, pos);
-        const assertion = Debug.checkDefined(findAncestor(token, (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertion(n)), "Expected to find an assertion expression");
+        const assertion = Debug.checkDefined(findAncestor(token, (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n)), "Expected to find an assertion expression");
         const replacement = isAsExpression(assertion)
-            ? createAsExpression(assertion.expression, createKeywordTypeNode(SyntaxKind.UnknownKeyword))
-            : createTypeAssertion(createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);
+            ? factory.createAsExpression(assertion.expression, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword))
+            : factory.createTypeAssertion(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);
         changeTracker.replaceNode(sourceFile, assertion.expression, replacement);
     }
 }

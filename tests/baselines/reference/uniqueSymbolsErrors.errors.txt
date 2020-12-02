@@ -58,7 +58,7 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(82,29): error 
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(82,45): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(83,36): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(83,52): error TS1335: 'unique symbol' types are not allowed here.
-tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'unique symbol' is not assignable to type 'string'.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'typeof shouldNotBeAssignable' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts (61 errors) ====
@@ -270,4 +270,4 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error T
     // https://github.com/Microsoft/TypeScript/issues/21584
     const shouldNotBeAssignable: string = Symbol();
           ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'unique symbol' is not assignable to type 'string'.
+!!! error TS2322: Type 'typeof shouldNotBeAssignable' is not assignable to type 'string'.

@@ -1,25 +1,42 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/first/first_PART1.ts]
+/*@internal*/ interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+console.log(s);
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
-12:04:00 AM - Projects in this build: 
+[[90m12:04:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-12:04:00 AM - Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
+[[90m12:04:00 AM[0m] Project 'src/first/tsconfig.json' is out of date because oldest output 'src/first/bin/first-output.js' is older than newest input 'src/first/first_PART1.ts'
 
-12:04:00 AM - Building project '/src/first/tsconfig.json'...
+[[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-12:04:00 AM - Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-12:04:00 AM - Updating output of project '/src/second/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-12:04:00 AM - Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/second/tsconfig.json'...
 
-12:04:00 AM - Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+[[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-12:04:00 AM - Updating output of project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
-12:04:00 AM - Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
+[[90m12:04:00 AM[0m] Updating unchanged output timestamps of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2405,20 +2422,6 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 ======================================================================
-
-//// [/src/first/first_PART1.ts]
-/*@internal*/ interface TheFirst {
-    none: any;
-}
-
-const s = "Hello, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-console.log(s);
 
 //// [/src/third/thirdjs/output/third-output.js]
 var s = "Hello, world";

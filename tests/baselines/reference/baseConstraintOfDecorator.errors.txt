@@ -1,5 +1,5 @@
 tests/cases/compiler/baseConstraintOfDecorator.ts(2,5): error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
-  'typeof decoratorFunc' is assignable to the constraint of type 'TFunction', but 'TFunction' could be instantiated with a different subtype of constraint '{}'.
+  'TFunction' could be instantiated with an arbitrary type which could be unrelated to 'typeof decoratorFunc'.
 tests/cases/compiler/baseConstraintOfDecorator.ts(2,40): error TS2507: Type 'TFunction' is not a constructor function type.
 tests/cases/compiler/baseConstraintOfDecorator.ts(12,18): error TS2545: A mixin class must have a constructor with a single rest parameter of type 'any[]'.
 
@@ -22,7 +22,7 @@ tests/cases/compiler/baseConstraintOfDecorator.ts(12,18): error TS2545: A mixin 
         };
     ~~~~~~
 !!! error TS2322: Type 'typeof decoratorFunc' is not assignable to type 'TFunction'.
-!!! error TS2322:   'typeof decoratorFunc' is assignable to the constraint of type 'TFunction', but 'TFunction' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'TFunction' could be instantiated with an arbitrary type which could be unrelated to 'typeof decoratorFunc'.
     }
     
     class MyClass { private x; }

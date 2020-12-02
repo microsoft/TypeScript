@@ -535,9 +535,9 @@ class DerivedWithClassExpression extends Base {
     constructor() {
         console.log(class {
 >console.log(class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        }) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        } : typeof (Anonymous class)
 
             private method() {
@@ -580,9 +580,9 @@ class DerivedWithClassExpressionExtendingMember extends Base {
     constructor() {
         console.log(class extends this.memberClass { });
 >console.log(class extends this.memberClass { }) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >class extends this.memberClass { } : typeof (Anonymous class)
 >this.memberClass : (Anonymous class)
 >this : this
@@ -605,9 +605,9 @@ class DerivedWithDerivedClassExpression extends Base {
     constructor() {
         console.log(class extends Base {
 >console.log(class extends Base {            constructor() {                super();            }            public foo() {                return this;            }            public bar = () => this;        }) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >class extends Base {            constructor() {                super();            }            public foo() {                return this;            }            public bar = () => this;        } : typeof (Anonymous class)
 >Base : Base
 
@@ -645,9 +645,9 @@ class DerivedWithNewDerivedClassExpression extends Base {
     constructor() {
         console.log(new class extends Base {
 >console.log(new class extends Base {            constructor() {                super();            }        }()) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >new class extends Base {            constructor() {                super();            }        }() : (Anonymous class)
 >class extends Base {            constructor() {                super();            }        } : typeof (Anonymous class)
 >Base : Base

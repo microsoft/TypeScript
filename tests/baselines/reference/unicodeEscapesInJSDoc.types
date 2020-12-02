@@ -10,9 +10,9 @@ function foo(a, aa) {
 
     console.log(a + aa);
 >console.log(a + aa) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a + aa : number
 >a : number
 >aa : number
@@ -29,9 +29,9 @@ function bar(a, aa) {
 
     console.log(a + aa);
 >console.log(a + aa) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >a + aa : number
 >a : number
 >aa : number

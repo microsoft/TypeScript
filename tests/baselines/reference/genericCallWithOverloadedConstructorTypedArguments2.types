@@ -16,7 +16,7 @@ module NonGenericParameter {
     }
 
     function foo4(cb: typeof a) {
->foo4 : (cb: { new (x: boolean): boolean; new (x: string): string; }) => { new (x: boolean): boolean; new (x: string): string; }
+>foo4 : (cb: typeof a) => { new (x: boolean): boolean; new (x: string): string; }
 >cb : { new (x: boolean): boolean; new (x: string): string; }
 >a : { new (x: boolean): boolean; new (x: string): string; }
 

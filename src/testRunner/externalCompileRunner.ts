@@ -30,7 +30,7 @@ namespace Harness {
 
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const cls = this;
-            describe(`${this.kind()} code samples`, function (this: Mocha.ISuiteCallbackContext) {
+            describe(`${this.kind()} code samples`, function (this: Mocha.Suite) {
                 this.timeout(600_000); // 10 minutes
                 for (const test of testList) {
                     cls.runTest(typeof test === "string" ? test : test.file);
@@ -41,7 +41,7 @@ namespace Harness {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const cls = this;
             const timeout = 600_000; // 10 minutes
-            describe(directoryName, function (this: Mocha.ISuiteCallbackContext) {
+            describe(directoryName, function (this: Mocha.Suite) {
                 this.timeout(timeout);
                 const cp: typeof import("child_process") = require("child_process");
 
@@ -127,7 +127,7 @@ ${stripAbsoluteImportPaths(result.stderr.toString().replace(/\r\n/g, "\n"))}`;
 
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const cls = this;
-            describe(`${this.kind()} code samples`, function (this: Mocha.ISuiteCallbackContext) {
+            describe(`${this.kind()} code samples`, function (this: Mocha.Suite) {
                 this.timeout(cls.timeout); // 20 minutes
                 before(() => {
                     cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability

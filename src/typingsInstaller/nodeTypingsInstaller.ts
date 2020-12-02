@@ -46,22 +46,22 @@ namespace ts.server.typingsInstaller {
         entries: MapLike<MapLike<string>>;
     }
 
-    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<MapLike<string>> {
+    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): ESMap<string, MapLike<string>> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<MapLike<string>>();
+            return new Map<string, MapLike<string>>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
-            return createMapFromTemplate(content.entries);
+            return new Map(getEntries(content.entries));
         }
         catch (e) {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<MapLike<string>>();
+            return new Map<string, MapLike<string>>();
         }
     }
 
@@ -79,7 +79,7 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
-        readonly typesRegistry: Map<MapLike<string>>;
+        readonly typesRegistry: ESMap<string, MapLike<string>>;
 
         private delayedInitializationError: InitializationFailedResponse | undefined;
 
@@ -122,7 +122,8 @@ namespace ts.server.typingsInstaller {
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
                     kind: "event::initializationFailed",
-                    message: (<Error>e).message
+                    message: (<Error>e).message,
+                    stack: (<Error>e).stack,
                 };
             }
 
@@ -246,7 +247,9 @@ namespace ts.server.typingsInstaller {
     const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
     installer.listen();
 
-    function indent(newline: string, str: string): string {
-        return `${newline}    ` + str.replace(/\r?\n/, `${newline}    `);
+    function indent(newline: string, str: string | undefined): string {
+        return str && str.length
+            ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
+            : "";
     }
 }

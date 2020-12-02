@@ -19,9 +19,9 @@ export default async(() => await(Promise.resolve(1)));
 >await(Promise.resolve(1)) : any
 >await : (...args: any[]) => any
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >1 : 1
 
 === tests/cases/compiler/b.ts ===

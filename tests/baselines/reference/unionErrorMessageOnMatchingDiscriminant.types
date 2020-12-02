@@ -1,0 +1,53 @@
+=== tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts ===
+type A = {
+>A : A
+
+    type: 'a',
+>type : "a"
+
+    data: { a: string }
+>data : { a: string; }
+>a : string
+
+};
+
+type B = {
+>B : B
+
+    type: 'b',
+>type : "b"
+
+    data: null
+>data : null
+>null : null
+
+};
+
+type C = {
+>C : C
+
+    type: 'c',
+>type : "c"
+
+    payload: string
+>payload : string
+
+};
+
+type Union = A | B | C;
+>Union : Union
+
+// error
+const foo: Union = {
+>foo : Union
+>{    type: 'a',    data: null} : { type: "a"; data: null; }
+
+    type: 'a',
+>type : "a"
+>'a' : "a"
+
+    data: null
+>data : null
+>null : null
+
+};

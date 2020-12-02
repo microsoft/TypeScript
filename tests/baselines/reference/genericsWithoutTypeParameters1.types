@@ -30,7 +30,7 @@ function foo(x: C, y: I) { }
 >y : any
 
 function foo2(x: C<I>, y: I<C>) { }
->foo2 : (x: C<any>, y: I<any>) => void
+>foo2 : (x: C<I>, y: I<C>) => void
 >x : C<any>
 >y : I<any>
 

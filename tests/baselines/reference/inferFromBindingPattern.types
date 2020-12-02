@@ -6,7 +6,7 @@ declare function f2<T extends string>(): [T];
 >f2 : <T extends string>() => [T]
 
 declare function f3<T extends string>(): { x: T };
->f3 : <T extends string>() => { x: T; }
+>f3 : <T extends string>() => {    x: T;}
 >x : T
 
 let x1 = f1();         // string

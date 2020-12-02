@@ -204,7 +204,7 @@ function f10(shape: Shape) {
 }
 
 function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
->f20 : <T, U>(x: T | U, y: T & U, k1: keyof T & keyof U, k2: keyof T & keyof U, k3: keyof T | keyof U, k4: keyof T | keyof U) => void
+>f20 : <T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) => void
 >x : T | U
 >y : T & U
 >k1 : keyof T & keyof U

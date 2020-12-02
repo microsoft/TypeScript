@@ -123,7 +123,7 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >1 : 1
 
 let propertyNested: { a: { a: number, b: string } } =
->propertyNested : { a: { a: number; b: string; }; }
+>propertyNested : { a: {    a: number;    b: string;}; }
 >a : { a: number; b: string; }
 >a : number
 >b : string
@@ -174,7 +174,7 @@ type Header = { head: string, body: string, authToken: string }
 >authToken : string
 
 function from16326(this: { header: Header }, header: Header, authToken: string): Header {
->from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
+>from16326 : (this: {    header: Header;}, header: Header, authToken: string) => Header
 >this : { header: Header; }
 >header : Header
 >header : Header
@@ -200,7 +200,7 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 }
 // boolean && T results in Partial<T>
 function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
->conditionalSpreadBoolean : (b: boolean) => { x: number; y: number; }
+>conditionalSpreadBoolean : (b: boolean) => {    x: number;    y: number;}
 >b : boolean
 >x : number
 >y : number
@@ -241,7 +241,7 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >o : { x: number; y: number; }
 }
 function conditionalSpreadNumber(nt: number): { x: number, y: number } {
->conditionalSpreadNumber : (nt: number) => { x: number; y: number; }
+>conditionalSpreadNumber : (nt: number) => {    x: number;    y: number;}
 >nt : number
 >x : number
 >y : number
@@ -282,7 +282,7 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >o : { x: number; y: number; }
 }
 function conditionalSpreadString(st: string): { x: string, y: number } {
->conditionalSpreadString : (st: string) => { x: string; y: number; }
+>conditionalSpreadString : (st: string) => {    x: string;    y: number;}
 >st : string
 >x : string
 >y : number
@@ -394,7 +394,7 @@ let changeTypeBoth: { a: string, b: number } =
 
 // optional
 function container(
->container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }) => void
+>container : (definiteBoolean: {    sn: boolean;}, definiteString: {    sn: string;}, optionalString: {    sn?: string;}, optionalNumber: {    sn?: number;}) => void
 
     definiteBoolean: { sn: boolean },
 >definiteBoolean : { sn: boolean; }
@@ -579,7 +579,7 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >'no' : "no"
 
 function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
->genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
+>genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | {    s: string;}, obj: {    x: number;}) => void
 >t : T
 >u : U
 >v : T | U

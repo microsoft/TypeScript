@@ -1,7 +1,7 @@
 === tests/cases/compiler/index.js ===
 const _item = require("./namespacer");
->_item : typeof B
->require("./namespacer") : typeof B
+>_item : typeof _item
+>require("./namespacer") : typeof _item
 >require : any
 >"./namespacer" : "./namespacer"
 

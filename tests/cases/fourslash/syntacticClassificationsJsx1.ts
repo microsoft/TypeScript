@@ -7,7 +7,7 @@
 ////
 ////let y = <element attr="123"/>
 
-const c = classification;   
+const c = classification("original");   
 verify.syntacticClassificationsAre(
     c.keyword("let"), c.identifier("x"), c.operator("="),
         c.punctuation("<"), 
@@ -25,3 +25,9 @@ verify.syntacticClassificationsAre(
                 c.jsxAttribute("attr"), c.operator("="), c.jsxAttributeStringLiteralValue(`"123"`), 
            c.punctuation("/"), c.punctuation(">")
 ) 
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("variable.declaration", "x"), 
+    c2.semanticToken("variable.declaration", "y"), 
+);

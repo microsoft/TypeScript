@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts ===
+export type Segment1 = [length: number, number]; // partially named, disallowed
+>Segment1 : Segment1
+
+export type Segment2 = [number, size: number]; // partially named, disallowed
+>Segment2 : Segment2
+
+export type List = [item: any, ...any];  // partially named, disallowed
+>List : [any, ...any[]]
+
+export type List2 = [any, ...remainder: any];  // partially named, disallowed
+>List2 : [any, ...any[]]
+
+export type Pair = [item: any, any?];  // partially named, disallowed
+>Pair : Pair
+
+export type Pair2 = [any, last?: any];  // partially named, disallowed
+>Pair2 : Pair2
+
+export type Opt = [element: string?]; // question mark on element disallowed
+>Opt : Opt
+
+export type Trailing = [first: string, rest: ...string[]]; // dots on element disallowed
+>Trailing : Trailing
+
+export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
+>OptTrailing : OptTrailing
+
+export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
+>OptRest : OptRest
+
+export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
+>NonArrayRest : [first: string, ...rest: any[]]
+
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+>RecusiveRestUnlabeled : any
+
+export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+>RecusiveRest : any
+

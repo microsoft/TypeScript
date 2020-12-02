@@ -27,7 +27,7 @@ class C4 {
 >C4 : C4
 
     async * f(await) {
->f : () => any
+>f : (await: any) => AsyncGenerator<never, void, unknown>
 >await : any
     }
 }
@@ -36,7 +36,7 @@ class C5 {
 >C5 : C5
 
     async * f(yield) {
->f : () => any
+>f : (yield: any) => AsyncGenerator<never, void, unknown>
 >yield : any
     }
 }
@@ -78,12 +78,10 @@ class C9 {
 >C9 : C9
 
     async * f() {
->f : () => AsyncGenerator<() => void, void, unknown>
+>f : () => AsyncGenerator<never, void, unknown>
 
         function yield() {
-> : () => any
->yield() {        } : any
->() {        } : () => void
+>yield : () => void
         }
     }
 }
@@ -92,13 +90,12 @@ class C10 {
 >C10 : C10
 
     async * f() {
->f : () => AsyncGenerator<() => void, void, unknown>
+>f : () => AsyncGenerator<never, void, unknown>
 
         const x = function yield() {
->x : () => any
->function : () => any
->yield() {        } : any
->() {        } : () => void
+>x : () => void
+>function yield() {        } : () => void
+>yield : () => void
 
         };
     }
@@ -111,10 +108,7 @@ class C11 {
 >f : () => AsyncGenerator<never, void, unknown>
 
         function await() {
-> : () => any
->await() : any
->() : any
-> : any
+>await : () => void
         }
     }
 }
@@ -126,11 +120,9 @@ class C12 {
 >f : () => AsyncGenerator<never, void, unknown>
 
         const x = function await() {
->x : () => any
->function : () => any
->await() : any
->() : any
-> : any
+>x : () => void
+>function await() {        } : () => void
+>await : () => void
 
         };
     }

@@ -105,9 +105,9 @@ function Person(name) {
 
     this.name = name;
 >this.name = name : string
->this.name : string
+>this.name : any
 >this : this
->name : string
+>name : any
 >name : string
 }
 Person.prototype.describe = function () {

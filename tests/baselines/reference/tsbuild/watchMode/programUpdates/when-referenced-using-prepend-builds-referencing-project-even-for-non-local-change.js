@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w sample1/logic
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -13,16 +13,65 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/sample1/core/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js"}}
+{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js","bundledPackageName":"core"}}
 
 //// [/user/username/projects/sample1/core/index.ts]
 function foo() { return 10; }
 
 //// [/user/username/projects/sample1/logic/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js"},"references":[{"path":"../core","prepend":true}]}
+{"compilerOptions":{"composite":true,"declaration":true,"outFile":"index.js","bundledPackageName":"logic"},"references":[{"path":"../core","prepend":true}]}
 
 //// [/user/username/projects/sample1/logic/index.ts]
 function bar() { return foo() + 1 };
+
+
+/a/lib/tsc.js -b -w sample1/logic
+Output::
+>> Screen clear
+[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/sample1/core/index.ts"]
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","bundledPackageName":"core","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.ts
+
+No cached semantic diagnostics in the builder::
+
+Program root files: ["/user/username/projects/sample1/logic/index.ts"]
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","bundledPackageName":"logic","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+No cached semantic diagnostics in the builder::
+
+WatchedFiles::
+/user/username/projects/sample1/core/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/core/index.ts:
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/logic/index.ts:
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/sample1/logic:
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/index.js]
 function foo() { return 10; }
@@ -173,29 +222,26 @@ declare function bar(): number;
 ======================================================================
 
 
+Change:: Make non local change and build core
+
+Input::
+//// [/user/username/projects/sample1/core/index.ts]
+function foo() { return 10; }
+function myFunc() { return 10; }
+
+
 Output::
 >> Screen clear
-12:00:29 AM - Starting compilation in watch mode...
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
-
-
-12:00:46 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","bundledPackageName":"core","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/core/index.ts
-
-No cached semantic diagnostics in the builder::
-
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/logic/index.ts
 
 No cached semantic diagnostics in the builder::
 
@@ -218,12 +264,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Make non local change and build core
-
-//// [/user/username/projects/sample1/core/index.ts]
-function foo() { return 10; }
-function myFunc() { return 10; }
 
 //// [/user/username/projects/sample1/core/index.js]
 function foo() { return 10; }
@@ -283,17 +323,22 @@ declare function myFunc(): number;
 ======================================================================
 
 
+Change:: Build logic
+
+Input::
+
 Output::
->> Screen clear
-12:00:50 AM - File change detected. Starting incremental compilation...
+[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program root files: ["/user/username/projects/sample1/logic/index.ts"]
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","bundledPackageName":"logic","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/logic/index.ts
 
 No cached semantic diagnostics in the builder::
 
@@ -316,8 +361,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Build logic
 
 //// [/user/username/projects/sample1/logic/index.js]
 function foo() { return 10; }
@@ -419,17 +462,26 @@ declare function bar(): number;
 ======================================================================
 
 
+Change:: Make local change and build core
+
+Input::
+//// [/user/username/projects/sample1/core/index.ts]
+function foo() { return 10; }
+function myFunc() { return 100; }
+
+
 Output::
+>> Screen clear
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
-12:01:15 AM - Found 0 errors. Watching for file changes.
 
 
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/logic/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program root files: ["/user/username/projects/sample1/core/index.ts"]
+Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","bundledPackageName":"core","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/logic/index.ts
+/user/username/projects/sample1/core/index.ts
 
 No cached semantic diagnostics in the builder::
 
@@ -452,12 +504,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Make local change and build core
-
-//// [/user/username/projects/sample1/core/index.ts]
-function foo() { return 10; }
-function myFunc() { return 100; }
 
 //// [/user/username/projects/sample1/core/index.js]
 function foo() { return 10; }
@@ -513,19 +559,14 @@ declare function myFunc(): number;
 ======================================================================
 
 
+Change:: Build logic
+
+Input::
+
 Output::
->> Screen clear
-12:01:19 AM - File change detected. Starting incremental compilation...
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"outFile":"/user/username/projects/sample1/core/index.js","watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.ts
-
-No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -546,8 +587,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Build logic
 
 //// [/user/username/projects/sample1/logic/index.js]
 function foo() { return 10; }
@@ -643,28 +682,3 @@ declare function bar(): number;
 
 ======================================================================
 
-
-Output::
-
-12:01:42 AM - Found 0 errors. Watching for file changes.
-
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined

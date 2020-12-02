@@ -79,7 +79,6 @@ let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
 >EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
 >ref : Symbol(ref, Decl(file.tsx, 31, 25))
 >input : Symbol(input, Decl(file.tsx, 31, 32))
->this : Symbol(globalThis)
 >input : Symbol(input, Decl(file.tsx, 31, 32))
 
 let e4 = <EmptyProp data-prop />

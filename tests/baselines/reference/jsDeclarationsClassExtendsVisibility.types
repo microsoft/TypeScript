@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/declarations/cls.js ===
 const Bar = require("./bar");
->Bar : typeof import("tests/cases/conformance/jsdoc/declarations/bar")
->require("./bar") : typeof import("tests/cases/conformance/jsdoc/declarations/bar")
+>Bar : typeof Bar
+>require("./bar") : typeof Bar
 >require : any
 >"./bar" : "./bar"
 
@@ -20,7 +20,7 @@ const Strings = {
 };
 class Foo extends Bar {}
 >Foo : Foo
->Bar : import("tests/cases/conformance/jsdoc/declarations/bar")
+>Bar : Bar
 
 module.exports = Foo;
 >module.exports = Foo : typeof Foo

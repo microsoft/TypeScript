@@ -75,11 +75,11 @@ declare function testFunctionP(): Promise<number>;
 >testFunctionP : () => Promise<number>
 
 declare function testFunction2(): IPromise<{ x: number }>;
->testFunction2 : () => IPromise<{ x: number; }>
+>testFunction2 : () => IPromise<{    x: number;}>
 >x : number
 
 declare function testFunction2P(): Promise<{ x: number }>;
->testFunction2P : () => Promise<{ x: number; }>
+>testFunction2P : () => Promise<{    x: number;}>
 >x : number
 
 declare function testFunction3(x: number): IPromise<number>;

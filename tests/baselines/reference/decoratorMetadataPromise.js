@@ -30,33 +30,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-let A = /** @class */ (() => {
-    class A {
-        foo() {
-            return __awaiter(this, void 0, void 0, function* () { });
-        }
-        bar() {
-            return __awaiter(this, void 0, void 0, function* () { return 0; });
-        }
-        baz(n) { return n; }
+class A {
+    foo() {
+        return __awaiter(this, void 0, void 0, function* () { });
     }
-    __decorate([
-        decorator,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", Promise)
-    ], A.prototype, "foo", null);
-    __decorate([
-        decorator,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", Promise)
-    ], A.prototype, "bar", null);
-    __decorate([
-        decorator,
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Promise]),
-        __metadata("design:returntype", Promise)
-    ], A.prototype, "baz", null);
-    return A;
-})();
+    bar() {
+        return __awaiter(this, void 0, void 0, function* () { return 0; });
+    }
+    baz(n) { return n; }
+}
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], A.prototype, "foo", null);
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], A.prototype, "bar", null);
+__decorate([
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Promise]),
+    __metadata("design:returntype", Promise)
+], A.prototype, "baz", null);

@@ -9,9 +9,9 @@ mod1()
 >mod1 : Symbol(mod1, Decl(a.js, 1, 3))
 
 mod1.f() // error, not enough arguments
->mod1.f : Symbol(f, Decl(mod1.js, 1, 32))
+>mod1.f : Symbol(mod1.f, Decl(mod1.js, 1, 32))
 >mod1 : Symbol(mod1, Decl(a.js, 1, 3))
->f : Symbol(f, Decl(mod1.js, 1, 32))
+>f : Symbol(mod1.f, Decl(mod1.js, 1, 32))
 
 === tests/cases/conformance/salsa/requires.d.ts ===
 declare var module: { exports: any };

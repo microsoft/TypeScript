@@ -10,5 +10,5 @@
         "types": ["node"],
         "lib": ["esnext", "dom"],
     },
-    "include": ["node_modules/debug"]
+    "include": ["index.ts", "node_modules/debug"]
 }

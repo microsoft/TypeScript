@@ -19,14 +19,18 @@ function F() {
     this.z = 1
 }
 
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+    constructor(/** @readonly */ x) {}
+}
 
 //// [foo.js]
 class C {
     /** @readonly */
     constructor(n) {
-        this.x = n;
         /** @readonly */
         this.x = 6;
+        this.x = n;
         /**
          * @readonly
          * @type {number}
@@ -38,6 +42,10 @@ new C().x;
 function F() {
     /** @readonly */
     this.z = 1;
+}
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+    constructor(/** @readonly */ x) { }
 }
 
 
@@ -57,4 +65,7 @@ declare class C {
      * @type {number}
      */
     readonly y: number;
+}
+declare class D {
+    constructor(x: any);
 }

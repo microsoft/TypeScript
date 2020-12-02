@@ -66,7 +66,7 @@ function multipleClasses(x: A | B | C | D) {
 }
 
 function anonymousClasses(x: { a: string; } | { b: number; }) {
->anonymousClasses : (x: { a: string; } | { b: number; }) => void
+>anonymousClasses : (x: {    a: string;} | {    b: number;}) => void
 >x : { a: string; } | { b: number; }
 >a : string
 >b : number

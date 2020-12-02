@@ -21,6 +21,7 @@ exports.y = "y";
 //// [t2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.y = void 0;
 var t1_1 = require("./t1");
 Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
 Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });

@@ -282,18 +282,15 @@ async function* asyncGenFuncYieldConstCall() { yield constCall; }
 async function* asyncGenFuncYieldLetCall() { yield letCall; }
 async function* asyncGenFuncYieldVarCall() { yield varCall; }
 // classes
-let C = /** @class */ (() => {
-    class C {
-        constructor() {
-            this.readonlyCall = Symbol();
-            this.readwriteCall = Symbol();
-        }
+class C {
+    constructor() {
+        this.readonlyCall = Symbol();
+        this.readwriteCall = Symbol();
     }
-    C.readonlyStaticCall = Symbol();
-    C.readonlyStaticTypeAndCall = Symbol();
-    C.readwriteStaticCall = Symbol();
-    return C;
-})();
+}
+C.readonlyStaticCall = Symbol();
+C.readonlyStaticTypeAndCall = Symbol();
+C.readwriteStaticCall = Symbol();
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 const constInitToCReadonlyStaticType = C.readonlyStaticType;
 const constInitToCReadonlyStaticTypeAndCall = C.readonlyStaticTypeAndCall;
@@ -341,30 +338,27 @@ const o2 = {
     method5(p = s) { return p; }
 };
 // property initializers
-let C0 = /** @class */ (() => {
-    class C0 {
-        constructor() {
-            this.a = s;
-            this.b = N.s;
-            this.c = N["s"];
-            this.d = s;
-            this.e = N.s;
-            this.f = N["s"];
-        }
-        method1() { return s; }
-        async method2() { return s; }
-        async *method3() { yield s; }
-        *method4() { yield s; }
-        method5(p = s) { return p; }
+class C0 {
+    constructor() {
+        this.a = s;
+        this.b = N.s;
+        this.c = N["s"];
+        this.d = s;
+        this.e = N.s;
+        this.f = N["s"];
     }
-    C0.a = s;
-    C0.b = N.s;
-    C0.c = N["s"];
-    C0.d = s;
-    C0.e = N.s;
-    C0.f = N["s"];
-    return C0;
-})();
+    method1() { return s; }
+    async method2() { return s; }
+    async *method3() { yield s; }
+    *method4() { yield s; }
+    method5(p = s) { return p; }
+}
+C0.a = s;
+C0.b = N.s;
+C0.c = N["s"];
+C0.d = s;
+C0.e = N.s;
+C0.f = N["s"];
 // non-widening positions
 // element access
 o[s];

@@ -9,7 +9,7 @@ declare global {
 
         [index: number]: HTMLElement
 >index : Symbol(index, Decl(intersectionsOfLargeUnions2.ts, 4, 9))
->HTMLElement : Symbol(HTMLElement, Decl(intersectionsOfLargeUnions2.ts, 5, 5))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 5, 5))
     }
 
     interface HTMLElement {
@@ -17,7 +17,7 @@ declare global {
 
         [index: number]: HTMLElement;
 >index : Symbol(index, Decl(intersectionsOfLargeUnions2.ts, 8, 9))
->HTMLElement : Symbol(HTMLElement, Decl(intersectionsOfLargeUnions2.ts, 5, 5))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 5, 5))
     }
 }
 

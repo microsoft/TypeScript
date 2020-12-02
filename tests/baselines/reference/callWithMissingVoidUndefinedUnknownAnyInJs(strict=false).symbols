@@ -1,0 +1,110 @@
+=== tests/cases/conformance/expressions/functionCalls/defs.d.ts ===
+declare function f1(p: void): void;
+>f1 : Symbol(f1, Decl(defs.d.ts, 0, 0))
+>p : Symbol(p, Decl(defs.d.ts, 0, 20))
+
+declare function f2(p: undefined): void;
+>f2 : Symbol(f2, Decl(defs.d.ts, 0, 35))
+>p : Symbol(p, Decl(defs.d.ts, 1, 20))
+
+declare function f3(p: unknown): void;
+>f3 : Symbol(f3, Decl(defs.d.ts, 1, 40))
+>p : Symbol(p, Decl(defs.d.ts, 2, 20))
+
+declare function f4(p: any): void;
+>f4 : Symbol(f4, Decl(defs.d.ts, 2, 38))
+>p : Symbol(p, Decl(defs.d.ts, 3, 20))
+
+interface I<T> { m(p: T): void; }
+>I : Symbol(I, Decl(defs.d.ts, 3, 34))
+>T : Symbol(T, Decl(defs.d.ts, 5, 12))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>p : Symbol(p, Decl(defs.d.ts, 5, 19))
+>T : Symbol(T, Decl(defs.d.ts, 5, 12))
+
+declare const o1: I<void>;
+>o1 : Symbol(o1, Decl(defs.d.ts, 6, 13))
+>I : Symbol(I, Decl(defs.d.ts, 3, 34))
+
+declare const o2: I<undefined>;
+>o2 : Symbol(o2, Decl(defs.d.ts, 7, 13))
+>I : Symbol(I, Decl(defs.d.ts, 3, 34))
+
+declare const o3: I<unknown>;
+>o3 : Symbol(o3, Decl(defs.d.ts, 8, 13))
+>I : Symbol(I, Decl(defs.d.ts, 3, 34))
+
+declare const o4: I<any>;
+>o4 : Symbol(o4, Decl(defs.d.ts, 9, 13))
+>I : Symbol(I, Decl(defs.d.ts, 3, 34))
+
+=== tests/cases/conformance/expressions/functionCalls/jsfile.js ===
+// current behavior: treat trailing `void` as optional
+f1();
+>f1 : Symbol(f1, Decl(defs.d.ts, 0, 0))
+
+o1.m();
+>o1.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o1 : Symbol(o1, Decl(defs.d.ts, 6, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+// new behavior: treat 'undefined', 'unknown', and 'any' as optional in non-strict mode
+f2();
+>f2 : Symbol(f2, Decl(defs.d.ts, 0, 35))
+
+f3();
+>f3 : Symbol(f3, Decl(defs.d.ts, 1, 40))
+
+f4();
+>f4 : Symbol(f4, Decl(defs.d.ts, 2, 38))
+
+o2.m();
+>o2.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o2 : Symbol(o2, Decl(defs.d.ts, 7, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+o3.m();
+>o3.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o3 : Symbol(o3, Decl(defs.d.ts, 8, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+o4.m();
+>o4.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o4 : Symbol(o4, Decl(defs.d.ts, 9, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+=== tests/cases/conformance/expressions/functionCalls/tsfile.ts ===
+// current behavior: treat trailing `void` as optional
+f1();
+>f1 : Symbol(f1, Decl(defs.d.ts, 0, 0))
+
+o1.m();
+>o1.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o1 : Symbol(o1, Decl(defs.d.ts, 6, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+// no change in behavior
+f2();
+>f2 : Symbol(f2, Decl(defs.d.ts, 0, 35))
+
+f3();
+>f3 : Symbol(f3, Decl(defs.d.ts, 1, 40))
+
+f4();
+>f4 : Symbol(f4, Decl(defs.d.ts, 2, 38))
+
+o2.m();
+>o2.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o2 : Symbol(o2, Decl(defs.d.ts, 7, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+o3.m();
+>o3.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o3 : Symbol(o3, Decl(defs.d.ts, 8, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+
+o4.m();
+>o4.m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+>o4 : Symbol(o4, Decl(defs.d.ts, 9, 13))
+>m : Symbol(I.m, Decl(defs.d.ts, 5, 16))
+

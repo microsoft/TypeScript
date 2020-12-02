@@ -1,0 +1,57 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment1.ts ===
+declare let a: string | undefined
+>a : Symbol(a, Decl(logicalAssignment1.ts, 0, 11))
+
+declare let b: string | undefined
+>b : Symbol(b, Decl(logicalAssignment1.ts, 1, 11))
+
+declare let c: string | undefined
+>c : Symbol(c, Decl(logicalAssignment1.ts, 2, 11))
+
+declare let d: number | undefined
+>d : Symbol(d, Decl(logicalAssignment1.ts, 4, 11))
+
+declare let e: number | undefined
+>e : Symbol(e, Decl(logicalAssignment1.ts, 5, 11))
+
+declare let f: number | undefined
+>f : Symbol(f, Decl(logicalAssignment1.ts, 6, 11))
+
+declare let g: 0 | 1 | 42
+>g : Symbol(g, Decl(logicalAssignment1.ts, 8, 11))
+
+declare let h: 0 | 1 | 42
+>h : Symbol(h, Decl(logicalAssignment1.ts, 9, 11))
+
+declare let i: 0 | 1 | 42
+>i : Symbol(i, Decl(logicalAssignment1.ts, 10, 11))
+
+
+a &&= "foo"
+>a : Symbol(a, Decl(logicalAssignment1.ts, 0, 11))
+
+b ||= "foo"
+>b : Symbol(b, Decl(logicalAssignment1.ts, 1, 11))
+
+c ??= "foo"
+>c : Symbol(c, Decl(logicalAssignment1.ts, 2, 11))
+
+
+d &&= 42
+>d : Symbol(d, Decl(logicalAssignment1.ts, 4, 11))
+
+e ||= 42
+>e : Symbol(e, Decl(logicalAssignment1.ts, 5, 11))
+
+f ??= 42
+>f : Symbol(f, Decl(logicalAssignment1.ts, 6, 11))
+
+g &&= 42
+>g : Symbol(g, Decl(logicalAssignment1.ts, 8, 11))
+
+h ||= 42
+>h : Symbol(h, Decl(logicalAssignment1.ts, 9, 11))
+
+i ??= 42
+>i : Symbol(i, Decl(logicalAssignment1.ts, 10, 11))
+

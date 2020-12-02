@@ -5,7 +5,7 @@ function Installer () {
     this.args = 0
 >this.args = 0 : 0
 >this.args : any
->this : any
+>this : this
 >args : any
 >0 : 0
 }

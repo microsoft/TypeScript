@@ -26,7 +26,7 @@
                     "pos": 18,
                     "end": 19,
                     "modifierFlagsCache": 0,
-                    "transformFlags": 0,
+                    "transformFlags": 1,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
@@ -41,7 +41,7 @@
                     "pos": 21,
                     "end": 22,
                     "modifierFlagsCache": 0,
-                    "transformFlags": 0,
+                    "transformFlags": 1,
                     "name": {
                         "kind": "Identifier",
                         "pos": 21,
@@ -53,11 +53,15 @@
                 },
                 "length": 2,
                 "pos": 18,
-                "end": 22
+                "end": 22,
+                "hasTrailingComma": false,
+                "transformFlags": 1
             }
         },
         "length": 1,
         "pos": 8,
-        "end": 22
+        "end": 22,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

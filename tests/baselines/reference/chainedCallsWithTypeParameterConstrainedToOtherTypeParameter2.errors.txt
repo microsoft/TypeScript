@@ -1,10 +1,10 @@
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,49): error TS2322: Type 'T' is not assignable to type 'S'.
-  'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
+  'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,35): error TS2322: Type 'T' is not assignable to type 'S'.
-  'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2322: Type '""' is not assignable to type 'number'.
+  'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts (5 errors) ====
@@ -17,14 +17,14 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
             (new Chain(t)).then(tt => s).then(ss => t);
                                                     ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // But error to try to climb up the chain
             (new Chain(s)).then(ss => t);
                                       ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:   'S' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // Staying at T or S should be fine
@@ -49,16 +49,16 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
             // Should get an error that we are assigning a string to a number
             (new Chain2(i)).then(ii => t).then(tt => s).value.x = "";
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
             // Staying at T or S should keep the constraint.
             // Get an error when we assign a string to a number in both cases
             (new Chain2(i)).then(ii => t).then(tt => t).then(tt => t).then(tt => t).value.x = "";
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
             (new Chain2(i)).then(ii => s).then(ss => s).then(ss => s).then(ss => s).value.x = "";
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
             return null;
         }

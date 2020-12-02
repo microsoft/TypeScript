@@ -4,7 +4,7 @@ import React = require("react");
 >React : typeof React
 
 function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
->f : <P>(App: React.ComponentClass<P, any> | React.StatelessComponent<P>) => void
+>f : <P>(App: React.ComponentClass<P> | React.StatelessComponent<P>) => void
 >App : React.ComponentClass<P, any> | React.StatelessComponent<P>
 >React : any
 >React : any

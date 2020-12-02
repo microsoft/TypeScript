@@ -128,7 +128,7 @@ module.exports.f.self = module.exports.f;
  * @param {{y: typeof module.exports.b}} b
  */
 function g(a, b) {
->g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
+>g : (a: {    x: string;}, b: { y: { (): void; cat: string; }; }) => void
 >a : { x: string; }
 >b : { y: { (): void; cat: string; }; }
 
@@ -157,7 +157,7 @@ module.exports.g = g;
  * @param {{y: typeof module.exports.b}} b
  */
 function hh(a, b) {
->hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
+>hh : (a: {    x: string;}, b: { y: { (): void; cat: string; }; }) => void
 >a : { x: string; }
 >b : { y: { (): void; cat: string; }; }
 

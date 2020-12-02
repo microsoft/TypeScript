@@ -2,7 +2,7 @@
 exports.#nope = 1;           // Error (outside class body)
 >exports.#nope = 1 : 1
 >exports.#nope : any
->exports : typeof import("tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment")
+>exports : any
 >1 : 1
 
 function A() { }

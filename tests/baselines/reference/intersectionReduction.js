@@ -108,6 +108,38 @@ const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a
 const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t;
 const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t;
 
+// Repro from #38549
+
+interface A2 {
+    kind: "A";
+    a: number;
+}
+
+interface B2 {
+    kind: "B";
+    b: number;
+}
+
+declare const shouldBeB: (A2 | B2) & B2;
+const b: B2 = shouldBeB; // works
+
+function inGeneric<T extends A2 | B2>(alsoShouldBeB: T & B2) {
+    const b: B2 = alsoShouldBeB;
+}
+
+// Repro from #38542
+
+interface ABI {
+    kind: 'a' | 'b';
+}
+
+declare class CA { kind: 'a'; a: string; x: number };
+declare class CB { kind: 'b'; b: string; y: number };
+
+function bar<T extends CA | CB>(x: T & CA) {
+    let ab: ABI = x;
+}
+
 
 //// [intersectionReduction.js]
 ab.kind; // Error
@@ -128,3 +160,12 @@ var f1 = function (t) { return t; };
 var f2 = function (t) { return t; };
 var f3 = function (t) { return t; };
 var f4 = function (t) { return t; };
+var b = shouldBeB; // works
+function inGeneric(alsoShouldBeB) {
+    var b = alsoShouldBeB;
+}
+;
+;
+function bar(x) {
+    var ab = x;
+}

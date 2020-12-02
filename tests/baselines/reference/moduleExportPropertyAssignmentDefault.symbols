@@ -9,7 +9,7 @@ module.exports = axios // both assignments should be ok
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 
 module.exports.default = axios
->module.exports.default : Symbol(default)
+>module.exports.default : Symbol(default, Decl(axios.js, 1, 22))
 >module.exports : Symbol(default, Decl(axios.js, 1, 22))
 >module : Symbol(module, Decl(axios.js, 0, 14))
 >exports : Symbol("tests/cases/conformance/salsa/axios", Decl(axios.js, 0, 0))

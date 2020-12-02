@@ -2,13 +2,13 @@
 const x = require("./lateBoundAssignmentDeclarationSupport4.js");
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >require : Symbol(require)
->"./lateBoundAssignmentDeclarationSupport4.js" : Symbol("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport4", Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
+>"./lateBoundAssignmentDeclarationSupport4.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
 
 const inst =  new x.F();
 >inst : Symbol(inst, Decl(usage.js, 1, 5))
->x.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
 >x : Symbol(x, Decl(usage.js, 0, 5))
->F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
+>F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
 
 const y = inst["my-fake-sym"];
 >y : Symbol(y, Decl(usage.js, 2, 5))
@@ -17,9 +17,9 @@ const y = inst["my-fake-sym"];
 const z = inst[x.S];
 >z : Symbol(z, Decl(usage.js, 3, 5))
 >inst : Symbol(inst, Decl(usage.js, 1, 5))
->x.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+>x.S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
 >x : Symbol(x, Decl(usage.js, 0, 5))
->S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
+>S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
 
 === tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport4.js ===
 // currently unsupported

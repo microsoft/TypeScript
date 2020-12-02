@@ -14,6 +14,6 @@ contact_links:
     name: "TypeScript FAQ"
     url: "https://github.com/microsoft/TypeScript/wiki/FAQ"
   - 
-    about: "Please raise issues about the site on it's own repo."
+    about: "Please raise issues about the site on its own repo."
     name: Website
     url: "https://github.com/microsoft/TypeScript-Website/issues/new"

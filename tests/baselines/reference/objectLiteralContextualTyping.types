@@ -69,7 +69,7 @@ var w: number;
 >w : number
 
 declare function bar<T>(param: { x?: T }): T;
->bar : <T>(param: { x?: T; }) => T
+>bar : <T>(param: {    x?: T;}) => T
 >param : { x?: T; }
 >x : T
 

@@ -43,7 +43,7 @@ arryFn(point);
 >point : readonly [3, 4]
 
 declare function arryFn2(x: Array<number>): void;
->arryFn2 : (x: number[]) => void
+>arryFn2 : (x: Array<number>) => void
 >x : number[]
 
 arryFn2(point);

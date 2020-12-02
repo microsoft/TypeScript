@@ -1,0 +1,29 @@
+=== tests/cases/conformance/salsa/main.js ===
+const { K } = require("./mod1");
+>K : Symbol(K, Decl(main.js, 0, 7))
+>require : Symbol(require)
+>"./mod1" : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
+
+/** @param {K} k */
+function f(k) {
+>f : Symbol(f, Decl(main.js, 0, 32))
+>k : Symbol(k, Decl(main.js, 2, 11))
+
+    k.values()
+>k.values : Symbol(K.values, Decl(mod1.js, 0, 21))
+>k : Symbol(k, Decl(main.js, 2, 11))
+>values : Symbol(K.values, Decl(mod1.js, 0, 21))
+}
+
+=== tests/cases/conformance/salsa/mod1.js ===
+exports.K = class K {
+>exports.K : Symbol(K, Decl(mod1.js, 0, 0))
+>exports : Symbol(K, Decl(mod1.js, 0, 0))
+>K : Symbol(K, Decl(mod1.js, 0, 0))
+>K : Symbol(K, Decl(mod1.js, 0, 11))
+
+    values() {
+>values : Symbol(K.values, Decl(mod1.js, 0, 21))
+    }
+};
+

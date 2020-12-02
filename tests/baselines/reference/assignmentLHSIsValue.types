@@ -225,8 +225,8 @@ foo() = value;
 
 ([]) = value;
 >([]) = value : any
->([]) : undefined[]
->[] : undefined[]
+>([]) : []
+>[] : []
 >value : any
 
 (function baz() { }) = value;

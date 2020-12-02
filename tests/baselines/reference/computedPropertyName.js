@@ -65,3 +65,4 @@ class F {
 }
 class G {
 }
+export {};

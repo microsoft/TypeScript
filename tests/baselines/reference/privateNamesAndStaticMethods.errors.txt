@@ -1,7 +1,7 @@
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(2,12): error TS18022: A method cannot be named with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(3,18): error TS18022: A method cannot be named with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(4,19): error TS18022: A method cannot be named with a private identifier.
-tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(7,5): error TS18019: 'static' modifier cannot be used with a private identifier
+tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(7,5): error TS18019: 'static' modifier cannot be used with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(8,16): error TS18023: An accessor cannot be named with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(11,16): error TS18023: An accessor cannot be named with a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethods.ts(24,12): error TS18022: A method cannot be named with a private identifier.
@@ -22,7 +22,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticMethod
         }
         static #_quux: number;
         ~~~~~~
-!!! error TS18019: 'static' modifier cannot be used with a private identifier
+!!! error TS18019: 'static' modifier cannot be used with a private identifier.
         static get #quux (): number {
                    ~~~~~
 !!! error TS18023: An accessor cannot be named with a private identifier.

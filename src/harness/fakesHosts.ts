@@ -32,6 +32,11 @@ namespace fakes {
             this._env = env;
         }
 
+        // Pretty output
+        writeOutputIsTTY() {
+            return true;
+        }
+
         public write(message: string) {
             this.output.push(message);
         }
@@ -491,37 +496,6 @@ ${indentText}${text}`;
         return text;
     }
 
-    function compareProgramBuildInfoDiagnostic(a: ts.ProgramBuildInfoDiagnostic, b: ts.ProgramBuildInfoDiagnostic) {
-        return ts.compareStringsCaseSensitive(ts.isString(a) ? a : a[0], ts.isString(b) ? b : b[0]);
-    }
-
-    export function sanitizeBuildInfoProgram(buildInfo: ts.BuildInfo) {
-        if (buildInfo.program) {
-            // reference Map
-            if (buildInfo.program.referencedMap) {
-                const referencedMap: ts.MapLike<string[]> = {};
-                for (const path of ts.getOwnKeys(buildInfo.program.referencedMap).sort()) {
-                    referencedMap[path] = buildInfo.program.referencedMap[path].sort();
-                }
-                buildInfo.program.referencedMap = referencedMap;
-            }
-
-            // exportedModulesMap
-            if (buildInfo.program.exportedModulesMap) {
-                const exportedModulesMap: ts.MapLike<string[]> = {};
-                for (const path of ts.getOwnKeys(buildInfo.program.exportedModulesMap).sort()) {
-                    exportedModulesMap[path] = buildInfo.program.exportedModulesMap[path].sort();
-                }
-                buildInfo.program.exportedModulesMap = exportedModulesMap;
-            }
-
-            // semanticDiagnosticsPerFile
-            if (buildInfo.program.semanticDiagnosticsPerFile) {
-                buildInfo.program.semanticDiagnosticsPerFile.sort(compareProgramBuildInfoDiagnostic);
-            }
-        }
-    }
-
     export const version = "FakeTSVersion";
 
     export function patchHostForBuildInfoReadWrite<T extends ts.System>(sys: T) {
@@ -542,7 +516,6 @@ ${indentText}${text}`;
             sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
                 if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
                 const buildInfo = ts.getBuildInfo(content);
-                sanitizeBuildInfoProgram(buildInfo);
                 buildInfo.version = version;
                 originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
             };

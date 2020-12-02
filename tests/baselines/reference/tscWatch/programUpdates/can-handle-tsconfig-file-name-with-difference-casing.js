@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /A/B/tsconfig.json
+Input::
 //// [/a/b/app.ts]
 let x = 1
 
@@ -18,22 +18,19 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/tsconfig.json]
 {"include":["app.ts"]}
 
-//// [/A/B/app.js]
-var x = 1;
 
-
-
+/a/lib/tsc.js -w -p /A/B/tsconfig.json
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
+[[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
 
-
-12:00:18 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/A/B/app.ts"]
 Program options: {"watch":true,"project":"/A/B/tsconfig.json","configFilePath":"/A/B/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /A/B/app.ts
@@ -57,3 +54,8 @@ FsWatchesRecursive::
   {"directoryName":"/A/B/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/A/B/app.js]
+var x = 1;
+
+

@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+declare global {
+>global : any
+
+    namespace JSX {
+        interface IntrinsicElements {
+            [e: string]: any;
+>e : string
+        }
+    }
+}
+export function h(): void;
+>h : () => void
+
+export function jsx(): void;
+>jsx : () => void
+
+export function Fragment(): void;
+>Fragment : () => void
+
+=== tests/cases/conformance/jsx/inline/preacty.tsx ===
+/**
+ * @jsx h
+ * @jsxFrag Fragment
+ */
+import {h, Fragment} from "./renderer";
+>h : () => void
+>Fragment : () => void
+
+<><div></div></>
+><><div></div></> : error
+><div></div> : error
+>div : any
+>div : any
+
+=== tests/cases/conformance/jsx/inline/snabbdomy.tsx ===
+/* @jsx jsx */
+/* @jsxfrag null */
+import {jsx} from "./renderer";
+>jsx : () => void
+
+<><span></span></>
+><><span></span></> : error
+><span></span> : error
+>span : any
+>span : any
+

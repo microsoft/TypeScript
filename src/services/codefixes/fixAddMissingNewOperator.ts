@@ -16,7 +16,7 @@ namespace ts.codefix {
 
     function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {
         const call = cast(findAncestorMatchingSpan(sourceFile, span), isCallExpression);
-        const newExpression = createNew(call.expression, call.typeArguments, call.arguments);
+        const newExpression = factory.createNewExpression(call.expression, call.typeArguments, call.arguments);
 
         changes.replaceNode(sourceFile, call, newExpression);
     }

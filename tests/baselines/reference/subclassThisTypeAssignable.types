@@ -37,7 +37,7 @@ class C implements ClassComponent<MyAttrs> {
 >C : C
 
 	view(v: Vnode<MyAttrs>) { return 0; }
->view : (v: Vnode<MyAttrs, Lifecycle<MyAttrs, any>>) => number
+>view : (v: Vnode<MyAttrs>) => number
 >v : Vnode<MyAttrs, Lifecycle<MyAttrs, any>>
 >0 : 0
 }

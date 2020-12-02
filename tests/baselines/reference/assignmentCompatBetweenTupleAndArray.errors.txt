@@ -1,7 +1,8 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(17,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Type 'string | number' is not assignable to type 'number'.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(18,1): error TS2741: Property '0' is missing in type '{}[]' but required in type '[{}]'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts(18,1): error TS2322: Type '{}[]' is not assignable to type '[{}]'.
+  Target requires 1 element(s) but source may have fewer.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts (2 errors) ====
@@ -28,5 +29,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     emptyObjTuple = emptyObjArray;
     ~~~~~~~~~~~~~
-!!! error TS2741: Property '0' is missing in type '{}[]' but required in type '[{}]'.
+!!! error TS2322: Type '{}[]' is not assignable to type '[{}]'.
+!!! error TS2322:   Target requires 1 element(s) but source may have fewer.
     

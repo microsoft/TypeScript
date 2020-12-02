@@ -48,6 +48,21 @@ function checksPropertyAccess() {
 
     // ok
     x.foo.bar ? x.foo.bar : undefined;
+
+    var chrome = {
+        platformKeys: {
+            subtleCrypto() {
+                return {
+                    sign() {},
+                    exportKey() { return true }
+                }
+            }
+        }
+    }
+    // ok
+    if (chrome.platformKeys.subtleCrypto().exportKey) {
+        chrome.platformKeys.subtleCrypto().exportKey
+    }
 }
 
 class Foo {
@@ -63,6 +78,11 @@ class Foo {
 
         // ok
         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+
+        // ok
+        if (this.isUser) {
+            this.isUser();
+        }
     }
 }
 
@@ -105,6 +125,20 @@ function checksPropertyAccess() {
     x.foo.bar ? console.log('x.foo.bar') : undefined;
     // ok
     x.foo.bar ? x.foo.bar : undefined;
+    var chrome = {
+        platformKeys: {
+            subtleCrypto: function () {
+                return {
+                    sign: function () { },
+                    exportKey: function () { return true; }
+                };
+            }
+        }
+    };
+    // ok
+    if (chrome.platformKeys.subtleCrypto().exportKey) {
+        chrome.platformKeys.subtleCrypto().exportKey;
+    }
 }
 var Foo = /** @class */ (function () {
     function Foo() {
@@ -117,6 +151,10 @@ var Foo = /** @class */ (function () {
         this.isUser ? console.log('this.isUser') : undefined;
         // ok
         this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+        // ok
+        if (this.isUser) {
+            this.isUser();
+        }
     };
     return Foo;
 }());

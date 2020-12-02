@@ -6,6 +6,7 @@ namespace ts {
      * @param context Context and state information for the transformation.
      */
     export function transformES5(context: TransformationContext) {
+        const { factory } = context;
         const compilerOptions = context.getCompilerOptions();
 
         // enable emit notification only if using --jsx preserve or react-native
@@ -24,7 +25,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
         context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
         context.enableSubstitution(SyntaxKind.PropertyAssignment);
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         /**
          * Transforms an ES5 source file to ES3.
@@ -87,7 +88,7 @@ namespace ts {
             }
             const literalName = trySubstituteReservedName(node.name);
             if (literalName) {
-                return setTextRange(createElementAccess(node.expression, literalName), node);
+                return setTextRange(factory.createElementAccessExpression(node.expression, literalName), node);
             }
             return node;
         }
@@ -100,7 +101,7 @@ namespace ts {
         function substitutePropertyAssignment(node: PropertyAssignment): PropertyAssignment {
             const literalName = isIdentifier(node.name) && trySubstituteReservedName(node.name);
             if (literalName) {
-                return updatePropertyAssignment(node, literalName, node.initializer);
+                return factory.updatePropertyAssignment(node, literalName, node.initializer);
             }
             return node;
         }
@@ -113,7 +114,7 @@ namespace ts {
         function trySubstituteReservedName(name: Identifier) {
             const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(idText(name)) : undefined);
             if (token !== undefined && token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
-                return setTextRange(createLiteral(name), name);
+                return setTextRange(factory.createStringLiteralFromNode(name), name);
             }
             return undefined;
         }

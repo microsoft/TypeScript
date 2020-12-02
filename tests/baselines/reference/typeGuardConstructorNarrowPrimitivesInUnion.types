@@ -1,0 +1,51 @@
+=== tests/cases/compiler/typeGuardConstructorNarrowPrimitivesInUnion.ts ===
+// Union of primitives, number, arrays, and C1
+let var1: number | "hello" | "world" | true | false | number[] | string[];
+>var1 : number | boolean | "hello" | "world" | number[] | string[]
+>true : true
+>false : false
+
+if (var1.constructor === Number) {
+>var1.constructor === Number : boolean
+>var1.constructor : Function
+>var1 : number | boolean | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Number : NumberConstructor
+
+    var1; // number
+>var1 : number
+}
+
+if (var1.constructor === String) {
+>var1.constructor === String : boolean
+>var1.constructor : Function
+>var1 : number | boolean | "hello" | "world" | number[] | string[]
+>constructor : Function
+>String : StringConstructor
+
+    var1; // "hello" | "world"
+>var1 : "hello" | "world"
+}
+
+if (var1.constructor === Boolean) {
+>var1.constructor === Boolean : boolean
+>var1.constructor : Function
+>var1 : number | boolean | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Boolean : BooleanConstructor
+
+    var1; // boolean
+>var1 : boolean
+}
+
+if (var1.constructor === Array) {
+>var1.constructor === Array : boolean
+>var1.constructor : Function
+>var1 : number | boolean | "hello" | "world" | number[] | string[]
+>constructor : Function
+>Array : ArrayConstructor
+
+    var1; // number[] | string[]
+>var1 : number[] | string[]
+}
+

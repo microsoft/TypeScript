@@ -18,8 +18,10 @@ Point.zero = (): Point => Point(0, 0);
 "use strict";
 exports.__esModule = true;
 exports.Rect = exports.Point = void 0;
-exports.Point = function (x, y) { return ({ x: x, y: y }); };
-exports.Rect = function (a, b) { return ({ a: a, b: b }); };
+var Point = function (x, y) { return ({ x: x, y: y }); };
+exports.Point = Point;
+var Rect = function (a, b) { return ({ a: a, b: b }); };
+exports.Rect = Rect;
 exports.Point.zero = function () { return exports.Point(0, 0); };
 
 

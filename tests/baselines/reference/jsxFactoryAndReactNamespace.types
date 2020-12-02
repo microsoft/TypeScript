@@ -85,7 +85,7 @@ import { Element} from './Element';
 >Element : typeof Element
 
 let c: {
->c : { a?: { b: string; }; }
+>c : { a?: {    b: string;}; }
 
 	a?: {
 >a : { b: string; }

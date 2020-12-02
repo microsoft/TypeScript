@@ -31,7 +31,7 @@ interface PM {
 }
 
 export function ComponentWithUnion(props: PM | PS) {
->ComponentWithUnion : (props: PS | PM) => JSX.Element
+>ComponentWithUnion : (props: PM | PS) => JSX.Element
 >props : PS | PM
 
     return <h1></h1>;
@@ -64,9 +64,9 @@ export function HereIsTheError() {
 >val => console.log(val) : (val: string | undefined) => void
 >val : string | undefined
 >console.log(val) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >val : string | undefined
 
         />
@@ -92,9 +92,9 @@ ComponentWithUnion({
 >val => console.log(val) : (val: string | undefined) => void
 >val : string | undefined
 >console.log(val) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >val : string | undefined
 
 });

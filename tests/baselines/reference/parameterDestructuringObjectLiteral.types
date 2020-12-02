@@ -2,8 +2,8 @@
 // Repro from #22644
 
 const fn1 = (options: { headers?: {} }) => { };
->fn1 : (options: { headers?: {}; }) => void
->(options: { headers?: {} }) => { } : (options: { headers?: {}; }) => void
+>fn1 : (options: {    headers?: {};}) => void
+>(options: { headers?: {} }) => { } : (options: {    headers?: {};}) => void
 >options : { headers?: {}; }
 >headers : {}
 
