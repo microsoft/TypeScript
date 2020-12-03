@@ -23,9 +23,9 @@ someFunction(function(BaseClass) {
 
             this.foo = "bar";
 >this.foo = "bar" : "bar"
->this.foo : string
+>this.foo : any
 >this : this
->foo : string
+>foo : any
 >"bar" : "bar"
         }
         _render(error) {

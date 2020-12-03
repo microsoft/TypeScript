@@ -1,8 +1,9 @@
 // @allowJs: true
 // @out: out.js
 // @declaration: true
+// @bundledPackageName: decl
 // @filename: a.ts
 var x = 10;
 
 // @filename: b.js
-var x = "hello"; // No error is recorded here and declaration file will show this as number
+var x = "hello"; // Error is recorded here, but suppressed because the js file isn't checked

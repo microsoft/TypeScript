@@ -246,3 +246,35 @@ var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 >choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
 >IUnknownChoiceList : Symbol(IUnknownChoiceList, Decl(intersectionsAndEmptyObjects.ts, 64, 2))
 
+// Repro from #38672
+
+type Foo1 = { x: string } & { [x: number]: Foo1 };
+>Foo1 : Symbol(Foo1, Decl(intersectionsAndEmptyObjects.ts, 75, 61))
+>x : Symbol(x, Decl(intersectionsAndEmptyObjects.ts, 79, 13))
+>x : Symbol(x, Decl(intersectionsAndEmptyObjects.ts, 79, 31))
+>Foo1 : Symbol(Foo1, Decl(intersectionsAndEmptyObjects.ts, 75, 61))
+
+type Foo2 = { x: string } & { [K in number]: Foo2 };
+>Foo2 : Symbol(Foo2, Decl(intersectionsAndEmptyObjects.ts, 79, 50))
+>x : Symbol(x, Decl(intersectionsAndEmptyObjects.ts, 80, 13))
+>K : Symbol(K, Decl(intersectionsAndEmptyObjects.ts, 80, 31))
+>Foo2 : Symbol(Foo2, Decl(intersectionsAndEmptyObjects.ts, 79, 50))
+
+// Repro from #40239
+
+declare function mock<M>(_: Promise<M>): {} & M;
+>mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))
+>M : Symbol(M, Decl(intersectionsAndEmptyObjects.ts, 84, 22))
+>_ : Symbol(_, Decl(intersectionsAndEmptyObjects.ts, 84, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>M : Symbol(M, Decl(intersectionsAndEmptyObjects.ts, 84, 22))
+>M : Symbol(M, Decl(intersectionsAndEmptyObjects.ts, 84, 22))
+
+mock(import('./ex'))
+>mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))
+>'./ex' : Symbol("tests/cases/conformance/types/intersection/ex", Decl(ex.d.ts, 0, 0))
+
+=== tests/cases/conformance/types/intersection/ex.d.ts ===
+export {}
+No type information for this code.
+No type information for this code.

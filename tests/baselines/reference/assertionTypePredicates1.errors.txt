@@ -1,0 +1,246 @@
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(43,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(47,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(91,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(126,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(141,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(157,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(158,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(159,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(162,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(163,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(164,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(165,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(170,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(172,5): error TS2776: Assertions require the call target to be an identifier or qualified name.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(174,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+
+
+==== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts (15 errors) ====
+    declare function isString(value: unknown): value is string;
+    declare function isArrayOfStrings(value: unknown): value is string[];
+    
+    const assert: (value: unknown) => asserts value = value => {}
+    
+    declare function assertIsString(value: unknown): asserts value is string;
+    declare function assertIsArrayOfStrings(value: unknown): asserts value is string[];
+    declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
+    
+    function f01(x: unknown) {
+        if (!!true) {
+            assert(typeof x === "string");
+            x.length;
+        }
+        if (!!true) {
+            assert(x instanceof Error);
+            x.message;
+        }
+        if (!!true) {
+            assert(typeof x === "boolean" || typeof x === "number");
+            x.toLocaleString;
+        }
+        if (!!true) {
+            assert(isArrayOfStrings(x));
+            x[0].length;
+        }
+        if (!!true) {
+            assertIsArrayOfStrings(x);
+            x[0].length;
+        }
+        if (!!true) {
+            assertIsArrayOfStrings(false);
+            x;
+        }
+        if (!!true) {
+            assert(x === undefined || typeof x === "string");
+            x;  // string | undefined
+            assertDefined(x);
+            x;  // string
+        }
+        if (!!true) {
+            assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+        if (!!true) {
+            assert(false && x === undefined);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    function f02(x: string | undefined) {
+        if (!!true) {
+            assert(x);
+            x.length;
+        }
+        if (!!true) {
+            assert(x !== undefined);
+            x.length;
+        }
+        if (!!true) {
+            assertDefined(x);
+            x.length;
+        }
+    }
+    
+    function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
+        assert(x);
+        x.length;
+    }
+    
+    namespace Debug {
+        export declare function assert(value: unknown, message?: string): asserts value;
+        export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
+    }
+    
+    function f10(x: string | undefined) {
+        if (!!true) {
+            Debug.assert(x);
+            x.length;
+        }
+        if (!!true) {
+            Debug.assert(x !== undefined);
+            x.length;
+        }
+        if (!!true) {
+            Debug.assertDefined(x);
+            x.length;
+        }
+        if (!!true) {
+            Debug.assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    class Test {
+        assert(value: unknown): asserts value {
+            if (value) return;
+            throw new Error();
+        }
+        isTest2(): this is Test2 {
+            return this instanceof Test2;
+        }
+        assertIsTest2(): asserts this is Test2 {
+            if (this instanceof Test2) return;
+            throw new Error();
+        }
+        assertThis(): asserts this {
+            if (!this) return;
+            throw new Error();
+        }
+        bar() {
+            this.assertThis();
+            this;
+        }
+        foo(x: unknown) {
+            this.assert(typeof x === "string");
+            x.length;
+            if (this.isTest2()) {
+                this.z;
+            }
+            this.assertIsTest2();
+            this.z;
+        }
+        baz(x: number) {
+            this.assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    class Test2 extends Test {
+        z = 0;
+    }
+    
+    class Derived extends Test {
+        foo(x: unknown) {
+            super.assert(typeof x === "string");
+            x.length;
+        }
+        baz(x: number) {
+            super.assert(false);
+            x;  // Unreachable
+            ~~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    function f11(items: Test[]) {
+        for (let item of items) {
+            if (item.isTest2()) {
+                item.z;
+            }
+            item.assertIsTest2();
+            item.z;
+        }
+    }
+    
+    // Invalid constructs
+    
+    declare let Q1: new (x: unknown) => x is string;
+                                        ~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    declare let Q2: new (x: boolean) => asserts x;
+                                        ~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    declare let Q3: new (x: unknown) => asserts x is string;
+                                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    
+    declare class Wat {
+        get p1(): this is string;
+                  ~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+        set p1(x: this is string);
+                  ~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+        get p2(): asserts this is string;
+                  ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+        set p2(x: asserts this is string);
+                  ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+    }
+    
+    function f20(x: unknown) {
+        const assert = (value: unknown): asserts value => {}
+        assert(typeof x === "string");  // Error
+        ~~~~~~
+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:169:11: 'assert' needs an explicit type annotation.
+        const a = [assert];
+        a[0](typeof x === "string");  // Error
+        ~~~~
+!!! error TS2776: Assertions require the call target to be an identifier or qualified name.
+        const t1 = new Test();
+        t1.assert(typeof x === "string");  // Error
+        ~~~~~~~~~
+!!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:173:11: 't1' needs an explicit type annotation.
+        const t2: Test = new Test();
+        t2.assert(typeof x === "string");
+    }
+    
+    // Repro from #35940
+    
+    interface Thing {
+        good: boolean;
+        isGood(): asserts this is GoodThing;
+    }
+    
+    interface GoodThing {
+        good: true;
+    }
+    
+    function example1(things: Thing[]) {
+        for (let thing of things) {
+            thing.isGood();
+            thing.good;
+        }
+    }
+    

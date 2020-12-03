@@ -1,0 +1,35 @@
+=== tests/cases/compiler/customAsyncIterator.ts ===
+// GH: https://github.com/microsoft/TypeScript/issues/33239
+class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> {
+>ConstantIterator : Symbol(ConstantIterator, Decl(customAsyncIterator.ts, 0, 0))
+>T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+>T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+
+    constructor(private constant: T) {
+>constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
+>T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+    }
+    async next(value?: T): Promise<IteratorResult<T>> {
+>next : Symbol(ConstantIterator.next, Decl(customAsyncIterator.ts, 3, 5))
+>value : Symbol(value, Decl(customAsyncIterator.ts, 4, 15))
+>T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
+>T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
+
+        if (value != null) {
+>value : Symbol(value, Decl(customAsyncIterator.ts, 4, 15))
+
+            throw new Error("ConstantIterator.prototype.next may not take any values");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+        return { value: this.constant, done: false };
+>value : Symbol(value, Decl(customAsyncIterator.ts, 8, 16))
+>this.constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
+>this : Symbol(ConstantIterator, Decl(customAsyncIterator.ts, 0, 0))
+>constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
+>done : Symbol(done, Decl(customAsyncIterator.ts, 8, 38))
+    }
+}

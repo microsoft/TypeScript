@@ -1,6 +1,4 @@
 //// [duplicateLocalVariable1.ts]
-/ /@module: commonjs
-
 //import FileManager = require('filemanager');
 //import App = require('app');
 
@@ -344,11 +342,13 @@ export var tests: TestRunner = (function () {
     return testRunner;
 })();
 
+
 //// [duplicateLocalVariable1.js]
 "use strict";
+//import FileManager = require('filemanager');
+//import App = require('app');
 exports.__esModule = true;
-/ /;
-commonjs;
+exports.tests = exports.TestRunner = exports.TestCase = void 0;
 var TestFileDir = ".\\TempTestFiles";
 var TestCase = /** @class */ (function () {
     function TestCase(name, test, errorMessageRegEx) {

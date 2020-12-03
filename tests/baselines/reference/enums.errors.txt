@@ -1,0 +1,40 @@
+/b.ts(3,1): error TS1361: 'SyntaxKind' cannot be used as a value because it was imported using 'import type'.
+/b.ts(4,1): error TS1361: 'SymbolFlags' cannot be used as a value because it was imported using 'import type'.
+
+
+==== /a.ts (0 errors) ====
+    enum SyntaxKind {
+      ImportClause,
+      ExportDeclaration
+    }
+    
+    const enum SymbolFlags {
+      Type = "Type",
+      Value = "Value"
+    }
+    
+    export type { SyntaxKind };
+    export { SymbolFlags };
+    
+==== /b.ts (2 errors) ====
+    import type { SyntaxKind, SymbolFlags } from './a';
+    
+    SyntaxKind.ImportClause;
+    ~~~~~~~~~~
+!!! error TS1361: 'SyntaxKind' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /b.ts:1:15: 'SyntaxKind' was imported here.
+    SymbolFlags.Type;
+    ~~~~~~~~~~~
+!!! error TS1361: 'SymbolFlags' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /b.ts:1:27: 'SymbolFlags' was imported here.
+    let kind: SyntaxKind.ImportClause;
+    let flags: SymbolFlags;
+    
+    type TypeFlag = SymbolFlags.Type;
+    export type { TypeFlag };
+    
+==== /c.ts (0 errors) ====
+    import { SymbolFlags } from './a';
+    import type { TypeFlag } from './b';
+    const flags: TypeFlag = SymbolFlags.Type;
+    

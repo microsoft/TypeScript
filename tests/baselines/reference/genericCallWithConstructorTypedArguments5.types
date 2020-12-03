@@ -34,8 +34,8 @@ var arg2: { cb: new <T>(x: T, y: T) => string };
 >y : T
 
 var r2 = foo(arg2); // error
->r2 : any
->foo(arg2) : any
+>r2 : string
+>foo(arg2) : string
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >arg2 : { cb: new <T>(x: T, y: T) => string; }
 
@@ -46,8 +46,8 @@ var arg3: { cb: new (x: string, y: number) => string };
 >y : number
 
 var r3 = foo(arg3); // error
->r3 : any
->foo(arg3) : any
+>r3 : string
+>foo(arg3) : string
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
 >arg3 : { cb: new (x: string, y: number) => string; }
 

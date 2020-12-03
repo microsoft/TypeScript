@@ -13,11 +13,11 @@ class Foo<T> {
 >fn : () => void
 
         this.x = a;
->this.x = a : T
+>this.x = a : globalThis.T
 >this.x : T
 >this : this
 >x : T
->a : T
+>a : globalThis.T
     }
 }
 

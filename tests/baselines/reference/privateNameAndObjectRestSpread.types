@@ -1,0 +1,30 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts ===
+class C {
+>C : C
+
+    #prop = 1;
+>#prop : number
+>1 : 1
+
+    method(other: C) {
+>method : (other: C) => void
+>other : C
+
+        const obj = { ...other };
+>obj : {}
+>{ ...other } : {}
+>other : C
+
+        obj.#prop;
+>obj.#prop : any
+>obj : {}
+
+        const { ...rest } = other;
+>rest : {}
+>other : C
+
+        rest.#prop;
+>rest.#prop : any
+>rest : {}
+    }
+}

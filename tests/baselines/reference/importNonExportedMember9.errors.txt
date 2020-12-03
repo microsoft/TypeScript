@@ -1,0 +1,14 @@
+tests/cases/compiler/b.js(1,10): error TS2597: 'Foo' can only be imported by using a 'require' call or by using a default import.
+tests/cases/compiler/b.js(1,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
+
+
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class Foo {}
+    export = Foo;
+    
+==== tests/cases/compiler/b.js (2 errors) ====
+    import { Foo } from './a';
+             ~~~
+!!! error TS2597: 'Foo' can only be imported by using a 'require' call or by using a default import.
+                        ~~~~~
+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.

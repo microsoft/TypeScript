@@ -52,6 +52,7 @@ class C {
 
     [`hello bye`] = 0;
 >[`hello bye`] : Symbol(C[`hello bye`], Decl(computedPropertyNames12_ES5.ts, 12, 31))
+>`hello bye` : Symbol(C[`hello bye`], Decl(computedPropertyNames12_ES5.ts, 12, 31))
 
     static [`hello ${a} bye`] = 0
 >[`hello ${a} bye`] : Symbol(C[`hello ${a} bye`], Decl(computedPropertyNames12_ES5.ts, 13, 22))

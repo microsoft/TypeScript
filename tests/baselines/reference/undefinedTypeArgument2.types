@@ -7,7 +7,7 @@ interface Query<T> {
 >item : T
 
     selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
->selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => any): Query<any>; }
+>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => any): Query<R>; }
 >arraySelector : (item: T) => U[]
 >item : T
 >resultSelector : (outer: T, inner: U) => any

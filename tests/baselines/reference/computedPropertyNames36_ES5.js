@@ -27,12 +27,12 @@ var C = /** @class */ (function () {
     Object.defineProperty(C.prototype, "get1", {
         // Computed properties
         get: function () { return new Foo; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "set1", {
         set: function (p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

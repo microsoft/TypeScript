@@ -13,11 +13,11 @@ namespace ts.codefix {
 
         if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
             // import Bluebird = require("bluebird");
-            variations.push(createAction(context, sourceFile, node, createImportEqualsDeclaration(
+            variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 namespace.name,
-                createExternalModuleReference(node.moduleSpecifier)
+                factory.createExternalModuleReference(node.moduleSpecifier)
             )));
         }
 
@@ -26,7 +26,7 @@ namespace ts.codefix {
 
     function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
-        return createCodeFixActionNoFixId(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
+        return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
     }
 
     registerCodeFix({
@@ -88,8 +88,8 @@ namespace ts.codefix {
         }
         if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
             const sourceFile = context.sourceFile;
-            const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, createPropertyAccess(expr, "default"), {}));
-            fixes.push(createCodeFixActionNoFixId(fixName, changes, Diagnostics.Use_synthetic_default_member));
+            const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
+            fixes.push(createCodeFixActionWithoutFixAll(fixName, changes, Diagnostics.Use_synthetic_default_member));
         }
         return fixes;
     }

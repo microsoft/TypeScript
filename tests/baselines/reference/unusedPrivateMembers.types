@@ -116,3 +116,45 @@ class Test5<T> {
     }
 }
 
+class Test6 {
+>Test6 : Test6
+
+    private get a() {
+>a : number
+
+        return 0;
+>0 : 0
+    }
+    private set a(v) {
+>a : number
+>v : number
+
+        v;
+>v : number
+    }
+    private b = 0;
+>b : number
+>0 : 0
+
+    public test() {
+>test : () => void
+
+        var x = new Test6();
+>x : Test6
+>new Test6() : Test6
+>Test6 : typeof Test6
+
+        x.a++;
+>x.a++ : number
+>x.a : number
+>x : Test6
+>a : number
+
+        x.b++;
+>x.b++ : number
+>x.b : number
+>x : Test6
+>b : number
+    }
+}
+

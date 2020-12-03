@@ -24,6 +24,7 @@ export class B<T2> {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.B = exports.A = void 0;
     var A = /** @class */ (function () {
         function A(callback) {
             this.callback = callback;

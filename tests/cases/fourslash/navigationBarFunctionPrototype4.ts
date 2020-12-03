@@ -7,13 +7,19 @@
 ////A.prototype = { m() {} };
 ////A.prototype.a = function() { };
 ////A.b = function() { };
+////
+////var B; 
+////B["prototype"] = { };
+////B["prototype"] = { m() {} };
+////B["prototype"]["a"] = function() { };
+////B["b"] = function() { };
 
 verify.navigationTree({
   "text": "<global>",
   "kind": "script",
-  "childItems": [
+  "childItems": [{ name: "A", quoted: false }, { name: "B", quoted: true }].map(({ name, quoted }) => (
     {
-      "text": "A",
+      "text": name,
       "kind": "class",
       "childItems": [
         {
@@ -25,31 +31,31 @@ verify.navigationTree({
           "kind": "method"
         },
         {
-          "text": "a",
+          "text": quoted ? `"a"` : "a",
           "kind": "function"
         },
         {
-          "text": "b",
+          "text": quoted ? `"b"` : "b",
           "kind": "function"
         }
       ]
     }
-  ]
+  ))
 });
 
 verify.navigationBar([
   {
     "text": "<global>",
     "kind": "script",
-    "childItems": [
+    "childItems": ["A", "B"].map(name => (
       {
-        "text": "A",
+        "text": name,
         "kind": "class"
       }
-    ]
+    ))
   },
-  {
-    "text": "A",
+  ...[{ name: "A", quoted: false }, { name: "B", quoted: true }].map(({ name, quoted }) => ({
+    "text": name,
     "kind": "class",
     "childItems": [
       {
@@ -61,14 +67,14 @@ verify.navigationBar([
         "kind": "method"
       },
       {
-        "text": "a",
+        "text": quoted ? `"a"` : "a",
         "kind": "function"
       },
       {
-        "text": "b",
+        "text": quoted ? `"b"` : "b",
         "kind": "function"
       }
     ],
     "indent": 1
-  }
+  }))
 ]);

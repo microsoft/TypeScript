@@ -1,13 +1,13 @@
 namespace ts {
-    function verifyMissingFilePaths(missingPaths: ReadonlyArray<Path>, expected: ReadonlyArray<string>) {
+    function verifyMissingFilePaths(missingPaths: readonly Path[], expected: readonly string[]) {
         assert.isDefined(missingPaths);
-        const map = arrayToSet(expected) as Map<boolean>;
+        const map = new Set(expected);
         for (const missing of missingPaths) {
-            const value = map.get(missing);
+            const value = map.has(missing);
             assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
-            map.set(missing, false);
+            map.delete(missing);
         }
-        const notFound = arrayFrom(mapDefinedIterator(map.keys(), k => map.get(k) === true ? k : undefined));
+        const notFound = arrayFrom(mapDefinedIterator(map.keys(), k => map.has(k) ? k : undefined));
         assert.equal(notFound.length, 0, `Not found ${notFound} in actual: ${missingPaths} expected: ${expected}`);
     }
 
@@ -152,12 +152,72 @@ namespace ts {
             assertIsExternal(program, [a, fooIndex], f => f !== a);
         });
 
-        function assertIsExternal(program: Program, files: ReadonlyArray<documents.TextDocument>, isExternalExpected: (file: documents.TextDocument) => boolean): void {
+        function assertIsExternal(program: Program, files: readonly documents.TextDocument[], isExternalExpected: (file: documents.TextDocument) => boolean): void {
             for (const file of files) {
                 const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
                 const expected = isExternalExpected(file);
                 assert.equal(actual, expected, `Expected ${file.file} isSourceFileFromExternalLibrary to be ${expected}, got ${actual}`);
             }
         }
+    });
+
+    describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => {
+        it("works on projects that have .json files", () => {
+            const main = new documents.TextDocument("/main.ts", 'export { version } from "./package.json";');
+            const pkg = new documents.TextDocument("/package.json", '{"version": "1.0.0"}');
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
+            const program = createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            const json = program.getSourceFile("/package.json")!;
+            assert.equal(json.scriptKind, ScriptKind.JSON);
+            assert.isNumber(json.nodeCount);
+            assert.isNumber(json.identifierCount);
+
+            assert.isNotNaN(program.getNodeCount());
+            assert.isNotNaN(program.getIdentifierCount());
+        });
+    });
+
+    describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
+        it("does not produce errors on `as const` it would not normally produce on the command line", () => {
+            const main = new documents.TextDocument("/main.ts", "0 as const");
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
+            const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            const sourceFile = program.getSourceFile("main.ts")!;
+            typeChecker.getTypeAtLocation(((sourceFile.statements[0] as ExpressionStatement).expression as AsExpression).type);
+            const diag = program.getSemanticDiagnostics();
+            assert.isEmpty(diag);
+        });
+        it("getSymbolAtLocation does not cause additional error to be added on module resolution failure", () => {
+            const main = new documents.TextDocument("/main.ts", "import \"./module\";");
+            const mod = new documents.TextDocument("/module.d.ts", "declare const foo: any;");
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
+            const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            const sourceFile = program.getSourceFile("main.ts")!;
+            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            typeChecker.getSymbolAtLocation((sourceFile.statements[0] as ImportDeclaration).moduleSpecifier);
+            assert.isEmpty(program.getSemanticDiagnostics());
+        });
+    });
+
+    describe("unittests:: programApi:: CompilerOptions relative paths", () => {
+        it("resolves relative paths by getCurrentDirectory", () => {
+            const main = new documents.TextDocument("/main.ts", "import \"module\";");
+            const mod = new documents.TextDocument("/lib/module.ts", "declare const foo: any;");
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
+            const program = createProgram(["./main.ts"], {
+                paths: { "*": ["./lib/*"] }
+            }, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            assert.isEmpty(program.getConfigFileParsingDiagnostics());
+            assert.isEmpty(program.getGlobalDiagnostics());
+            assert.isEmpty(program.getSemanticDiagnostics());
+        });
     });
 }

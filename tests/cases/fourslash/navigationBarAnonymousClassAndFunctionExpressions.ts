@@ -62,7 +62,7 @@ verify.navigationTree({
                     "childItems": [
                         {
                             "text": "foo",
-                            "kind": "function"
+                            "kind": "method"
                         }
                     ]
                 }
@@ -185,7 +185,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "foo",
-                "kind": "function"
+                "kind": "method"
             }
         ],
         "indent": 2

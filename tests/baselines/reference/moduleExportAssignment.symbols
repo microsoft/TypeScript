@@ -5,9 +5,9 @@ var npmlog = require('./npmlog')
 >'./npmlog' : Symbol("tests/cases/conformance/salsa/npmlog", Decl(npmlog.js, 0, 0))
 
 npmlog.x
->npmlog.x : Symbol(x, Decl(npmlog.js, 7, 23))
+>npmlog.x : Symbol(npmlog.x, Decl(npmlog.js, 7, 23))
 >npmlog : Symbol(npmlog, Decl(use.js, 0, 3))
->x : Symbol(x, Decl(npmlog.js, 7, 23))
+>x : Symbol(npmlog.x, Decl(npmlog.js, 7, 23))
 
 npmlog.on
 >npmlog.on : Symbol(EE.on, Decl(npmlog.js, 0, 10))

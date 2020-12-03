@@ -21,6 +21,7 @@ export var x: SubModule.m.m3.c;
 //// [declFileAmbientExternalModuleWithSingleExportedModule_1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.d.ts]

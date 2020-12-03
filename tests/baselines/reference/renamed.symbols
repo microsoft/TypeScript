@@ -1,0 +1,23 @@
+=== /a.ts ===
+class A { a!: string }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>a : Symbol(A.a, Decl(a.ts, 0, 9))
+
+export type { A as B };
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>B : Symbol(B, Decl(a.ts, 1, 13))
+
+=== /b.ts ===
+export type { B as C } from './a';
+>B : Symbol(B, Decl(a.ts, 1, 13))
+>C : Symbol(C, Decl(b.ts, 0, 13))
+
+=== /c.ts ===
+import type { C as D } from './b';
+>C : Symbol(C, Decl(b.ts, 0, 13))
+>D : Symbol(D, Decl(c.ts, 0, 13))
+
+const d: D = {};
+>d : Symbol(d, Decl(c.ts, 1, 5))
+>D : Symbol(D, Decl(c.ts, 0, 13))
+

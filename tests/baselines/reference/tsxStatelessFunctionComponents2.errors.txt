@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(19,10): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(25,42): error TS2551: Property 'subtr' does not exist on type 'string'. Did you mean 'substr'?
 tests/cases/conformance/jsx/file.tsx(27,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
@@ -25,7 +25,7 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     let b = <Greet key="k" />;
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
-             ~~~~~
+                   ~~~
 !!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
 !!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
     

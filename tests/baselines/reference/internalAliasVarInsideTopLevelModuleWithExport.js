@@ -12,6 +12,7 @@ export var bVal = b;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.bVal = exports.b = exports.a = void 0;
     var a;
     (function (a) {
         a.x = 10;

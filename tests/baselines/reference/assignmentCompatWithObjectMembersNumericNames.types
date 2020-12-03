@@ -31,18 +31,18 @@ var t2: T2;
 >t2 : T2
 
 var a: { 1.: string; bar?: string }
->a : { 1.: string; bar?: string; }
+>a : { 1: string; bar?: string; }
 >1. : string
 >bar : string
 
 var b: { 1.0: string; baz?: string }
->b : { 1.0: string; baz?: string; }
+>b : { 1: string; baz?: string; }
 >1.0 : string
 >baz : string
 
 var a2 = { 1.0: '' };
->a2 : { 1.0: string; }
->{ 1.0: '' } : { 1.0: string; }
+>a2 : { 1: string; }
+>{ 1.0: '' } : { 1: string; }
 >1.0 : string
 >'' : ""
 
@@ -68,9 +68,9 @@ s = s2;
 >s2 : S2
 
 s = a2;
->s = a2 : { 1.0: string; }
+>s = a2 : { 1: string; }
 >s : S
->a2 : { 1.0: string; }
+>a2 : { 1: string; }
 
 s2 = t2;
 >s2 = t2 : T2
@@ -88,62 +88,62 @@ s2 = t;
 >t : T
 
 s2 = b;
->s2 = b : { 1.0: string; baz?: string; }
+>s2 = b : { 1: string; baz?: string; }
 >s2 : S2
->b : { 1.0: string; baz?: string; }
+>b : { 1: string; baz?: string; }
 
 s2 = a2;
->s2 = a2 : { 1.0: string; }
+>s2 = a2 : { 1: string; }
 >s2 : S2
->a2 : { 1.0: string; }
+>a2 : { 1: string; }
 
 a = b;
->a = b : { 1.0: string; baz?: string; }
->a : { 1.: string; bar?: string; }
->b : { 1.0: string; baz?: string; }
+>a = b : { 1: string; baz?: string; }
+>a : { 1: string; bar?: string; }
+>b : { 1: string; baz?: string; }
 
 b = a;
->b = a : { 1.: string; bar?: string; }
->b : { 1.0: string; baz?: string; }
->a : { 1.: string; bar?: string; }
+>b = a : { 1: string; bar?: string; }
+>b : { 1: string; baz?: string; }
+>a : { 1: string; bar?: string; }
 
 a = s;
 >a = s : S
->a : { 1.: string; bar?: string; }
+>a : { 1: string; bar?: string; }
 >s : S
 
 a = s2;
 >a = s2 : S2
->a : { 1.: string; bar?: string; }
+>a : { 1: string; bar?: string; }
 >s2 : S2
 
 a = a2;
->a = a2 : { 1.0: string; }
->a : { 1.: string; bar?: string; }
->a2 : { 1.0: string; }
+>a = a2 : { 1: string; }
+>a : { 1: string; bar?: string; }
+>a2 : { 1: string; }
 
 a2 = b2;
 >a2 = b2 : { 1: string; }
->a2 : { 1.0: string; }
+>a2 : { 1: string; }
 >b2 : { 1: string; }
 
 b2 = a2;
->b2 = a2 : { 1.0: string; }
+>b2 = a2 : { 1: string; }
 >b2 : { 1: string; }
->a2 : { 1.0: string; }
+>a2 : { 1: string; }
 
 a2 = b;
->a2 = b : { 1.0: string; baz?: string; }
->a2 : { 1.0: string; }
->b : { 1.0: string; baz?: string; }
+>a2 = b : { 1: string; baz?: string; }
+>a2 : { 1: string; }
+>b : { 1: string; baz?: string; }
 
 a2 = t2;
 >a2 = t2 : T2
->a2 : { 1.0: string; }
+>a2 : { 1: string; }
 >t2 : T2
 
 a2 = t;
 >a2 = t : T
->a2 : { 1.0: string; }
+>a2 : { 1: string; }
 >t : T
 

@@ -1,0 +1,17 @@
+tests/cases/compiler/a.ts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+tests/cases/compiler/b.js(1,10): error TS2596: 'Foo' can only be imported by turning on the 'esModuleInterop' flag and using a default import.
+tests/cases/compiler/b.js(1,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
+
+
+==== tests/cases/compiler/a.ts (1 errors) ====
+    class Foo {}
+    export = Foo;
+    ~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    
+==== tests/cases/compiler/b.js (2 errors) ====
+    import { Foo } from './a';
+             ~~~
+!!! error TS2596: 'Foo' can only be imported by turning on the 'esModuleInterop' flag and using a default import.
+                        ~~~~~
+!!! error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.

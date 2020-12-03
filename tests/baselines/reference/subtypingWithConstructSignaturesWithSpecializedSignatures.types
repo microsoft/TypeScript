@@ -57,7 +57,7 @@ module MemberWithCallSignature {
     interface Base { // T
         // M's
         a: {
->a : { new (x: "a"): void; new (x: string): void; }
+>a : { new (x: 'a'): void; new (x: string): void; }
 
             new (x: 'a'): void;
 >x : "a"
@@ -66,7 +66,7 @@ module MemberWithCallSignature {
 >x : string
         }
         a2: {
->a2 : { new (x: "a", y: number): void; new (x: string, y: number): void; }
+>a2 : { new (x: 'a', y: number): void; new (x: string, y: number): void; }
 
             new (x: 'a', y: number): void;
 >x : "a"
@@ -101,7 +101,7 @@ module MemberWithCallSignature {
     interface Base2 { // T
         // M's
         a: {
->a : { new (x: "a"): number; new (x: string): number; }
+>a : { new (x: 'a'): number; new (x: string): number; }
 
             new (x: 'a'): number;
 >x : "a"

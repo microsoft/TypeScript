@@ -71,21 +71,21 @@ namespace ts {
         });
     });
 
-    function makeAssertChanges(getProgram: () => Program): (fileNames: ReadonlyArray<string>) => void {
+    function makeAssertChanges(getProgram: () => Program): (fileNames: readonly string[]) => void {
         const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
         let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         return fileNames => {
             const program = getProgram();
             builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
-            // tslint:disable-next-line no-empty
+            // eslint-disable-next-line no-empty
             while (builderProgram.emitNextAffectedFile(fileName => outputFileNames.push(fileName))) {
             }
             assert.deepEqual(outputFileNames, fileNames);
         };
     }
 
-    function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: ReadonlyArray<string>, cancelAfterEmitLength?: number) => void {
+    function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
         const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
         let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         let cancel = false;
@@ -104,7 +104,6 @@ namespace ts {
             builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(program, host, builderProgram);
             const outputFileNames: string[] = [];
             try {
-                // tslint:disable-next-line no-empty
                 do {
                     assert.isFalse(cancel);
                     if (outputFileNames.length === cancelAfterEmitLength) {

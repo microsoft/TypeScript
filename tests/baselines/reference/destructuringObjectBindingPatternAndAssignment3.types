@@ -34,7 +34,7 @@ var {1} = { 1 };
 
 var {"prop"} = { "prop": 1 };
 > : any
->{ "prop": 1 } : { "prop": number; }
+>{ "prop": 1 } : { prop: number; }
 >"prop" : number
 >1 : 1
 

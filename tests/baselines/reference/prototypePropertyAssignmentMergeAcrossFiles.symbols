@@ -3,6 +3,8 @@ function C() {
 >C : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
 
     this.a = 1
+>this.a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
+>this : Symbol(C, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 0))
 >a : Symbol(C.a, Decl(prototypePropertyAssignmentMergeAcrossFiles.js, 0, 14))
 }
 

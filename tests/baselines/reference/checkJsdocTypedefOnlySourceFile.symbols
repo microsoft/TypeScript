@@ -1,0 +1,16 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+
+var exports = {};
+>exports : Symbol(exports, Decl(0.js, 2, 3))
+
+/**
+ * @typedef {string}
+ */
+exports.SomeName;
+>exports : Symbol(exports, Decl(0.js, 2, 3))
+
+/** @type {exports.SomeName} */
+const myString = 'str';
+>myString : Symbol(myString, Decl(0.js, 10, 5))
+

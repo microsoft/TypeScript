@@ -1,0 +1,58 @@
+=== tests/cases/compiler/intersectionPropertyCheck.ts ===
+let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
+>obj : Symbol(obj, Decl(intersectionPropertyCheck.ts, 0, 3))
+>a : Symbol(a, Decl(intersectionPropertyCheck.ts, 0, 10))
+>x : Symbol(x, Decl(intersectionPropertyCheck.ts, 0, 15))
+>c : Symbol(c, Decl(intersectionPropertyCheck.ts, 0, 33))
+>a : Symbol(a, Decl(intersectionPropertyCheck.ts, 0, 49))
+>x : Symbol(x, Decl(intersectionPropertyCheck.ts, 0, 54))
+>y : Symbol(y, Decl(intersectionPropertyCheck.ts, 0, 66))
+>c : Symbol(c, Decl(intersectionPropertyCheck.ts, 0, 74))
+
+declare let wrong: { a: { y: string } };
+>wrong : Symbol(wrong, Decl(intersectionPropertyCheck.ts, 2, 11))
+>a : Symbol(a, Decl(intersectionPropertyCheck.ts, 2, 20))
+>y : Symbol(y, Decl(intersectionPropertyCheck.ts, 2, 25))
+
+let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
+>weak : Symbol(weak, Decl(intersectionPropertyCheck.ts, 3, 3))
+>a : Symbol(a, Decl(intersectionPropertyCheck.ts, 3, 11))
+>x : Symbol(x, Decl(intersectionPropertyCheck.ts, 3, 17))
+>c : Symbol(c, Decl(intersectionPropertyCheck.ts, 3, 36))
+>wrong : Symbol(wrong, Decl(intersectionPropertyCheck.ts, 2, 11))
+
+function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
+>foo : Symbol(foo, Decl(intersectionPropertyCheck.ts, 3, 58))
+>T : Symbol(T, Decl(intersectionPropertyCheck.ts, 5, 13))
+>x : Symbol(x, Decl(intersectionPropertyCheck.ts, 5, 31))
+>a : Symbol(a, Decl(intersectionPropertyCheck.ts, 5, 35))
+>y : Symbol(y, Decl(intersectionPropertyCheck.ts, 5, 49))
+>T : Symbol(T, Decl(intersectionPropertyCheck.ts, 5, 13))
+>a : Symbol(a, Decl(intersectionPropertyCheck.ts, 5, 58))
+
+  x = y;  // Mismatched property in source intersection
+>x : Symbol(x, Decl(intersectionPropertyCheck.ts, 5, 31))
+>y : Symbol(y, Decl(intersectionPropertyCheck.ts, 5, 49))
+}
+
+// Repro from #36637
+
+interface Test {
+>Test : Symbol(Test, Decl(intersectionPropertyCheck.ts, 7, 1))
+
+  readonly hi?: string[]
+>hi : Symbol(Test.hi, Decl(intersectionPropertyCheck.ts, 11, 16))
+}
+
+function test<T extends object>(value: T): Test {
+>test : Symbol(test, Decl(intersectionPropertyCheck.ts, 13, 1))
+>T : Symbol(T, Decl(intersectionPropertyCheck.ts, 15, 14))
+>value : Symbol(value, Decl(intersectionPropertyCheck.ts, 15, 32))
+>T : Symbol(T, Decl(intersectionPropertyCheck.ts, 15, 14))
+>Test : Symbol(Test, Decl(intersectionPropertyCheck.ts, 7, 1))
+
+  return { ...value, hi: true }
+>value : Symbol(value, Decl(intersectionPropertyCheck.ts, 15, 32))
+>hi : Symbol(hi, Decl(intersectionPropertyCheck.ts, 16, 20))
+}
+

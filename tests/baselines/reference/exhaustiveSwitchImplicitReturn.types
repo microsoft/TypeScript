@@ -85,3 +85,36 @@ function foo5(bar: "a" | "b"): number {
     }
 }
 
+function foo6(bar: "a", a: boolean, b: boolean): number {
+>foo6 : (bar: "a", a: boolean, b: boolean) => number
+>bar : "a"
+>a : boolean
+>b : boolean
+
+    if (a) {
+>a : boolean
+
+        switch (bar) {
+>bar : "a"
+
+            case "a": return 1;
+>"a" : "a"
+>1 : 1
+        }
+    }
+    else {
+        switch (b) {
+>b : boolean
+
+            case true: return -1;
+>true : true
+>-1 : -1
+>1 : 1
+
+            case false: return 0;
+>false : false
+>0 : 0
+        }
+    }
+}
+

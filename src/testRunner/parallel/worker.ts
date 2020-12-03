@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace Harness.Parallel.Worker {
     export function start() {
         function hookUncaughtExceptions() {
@@ -21,7 +19,7 @@ namespace Harness.Parallel.Worker {
         let exceptionsHooked = false;
         hookUncaughtExceptions();
 
-        // tslint:disable-next-line:variable-name - Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
+        // Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
         const Mocha = require("mocha") as typeof import("mocha");
 
         /**
@@ -43,7 +41,7 @@ namespace Harness.Parallel.Worker {
             return class extends (base as typeof Mocha.Runnable) {
                 resetTimeout() {
                     this.clearTimeout();
-                    if (this.enableTimeouts()) {
+                    if (this.timeout() > 0) {
                         sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
                         this.timer = true;
                     }
@@ -99,7 +97,6 @@ namespace Harness.Parallel.Worker {
          * @param context The test context (usually the NodeJS `global` object).
          */
         function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
-            // tslint:disable-next-line:variable-name
             const suites = [rootSuite];
             context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeAll(title as string, fn); };
             context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterAll(title as string, fn); };
@@ -125,7 +122,10 @@ namespace Harness.Parallel.Worker {
             }
 
             function addTest(title: string | Mocha.Func | Mocha.AsyncFunc, fn: Mocha.Func | Mocha.AsyncFunc | undefined): Mocha.Test {
-                if (typeof title === "function") fn = title, title = fn.name;
+                if (typeof title === "function") {
+                    fn = title;
+                    title = fn.name;
+                }
                 const test = new Test(title, suites[0].pending ? undefined : fn);
                 suites[0].addTest(test);
                 return test;
@@ -137,22 +137,22 @@ namespace Harness.Parallel.Worker {
          */
         function runTests(task: Task, fn: (payload: TaskResult) => void) {
             if (task.runner === "unittest") {
-                return runUnitTests(task, fn);
+                return executeUnitTests(task, fn);
             }
             else {
                 return runFileTests(task, fn);
             }
         }
 
-        function runUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
+        function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
             if (!unitTestSuiteMap && unitTestSuite.suites.length) {
-                unitTestSuiteMap = ts.createMap<Mocha.Suite>();
+                unitTestSuiteMap = new ts.Map<string, Mocha.Suite>();
                 for (const suite of unitTestSuite.suites) {
                     unitTestSuiteMap.set(suite.title, suite);
                 }
             }
             if (!unitTestTestMap && unitTestSuite.tests.length) {
-                unitTestTestMap = ts.createMap<Mocha.Test>();
+                unitTestTestMap = new ts.Map<string, Mocha.Test>();
                 for (const test of unitTestSuite.tests) {
                     unitTestTestMap.set(test.title, test);
                 }
@@ -210,12 +210,10 @@ namespace Harness.Parallel.Worker {
             const passes: TestInfo[] = [];
             const start = +new Date();
             const runner = new Mocha.Runner(suite, /*delay*/ false);
-            const uncaught = (err: any) => runner.uncaught(err);
 
             runner
                 .on("start", () => {
                     unhookUncaughtExceptions(); // turn off global uncaught handling
-                    process.on("unhandledRejection", uncaught); // turn on unhandled rejection handling (not currently handled in mocha)
                 })
                 .on("pass", (test: Mocha.Test) => {
                     passes.push({ name: test.titlePath() });
@@ -224,8 +222,8 @@ namespace Harness.Parallel.Worker {
                     errors.push({ name: test.titlePath(), error: err.message, stack: err.stack });
                 })
                 .on("end", () => {
-                    process.removeListener("unhandledRejection", uncaught);
                     hookUncaughtExceptions();
+                    runner.dispose();
                 })
                 .run(() => {
                     fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });
@@ -297,13 +295,13 @@ namespace Harness.Parallel.Worker {
         }
 
         // A cache of test harness Runner instances.
-        const runners = ts.createMap<RunnerBase>();
+        const runners = new ts.Map<string, RunnerBase>();
 
         // The root suite for all unit tests.
         let unitTestSuite: Suite;
-        let unitTestSuiteMap: ts.Map<Mocha.Suite>;
+        let unitTestSuiteMap: ts.ESMap<string, Mocha.Suite>;
         // (Unit) Tests directly within the root suite
-        let unitTestTestMap: ts.Map<Mocha.Test>;
+        let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
 
         if (runUnitTests) {
             unitTestSuite = new Suite("", new Mocha.Context());

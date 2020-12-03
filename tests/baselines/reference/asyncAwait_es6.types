@@ -1,6 +1,6 @@
 === tests/cases/conformance/async/es6/asyncAwait_es6.ts ===
 type MyPromise<T> = Promise<T>;
->MyPromise : Promise<T>
+>MyPromise : MyPromise<T>
 
 declare var MyPromise: typeof Promise;
 >MyPromise : PromiseConstructor
@@ -10,7 +10,7 @@ declare var p: Promise<number>;
 >p : Promise<number>
 
 declare var mp: MyPromise<number>;
->mp : Promise<number>
+>mp : MyPromise<number>
 
 async function f0() { }
 >f0 : () => Promise<void>
@@ -19,7 +19,7 @@ async function f1(): Promise<void> { }
 >f1 : () => Promise<void>
 
 async function f3(): MyPromise<void> { }
->f3 : () => Promise<void>
+>f3 : () => MyPromise<void>
 
 let f4 = async function() { }
 >f4 : () => Promise<void>
@@ -30,8 +30,8 @@ let f5 = async function(): Promise<void> { }
 >async function(): Promise<void> { } : () => Promise<void>
 
 let f6 = async function(): MyPromise<void> { }
->f6 : () => Promise<void>
->async function(): MyPromise<void> { } : () => Promise<void>
+>f6 : () => MyPromise<void>
+>async function(): MyPromise<void> { } : () => MyPromise<void>
 
 let f7 = async () => { };
 >f7 : () => Promise<void>
@@ -42,8 +42,8 @@ let f8 = async (): Promise<void> => { };
 >async (): Promise<void> => { } : () => Promise<void>
 
 let f9 = async (): MyPromise<void> => { };
->f9 : () => Promise<void>
->async (): MyPromise<void> => { } : () => Promise<void>
+>f9 : () => MyPromise<void>
+>async (): MyPromise<void> => { } : () => MyPromise<void>
 
 let f10 = async () => p;
 >f10 : () => Promise<number>
@@ -53,21 +53,21 @@ let f10 = async () => p;
 let f11 = async () => mp;
 >f11 : () => Promise<number>
 >async () => mp : () => Promise<number>
->mp : Promise<number>
+>mp : MyPromise<number>
 
 let f12 = async (): Promise<number> => mp;
 >f12 : () => Promise<number>
 >async (): Promise<number> => mp : () => Promise<number>
->mp : Promise<number>
+>mp : MyPromise<number>
 
 let f13 = async (): MyPromise<number> => p;
->f13 : () => Promise<number>
->async (): MyPromise<number> => p : () => Promise<number>
+>f13 : () => MyPromise<number>
+>async (): MyPromise<number> => p : () => MyPromise<number>
 >p : Promise<number>
 
 let o = {
->o : { m1(): Promise<void>; m2(): Promise<void>; m3(): Promise<void>; }
->{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): Promise<void>; }
+>o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+>{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
 
 	async m1() { },
 >m1 : () => Promise<void>
@@ -76,7 +76,7 @@ let o = {
 >m2 : () => Promise<void>
 
 	async m3(): MyPromise<void> { }
->m3 : () => Promise<void>
+>m3 : () => MyPromise<void>
 
 };
 
@@ -90,7 +90,7 @@ class C {
 >m2 : () => Promise<void>
 
 	async m3(): MyPromise<void> { }
->m3 : () => Promise<void>
+>m3 : () => MyPromise<void>
 
 	static async m4() { }
 >m4 : () => Promise<void>
@@ -99,7 +99,7 @@ class C {
 >m5 : () => Promise<void>
 
 	static async m6(): MyPromise<void> { }
->m6 : () => Promise<void>
+>m6 : () => MyPromise<void>
 }
 
 module M {

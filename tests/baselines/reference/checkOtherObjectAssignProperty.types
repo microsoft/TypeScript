@@ -1,80 +1,80 @@
 === tests/cases/conformance/jsdoc/importer.js ===
 const mod = require("./mod1");
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
->require("./mod1") : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
+>require("./mod1") : typeof mod
 >require : any
 >"./mod1" : "./mod1"
 
 mod.thing;
 >mod.thing : number
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >thing : number
 
 mod.other;
 >mod.other : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >other : any
 
 mod.prop;
 >mod.prop : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >prop : any
 
 mod.bad1;
 >mod.bad1 : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >bad1 : any
 
 mod.bad2;
 >mod.bad2 : string
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >bad2 : string
 
 mod.bad3;
 >mod.bad3 : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >bad3 : any
 
 
 mod.thing = 0;
 >mod.thing = 0 : 0
 >mod.thing : number
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >thing : number
 >0 : 0
 
 mod.other = 0;
 >mod.other = 0 : 0
 >mod.other : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >other : any
 >0 : 0
 
 mod.prop = 0;
 >mod.prop = 0 : 0
 >mod.prop : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >prop : any
 >0 : 0
 
 mod.bad1 = 0;
 >mod.bad1 = 0 : 0
 >mod.bad1 : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >bad1 : any
 >0 : 0
 
 mod.bad2 = 0;
 >mod.bad2 = 0 : 0
 >mod.bad2 : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >bad2 : any
 >0 : 0
 
 mod.bad3 = 0;
 >mod.bad3 = 0 : 0
 >mod.bad3 : any
->mod : typeof import("tests/cases/conformance/jsdoc/mod1")
+>mod : typeof mod
 >bad3 : any
 >0 : 0
 

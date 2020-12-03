@@ -27,7 +27,7 @@ var C = /** @class */ (function () {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -38,7 +38,7 @@ var D = /** @class */ (function () {
     Object.defineProperty(D.prototype, "x", {
         set: function (v) { } // error
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;
@@ -51,7 +51,7 @@ var E = /** @class */ (function () {
             return 1;
         },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return E;

@@ -1,0 +1,109 @@
+=== tests/cases/conformance/jsdoc/assertionsAndNonReturningFunctions.js ===
+/** @typedef {(check: boolean) => asserts check} AssertFunc */
+
+/** @type {AssertFunc} */
+const assert = check => {
+>assert : Symbol(assert, Decl(assertionsAndNonReturningFunctions.js, 3, 5))
+>check : Symbol(check, Decl(assertionsAndNonReturningFunctions.js, 3, 14))
+
+    if (!check) throw new Error();
+>check : Symbol(check, Decl(assertionsAndNonReturningFunctions.js, 3, 14))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+/** @type {(x: unknown) => asserts x is string } */
+function assertIsString(x) {
+>assertIsString : Symbol(assertIsString, Decl(assertionsAndNonReturningFunctions.js, 5, 1))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 8, 24))
+
+    if (!(typeof x === "string")) throw new Error();
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 8, 24))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * @param {boolean} check
+ * @returns {asserts check}
+*/
+function assert2(check) {
+>assert2 : Symbol(assert2, Decl(assertionsAndNonReturningFunctions.js, 10, 1))
+>check : Symbol(check, Decl(assertionsAndNonReturningFunctions.js, 16, 17))
+
+    if (!check) throw new Error();
+>check : Symbol(check, Decl(assertionsAndNonReturningFunctions.js, 16, 17))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * @returns {never}
+ */
+function fail() {
+>fail : Symbol(fail, Decl(assertionsAndNonReturningFunctions.js, 18, 1))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * @param {*} x 
+ */
+function f1(x) {
+>f1 : Symbol(f1, Decl(assertionsAndNonReturningFunctions.js, 25, 1))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+
+    if (!!true) {
+        assert(typeof x === "string");
+>assert : Symbol(assert, Decl(assertionsAndNonReturningFunctions.js, 3, 5))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assert2(typeof x === "string");
+>assert2 : Symbol(assert2, Decl(assertionsAndNonReturningFunctions.js, 10, 1))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        assertIsString(x);
+>assertIsString : Symbol(assertIsString, Decl(assertionsAndNonReturningFunctions.js, 5, 1))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+
+        x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+    if (!!true) {
+        fail();
+>fail : Symbol(fail, Decl(assertionsAndNonReturningFunctions.js, 18, 1))
+
+        x;  // Unreachable
+>x : Symbol(x, Decl(assertionsAndNonReturningFunctions.js, 30, 12))
+    }
+}
+
+/**
+ * @param {boolean} b 
+ */
+function f2(b) {
+>f2 : Symbol(f2, Decl(assertionsAndNonReturningFunctions.js, 47, 1))
+>b : Symbol(b, Decl(assertionsAndNonReturningFunctions.js, 52, 12))
+
+    switch (b) {
+>b : Symbol(b, Decl(assertionsAndNonReturningFunctions.js, 52, 12))
+
+        case true: return 1;
+        case false: return 0;
+    }
+    b;  // Unreachable
+>b : Symbol(b, Decl(assertionsAndNonReturningFunctions.js, 52, 12))
+}
+

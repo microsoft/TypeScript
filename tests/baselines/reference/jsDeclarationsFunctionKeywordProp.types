@@ -1,0 +1,45 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+function foo() {}
+>foo : typeof foo
+
+foo.null = true;
+>foo.null = true : true
+>foo.null : boolean
+>foo : typeof foo
+>null : boolean
+>true : true
+
+function bar() {}
+>bar : typeof bar
+
+bar.async = true;
+>bar.async = true : true
+>bar.async : boolean
+>bar : typeof bar
+>async : boolean
+>true : true
+
+bar.normal = false;
+>bar.normal = false : false
+>bar.normal : boolean
+>bar : typeof bar
+>normal : boolean
+>false : false
+
+function baz() {}
+>baz : typeof baz
+
+baz.class = true;
+>baz.class = true : true
+>baz.class : boolean
+>baz : typeof baz
+>class : boolean
+>true : true
+
+baz.normal = false;
+>baz.normal = false : false
+>baz.normal : boolean
+>baz : typeof baz
+>normal : boolean
+>false : false
+

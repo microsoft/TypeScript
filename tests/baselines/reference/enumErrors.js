@@ -27,7 +27,8 @@ enum E11 {
     A = true,
     B = new Date(),
     C = window,
-    D = {}
+    D = {},
+    E = (() => 'foo')(),
 }
 
 // Enum with string valued member and computed member initializers
@@ -37,7 +38,20 @@ enum E12 {
     C = window,
     D = {},
     E = 1 + 1,
+    F = (() => 'foo')(),
 }
+
+// Enum with incorrect syntax
+enum E13 {
+    postComma,
+    postValueComma = 1,
+
+    postSemicolon;
+    postColonValueComma: 2,
+    postColonValueSemicolon: 3;
+};
+
+enum E14 { a, b: any "hello" += 1, c, d}
 
 
 //// [enumErrors.js]
@@ -78,6 +92,7 @@ var E11;
     E11[E11["B"] = new Date()] = "B";
     E11[E11["C"] = window] = "C";
     E11[E11["D"] = {}] = "D";
+    E11[E11["E"] = (function () { return 'foo'; })()] = "E";
 })(E11 || (E11 = {}));
 // Enum with string valued member and computed member initializers
 var E12;
@@ -87,4 +102,27 @@ var E12;
     E12[E12["C"] = 0] = "C";
     E12[E12["D"] = 0] = "D";
     E12[E12["E"] = 0] = "E";
+    E12[E12["F"] = 0] = "F";
 })(E12 || (E12 = {}));
+// Enum with incorrect syntax
+var E13;
+(function (E13) {
+    E13[E13["postComma"] = 0] = "postComma";
+    E13[E13["postValueComma"] = 1] = "postValueComma";
+    E13[E13["postSemicolon"] = 2] = "postSemicolon";
+    E13[E13["postColonValueComma"] = 3] = "postColonValueComma";
+    E13[E13[2] = 4] = 2;
+    E13[E13["postColonValueSemicolon"] = 5] = "postColonValueSemicolon";
+    E13[E13[3] = 6] = 3;
+})(E13 || (E13 = {}));
+;
+var E14;
+(function (E14) {
+    E14[E14["a"] = 0] = "a";
+    E14[E14["b"] = 1] = "b";
+    E14[E14["any"] = 2] = "any";
+    E14[E14["hello"] = 3] = "hello";
+    E14[E14[1] = 4] = 1;
+    E14[E14["c"] = 5] = "c";
+    E14[E14["d"] = 6] = "d";
+})(E14 || (E14 = {}));

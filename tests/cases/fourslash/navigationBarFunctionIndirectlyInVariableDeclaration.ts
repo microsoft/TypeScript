@@ -1,11 +1,16 @@
 /// <reference path="fourslash.ts"/>
 
 ////var a = {
-////    propA: function() {}
+////    propA: function() {
+////        var c;
+////    }
 ////};
 ////var b;
 ////b = {
-////    propB: function() {}
+////    propB: function() {
+////    // function must not have an empty body to appear top level
+////        var d;
+////    }
 ////};
 
 verify.navigationTree({
@@ -18,7 +23,13 @@ verify.navigationTree({
             "childItems": [
                 {
                     "text": "propA",
-                    "kind": "function"
+                    "kind": "method",
+                    "childItems": [
+                        {
+                            "text": "c",
+                            "kind": "var"
+                        }
+                    ]
                 }
             ]
         },
@@ -28,7 +39,13 @@ verify.navigationTree({
         },
         {
             "text": "propB",
-            "kind": "function"
+            "kind": "method",
+            "childItems": [
+                {
+                    "text": "d",
+                    "kind": "var"
+                }
+            ]
         }
     ]
 });
@@ -48,7 +65,7 @@ verify.navigationBar([
           },
           {
               "text": "propB",
-              "kind": "function"
+              "kind": "method"
           }
       ]
     },
@@ -58,14 +75,31 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "propA",
-                "kind": "function"
+                "kind": "method"
             }
         ],
         "indent": 1
     },
     {
+        "text": "propA",
+        "kind": "method",
+        "childItems": [
+            {
+                "text": "c",
+                "kind": "var"
+            }
+        ],
+        "indent": 2
+    },
+    {
         "text": "propB",
-        "kind": "function",
+        "kind": "method",
+        "childItems": [
+            {
+                "text": "d",
+                "kind": "var"
+            }
+        ],
         "indent": 1
     }
 ]);

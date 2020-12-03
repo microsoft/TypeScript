@@ -7,11 +7,10 @@ export namespace N { export var x = 1; }
 import {N} from "./f1";
 >N : Symbol(N, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))
 
-// partial revert of https://github.com/Microsoft/TypeScript/pull/7583 to prevent breaking changes
 export namespace N {
 >N : Symbol(N, Decl(f2.ts, 0, 23))
 
     export interface I {x: any}
->I : Symbol(I, Decl(f2.ts, 2, 20))
->x : Symbol(I.x, Decl(f2.ts, 3, 24))
+>I : Symbol(I, Decl(f2.ts, 1, 20))
+>x : Symbol(I.x, Decl(f2.ts, 2, 24))
 }

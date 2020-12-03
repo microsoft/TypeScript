@@ -1,35 +1,35 @@
 === tests/cases/conformance/jsdoc/use.js ===
 var mod = require('./mod');
->mod : typeof import("tests/cases/conformance/jsdoc/mod")
->require('./mod') : typeof import("tests/cases/conformance/jsdoc/mod")
+>mod : typeof mod
+>require('./mod') : typeof mod
 >require : any
 >'./mod' : "./mod"
 
 mod.f('no')
 >mod.f('no') : number
 >mod.f : (n: number) => number
->mod : typeof import("tests/cases/conformance/jsdoc/mod")
+>mod : typeof mod
 >f : (n: number) => number
 >'no' : "no"
 
 mod.g('also no')
 >mod.g('also no') : number
 >mod.g : (n: number) => number
->mod : typeof import("tests/cases/conformance/jsdoc/mod")
+>mod : typeof mod
 >g : (n: number) => number
 >'also no' : "also no"
 
 mod.h(0)
 >mod.h(0) : string
 >mod.h : (mom: string) => string
->mod : typeof import("tests/cases/conformance/jsdoc/mod")
+>mod : typeof mod
 >h : (mom: string) => string
 >0 : 0
 
 mod.i(1)
 >mod.i(1) : string
 >mod.i : (mom: string) => string
->mod : typeof import("tests/cases/conformance/jsdoc/mod")
+>mod : typeof mod
 >i : (mom: string) => string
 >1 : 1
 
@@ -58,13 +58,13 @@ module.exports.h = module.exports.i = function hi(mom) {
 >module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.h : (mom: string) => string
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod")
->module : { "tests/cases/conformance/jsdoc/mod": typeof import("tests/cases/conformance/jsdoc/mod"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod\"": typeof import("tests/cases/conformance/jsdoc/mod"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod")
 >h : (mom: string) => string
 >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
 >module.exports.i : (mom: string) => string
 >module.exports : typeof import("tests/cases/conformance/jsdoc/mod")
->module : { "tests/cases/conformance/jsdoc/mod": typeof import("tests/cases/conformance/jsdoc/mod"); }
+>module : { "\"tests/cases/conformance/jsdoc/mod\"": typeof import("tests/cases/conformance/jsdoc/mod"); }
 >exports : typeof import("tests/cases/conformance/jsdoc/mod")
 >i : (mom: string) => string
 >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string

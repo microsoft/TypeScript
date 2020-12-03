@@ -78,5 +78,17 @@ verify.navigationBar([
             }
         ],
         "indent": 1
+    },
+    {
+      "text": "constructor",
+      "kind": "constructor",
+      "childItems": [
+        {
+          "text": "local",
+          "kind": "var"
+        }
+      ],
+      "indent": 2
     }
+    
 ]);

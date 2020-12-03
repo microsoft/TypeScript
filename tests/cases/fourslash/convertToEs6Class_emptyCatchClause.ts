@@ -13,8 +13,7 @@ verify.codeFix({
 `class MyClass {
     constructor() { }
     foo() {
-        try { }
-        catch () { }
+        try { } catch () { }
     }
 }
 `,

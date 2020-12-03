@@ -137,7 +137,7 @@ interface C<T> {
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 12))
 }
 
-interface C<T extends number> { // error
+interface C<T extends number> { // ok
 >C : Symbol(C, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 50, 1), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 54, 1))
 >T : Symbol(T, Decl(twoGenericInterfacesWithDifferentConstraints.ts, 52, 12), Decl(twoGenericInterfacesWithDifferentConstraints.ts, 56, 12))
 

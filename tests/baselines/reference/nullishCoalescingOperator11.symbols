@@ -1,0 +1,11 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator11.ts ===
+declare const f11: 1 | 0 | '' | null | undefined;
+>f11 : Symbol(f11, Decl(nullishCoalescingOperator11.ts, 0, 13))
+
+let g11 = f11 ?? f11.toFixed()
+>g11 : Symbol(g11, Decl(nullishCoalescingOperator11.ts, 2, 3))
+>f11 : Symbol(f11, Decl(nullishCoalescingOperator11.ts, 0, 13))
+>f11 : Symbol(f11, Decl(nullishCoalescingOperator11.ts, 0, 13))
+
+
+

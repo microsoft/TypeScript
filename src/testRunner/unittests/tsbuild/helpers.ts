@@ -113,9 +113,11 @@ interface Symbol {
 }
 `;
 
+    /**
+     * Load project from disk into /src folder
+     */
     export function loadProjectFromDisk(
         root: string,
-        time?: vfs.FileSystemOptions["time"],
         libContentToAppend?: string
     ): vfs.FileSystem {
         const resolver = vfs.createResolver(Harness.IO);
@@ -125,22 +127,22 @@ interface Symbol {
             },
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
-            time
         });
         addLibAndMakeReadonly(fs, libContentToAppend);
         return fs;
     }
 
+    /**
+     * All the files must be in /src
+     */
     export function loadProjectFromFiles(
         files: vfs.FileSet,
-        time?: vfs.FileSystemOptions["time"],
         libContentToAppend?: string
     ): vfs.FileSystem {
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files,
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
-            time
         });
         addLibAndMakeReadonly(fs, libContentToAppend);
         return fs;
@@ -150,6 +152,26 @@ interface Symbol {
         fs.mkdirSync("/lib");
         fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
         fs.makeReadonly();
+    }
+
+    /**
+     * Gets the FS mountuing existing fs's /src and /lib folder
+     */
+    export function getFsWithTime(baseFs: vfs.FileSystem) {
+        const { time, tick } = getTime();
+        const host = new fakes.System(baseFs) as any as vfs.FileSystemResolverHost;
+        host.getWorkspaceRoot = notImplemented;
+        const resolver = vfs.createResolver(host);
+        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            files: {
+                ["/src"]: new vfs.Mount("/src", resolver),
+                ["/lib"]: new vfs.Mount("/lib", resolver)
+            },
+            cwd: "/",
+            meta: { defaultLibLocation: "/lib" },
+            time
+        });
+        return { fs, time, tick };
     }
 
     export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
@@ -164,39 +186,21 @@ interface Symbol {
         }
     }
 
-    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
-        for (const mapFile of mapFileNames) {
-            if (!fs.existsSync(mapFile)) continue;
-            const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
-            fs.writeFileSync(`${mapFile}.baseline.txt`, text);
+    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<string>; }) {
+        const mapFileNames = mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
+        while (true) {
+            const result = mapFileNames.next();
+            if (result.done) break;
+            const mapFile = result.value;
+            const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
+            sys.writeFile(`${mapFile}.baseline.txt`, text);
         }
     }
 
-    // [tsbuildinfo, js, dts]
-    export type BuildInfoSectionBaselineFiles = [string, string | undefined, string | undefined];
-    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>) {
-        for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
-            if (!fs.existsSync(file)) continue;
-
-            const buildInfo = getBuildInfo(fs.readFileSync(file, "utf8"));
-            const bundle = buildInfo.bundle;
-            if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) continue;
-
-            // Write the baselines:
-            const baselineRecorder = new Harness.Compiler.WriterAggregator();
-            generateBundleFileSectionInfo(fs, baselineRecorder, bundle.js, jsFile);
-            generateBundleFileSectionInfo(fs, baselineRecorder, bundle.dts, dtsFile);
-            baselineRecorder.Close();
-
-            const text = baselineRecorder.lines.join("\r\n");
-            fs.writeFileSync(`${file}.baseline.txt`, text, "utf8");
-        }
-    }
-
-    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: BundleFileInfo | undefined, outFile: string | undefined) {
+    function generateBundleFileSectionInfo(sys: System, originalReadCall: System["readFile"], baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: BundleFileInfo | undefined, outFile: string | undefined) {
         if (!length(bundleFileInfo && bundleFileInfo.sections) && !outFile) return; // Nothing to baseline
 
-        const content = outFile && fs.existsSync(outFile) ? fs.readFileSync(outFile, "utf8") : "";
+        const content = outFile && sys.fileExists(outFile) ? originalReadCall.call(sys, outFile, "utf8")! : "";
         baselineRecorder.WriteLine("======================================================================");
         baselineRecorder.WriteLine(`File:: ${outFile}`);
         for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
@@ -205,7 +209,7 @@ interface Symbol {
             if (section.kind !== BundleFileSectionKind.Prepend) {
                 writeTextOfSection(section.pos, section.end);
             }
-            else {
+            else if (section.texts.length > 0) {
                 Debug.assert(section.pos === first(section.texts).pos);
                 Debug.assert(section.end === last(section.texts).end);
                 for (const text of section.texts) {
@@ -213,6 +217,9 @@ interface Symbol {
                     writeSectionHeader(text);
                     writeTextOfSection(text.pos, text.end);
                 }
+            }
+            else {
+                Debug.assert(section.pos === section.end);
             }
         }
         baselineRecorder.WriteLine("======================================================================");
@@ -229,235 +236,305 @@ interface Symbol {
         }
     }
 
-    interface BuildInput {
-        fs: vfs.FileSystem;
+    export function baselineBuildInfo(
+        options: CompilerOptions,
+        sys: System & { writtenFiles: ReadonlyCollection<string>; },
+        originalReadCall?: System["readFile"]
+    ) {
+        const out = outFile(options);
+        if (!out) return;
+        const { buildInfoPath, jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
+        if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;
+        if (!sys.fileExists(buildInfoPath)) return;
+
+        const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        const bundle = buildInfo.bundle;
+        if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) return;
+
+        // Write the baselines:
+        const baselineRecorder = new Harness.Compiler.WriterAggregator();
+        generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
+        generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
+        baselineRecorder.Close();
+
+        const text = baselineRecorder.lines.join("\r\n");
+        sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
+    }
+
+    interface VerifyIncrementalCorrectness {
+        scenario: TscCompile["scenario"];
+        subScenario: TscCompile["subScenario"];
+        commandLineArgs: TscCompile["commandLineArgs"];
+        modifyFs: TscCompile["modifyFs"];
+        incrementalModifyFs: TscIncremental["modifyFs"];
         tick: () => void;
-        rootNames: ReadonlyArray<string>;
-        expectedMapFileNames?: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
-        modifyFs: (fs: vfs.FileSystem) => void;
+        baseFs: vfs.FileSystem;
+        newSys: TscCompileSystem;
     }
-
-    function build({ fs, tick, rootNames, expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, modifyFs }: BuildInput) {
-        const actualReadFileMap = createMap<number>();
-        modifyFs(fs);
-        tick();
-
-        const host = new fakes.SolutionBuilderHost(fs);
-        const builder = createSolutionBuilder(host, rootNames, { dry: false, force: false, verbose: true });
-        host.clearDiagnostics();
-        const originalReadFile = host.readFile;
-        host.readFile = path => {
-            // Dont record libs
-            if (path.startsWith("/src/")) {
-                actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
+    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number) {
+        it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index}`, () => {
+            const {
+                scenario, subScenario, commandLineArgs,
+                modifyFs, incrementalModifyFs,
+                tick, baseFs, newSys
+            } = input();
+            const sys = tscCompile({
+                scenario,
+                subScenario,
+                fs: () => baseFs.makeReadonly(),
+                commandLineArgs,
+                modifyFs: fs => {
+                    tick();
+                    if (modifyFs) modifyFs(fs);
+                    incrementalModifyFs(fs);
+                },
+            });
+            for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
+                const expectedText = sys.readFile(outputFile);
+                const actualText = newSys.readFile(outputFile);
+                if (!isBuildInfoFile(outputFile)) {
+                    assert.equal(actualText, expectedText, `File: ${outputFile}`);
+                }
+                else if (actualText !== expectedText) {
+                    // Verify build info without affectedFilesPendingEmit
+                    const { buildInfo: actualBuildInfo, affectedFilesPendingEmit: actualAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(actualText);
+                    const { buildInfo: expectedBuildInfo, affectedFilesPendingEmit: expectedAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(expectedText);
+                    assert.deepEqual(actualBuildInfo, expectedBuildInfo, `TsBuild info text without affectedFilesPendingEmit: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                    // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
+                    if (actualAffectedFilesPendingEmit) {
+                        assert.isDefined(expectedAffectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                        let expectedIndex = 0;
+                        actualAffectedFilesPendingEmit.forEach(([actualFile]) => {
+                            expectedIndex = findIndex(expectedAffectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                            assert.notEqual(expectedIndex, -1, `Incremental build contains ${actualFile} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                            expectedIndex++;
+                        });
+                    }
+                }
             }
-            return originalReadFile.call(host, path);
-        };
-        builder.build();
-        if (expectedMapFileNames) generateSourceMapBaselineFiles(fs, expectedMapFileNames);
-        generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
-        fs.makeReadonly();
-        return { fs, actualReadFileMap, host, builder };
-    }
-
-    function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, baseFs: vfs.FileSystem) {
-        const patch = fs.diff(baseFs);
-        // tslint:disable-next-line:no-null-keyword
-        Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
-    }
-
-    function verifyReadFileCalls(actualReadFileMap: Map<number>, expectedReadFiles: ReadonlyMap<number>) {
-        TestFSWithWatch.verifyMapSize("readFileCalls", actualReadFileMap, arrayFrom(expectedReadFiles.keys()));
-        expectedReadFiles.forEach((expected, expectedFile) => {
-            const actual = actualReadFileMap.get(expectedFile);
-            assert.equal(actual, expected, `Mismatch in read file call number for: ${expectedFile}
-Not in Actual: ${JSON.stringify(arrayFrom(mapDefinedIterator(expectedReadFiles.keys(), f => actualReadFileMap.has(f) ? undefined : f)))}
-Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIterator(actualReadFileMap.entries(),
-                ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined)))}`);
         });
     }
 
-    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, ...filesWithTwoReadCalls: string[]) {
-        const map = arrayToMap(filesReadOnce, identity, () => 1);
-        for (const fileWithTwoReadCalls of filesWithTwoReadCalls) {
-            map.set(fileWithTwoReadCalls, 2);
-        }
-        return map;
+    function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): { buildInfo: BuildInfo | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
+        const buildInfo = text ? getBuildInfo(text) : undefined;
+        if (!buildInfo?.program) return { buildInfo };
+        // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
+        const { program: { affectedFilesPendingEmit, options: { noEmit, ...optionsRest}, ...programRest }, ...rest } = buildInfo;
+        return {
+            buildInfo: {
+                ...rest,
+                program: {
+                    options: optionsRest,
+                    ...programRest
+                }
+            },
+            affectedFilesPendingEmit
+        };
     }
 
-    export interface ExpectedBuildOutput {
-        expectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>;
-        expectedReadFiles?: ReadonlyMap<number>;
-    }
-
-    export interface BuildState extends ExpectedBuildOutput {
+    export interface TscIncremental {
+        buildKind: BuildKind;
         modifyFs: (fs: vfs.FileSystem) => void;
+        subScenario?: string;
+        commandLineArgs?: readonly string[];
     }
 
-    export interface VerifyTsBuildInput {
-        scenario: string;
-        projFs: () => vfs.FileSystem;
-        time: () => number;
-        tick: () => void;
-        proj: string;
-        rootNames: ReadonlyArray<string>;
-        /** map file names to generate baseline of */
-        expectedMapFileNames?: ReadonlyArray<string>;
-        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
-        lastProjectOutput: string;
-        initialBuild: BuildState;
-        outputFiles?: ReadonlyArray<string>;
-        incrementalDtsChangedBuild?: BuildState;
-        incrementalDtsUnchangedBuild?: BuildState;
-        incrementalHeaderChangedBuild?: BuildState;
-        baselineOnly?: true;
-        verifyDiagnostics?: true;
+    export interface VerifyTsBuildInput extends VerifyTsBuildInputWorker {
+        baselineIncremental?: boolean;
     }
 
-    export function verifyTsbuildOutput({
-        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
-        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutput,
-        initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
-    }: VerifyTsBuildInput) {
-        describe(`tsc --b ${proj}:: ${scenario}`, () => {
-            let fs: vfs.FileSystem;
-            let actualReadFileMap: Map<number>;
-            let firstBuildTime: number;
-            let host: fakes.SolutionBuilderHost;
+    export function verifyTscIncrementalEdits(input: VerifyTsBuildInput) {
+        verifyTscIncrementalEditsWorker(input);
+        if (input.baselineIncremental) {
+            verifyTscIncrementalEditsWorker({
+                ...input,
+                subScenario: `${input.subScenario} with incremental`,
+                commandLineArgs: [...input.commandLineArgs, "--incremental"],
+            });
+        }
+    }
+
+    export interface VerifyTsBuildInputWorker extends TscCompile {
+        incrementalScenarios: TscIncremental[];
+    }
+    function verifyTscIncrementalEditsWorker({
+        subScenario, fs, scenario, commandLineArgs,
+        baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
+        incrementalScenarios
+    }: VerifyTsBuildInputWorker) {
+        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
+            let tick: () => void;
+            let sys: TscCompileSystem;
+            let baseFs: vfs.FileSystem;
             before(() => {
-                const result = build({
-                    fs: projFs().shadow(),
-                    tick,
-                    rootNames,
-                    expectedMapFileNames,
-                    expectedBuildInfoFilesForSectionBaselines,
-                    modifyFs: initialBuild.modifyFs,
+                ({ fs: baseFs, tick } = getFsWithTime(fs()));
+                sys = tscCompile({
+                    scenario,
+                    subScenario,
+                    fs: () => baseFs.makeReadonly(),
+                    commandLineArgs,
+                    modifyFs: fs => {
+                        if (modifyFs) modifyFs(fs);
+                        tick();
+                    },
+                    baselineSourceMap,
+                    baselineReadFileCalls,
+                    baselinePrograms
                 });
-                ({ fs, actualReadFileMap, host } = result);
-                firstBuildTime = time();
+                Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
             });
             after(() => {
-                fs = undefined!;
-                actualReadFileMap = undefined!;
-                host = undefined!;
+                baseFs = undefined!;
+                sys = undefined!;
+                tick = undefined!;
             });
             describe("initialBuild", () => {
-                if (!baselineOnly || verifyDiagnostics) {
-                    it(`verify diagnostics`, () => {
-                        host.assertDiagnosticMessages(...(initialBuild.expectedDiagnostics || emptyArray));
-                    });
-                }
-                it(`Generates files matching the baseline`, () => {
-                    generateBaseline(fs, proj, scenario, "initial Build", projFs());
-                });
-                if (!baselineOnly) {
-                    it("verify readFile calls", () => {
-                        verifyReadFileCalls(actualReadFileMap, Debug.assertDefined(initialBuild.expectedReadFiles));
-                    });
-                }
+                verifyTscBaseline(() => sys);
             });
 
-            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
-                describe(subScenario, () => {
-                    let newFs: vfs.FileSystem;
-                    let actualReadFileMap: Map<number>;
-                    let host: fakes.SolutionBuilderHost;
-                    let beforeBuildTime: number;
-                    let afterBuildTime: number;
+            incrementalScenarios.forEach(({
+                buildKind,
+                modifyFs: incrementalModifyFs,
+                subScenario: incrementalSubScenario,
+                commandLineArgs: incrementalCommandLineArgs
+            }, index) => {
+                describe(incrementalSubScenario || buildKind, () => {
+                    let newSys: TscCompileSystem;
                     before(() => {
-                        beforeBuildTime = fs.statSync(lastProjectOutput).mtimeMs;
+                        Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
                         tick();
-                        newFs = fs.shadow();
-                        tick();
-                        ({ actualReadFileMap, host } = build({
-                            fs: newFs,
-                            tick,
-                            rootNames,
-                            expectedMapFileNames,
-                            expectedBuildInfoFilesForSectionBaselines,
-                            modifyFs: incrementalModifyFs,
-                        }));
-                        afterBuildTime = newFs.statSync(lastProjectOutput).mtimeMs;
+                        newSys = tscCompile({
+                            scenario,
+                            subScenario: incrementalSubScenario || subScenario,
+                            buildKind,
+                            fs: () => sys.vfs,
+                            commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                            modifyFs: fs => {
+                                tick();
+                                incrementalModifyFs(fs);
+                                tick();
+                            },
+                            baselineSourceMap,
+                            baselineReadFileCalls,
+                            baselinePrograms
+                        });
                     });
                     after(() => {
-                        newFs = undefined!;
-                        actualReadFileMap = undefined!;
-                        host = undefined!;
+                        newSys = undefined!;
                     });
-                    it("verify build output times", () => {
-                        assert.equal(beforeBuildTime, firstBuildTime, "First build timestamp is correct");
-                        assert.equal(afterBuildTime, time(), "Second build timestamp is correct");
-                    });
-                    if (!baselineOnly || verifyDiagnostics) {
-                        it(`verify diagnostics`, () => {
-                            host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
-                        });
-                    }
-                    else {
-                        // Build should pass without errors if not verifying diagnostics
-                        it(`verify no errors`, () => {
-                            host.assertErrors(/*empty*/);
-                        });
-                    }
-                    it(`Generates files matching the baseline`, () => {
-                        generateBaseline(newFs, proj, scenario, subScenario, fs);
-                    });
-                    if (!baselineOnly) {
-                        it("verify readFile calls", () => {
-                            verifyReadFileCalls(actualReadFileMap, Debug.assertDefined(incrementalExpectedReadFiles));
-                        });
-                    }
-                    it(`Verify emit output file text is same when built clean`, () => {
-                        const expectedOutputFiles = Debug.assertDefined(outputFiles);
-                        const { fs } = build({
-                            fs: newFs.shadow(),
-                            tick,
-                            rootNames,
-                            modifyFs: fs => {
-                                // Delete output files
-                                for (const outputFile of expectedOutputFiles) {
-                                    if (fs.existsSync(outputFile)) {
-                                        fs.rimrafSync(outputFile);
-                                    }
-                                }
-                            },
-                        });
-
-                        for (const outputFile of expectedOutputFiles) {
-                            const expectedText = fs.existsSync(outputFile) ? fs.readFileSync(outputFile, "utf8") : undefined;
-                            const actualText = newFs.existsSync(outputFile) ? newFs.readFileSync(outputFile, "utf8") : undefined;
-                            assert.equal(actualText, expectedText, `File: ${outputFile}`);
-                        }
-                    });
+                    verifyTscBaseline(() => newSys);
+                    verifyIncrementalCorrectness(() => ({
+                        scenario,
+                        subScenario,
+                        baseFs,
+                        newSys,
+                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                        incrementalModifyFs,
+                        modifyFs,
+                        tick
+                    }), index);
                 });
-            }
-            if (incrementalDtsChangedBuild) {
-                incrementalBuild(
-                    "incremental declaration changes",
-                    incrementalDtsChangedBuild.modifyFs,
-                    incrementalDtsChangedBuild.expectedDiagnostics,
-                    incrementalDtsChangedBuild.expectedReadFiles,
-                );
-            }
+            });
+        });
+    }
 
-            if (incrementalDtsUnchangedBuild) {
-                incrementalBuild(
-                    "incremental declaration doesnt change",
-                    incrementalDtsUnchangedBuild.modifyFs,
-                    incrementalDtsUnchangedBuild.expectedDiagnostics,
-                    incrementalDtsUnchangedBuild.expectedReadFiles
-                );
-            }
+    export function verifyTscSerializedIncrementalEdits(input: VerifyTsBuildInput) {
+        verifyTscSerializedIncrementalEditsWorker(input);
+        if (input.baselineIncremental) {
+            verifyTscSerializedIncrementalEditsWorker({
+                ...input,
+                subScenario: `${input.subScenario} with incremental`,
+                commandLineArgs: [...input.commandLineArgs, "--incremental"],
+            });
+        }
+    }
+    function verifyTscSerializedIncrementalEditsWorker({
+        subScenario, fs, scenario, commandLineArgs,
+        baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
+        incrementalScenarios
+    }: VerifyTsBuildInputWorker) {
+        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
+            Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
+            let tick: () => void;
+            let sys: TscCompileSystem;
+            let baseFs: vfs.FileSystem;
+            let incrementalSys: TscCompileSystem[];
+            before(() => {
+                ({ fs: baseFs, tick } = getFsWithTime(fs()));
+                sys = tscCompile({
+                    scenario,
+                    subScenario,
+                    fs: () => baseFs.makeReadonly(),
+                    commandLineArgs,
+                    modifyFs: fs => {
+                        if (modifyFs) modifyFs(fs);
+                        tick();
+                    },
+                    baselineSourceMap,
+                    baselineReadFileCalls,
+                    baselinePrograms
+                });
+                incrementalScenarios.forEach((
+                    { buildKind, modifyFs, subScenario: incrementalSubScenario, commandLineArgs: incrementalCommandLineArgs },
+                    index
+                ) => {
+                    Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
+                    tick();
+                    (incrementalSys || (incrementalSys = [])).push(tscCompile({
+                        scenario,
+                        subScenario: incrementalSubScenario || subScenario,
+                        buildKind,
+                        fs: () => index === 0 ? sys.vfs : incrementalSys[index - 1].vfs,
+                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                        modifyFs: fs => {
+                            tick();
+                            modifyFs(fs);
+                            tick();
+                        },
+                        baselineSourceMap,
+                        baselineReadFileCalls,
+                        baselinePrograms
+                    }));
+                });
+            });
+            after(() => {
+                baseFs = undefined!;
+                sys = undefined!;
+                tick = undefined!;
+                incrementalSys = undefined!;
+            });
+            describe("serializedBuild", () => {
 
-            if (incrementalHeaderChangedBuild) {
-                incrementalBuild(
-                    "incremental headers change without dts changes",
-                    incrementalHeaderChangedBuild.modifyFs,
-                    incrementalHeaderChangedBuild.expectedDiagnostics,
-                    incrementalHeaderChangedBuild.expectedReadFiles
-                );
-            }
+                verifyTscBaseline(() => ({
+                    baseLine: () => {
+                        const { file, text } = sys.baseLine();
+                        const texts: string[] = [text];
+                        incrementalSys.forEach((sys, index) => {
+                            const incrementalScenario = incrementalScenarios[index];
+                            texts.push("");
+                            texts.push(`Change:: ${incrementalScenario.subScenario || incrementalScenario.buildKind}`);
+                            texts.push(sys.baseLine().text);
+                        });
+                        return { file, text: texts.join("\r\n") };
+                    }
+                }));
+            });
+            describe("incremental correctness", () => {
+                incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs }, index) => verifyIncrementalCorrectness(() => ({
+                    scenario,
+                    subScenario,
+                    baseFs,
+                    newSys: incrementalSys[index],
+                    commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                    incrementalModifyFs: fs => {
+                        for (let i = 0; i <= index; i++) {
+                            incrementalScenarios[i].modifyFs(fs);
+                        }
+                    },
+                    modifyFs,
+                    tick
+                }), index));
+            });
         });
     }
 

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/callOfPropertylessConstructorFunction.js ===
+/**
+ * @constructor
+ */
+function Dependency(j) {
+>Dependency : Symbol(Dependency, Decl(callOfPropertylessConstructorFunction.js, 0, 0))
+>j : Symbol(j, Decl(callOfPropertylessConstructorFunction.js, 3, 20))
+
+  return j
+>j : Symbol(j, Decl(callOfPropertylessConstructorFunction.js, 3, 20))
+}
+Dependency({})
+>Dependency : Symbol(Dependency, Decl(callOfPropertylessConstructorFunction.js, 0, 0))
+

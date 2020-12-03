@@ -37,3 +37,4 @@ import("./locales/" + localeName + ".js").then(bar => {
 >bar : any
 
 });
+

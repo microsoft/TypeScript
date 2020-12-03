@@ -1,26 +1,26 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as child_process from "child_process";
+import * as childProcess from "child_process";
 
 
 interface Map<T> {
     [key: string]: T;
 }
 
-declare var process: {
+declare let process: {
     argv: string[];
     env: Map<string>;
     exit(exitCode?: number): void;
-}
+};
 
 main();
 function main() {
     const [, progName, tscRoot, definitelyTypedRoot] = process.argv;
     if (process.argv.length !== 4) {
         if (process.argv.length < 2) {
-            throw "Expected at least 2 argv elements."
+            throw new Error("Expected at least 2 argv elements.");
         }
-        console.log("Usage:")
+        console.log("Usage:");
         console.log(`    node ${path.relative(__dirname, progName)} [TypeScript Repo Root] [DefinitelyTyped Repo Root]`);
         return;
     }
@@ -42,63 +42,62 @@ function filePathEndsWith(path: string, endingString: string): boolean {
 }
 
 function copyFileSync(source: string, destination: string) {
-    let text = fs.readFileSync(source);
+    const text = fs.readFileSync(source);
     fs.writeFileSync(destination, text);
 }
 
-function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string ) {
+function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string) {
     let cmd = "node " + tscPath + " --module commonjs " + testFiles.join(" ");
     if (responseFile) {
         cmd += " @" + responseFile;
     }
 
-    let testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1); 
-    let testDirectoryPath = path.join(process.env["temp"], testDirectoryName);
+    const testDirectoryName = testCaseName + "_" + Math.floor((Math.random() * 10000) + 1);
+    const testDirectoryPath = path.join(process.env.temp, testDirectoryName);
     if (fs.existsSync(testDirectoryPath)) {
         throw new Error("Could not create test directory");
     }
     fs.mkdirSync(testDirectoryPath);
 
-    child_process.exec(cmd, {
+    childProcess.exec(cmd, {
         maxBuffer: 1 * 1024 * 1024,
         cwd: testDirectoryPath
     }, (error, stdout, stderr) => {
+        console.log("importing " + testCaseName + " ...");
+        console.log(cmd);
+
+        if (error) {
             console.log("importing " + testCaseName + " ...");
             console.log(cmd);
-
-            if (error) {
-                console.log("importing " + testCaseName + " ...");
-                console.log(cmd);
-                console.log("==> error " + JSON.stringify(error));
-                console.log("==> stdout " + String(stdout));
-                console.log("==> stderr " + String(stderr));
-                console.log("\r\n");
-                return;
-            }
-
-            // copy generated file to output location
-            let outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
-            let testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
-            copyFileSync(outputFilePath, testCasePath);
-
-            //console.log("output generated at: " + outputFilePath);
-
-            if (!fs.existsSync(testCasePath)) {
-                throw new Error("could not find test case at: " + testCasePath);
-            }
-            else {
-                fs.unlinkSync(outputFilePath);
-                fs.rmdirSync(testDirectoryPath);
-                //console.log("testcase generated at: " + testCasePath);
-                //console.log("Done.");
-            }
-            //console.log("\r\n");
-
-        })
-        .on('error', (error: any) => {
             console.log("==> error " + JSON.stringify(error));
+            console.log("==> stdout " + String(stdout));
+            console.log("==> stderr " + String(stderr));
             console.log("\r\n");
-        });
+            return;
+        }
+
+        // copy generated file to output location
+        const outputFilePath = path.join(testDirectoryPath, "iocapture0.json");
+        const testCasePath = path.join(rwcTestPath, "DefinitelyTyped_" + testCaseName + ".json");
+        copyFileSync(outputFilePath, testCasePath);
+
+        //console.log("output generated at: " + outputFilePath);
+
+        if (!fs.existsSync(testCasePath)) {
+            throw new Error("could not find test case at: " + testCasePath);
+        }
+        else {
+            fs.unlinkSync(outputFilePath);
+            fs.rmdirSync(testDirectoryPath);
+            //console.log("testcase generated at: " + testCasePath);
+            //console.log("Done.");
+        }
+        //console.log("\r\n");
+
+    }).on("error", (error: any) => {
+        console.log("==> error " + JSON.stringify(error));
+        console.log("\r\n");
+    });
 }
 
 function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, definitelyTypedRoot: string): void {
@@ -116,13 +115,13 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
             .filter(i => fs.statSync(path.join(definitelyTypedRoot, i)).isDirectory())
             .forEach(d => {
                 const directoryPath = path.join(definitelyTypedRoot, d);
-                fs.readdir(directoryPath, function (err, files) {
+                fs.readdir(directoryPath, (err, files) => {
                     if (err) {
                         throw err;
                     }
 
-                    let tsFiles: string[] = [];
-                    let testFiles: string[] = [];
+                    const tsFiles: string[] = [];
+                    const testFiles: string[] = [];
                     let paramFile: string;
 
                     for (const filePath of files.map(f => path.join(directoryPath, f))) {
@@ -147,7 +146,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
                             }
                         }
                         else {
-                           importDefinitelyTypedTest(tscPath, rwcTestPath, d, tsFiles, paramFile);
+                            importDefinitelyTypedTest(tscPath, rwcTestPath, d, tsFiles, paramFile);
                         }
                     }
                     else {
@@ -156,6 +155,6 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
                         }
                     }
                 });
-            })
+            });
     });
 }

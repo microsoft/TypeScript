@@ -18,3 +18,15 @@ class B {
         // it should error here because it returns undefined
     }
 }
+class C {
+    get a() {
+        if (Math.random() > 0.5) {
+            return 0;
+        }
+
+        // it should error here because it returns undefined
+    }
+
+    set a(value: number) {
+    }
+}

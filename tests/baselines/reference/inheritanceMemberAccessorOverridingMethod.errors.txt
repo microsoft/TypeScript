@@ -1,0 +1,20 @@
+tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
+
+
+==== tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts (1 errors) ====
+    class a {
+        x() {
+            return "20";
+        }
+    }
+    
+    class b extends a {
+        get x() {
+            ~
+!!! error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
+            return () => "20";
+        }
+        set x(aValue) {
+            
+        }
+    }

@@ -1,4 +1,4 @@
-tests/cases/compiler/service.ts(1,8): error TS1192: Module '"tests/cases/compiler/db"' has no default export.
+tests/cases/compiler/service.ts(1,8): error TS2613: Module '"tests/cases/compiler/db"' has no default export. Did you mean to use 'import { db } from "tests/cases/compiler/db"' instead?
 
 
 ==== tests/cases/compiler/db.ts (0 errors) ====
@@ -10,7 +10,7 @@ tests/cases/compiler/service.ts(1,8): error TS1192: Module '"tests/cases/compile
 ==== tests/cases/compiler/service.ts (1 errors) ====
     import db from './db'; // error no default export
            ~~
-!!! error TS1192: Module '"tests/cases/compiler/db"' has no default export.
+!!! error TS2613: Module '"tests/cases/compiler/db"' has no default export. Did you mean to use 'import { db } from "tests/cases/compiler/db"' instead?
     function someDecorator(target) {
         return target;
     }

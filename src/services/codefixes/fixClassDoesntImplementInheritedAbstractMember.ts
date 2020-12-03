@@ -15,7 +15,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seenClassDeclarations = createMap<true>();
+            const seenClassDeclarations = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
@@ -41,13 +41,15 @@ namespace ts.codefix {
         // so duplicates cannot occur.
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, sourceFile, context, preferences, importAdder, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        importAdder.writeFixes(changeTracker);
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
         // See `codeFixClassExtendAbstractProtectedProperty.ts` in https://github.com/Microsoft/TypeScript/pull/11547/files
         // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
-        const flags = getModifierFlags(first(symbol.getDeclarations()!));
+        const flags = getSyntacticModifierFlags(first(symbol.getDeclarations()!));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

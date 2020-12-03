@@ -1,12 +1,16 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
-src/config/passport.ts(136,25): error TS2339: Property 'tokens' does not exist on type 'User'.
-src/controllers/api.ts(22,28): error TS2339: Property 'tokens' does not exist on type 'User'.
-src/controllers/api.ts(24,27): error TS2339: Property 'facebook' does not exist on type 'User'.
-src/controllers/user.ts(145,28): error TS2339: Property 'id' does not exist on type 'User'.
-src/controllers/user.ts(181,28): error TS2339: Property 'id' does not exist on type 'User'.
-src/controllers/user.ts(197,33): error TS2339: Property 'id' does not exist on type 'User'.
-src/controllers/user.ts(211,28): error TS2339: Property 'id' does not exist on type 'User'.
+node_modules/connect-mongo/src/types.d.ts(113,66): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
+node_modules/connect-mongo/src/types.d.ts(114,45): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
+node_modules/connect-mongo/src/types.d.ts(118,47): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
+src/app.ts(72,21): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+src/app.ts(75,21): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+src/app.ts(116,30): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+src/controllers/user.ts(51,38): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
 
 
 

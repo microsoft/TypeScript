@@ -1,0 +1,110 @@
+=== tests/cases/conformance/inferFromBindingPattern.ts ===
+declare function f1<T extends string>(): T;
+>f1 : <T extends string>() => T
+
+declare function f2<T extends string>(): [T];
+>f2 : <T extends string>() => [T]
+
+declare function f3<T extends string>(): { x: T };
+>f3 : <T extends string>() => {    x: T;}
+>x : T
+
+let x1 = f1();         // string
+>x1 : string
+>f1() : string
+>f1 : <T extends string>() => T
+
+let [x2] = f2();       // string
+>x2 : string
+>f2() : [string]
+>f2 : <T extends string>() => [T]
+
+let { x: x3 } = f3();  // string
+>x : any
+>x3 : string
+>f3() : { x: string; }
+>f3 : <T extends string>() => { x: T; }
+
+// Repro from #30379
+
+function foo<T = number>(): [T] {
+>foo : <T = number>() => [T]
+
+	return [42 as any]
+>[42 as any] : [any]
+>42 as any : any
+>42 : 42
+}
+const [x] = foo();  // [number]
+>x : number
+>foo() : [number]
+>foo : <T = number>() => [T]
+
+// Repro from #35291
+
+interface SelectProps<T, K> {
+  selector?: (obj: T) => K;
+>selector : ((obj: T) => K) | undefined
+>obj : T
+}
+
+type SelectResult<T, K> = [K, T];
+>SelectResult : SelectResult<T, K>
+
+interface Person {
+  name: string;
+>name : string
+
+  surname: string;
+>surname : string
+}
+
+declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
+>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
+>props : SelectProps<Person, K> | undefined
+
+const [person] = selectJohn();
+>person : Person
+>selectJohn() : SelectResult<Person, Person>
+>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
+
+const [any, whatever] = selectJohn();
+>any : Person
+>whatever : Person
+>selectJohn() : SelectResult<Person, Person>
+>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
+
+const john = selectJohn();
+>john : SelectResult<Person, Person>
+>selectJohn() : SelectResult<Person, Person>
+>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
+
+const [personAgain, nufinspecial] = john;
+>personAgain : Person
+>nufinspecial : Person
+>john : SelectResult<Person, Person>
+
+// Repro from #35291
+
+declare function makeTuple<T1>(arg: T1): [T1];
+>makeTuple : <T1>(arg: T1) => [T1]
+>arg : T1
+
+declare function stringy<T = string>(arg?: T): T;
+>stringy : <T = string>(arg?: T | undefined) => T
+>arg : T | undefined
+
+const isStringTuple = makeTuple(stringy());  // [string]
+>isStringTuple : [string]
+>makeTuple(stringy()) : [string]
+>makeTuple : <T1>(arg: T1) => [T1]
+>stringy() : string
+>stringy : <T = string>(arg?: T | undefined) => T
+
+const [isAny] = makeTuple(stringy());  // [string]
+>isAny : string
+>makeTuple(stringy()) : [string]
+>makeTuple : <T1>(arg: T1) => [T1]
+>stringy() : string
+>stringy : <T = string>(arg?: T | undefined) => T
+

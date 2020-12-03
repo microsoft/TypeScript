@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    enum SemicolonPreference {
+        Ignore = "ignore",
+        Insert = "insert",
+        Remove = "remove",
+    }
+
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
@@ -87,6 +93,11 @@ declare module ts {
         reportsUnnecessary?: {};
     }
 
+    interface LineAndCharacter {
+        line: number;
+        character: number;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -96,12 +107,26 @@ declare namespace FourSlashInterface {
         position: number;
         data?: any;
     }
+    enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
+    }
     interface EditorOptions {
         BaseIndentSize?: number,
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+    }
+    interface EditorSettings {
+        baseIndentSize?: number;
+        indentSize?: number;
+        tabSize?: number;
+        newLineCharacter?: string;
+        convertTabsToSpaces?: boolean;
+        indentStyle?: IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
@@ -118,6 +143,26 @@ declare namespace FourSlashInterface {
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         insertSpaceBeforeTypeAnnotation: boolean;
         [s: string]: boolean | number | string | undefined;
+    }
+    interface FormatCodeSettings extends EditorSettings {
+        readonly insertSpaceAfterCommaDelimiter?: boolean;
+        readonly insertSpaceAfterSemicolonInForStatements?: boolean;
+        readonly insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        readonly insertSpaceAfterConstructor?: boolean;
+        readonly insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        readonly insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        readonly insertSpaceAfterTypeAssertion?: boolean;
+        readonly insertSpaceBeforeFunctionParenthesis?: boolean;
+        readonly placeOpenBraceOnNewLineForFunctions?: boolean;
+        readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        readonly insertSpaceBeforeTypeAnnotation?: boolean;
+        readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly semicolons?: ts.SemicolonPreference;
     }
     interface Range {
         fileName: string;
@@ -155,10 +200,16 @@ declare namespace FourSlashInterface {
         implementation(): void;
         position(position: number, fileIndex?: number): any;
         position(position: number, fileName?: string): any;
+        position(lineAndCharacter: ts.LineAndCharacter, fileName?: string): void;
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
         select(startMarker: string, endMarker: string): void;
         selectRange(range: Range): void;
+        /**
+         * Selects a line at a given index, not including any newline characters.
+         * @param index 0-based
+         */
+        selectLine(index: number): void;
     }
     class verifyNegatable {
         private negative;
@@ -176,7 +227,7 @@ declare namespace FourSlashInterface {
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
-            description: string,
+            description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
             newFileContent?: NewFileContent,
             newRangeContent?: string,
             errorCode?: number,
@@ -186,11 +237,13 @@ declare namespace FourSlashInterface {
             commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions> | string): void;
+        codeFixAllAvailable(fixName: string): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -236,10 +289,12 @@ declare namespace FourSlashInterface {
         goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
+        baselineFindAllReferences(markerName: string): void;
         noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
         /**
+         * @deprecated Use baselineFindAllReferences instead
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
@@ -247,7 +302,7 @@ declare namespace FourSlashInterface {
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(...texts: string[]): void;
-        rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[] });
+        rangesAreRenameLocations(options?: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: Range[], providePrefixAndSuffixTextForRename?: boolean });
         findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]): void;
         noSignatureHelp(...markers: (string | Marker)[]): void;
         noSignatureHelpForTriggerReason(triggerReason: SignatureHelpTriggerReason, ...markers: (string | Marker)[]): void
@@ -260,11 +315,13 @@ declare namespace FourSlashInterface {
         baselineCurrentFileBreakpointLocations(): void;
         baselineCurrentFileNameOrDottedNameSpans(): void;
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
+        baselineSyntacticDiagnostics(): void;
+        baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: Range[]): void;
+        outliningSpansInCurrentFile(spans: Range[], kind?: "comment" | "region" | "code" | "imports"): void;
         outliningHintSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
@@ -278,6 +335,7 @@ declare namespace FourSlashInterface {
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
+        importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[]): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -292,19 +350,22 @@ declare namespace FourSlashInterface {
          */
         syntacticClassificationsAre(...classifications: {
             classificationType: string;
-            text: string;
+            text?: string;
         }[]): void;
         /**
          * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
          */
-        semanticClassificationsAre(...classifications: {
-            classificationType: string;
-            text: string;
+        semanticClassificationsAre(format: "original" | "2020", ...classifications: {
+            classificationType: string | number;
+            text?: string;
             textSpan?: TextSpan;
         }[]): void;
+        /** Edits the current testfile and replaces with the semantic classifications */
+        replaceWithSemanticClassifications(format: "2020")
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
         renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
+        baselineRename(marker: string, options: RenameOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
@@ -330,6 +391,7 @@ declare namespace FourSlashInterface {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
         }): void;
+        baselineCallHierarchy(): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
             readonly preferences?: UserPreferences;
@@ -337,6 +399,13 @@ declare namespace FourSlashInterface {
         noMoveToNewFile(): void;
 
         generateTypes(...options: GenerateTypesOptions[]): void;
+
+        organizeImports(newContent: string): void;
+
+        toggleLineComment(newFileContent: string): void;
+        toggleMultilineComment(newFileContent: string): void;
+        commentSelection(newFileContent: string): void;
+        uncommentSelection(newFileContent: string): void;
     }
     class edit {
         backspace(count?: number): void;
@@ -346,12 +415,21 @@ declare namespace FourSlashInterface {
         insert(text: string): void;
         insertLine(text: string): void;
         insertLines(...lines: string[]): void;
+        /** @param index 0-based */
+        deleteLine(index: number): void;
+        /**
+         * @param startIndex 0-based
+         * @param endIndexInclusive 0-based
+         */
+        deleteLineRange(startIndex: number, endIndexInclusive: number): void;
+        /** @param index 0-based */
+        replaceLine(index: number, text: string): void;
         moveRight(count?: number): void;
         moveLeft(count?: number): void;
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: NewFileContent }): void;
+        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: NewFileContent, triggerReason?: RefactorTriggerReason }): void;
     }
     class debug {
         printCurrentParameterHelp(): void;
@@ -369,13 +447,14 @@ declare namespace FourSlashInterface {
         printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
+        printOutliningSpans(): void;
         printReferences(): void;
         printContext(): void;
     }
     class format {
         document(): void;
         copyFormatOptions(): FormatCodeOptions;
-        setFormatOptions(options: FormatCodeOptions): any;
+        setFormatOptions(options: FormatCodeOptions | FormatCodeSettings): any;
         selection(startMarker: string, endMarker: string): void;
         onType(posMarker: string, key: string): void;
         setOption(name: keyof FormatCodeOptions, value: number | string | boolean): void;
@@ -384,118 +463,123 @@ declare namespace FourSlashInterface {
         resetCancelled(): void;
         setCancelled(numberOfCalls?: number): void;
     }
-    module classification {
-        function comment(text: string, position?: number): {
+
+    interface ModernClassificationFactory {
+        semanticToken(identifier: string, name: string)
+    }
+
+    interface ClassificationFactory {
+        comment(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function identifier(text: string, position?: number): {
+        identifier(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function keyword(text: string, position?: number): {
+        keyword(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function numericLiteral(text: string, position?: number): {
+        numericLiteral(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function operator(text: string, position?: number): {
+        operator(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function stringLiteral(text: string, position?: number): {
+        stringLiteral(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function whiteSpace(text: string, position?: number): {
+        whiteSpace(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function text(text: string, position?: number): {
+        text(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function punctuation(text: string, position?: number): {
+        punctuation(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function docCommentTagName(text: string, position?: number): {
+        docCommentTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function className(text: string, position?: number): {
+        className(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function enumName(text: string, position?: number): {
+        enumName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function interfaceName(text: string, position?: number): {
+        interfaceName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function moduleName(text: string, position?: number): {
+        moduleName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function typeParameterName(text: string, position?: number): {
+        typeParameterName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function parameterName(text: string, position?: number): {
+        parameterName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function typeAliasName(text: string, position?: number): {
+        typeAliasName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxOpenTagName(text: string, position?: number): {
+        jsxOpenTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxCloseTagName(text: string, position?: number): {
+        jsxCloseTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxSelfClosingTagName(text: string, position?: number): {
+        jsxSelfClosingTagName(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxAttribute(text: string, position?: number): {
+        jsxAttribute(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxText(text: string, position?: number): {
+        jsxText(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
         };
-        function jsxAttributeStringLiteralValue(text: string, position?: number): {
+        jsxAttributeStringLiteralValue(text: string, position?: number): {
             classificationType: string;
             text: string;
             textSpan?: TextSpan;
@@ -516,21 +600,24 @@ declare namespace FourSlashInterface {
         range?: Range;
         code: number;
         reportsUnnecessary?: true;
+        reportsDeprecated?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly includeAutomaticOptionalChainCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
         readonly isNewIdentifierLocation?: boolean;
         readonly isGlobalCompletion?: boolean;
+        readonly optionalReplacementSpan?: Range;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
@@ -545,9 +632,11 @@ declare namespace FourSlashInterface {
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;
+        readonly isFromUncheckedFile?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
+        readonly isPackageJsonImport?: boolean;
 
         // details
         readonly text?: string;
@@ -570,6 +659,7 @@ declare namespace FourSlashInterface {
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
         triggerReason?: SignatureHelpTriggerReason;
+        overrideSelectedItemIndex?: number;
     }
 
     export type SignatureHelpTriggerReason =
@@ -611,6 +701,8 @@ declare namespace FourSlashInterface {
          */
         triggerCharacter?: string,
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface VerifyCodeFixAvailableOptions {
         readonly description: string;
@@ -656,8 +748,13 @@ declare namespace FourSlashInterface {
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
+
+    type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
+    type DiagnosticIgnoredInterpolations = { template: string }
 }
+/** Wraps a diagnostic message to be compared ignoring interpolated strings */
+declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
 declare var plugins: FourSlashInterface.plugins;
@@ -667,17 +764,22 @@ declare var edit: FourSlashInterface.edit;
 declare var debug: FourSlashInterface.debug;
 declare var format: FourSlashInterface.format;
 declare var cancellation: FourSlashInterface.cancellation;
-declare var classification: typeof FourSlashInterface.classification;
+declare function classification(format: "original"): FourSlashInterface.ClassificationFactory;
+declare function classification(format: "2020"): FourSlashInterface.ModernClassificationFactory;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
-        LocationPriority = "0",
-        OptionalMember = "1",
-        MemberDeclaredBySpreadAssignment = "2",
-        SuggestedClassMembers = "3",
-        GlobalsOrKeywords = "4",
-        AutoImportSuggestions = "5",
-        JavascriptIdentifiers = "6"
+        LocalDeclarationPriority = "0",
+        LocationPriority = "1",
+        OptionalMember = "2",
+        MemberDeclaredBySpreadAssignment = "3",
+        SuggestedClassMembers = "4",
+        GlobalsOrKeywords = "5",
+        AutoImportSuggestions = "6",
+        JavascriptIdentifiers = "7"
+    }
+    export const enum CompletionSource {
+        ThisProperty = "ThisProperty/"
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

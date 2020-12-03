@@ -1,0 +1,140 @@
+=== tests/cases/compiler/discriminantElementAccessCheck.ts ===
+type U = TypeA | TypeB;
+>U : U
+
+interface TypeA {
+    kind: 'A';
+>kind : "A"
+
+    a: number;
+>a : number
+}
+interface TypeB {
+    kind: 'B';
+>kind : "B"
+
+    b: string;
+>b : string
+}
+
+function assertNever(x: never) {
+>assertNever : (x: never) => never
+>x : never
+
+    return x;
+>x : never
+}
+
+function IfWithString(val: U) {
+>IfWithString : (val: U) => string | number
+>val : U
+
+    if (val['kind'] === 'B') {
+>val['kind'] === 'B' : boolean
+>val['kind'] : "A" | "B"
+>val : U
+>'kind' : "kind"
+>'B' : "B"
+
+        return val.b;
+>val.b : string
+>val : TypeB
+>b : string
+
+    } else {
+        return val.a;
+>val.a : number
+>val : TypeA
+>a : number
+    }
+}
+
+function SwitchWithString(val: U) {
+>SwitchWithString : (val: U) => string | number
+>val : U
+
+    switch (val['kind']) {
+>val['kind'] : "A" | "B"
+>val : U
+>'kind' : "kind"
+
+        case 'A':
+>'A' : "A"
+
+            return val.a;
+>val.a : number
+>val : TypeA
+>a : number
+
+        case 'B':
+>'B' : "B"
+
+            return val.b;
+>val.b : string
+>val : TypeB
+>b : string
+
+        default:
+            return assertNever(val);
+>assertNever(val) : never
+>assertNever : (x: never) => never
+>val : never
+    }
+}
+
+function IfWithTemplate(val: U) {
+>IfWithTemplate : (val: U) => string | number
+>val : U
+
+    if (val[`kind`] === 'B') {
+>val[`kind`] === 'B' : boolean
+>val[`kind`] : "A" | "B"
+>val : U
+>`kind` : "kind"
+>'B' : "B"
+
+        return val.b;
+>val.b : string
+>val : TypeB
+>b : string
+
+    } else {
+        return val.a;
+>val.a : number
+>val : TypeA
+>a : number
+    }
+}
+
+function SwitchWithTemplate(val: U) {
+>SwitchWithTemplate : (val: U) => string | number
+>val : U
+
+    switch (val[`kind`]) {
+>val[`kind`] : "A" | "B"
+>val : U
+>`kind` : "kind"
+
+        case 'A':
+>'A' : "A"
+
+            return val.a;
+>val.a : number
+>val : TypeA
+>a : number
+
+        case 'B':
+>'B' : "B"
+
+            return val.b;
+>val.b : string
+>val : TypeB
+>b : string
+
+        default:
+            return assertNever(val);
+>assertNever(val) : never
+>assertNever : (x: never) => never
+>val : never
+    }
+}

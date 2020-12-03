@@ -1,0 +1,9 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/definePropertyOutputES3.ts ===
+class A {
+>A : A
+
+    a = 12
+>a : number
+>12 : 12
+}
+

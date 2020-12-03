@@ -1,0 +1,166 @@
+=== tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts ===
+function foo (id: string) {
+>foo : (id: string) => string | number | boolean | undefined
+>id : string
+
+  return {
+>{      a: 1,      b: "",      c: true  }[id] : string | number | boolean | undefined
+>{      a: 1,      b: "",      c: true  } : { a: number; b: string; c: boolean; }
+
+      a: 1,
+>a : number
+>1 : 1
+
+      b: "",
+>b : string
+>"" : ""
+
+      c: true
+>c : boolean
+>true : true
+
+  }[id]
+>id : string
+}
+
+function bar (id: 'a' | 'b') {
+>bar : (id: 'a' | 'b') => string | number
+>id : "a" | "b"
+
+  return {
+>{      a: 1,      b: "",      c: false  }[id] : string | number
+>{      a: 1,      b: "",      c: false  } : { a: number; b: string; c: boolean; }
+
+      a: 1,
+>a : number
+>1 : 1
+
+      b: "",
+>b : string
+>"" : ""
+
+      c: false
+>c : boolean
+>false : false
+
+  }[id]
+>id : "a" | "b"
+}
+
+function baz (id: '1' | '2') {
+>baz : (id: '1' | '2') => string | number
+>id : "1" | "2"
+
+  return {
+>{      1: 1,      2: "",      3: false  }[id] : string | number
+>{      1: 1,      2: "",      3: false  } : { 1: number; 2: string; 3: boolean; }
+
+      1: 1,
+>1 : number
+>1 : 1
+
+      2: "",
+>2 : string
+>"" : ""
+
+      3: false
+>3 : boolean
+>false : false
+
+  }[id]
+>id : "1" | "2"
+}
+
+function qux (id: 1 | 2) {
+>qux : (id: 1 | 2) => string | number
+>id : 1 | 2
+
+  return {
+>{      1: 1,      2: "",      3: false  }[id] : string | number
+>{      1: 1,      2: "",      3: false  } : { 1: number; 2: string; 3: boolean; }
+
+      1: 1,
+>1 : number
+>1 : 1
+
+      2: "",
+>2 : string
+>"" : ""
+
+      3: false
+>3 : boolean
+>false : false
+
+  }[id]
+>id : 1 | 2
+}
+
+function quux (id: 'a' | 'b' | 'z') {
+>quux : (id: 'a' | 'b' | 'z') => string | number | undefined
+>id : "a" | "b" | "z"
+
+  return {
+>{      a: 1,      b: "",      c: false  }[id] : string | number | undefined
+>{      a: 1,      b: "",      c: false  } : { a: number; b: string; c: boolean; }
+
+      a: 1,
+>a : number
+>1 : 1
+
+      b: "",
+>b : string
+>"" : ""
+
+      c: false
+>c : boolean
+>false : false
+
+  }[id]
+>id : "a" | "b" | "z"
+}
+
+function corge(id: string) {
+>corge : (id: string) => string | number
+>id : string
+
+  return ({
+>({      a: 123,      b: ""  } as Record<string, number | string>)[id] : string | number
+>({      a: 123,      b: ""  } as Record<string, number | string>) : Record<string, string | number>
+>{      a: 123,      b: ""  } as Record<string, number | string> : Record<string, string | number>
+>{      a: 123,      b: ""  } : { a: number; b: string; }
+
+      a: 123,
+>a : number
+>123 : 123
+
+      b: ""
+>b : string
+>"" : ""
+
+  } as Record<string, number | string>)[id]
+>id : string
+}
+
+function grault(id: string) {
+>grault : (id: string) => string | number
+>id : string
+
+  return ({
+>({      a: 123,      b: ""  } as { [k: string]: string | number})[id] : string | number
+>({      a: 123,      b: ""  } as { [k: string]: string | number}) : { [k: string]: string | number; }
+>{      a: 123,      b: ""  } as { [k: string]: string | number} : { [k: string]: string | number; }
+>{      a: 123,      b: ""  } : { a: number; b: string; }
+
+      a: 123,
+>a : number
+>123 : 123
+
+      b: ""
+>b : string
+>"" : ""
+
+  } as { [k: string]: string | number})[id]
+>k : string
+>id : string
+}
+

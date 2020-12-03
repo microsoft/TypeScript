@@ -54,7 +54,7 @@ interface C<T> {
   x: T;
 }
 
-interface C<T extends number> { // error
+interface C<T extends number> { // ok
   y: T;
 }
 

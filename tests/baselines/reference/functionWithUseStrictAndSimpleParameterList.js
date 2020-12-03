@@ -52,6 +52,7 @@ function invalidPrologue(a = 10, b = 20) {
 //// [functionWithUseStrictAndSimpleParameterList.js]
 "use strict";
 exports.__esModule = true;
+exports.foo = void 0;
 function a(a) {
     "use strict";
     if (a === void 0) { a = 10; }

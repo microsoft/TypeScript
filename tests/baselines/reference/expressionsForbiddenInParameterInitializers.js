@@ -45,6 +45,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+exports.foo2 = exports.foo = void 0;
 function foo(_a) {
     var _b = _a.foo, foo = _b === void 0 ? yield Promise.resolve().then(function () { return require("./bar"); }) : _b;
     return __awaiter(this, void 0, void 0, function () {

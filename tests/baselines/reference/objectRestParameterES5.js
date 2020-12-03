@@ -57,7 +57,7 @@ var C = /** @class */ (function () {
             var a = _a.a, clone = __rest(_a, ["a"]);
             // actually, never mind, don't clone
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

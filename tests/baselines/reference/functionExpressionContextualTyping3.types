@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping3.ts ===
 // #31114
 declare function f<T>(value: T | number): void;
->f : <T>(value: number | T) => void
+>f : <T>(value: T | number) => void
 >value : number | T
 
 f((a: any) => "")

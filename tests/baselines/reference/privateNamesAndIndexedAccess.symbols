@@ -1,0 +1,28 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndIndexedAccess.ts ===
+class C {
+>C : Symbol(C, Decl(privateNamesAndIndexedAccess.ts, 0, 0))
+
+    foo = 3;
+>foo : Symbol(C.foo, Decl(privateNamesAndIndexedAccess.ts, 0, 9))
+
+    #bar = 3;
+>#bar : Symbol(C.#bar, Decl(privateNamesAndIndexedAccess.ts, 1, 12))
+
+    constructor () {
+        const ok: C["foo"] = 3;
+>ok : Symbol(ok, Decl(privateNamesAndIndexedAccess.ts, 4, 13))
+>C : Symbol(C, Decl(privateNamesAndIndexedAccess.ts, 0, 0))
+
+        // not supported yet, could support in future:
+        const badForNow: C[#bar] = 3;   // Error
+>badForNow : Symbol(badForNow, Decl(privateNamesAndIndexedAccess.ts, 6, 13))
+>C : Symbol(C, Decl(privateNamesAndIndexedAccess.ts, 0, 0))
+>#bar : Symbol(#bar, Decl(privateNamesAndIndexedAccess.ts, 6, 27))
+
+        // will never use this syntax, already taken:
+        const badAlways: C["#bar"] = 3; // Error
+>badAlways : Symbol(badAlways, Decl(privateNamesAndIndexedAccess.ts, 8, 13))
+>C : Symbol(C, Decl(privateNamesAndIndexedAccess.ts, 0, 0))
+    }
+}
+

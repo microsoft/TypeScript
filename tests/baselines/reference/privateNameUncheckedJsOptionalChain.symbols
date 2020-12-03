@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameUncheckedJsOptionalChain.js ===
+class C {
+>C : Symbol(C, Decl(privateNameUncheckedJsOptionalChain.js, 0, 0))
+
+    #bar;
+>#bar : Symbol(C.#bar, Decl(privateNameUncheckedJsOptionalChain.js, 0, 9))
+
+    constructor () {
+        this?.#foo;
+>this : Symbol(C, Decl(privateNameUncheckedJsOptionalChain.js, 0, 0))
+
+        this?.#bar;
+>this?.#bar : Symbol(C.#bar, Decl(privateNameUncheckedJsOptionalChain.js, 0, 9))
+>this : Symbol(C, Decl(privateNameUncheckedJsOptionalChain.js, 0, 0))
+    }
+}
+

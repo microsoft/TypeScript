@@ -1,0 +1,98 @@
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(3,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(4,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(5,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(6,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(8,3): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(9,3): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(10,3): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(11,3): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(13,1): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(14,1): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(15,1): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(16,1): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(18,6): error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(19,6): error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(20,6): error TS2781: The left-hand side of a 'for...of' statement may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(21,6): error TS2781: The left-hand side of a 'for...of' statement may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(23,7): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(24,7): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(25,7): error TS2778: The target of an object rest assignment may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(26,7): error TS2778: The target of an object rest assignment may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(27,5): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts(28,5): error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+
+
+==== tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.3.ts (22 errors) ====
+    declare const obj: any;
+    
+    obj?.a++;
+    ~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    obj?.a.b++;
+    ~~~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    obj?.a--;
+    ~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    obj?.a.b--;
+    ~~~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    
+    ++obj?.a;
+      ~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    ++obj?.a.b;
+      ~~~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    --obj?.a;
+      ~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    --obj?.a.b;
+      ~~~~~~~~
+!!! error TS2777: The operand of an increment or decrement operator may not be an optional property access.
+    
+    obj?.a = 1;
+    ~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    obj?.a.b = 1;
+    ~~~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    obj?.a += 1;
+    ~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    obj?.a.b += 1;
+    ~~~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    
+    for (obj?.a in {});
+         ~~~~~~
+!!! error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+    for (obj?.a.b in {});
+         ~~~~~~~~
+!!! error TS2780: The left-hand side of a 'for...in' statement may not be an optional property access.
+    for (obj?.a of []);
+         ~~~~~~
+!!! error TS2781: The left-hand side of a 'for...of' statement may not be an optional property access.
+    for (obj?.a.b of []);
+         ~~~~~~~~
+!!! error TS2781: The left-hand side of a 'for...of' statement may not be an optional property access.
+    
+    ({ a: obj?.a } = { a: 1 });
+          ~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    ({ a: obj?.a.b } = { a: 1 });
+          ~~~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    ({ ...obj?.a } = { a: 1 });
+          ~~~~~~
+!!! error TS2778: The target of an object rest assignment may not be an optional property access.
+    ({ ...obj?.a.b } = { a: 1 });
+          ~~~~~~~~
+!!! error TS2778: The target of an object rest assignment may not be an optional property access.
+    [...obj?.a] = [];
+        ~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    [...obj?.a.b] = [];
+        ~~~~~~~~
+!!! error TS2779: The left-hand side of an assignment expression may not be an optional property access.
+    

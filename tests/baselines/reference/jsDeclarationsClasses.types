@@ -1,0 +1,331 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export class A {}
+>A : A
+
+export class B {
+>B : B
+
+    static cat = "cat";
+>cat : string
+>"cat" : "cat"
+}
+
+export class C {
+>C : C
+
+    static Cls = class {}
+>Cls : typeof (Anonymous class)
+>class {} : typeof (Anonymous class)
+}
+
+export class D {
+>D : D
+
+    /**
+     * @param {number} a
+     * @param {number} b
+     */
+    constructor(a, b) {}
+>a : number
+>b : number
+}
+
+/**
+ * @template T,U
+ */
+export class E {
+>E : E<T, U>
+
+    /**
+     * @type {T & U}
+     */
+    field;
+>field : T & U
+
+    // @readonly is currently unsupported, it seems - included here just in case that changes
+    /**
+     * @type {T & U}
+     * @readonly
+     */
+    readonlyField;
+>readonlyField : T & U
+
+    initializedField = 12;
+>initializedField : number
+>12 : 12
+
+    /**
+     * @return {U}
+     */
+    get f1() { return /** @type {*} */(null); }
+>f1 : U
+>(null) : any
+>null : null
+
+    /**
+     * @param {U} _p
+     */
+    set f1(_p) {}
+>f1 : U
+>_p : U
+
+    /**
+     * @return {U}
+     */
+    get f2() { return /** @type {*} */(null); }
+>f2 : U
+>(null) : any
+>null : null
+
+    /**
+     * @param {U} _p
+     */
+    set f3(_p) {}
+>f3 : U
+>_p : U
+
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
+    constructor(a, b) {}
+>a : T
+>b : U
+
+
+    /**
+     * @type {string}
+     */
+    static staticField;
+>staticField : string
+
+    // @readonly is currently unsupported, it seems - included here just in case that changes
+    /**
+     * @type {string}
+     * @readonly
+     */
+    static staticReadonlyField;
+>staticReadonlyField : string
+
+    static staticInitializedField = 12;
+>staticInitializedField : number
+>12 : 12
+
+    /**
+     * @return {string}
+     */
+    static get s1() { return ""; }
+>s1 : string
+>"" : ""
+
+    /**
+     * @param {string} _p
+     */
+    static set s1(_p) {}
+>s1 : string
+>_p : string
+
+    /**
+     * @return {string}
+     */
+    static get s2() { return ""; }
+>s2 : string
+>"" : ""
+
+    /**
+     * @param {string} _p
+     */
+    static set s3(_p) {}
+>s3 : string
+>_p : string
+}
+
+/**
+ * @template T,U
+ */
+export class F {
+>F : F<T, U>
+
+    /**
+     * @type {T & U}
+     */
+    field;
+>field : T & U
+
+    /**
+     * @param {T} a
+     * @param {U} b
+     */
+    constructor(a, b) {}
+>a : T
+>b : U
+
+    /**
+     * @template A,B
+     * @param {A} a
+     * @param {B} b
+     */
+    static create(a, b) { return new F(a, b); }
+>create : <A, B>(a: A, b: B) => F<A, B>
+>a : A
+>b : B
+>new F(a, b) : F<A, B>
+>F : typeof F
+>a : A
+>b : B
+}
+
+class G {}
+>G : G
+
+export { G };
+>G : typeof G
+
+class HH {}
+>HH : HH
+
+export { HH as H };
+>HH : typeof HH
+>H : typeof HH
+
+export class I {}
+>I : I
+
+export { I as II };
+>I : typeof I
+>II : typeof I
+
+export { J as JJ };
+>J : typeof J
+>JJ : typeof J
+
+export class J {}
+>J : J
+
+
+export class K {
+>K : K
+
+    constructor() {
+        this.p1 = 12;
+>this.p1 = 12 : 12
+>this.p1 : any
+>this : this
+>p1 : any
+>12 : 12
+
+        this.p2 = "ok";
+>this.p2 = "ok" : "ok"
+>this.p2 : any
+>this : this
+>p2 : any
+>"ok" : "ok"
+    }
+
+    method() {
+>method : () => number
+
+        return this.p1;
+>this.p1 : number
+>this : this
+>p1 : number
+    }
+}
+
+export class L extends K {}
+>L : L
+>K : K
+
+export class M extends null {
+>M : M
+>null : null
+
+    constructor() {
+        this.prop = 12;
+>this.prop = 12 : 12
+>this.prop : any
+>this : this
+>prop : any
+>12 : 12
+    }
+}
+
+
+/**
+ * @template T
+ */
+export class N extends L {
+>N : N<T>
+>L : L
+
+    /**
+     * @param {T} param 
+     */
+    constructor(param) {
+>param : T
+
+        super();
+>super() : void
+>super : typeof L
+
+        this.another = param;
+>this.another = param : T
+>this.another : any
+>this : this
+>another : any
+>param : T
+    }
+}
+
+/**
+ * @template U
+ * @extends {N<U>}
+ */
+export class O extends N {
+>O : O<U>
+>N : N<U>
+
+    /**
+     * @param {U} param 
+     */
+    constructor(param) {
+>param : U
+
+        super(param);
+>super(param) : void
+>super : typeof N
+>param : U
+
+        this.another2 = param;
+>this.another2 = param : U
+>this.another2 : any
+>this : this
+>another2 : any
+>param : U
+    }
+}
+
+var x = /** @type {*} */(null);
+>x : any
+>(null) : any
+>null : null
+
+export class VariableBase extends x {}
+>VariableBase : VariableBase
+>x : any
+
+export class HasStatics {
+>HasStatics : HasStatics
+
+    static staticMethod() {}
+>staticMethod : () => void
+}
+
+export class ExtendsStatics extends HasStatics {
+>ExtendsStatics : ExtendsStatics
+>HasStatics : HasStatics
+
+    static also() {}
+>also : () => void
+}
+

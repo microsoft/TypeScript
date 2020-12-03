@@ -3,8 +3,7 @@ tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2
     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
       Types of property 'children' are incompatible.
         Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-          Types of property 'length' are incompatible.
-            Type '3' is not assignable to type '2'.
+          Source has 3 element(s) but target allows only 2.
   Overload 2 of 2, '(props: ResizablePanelProps, context?: any): ResizablePanel', gave the following error.
     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
       Types of property 'children' are incompatible.
@@ -35,8 +34,7 @@ tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2
 !!! error TS2769:     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
 !!! error TS2769:       Types of property 'children' are incompatible.
 !!! error TS2769:         Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
-!!! error TS2769:           Types of property 'length' are incompatible.
-!!! error TS2769:             Type '3' is not assignable to type '2'.
+!!! error TS2769:           Source has 3 element(s) but target allows only 2.
 !!! error TS2769:   Overload 2 of 2, '(props: ResizablePanelProps, context?: any): ResizablePanel', gave the following error.
 !!! error TS2769:     Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
 !!! error TS2769:       Types of property 'children' are incompatible.

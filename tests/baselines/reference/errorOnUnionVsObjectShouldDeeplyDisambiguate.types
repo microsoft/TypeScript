@@ -1,0 +1,98 @@
+=== tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
+interface Stuff {
+    a?: () => Promise<number[]>;
+>a : () => Promise<number[]>
+
+    b: () => Promise<string>;
+>b : () => Promise<string>
+
+    c: () => Promise<string>;
+>c : () => Promise<string>
+
+    d: () => Promise<string>;
+>d : () => Promise<string>
+
+    e: () => Promise<string>;
+>e : () => Promise<string>
+
+    f: () => Promise<string>;
+>f : () => Promise<string>
+
+    g: () => Promise<string>;
+>g : () => Promise<string>
+
+    h: () => Promise<string>;
+>h : () => Promise<string>
+
+    i: () => Promise<string>;
+>i : () => Promise<string>
+
+    j: () => Promise<string>;
+>j : () => Promise<string>
+
+    k: () => Promise<number>;
+>k : () => Promise<number>
+  }
+  
+  function foo(): Stuff | string {
+>foo : () => Stuff | string
+
+    return {
+>{      a() { return [123] },      b: () => "hello",      c: () => "hello",      d: () => "hello",      e: () => "hello",      f: () => "hello",      g: () => "hello",      h: () => "hello",      i: () => "hello",      j: () => "hello",      k: () => 123    } : { a(): number[]; b: () => string; c: () => string; d: () => string; e: () => string; f: () => string; g: () => string; h: () => string; i: () => string; j: () => string; k: () => number; }
+
+      a() { return [123] },
+>a : () => number[]
+>[123] : number[]
+>123 : 123
+
+      b: () => "hello",
+>b : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      c: () => "hello",
+>c : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      d: () => "hello",
+>d : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      e: () => "hello",
+>e : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      f: () => "hello",
+>f : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      g: () => "hello",
+>g : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      h: () => "hello",
+>h : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      i: () => "hello",
+>i : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      j: () => "hello",
+>j : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+
+      k: () => 123
+>k : () => number
+>() => 123 : () => number
+>123 : 123
+    }
+  }

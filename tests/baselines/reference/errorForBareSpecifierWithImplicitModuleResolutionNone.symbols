@@ -1,0 +1,9 @@
+=== tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolutionNone.ts ===
+// This would be classed as moduleResolutionKind: Classic
+
+import { thing } from "non-existent-module";
+>thing : Symbol(thing, Decl(errorForBareSpecifierWithImplicitModuleResolutionNone.ts, 2, 8))
+
+thing()
+>thing : Symbol(thing, Decl(errorForBareSpecifierWithImplicitModuleResolutionNone.ts, 2, 8))
+

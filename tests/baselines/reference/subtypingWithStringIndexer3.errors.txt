@@ -5,6 +5,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer3.ts(32,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer3.ts(36,11): error TS2415: Class 'B4<T>' incorrectly extends base class 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
@@ -59,6 +60,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
 !!! error TS2415:   Index signatures are incompatible.
 !!! error TS2415:     Type 'Base' is not assignable to type 'T'.
+!!! error TS2415:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
             [x: string]: Base; // error
         }
     

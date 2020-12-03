@@ -45,7 +45,7 @@ var Widget = /** @class */ (function () {
         get: function () {
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Widget;

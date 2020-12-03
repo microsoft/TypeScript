@@ -20,30 +20,14 @@
                 "transformFlags": 0,
                 "escapedText": "typedef"
             },
-            "fullName": {
-                "kind": "Identifier",
-                "pos": 17,
-                "end": 23,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "escapedText": "People"
-            },
-            "name": {
-                "kind": "Identifier",
-                "pos": 17,
-                "end": 23,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "escapedText": "People"
-            },
             "typeExpression": {
                 "kind": "JSDocTypeLiteral",
                 "pos": 8,
                 "end": 100,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "jsDocPropertyTags": [
-                    {
+                "jsDocPropertyTags": {
+                    "0": {
                         "kind": "JSDocPropertyTag",
                         "pos": 47,
                         "end": 74,
@@ -68,7 +52,7 @@
                                 "pos": 58,
                                 "end": 64,
                                 "modifierFlagsCache": 0,
-                                "transformFlags": 0
+                                "transformFlags": 1
                             }
                         },
                         "name": {
@@ -82,7 +66,7 @@
                         "isNameFirst": false,
                         "isBracketed": false
                     },
-                    {
+                    "1": {
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
                         "end": 100,
@@ -107,7 +91,7 @@
                                 "pos": 85,
                                 "end": 91,
                                 "modifierFlagsCache": 0,
-                                "transformFlags": 0
+                                "transformFlags": 1
                             }
                         },
                         "name": {
@@ -120,12 +104,36 @@
                         },
                         "isNameFirst": false,
                         "isBracketed": false
-                    }
-                ]
+                    },
+                    "length": 2,
+                    "pos": -1,
+                    "end": -1,
+                    "hasTrailingComma": false,
+                    "transformFlags": 0
+                },
+                "isArrayType": false
+            },
+            "fullName": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "People"
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "People"
             }
         },
         "length": 1,
         "pos": 8,
-        "end": 100
+        "end": 100,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

@@ -2,7 +2,7 @@
 class C extends (class {} as new () => Readonly<{ attrib: number }>) {
 >C : C
 >(class {} as new () => Readonly<{ attrib: number }>) : Readonly<{ attrib: number; }>
->class {} as new () => Readonly<{ attrib: number }> : new () => Readonly<{ attrib: number; }>
+>class {} as new () => Readonly<{ attrib: number }> : new () => Readonly<{    attrib: number;}>
 >class {} : typeof (Anonymous class)
 >attrib : number
 

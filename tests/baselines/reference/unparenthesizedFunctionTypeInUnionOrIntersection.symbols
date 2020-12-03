@@ -1,0 +1,76 @@
+=== tests/cases/compiler/unparenthesizedFunctionTypeInUnionOrIntersection.ts ===
+type U1 = string | () => void;
+>U1 : Symbol(U1, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 0, 0))
+
+type U2 = string | (foo: number) => void
+>U2 : Symbol(U2, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 0, 30))
+>foo : Symbol(foo, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 1, 20))
+
+type U3 = | () => number
+>U3 : Symbol(U3, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 1, 40))
+
+type U4 = | (foo?: number) => void;
+>U4 : Symbol(U4, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 2, 24))
+>foo : Symbol(foo, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 3, 13))
+
+type U5 = string | (number: number, foo?: string) => void | number;
+>U5 : Symbol(U5, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 3, 35))
+>number : Symbol(number, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 4, 20))
+>foo : Symbol(foo, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 4, 35))
+
+type U6 =
+>U6 : Symbol(U6, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 4, 67))
+
+  | string
+  | (...args: any[]) => void
+>args : Symbol(args, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 7, 5))
+
+  | number;
+
+type I1 = string & () => void;
+>I1 : Symbol(I1, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 8, 11))
+
+type I2 = string & (...foo: number[]) => void;
+>I2 : Symbol(I2, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 10, 30))
+>foo : Symbol(foo, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 11, 20))
+
+type I3 = & () => boolean
+>I3 : Symbol(I3, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 11, 46))
+
+type I4 = & () => boolean & null;
+>I4 : Symbol(I4, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 12, 25))
+
+type I5 = string & (any: any, any2: any) => any & any;
+>I5 : Symbol(I5, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 13, 33))
+>any : Symbol(any, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 14, 20))
+>any2 : Symbol(any2, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 14, 29))
+
+type I6 =
+>I6 : Symbol(I6, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 14, 54))
+
+  & string
+  & (foo: any) => void;
+>foo : Symbol(foo, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 17, 5))
+
+type M1 = string | number & string | () => number;
+>M1 : Symbol(M1, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 17, 23))
+
+type M2 = any & string | any & () => void;
+>M2 : Symbol(M2, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 19, 50))
+
+type M3 = any & (foo: any) => void | () => void & any;
+>M3 : Symbol(M3, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 20, 42))
+>foo : Symbol(foo, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 21, 17))
+
+type OK1 = string | (number);
+>OK1 : Symbol(OK1, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 21, 54))
+
+type OK2 = string | ((number));
+>OK2 : Symbol(OK2, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 23, 29))
+
+type OK3 = string | (()=> void);
+>OK3 : Symbol(OK3, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 24, 31))
+
+type OK4 = string | (()=> string | number);
+>OK4 : Symbol(OK4, Decl(unparenthesizedFunctionTypeInUnionOrIntersection.ts, 25, 32))
+

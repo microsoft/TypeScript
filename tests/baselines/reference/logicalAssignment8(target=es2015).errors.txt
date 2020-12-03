@@ -1,0 +1,19 @@
+tests/cases/conformance/esnext/logicalAssignment/logicalAssignment8.ts(12,5): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment8.ts (1 errors) ====
+    declare const bar: { value?: number[] } | undefined
+    
+    function foo1(results: number[] | undefined) {
+        (results ||= bar?.value ?? []).push(100);
+    }
+    
+    function foo2(results: number[] | undefined) {
+        (results ??= bar?.value ?? []).push(100);
+    }
+    
+    function foo3(results: number[] | undefined) {
+        (results &&= bar?.value ?? []).push(100);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    }

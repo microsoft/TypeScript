@@ -60,12 +60,12 @@ namespace ts {
 
         it("should respect CRLF line endings around outlining spans", () => {
             verifyOutliningSpanNewLines("// comment not included\r\n// #region name\r\nlet x: string = \"x\";\r\n// #endregion name\r\n",
-            { newLine: NewLineKind.CarriageReturnLineFeed });
+                { newLine: NewLineKind.CarriageReturnLineFeed });
         });
 
         it("should respect LF line endings around outlining spans", () => {
             verifyOutliningSpanNewLines("// comment not included\n// #region name\nlet x: string = \"x\";\n// #endregion name\n\n",
-            { newLine: NewLineKind.LineFeed });
+                { newLine: NewLineKind.LineFeed });
         });
     });
 }

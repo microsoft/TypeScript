@@ -38,7 +38,7 @@ var MyModule;
                 var obj = {};
                 return obj;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return MyClass;

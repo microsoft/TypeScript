@@ -1,0 +1,33 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-1.ts ===
+class Parent {
+>Parent : Symbol(Parent, Decl(privateNamesConstructorChain-1.ts, 0, 0))
+
+    #foo = 3;
+>#foo : Symbol(Parent.#foo, Decl(privateNamesConstructorChain-1.ts, 0, 14))
+
+    static #bar = 5;
+>#bar : Symbol(Parent.#bar, Decl(privateNamesConstructorChain-1.ts, 1, 13))
+
+    accessChildProps() {
+>accessChildProps : Symbol(Parent.accessChildProps, Decl(privateNamesConstructorChain-1.ts, 2, 20))
+
+        new Child().#foo; // OK (`#foo` was added when `Parent`'s constructor was called on `child`)
+>new Child().#foo : Symbol(Parent.#foo, Decl(privateNamesConstructorChain-1.ts, 0, 14))
+>Child : Symbol(Child, Decl(privateNamesConstructorChain-1.ts, 7, 1))
+
+        Child.#bar;       // Error: not found
+>Child : Symbol(Child, Decl(privateNamesConstructorChain-1.ts, 7, 1))
+    }
+}
+
+class Child extends Parent {
+>Child : Symbol(Child, Decl(privateNamesConstructorChain-1.ts, 7, 1))
+>Parent : Symbol(Parent, Decl(privateNamesConstructorChain-1.ts, 0, 0))
+
+    #foo = "foo";       // OK (Child's #foo does not conflict, as `Parent`'s `#foo` is not accessible)
+>#foo : Symbol(Child.#foo, Decl(privateNamesConstructorChain-1.ts, 9, 28))
+
+    #bar = "bar";       // OK
+>#bar : Symbol(Child.#bar, Decl(privateNamesConstructorChain-1.ts, 10, 17))
+}
+

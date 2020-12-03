@@ -1,5 +1,5 @@
 tests/cases/compiler/f3.ts(11,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-tests/cases/compiler/f3.ts(11,21): error TS2307: Cannot find module './f2'.
+tests/cases/compiler/f3.ts(11,21): error TS2307: Cannot find module './f2' or its corresponding type declarations.
 tests/cases/compiler/f3.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/f3.ts(13,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 
@@ -27,7 +27,7 @@ tests/cases/compiler/f3.ts(13,5): error TS2667: Imports are not permitted in mod
         ~~~~~~
 !!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
                         ~~~~~~
-!!! error TS2307: Cannot find module './f2'.
+!!! error TS2307: Cannot find module './f2' or its corresponding type declarations.
         import I = N.Ifc;
         ~~~~~~
 !!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.

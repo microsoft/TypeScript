@@ -1,0 +1,82 @@
+=== tests/cases/compiler/dash.d.ts ===
+type ObjectIterator<TObject, TResult> = (value: TObject[keyof TObject], key: string, collection: TObject) => TResult;
+>ObjectIterator : Symbol(ObjectIterator, Decl(dash.d.ts, 0, 0))
+>TObject : Symbol(TObject, Decl(dash.d.ts, 0, 20))
+>TResult : Symbol(TResult, Decl(dash.d.ts, 0, 28))
+>value : Symbol(value, Decl(dash.d.ts, 0, 41))
+>TObject : Symbol(TObject, Decl(dash.d.ts, 0, 20))
+>TObject : Symbol(TObject, Decl(dash.d.ts, 0, 20))
+>key : Symbol(key, Decl(dash.d.ts, 0, 71))
+>collection : Symbol(collection, Decl(dash.d.ts, 0, 84))
+>TObject : Symbol(TObject, Decl(dash.d.ts, 0, 20))
+>TResult : Symbol(TResult, Decl(dash.d.ts, 0, 28))
+
+interface LoDashStatic {
+>LoDashStatic : Symbol(LoDashStatic, Decl(dash.d.ts, 0, 117))
+
+    mapValues<T extends object, TResult>(obj: T | null | undefined, callback: ObjectIterator<T, TResult>): { [P in keyof T]: TResult };
+>mapValues : Symbol(LoDashStatic.mapValues, Decl(dash.d.ts, 2, 24))
+>T : Symbol(T, Decl(dash.d.ts, 3, 14))
+>TResult : Symbol(TResult, Decl(dash.d.ts, 3, 31))
+>obj : Symbol(obj, Decl(dash.d.ts, 3, 41))
+>T : Symbol(T, Decl(dash.d.ts, 3, 14))
+>callback : Symbol(callback, Decl(dash.d.ts, 3, 67))
+>ObjectIterator : Symbol(ObjectIterator, Decl(dash.d.ts, 0, 0))
+>T : Symbol(T, Decl(dash.d.ts, 3, 14))
+>TResult : Symbol(TResult, Decl(dash.d.ts, 3, 31))
+>P : Symbol(P, Decl(dash.d.ts, 3, 110))
+>T : Symbol(T, Decl(dash.d.ts, 3, 14))
+>TResult : Symbol(TResult, Decl(dash.d.ts, 3, 31))
+}
+declare const _: LoDashStatic;
+>_ : Symbol(_, Decl(dash.d.ts, 5, 13))
+>LoDashStatic : Symbol(LoDashStatic, Decl(dash.d.ts, 0, 117))
+
+export = _;
+>_ : Symbol(_, Decl(dash.d.ts, 5, 13))
+
+=== tests/cases/compiler/Consts.ts ===
+export const INDEX_FIELD = '__INDEX';
+>INDEX_FIELD : Symbol(INDEX_FIELD, Decl(Consts.ts, 0, 12))
+
+=== tests/cases/compiler/index.js ===
+import * as _ from './dash';
+>_ : Symbol(_, Decl(index.js, 0, 6))
+
+import { INDEX_FIELD } from './Consts';
+>INDEX_FIELD : Symbol(INDEX_FIELD, Decl(index.js, 1, 8))
+
+export class Test {
+>Test : Symbol(Test, Decl(index.js, 1, 39))
+
+    /**
+     * @param {object} obj
+     * @param {object} vm
+     */
+    test(obj, vm) {
+>test : Symbol(Test.test, Decl(index.js, 3, 19))
+>obj : Symbol(obj, Decl(index.js, 8, 9))
+>vm : Symbol(vm, Decl(index.js, 8, 13))
+
+        let index = 0;
+>index : Symbol(index, Decl(index.js, 9, 11))
+
+        vm.objects = _.mapValues(
+>vm : Symbol(vm, Decl(index.js, 8, 13))
+>_.mapValues : Symbol(LoDashStatic.mapValues, Decl(dash.d.ts, 2, 24))
+>_ : Symbol(_, Decl(index.js, 0, 6))
+>mapValues : Symbol(LoDashStatic.mapValues, Decl(dash.d.ts, 2, 24))
+
+            obj,
+>obj : Symbol(obj, Decl(index.js, 8, 9))
+
+            object => ({ ...object, [INDEX_FIELD]: index++ }),
+>object : Symbol(object, Decl(index.js, 11, 16))
+>object : Symbol(object, Decl(index.js, 11, 16))
+>[INDEX_FIELD] : Symbol([INDEX_FIELD], Decl(index.js, 12, 35))
+>INDEX_FIELD : Symbol(INDEX_FIELD, Decl(index.js, 1, 8))
+>index : Symbol(index, Decl(index.js, 9, 11))
+
+        );
+    }
+}

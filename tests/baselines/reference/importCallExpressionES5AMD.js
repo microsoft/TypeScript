@@ -32,6 +32,7 @@ export class D {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = void 0;
     function foo() { return "foo"; }
     exports.foo = foo;
 });
@@ -39,6 +40,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.D = exports.p2 = void 0;
     new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
     var p1 = new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); });
     p1.then(function (zero) {

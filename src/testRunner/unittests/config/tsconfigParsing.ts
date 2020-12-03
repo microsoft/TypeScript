@@ -137,7 +137,7 @@ namespace ts {
                         "xx\\\\" // end of line comment
                     ]
                 }`, { config: { exclude: ["xx\\"] } });
-         });
+        });
 
         it("returns object with error when json is invalid", () => {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
@@ -380,6 +380,37 @@ namespace ts {
             }`;
             const parsed = getParsedCommandJsonNode(jsonText, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"]);
             assert.isTrue(parsed.errors.length >= 0);
+        });
+
+        it("generates errors when files is not string", () => {
+            assertParseFileDiagnostics(
+                JSON.stringify({
+                    files: [{
+                        compilerOptions: {
+                            experimentalDecorators: true,
+                            allowJs: true
+                        }
+                    }]
+                }),
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+                /*noLocation*/ true);
+        });
+
+        it("generates errors when include is not string", () => {
+            assertParseFileDiagnostics(
+                JSON.stringify({
+                    include: [
+                        ["./**/*.ts"]
+                    ]
+                }),
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+                /*noLocation*/ true);
         });
     });
 }

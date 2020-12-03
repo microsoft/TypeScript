@@ -29,6 +29,20 @@ x(
 x();
 >x : Symbol(x, Decl(a.js, 0, 3))
 
+/* @ts-ignore */
+/*another comment
+ that could be multiline*/
+
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+/* @ts-ignore
+continuing comment
+ that could be multiline*/
+
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
 
 
 // @ts-ignore: no call signature

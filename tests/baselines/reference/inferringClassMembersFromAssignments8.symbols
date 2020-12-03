@@ -1,0 +1,19 @@
+=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments8.ts ===
+// no inference in TS files, even for `this` aliases:
+
+var app = function() {
+>app : Symbol(app, Decl(inferringClassMembersFromAssignments8.ts, 2, 3))
+
+    var _this = this;
+>_this : Symbol(_this, Decl(inferringClassMembersFromAssignments8.ts, 3, 7))
+
+    _this.swap = function() { }
+>_this : Symbol(_this, Decl(inferringClassMembersFromAssignments8.ts, 3, 7))
+}
+var a = new app()
+>a : Symbol(a, Decl(inferringClassMembersFromAssignments8.ts, 6, 3))
+>app : Symbol(app, Decl(inferringClassMembersFromAssignments8.ts, 2, 3))
+
+a
+>a : Symbol(a, Decl(inferringClassMembersFromAssignments8.ts, 6, 3))
+

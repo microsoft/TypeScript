@@ -18,6 +18,7 @@ fn(a); // Error: property 'x' is missing from 'a'
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
 });
 //// [moduleAliasAsFunctionArgument_1.js]
 define(["require", "exports", "moduleAliasAsFunctionArgument_0"], function (require, exports, a) {

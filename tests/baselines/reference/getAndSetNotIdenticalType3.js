@@ -31,7 +31,7 @@ var C = /** @class */ (function () {
         set: function (v) {
             this.data = v;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

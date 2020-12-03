@@ -48,6 +48,7 @@ import "./x";
 //// [x0.js]
 "use strict";
 exports.__esModule = true;
+exports.a = void 0;
 exports.a = 1;
 //// [x.js]
 "use strict";
@@ -59,10 +60,12 @@ var N1;
 //// [observable.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = 1;
 //// [test.js]
 "use strict";
 exports.__esModule = true;
+exports.b = void 0;
 exports.b = 1;
 //// [main.js]
 "use strict";

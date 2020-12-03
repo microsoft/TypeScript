@@ -209,6 +209,16 @@ verify.navigationBar([
     "indent": 2
   },
   {
+    "text": "x",
+    "childItems": [
+      {
+        "text": "get",
+        "kind": "method"
+      }
+    ],
+    "indent": 3
+  },
+  {
     "text": "D",
     "kind": "class",
     "childItems": [

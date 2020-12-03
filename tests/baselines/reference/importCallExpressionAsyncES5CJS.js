@@ -67,6 +67,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.l = exports.cl2 = exports.obj = exports.cl1 = exports.fn = void 0;
 function fn() {
     return __awaiter(this, void 0, void 0, function () {
         var req;
@@ -137,7 +138,7 @@ var cl2 = /** @class */ (function () {
     return cl2;
 }());
 exports.cl2 = cl2;
-exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
+var l = function () { return __awaiter(void 0, void 0, void 0, function () {
     var req;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -149,3 +150,4 @@ exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
         }
     });
 }); };
+exports.l = l;

@@ -1,0 +1,173 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.ts ===
+declare const o1: undefined | ((...args: any[]) => number);
+>o1 : Symbol(o1, Decl(callChain.ts, 0, 13))
+>args : Symbol(args, Decl(callChain.ts, 0, 32))
+
+o1?.();
+>o1 : Symbol(o1, Decl(callChain.ts, 0, 13))
+
+o1?.(1);
+>o1 : Symbol(o1, Decl(callChain.ts, 0, 13))
+
+o1?.(...[1, 2]);
+>o1 : Symbol(o1, Decl(callChain.ts, 0, 13))
+
+o1?.(1, ...[2, 3], 4);
+>o1 : Symbol(o1, Decl(callChain.ts, 0, 13))
+
+declare const o2: undefined | { b: (...args: any[]) => number };
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+>args : Symbol(args, Decl(callChain.ts, 6, 36))
+
+o2?.b();
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+
+o2?.b(1);
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+
+o2?.b(...[1, 2]);
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+
+o2?.b(1, ...[2, 3], 4);
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+
+o2?.["b"]();
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+
+o2?.["b"](1);
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+
+o2?.["b"](...[1, 2]);
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+
+o2?.["b"](1, ...[2, 3], 4);
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+
+declare const o3: { b: ((...args: any[]) => { c: string }) | undefined };
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+>args : Symbol(args, Decl(callChain.ts, 16, 25))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3.b?.().c;
+>o3.b?.().c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3.b?.(1).c;
+>o3.b?.(1).c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3.b?.(...[1, 2]).c;
+>o3.b?.(...[1, 2]).c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3.b?.(1, ...[2, 3], 4).c;
+>o3.b?.(1, ...[2, 3], 4).c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3.b?.()["c"];
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+
+o3.b?.(1)["c"];
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+
+o3.b?.(...[1, 2])["c"];
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+
+o3.b?.(1, ...[2, 3], 4)["c"];
+>o3.b : Symbol(b, Decl(callChain.ts, 16, 19))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>b : Symbol(b, Decl(callChain.ts, 16, 19))
+
+o3["b"]?.().c;
+>o3["b"]?.().c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>"b" : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3["b"]?.(1).c;
+>o3["b"]?.(1).c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>"b" : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3["b"]?.(...[1, 2]).c;
+>o3["b"]?.(...[1, 2]).c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>"b" : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+o3["b"]?.(1, ...[2, 3], 4).c;
+>o3["b"]?.(1, ...[2, 3], 4).c : Symbol(c, Decl(callChain.ts, 16, 45))
+>o3 : Symbol(o3, Decl(callChain.ts, 16, 13))
+>"b" : Symbol(b, Decl(callChain.ts, 16, 19))
+>c : Symbol(c, Decl(callChain.ts, 16, 45))
+
+declare const o4: undefined | (<T>(f: (a: T) => T) => T);
+>o4 : Symbol(o4, Decl(callChain.ts, 30, 13))
+>T : Symbol(T, Decl(callChain.ts, 30, 32))
+>f : Symbol(f, Decl(callChain.ts, 30, 35))
+>a : Symbol(a, Decl(callChain.ts, 30, 39))
+>T : Symbol(T, Decl(callChain.ts, 30, 32))
+>T : Symbol(T, Decl(callChain.ts, 30, 32))
+>T : Symbol(T, Decl(callChain.ts, 30, 32))
+
+declare function incr(x: number): number;
+>incr : Symbol(incr, Decl(callChain.ts, 30, 57))
+>x : Symbol(x, Decl(callChain.ts, 31, 22))
+
+const v: number | undefined = o4?.(incr);
+>v : Symbol(v, Decl(callChain.ts, 32, 5))
+>o4 : Symbol(o4, Decl(callChain.ts, 30, 13))
+>incr : Symbol(incr, Decl(callChain.ts, 30, 57))
+
+// GH#33744
+declare const o5: <T>() => undefined | (() => void);
+>o5 : Symbol(o5, Decl(callChain.ts, 35, 13))
+>T : Symbol(T, Decl(callChain.ts, 35, 19))
+
+o5<number>()?.();
+>o5 : Symbol(o5, Decl(callChain.ts, 35, 13))
+
+// GH#36031
+o2?.b()!.toString;
+>o2?.b()!.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+o2?.b()!.toString!;
+>o2?.b()!.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>o2?.b : Symbol(b, Decl(callChain.ts, 6, 31))
+>o2 : Symbol(o2, Decl(callChain.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.ts, 6, 31))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

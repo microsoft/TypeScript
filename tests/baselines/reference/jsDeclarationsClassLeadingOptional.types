@@ -1,0 +1,16 @@
+=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+export class Z {
+>Z : Z
+
+    f(x = 1, y) {
+>f : (x: number, y: any) => any[]
+>x : number
+>1 : 1
+>y : any
+
+        return [x, y];
+>[x, y] : any[]
+>x : number
+>y : any
+    }
+}

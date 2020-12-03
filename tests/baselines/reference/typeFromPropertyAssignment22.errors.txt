@@ -1,4 +1,4 @@
-tests/cases/conformance/salsa/npm-install.js(7,9): error TS2322: Type '"hi"' is not assignable to type 'number'.
+tests/cases/conformance/salsa/npm-install.js(7,9): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/salsa/npm-install.js (1 errors) ====
@@ -10,7 +10,7 @@ tests/cases/conformance/salsa/npm-install.js(7,9): error TS2322: Type '"hi"' is 
         (args) => {
             this.args = 'hi'
             ~~~~~~~~~
-!!! error TS2322: Type '"hi"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
             this.newProperty = 1
         }
     }

@@ -59,68 +59,68 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "b1", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "b2", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "b3", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "c1", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "c2", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C.prototype, "c3", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "t1", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "t2", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "t3", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "u1", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "u2", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "u3", {
         get: function () { return 1; },
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -149,21 +149,27 @@ declare class C {
     private readonly a1;
     protected readonly a2: number;
     readonly a3: number;
-    private readonly b1;
-    protected readonly b2: number;
-    readonly b3: number;
-    private c1;
-    protected c2: number;
-    c3: number;
+    private get b1();
+    protected get b2(): number;
+    get b3(): number;
+    private get c1();
+    private set c1(value);
+    protected get c2(): number;
+    protected set c2(value: number);
+    get c3(): number;
+    set c3(value: number);
     private static readonly s1;
     protected static readonly s2: number;
     static readonly s3: number;
-    private static readonly t1;
-    protected static readonly t2: number;
-    static readonly t3: number;
-    private static u1;
-    protected static u2: number;
-    static u3: number;
+    private static get t1();
+    protected static get t2(): number;
+    static get t3(): number;
+    private static get u1();
+    private static set u1(value);
+    protected static get u2(): number;
+    protected static set u2(value: number);
+    static get u3(): number;
+    static set u3(value: number);
 }
 declare var z: {
     readonly a: string;

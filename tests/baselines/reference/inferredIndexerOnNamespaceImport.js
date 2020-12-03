@@ -16,6 +16,7 @@ f(foo);
 //// [foo.js]
 "use strict";
 exports.__esModule = true;
+exports.y = exports.x = void 0;
 exports.x = 3;
 exports.y = 5;
 //// [bar.js]

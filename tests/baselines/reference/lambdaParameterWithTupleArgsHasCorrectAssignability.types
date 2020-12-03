@@ -1,0 +1,64 @@
+=== tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts ===
+type MyTupleItem = {};
+>MyTupleItem : MyTupleItem
+
+type MyTuple = [MyTupleItem, ...MyTupleItem[]];
+>MyTuple : MyTuple
+
+type GenericFunction<T extends MyTuple> = (...fromArgs: T) => void;
+>GenericFunction : GenericFunction<T>
+>fromArgs : T
+
+class GenericClass<T extends MyTuple> {
+>GenericClass : GenericClass<T>
+
+    from: GenericFunction<T> | undefined;
+>from : GenericFunction<T> | undefined
+}
+
+function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> {
+>createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
+>f : GenericFunction<T>
+
+    return new GenericClass<T>(/* ... use f */);
+>new GenericClass<T>(/* ... use f */) : GenericClass<T>
+>GenericClass : typeof GenericClass
+}
+
+function consumeClass(c: GenericClass<[string, boolean]>) { }
+>consumeClass : (c: GenericClass<[string, boolean]>) => void
+>c : GenericClass<[string, boolean]>
+
+// should work
+consumeClass(createClass(str => console.log(str.length)));
+>consumeClass(createClass(str => console.log(str.length))) : void
+>consumeClass : (c: GenericClass<[string, boolean]>) => void
+>createClass(str => console.log(str.length)) : GenericClass<[str: string]>
+>createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
+>str => console.log(str.length) : (str: string) => void
+>str : string
+>console.log(str.length) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>str.length : number
+>str : string
+>length : number
+
+// should work
+consumeClass(createClass((str, _unused_num) => console.log(str.length)));
+>consumeClass(createClass((str, _unused_num) => console.log(str.length))) : void
+>consumeClass : (c: GenericClass<[string, boolean]>) => void
+>createClass((str, _unused_num) => console.log(str.length)) : GenericClass<[str: string, _unused_num: boolean]>
+>createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
+>(str, _unused_num) => console.log(str.length) : (str: string, _unused_num: boolean) => void
+>str : string
+>_unused_num : boolean
+>console.log(str.length) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>str.length : number
+>str : string
+>length : number
+

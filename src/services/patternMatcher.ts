@@ -38,7 +38,7 @@ namespace ts {
         // Fully checks a candidate, with an dotted container, against the search pattern.
         // The candidate must match the last part of the search pattern, and the dotted container
         // must match the preceding segments of the pattern.
-        getFullMatch(candidateContainers: ReadonlyArray<string>, candidate: string): PatternMatch | undefined;
+        getFullMatch(candidateContainers: readonly string[], candidate: string): PatternMatch | undefined;
 
         // Whether or not the pattern contained dots or not.  Clients can use this to determine
         // If they should call getMatches, or if getMatchesForLastSegmentOfPattern is sufficient.
@@ -102,7 +102,7 @@ namespace ts {
         // we see the name of a module that is used everywhere, or the name of an overload).  As
         // such, we cache the information we compute about the candidate for the life of this
         // pattern matcher so we don't have to compute it multiple times.
-        const stringToWordSpans = createMap<TextSpan[]>();
+        const stringToWordSpans = new Map<string, TextSpan[]>();
 
         const dotSeparatedSegments = pattern.trim().split(".").map(p => createSegment(p.trim()));
         // A segment is considered invalid if we couldn't find any words in it.
@@ -115,7 +115,7 @@ namespace ts {
         };
     }
 
-    function getFullMatch(candidateContainers: ReadonlyArray<string>, candidate: string, dotSeparatedSegments: ReadonlyArray<Segment>, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
+    function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
         // First, check that the last part of the dot separated pattern matches the name of the
         // candidate.  If not, then there's no point in proceeding and doing the more
         // expensive work.
@@ -134,14 +134,14 @@ namespace ts {
 
         let bestMatch: PatternMatch | undefined;
         for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
-             i >= 0;
-             i -= 1, j -= 1) {
+            i >= 0;
+            i -= 1, j -= 1) {
             bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
         }
         return bestMatch;
     }
 
-    function getWordSpans(word: string, stringToWordSpans: Map<TextSpan[]>): TextSpan[] {
+    function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>): TextSpan[] {
         let spans = stringToWordSpans.get(word);
         if (!spans) {
             stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
@@ -149,7 +149,7 @@ namespace ts {
         return spans;
     }
 
-    function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
+    function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
         const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
         if (index === 0) {
             // a) Check if the word is a prefix of the candidate, in a case insensitive or
@@ -201,7 +201,7 @@ namespace ts {
         }
     }
 
-    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
+    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
         // First check if the segment matches as is.  This is also useful if the segment contains
         // characters we would normally strip when splitting into parts that we also may want to
         // match in the candidate.  For example if the segment is "@int" and the candidate is

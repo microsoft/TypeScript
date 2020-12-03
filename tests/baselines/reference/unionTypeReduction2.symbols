@@ -1,0 +1,203 @@
+=== tests/cases/conformance/types/union/unionTypeReduction2.ts ===
+function f1(x: { f(): void }, y: { f(x?: string): void }) {
+>f1 : Symbol(f1, Decl(unionTypeReduction2.ts, 0, 0))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 0, 12))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 0, 16))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 0, 29))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 0, 34))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 0, 37))
+
+    let z = !!true ? x : y;  // { f(x?: string): void }
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 1, 7))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 0, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 0, 29))
+
+    z.f();
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 0, 34))
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 1, 7))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 0, 34))
+
+    z.f('hello');
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 0, 34))
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 1, 7))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 0, 34))
+}
+
+function f2(x: { f(x: string | undefined): void }, y: { f(x?: string): void }) {
+>f2 : Symbol(f2, Decl(unionTypeReduction2.ts, 4, 1))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 6, 12))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 6, 16))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 6, 19))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 6, 50))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 6, 55))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 6, 58))
+
+    let z = !!true ? x : y;  // { f(x?: string): void }
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 7, 7))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 6, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 6, 50))
+
+    z.f();
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 6, 55))
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 7, 7))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 6, 55))
+
+    z.f('hello');
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 6, 55))
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 7, 7))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 6, 55))
+}
+
+function f3(x: () => void, y: (x?: string) => void) {
+>f3 : Symbol(f3, Decl(unionTypeReduction2.ts, 10, 1))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 12, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 12, 26))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 12, 31))
+
+    let f = !!true ? x : y;  // (x?: string) => void
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 13, 7))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 12, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 12, 26))
+
+    f();
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 13, 7))
+
+    f('hello');
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 13, 7))
+}
+
+function f4(x: (x: string | undefined) => void, y: (x?: string) => void) {
+>f4 : Symbol(f4, Decl(unionTypeReduction2.ts, 16, 1))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 18, 12))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 18, 16))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 18, 47))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 18, 52))
+
+    let f = !!true ? x : y;  // (x?: string) => void
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 19, 7))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 18, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 18, 47))
+
+    f();
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 19, 7))
+
+    f('hello');
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 19, 7))
+}
+
+function f5(x: (x: string | undefined) => void, y: (x?: 'hello') => void) {
+>f5 : Symbol(f5, Decl(unionTypeReduction2.ts, 22, 1))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 24, 12))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 24, 16))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 24, 47))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 24, 52))
+
+    let f = !!true ? x : y;  // (x?: 'hello') => void
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 25, 7))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 24, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 24, 47))
+
+    f();
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 25, 7))
+
+    f('hello');
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 25, 7))
+}
+
+function f6(x: (x: 'hello' | undefined) => void, y: (x?: string) => void) {
+>f6 : Symbol(f6, Decl(unionTypeReduction2.ts, 28, 1))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 30, 12))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 30, 16))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 30, 48))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 30, 53))
+
+    let f = !!true ? x : y;  // (x: 'hello' | undefined) => void
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 31, 7))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 30, 12))
+>y : Symbol(y, Decl(unionTypeReduction2.ts, 30, 48))
+
+    f();  // Error
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 31, 7))
+
+    f('hello');
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 31, 7))
+}
+
+type A = {
+>A : Symbol(A, Decl(unionTypeReduction2.ts, 34, 1))
+
+    f(): void;
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10))
+}
+
+type B = {
+>B : Symbol(B, Decl(unionTypeReduction2.ts, 38, 1))
+
+    f(x?: string): void;
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 40, 10))
+>x : Symbol(x, Decl(unionTypeReduction2.ts, 41, 6))
+
+    g(): void;
+>g : Symbol(g, Decl(unionTypeReduction2.ts, 41, 24))
+}
+
+function f11(a: A, b: B) {
+>f11 : Symbol(f11, Decl(unionTypeReduction2.ts, 43, 1))
+>a : Symbol(a, Decl(unionTypeReduction2.ts, 45, 13))
+>A : Symbol(A, Decl(unionTypeReduction2.ts, 34, 1))
+>b : Symbol(b, Decl(unionTypeReduction2.ts, 45, 18))
+>B : Symbol(B, Decl(unionTypeReduction2.ts, 38, 1))
+
+    let z = !!true ? a : b;  // A | B
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 46, 7))
+>a : Symbol(a, Decl(unionTypeReduction2.ts, 45, 13))
+>b : Symbol(b, Decl(unionTypeReduction2.ts, 45, 18))
+
+    z.f();
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 46, 7))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+
+    z.f('hello');
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+>z : Symbol(z, Decl(unionTypeReduction2.ts, 46, 7))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+}
+
+// Repro from #35414
+
+interface ReturnVal {
+>ReturnVal : Symbol(ReturnVal, Decl(unionTypeReduction2.ts, 49, 1))
+
+    something(): void;
+>something : Symbol(ReturnVal.something, Decl(unionTypeReduction2.ts, 53, 21))
+}
+
+const k: ReturnVal = { something() { } }
+>k : Symbol(k, Decl(unionTypeReduction2.ts, 57, 5))
+>ReturnVal : Symbol(ReturnVal, Decl(unionTypeReduction2.ts, 49, 1))
+>something : Symbol(something, Decl(unionTypeReduction2.ts, 57, 22))
+
+declare const val: ReturnVal;
+>val : Symbol(val, Decl(unionTypeReduction2.ts, 59, 13))
+>ReturnVal : Symbol(ReturnVal, Decl(unionTypeReduction2.ts, 49, 1))
+
+function run(options: { something?(b?: string): void }) {
+>run : Symbol(run, Decl(unionTypeReduction2.ts, 59, 29))
+>options : Symbol(options, Decl(unionTypeReduction2.ts, 60, 13))
+>something : Symbol(something, Decl(unionTypeReduction2.ts, 60, 23))
+>b : Symbol(b, Decl(unionTypeReduction2.ts, 60, 35))
+
+    const something = options.something ?? val.something;
+>something : Symbol(something, Decl(unionTypeReduction2.ts, 61, 9))
+>options.something : Symbol(something, Decl(unionTypeReduction2.ts, 60, 23))
+>options : Symbol(options, Decl(unionTypeReduction2.ts, 60, 13))
+>something : Symbol(something, Decl(unionTypeReduction2.ts, 60, 23))
+>val.something : Symbol(ReturnVal.something, Decl(unionTypeReduction2.ts, 53, 21))
+>val : Symbol(val, Decl(unionTypeReduction2.ts, 59, 13))
+>something : Symbol(ReturnVal.something, Decl(unionTypeReduction2.ts, 53, 21))
+
+    something('');
+>something : Symbol(something, Decl(unionTypeReduction2.ts, 61, 9))
+}
+

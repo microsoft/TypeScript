@@ -31,7 +31,6 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const inspect = cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
-    const skipPercent = process.env.CI === "true" ? 0 : cmdLineOptions.skipPercent;
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
@@ -65,8 +64,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         testTimeout = 400000;
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || skipPercent !== undefined || shards || shardId) {
-        writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
     }
 
     const colors = cmdLineOptions.colors;
@@ -78,11 +77,22 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
-        args.push(failed ? "scripts/run-failed-tests.js" : mochaJs);
+        args.push(mochaJs);
         args.push("-R", "scripts/failed-tests");
         args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {
             args.push("-g", `"${tests}"`);
+        }
+        if (failed) {
+            const grep = fs.readFileSync(".failed-tests", "utf8")
+                .split(/\r?\n/g)
+                .map(test => test.trim())
+                .filter(test => test.length > 0)
+                .map(regExpEscape)
+                .join("|");
+            const file = path.join(os.tmpdir(), ".failed-tests.json");
+            fs.writeFileSync(file, JSON.stringify({ grep }), "utf8");
+            args.push("--config", file);
         }
         if (colors) {
             args.push("--colors");
@@ -90,11 +100,13 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
         else {
             args.push("--no-colors");
         }
-        if (inspect) {
-            args.unshift("--inspect-brk");
+        if (inspect !== undefined) {
+            args.unshift(inspect == "" ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.push("-t", "0");
         }
         else if (debug) {
             args.unshift("--debug-brk");
+            args.push("-t", "0");
         }
         else {
             args.push("-t", "" + testTimeout);
@@ -161,7 +173,6 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light
- * @param {string} skipPercent
  * @param {string} [taskConfigsFolder]
  * @param {string | number} [workerCount]
  * @param {string} [stackTraceLimit]
@@ -170,12 +181,11 @@ exports.cleanTestDirs = cleanTestDirs;
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
  */
-function writeTestConfigFile(tests, runners, light, skipPercent, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
+function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
         runners: runners ? runners.split(",") : undefined,
         light,
-        skipPercent,
         workerCount,
         stackTraceLimit,
         taskConfigsFolder,
@@ -203,4 +213,8 @@ function restoreSavedNodeEnv() {
 
 function deleteTemporaryProjectOutput() {
     return del(path.join(exports.localBaseline, "projectOutput/"));
+}
+
+function regExpEscape(text) {
+    return text.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
 }

@@ -10,7 +10,7 @@ var x: I<{s: string}>
 >s : string
 
 x.f({s: 1})
->x.f({s: 1}) : any
+>x.f({s: 1}) : void
 >x.f : <T extends { s: string; }>(x: T) => void
 >x : I<{ s: string; }>
 >f : <T extends { s: string; }>(x: T) => void

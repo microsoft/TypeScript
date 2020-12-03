@@ -1,0 +1,47 @@
+=== tests/cases/compiler/unwitnessedTypeParameterVariance.ts ===
+// Repros from #33872
+
+export interface CalcObj<O> {
+    read: (origin: O) => CalcValue<O>;
+>read : (origin: O) => CalcValue<O>
+>origin : O
+}
+
+export type CalcValue<O> = CalcObj<O>;
+>CalcValue : CalcValue<O>
+
+function foo<O>() {
+>foo : <O>() => void
+
+    const unk: CalcObj<unknown> = { read: (origin: unknown) => unk }
+>unk : CalcObj<unknown>
+>{ read: (origin: unknown) => unk } : { read: (origin: unknown) => CalcObj<unknown>; }
+>read : (origin: unknown) => CalcObj<unknown>
+>(origin: unknown) => unk : (origin: unknown) => CalcObj<unknown>
+>origin : unknown
+>unk : CalcObj<unknown>
+
+    const x: CalcObj<O> = unk;
+>x : CalcObj<O>
+>unk : CalcObj<unknown>
+}
+
+type A<T> = B<T>;
+>A : A<T>
+
+interface B<T> {
+    prop: A<T>;
+>prop : A<T>
+}
+
+declare let a: A<number>;
+>a : A<number>
+
+declare let b: A<3>;
+>b : A<3>
+ 
+b = a;
+>b = a : A<number>
+>b : A<3>
+>a : A<number>
+

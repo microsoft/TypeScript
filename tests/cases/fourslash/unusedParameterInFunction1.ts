@@ -5,7 +5,7 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'x'",
+    description: "Remove unused declaration for: 'x'",
     index: 0,
     newRangeContent: "greeter()",
 });

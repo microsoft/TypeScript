@@ -84,7 +84,10 @@ namespace ts.projectSystem {
                     command: "geterr",
                     arguments: { files: ["/a/missing"] }
                 });
-                // no files - expect 'completed' event
+                // Queued files
+                assert.equal(host.getOutput().length, 0, "expected 0 message");
+                host.checkTimeoutQueueLengthAndRun(1);
+                // Completed event since file is missing
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 verifyRequestCompleted(session.getSeq(), 0);
             }

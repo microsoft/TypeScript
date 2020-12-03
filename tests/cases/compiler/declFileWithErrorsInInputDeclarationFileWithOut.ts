@@ -1,5 +1,6 @@
 // @declaration: true
 // @out: out.js
+// @bundledPackageName: "lib"
 
 // @Filename: declFile.d.ts
 declare module M {

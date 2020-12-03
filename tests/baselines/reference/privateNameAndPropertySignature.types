@@ -1,0 +1,32 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts ===
+type A = {
+>A : A
+
+    #foo: string
+>#foo : string
+}
+
+interface B {
+    #foo: string;
+>#foo : string
+}
+
+declare const x: {
+>x : { bar: {    #baz: string;}; }
+
+    #foo: number;
+>#foo : number
+
+    bar: {
+>bar : {}
+
+        #baz: string;
+>#baz : string
+    }
+};
+
+declare const y: [{ qux: { #quux: 3 } }];
+>y : [{ qux: {    #quux: 3;}; }]
+>qux : {}
+>#quux : 3
+

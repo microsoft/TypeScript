@@ -1,0 +1,59 @@
+tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(28,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(29,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(30,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts(31,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+
+
+==== tests/cases/conformance/enums/enumConstantMemberWithTemplateLiterals.ts (4 errors) ====
+    enum T1 {
+        a = `1`
+    }
+    
+    enum T2 {
+        a = `1`,
+        b = "2",
+        c = 3
+    }
+    
+    enum T3 {
+        a = `1` + `1`
+    }
+    
+    enum T4 {
+        a = `1`,
+        b = `1` + `1`,
+        c = `1` + "2",
+        d = "2" + `1`,
+        e = "2" + `1` + `1`
+    }
+    
+    enum T5 {
+        a = `1`,
+        b = `1` + `2`,
+        c = `1` + `2` + `3`,
+        d = 1,
+        e = `1` - `1`,
+            ~~~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        f = `1` + 1,
+            ~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        g = `1${"2"}3`,
+            ~~~~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+        h = `1`.length
+            ~~~~~~~~~~
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
+    }
+    
+    enum T6 {
+        a = 1,
+        b = `12`.length
+    }
+    
+    declare enum T7 {
+        a = `1`,
+        b = `1` + `1`,
+        c = "2" + `1`
+    }
+    

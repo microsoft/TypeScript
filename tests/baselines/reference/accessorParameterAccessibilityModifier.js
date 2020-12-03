@@ -10,12 +10,12 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "X", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "X", {
         set: function (v2) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

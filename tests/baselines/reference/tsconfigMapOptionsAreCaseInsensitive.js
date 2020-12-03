@@ -20,6 +20,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./other.js"], function (require, exports, other_js_1) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     var x = 10 + other_js_1["default"];
     exports.x = x;
 });

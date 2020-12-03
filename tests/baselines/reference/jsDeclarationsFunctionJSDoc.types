@@ -1,0 +1,52 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+/**
+ * Foos a bar together using an `a` and a `b`
+ * @param {number} a
+ * @param {string} b
+ */
+export function foo(a, b) {}
+>foo : (a: number, b: string) => void
+>a : number
+>b : string
+
+/**
+ * Legacy - DO NOT USE
+ */
+export class Aleph {
+>Aleph : Aleph
+
+    /**
+     * Impossible to construct.
+     * @param {Aleph} a
+     * @param {null} b
+     */
+    constructor(a, b) {
+>a : Aleph
+>b : null
+
+        /**
+         * Field is always null
+         */
+        this.field = b;
+>this.field = b : null
+>this.field : any
+>this : this
+>field : any
+>b : null
+    }
+
+    /**
+     * Doesn't actually do anything
+     * @returns {void}
+     */
+    doIt() {}
+>doIt : () => void
+}
+
+/**
+ * Not the speed of light
+ */
+export const c = 12;
+>c : 12
+>12 : 12
+

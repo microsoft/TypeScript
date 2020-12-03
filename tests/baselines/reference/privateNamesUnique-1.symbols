@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-1.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesUnique-1.ts, 0, 0))
+
+    #foo: number;
+>#foo : Symbol(A.#foo, Decl(privateNamesUnique-1.ts, 0, 9))
+}
+
+class B {
+>B : Symbol(B, Decl(privateNamesUnique-1.ts, 2, 1))
+
+    #foo: number;
+>#foo : Symbol(B.#foo, Decl(privateNamesUnique-1.ts, 4, 9))
+}
+
+const b: A = new B();     // Error: Property #foo is missing
+>b : Symbol(b, Decl(privateNamesUnique-1.ts, 8, 5))
+>A : Symbol(A, Decl(privateNamesUnique-1.ts, 0, 0))
+>B : Symbol(B, Decl(privateNamesUnique-1.ts, 2, 1))
+

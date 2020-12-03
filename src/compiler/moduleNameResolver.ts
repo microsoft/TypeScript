@@ -10,12 +10,6 @@ namespace ts {
         return !!compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    /** Array that is only intended to be pushed to, never read. */
-    /* @internal */
-    export interface Push<T> {
-        push(value: T): void;
-    }
-
     function withPackageId(packageInfo: PackageJsonInfo | undefined, r: PathAndExtension | undefined): Resolved | undefined {
         let packageId: PackageId | undefined;
         if (r && packageInfo) {
@@ -90,7 +84,11 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
+        if (resultFromCache) {
+            resultFromCache.failedLookupLocations.push(...failedLookupLocations);
+            return resultFromCache;
+        }
         return {
             resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
             failedLookupLocations
@@ -102,6 +100,7 @@ namespace ts {
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
+        resultFromCache?: ResolvedModuleWithFailedLookupLocations;
     }
 
     /** Just the fields that we use for module resolution. */
@@ -118,8 +117,6 @@ namespace ts {
         version?: string;
     }
 
-    type MatchingKeys<TRecord, TMatch, K extends keyof TRecord = keyof TRecord> = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
-
     function readPackageJsonField<TMatch, K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
     function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined;
     function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string" | "object", state: ModuleResolutionState): PackageJson[K] | undefined {
@@ -130,8 +127,9 @@ namespace ts {
             return;
         }
         const value = jsonContent[fieldName];
-        if (typeof value !== typeOfTag || value === null) {
+        if (typeof value !== typeOfTag || value === null) { // eslint-disable-line no-null/no-null
             if (state.traceEnabled) {
+                // eslint-disable-next-line no-null/no-null
                 trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, fieldName, typeOfTag, value === null ? "null" : typeof value);
             }
             return;
@@ -420,7 +418,7 @@ namespace ts {
                             const packageJsonPath = combinePaths(root, normalized, "package.json");
                             // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
                             // See `createNotNeededPackageJSON` in the types-publisher` repo.
-                            // tslint:disable-next-line:no-null-keyword
+                            // eslint-disable-next-line no-null/no-null
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
                                 const baseFileName = getBaseFileName(normalized);
@@ -445,7 +443,7 @@ namespace ts {
      */
     export interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
-        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>;
+        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>;
     }
 
     /**
@@ -474,18 +472,18 @@ namespace ts {
 
     /*@internal*/
     export interface CacheWithRedirects<T> {
-        ownMap: Map<T>;
-        redirectsMap: Map<Map<T>>;
-        getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<T>;
+        ownMap: ESMap<string, T>;
+        redirectsMap: ESMap<Path, ESMap<string, T>>;
+        getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): ESMap<string, T>;
         clear(): void;
         setOwnOptions(newOptions: CompilerOptions): void;
-        setOwnMap(newOwnMap: Map<T>): void;
+        setOwnMap(newOwnMap: ESMap<string, T>): void;
     }
 
     /*@internal*/
     export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
-        let ownMap: Map<T> = createMap();
-        const redirectsMap: Map<Map<T>> = createMap();
+        let ownMap: ESMap<string, T> = new Map();
+        const redirectsMap = new Map<Path, ESMap<string, T>>();
         return {
             ownMap,
             redirectsMap,
@@ -499,7 +497,7 @@ namespace ts {
             options = newOptions;
         }
 
-        function setOwnMap(newOwnMap: Map<T>) {
+        function setOwnMap(newOwnMap: ESMap<string, T>) {
             ownMap = newOwnMap;
         }
 
@@ -511,7 +509,7 @@ namespace ts {
             let redirects = redirectsMap.get(path);
             if (!redirects) {
                 // Reuse map if redirected reference map uses same resolution
-                redirects = !options || optionsHaveModuleResolutionChanges(options, redirectedReference.commandLine.options) ? createMap() : ownMap;
+                redirects = !options || optionsHaveModuleResolutionChanges(options, redirectedReference.commandLine.options) ? new Map() : ownMap;
                 redirectsMap.set(path, redirects);
             }
             return redirects;
@@ -525,7 +523,7 @@ namespace ts {
 
     /*@internal*/
     export function createModuleResolutionCacheWithMaps(
-        directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>,
+        directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>,
         moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>,
         currentDirectory: string,
         getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
@@ -534,7 +532,7 @@ namespace ts {
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-            return getOrCreateCache<Map<ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, createMap);
+            return getOrCreateCache<ESMap<string, ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, () => new Map());
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
@@ -553,7 +551,7 @@ namespace ts {
         }
 
         function createPerModuleNameCache(): PerModuleNameCache {
-            const directoryPathMap = createMap<ResolvedModuleWithFailedLookupLocations>();
+            const directoryPathMap = new Map<string, ResolvedModuleWithFailedLookupLocations>();
 
             return { get, set };
 
@@ -791,12 +789,15 @@ namespace ts {
 
     function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
         const { baseUrl, paths } = state.compilerOptions;
-        if (baseUrl && paths && !pathIsRelative(moduleName)) {
+        if (paths && !pathIsRelative(moduleName)) {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
+                if (baseUrl) {
+                    trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
+                }
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-            return tryLoadModuleUsingPaths(extensions, moduleName, baseUrl, paths, loader, /*onlyRecordFailures*/ false, state);
+            const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
@@ -921,7 +922,7 @@ namespace ts {
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-    /* @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // tslint:disable-line unified-signatures
+    /* @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations {
         return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, lookupConfig ? tsconfigExtensions : (compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions), redirectedReference);
     }
@@ -933,11 +934,7 @@ namespace ts {
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
 
         const result = forEach(extensions, ext => tryResolve(ext));
-        if (result && result.value) {
-            const { resolved, isExternalLibraryImport } = result.value;
-            return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
-        }
-        return { resolvedModule: undefined, failedLookupLocations };
+        return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
@@ -980,7 +977,7 @@ namespace ts {
         if (traceEnabled) {
             trace(host, Diagnostics.Resolving_real_path_for_0_result_1, path, real);
         }
-        Debug.assert(host.fileExists(real), `${path} linked to nonexistent file ${real}`); // tslint:disable-line
+        Debug.assert(host.fileExists(real), `${path} linked to nonexistent file ${real}`);
         return real;
     }
 
@@ -1026,7 +1023,7 @@ namespace ts {
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
-     * (Not neeeded for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
+     * (Not needed for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
      *
      * packageDirectory is the directory of the package itself.
      *   For `blah/node_modules/foo/index.d.ts` this is packageDirectory: "foo"
@@ -1374,6 +1371,7 @@ namespace ts {
             }
             const resolved = forEach(paths[matchedPatternText], subst => {
                 const path = matchedStar ? subst.replace("*", matchedStar) : subst;
+                // When baseUrl is not specified, the command line parser resolves relative paths to the config file location.
                 const candidate = normalizePath(combinePaths(baseDirectory, path));
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
@@ -1442,7 +1440,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
-            state.failedLookupLocations.push(...result.failedLookupLocations);
+            state.resultFromCache = result;
             return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
     }
@@ -1455,7 +1453,7 @@ namespace ts {
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
@@ -1502,7 +1500,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, state.resultFromCache);
     }
 
     /**

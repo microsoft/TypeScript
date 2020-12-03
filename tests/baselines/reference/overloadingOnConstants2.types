@@ -50,8 +50,8 @@ var b: E = foo("bye", []); // E
 >[] : undefined[]
 
 var c = foo("um", []); // error
->c : any
->foo("um", []) : any
+>c : D & E
+>foo("um", []) : D & E
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
 >"um" : "um"
 >[] : undefined[]

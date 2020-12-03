@@ -5,7 +5,7 @@ namespace ts.projectSystem {
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
         throttleLimit?: number;
-        typesRegistry?: Map<MapLike<string>>;
+        typesRegistry?: ESMap<string, MapLike<string>>;
     }
 
     class Installer extends TestTypingsInstaller {
@@ -130,13 +130,14 @@ namespace ts.projectSystem {
             })();
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
             projectService.openClientFile(file1.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
-            const expectedWatchedFiles = createMap<number>();
+            const expectedWatchedFiles = new Map<string, number>();
             expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
             expectedWatchedFiles.set(libFile.path, 1); // tsserver
             expectedWatchedFiles.set(packageJson.path, 1); // typing installer
@@ -144,7 +145,7 @@ namespace ts.projectSystem {
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
-            const expectedWatchedDirectoriesRecursive = createMap<number>();
+            const expectedWatchedDirectoriesRecursive = new Map<string, number>();
             expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
             expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
             expectedWatchedDirectoriesRecursive.set("/a/b/node_modules", 1); // TypingInstaller
@@ -204,6 +205,50 @@ namespace ts.projectSystem {
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             checkProjectActualFiles(p, [file1.path, jquery.path]);
+        });
+
+        it("inferred project - type acquisition with disableFilenameBasedTypeAcquisition:true", () => {
+            // Tests:
+            // Exclude file with disableFilenameBasedTypeAcquisition:true
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+
+            const messages: string[] = [];
+            const host = createServerHost([jqueryJs]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: File[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                enable: true,
+                disableFilenameBasedTypeAcquisition: true
+            });
+            projectService.openClientFile(jqueryJs.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const p = projectService.inferredProjects[0];
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.installAll(/*expectedCount*/ 0);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            // files should not be removed from project if ATA is skipped
+            checkProjectActualFiles(p, [jqueryJs.path]);
+            assert.isTrue(messages.indexOf("No new typings were requested as a result of typings discovery") > 0, "Should not request filename-based typings");
         });
 
         it("external project - no type acquisition, no .d.ts/js files", () => {
@@ -390,7 +435,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file2Jsx.path, file3dts.path, lodashDts.path, reactDts.path]);
         });
@@ -433,6 +478,51 @@ namespace ts.projectSystem {
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
         });
+
+        it("external project - type acquisition with disableFilenameBasedTypeAcquisition:true", () => {
+            // Tests:
+            // Exclude file with disableFilenameBasedTypeAcquisition:true
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+
+            const messages: string[] = [];
+            const host = createServerHost([jqueryJs]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: File[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
+                rootFiles: [toExternalFile(jqueryJs.path)],
+                typeAcquisition: { enable: true, disableFilenameBasedTypeAcquisition: true }
+            });
+
+            const p = projectService.externalProjects[0];
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.installAll(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            // files should not be removed from project if ATA is skipped
+            checkProjectActualFiles(p, [jqueryJs.path]);
+            assert.isTrue(messages.indexOf("No new typings were requested as a result of typings discovery") > 0, "Should not request filename-based typings");
+        });
+
         it("external project - no type acquisition, with js & ts files", () => {
             // Tests:
             // 1. No typings are included for JS projects when the project contains ts files
@@ -552,7 +642,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             // Commander: Existed as a JS file
             // JQuery: Specified in 'include'
@@ -636,7 +726,7 @@ namespace ts.projectSystem {
             for (const f of typingFiles) {
                 assert.isTrue(host.fileExists(f.path), `expected file ${f.path} to exist`);
             }
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
         });
@@ -739,7 +829,7 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-            host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
+            host.checkTimeoutQueueLengthAndRun(2); // for 2 projects
             checkProjectActualFiles(p1, [file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
@@ -837,9 +927,10 @@ namespace ts.projectSystem {
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
-            const watchedFilesExpected = createMap<number>();
+            const watchedFilesExpected = new Map<string, number>();
             watchedFilesExpected.set(jsconfig.path, 1); // project files
             watchedFilesExpected.set(libFile.path, 1); // project files
+            watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
             checkWatchedFilesDetailed(host, watchedFilesExpected);
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
@@ -934,7 +1025,7 @@ namespace ts.projectSystem {
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
-            host.reloadFS([f, fixedPackageJson]);
+            host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
             host.checkTimeoutQueueLengthAndRun(2); // To refresh the project and refresh inferred projects
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
@@ -993,19 +1084,18 @@ namespace ts.projectSystem {
         });
 
         it("should redo resolution that resolved to '.js' file after typings are installed", () => {
-            const projects = `/user/username/projects`;
             const file: TestFSWithWatch.File = {
-                path: `${projects}/a/b/app.js`,
+                path: `${tscWatch.projects}/a/b/app.js`,
                 content: `
                 import * as commander from "commander";`
             };
-            const cachePath = `${projects}/a/cache`;
+            const cachePath = `${tscWatch.projects}/a/cache`;
             const commanderJS: TestFSWithWatch.File = {
-                path: `${projects}/node_modules/commander/index.js`,
+                path: `${tscWatch.projects}/node_modules/commander/index.js`,
                 content: "module.exports = 0",
             };
 
-            const typeNames: ReadonlyArray<string> = ["commander"];
+            const typeNames: readonly string[] = ["commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
             const host = createServerHost([file, commanderJS]);
             const installer = new (class extends Installer {
@@ -1025,12 +1115,12 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, [], /*recursive*/ false);
             // Does not include cachePath because that is handled by typingsInstaller
             checkWatchedDirectories(host, [
-                `${projects}/node_modules`,
-                `${projects}/a/node_modules`,
-                `${projects}/a/b/node_modules`,
-                `${projects}/a/node_modules/@types`,
-                `${projects}/a/b/node_modules/@types`,
-                `${projects}/a/b/bower_components`
+                `${tscWatch.projects}/node_modules`,
+                `${tscWatch.projects}/a/node_modules`,
+                `${tscWatch.projects}/a/b/node_modules`,
+                `${tscWatch.projects}/a/node_modules/@types`,
+                `${tscWatch.projects}/a/b/node_modules/@types`,
+                `${tscWatch.projects}/a/b/bower_components`
             ], /*recursive*/ true);
 
             service.checkNumberOfProjects({ inferredProjects: 1 });
@@ -1360,7 +1450,7 @@ namespace ts.projectSystem {
                 content: ""
             };
 
-            const safeList = createMapFromTemplate({ jquery: "jquery", chroma: "chroma-js" });
+            const safeList = new Map(getEntries({ jquery: "jquery", chroma: "chroma-js" }));
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
@@ -1380,7 +1470,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f]);
-            const cache = createMap<JsTyping.CachedTyping>();
+            const cache = new Map<string, JsTyping.CachedTyping>();
 
             for (const name of JsTyping.nodeCoreModuleList) {
                 const logger = trackingLogger();
@@ -1403,7 +1493,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } });
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
             const registry = createTypesRegistry("node");
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry);
@@ -1425,7 +1515,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } });
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
             assert.deepEqual(logger.finish(), [
@@ -1450,7 +1540,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ name: "b" }),
             };
             const host = createServerHost([app, a, b]);
-            const cache = createMap<JsTyping.CachedTyping>();
+            const cache = new Map<string, JsTyping.CachedTyping>();
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
             assert.deepEqual(logger.finish(), [
@@ -1481,10 +1571,10 @@ namespace ts.projectSystem {
                 content: "export let y: number"
             };
             const host = createServerHost([app]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({
                 node: { typingLocation: node.path, version: new Version("1.3.0") },
                 commander: { typingLocation: commander.path, version: new Version("1.0.0") }
-            });
+            }));
             const registry = createTypesRegistry("node", "commander");
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
@@ -1507,9 +1597,9 @@ namespace ts.projectSystem {
                 content: "export let y: number"
             };
             const host = createServerHost([app]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({
                 node: { typingLocation: node.path, version: new Version("1.0.0") }
-            });
+            }));
             const registry = createTypesRegistry("node");
             registry.delete(`ts${versionMajorMinor}`);
             const logger = trackingLogger();
@@ -1538,10 +1628,10 @@ namespace ts.projectSystem {
                 content: "export let y: number"
             };
             const host = createServerHost([app]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({
                 node: { typingLocation: node.path, version: new Version("1.3.0-next.0") },
                 commander: { typingLocation: commander.path, version: new Version("1.3.0-next.0") }
-            });
+            }));
             const registry = createTypesRegistry("node", "commander");
             registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();

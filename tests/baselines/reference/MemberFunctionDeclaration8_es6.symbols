@@ -6,7 +6,7 @@ class C {
 >foo : Symbol(C.foo, Decl(MemberFunctionDeclaration8_es6.ts, 0, 9))
 
     // Make sure we don't think of *bar as the start of a generator method.
-    if (a) # * bar;
+    if (a) ¬ * bar;
     return bar;
   }
 }

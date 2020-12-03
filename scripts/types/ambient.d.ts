@@ -19,7 +19,7 @@ declare module "vinyl" {
         cwd: string;
         base: string;
         path: string;
-        readonly history: ReadonlyArray<string>;
+        readonly history: readonly string[];
         contents: T;
         relative: string;
         dirname: string;
@@ -45,7 +45,7 @@ declare module "vinyl" {
             cwd?: string;
             base?: string;
             path?: string;
-            history?: ReadonlyArray<string>;
+            history?: readonly string[];
             stat?: import("fs").Stats;
             contents?: T;
             sourceMap?: import("./sourcemaps").RawSourceMap | string;
@@ -76,10 +76,15 @@ declare module "undertaker" {
     interface TaskFunctionParams {
         flags?: Record<string, string>;
     }
+    interface TaskFunctionWrapped {
+        description: string
+        flags: { [name: string]: string }
+    }
 }
 
 declare module "gulp-sourcemaps" {
     interface WriteOptions {
         destPath?: string;
     }
+
 }

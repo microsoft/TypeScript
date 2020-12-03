@@ -13,5 +13,12 @@ declare class Something
 
     private someVar;
 >someVar : Symbol(Something.someVar, Decl(test.d.ts, 2, 33))
+
+    private get getter();
+>getter : Symbol(Something.getter, Decl(test.d.ts, 3, 20))
+
+    private set setter(v);
+>setter : Symbol(Something.setter, Decl(test.d.ts, 4, 25))
+>v : Symbol(v, Decl(test.d.ts, 5, 23))
 }
 

@@ -1,7 +1,7 @@
 namespace ts {
     interface TestProjectSpecification {
         configFileName?: string;
-        references?: ReadonlyArray<string | ProjectReference>;
+        references?: readonly (string | ProjectReference)[];
         files: { [fileName: string]: string };
         outputFiles?: { [fileName: string]: string };
         config?: object;
@@ -11,14 +11,14 @@ namespace ts {
         [path: string]: TestProjectSpecification;
     }
 
-    function assertHasError(message: string, errors: ReadonlyArray<Diagnostic>, diag: DiagnosticMessage) {
+    function assertHasError(message: string, errors: readonly Diagnostic[], diag: DiagnosticMessage) {
         if (!errors.some(e => e.code === diag.code)) {
             const errorString = errors.map(e => `    ${e.file ? e.file.fileName : "[global]"}: ${e.messageText}`).join("\r\n");
             assert(false, `${message}: Did not find any diagnostic for ${diag.message} in:\r\n${errorString}`);
         }
     }
 
-    function assertNoErrors(message: string, errors: ReadonlyArray<Diagnostic>) {
+    function assertNoErrors(message: string, errors: readonly Diagnostic[]) {
         if (errors && errors.length > 0) {
             assert(false, `${message}: Expected no errors, but found:\r\n${errors.map(e => `    ${e.messageText}`).join("\r\n")}`);
         }
@@ -43,7 +43,7 @@ namespace ts {
     }
 
     function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: Program, host: fakes.CompilerHost) => void) {
-        const files = createMap<string>();
+        const files = new Map<string, string>();
         for (const key in spec) {
             const sp = spec[key];
             const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");

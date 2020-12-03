@@ -1,0 +1,54 @@
+=== tests/cases/compiler/reverseMappedTypeAssignableToIndex.ts ===
+// Simple mapped type and inferrence
+type Mapped<T> = { [K in keyof T]: { name: T[K] } };
+>Mapped : Symbol(Mapped, Decl(reverseMappedTypeAssignableToIndex.ts, 0, 0))
+>T : Symbol(T, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 12))
+>K : Symbol(K, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 20))
+>T : Symbol(T, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 12))
+>name : Symbol(name, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 36))
+>T : Symbol(T, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 12))
+>K : Symbol(K, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 20))
+
+type InferFromMapped<T> = T extends Mapped<infer R> ? R : never;
+>InferFromMapped : Symbol(InferFromMapped, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 52))
+>T : Symbol(T, Decl(reverseMappedTypeAssignableToIndex.ts, 2, 21))
+>T : Symbol(T, Decl(reverseMappedTypeAssignableToIndex.ts, 2, 21))
+>Mapped : Symbol(Mapped, Decl(reverseMappedTypeAssignableToIndex.ts, 0, 0))
+>R : Symbol(R, Decl(reverseMappedTypeAssignableToIndex.ts, 2, 48))
+>R : Symbol(R, Decl(reverseMappedTypeAssignableToIndex.ts, 2, 48))
+
+// Object literal type and associated mapped type
+// Note that in the real code we don't have a direct reference to LiteralType
+type LiteralType = {
+>LiteralType : Symbol(LiteralType, Decl(reverseMappedTypeAssignableToIndex.ts, 2, 64))
+
+	first: "first";
+>first : Symbol(first, Decl(reverseMappedTypeAssignableToIndex.ts, 6, 20))
+
+	second: "second";
+>second : Symbol(second, Decl(reverseMappedTypeAssignableToIndex.ts, 7, 16))
+}
+type MappedLiteralType = {
+>MappedLiteralType : Symbol(MappedLiteralType, Decl(reverseMappedTypeAssignableToIndex.ts, 9, 1))
+
+	first: { name: "first" },
+>first : Symbol(first, Decl(reverseMappedTypeAssignableToIndex.ts, 10, 26))
+>name : Symbol(name, Decl(reverseMappedTypeAssignableToIndex.ts, 11, 9))
+
+	second: { name: "second" },
+>second : Symbol(second, Decl(reverseMappedTypeAssignableToIndex.ts, 11, 26))
+>name : Symbol(name, Decl(reverseMappedTypeAssignableToIndex.ts, 12, 10))
+
+};
+
+type Inferred = InferFromMapped<MappedLiteralType>;
+>Inferred : Symbol(Inferred, Decl(reverseMappedTypeAssignableToIndex.ts, 13, 2))
+>InferFromMapped : Symbol(InferFromMapped, Decl(reverseMappedTypeAssignableToIndex.ts, 1, 52))
+>MappedLiteralType : Symbol(MappedLiteralType, Decl(reverseMappedTypeAssignableToIndex.ts, 9, 1))
+
+// UNEXPECTED resolves to false
+type Test1 = Inferred extends Record<any, string> ? true : false;
+>Test1 : Symbol(Test1, Decl(reverseMappedTypeAssignableToIndex.ts, 15, 51))
+>Inferred : Symbol(Inferred, Decl(reverseMappedTypeAssignableToIndex.ts, 13, 2))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+

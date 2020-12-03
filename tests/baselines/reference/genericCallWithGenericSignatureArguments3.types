@@ -175,8 +175,8 @@ var x: (a: string) => boolean;
 >a : string
 
 var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2); // error
->r11 : any
->foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2) : any
+>r11 : (x: (a: string) => boolean) => (n: Object) => number
+>foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: string) => string) => 2) : (x: (a: string) => boolean) => (n: Object) => number
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
 >x : (a: string) => boolean
 >(a1: (y: string) => string) => (n: Object) => 1 : (a1: (y: string) => string) => (n: Object) => number
@@ -191,8 +191,8 @@ var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: stri
 >2 : 2
 
 var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2); // error
->r12 : any
->foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2) : any
+>r12 : (x: (z: string) => boolean) => (n: Object) => number
+>foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: string) => boolean) => 2) : (x: (z: string) => boolean) => (n: Object) => number
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
 >x : (a: string) => boolean
 >(a1: (y: string) => boolean) => (n: Object) => 1 : (a1: (y: string) => boolean) => (n: Object) => number

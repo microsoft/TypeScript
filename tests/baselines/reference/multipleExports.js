@@ -14,6 +14,7 @@ export module M {
 //// [multipleExports.js]
 "use strict";
 exports.__esModule = true;
+exports.M = void 0;
 var M;
 (function (M) {
     M.v = 0;

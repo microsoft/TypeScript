@@ -1,0 +1,28 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.2.ts ===
+declare const o1: undefined | (() => number);
+>o1 : Symbol(o1, Decl(callChain.2.ts, 0, 13))
+
+o1?.();
+>o1 : Symbol(o1, Decl(callChain.2.ts, 0, 13))
+
+declare const o2: undefined | { b: () => number };
+>o2 : Symbol(o2, Decl(callChain.2.ts, 3, 13))
+>b : Symbol(b, Decl(callChain.2.ts, 3, 31))
+
+o2?.b();
+>o2?.b : Symbol(b, Decl(callChain.2.ts, 3, 31))
+>o2 : Symbol(o2, Decl(callChain.2.ts, 3, 13))
+>b : Symbol(b, Decl(callChain.2.ts, 3, 31))
+
+declare const o3: { b: (() => { c: string }) | undefined };
+>o3 : Symbol(o3, Decl(callChain.2.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.2.ts, 6, 19))
+>c : Symbol(c, Decl(callChain.2.ts, 6, 31))
+
+o3.b?.().c;
+>o3.b?.().c : Symbol(c, Decl(callChain.2.ts, 6, 31))
+>o3.b : Symbol(b, Decl(callChain.2.ts, 6, 19))
+>o3 : Symbol(o3, Decl(callChain.2.ts, 6, 13))
+>b : Symbol(b, Decl(callChain.2.ts, 6, 19))
+>c : Symbol(c, Decl(callChain.2.ts, 6, 31))
+

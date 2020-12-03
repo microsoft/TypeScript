@@ -3,7 +3,7 @@
  * @param {Array<*>} list
  */
 function thing(list) {
->thing : (list: any[]) => any[]
+>thing : (list: Array<any>) => any[]
 >list : any[]
 
     return list;

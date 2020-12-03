@@ -72,13 +72,13 @@ var x7: T7;
 >x7 : C7
 
 type T8 = string | boolean;
->T8 : string | boolean
+>T8 : T8
 
 var x8: string | boolean;
->x8 : string | boolean
+>x8 : T8
 
 var x8: T8;
->x8 : string | boolean
+>x8 : T8
 
 type T9 = () => string;
 >T9 : T9
@@ -122,7 +122,7 @@ var x13_2: T13
 >x13_2 : I13
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
 >t1 : T1
 >t2 : I13
 
@@ -145,7 +145,7 @@ var x14: T14;
 >x14 : string
 
 declare function foo14_1(x: T14): void;
->foo14_1 : (x: string) => void
+>foo14_1 : (x: T14) => void
 >x : string
 
 declare function foo14_2(x: "click"): void;
@@ -153,7 +153,7 @@ declare function foo14_2(x: "click"): void;
 >x : "click"
 
 declare function foo14_2(x: T14): void;
->foo14_2 : { (x: "click"): void; (x: string): void; }
+>foo14_2 : { (x: "click"): void; (x: T14): void; }
 >x : string
 
 type Meters = number
@@ -169,7 +169,7 @@ declare function f15(a: string): boolean;
 >a : string
 
 declare function f15(a: Meters): string;
->f15 : { (a: string): boolean; (a: number): string; }
+>f15 : { (a: string): boolean; (a: Meters): string; }
 >a : number
 
 f15(E.x).toLowerCase();
@@ -183,22 +183,22 @@ f15(E.x).toLowerCase();
 >toLowerCase : () => string
 
 type StringAndBoolean = [string, boolean]
->StringAndBoolean : [string, boolean]
+>StringAndBoolean : StringAndBoolean
 
 declare function f16(s: StringAndBoolean): string;
->f16 : (s: [string, boolean]) => string
->s : [string, boolean]
+>f16 : (s: StringAndBoolean) => string
+>s : StringAndBoolean
 
 var x: [string, boolean];
 >x : [string, boolean]
 
 f16(x);
 >f16(x) : string
->f16 : (s: [string, boolean]) => string
+>f16 : (s: StringAndBoolean) => string
 >x : [string, boolean]
 
 var y: StringAndBoolean = ["1", false];
->y : [string, boolean]
+>y : StringAndBoolean
 >["1", false] : [string, false]
 >"1" : "1"
 >false : false
@@ -207,7 +207,7 @@ y[0].toLowerCase();
 >y[0].toLowerCase() : string
 >y[0].toLowerCase : () => string
 >y[0] : string
->y : [string, boolean]
+>y : StringAndBoolean
 >0 : 0
 >toLowerCase : () => string
 

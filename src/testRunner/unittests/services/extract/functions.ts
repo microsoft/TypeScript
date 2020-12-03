@@ -220,7 +220,7 @@ namespace ts {
 }`, /*includeLib*/ true);
 
         testExtractFunction("extractFunction20",
-        `const _ = class {
+            `const _ = class {
     a() {
         [#|let a1 = { x: 1 };
         return a1.x + 10;|]
@@ -545,14 +545,14 @@ var q = /*b*/ //c
     /*j*/ 2|] /*k*/ //l
     /*m*/; /*n*/ //o`);
 
-    testExtractFunction("extractFunction_NamelessClass", `
+        testExtractFunction("extractFunction_NamelessClass", `
 export default class {
     M() {
         [#|1 + 1|];
     }
 }`);
 
-    testExtractFunction("extractFunction_NoDeclarations", `
+        testExtractFunction("extractFunction_NoDeclarations", `
 function F() {
 [#|arguments.length|]; // arguments has no declaration
 }`);

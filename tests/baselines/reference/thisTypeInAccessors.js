@@ -64,7 +64,7 @@ var Explicit = /** @class */ (function () {
     Object.defineProperty(Explicit.prototype, "x", {
         get: function () { return this.n; },
         set: function (n) { this.n = n; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Explicit;
@@ -76,7 +76,7 @@ var Contextual = /** @class */ (function () {
     Object.defineProperty(Contextual.prototype, "x", {
         get: function () { return this.n; } // inside a class, so already correct
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Contextual;

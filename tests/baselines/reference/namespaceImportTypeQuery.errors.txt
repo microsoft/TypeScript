@@ -1,0 +1,15 @@
+/b.ts(2,21): error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
+
+
+==== /a.ts (0 errors) ====
+    class A {}
+    export type { A };
+    export class B {};
+    
+==== /b.ts (1 errors) ====
+    import * as types from './a';
+    let A: typeof types.A;
+                        ~
+!!! error TS2339: Property 'A' does not exist on type 'typeof import("/a")'.
+    let B: typeof types.B;
+    

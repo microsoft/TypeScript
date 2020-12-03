@@ -1,5 +1,5 @@
 /a.js(7,3): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'number'.
-/a.js(8,6): error TS2345: Argument of type '"2"' is not assignable to parameter of type 'number'.
+/a.js(8,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
 ==== /a.js (2 errors) ====
@@ -14,6 +14,6 @@
 !!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'number'.
     f(1, "2"); // Error
          ~~~
-!!! error TS2345: Argument of type '"2"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     f(1, 2);
     

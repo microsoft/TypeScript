@@ -19,8 +19,8 @@ module n {
 >10000 : 10000
 
     export var y = {
->y : { m: typeof m; (Missing): any; }
->{        m.x  // error    } : { m: typeof m; (Missing): any; }
+>y : { m: typeof m; "": any; }
+>{        m.x  // error    } : { m: typeof m; "": any; }
 
         m.x  // error
 >m : typeof m

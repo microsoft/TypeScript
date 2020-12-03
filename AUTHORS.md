@@ -1,348 +1,480 @@
 TypeScript is authored by:
-* Aaron Holmes
-* Abubaker Bashir
-* Adam Freidin
-* Adi Dahiya
-* Aditya Daflapurkar
-* Adnan Chowdhury 
-* Adrian Leonhard 
-* Adrien Gibrat 
-* Ahmad Farid
-* Akshar Patel
-* Alan Agius 
-* Alex Chugaev 
-* Alex Eagle
-* Alex Khomchenko 
-* Alex Ryan 
-* Alexander Kuvaev
-* Alexander Rusakov 
-* Alexander Tarasyuk
-* Ali Sabzevari
-* Aliaksandr Radzivanovich
-* Aluan Haddad 
-* Anatoly Ressin 
-* Anders Hejlsberg
-* Andreas Martin
-* Andrej Baran 
-* Andrew Casey 
-* Andrew Faulkner 
-* Andrew Ochsner 
-* Andrew Stegmaier 
-* Andrew Z Allen
-* András Parditka 
-* Andy Hanson
-* Anil Anar
-* Anton Khlynovskiy 
-* Anton Tolmachev
-* Anubha Mathur 
-* Armando Aguirre 
-* Arnaud Tournier 
-* Arnav Singh
-* Artem Tyurin 
-* Arthur Ozga
-* Asad Saeeduddin
-* Avery Morin
-* Basarat Ali Syed
-* @begincalendar
-* Ben Duffield
-* Ben Mosher 
-* Benjamin Bock 
-* Benjamin Lichtman 
-* Benny Neugebauer 
-* Bill Ticehurst
-* Blaine Bublitz 
-* Blake Embrey
-* @bluelovers
-* @bootstraponline
-* Bowden Kelly
-* Bowden Kenny
-* Brandon Slade 
-* Brett Mayen
-* Bryan Forbes
-* Caitlin Potter
-* Cameron Taggart 
-* @cedvdb
-* Charles Pierce 
-* Charly POLY 
-* Chris Bubernak
-* Christophe Vidal 
-* Chuck Jazdzewski
-* Colby Russell
-* Colin Snover
-* Cotton Hou 
-* Cyrus Najmabadi
-* Dafrok Zhang
-* Dahan Gong
-* Dan Corder
-* Dan Freeman 
-* Dan Quirk
-* Daniel Gooss
-* Daniel Hollocher
-* Daniel Król 
-* Daniel Lehenbauer
-* Daniel Rosenwasser
-* David Kmenta
-* David Li
-* David Sheldrick 
-* David Sherret 
-* David Souther
-* David Staheli 
-* Denis Nedelyaev
-* Derek P Sifford 
-* Dhruv Rajvanshi 
-* Dick van den Brink
-* Diogo Franco (Kovensky) 
-* Dirk Bäumer
-* Dirk Holtwick
-* Dom Chen 
-* Donald Pipowitch 
-* Doug Ilijev
-* @e-cloud
-* Ecole Keine
-* Elisée Maurer
-* Elizabeth Dinella 
-* Emilio García-Pumarino
-* Eric Grube 
-* Eric Tsang
-* Erik Edrosa
-* Erik McClenney 
-* Esakki Raj 
-* Ethan Resnick 
-* Ethan Rubio
-* Eugene Timokhov 
-* Evan Martin
-* Evan Sebastian
-* Eyas Sharaiha
-* Fabian Cook 
-* @falsandtru
-* Filipe Silva 
-* @flowmemo
-* Francois Wouts 
-* Frank Wallis
-* Franklin Tse
-* František Žiacik
-* Gabe Moothart 
-* Gabriel Isenberg
-* Gilad Peleg
-* Godfrey Chan 
-* Graeme Wicksted
-* Guilherme Oenning
-* Guillaume Salles
-* Guy Bedford
-* Halasi Tamás 
-* Harald Niesche
-* Hendrik Liebau 
-* Henry Mercer 
-* Herrington Darkholme
-* Holger Jeromin 
-* Homa Wong 
-* Iain Monro
-* @IdeaHunter
-* Igor Novozhilov
-* Ika 
-* Ingvar Stepanyan
-* Isiah Meadows
-* Ivan Enderlin 
-* Ivo Gabe de Wolff
-* Iwata Hidetaka 
-* Jack Williams 
-* Jakub Korzeniowski
-* Jakub Młokosiewicz 
-* James Henry 
-* James Whitney
-* Jan Melcher 
-* Jason Freeman
-* Jason Jarrett 
-* Jason Killian
-* Jason Ramsay
-* JBerger
-* Jed Mao
-* Jeffrey Morlan
-* Jesse Schalken
-* Jing Ma 
-* Jiri Tobisek
-* Joe Calzaretta 
-* Joe Chung 
-* Joel Day 
-* Joey Wilson
-* Johannes Rieken
-* John Doe 
-* John Vilk
-* Jonathan Bond-Caron
-* Jonathan Park
-* Jonathan Toland
-* Jonathan Turner
-* Jonathon Smith
-* Jordi Oliveras Rovira 
-* Joscha Feth 
-* Josh Abernathy 
-* Josh Goldberg 
-* Josh Kalderimis
-* Josh Soref
-* Juan Luis Boya García
-* Julian Williams
-* Justin Bay 
-* Justin Johansson 
-* K. Preißer
-* Kagami Sascha Rosylight
-* Kanchalai Tanglertsampan
-* Kate Miháliková 
-* Keith Mashinter
-* Ken Howard
-* Kenji Imamula
-* Kerem Kat
-* Kevin Donnelly 
-* Kevin Gibbons 
-* Kevin Lang 
-* Khải 
-* Kitson Kelly 
-* Klaus Meinhardt 
-* Kris Zyp 
-* Kyle Kelley
-* Kārlis Gaņģis
-* Lorant Pinter
-* Lucien Greathouse
-* Lukas Elmer 
-* Maarten Sijm 
-* Magnus Hiie 
-* Magnus Kulke 
-* Manish Giri
-* Marin Marinov
-* Marius Schulz 
-* Markus Johnsson 
-* Martin Hiller 
-* Martin Probst 
-* Martin Vseticka
-* Martyn Janes 
-* Masahiro Wakame
-* Mateusz Burzyński 
-* Matt Bierner 
-* Matt McCutchen
-* Matt Mitchell 
-* Mattias Buelens
-* Mattias Buelens 
-* Max Deepfield
-* Maxwell Paul Brickner 
-* @meyer
-* Micah Zoltu
-* @micbou
-* Michael 
-* Michael Bromley
-* Mike Busyrev 
-* Mike Morearty 
-* Mine Starks 
-* Mohamed Hegazy
-* Mohsen Azimi 
-* Myles Megyesi 
-* Nathan Shively-Sanders
-* Nathan Yee
-* Nicolas Henry
-* Nicu Micleușanu
-* @nieltg
-* Nima Zahedi
-* Noah Chen 
-* Noel Varanda 
-* Noj Vek
-* Oleg Mihailik
-* Oleksandr Chekhovskyi
-* Omer Sheikh 
-* Orta Therox
-* Oskar Segersva¨rd
-* Oussama Ben Brahim 
-* Patrick Zhong
-* Paul Jolly
-* Paul Koerbitz 
-* Paul van Brenk
-* @pcbro
-* Pedro Maltez
-* Perry Jiang
-* Peter Burns
-* Philip Bulley
-* Philippe Voinov 
-* Pi Lanningham 
-* Piero Cangianiello
-* @piloopin
-* Prayag Verma
-* Priyantha Lankapura 
-* @progre
-* Punya Biswal
-* Rado Kirov
-* Raj Dosanjh
-* Reiner Dolp 
-* Remo H. Jansen 
-* @rhysd
-* Ricardo N Feliciano 
-* Richard Karmazín 
-* Richard Knoll
-* Richard Sentino
-* Robert Coie
-* Rohit Verma
-* Ron Buckton
-* Rostislav Galimsky 
-* Rowan Wyborn
-* Ryan Cavanaugh
-* Ryohei Ikegami
-* Sam Bostock 
-* Sam El-Husseini 
-* Sarangan Rajamanickam
-* Sean Barag 
-* Sergey Rubanov
-* Sergey Shandar 
-* Sergii Bezliudnyi 
-* Sharon Rolel 
-* Sheetal Nandi
-* Shengping Zhong
-* Shyyko Serhiy
-* Simon Hürlimann
-* Slawomir Sadziak 
-* Solal Pirelli
-* Soo Jae Hwang 
-* Stan Thomas
-* Stanislav Iliev 
-* Stanislav Sysoev
-* Stas Vilchik 
-* Stephan Ginthör 
-* Steve Lucco
-* @styfle
-* Sudheesh Singanamalla 
-* Sébastien Arod
-* @T18970237136
-* @t_
-* Taras Mankovski 
-* Tarik Ozket
-* Tetsuharu Ohzeki
-* Thomas den Hollander 
-* Thomas Loubiou
-* Tien Hoanhtien
-* Tim Lancina 
-* Tim Perry
-* Tim Viiding-Spader
-* Tingan Ho
-* Todd Thomson
-* togru
-* Tomas Grubliauskas
-* Torben Fitschen 
-* @TravCav
-* TruongSinh Tran-Nguyen
-* Tycho Grouwstra 
-* Vadi Taslim 
-* Vakhurin Sergey 
-* Vidar Tonaas Fauske
-* Viktor Zozulyak
-* Vilic Vane
-* Vimal Raghubir 
-* Vladimir Kurchatkin 
-* Vladimir Matveev
-* Vyacheslav Pukhanov 
-* Wenlu Wang 
-* Wesley Wigham
-* William Orr 
-* Wilson Hobbs 
-* York Yao
-* @yortus
-* Yuichi Nukiyama
-* Yuval Greenfield 
-* Zeeshan Ahmed 
-* Zev Spitz
-* Zhengbo Li
-* @Zzzen
+
+ - 0verk1ll
+ - Abubaker Bashir
+ - Adam Freidin
+ - Adam Postma
+ - Adi Dahiya
+ - Aditya Daflapurkar
+ - Adnan Chowdhury
+ - Adrian Leonhard
+ - Adrien Gibrat
+ - Ahmad Farid
+ - Ajay Poshak
+ - Alan Agius
+ - Alan Pierce
+ - Alessandro Vergani
+ - Alex Chugaev
+ - Alex Eagle
+ - Alex Khomchenko
+ - Alex Ryan
+ - Alexander
+ - Alexander Kuvaev
+ - Alexander Rusakov
+ - Alexander Tarasyuk
+ - Ali Sabzevari
+ - Aluan Haddad
+ - amaksimovich2
+ - Anatoly Ressin
+ - Anders Hejlsberg
+ - Anders Kaseorg
+ - Andre Sutherland
+ - Andreas Martin
+ - Andrej Baran
+ - Andrew
+ - Andrew Branch
+ - Andrew Casey
+ - Andrew Faulkner
+ - Andrew Ochsner
+ - Andrew Stegmaier
+ - Andrew Z Allen
+ - Andrey Roenko
+ - Andrii Dieiev
+ - András Parditka
+ - Andy Hanson
+ - Anil Anar
+ - Anix
+ - Anton Khlynovskiy
+ - Anton Tolmachev
+ - Anubha Mathur
+ - AnyhowStep
+ - Armando Aguirre
+ - Arnaud Tournier
+ - Arnav Singh
+ - Arpad Borsos
+ - Artem Tyurin
+ - Arthur Ozga
+ - Asad Saeeduddin
+ - Austin Cummings
+ - Avery Morin
+ - Aziz Khambati
+ - Basarat Ali Syed
+ - @begincalendar
+ - Ben Duffield
+ - Ben Lichtman
+ - Ben Mosher
+ - Benedikt Meurer
+ - Benjamin Bock
+ - Benjamin Lichtman
+ - Benny Neugebauer
+ - BigAru
+ - Bill Ticehurst
+ - Blaine Bublitz
+ - Blake Embrey
+ - @bluelovers
+ - @bootstraponline
+ - Bowden Kelly
+ - Bowden Kenny
+ - Brad Zacher
+ - Brandon Banks
+ - Brandon Bloom
+ - Brandon Slade
+ - Brendan Kenny
+ - Brett Mayen
+ - Brian Terlson
+ - Bryan Forbes
+ - Caitlin Potter
+ - Caleb Sander
+ - Cameron Taggart
+ - @cedvdb
+ - Charles
+ - Charles Pierce
+ - Charly POLY
+ - Chris Bubernak
+ - Chris Patterson
+ - christian
+ - Christophe Vidal
+ - Chuck Jazdzewski
+ - Clay Miller
+ - Colby Russell
+ - Colin Snover
+ - Collins Abitekaniza
+ - Connor Clark
+ - Cotton Hou
+ - csigs
+ - Cyrus Najmabadi
+ - Dafrok Zhang
+ - Dahan Gong
+ - Daiki Nishikawa
+ - Dan Corder
+ - Dan Freeman
+ - Dan Quirk
+ - Dan Rollo
+ - Daniel Gooss
+ - Daniel Imms
+ - Daniel Krom
+ - Daniel Król
+ - Daniel Lehenbauer
+ - Daniel Rosenwasser
+ - David Li
+ - David Sheldrick
+ - David Sherret
+ - David Souther
+ - David Staheli
+ - Denis Nedelyaev
+ - Derek P Sifford
+ - Dhruv Rajvanshi
+ - Dick van den Brink
+ - Diogo Franco (Kovensky)
+ - Dirk Bäumer
+ - Dirk Holtwick
+ - Dmitrijs Minajevs
+ - Dom Chen
+ - Donald Pipowitch
+ - Doug Ilijev
+ - dreamran43@gmail.com
+ - @e-cloud
+ - Ecole Keine
+ - Eddie Jaoude
+ - Edward Thomson
+ - EECOLOR
+ - Eli Barzilay
+ - Elizabeth Dinella
+ - Ely Alamillo
+ - Eric Grube
+ - Eric Tsang
+ - Erik Edrosa
+ - Erik McClenney
+ - Esakki Raj
+ - Ethan Resnick
+ - Ethan Rubio
+ - Eugene Timokhov
+ - Evan Cahill
+ - Evan Martin
+ - Evan Sebastian
+ - ExE Boss
+ - Eyas Sharaiha
+ - Fabian Cook
+ - @falsandtru
+ - Filipe Silva
+ - @flowmemo
+ - Forbes Lindesay
+ - Francois Hendriks
+ - Francois Wouts
+ - Frank Wallis
+ - František Žiacik
+ - Frederico Bittencourt
+ - fullheightcoding
+ - Gabe Moothart
+ - Gabriel Isenberg
+ - Gabriela Araujo Britto
+ - Gabriela Britto
+ - gb714us
+ - Gilad Peleg
+ - Godfrey Chan
+ - Gorka Hernández Estomba
+ - Graeme Wicksted
+ - Guillaume Salles
+ - Guy Bedford
+ - hafiz
+ - Halasi Tamás
+ - Hendrik Liebau
+ - Henry Mercer
+ - Herrington Darkholme
+ - Hoang Pham
+ - Holger Jeromin
+ - Homa Wong
+ - Hye Sung Jung
+ - Iain Monro
+ - @IdeaHunter
+ - Igor Novozhilov
+ - Igor Oleinikov
+ - Ika
+ - iliashkolyar
+ - IllusionMH
+ - Ingvar Stepanyan
+ - Ingvar Stepanyan
+ - Isiah Meadows
+ - ispedals
+ - Ivan Enderlin
+ - Ivo Gabe de Wolff
+ - Iwata Hidetaka
+ - Jack Bates
+ - Jack Williams
+ - Jake Boone
+ - Jakub Korzeniowski
+ - Jakub Młokosiewicz
+ - James Henry
+ - James Keane
+ - James Whitney
+ - Jan Melcher
+ - Jason Freeman
+ - Jason Jarrett
+ - Jason Killian
+ - Jason Ramsay
+ - JBerger
+ - Jean Pierre
+ - Jed Mao
+ - Jeff Wilcox
+ - Jeffrey Morlan
+ - Jesse Schalken
+ - Jesse Trinity
+ - Jing Ma
+ - Jiri Tobisek
+ - Joe Calzaretta
+ - Joe Chung
+ - Joel Day
+ - Joey Watts
+ - Johannes Rieken
+ - John Doe
+ - John Vilk
+ - Jonathan Bond-Caron
+ - Jonathan Park
+ - Jonathan Toland
+ - Jordan Harband
+ - Jordi Oliveras Rovira
+ - Joscha Feth
+ - Joseph Wunderlich
+ - Josh Abernathy
+ - Josh Goldberg
+ - Josh Kalderimis
+ - Josh Soref
+ - Juan Luis Boya García
+ - Julian Williams
+ - Justin Bay
+ - Justin Johansson
+ - jwbay
+ - K. Preißer
+ - Kagami Sascha Rosylight
+ - Kanchalai Tanglertsampan
+ - karthikkp
+ - Kate Miháliková
+ - Keen Yee Liau
+ - Keith Mashinter
+ - Ken Howard
+ - Kenji Imamula
+ - Kerem Kat
+ - Kevin Donnelly
+ - Kevin Gibbons
+ - Kevin Lang
+ - Khải
+ - Kitson Kelly
+ - Klaus Meinhardt
+ - Kris Zyp
+ - Kyle Kelley
+ - Kārlis Gaņģis
+ - laoxiong
+ - Leon Aves
+ - Limon Monte
+ - Lorant Pinter
+ - Lucien Greathouse
+ - Luka Hartwig
+ - Lukas Elmer
+ - M.Yoshimura
+ - Maarten Sijm
+ - Magnus Hiie
+ - Magnus Kulke
+ - Manish Bansal
+ - Manish Giri
+ - Marcus Noble
+ - Marin Marinov
+ - Marius Schulz
+ - Markus Johnsson
+ - Markus Wolf
+ - Martin
+ - Martin Hiller
+ - Martin Johns
+ - Martin Probst
+ - Martin Vseticka
+ - Martyn Janes
+ - Masahiro Wakame
+ - Mateusz Burzyński
+ - Matt Bierner
+ - Matt McCutchen
+ - Matt Mitchell
+ - Matthew Aynalem
+ - Matthew Miller
+ - Mattias Buelens
+ - Max Heiber
+ - Maxwell Paul Brickner
+ - @meyer
+ - Micah Zoltu
+ - @micbou
+ - Michael
+ - Michael Crane
+ - Michael Henderson
+ - Michael Tamm
+ - Michael Tang
+ - Michal Przybys
+ - Mike Busyrev
+ - Mike Morearty
+ - Milosz Piechocki
+ - Mine Starks
+ - Minh Nguyen
+ - Mohamed Hegazy
+ - Mohsen Azimi
+ - Mukesh Prasad
+ - Myles Megyesi
+ - Nathan Day
+ - Nathan Fenner
+ - Nathan Shively-Sanders
+ - Nathan Yee
+ - ncoley
+ - Nicholas Yang
+ - Nicu Micleușanu
+ - @nieltg
+ - Nima Zahedi
+ - Noah Chen
+ - Noel Varanda
+ - Noel Yoo
+ - Noj Vek
+ - nrcoley
+ - Nuno Arruda
+ - Oleg Mihailik
+ - Oleksandr Chekhovskyi
+ - Omer Sheikh
+ - Orta Therox
+ - Orta Therox
+ - Oskar Grunning
+ - Oskar Segersva¨rd
+ - Oussama Ben Brahim
+ - Ozair Patel
+ - Patrick McCartney
+ - Patrick Zhong
+ - Paul Koerbitz
+ - Paul van Brenk
+ - @pcbro
+ - Pedro Maltez
+ - Pete Bacon Darwin
+ - Peter Burns
+ - Peter Šándor
+ - Philip Pesca
+ - Philippe Voinov
+ - Pi Lanningham
+ - Piero Cangianiello
+ - Pierre-Antoine Mills
+ - @piloopin
+ - Pranav Senthilnathan
+ - Prateek Goel
+ - Prateek Nayak
+ - Prayag Verma
+ - Priyantha Lankapura
+ - @progre
+ - Punya Biswal
+ - r7kamura
+ - Rado Kirov
+ - Raj Dosanjh
+ - rChaser53
+ - Reiner Dolp
+ - Remo H. Jansen
+ - @rflorian
+ - Rhys van der Waerden
+ - @rhysd
+ - Ricardo N Feliciano
+ - Richard Karmazín
+ - Richard Knoll
+ - Roger Spratley
+ - Ron Buckton
+ - Rostislav Galimsky
+ - Rowan Wyborn
+ - rpgeeganage
+ - Ruwan Pradeep Geeganage
+ - Ryan Cavanaugh
+ - Ryan Clarke
+ - Ryohei Ikegami
+ - Salisbury, Tom
+ - Sam Bostock
+ - Sam Drugan
+ - Sam El-Husseini
+ - Sam Lanning
+ - Sangmin Lee
+ - Sanket Mishra
+ - Sarangan Rajamanickam
+ - Sasha Joseph
+ - Sean Barag
+ - Sergey Rubanov
+ - Sergey Shandar
+ - Sergey Tychinin
+ - Sergii Bezliudnyi
+ - Sergio Baidon
+ - Sharon Rolel
+ - Sheetal Nandi
+ - Shengping Zhong
+ - Sheon Han
+ - Shyyko Serhiy
+ - Siddharth Singh
+ - sisisin
+ - Slawomir Sadziak
+ - Solal Pirelli
+ - Soo Jae Hwang
+ - Stan Thomas
+ - Stanislav Iliev
+ - Stanislav Sysoev
+ - Stas Vilchik
+ - Stephan Ginthör
+ - Steve Lucco
+ - @styfle
+ - Sudheesh Singanamalla
+ - Suhas
+ - Suhas Deshpande
+ - superkd37
+ - Sébastien Arod
+ - @T18970237136
+ - @t_
+ - Tan Li Hau
+ - Tapan Prakash
+ - Taras Mankovski
+ - Tarik Ozket
+ - Tetsuharu Ohzeki
+ - The Gitter Badger
+ - Thomas den Hollander
+ - Thorsten Ball
+ - Tien Hoanhtien
+ - Tim Lancina
+ - Tim Perry
+ - Tim Schaub
+ - Tim Suchanek
+ - Tim Viiding-Spader
+ - Tingan Ho
+ - Titian Cernicova-Dragomir
+ - tkondo
+ - Todd Thomson
+ - togru
+ - Tom J
+ - Torben Fitschen
+ - Toxyxer
+ - @TravCav
+ - Troy Tae
+ - TruongSinh Tran-Nguyen
+ - Tycho Grouwstra
+ - uhyo
+ - Vadi Taslim
+ - Vakhurin Sergey
+ - Valera Rozuvan
+ - Vilic Vane
+ - Vimal Raghubir
+ - Vladimir Kurchatkin
+ - Vladimir Matveev
+ - Vyacheslav Pukhanov
+ - Wenlu Wang
+ - Wes Souza
+ - Wesley Wigham
+ - William Orr
+ - Wilson Hobbs
+ - xiaofa
+ - xl1
+ - Yacine Hmito
+ - Yang Cao
+ - York Yao
+ - @yortus
+ - Yoshiki Shibukawa
+ - Yuichi Nukiyama
+ - Yuval Greenfield
+ - Yuya Tanaka
+ - Z
+ - Zeeshan Ahmed
+ - Zev Spitz
+ - Zhengbo Li
+ - Zixiang Li
+ - @Zzzen
+ - 阿卡琳

@@ -20,6 +20,7 @@ export var d = new m2.m3.c();
 //// [internalAliasClassInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
 exports.__esModule = true;
+exports.d = exports.m2 = exports.x = void 0;
 var x;
 (function (x) {
     var c = /** @class */ (function () {

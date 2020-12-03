@@ -3,7 +3,7 @@ class C {
 >C : C
 
     [Symbol.iterator](x: string): { x: string };
->[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
+>[Symbol.iterator] : { (x: string): {    x: string;}; (x: "hello"): { x: string; hello: string; }; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -11,7 +11,7 @@ class C {
 >x : string
 
     [Symbol.iterator](x: "hello"): { x: string; hello: string };
->[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
+>[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): {    x: string;    hello: string;}; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

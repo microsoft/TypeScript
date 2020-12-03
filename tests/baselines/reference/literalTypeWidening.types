@@ -357,7 +357,7 @@ let x = onMouseOver();
 // Repro from #23649
 
 export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
->Set : <K extends string>(...keys: K[]) => Record<K, true>
+>Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 >keys : K[]
 >true : true
 

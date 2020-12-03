@@ -42,6 +42,7 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 //// [generatorTypeCheck63.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Nothing3 = exports.Nothing2 = exports.Nothing1 = exports.Nothing = exports.strategy = void 0;
 function strategy(stratName, gen) {
     return function* (state) {
         for (const next of gen(state)) {

@@ -1,5 +1,3 @@
-/// <reference path="./host.ts" />
-/// <reference path="./worker.ts" />
 namespace Harness.Parallel {
     export interface RunnerTask {
         runner: TestRunnerKind;

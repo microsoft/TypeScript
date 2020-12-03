@@ -1,25 +1,28 @@
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(12,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(13,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(14,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(16,11): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(17,11): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(19,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(20,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(30,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(31,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(32,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(33,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(34,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(15,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(16,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(17,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(19,11): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(20,11): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(22,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(23,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(24,12): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(25,12): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(35,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(36,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(37,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(38,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(39,17): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(43,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(43,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(38,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(39,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(40,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(41,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(42,16): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(43,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(44,17): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(47,11): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(47,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts (19 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts (21 errors) ====
+    class Foo {}
     enum E { a }
     
     var x: any;
@@ -29,7 +32,9 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInv
     var a1: boolean;
     var a2: void;
     var a3: {};
-    var a4: E
+    var a4: E;
+    var a5: Foo | string;
+    var a6: Foo;
     
     var ra1 = a1 in x;
               ~~
@@ -53,6 +58,12 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInv
 !!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
     var ra9 = {} in x;
               ~~
+!!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+    var ra10 = a5 in x;
+               ~~
+!!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+    var ra11 = a6 in x;
+               ~~
 !!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
     
     // invalid right operands
@@ -93,7 +104,6 @@ tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInv
     var rb10 = x in undefined;
                     ~~~~~~~~~
 !!! error TS2532: Object is possibly 'undefined'.
-    
     
     // both operands are invalid
     var rc1 = {} in '';

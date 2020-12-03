@@ -142,7 +142,7 @@ var p = new Proxy(t, {});
 // Using ES6 reflect
 Reflect.isExtensible({});
 >Reflect.isExtensible : Symbol(Reflect.isExtensible, Decl(lib.es2015.reflect.d.ts, --, --))
->Reflect : Symbol(Reflect, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
 >isExtensible : Symbol(Reflect.isExtensible, Decl(lib.es2015.reflect.d.ts, --, --))
 
 // Using Es6 regexp

@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(4,17): error TS1003: Identifier expected.
+tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(4,17): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(4,17): error TS2680: A 'this' parameter must be the first parameter.
 
 
@@ -8,7 +8,7 @@ tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethod
     class C {
         method(@dec this: C) {}
                     ~~~~
-!!! error TS1003: Identifier expected.
+!!! error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
                     ~~~~~~~
 !!! error TS2680: A 'this' parameter must be the first parameter.
     }

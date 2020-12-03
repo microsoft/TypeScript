@@ -62,6 +62,7 @@ export const ObjectLiteralVisibility = {
 //// [dynamicNamesErrors.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObjectLiteralVisibility = exports.ClassMemberVisibility = void 0;
 const c0 = "1";
 const c1 = 1;
 let t1;
@@ -101,12 +102,12 @@ export interface InterfaceMemberVisibility {
 export declare class ClassMemberVisibility {
     static [x]: number;
     static [y](): number;
-    static readonly [z]: number;
-    static [w]: number;
+    static get [z](): number;
+    static set [w](value: number);
     [x]: number;
     [y](): number;
-    readonly [z]: number;
-    [w]: number;
+    get [z](): number;
+    set [w](value: number);
 }
 export declare type ObjectTypeVisibility = {
     [x]: number;

@@ -136,67 +136,31 @@ a.pvt.toFixed();    // Error
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab.pb.toFixed();
->ab.pb.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->ab.pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 >ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
->pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab.ptd.toFixed();   // Error
->ab.ptd.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->ab.ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 11, 30), Decl(mixinPrivateAndProtected.ts, 5, 26))
 >ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 11, 30), Decl(mixinPrivateAndProtected.ts, 5, 26))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab.pvt.toFixed();   // Error
->ab.pvt.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->ab.pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 12, 35), Decl(mixinPrivateAndProtected.ts, 6, 30))
 >ab : Symbol(ab, Decl(mixinPrivateAndProtected.ts, 39, 16))
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 12, 35), Decl(mixinPrivateAndProtected.ts, 6, 30))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 abc.pb.toFixed();
->abc.pb.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->abc.pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 >abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
->pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 abc.ptd.toFixed();  // Error
->abc.ptd.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->abc.ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 28, 30), Decl(mixinPrivateAndProtected.ts, 11, 30), Decl(mixinPrivateAndProtected.ts, 5, 26))
 >abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 28, 30), Decl(mixinPrivateAndProtected.ts, 11, 30), Decl(mixinPrivateAndProtected.ts, 5, 26))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 abc.pvt.toFixed();  // Error
->abc.pvt.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->abc.pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 29, 36), Decl(mixinPrivateAndProtected.ts, 12, 35), Decl(mixinPrivateAndProtected.ts, 6, 30))
 >abc : Symbol(abc, Decl(mixinPrivateAndProtected.ts, 40, 18))
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 29, 36), Decl(mixinPrivateAndProtected.ts, 12, 35), Decl(mixinPrivateAndProtected.ts, 6, 30))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab2c.pb.toFixed();
->ab2c.pb.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->ab2c.pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
 >ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
->pb : Symbol(A.pb, Decl(mixinPrivateAndProtected.ts, 4, 9))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab2c.ptd.toFixed(); // Error
->ab2c.ptd.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->ab2c.ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 28, 30), Decl(mixinPrivateAndProtected.ts, 18, 30), Decl(mixinPrivateAndProtected.ts, 5, 26))
 >ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
->ptd : Symbol(ptd, Decl(mixinPrivateAndProtected.ts, 28, 30), Decl(mixinPrivateAndProtected.ts, 18, 30), Decl(mixinPrivateAndProtected.ts, 5, 26))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 ab2c.pvt.toFixed(); // Error
->ab2c.pvt.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
->ab2c.pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 29, 36), Decl(mixinPrivateAndProtected.ts, 6, 30))
 >ab2c : Symbol(ab2c, Decl(mixinPrivateAndProtected.ts, 41, 20))
->pvt : Symbol(pvt, Decl(mixinPrivateAndProtected.ts, 29, 36), Decl(mixinPrivateAndProtected.ts, 6, 30))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 // Repro from #13924
 

@@ -50,6 +50,7 @@ let c = a.getCls().y.toLowerCase();
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.A = void 0;
     var A = /** @class */ (function () {
         function A() {
         }
@@ -60,6 +61,7 @@ define("a", ["require", "exports"], function (require, exports) {
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.B = void 0;
     var B = /** @class */ (function () {
         function B() {
         }

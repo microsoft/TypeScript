@@ -1,13 +1,13 @@
 // @allowJs: true
 // @out: out.js
 // @declaration: true
+// @bundledPackageName: out
 // @filename: a.ts
 class c {
 }
 
 // @filename: b.ts
 /// <reference path="c.js"/>
-// error on above reference when emitting declarations
 function foo() {
 }
 
