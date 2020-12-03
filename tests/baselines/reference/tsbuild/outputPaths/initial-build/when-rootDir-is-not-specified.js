@@ -27,7 +27,7 @@ Output::
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:01:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/src/index.js' does not exist
+[[90m12:01:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/tsconfig.json'...
 
@@ -52,14 +52,11 @@ Output::
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/src/index.js' does not exist
-
-[[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
+[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is up to date because newest input 'src/src/index.ts' is older than oldest output 'src/dist/index.js'
 
 exitCode:: ExitStatus.Success
 
 
-//// [/src/dist/index.js] file written with same contents
 
 
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
