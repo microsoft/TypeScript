@@ -1,0 +1,17 @@
+Exit Code: 2
+Standard output:
+node_modules/connect-mongo/src/types.d.ts(113,66): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
+node_modules/connect-mongo/src/types.d.ts(114,45): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
+node_modules/connect-mongo/src/types.d.ts(118,47): error TS2694: Namespace 'Express' has no exported member 'SessionData'.
+src/app.ts(72,21): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+src/app.ts(75,21): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+src/app.ts(116,30): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+src/controllers/user.ts(51,38): error TS2339: Property 'returnTo' does not exist on type 'Session | InitializedSession'.
+  Property 'returnTo' does not exist on type 'Session'.
+
+
+
+Standard error:

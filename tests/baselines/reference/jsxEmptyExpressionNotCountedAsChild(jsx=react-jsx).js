@@ -21,8 +21,6 @@ const element = (
 "use strict";
 exports.__esModule = true;
 var jsx_runtime_1 = require("react/jsx-runtime");
-/// <reference path="react16.d.ts" />
-var React = require("react");
 function Wrapper(props) {
     return jsx_runtime_1.jsx("div", { children: props.children }, void 0);
 }

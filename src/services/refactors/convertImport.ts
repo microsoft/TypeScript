@@ -73,34 +73,33 @@ namespace ts.refactor {
     function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
         let usedAsNamespaceOrDefault = false;
 
-        const nodesToReplace: PropertyAccessExpression[] = [];
+        const nodesToReplace: (PropertyAccessExpression | QualifiedName)[] = [];
         const conflictingNames = new Map<string, true>();
 
         FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
-            if (!isPropertyAccessExpression(id.parent)) {
+            if (!isPropertyAccessOrQualifiedName(id.parent)) {
                 usedAsNamespaceOrDefault = true;
             }
             else {
-                const parent = cast(id.parent, isPropertyAccessExpression);
-                const exportName = parent.name.text;
+                const exportName = getRightOfPropertyAccessOrQualifiedName(id.parent).text;
                 if (checker.resolveName(exportName, id, SymbolFlags.All, /*excludeGlobals*/ true)) {
                     conflictingNames.set(exportName, true);
                 }
-                Debug.assert(parent.expression === id, "Parent expression should match id");
-                nodesToReplace.push(parent);
+                Debug.assert(getLeftOfPropertyAccessOrQualifiedName(id.parent) === id, "Parent expression should match id");
+                nodesToReplace.push(id.parent);
             }
         });
 
         // We may need to change `mod.x` to `_x` to avoid a name conflict.
         const exportNameToImportName = new Map<string, string>();
 
-        for (const propertyAccess of nodesToReplace) {
-            const exportName = propertyAccess.name.text;
+        for (const propertyAccessOrQualifiedName of nodesToReplace) {
+            const exportName = getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName).text;
             let importName = exportNameToImportName.get(exportName);
             if (importName === undefined) {
                 exportNameToImportName.set(exportName, importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName);
             }
-            changes.replaceNode(sourceFile, propertyAccess, factory.createIdentifier(importName));
+            changes.replaceNode(sourceFile, propertyAccessOrQualifiedName, factory.createIdentifier(importName));
         }
 
         const importSpecifiers: ImportSpecifier[] = [];
@@ -116,6 +115,14 @@ namespace ts.refactor {
         else {
             changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
         }
+    }
+
+    function getRightOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
+        return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.name : propertyAccessOrQualifiedName.right;
+    }
+
+    function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: PropertyAccessExpression | QualifiedName) {
+        return isPropertyAccessExpression(propertyAccessOrQualifiedName) ? propertyAccessOrQualifiedName.expression : propertyAccessOrQualifiedName.left;
     }
 
     function doChangeNamedToNamespace(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamedImports): void {

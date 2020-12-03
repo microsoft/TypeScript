@@ -112,20 +112,20 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function getFunctionInfo(file: SourceFile, startPosition: number, program: Program): FunctionInfo | undefined {
         const token = getTokenAtPosition(file, startPosition);
-
-        const arrowFunc = getArrowFunctionFromVariableDeclaration(token.parent);
-        if (arrowFunc && !containingThis(arrowFunc.body)) return { selectedVariableDeclaration: true, func: arrowFunc };
+        const typeChecker = program.getTypeChecker();
+        const func = tryGetFunctionFromVariableDeclaration(file, typeChecker, token.parent);
+        if (func && !containingThis(func.body)) {
+            return { selectedVariableDeclaration: true, func };
+        }
 
         const maybeFunc = getContainingFunction(token);
-        const typeChecker = program.getTypeChecker();
-
         if (
             maybeFunc &&
             (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) &&
             !rangeContainsRange(maybeFunc.body, token) &&
             !containingThis(maybeFunc.body)
         ) {
-            if ((isFunctionExpression(maybeFunc) && maybeFunc.name && FindAllReferences.Core.isSymbolReferencedInFile(maybeFunc.name, typeChecker, file))) return undefined;
+            if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
             return { selectedVariableDeclaration: false, func: maybeFunc };
         }
 
@@ -136,13 +136,16 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1);
     }
 
-    function getArrowFunctionFromVariableDeclaration(parent: Node): ArrowFunction | undefined {
-        if (!isSingleVariableDeclaration(parent)) return undefined;
-        const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
-
+    function tryGetFunctionFromVariableDeclaration(sourceFile: SourceFile, typeChecker: TypeChecker, parent: Node): ArrowFunction | FunctionExpression | undefined {
+        if (!isSingleVariableDeclaration(parent)) {
+            return undefined;
+        }
+        const variableDeclaration = isVariableDeclaration(parent) ? parent : first(parent.declarations);
         const initializer = variableDeclaration.initializer;
-        if (!initializer || !isArrowFunction(initializer)) return undefined;
-        return initializer;
+        if (initializer && (isArrowFunction(initializer) || isFunctionExpression(initializer) && !isFunctionReferencedInFile(sourceFile, typeChecker, initializer))) {
+            return initializer;
+        }
+        return undefined;
     }
 
     function convertToBlock(body: ConciseBody): Block {
@@ -212,5 +215,9 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
         return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression));
+    }
+
+    function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {
+        return !!node.name && FindAllReferences.Core.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
     }
 }

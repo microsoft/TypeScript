@@ -170,3 +170,58 @@ type KeysOfPrimitives<T> = keyof OnlyPrimitives<T>;
 let carKeys: KeysOfPrimitives<Car>;  // "name" | "seats"
 >carKeys : "name" | "seats"
 
+// Repro from #41453
+
+type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
+>Equal : Equal<A, B>
+>true : true
+>false : false
+
+type If<Cond extends boolean, Then, Else> = Cond extends true ? Then : Else;
+>If : If<Cond, Then, Else>
+>true : true
+
+type GetKey<S, V> = keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any };
+>GetKey : keyof { [TP in keyof S as Equal<S[TP], V> extends true ? TP : never]: any; }
+>true : true
+
+type GetKeyWithIf<S, V> = keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
+>GetKeyWithIf : keyof { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any; }
+
+type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: any };
+>GetObjWithIf : GetObjWithIf<S, V>
+
+type Task = {
+>Task : Task
+
+  isDone: boolean;
+>isDone : boolean
+
+};
+
+type Schema = {
+>Schema : Schema
+
+  root: {
+>root : { title: string; task: Task; }
+
+    title: string;
+>title : string
+
+    task: Task;
+>task : Task
+  }
+  Task: Task;
+>Task : Task
+
+};
+
+type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
+>Res1 : "Task"
+
+type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
+>Res2 : "Task"
+
+type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
+>Res3 : "Task"
+

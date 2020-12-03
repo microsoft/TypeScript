@@ -1413,7 +1413,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicionar 'void' à Promessa resolvida sem um valor]]></Val>
+            <Val><![CDATA[Adicionar 'void' ao Promise resolvido sem um valor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1422,7 +1422,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Adicionar 'void' a todas as Promessas resolvidas sem um valor]]></Val>
+            <Val><![CDATA[Adicionar 'void' a todos os Promises resolvidos sem um valor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4091,6 +4091,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Delete_all_unused_imports_95147" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Delete all unused imports]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Excluir todas as importações não usadas]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Delete_the_outputs_of_all_projects_6365" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects]]></Val>
@@ -6157,6 +6166,15 @@
           <Val><![CDATA[Infer all types from usage]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Inferir todos os tipos de uso]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Infer_function_return_type_95148" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Infer function return type]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Inferir o tipo de retorno da função]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8483,6 +8501,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0_4111" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' comes from an index signature, so it must be accessed with ['{0}']5D;.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A propriedade '{0}' vem de uma assinatura de índice, portanto, ela precisa ser acessada com ['{0}']5D;.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Property_0_does_not_exist_on_const_enum_1_2479" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
@@ -8506,6 +8533,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[A propriedade '{0}' não existe no tipo '{1}'. Você quis dizer '{2}'?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_does_not_exist_on_type_1_Did_you_mean_to_access_the_static_member_2_instead_2576" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Did you mean to access the static member '{2}' instead?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A propriedade '{0}' não existe no tipo '{1}'. Você queria acessar o membro estático '{2}'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8591,18 +8627,6 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[A propriedade '{0}' no tipo '{1}' se refere a um membro diferente que não pode ser acessado por meio do tipo '{2}'.]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_is_a_static_member_of_type_1_2576" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' is a static member of type '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A propriedade '{0}' é um membro estático do tipo '{1}'.]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Property '{0}' is a static member of type '{1}']]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9159,7 +9183,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Remover a declaração não usada de: '{0}']]></Val>
+            <Val><![CDATA[Remova as declarações não usadas de: '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9168,7 +9192,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove unused destructuring declaration]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Remover a declaração de desestruturação não usada]]></Val>
+            <Val><![CDATA[Remova a declaração de desestruturação não usada]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9268,6 +9292,15 @@
           <Val><![CDATA[Report errors on unused parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Relatar erros nos parâmetros não utilizados.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Require_undeclared_properties_from_index_signatures_to_use_element_accesses_6803" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Require undeclared properties from index signatures to use element accesses.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Exigir que as propriedades não declaradas de assinaturas de índice usem acessos de elemento.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10245,7 +10278,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Mudar cada '{0}' usado incorretamente para '{1}']]></Val>
+            <Val><![CDATA[Mude cada '{0}' usado incorretamente para '{1}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10541,11 +10574,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'esnext' or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A metapropriedade 'import.meta' só é permitida quando a opção '--module' é 'esnext' ou 'system'.]]></Val>
+            <Val><![CDATA[A metapropriedade 'import.meta' só é permitida quando a opção '--module' é 'es2020', 'esnext' ou 'system'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12328,6 +12361,24 @@
           <Val><![CDATA[Updating unchanged output timestamps of project '{0}'...]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Atualizando os carimbos de data/hora de saída inalterados do projeto '{0}'...]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_element_access_for_0_95145" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use element access for '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usar o acesso de elemento para '{0}']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Use_element_access_for_all_undeclared_properties_95146" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Use element access for all undeclared properties.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usar o acesso de elemento para todas as propriedades não declaradas.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

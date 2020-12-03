@@ -251,7 +251,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         else {
             recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
             checkMap(
-                `fsWatches{recursive ? " recursive" : ""}`,
+                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
                 recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
                 [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
@@ -433,6 +433,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 fsWatch: this.fsWatch.bind(this),
                 fileExists: this.fileExists.bind(this),
                 useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
+                getCurrentDirectory: this.getCurrentDirectory.bind(this),
                 fsSupportsRecursiveFsWatch: tscWatchDirectory ? false : !runWithoutRecursiveWatches,
                 directoryExists: this.directoryExists.bind(this),
                 getAccessibleSortedChildDirectories: path => this.getDirectories(path),

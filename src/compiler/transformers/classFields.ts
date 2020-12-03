@@ -579,7 +579,7 @@ namespace ts {
         }
 
         function isPropertyDeclarationThatRequiresConstructorStatement(member: ClassElement): member is PropertyDeclaration {
-            if (!isPropertyDeclaration(member) || hasStaticModifier(member)) {
+            if (!isPropertyDeclaration(member) || hasStaticModifier(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
                 return false;
             }
             if (context.getCompilerOptions().useDefineForClassFields) {
@@ -779,6 +779,9 @@ namespace ts {
             }
 
             const propertyOriginalNode = getOriginalNode(property);
+            if (hasSyntacticModifier(propertyOriginalNode, ModifierFlags.Abstract)) {
+                return undefined;
+            }
             const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, visitor, isExpression) ?? factory.createVoidZero()
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : factory.createVoidZero();

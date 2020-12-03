@@ -1372,6 +1372,8 @@ namespace ts {
                     }
 
                     const hasPrivateIdentifier = some(input.members, member => !!member.name && isPrivateIdentifier(member.name));
+                    // When the class has at least one private identifier, create a unique constant identifier to retain the nominal typing behavior
+                    // Prevents other classes with the same public members from being used in place of the current class
                     const privateIdentifier = hasPrivateIdentifier ? [
                         factory.createPropertyDeclaration(
                             /*decorators*/ undefined,

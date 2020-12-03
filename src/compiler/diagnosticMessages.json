@@ -2445,7 +2445,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'.": {
+    "Property '{0}' does not exist on type '{1}'. Did you mean to access the static member '{2}' instead?": {
         "category": "Error",
         "code": 2576
     },
@@ -6134,6 +6134,10 @@
     "Delete all unused imports": {
         "category": "Message",
         "code": 95147
+    },
+    "Infer function return type": {
+        "category": "Message",
+        "code": 95148
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

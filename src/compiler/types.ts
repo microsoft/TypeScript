@@ -4206,6 +4206,7 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
         /* @internal */ resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;
+        /* @internal */ getJsxFragmentFactory(location: Node): string | undefined;
 
         /**
          * Note that this will return undefined in the following case:
@@ -5922,6 +5923,8 @@ namespace ts {
         watchDirectory?: WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
 
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -6084,6 +6087,7 @@ namespace ts {
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
+        extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
 
     /* @internal */
@@ -7923,6 +7927,7 @@ namespace ts {
         realpath?(path: string): string;
         getSymlinkCache?(): SymlinkCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
@@ -8222,7 +8227,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
