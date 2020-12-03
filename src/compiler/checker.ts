@@ -4997,7 +4997,7 @@ namespace ts {
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
-                if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late) {
+                if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late && isLateBoundName(propertySymbol.escapedName)) {
                     const decl = first(propertySymbol.declarations);
                     if (hasLateBindableName(decl)) {
                         if (isBinaryExpression(decl)) {
