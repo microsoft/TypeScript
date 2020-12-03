@@ -1,13 +1,14 @@
 namespace ts {
     describe("unittests:: tsbuild - output file paths", () => {
+        const noChangeProject: TscIncremental = {
+            buildKind: BuildKind.NoChangeRun,
+            modifyFs: noop,
+            subScenario: "Normal build without change, that does not block emit on error to show files that get emitted",
+            commandLineArgs: ["-p", "/src/tsconfig.json"],
+        };
         const incrementalScenarios: TscIncremental[] = [
             noChangeRun,
-            {
-                buildKind: BuildKind.NoChangeRun,
-                modifyFs: noop,
-                subScenario: "Normal build without change, that does not block emit on error to show files that get emitted",
-                commandLineArgs: ["-p", "/src/tsconfig.json"],
-            }
+            noChangeProject,
         ];
 
         verifyTscSerializedIncrementalEdits({
@@ -38,7 +39,17 @@ namespace ts {
                 })
             }),
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
-            incrementalScenarios,
+            incrementalScenarios: [
+                noChangeRun,
+                {
+                    ...noChangeProject,
+                    cleanBuildDescripencies: () => {
+                        const map = new Map<string, CleanBuildDescripency>();
+                        map.set("/src/dist/tsconfig.tsbuildinfo", CleanBuildDescripency.CleanFileTextDifferent); // tsbuildinfo will have -p setting when built using -p vs no build happens incrementally because of no change.
+                        return map;
+                    }
+                }
+            ],
         });
 
         verifyTscSerializedIncrementalEdits({
