@@ -7283,6 +7283,7 @@ namespace ts {
                 let tagsPos: number;
                 let tagsEnd: number;
                 const comments: string[] = [];
+                const links: JSDocLinkNode[] = [];
 
                 // + 3 for leading /**, - 5 in total for /** */
                 return scanner.scanRange(start + 3, length - 5, () => {
@@ -7355,6 +7356,17 @@ namespace ts {
                                 break;
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
+                            case SyntaxKind.OpenBraceToken:
+                                // TODO: Refactor in the same way as the other parser, and probably dedupe into a single function
+                                if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
+                                    state = JSDocState.SavingComments;
+                                    // TODO: Maybe shouldn't use 1 as the length of { ?
+                                    const link = parseLink(scanner.getTextPos() - 1);
+                                    links.push(link)
+                                    pushComment(scanner.getText().slice(link.pos, link.end));
+                                    break;
+                                }
+                                // fallthrough if it's not a {@link sequence
                             default:
                                 // Anything else is doc comment text. We just save it. Because it
                                 // wasn't a tag, we can no longer parse a tag on this line until we hit the next
@@ -7384,7 +7396,7 @@ namespace ts {
 
                 function createJSDocComment(): JSDoc {
                     // TODO: Parse links too!
-                    const comment = comments.length ? { links: [], text: comments.join("") } : undefined;
+                    const comment = comments.length ? { links, text: comments.join("") } : undefined;
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     return finishNode(factory.createJSDocComment(comment, tagsArray), start, end);
                 }
@@ -7522,7 +7534,6 @@ namespace ts {
                     return parseTagComments(margin, indentText.slice(margin));
                 }
 
-                // TODO: Also needs to parse link tags
                 function parseTagComments(indent: number, initialMargin?: string): JSDocComment | undefined {
                     const comments: string[] = [];
                     const links: JSDocLinkNode[] = [];
@@ -7624,8 +7635,10 @@ namespace ts {
                 function parseLink(start: number) {
                     nextTokenJSDoc(); // @
                     nextTokenJSDoc(); // link
-                    nextTokenJSDoc(); // ' '
-                    nextTokenJSDoc(); // first token
+                    nextTokenJSDoc(); // ' ' TODO: make sure that each of these tokens after @link are actually the expected ones
+                    nextTokenJSDoc(); // first token TODO: Skip multiple whitespace/newlines
+                    // TODO: When failing, decide whether to parse a trailing }. Probably doesn't matter since the only thing we're interested inside comment text is `@` (and *, newline, etc)
+                    // oh, except for `{@link}` should parse correctly
                     const name = tokenIsIdentifierOrKeyword(token()) ? parseEntityName(/*allowReservedWords*/ true) : createMissingNode<Identifier>(SyntaxKind.Identifier, false);  // don't try to parseEntityName, it'll assert
                     // TODO: I'm pretty sure you getting a MissingIdentifier for a bad parse, or soething like that
                     // in any case, most of the time you'll have `http` as the first identifier and you'll be fine
@@ -7774,15 +7787,16 @@ namespace ts {
                     }
 
                     let comments = authorInfoWithEmail;
+                    let links;
                     if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
-                        // TODO: This is wrong, there could be links in there
                         const comment = parseTagComments(indent);
                         if (comment) {
                             comments += comment.text;
+                            links = comment.links;
                         }
                     }
 
-                    return finishNode(factory.createJSDocAuthorTag(tagName, { links: [], text: comments }), start);
+                    return finishNode(factory.createJSDocAuthorTag(tagName, { links, text: comments }), start);
                 }
 
                 function tryParseAuthorNameAndEmail(): string | undefined {

@@ -422,7 +422,7 @@ namespace ts.SymbolDisplay {
                     }
                     else {
                         documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
-                        tagsFromAlias = resolvedSymbol.getJsDocTags();
+                        tagsFromAlias = resolvedSymbol.getJsDocTags(typeChecker);
                     }
                 }
             }

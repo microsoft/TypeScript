@@ -1,12 +1,43 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 187,
+    "end": 646,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "comment": {
-        "links": [],
+        "links": [
+            {
+                "kind": "JSDocLink",
+                "pos": 7,
+                "end": 21,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 14,
+                    "end": 19,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "escapedText": "first"
+                }
+            },
+            {
+                "kind": "JSDocLink",
+                "pos": 32,
+                "end": 49,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 39,
+                    "end": 43,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "escapedText": "link"
+                }
+            }
+        ],
         "text": "{@link first }\nInside {@link link text} thing"
     },
     "tags": {
@@ -73,7 +104,7 @@
         "1": {
             "kind": "JSDocParameterTag",
             "pos": 102,
-            "end": 185,
+            "end": 569,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -147,7 +178,7 @@
         },
         "length": 2,
         "pos": 59,
-        "end": 185,
+        "end": 644,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

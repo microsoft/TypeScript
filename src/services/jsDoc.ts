@@ -124,19 +124,24 @@ namespace ts.JsDoc {
     }
 
     function getLinks(tag: JSDocTag, checker: TypeChecker): JSDocLink[] | undefined {
-        if (tag.kind !== SyntaxKind.JSDocSeeTag) return; // TODO: Change this to look for @link not @see
+        const links = tag.comment?.links
+        if (links) {
+            return mapDefined(links, link => {
+                if (!link.name) return
+                // TODO: Test this, I think getSymbolAtLocation eventually calls checkQualifiedName and then returns resolvedSymbol, but it's hard to be sure
+                const symbol = checker.getSymbolAtLocation(link.name)
+                if (!symbol || !symbol.valueDeclaration) return
+                return {
+                    fileName: getSourceFileOfNode(see).fileName,
+                    textSpan: createTextSpanFromNode(see),
+                    target: {
+                        fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
+                        textSpan: createTextSpanFromNode(symbol.valueDeclaration)
+                    }
+                }
+            })
+        }
         const see = tag as JSDocSeeTag;
-        if (!see.name) return
-        const symbol = checker.getSymbolAtLocation(see.name)
-        if (!symbol || !symbol.valueDeclaration) return
-        return [{
-            fileName: getSourceFileOfNode(see).fileName,
-            textSpan: createTextSpanFromNode(see),
-            target: {
-                fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
-                textSpan: createTextSpanFromNode(symbol.valueDeclaration)
-            }
-        }]
     }
 
     function getCommentText(tag: JSDocTag): string | undefined {

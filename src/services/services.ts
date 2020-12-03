@@ -359,6 +359,7 @@ namespace ts {
             }
         }
 
+        // TODO: Maybe link symbol resolution should be lazy so this function doesn't need to provide a checker
         getJsDocTags(checker: TypeChecker): JSDocTagInfo[] {
             if (this.tags === undefined) {
                 this.tags = JsDoc.getJsDocTagsFromDeclarations(checker, this.declarations);
