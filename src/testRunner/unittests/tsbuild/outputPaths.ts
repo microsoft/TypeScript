@@ -11,8 +11,28 @@ namespace ts {
             noChangeProject,
         ];
 
-        verifyTscSerializedIncrementalEdits({
-            scenario: "outputPaths",
+        function verify(input: Pick<VerifyTsBuildInput, "subScenario" | "fs" | "incrementalScenarios">, expectedOuptutNames: readonly string[]) {
+            verifyTscSerializedIncrementalEdits({
+                scenario: "outputPaths",
+                commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
+                ...input
+            });
+
+            it("verify getOutputFileNames", () => {
+                const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+                ;
+                assert.deepEqual(
+                    getOutputFileNames(
+                        parseConfigFileWithSystem("/src/tsconfig.json", {}, {}, sys, noop)!,
+                        "/src/src/index.ts",
+                        /*ignoreCase*/ false
+                    ),
+                    expectedOuptutNames
+                );
+            });
+        }
+
+        verify({
             subScenario: "when rootDir is not specified",
             fs: () => loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
@@ -22,12 +42,10 @@ namespace ts {
                     }
                 })
             }),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
             incrementalScenarios,
-        });
+        }, ["/src/dist/index.js"]);
 
-        verifyTscSerializedIncrementalEdits({
-            scenario: "outputPaths",
+        verify({
             subScenario: "when rootDir is not specified and is composite",
             fs: () => loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
@@ -38,7 +56,6 @@ namespace ts {
                     }
                 })
             }),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
             incrementalScenarios: [
                 noChangeRun,
                 {
@@ -50,10 +67,9 @@ namespace ts {
                     }
                 }
             ],
-        });
+        }, ["/src/dist/src/index.js", "/src/dist/src/index.d.ts"]);
 
-        verifyTscSerializedIncrementalEdits({
-            scenario: "outputPaths",
+        verify({
             subScenario: "when rootDir is specified",
             fs: () => loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
@@ -64,12 +80,10 @@ namespace ts {
                     }
                 })
             }),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
             incrementalScenarios,
-        });
+        }, ["/src/dist/index.js"]);
 
-        verifyTscSerializedIncrementalEdits({
-            scenario: "outputPaths",
+        verify({
             subScenario: "when rootDir is specified but not all files belong to rootDir",
             fs: () => loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
@@ -81,12 +95,10 @@ namespace ts {
                     }
                 })
             }),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
             incrementalScenarios,
-        });
+        }, ["/src/dist/index.js"]);
 
-        verifyTscSerializedIncrementalEdits({
-            scenario: "outputPaths",
+        verify({
             subScenario: "when rootDir is specified but not all files belong to rootDir and is composite",
             fs: () => loadProjectFromFiles({
                 "/src/src/index.ts": "export const x = 10;",
@@ -99,8 +111,7 @@ namespace ts {
                     }
                 })
             }),
-            commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
             incrementalScenarios,
-        });
+        }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
     });
 }
