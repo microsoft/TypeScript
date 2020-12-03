@@ -1,5 +1,5 @@
-// @noEmit: true
 // @noTypesAndSymbols: true
+// @declaration: true
 
 // @Filename: /a.ts
 class A { a!: string }
@@ -14,5 +14,6 @@ import type A = require('./a'); // Ok
 import type = require('./b');   // Ok
 
 A.prototype; // Error
-const a: A = { a: 'a' };
-export declare const AConstructor: typeof A;
+const a: A = { a: 'a' }; // Ok
+void type; // Ok
+export declare const AConstructor: typeof A; // Ok

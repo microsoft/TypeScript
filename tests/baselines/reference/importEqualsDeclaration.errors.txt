@@ -9,8 +9,9 @@
     ~
 !!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
 !!! related TS1376 /c.ts:1:1: 'A' was imported here.
-    const a: A = { a: 'a' };
-    export declare const AConstructor: typeof A;
+    const a: A = { a: 'a' }; // Ok
+    void type; // Ok
+    export declare const AConstructor: typeof A; // Ok
     
 ==== /a.ts (0 errors) ====
     class A { a!: string }

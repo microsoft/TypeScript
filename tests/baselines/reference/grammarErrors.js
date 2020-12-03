@@ -32,4 +32,3 @@ var ns;
     }());
     ns.Foo = Foo;
 })(ns || (ns = {}));
-var Foo = ns.Foo;
