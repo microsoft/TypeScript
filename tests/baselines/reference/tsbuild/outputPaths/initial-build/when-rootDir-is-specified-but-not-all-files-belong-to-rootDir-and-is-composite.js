@@ -81,24 +81,15 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/dist/src/index.d.ts]
+//// [/src/dist/index.d.ts]
 export declare const x = 10;
 
 
-//// [/src/dist/src/index.js]
+//// [/src/dist/index.js]
 "use strict";
 exports.__esModule = true;
 exports.x = void 0;
 exports.x = 10;
-
-
-//// [/src/dist/types/type.d.ts]
-export declare type t = string;
-
-
-//// [/src/dist/types/type.js]
-"use strict";
-exports.__esModule = true;
 
 
 //// [/src/tsconfig.tsbuildinfo]
@@ -134,4 +125,13 @@ exports.__esModule = true;
   },
   "version": "FakeTSVersion"
 }
+
+//// [/src/types/type.d.ts]
+export declare type t = string;
+
+
+//// [/src/types/type.js]
+"use strict";
+exports.__esModule = true;
+
 

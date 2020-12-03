@@ -1127,9 +1127,10 @@ namespace ts {
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
                 const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, program));
-                if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
+                if (options.rootDir) {
                     // If a rootDir is specified use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
+                    checkSourceFilesBelongToPath(emittedFiles, options.rootDir);
                 }
                 else if (options.composite && options.configFilePath) {
                     // Project compilations never infer their root from the input source paths

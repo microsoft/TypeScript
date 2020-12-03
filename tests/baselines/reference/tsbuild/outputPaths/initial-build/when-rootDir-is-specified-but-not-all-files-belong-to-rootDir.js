@@ -81,14 +81,14 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/dist/src/index.js]
+//// [/src/dist/index.js]
 "use strict";
 exports.__esModule = true;
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/src/dist/types/type.js]
+//// [/src/types/type.js]
 "use strict";
 exports.__esModule = true;
 
