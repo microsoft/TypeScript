@@ -2482,7 +2482,7 @@ namespace ts {
                 const immediate = resolveExternalModuleName(
                     node,
                     getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node));
-               const resolved = resolveExternalModuleSymbol(immediate);
+                const resolved = resolveExternalModuleSymbol(immediate);
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
                 return resolved;
             }
@@ -2492,7 +2492,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
-            if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false)) {
+            if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false) && !node.isTypeOnly) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
                 const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
                 const message = isExport
@@ -6841,6 +6841,7 @@ namespace ts {
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
+                                    /*isTypeOnly*/ false,
                                     uniqueName,
                                     factory.createExternalModuleReference(factory.createStringLiteral(specifier))
                                 ), ModifierFlags.None);
@@ -6848,6 +6849,7 @@ namespace ts {
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
+                                    /*isTypeOnly*/ false,
                                     factory.createIdentifier(localName),
                                     factory.createQualifiedName(uniqueName, initializer.name as Identifier),
                                 ), modifierFlags);
@@ -6867,6 +6869,7 @@ namespace ts {
                             addResult(factory.createImportEqualsDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
+                                /*isTypeOnly*/ false,
                                 factory.createIdentifier(localName),
                                 isLocalImport
                                     ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
@@ -7024,6 +7027,7 @@ namespace ts {
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
+                                    /*isTypeOnly*/ false,
                                     factory.createIdentifier(varName),
                                     symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
                                 ), ModifierFlags.None);
@@ -36459,9 +36463,12 @@ namespace ts {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
                         }
                     }
+                    if (node.isTypeOnly) {
+                        grammarErrorOnNode(node, Diagnostics.An_import_alias_cannot_use_import_type);
+                    }
                 }
                 else {
-                    if (moduleKind >= ModuleKind.ES2015 && !(node.flags & NodeFlags.Ambient)) {
+                    if (moduleKind >= ModuleKind.ES2015 && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
@@ -36552,19 +36559,30 @@ namespace ts {
             });
         }
 
+        function canConvertImportDeclarationToTypeOnly(statement: Statement) {
+            return isImportDeclaration(statement) &&
+                statement.importClause &&
+                !statement.importClause.isTypeOnly &&
+                importClauseContainsReferencedImport(statement.importClause) &&
+                !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true) &&
+                !importClauseContainsConstEnumUsedAsValue(statement.importClause);
+        }
+
+        function canConvertImportEqualsDeclarationToTypeOnly(statement: Statement) {
+            return isImportEqualsDeclaration(statement) &&
+                isExternalModuleReference(statement.moduleReference) &&
+                !statement.isTypeOnly &&
+                getSymbolOfNode(statement).isReferenced &&
+                !isReferencedAliasDeclaration(statement, /*checkChildren*/ false) &&
+                !getSymbolLinks(getSymbolOfNode(statement)).constEnumReferenced;
+        }
+
         function checkImportsForTypeOnlyConversion(sourceFile: SourceFile) {
             for (const statement of sourceFile.statements) {
-                if (
-                    isImportDeclaration(statement) &&
-                    statement.importClause &&
-                    !statement.importClause.isTypeOnly &&
-                    importClauseContainsReferencedImport(statement.importClause) &&
-                    !isReferencedAliasDeclaration(statement.importClause, /*checkChildren*/ true) &&
-                    !importClauseContainsConstEnumUsedAsValue(statement.importClause)
-                ) {
+                if (canConvertImportDeclarationToTypeOnly(statement) || canConvertImportEqualsDeclarationToTypeOnly(statement)) {
                     error(
                         statement,
-                        Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is_set_to_error);
+                        Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error);
                 }
             }
         }
