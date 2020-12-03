@@ -1591,7 +1591,7 @@ namespace ts {
     // | 1. | i        | 105       | Ascii i                                                                |
     // | 2. | I        | 73        | Ascii I                                                                |
     // |-------- Special characters ------------------------------------------------------------------------|
-    // | 3. | \u0130   | 304       | Uppper case I with dot above                                           |
+    // | 3. | \u0130   | 304       | Upper case I with dot above                                            |
     // | 4. | i,\u0307 | 105,775   | i, followed by 775: Lower case of (3rd item)                           |
     // | 5. | I,\u0307 | 73,775    | I, followed by 775: Upper case of (4th item), lower case is (4th item) |
     // | 6. | \u0131   | 305       | Lower case i without dot, upper case is I (2nd item)                   |

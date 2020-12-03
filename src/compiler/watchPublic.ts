@@ -253,7 +253,7 @@ namespace ts {
 
 
         const sourceFilesCache = new Map<string, HostFileInfo>();                 // Cache that stores the source file and version info
-        let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
+        let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temporarily so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
 
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
