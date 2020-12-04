@@ -1112,11 +1112,7 @@
         "category": "Message",
         "code": 1369
     },
-    "Only ECMAScript imports may use 'import type'.": {
-        "category": "Error",
-        "code": 1370
-    },
-    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
+    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
     },
@@ -1196,157 +1192,161 @@
         "category": "Error",
         "code": 1391
     },
-    "Imported via {0} from file '{1}'": {
-        "category": "Message",
+    "An import alias cannot use 'import type'": {
+        "category": "Error",
         "code": 1392
     },
-    "Imported via {0} from file '{1}' with packageId '{2}'": {
+    "Imported via {0} from file '{1}'": {
         "category": "Message",
         "code": 1393
     },
-    "Referenced via '{0}' from file '{1}'": {
+    "Imported via {0} from file '{1}' with packageId '{2}'": {
         "category": "Message",
         "code": 1394
     },
-    "Type library referenced via '{0}' from file '{1}'": {
+    "Imported via {0} from file '{1}' to import 'importHelpers' as specified in compilerOptions": {
         "category": "Message",
         "code": 1395
     },
-    "Type library referenced via '{0}' from file '{1}' with packageId '{2}'": {
+    "Imported via {0} from file '{1}' with packageId '{2}' to import 'importHelpers' as specified in compilerOptions": {
         "category": "Message",
         "code": 1396
     },
-    "Library referenced via '{0}' from file '{1}'": {
+    "Imported via {0} from file '{1}' to import 'jsx' and 'jsxs' factory functions": {
         "category": "Message",
         "code": 1397
     },
-    "Matched by include pattern '{0}' in '{1}'": {
+    "Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions": {
         "category": "Message",
         "code": 1398
     },
-    "Part of 'files' list in tsconfig.json": {
+    "File is included via import here.": {
         "category": "Message",
         "code": 1399
     },
-    "Output from referenced project '{0}' included because '{1}' specified": {
+    "Referenced via '{0}' from file '{1}'": {
         "category": "Message",
         "code": 1400
     },
-    "Source from referenced project '{0}' included because '{1}' specified": {
+    "File is included via reference here.": {
         "category": "Message",
         "code": 1401
     },
-    "Output from referenced project '{0}' included because '--module' is specified as 'none'": {
+    "Type library referenced via '{0}' from file '{1}'": {
         "category": "Message",
         "code": 1402
     },
-    "Source from referenced project '{0}' included because '--module' is specified as 'none'": {
+    "Type library referenced via '{0}' from file '{1}' with packageId '{2}'": {
         "category": "Message",
         "code": 1403
     },
-    "Entry point of type library '{0}' specified in compilerOptions": {
+    "File is included via type library reference here.": {
         "category": "Message",
         "code": 1404
     },
-    "Entry point of type library '{0}' specified in compilerOptions with packageId '{1}'": {
+    "Library referenced via '{0}' from file '{1}'": {
         "category": "Message",
         "code": 1405
     },
-    "Entry point for implicit type library '{0}'": {
+    "File is included via library reference here.": {
         "category": "Message",
         "code": 1406
     },
-    "Entry point for implicit type library '{0}' with packageId '{1}'": {
+    "Matched by include pattern '{0}' in '{1}'": {
         "category": "Message",
         "code": 1407
     },
-    "Library '{0}' specified in compilerOptions": {
+    "File is matched by include pattern specified here.": {
         "category": "Message",
         "code": 1408
     },
-    "Default library": {
+    "Part of 'files' list in tsconfig.json": {
         "category": "Message",
         "code": 1409
     },
-    "Default library for target '{0}'": {
+    "File is matched by 'files' list specified here.": {
         "category": "Message",
         "code": 1410
     },
-    "Root file specified for compilation": {
+    "Output from referenced project '{0}' included because '{1}' specified": {
         "category": "Message",
         "code": 1411
     },
-    "File is output of project reference source '{0}'": {
+    "Output from referenced project '{0}' included because '--module' is specified as 'none'": {
         "category": "Message",
         "code": 1412
     },
-    "File redirects to file '{0}'": {
+    "File is output from referenced project specified here.": {
         "category": "Message",
         "code": 1413
     },
-    "The file is in the program because:": {
+    "Source from referenced project '{0}' included because '{1}' specified": {
         "category": "Message",
         "code": 1414
     },
-    "File is included via import here.": {
+    "Source from referenced project '{0}' included because '--module' is specified as 'none'": {
         "category": "Message",
         "code": 1415
     },
-    "File is included via reference here.": {
+    "File is source from referenced project specified here.": {
         "category": "Message",
         "code": 1416
     },
-    "File is included via type library reference here.": {
+    "Entry point of type library '{0}' specified in compilerOptions": {
         "category": "Message",
         "code": 1417
     },
-    "File is included via library reference here.": {
+    "Entry point of type library '{0}' specified in compilerOptions with packageId '{1}'": {
         "category": "Message",
         "code": 1418
     },
-    "File is matched by include pattern specified here.": {
+    "File is entry point of type library specified here.": {
         "category": "Message",
         "code": 1419
     },
-    "File is matched by 'files' list specified here.": {
+    "Entry point for implicit type library '{0}'": {
         "category": "Message",
         "code": 1420
     },
-    "File is output from referenced project specified here.": {
+    "Entry point for implicit type library '{0}' with packageId '{1}'": {
         "category": "Message",
         "code": 1421
     },
-    "File is source from referenced project specified here.": {
+    "Library '{0}' specified in compilerOptions": {
         "category": "Message",
         "code": 1422
     },
-    "File is entry point of type library specified here.": {
+    "File is library specified here.": {
         "category": "Message",
         "code": 1423
     },
-    "File is library specified here.": {
+    "Default library": {
         "category": "Message",
         "code": 1424
     },
-    "File is default library for target specified here.": {
+    "Default library for target '{0}'": {
         "category": "Message",
         "code": 1425
     },
-    "Imported via {0} from file '{1}' to import 'importHelpers' as specified in compilerOptions": {
+    "File is default library for target specified here.": {
         "category": "Message",
         "code": 1426
     },
-    "Imported via {0} from file '{1}' with packageId '{2}' to import 'importHelpers' as specified in compilerOptions": {
+    "Root file specified for compilation": {
         "category": "Message",
         "code": 1427
     },
-    "Imported via {0} from file '{1}' to import 'jsx' and 'jsxs' factory functions": {
+    "File is output of project reference source '{0}'": {
         "category": "Message",
         "code": 1428
     },
-    "Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions": {
+    "File redirects to file '{0}'": {
         "category": "Message",
         "code": 1429
+    },
+    "The file is in the program because:": {
+        "category": "Message",
+        "code": 1430
     },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

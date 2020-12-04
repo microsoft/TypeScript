@@ -6929,11 +6929,8 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             const moduleReference = parseModuleReference();
             parseSemicolon();
-            const node = factory.createImportEqualsDeclaration(decorators, modifiers, identifier, moduleReference);
+            const node = factory.createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, identifier, moduleReference);
             const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
-            if (isTypeOnly) {
-                parseErrorAtRange(finished, Diagnostics.Only_ECMAScript_imports_may_use_import_type);
-            }
             return finished;
         }
 
