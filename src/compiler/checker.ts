@@ -25904,7 +25904,7 @@ namespace ts {
 
                 propType = (compilerOptions.noUncheckedIndexedAccess && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                 if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
-                    error(node, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
+                    error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
                 }
             }
             else {

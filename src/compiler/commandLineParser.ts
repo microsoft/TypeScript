@@ -662,8 +662,6 @@ namespace ts {
         {
             name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
-            affectsBindDiagnostics: true,
-            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses
