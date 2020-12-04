@@ -133,3 +133,21 @@ x.type;
 >x : Child<ListWidget>
 >type : any
 
+// Repros from #41790
+
+export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
+>TV : TV<T, K>
+
+export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
+>ObjectOrArray : ObjectOrArray<T, K>
+
+export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
+>ThemeValue : ThemeValue<K, ThemeType, TVal>
+
+    ThemeType[K] extends TVal[] ? number :
+    ThemeType[K] extends Record<infer E, TVal> ? E :
+    ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
+
+export type Foo<T> = T extends { [P in infer E]: any } ? E : never;
+>Foo : Foo<T>
+

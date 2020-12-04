@@ -12081,6 +12081,11 @@ namespace ts {
                         else if (grandParent.kind === SyntaxKind.TemplateLiteralTypeSpan) {
                             inferences = append(inferences, stringType);
                         }
+                        // When an 'infer T' declaration is in the constraint position of a mapped type, we infer a 'keyof any'
+                        // constraint.
+                        else if (grandParent.kind === SyntaxKind.TypeParameter && grandParent.parent.kind === SyntaxKind.MappedType) {
+                            inferences = append(inferences, keyofConstraintType);
+                        }
                     }
                 }
             }
@@ -15281,8 +15286,7 @@ namespace ts {
                 }
             }
             // If the constraint type of the instantiation is the wildcard type, return the wildcard type.
-            const result = <MappedType>instantiateAnonymousType(type, mapper);
-            return getConstraintTypeFromMappedType(result) === wildcardType ? wildcardType : result;
+            return instantiateType(getConstraintTypeFromMappedType(type), mapper) === wildcardType ? wildcardType : instantiateAnonymousType(type, mapper);
         }
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
