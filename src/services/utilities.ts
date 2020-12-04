@@ -2926,16 +2926,5 @@ namespace ts {
         return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
     }
 
-    export function getNodeAtTextRange(sourceFile: SourceFile, textRange: TextRange, includeLeadingTrivia: boolean): Node | undefined {
-        const token = getTokenAtPosition(sourceFile, textRange.pos);
-        return findAncestor(token, node => {
-            const pos = includeLeadingTrivia ? node.pos : node.getStart();
-            const end = node.end;
-            if (pos < textRange.pos || end > textRange.end) return "quit";
-            if (textRangesEqual({ pos, end }, textRange)) return true;
-            return false;
-        });
-    }
-
     // #endregion
 }
