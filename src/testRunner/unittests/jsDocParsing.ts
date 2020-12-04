@@ -316,8 +316,6 @@ namespace ts {
  * Inside {@link link text} thing
  */`);
                 parsesCorrectly("authorTag",
-                                // TODO: Try this one when everything else is working:
-                                // * @author Smorgasbord Hardmode <<@><@<>@<@>>>@<@<>>
                     `/**
  * @author John Doe <john.doe@example.com>
  * @author John Doe <john.doe@example.com> unexpected comment
