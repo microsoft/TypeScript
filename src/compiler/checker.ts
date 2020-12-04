@@ -5961,6 +5961,18 @@ namespace ts {
                         return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
                     }
                     if (isLiteralImportTypeNode(node)) {
+                        const nodeSymbol = getNodeLinks(node).resolvedSymbol;
+                        if (isInJSDoc(node) &&
+                            nodeSymbol &&
+                            (
+                                // The import type resolved using jsdoc fallback logic
+                                (!node.isTypeOf && !(nodeSymbol.flags & SymbolFlags.Type)) ||
+                                // The import type had type arguments autofilled by js fallback logic
+                                !(length(node.typeArguments) >= getMinTypeArgumentCount(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(nodeSymbol)))
+                            )
+                        ) {
+                            return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
+                        }
                         return factory.updateImportTypeNode(
                             node,
                             factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
@@ -6536,8 +6548,12 @@ namespace ts {
                     const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined;
                     const oldFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
+                    const typeNode = jsdocAliasDecl && jsdocAliasDecl.typeExpression
+                        && isJSDocTypeExpression(jsdocAliasDecl.typeExpression)
+                        && serializeExistingTypeNode(context, jsdocAliasDecl.typeExpression.type, includePrivateSymbol, bundled)
+                        || typeToTypeNodeHelper(aliasType, context);
                     addResult(setSyntheticLeadingComments(
-                        factory.createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
+                        factory.createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeNode),
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
                     ), modifierFlags);
                     context.flags = oldFlags;
