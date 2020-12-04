@@ -681,6 +681,7 @@ namespace ts {
                     decl,
                     /*decorators*/ undefined,
                     decl.modifiers,
+                    decl.isTypeOnly,
                     decl.name,
                     factory.updateExternalModuleReference(decl.moduleReference, rewriteModuleSpecifier(decl, specifier))
                 );

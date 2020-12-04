@@ -795,6 +795,7 @@ namespace ts.codefix {
                 ? factory.createImportEqualsDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
+                    typeOnly,
                     factory.createIdentifier(namespaceLikeImport.name),
                     factory.createExternalModuleReference(quotedModuleSpecifier))
                 : factory.createImportDeclaration(
