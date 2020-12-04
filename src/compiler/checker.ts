@@ -16507,7 +16507,8 @@ namespace ts {
             let sourceStack: Type[];
             let targetStack: Type[];
             let maybeCount = 0;
-            let depth = 0;
+            let sourceDepth = 0;
+            let targetDepth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
@@ -16522,7 +16523,7 @@ namespace ts {
                 reportIncompatibleStack();
             }
             if (overflow) {
-                tracing.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth });
+                tracing.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth: sourceDepth, targetDepth });
                 const diag = error(errorNode || currentNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
                 if (errorOutputContainer) {
                     (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
@@ -17320,20 +17321,27 @@ namespace ts {
                             return Ternary.Maybe;
                         }
                     }
-                    if (depth === 100) {
+                    if (sourceDepth === 100 || targetDepth === 100) {
                         overflow = true;
                         return Ternary.False;
                     }
                 }
+                const constantSource = sourceStack[sourceDepth] === source;
+                const constantTarget = targetStack[targetDepth] === target;
                 const maybeStart = maybeCount;
                 maybeKeys[maybeCount] = id;
                 maybeCount++;
-                sourceStack[depth] = source;
-                targetStack[depth] = target;
-                depth++;
+                if (!constantSource) {
+                    sourceStack[sourceDepth] = source;
+                    sourceDepth++;
+                }
+                if (!constantTarget) {
+                    targetStack[targetDepth] = target;
+                    targetDepth++;
+                }
                 const saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= ExpandingFlags.Source;
-                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= ExpandingFlags.Target;
+                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
+                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
                 let originalHandler: typeof outofbandVarianceMarkerHandler;
                 let propagatingVarianceFlags: RelationComparisonResult = 0;
                 if (outofbandVarianceMarkerHandler) {
@@ -17350,7 +17358,8 @@ namespace ts {
                         sourceIdStack: sourceStack.map(t => t.id),
                         targetId: target.id,
                         targetIdStack: targetStack.map(t => t.id),
-                        depth,
+                        depth: sourceDepth,
+                        targetDepth
                     });
                 }
 
@@ -17359,9 +17368,14 @@ namespace ts {
                     outofbandVarianceMarkerHandler = originalHandler;
                 }
                 expandingFlags = saveExpandingFlags;
-                depth--;
+                if (!constantSource) {
+                    sourceDepth--;
+                }
+                if (!constantTarget) {
+                    targetDepth--;
+                }
                 if (result) {
-                    if (result === Ternary.True || depth === 0) {
+                    if (result === Ternary.True || (sourceDepth === 0 && targetDepth === 0)) {
                         if (result === Ternary.True || result === Ternary.Maybe) {
                             // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                             // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
