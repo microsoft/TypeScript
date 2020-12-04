@@ -3155,6 +3155,10 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
+            if (node.isTypeOnly) {
+                emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+                writeSpace();
+            }
             emit(node.name);
             writeSpace();
             emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
@@ -4600,7 +4604,8 @@ namespace ts {
 
             const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
                 | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
-                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0);
+                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
+                | (printerOptions.target && printerOptions.target === ScriptTarget.ESNext ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
             return getLiteralText(node, currentSourceFile!, flags);
         }

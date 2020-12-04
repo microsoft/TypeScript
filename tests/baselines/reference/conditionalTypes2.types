@@ -527,3 +527,17 @@ gg(ff);
 >gg : <T>(f: (x: Foo3<T>) => void) => void
 >ff : (x: { x: string; }) => void
 
+// Repro from #41613
+
+type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } } ? true : false;
+>Wat : Wat<K>
+>x : { y: 0; z: 1; }
+>y : 0
+>z : 1
+>x : { [P in K]: 0; }
+>true : true
+>false : false
+ 
+type Huh = Wat<"y">;  // true
+>Huh : true
+

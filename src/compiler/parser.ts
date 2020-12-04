@@ -4915,7 +4915,7 @@ namespace ts {
             }
 
             const tagName = parseJsxElementName();
-            const typeArguments = tryParseTypeArguments();
+            const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments() : undefined;
             const attributes = parseJsxAttributes();
 
             let node: JsxOpeningLikeElement;
@@ -5180,7 +5180,8 @@ namespace ts {
                 expression = parseMemberExpressionRest(pos, expression, /*allowOptionalChain*/ true);
                 const questionDotToken = parseOptionalToken(SyntaxKind.QuestionDotToken);
                 // handle 'foo<<T>()'
-                if (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken) {
+                // parse template arguments only in TypeScript files (not in JavaScript files).
+                if ((contextFlags & NodeFlags.JavaScriptFile) === 0 && (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken)) {
                     // See if this is the start of a generic invocation.  If so, consume it and
                     // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
@@ -5226,6 +5227,11 @@ namespace ts {
         }
 
         function parseTypeArgumentsInExpression() {
+            if ((contextFlags & NodeFlags.JavaScriptFile) !== 0) {
+                // TypeArguments must not be parsed in JavaScript files to avoid ambiguity with binary operators.
+                return undefined;
+            }
+
             if (reScanLessThanToken() !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
@@ -6937,11 +6943,8 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             const moduleReference = parseModuleReference();
             parseSemicolon();
-            const node = factory.createImportEqualsDeclaration(decorators, modifiers, identifier, moduleReference);
+            const node = factory.createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, identifier, moduleReference);
             const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
-            if (isTypeOnly) {
-                parseErrorAtRange(finished, Diagnostics.Only_ECMAScript_imports_may_use_import_type);
-            }
             return finished;
         }
 

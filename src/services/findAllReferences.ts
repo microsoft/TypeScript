@@ -616,7 +616,8 @@ namespace ts.FindAllReferences {
             }
 
             const checker = program.getTypeChecker();
-            const symbol = checker.getSymbolAtLocation(node);
+            // constructors should use the class symbol, detected by name, if present
+            const symbol = checker.getSymbolAtLocation(isConstructorDeclaration(node) && node.parent.name || node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -874,6 +875,7 @@ namespace ts.FindAllReferences {
 
         function getSpecialSearchKind(node: Node): SpecialSearchKind {
             switch (node.kind) {
+                case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructorKeyword:
                     return SpecialSearchKind.Constructor;
                 case SyntaxKind.Identifier:
@@ -1238,8 +1240,13 @@ namespace ts.FindAllReferences {
             }
         }
 
-        export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: readonly SourceFile[], checker: TypeChecker, cb: (call: CallExpression) => void): void {
-            if (!signature.name || !isIdentifier(signature.name)) return;
+        export function someSignatureUsage(
+            signature: SignatureDeclaration,
+            sourceFiles: readonly SourceFile[],
+            checker: TypeChecker,
+            cb: (name: Identifier, call?: CallExpression) => boolean
+        ): boolean {
+            if (!signature.name || !isIdentifier(signature.name)) return false;
 
             const symbol = Debug.checkDefined(checker.getSymbolAtLocation(signature.name));
 
@@ -1247,14 +1254,16 @@ namespace ts.FindAllReferences {
                 for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
                     if (!isIdentifier(name) || name === signature.name || name.escapedText !== signature.name.escapedText) continue;
                     const called = climbPastPropertyAccess(name);
-                    const call = called.parent;
-                    if (!isCallExpression(call) || call.expression !== called) continue;
+                    const call = isCallExpression(called.parent) && called.parent.expression === called ? called.parent : undefined;
                     const referenceSymbol = checker.getSymbolAtLocation(name);
                     if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
-                        cb(call);
+                        if (cb(name, call)) {
+                            return true;
+                        }
                     }
                 }
             }
+            return false;
         }
 
         function getPossibleSymbolReferenceNodes(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): readonly Node[] {
@@ -2052,6 +2061,34 @@ namespace ts.FindAllReferences {
                 if (bindingElement && isObjectBindingElementWithoutPropertyName(bindingElement)) {
                     return getPropertySymbolFromBindingElement(checker, bindingElement);
                 }
+            }
+        }
+
+        /**
+         * Find symbol of the given property-name and add the symbol to the given result array
+         * @param symbol a symbol to start searching for the given propertyName
+         * @param propertyName a name of property to search for
+         * @param result an array of symbol of found property symbols
+         * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
+         *                                The value of previousIterationSymbol is undefined when the function is first called.
+         */
+        function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
+            const seen = new Map<string, true>();
+            return recur(symbol);
+
+            function recur(symbol: Symbol): T | undefined {
+                // Use `addToSeen` to ensure we don't infinitely recurse in this situation:
+                //      interface C extends C {
+                //          /*findRef*/propName: string;
+                //      }
+                if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
+
+                return firstDefined(symbol.declarations, declaration => firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
+                    const type = checker.getTypeAtLocation(typeReference);
+                    const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
+                    // Visit the typeReference as well to see if it directly or indirectly uses that property
+                    return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
+                }));
             }
         }
 

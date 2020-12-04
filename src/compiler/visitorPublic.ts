@@ -937,6 +937,7 @@ namespace ts {
                 return factory.updateImportEqualsDeclaration(<ImportEqualsDeclaration>node,
                     nodesVisitor((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier),
+                    (<ImportEqualsDeclaration>node).isTypeOnly,
                     nodeVisitor((<ImportEqualsDeclaration>node).name, visitor, isIdentifier),
                     nodeVisitor((<ImportEqualsDeclaration>node).moduleReference, visitor, isModuleReference));
 
@@ -949,7 +950,7 @@ namespace ts {
 
             case SyntaxKind.ImportClause:
                 return factory.updateImportClause(<ImportClause>node,
-                    (node as ImportClause).isTypeOnly,
+                    (<ImportClause>node).isTypeOnly,
                     nodeVisitor((<ImportClause>node).name, visitor, isIdentifier),
                     nodeVisitor((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
 
@@ -980,7 +981,7 @@ namespace ts {
                 return factory.updateExportDeclaration(<ExportDeclaration>node,
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    (node as ExportDeclaration).isTypeOnly,
+                    (<ExportDeclaration>node).isTypeOnly,
                     nodeVisitor((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
                     nodeVisitor((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
 

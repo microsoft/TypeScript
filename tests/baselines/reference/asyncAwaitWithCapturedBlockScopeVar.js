@@ -44,11 +44,11 @@ function fn1() {
                 case 0:
                     ar = [];
                     _loop_1 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _b.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/];
                             }
@@ -78,11 +78,11 @@ function fn2() {
                 case 0:
                     ar = [];
                     _loop_2 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _b.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/, "break"];
                             }
@@ -114,11 +114,11 @@ function fn3() {
                 case 0:
                     ar = [];
                     _loop_3 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _b.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/, "continue"];
                             }
@@ -148,11 +148,11 @@ function fn4() {
                 case 0:
                     ar = [];
                     _loop_4 = function (i) {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
                                 case 0: return [4 /*yield*/, 1];
                                 case 1:
-                                    _a.sent();
+                                    _b.sent();
                                     ar.push(function () { return i; });
                                     return [2 /*return*/, { value: 1 }];
                             }

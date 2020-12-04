@@ -84,6 +84,10 @@ namespace ts.FindAllReferences {
 
                     switch (direct.kind) {
                         case SyntaxKind.CallExpression:
+                            if (isImportCall(direct)) {
+                                handleImportCall(direct);
+                                break;
+                            }
                             if (!isAvailableThroughGlobal) {
                                 const parent = direct.parent;
                                 if (exportKind === ExportKind.ExportEquals && parent.kind === SyntaxKind.VariableDeclaration) {
@@ -121,7 +125,7 @@ namespace ts.FindAllReferences {
                             }
                             else if (direct.exportClause.kind === SyntaxKind.NamespaceExport) {
                                 // `export * as foo from "foo"` add to indirect uses
-                                addIndirectUsers(getSourceFileLikeForImportDeclaration(direct));
+                                addIndirectUser(getSourceFileLikeForImportDeclaration(direct), /** addTransitiveDependencies */ true);
                             }
                             else {
                                 // This is `export { foo } from "foo"` and creates an alias symbol, so recursive search will get handle re-exports.
@@ -130,6 +134,10 @@ namespace ts.FindAllReferences {
                             break;
 
                         case SyntaxKind.ImportType:
+                            // Only check for typeof import('xyz')
+                            if (direct.isTypeOf && !direct.qualifier && isExported(direct)) {
+                                addIndirectUser(direct.getSourceFile(), /** addTransitiveDependencies */ true);
+                            }
                             directImports.push(direct);
                             break;
 
@@ -138,6 +146,18 @@ namespace ts.FindAllReferences {
                     }
                 }
             }
+        }
+
+        function handleImportCall(importCall: ImportCall) {
+            const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
+            addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /** stopAtAmbientModule */ true));
+        }
+
+        function isExported(node: Node, stopAtAmbientModule = false) {
+            return findAncestor(node, node => {
+                if (stopAtAmbientModule && isAmbientModuleDeclaration(node)) return "quit";
+                return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
+            });
         }
 
         function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
@@ -149,7 +169,7 @@ namespace ts.FindAllReferences {
                 const sourceFileLike = getSourceFileLikeForImportDeclaration(importDeclaration);
                 Debug.assert(sourceFileLike.kind === SyntaxKind.SourceFile || sourceFileLike.kind === SyntaxKind.ModuleDeclaration);
                 if (isReExport || findNamespaceReExports(sourceFileLike, name, checker)) {
-                    addIndirectUsers(sourceFileLike);
+                    addIndirectUser(sourceFileLike, /** addTransitiveDependencies */ true);
                 }
                 else {
                     addIndirectUser(sourceFileLike);
@@ -157,28 +177,22 @@ namespace ts.FindAllReferences {
             }
         }
 
-        function addIndirectUser(sourceFileLike: SourceFileLike): boolean {
+        /** Adds a module and all of its transitive dependencies as possible indirect users. */
+        function addIndirectUser(sourceFileLike: SourceFileLike, addTransitiveDependencies = false): void {
             Debug.assert(!isAvailableThroughGlobal);
             const isNew = markSeenIndirectUser(sourceFileLike);
-            if (isNew) {
-                indirectUserDeclarations!.push(sourceFileLike); // TODO: GH#18217
-            }
-            return isNew;
-        }
+            if (!isNew) return;
+            indirectUserDeclarations!.push(sourceFileLike); // TODO: GH#18217
 
-        /** Adds a module and all of its transitive dependencies as possible indirect users. */
-        function addIndirectUsers(sourceFileLike: SourceFileLike): void {
-            if (!addIndirectUser(sourceFileLike)) {
-                return;
-            }
-
+            if (!addTransitiveDependencies) return;
             const moduleSymbol = checker.getMergedSymbol(sourceFileLike.symbol);
+            if (!moduleSymbol) return;
             Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
             const directImports = getDirectImports(moduleSymbol);
             if (directImports) {
                 for (const directImport of directImports) {
                     if (!isImportTypeNode(directImport)) {
-                        addIndirectUsers(getSourceFileLikeForImportDeclaration(directImport));
+                        addIndirectUser(getSourceFileLikeForImportDeclaration(directImport), /** addTransitiveDependencies */ true);
                     }
                 }
             }
