@@ -199,7 +199,7 @@ namespace ts {
                 bindingOrAssignmentElementContainsNonLiteralComputedName(node))) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
-                initializer = ensureIdentifier(flattenContext, initializer, /*reuseIdentifierExpressions*/ false, initializer);
+                initializer = ensureIdentifier(flattenContext, visitNode(initializer, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, initializer);
                 node = context.factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
             }
         }
