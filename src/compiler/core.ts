@@ -1970,7 +1970,7 @@ namespace ts {
         let previous = new Array(s2.length + 1);
         let current = new Array(s2.length + 1);
         /** Represents any value > max. We don't care about the particular value. */
-        const big = max + 0.000000001;
+        const big = max + 0.01;
 
         for (let i = 0; i <= s2.length; i++) {
             previous[i] = i;
@@ -1978,8 +1978,8 @@ namespace ts {
 
         for (let i = 1; i <= s1.length; i++) {
             const c1 = s1.charCodeAt(i - 1);
-            const minJ = Math.ceil(Math.max(i - max, 1));
-            const maxJ = Math.floor(Math.min(max + i, s2.length));
+            const minJ = Math.ceil(i > max ? i - max : 1);
+            const maxJ = Math.floor(s2.length > max + i ? max + i : s2.length);
             current[0] = i;
             /** Smallest value of the matrix in the ith column. */
             let colMin = i;
