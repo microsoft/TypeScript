@@ -624,9 +624,8 @@ namespace ts.FindAllReferences {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
                 if (!options.implementations && isStringLiteralLike(node)) {
                     const refFileMap = program.getRefFileMap();
-                    const refs = refFileMap?.get(node.getSourceFile().path);
-                    const ref = refs && find(refs, ref => textRangesEqual(ref, node));
-                    const referencedFile = ref && program.getSourceFileByPath(ref.file);
+                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
+                    const referencedFile = referencedFileName && program.getSourceFile(referencedFileName);
                     return referencedFile
                         ? [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, refFileMap!, program) || emptyArray }]
                         : getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
@@ -654,7 +653,7 @@ namespace ts.FindAllReferences {
         export function getReferencesForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly Entry[] {
             const moduleSymbol = program.getSourceFile(fileName)?.symbol;
             if (moduleSymbol) {
-                return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references;
+                return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references || emptyArray;
             }
             const refFileMap = program.getRefFileMap();
             const referencedFile = program.getSourceFile(fileName);

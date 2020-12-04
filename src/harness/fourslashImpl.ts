@@ -1108,19 +1108,21 @@ namespace FourSlash {
             }
         }
 
-        public verifyBaselineFindAllReferences(markerName: string) {
-            const marker = this.getMarkerByName(markerName);
-            const references = this.languageService.findReferences(marker.fileName, marker.position);
-            const refsByFile = references
-                ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
-                : ts.emptyArray;
+        public verifyBaselineFindAllReferences(...markerNames: string[]) {
+            const baseline = markerNames.map(markerName => {
+                const marker = this.getMarkerByName(markerName);
+                const references = this.languageService.findReferences(marker.fileName, marker.position);
+                const refsByFile = references
+                    ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                    : ts.emptyArray;
 
-            // Write input files
-            let baselineContent = this.getBaselineContentForGroupedReferences(refsByFile, markerName);
+                // Write input files
+                const baselineContent = this.getBaselineContentForGroupedReferences(refsByFile, markerName);
 
-            // Write response JSON
-            baselineContent += JSON.stringify(references, undefined, 2);
-            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+                // Write response JSON
+                return baselineContent + JSON.stringify(references, undefined, 2);
+            }).join("\n\n");
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baseline);
         }
 
         public verifyBaselineGetFileReferences(fileName: string) {
