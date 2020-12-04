@@ -1987,7 +1987,7 @@ namespace ts {
                 current[j] = big;
             }
             for (let j = minJ; j <= maxJ; j++) {
-                // case difference should be insignificant.
+                // case difference should be significantly cheaper than other differences
                 const substitutionDistance = s1[i - 1].toLowerCase() === s2[j-1].toLowerCase()
                     ? (previous[j - 1] + 0.1)
                     : (previous[j - 1] + 2);
