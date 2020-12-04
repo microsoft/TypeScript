@@ -2631,7 +2631,9 @@ namespace ts {
                     referencedFileName,
                     kind: refFile.kind,
                     index: refFile.index,
-                    file: refFile.file.path
+                    file: refFile.file.path,
+                    pos: refFile.pos,
+                    end: refFile.end
                 });
             }
         }

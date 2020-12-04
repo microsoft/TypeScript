@@ -3694,7 +3694,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export interface RefFile {
+    export interface RefFile extends TextRange {
         referencedFileName: string;
         kind: RefFileKind;
         index: number;

@@ -1961,6 +1961,9 @@ namespace ts {
     export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
         return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
     }
+    export function textRangesEqual(a: TextRange, b: TextRange): boolean {
+        return a.pos === b.pos && a.end === b.end;
+    }
 
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
@@ -2921,6 +2924,17 @@ namespace ts {
         }
         // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
         return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
+    }
+
+    export function getNodeAtTextRange(sourceFile: SourceFile, textRange: TextRange, includeLeadingTrivia: boolean): Node | undefined {
+        const token = getTokenAtPosition(sourceFile, textRange.pos);
+        return findAncestor(token, node => {
+            const pos = includeLeadingTrivia ? node.pos : node.getStart();
+            const end = node.end;
+            if (pos < textRange.pos || end > textRange.end) return "quit";
+            if (textRangesEqual({ pos, end }, textRange)) return true;
+            return false;
+        });
     }
 
     // #endregion

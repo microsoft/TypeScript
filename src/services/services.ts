@@ -1730,9 +1730,7 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            return flatMapToMutable(
-                FindAllReferences.Core.getReferencedSymbolsForFileName(fileName, program, program.getSourceFiles()),
-                symbolAndEntries => symbolAndEntries.references.map(FindAllReferences.toReferenceEntry));
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {

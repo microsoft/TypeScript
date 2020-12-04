@@ -622,7 +622,16 @@ namespace ts.FindAllReferences {
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
-                return !options.implementations && isStringLiteralLike(node) ? getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken) : undefined;
+                if (!options.implementations && isStringLiteralLike(node)) {
+                    const refFileMap = program.getRefFileMap();
+                    const refs = refFileMap?.get(node.getSourceFile().path);
+                    const ref = refs && find(refs, ref => textRangesEqual(ref, node));
+                    const referencedFile = ref && program.getSourceFileByPath(ref.file);
+                    return referencedFile
+                        ? [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, refFileMap!, program) || emptyArray }]
+                        : getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
+                }
+                return undefined;
             }
 
             if (symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -642,10 +651,24 @@ namespace ts.FindAllReferences {
             return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
         }
 
-        export function getReferencedSymbolsForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
+        export function getReferencesForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly Entry[] {
             const moduleSymbol = program.getSourceFile(fileName)?.symbol;
-            if (!moduleSymbol) return undefined;
-            return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+            if (moduleSymbol) {
+                return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references;
+            }
+            const refFileMap = program.getRefFileMap();
+            const referencedFile = program.getSourceFile(fileName);
+            return referencedFile && refFileMap && getReferencesForNonModule(referencedFile, refFileMap, program) || emptyArray;
+        }
+
+        function getReferencesForNonModule(referencedFile: SourceFile, refFileMap: MultiMap<Path, RefFile>, program: Program): readonly SpanEntry[] | undefined {
+            let entries: SpanEntry[] | undefined;
+            const references = refFileMap.get(referencedFile.path) || emptyArray;
+            for (const ref of references) {
+                const referencingFile = program.getSourceFileByPath(ref.file)!;
+                entries = append(entries, { kind: EntryKind.Span, fileName: referencingFile.fileName, textSpan: createTextSpanFromRange(ref) });
+            }
+            return entries;
         }
 
         function getMergedAliasedSymbolOfNamespaceExportDeclaration(node: Node, symbol: Symbol, checker: TypeChecker) {
