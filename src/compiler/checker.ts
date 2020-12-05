@@ -30213,7 +30213,8 @@ namespace ts {
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                             if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                                checkTestingKnownTruthyCallableType(node.left, leftType, isIfStatement(node.parent) ? node.parent.thenStatement : undefined);
+                                const parent = walkUpParenthesizedExpressions(node.parent);
+                                checkTestingKnownTruthyCallableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                             }
                             checkTruthinessOfType(leftType, node.left);
                         }
