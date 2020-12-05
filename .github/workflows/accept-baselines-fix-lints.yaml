@@ -20,7 +20,7 @@ jobs:
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
         npm install
-        gulp runtests-parallel --ci --fix
+        gulp runtests-parallel --ci --fix || true
         gulp baseline-accept
         git add ./src
         git add ./tests/baselines/reference
