@@ -2631,9 +2631,7 @@ namespace ts {
                     referencedFileName,
                     kind: refFile.kind,
                     index: refFile.index,
-                    file: refFile.file.path,
-                    pos: refFile.pos,
-                    end: refFile.end
+                    file: refFile.file.path
                 });
             }
         }
@@ -3357,22 +3355,7 @@ namespace ts {
 
         function createFileDiagnosticAtReference(refPathToReportErrorOn: ts.RefFile, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             const refFile = Debug.checkDefined(getSourceFileByPath(refPathToReportErrorOn.file));
-            const { kind, index } = refPathToReportErrorOn;
-            let pos: number, end: number;
-            switch (kind) {
-                case RefFileKind.Import:
-                    pos = skipTrivia(refFile.text, refFile.imports[index].pos);
-                    end = refFile.imports[index].end;
-                    break;
-                case RefFileKind.ReferenceFile:
-                    ({ pos, end } = refFile.referencedFiles[index]);
-                    break;
-                case RefFileKind.TypeReferenceDirective:
-                    ({ pos, end } = refFile.typeReferenceDirectives[index]);
-                    break;
-                default:
-                    return Debug.assertNever(kind);
-            }
+            const { pos, end } = getRangeOfRef(refPathToReportErrorOn, refFile);
             return createFileDiagnostic(refFile, pos, end - pos, message, ...args);
         }
 

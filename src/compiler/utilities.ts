@@ -7001,4 +7001,24 @@ namespace ts {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
         }
     }
+
+    export function getRangeOfRef(ref: RefFile, referencingFile: SourceFile): TextRange {
+        const { kind, index } = ref;
+        let pos: number, end: number;
+        switch (kind) {
+            case RefFileKind.Import:
+                pos = skipTrivia(referencingFile.text, referencingFile.imports[index].pos);
+                end = referencingFile.imports[index].end;
+                break;
+            case RefFileKind.ReferenceFile:
+                ({ pos, end } = referencingFile.referencedFiles[index]);
+                break;
+            case RefFileKind.TypeReferenceDirective:
+                ({ pos, end } = referencingFile.typeReferenceDirectives[index]);
+                break;
+            default:
+                return Debug.assertNever(kind);
+        }
+        return { pos, end };
+    }
 }
