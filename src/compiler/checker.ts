@@ -1949,7 +1949,10 @@ namespace ts {
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.JSDocEnumTag:
                         // js type aliases do not resolve names from their host, so skip past it
-                        location = getJSDocHost(location);
+                        const root = getJSDocRoot(location);
+                        if (root) {
+                            location = root.parent;
+                        }
                         break;
                     case SyntaxKind.Parameter:
                         if (lastLocation && (
@@ -3161,7 +3164,8 @@ namespace ts {
                 return;
             }
             const host = getJSDocHost(node);
-            if (isExpressionStatement(host) &&
+            if (host &&
+                isExpressionStatement(host) &&
                 isBinaryExpression(host.expression) &&
                 getAssignmentDeclarationKind(host.expression) === AssignmentDeclarationKind.PrototypeProperty) {
                 // X.prototype.m = /** @param {K} p */ function () { } <-- look for K on X's declaration
@@ -3170,7 +3174,7 @@ namespace ts {
                     return getDeclarationOfJSPrototypeContainer(symbol);
                 }
             }
-            if ((isObjectLiteralMethod(host) || isPropertyAssignment(host)) &&
+            if (host && (isObjectLiteralMethod(host) || isPropertyAssignment(host)) &&
                 isBinaryExpression(host.parent.parent) &&
                 getAssignmentDeclarationKind(host.parent.parent) === AssignmentDeclarationKind.Prototype) {
                 // X.prototype = { /** @param {K} p */m() { } } <-- look for K on X's declaration
