@@ -8,6 +8,6 @@
 
 verify.completions({
   marker: "",
-  exact: completion.globalsPlus(['obj']),
+  exact: completion.globalsPlus(["obj"]),
   preferences: { includeCompletionsForModuleExports: true }
 });

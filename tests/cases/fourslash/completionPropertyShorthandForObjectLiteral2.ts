@@ -13,5 +13,5 @@
 
 verify.completions({
     marker: test.markers(),
-    includes: ["bar"]
+    exact: completion.globalsPlus(["foo", "bar", "obj1", "obj2"]),
 });

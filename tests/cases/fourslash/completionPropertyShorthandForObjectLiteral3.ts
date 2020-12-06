@@ -7,5 +7,5 @@
 
 verify.completions({
     marker: ["1"],
-    includes: ["bar"]
+    exact: completion.globalsPlus(["foo", "bar", "obj"])
 });

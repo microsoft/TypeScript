@@ -15,13 +15,11 @@
 //// declare function f9<T extends {}>(obj: T): void;
 //// declare function f10<T extends Empty>(obj: T): void;
 //// declare function f11<T extends (Empty | Record<string, any> | {})>(obj: T): void;
-//// declare function f12(obj: Object): void;
-//// declare function f13<T extends Object>(obj: T): void;
-//// declare function f14(obj: Typed): void;
-//// declare function f15<T extends (Empty | Object | Typed)>(obj: T): void;
-//// declare function f16(obj: Record<number, any>): void;
-//// declare function f17(obj: { [key: string]: number, prop: number }): void;
-//// declare function f18(obj: { [key: number]: number }): void;
+//// declare function f12(obj: Typed): void;
+//// declare function f13<T extends (Empty | Typed)>(obj: T): void;
+//// declare function f14(obj: { [key: string]: number, prop: number }): void;
+//// declare function f15(obj: Record<number, any>): void;
+//// declare function f16(obj: { [key: number]: number }): void;
 
 //// f1({f/*1*/});
 //// f2({f/*2*/});
@@ -39,11 +37,24 @@
 //// f14({f/*14*/});
 //// f15({f/*15*/});
 //// f16({f/*16*/});
-//// f17({f/*17*/});
-//// f18({f/*18*/});
 
+const locals = [
+    ...(() => {
+        const symbols = [];
+        for (let i = 1; i <= 16; i ++) {
+            symbols.push(`f${i}`);
+        }
+        return symbols;
+    })(),
+    "foo"
+];
 verify.completions(
-    { marker: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], includes: ["foo"]},
-    { marker: ["12", "13", "14", "15"], excludes: ["foo"]},
-    { marker: ["16", "17", "18"], excludes: ["foo"], isNewIdentifierLocation: true},
+    // Non-contextual, any, unknown, object, Record<string, ..>, [key: string]: .., Type parameter, etc..
+    { marker: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], exact: completion.globalsPlus(locals)},
+    // Has named property
+    { marker: ["12", "13"], exact: "typed"},
+    // Has both StringIndexType and named property
+    { marker: ["14"], exact: "prop", isNewIdentifierLocation: true},
+    // NumberIndexType
+    { marker: ["15", "16"], exact: [], isNewIdentifierLocation: true},
 );
