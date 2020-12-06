@@ -15,9 +15,12 @@
 //// declare function f9<T extends {}>(obj: T): void;
 //// declare function f10<T extends Empty>(obj: T): void;
 //// declare function f11<T extends (Empty | Record<string, any> | {})>(obj: T): void;
+
 //// declare function f12(obj: Typed): void;
 //// declare function f13<T extends (Empty | Typed)>(obj: T): void;
+
 //// declare function f14(obj: { [key: string]: number, prop: number }): void;
+
 //// declare function f15(obj: Record<number, any>): void;
 //// declare function f16(obj: { [key: number]: number }): void;
 
@@ -32,9 +35,12 @@
 //// f9({f/*9*/});
 //// f10({f/*10*/});
 //// f11({f/*11*/});
+
 //// f12({f/*12*/});
 //// f13({f/*13*/});
+
 //// f14({f/*14*/});
+
 //// f15({f/*15*/});
 //// f16({f/*16*/});
 
