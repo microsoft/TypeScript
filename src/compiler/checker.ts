@@ -14374,10 +14374,9 @@ namespace ts {
                     }
                 }
                 // Return a deferred type for a check that is neither definitely true nor definitely false
-                const erasedCheckType = getActualTypeVariable(checkType);
                 result = <ConditionalType>createType(TypeFlags.Conditional);
                 result.root = root;
-                result.checkType = erasedCheckType;
+                result.checkType = checkType;
                 result.extendsType = extendsType;
                 result.mapper = mapper;
                 result.combinedMapper = combinedMapper;
@@ -20208,12 +20207,6 @@ namespace ts {
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         invokeOnce(source, target, inferFromObjectTypes);
-                    }
-                }
-                if (source.flags & TypeFlags.Simplifiable) {
-                    const simplified = getSimplifiedType(source, contravariant);
-                    if (simplified !== source) {
-                        inferFromTypes(simplified, target);
                     }
                 }
             }
