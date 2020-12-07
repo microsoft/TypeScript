@@ -1422,7 +1422,8 @@ namespace ts {
     export function getPackageNameFromTypesPackageName(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return unmangleScopedPackageName(withoutAtTypePrefix);
+            const withoutAtTypeNodePrefix = removePrefix(withoutAtTypePrefix, "node/");
+            return unmangleScopedPackageName(withoutAtTypeNodePrefix);
         }
         return mangledName;
     }
