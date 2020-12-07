@@ -68,7 +68,6 @@ namespace ts.projectSystem {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
-                tags: undefined,
             };
             assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
                 {
@@ -90,6 +89,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         },
                     ],
+                    tags: [],
                     ...detailsCommon,
                 },
             ]);
@@ -116,6 +116,7 @@ namespace ts.projectSystem {
                             commands: undefined,
                         }
                     ],
+                    tags: undefined,
                     ...detailsCommon,
                 }
             ]);

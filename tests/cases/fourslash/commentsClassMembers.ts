@@ -222,7 +222,7 @@ verify.completions(
             name: "a",
             text: "(property) cWithConstructorProperty.a: number",
             documentation: "more info about a\nthis is first parameter a",
-            tags: [{ name: "param", text: "a this is first parameter a" }],
+            tags: [{ links:[], name: "param", text: "a this is first parameter a" }],
         },
     },
     {
@@ -231,7 +231,7 @@ verify.completions(
             name: "a",
             text: "(parameter) a: number",
             documentation: "more info about a\nthis is first parameter a",
-            tags: [{ name: "param", text: "a this is first parameter a" }],
+            tags: [{ links:[],  name: "param", text: "a this is first parameter a" }],
         },
         isNewIdentifierLocation: true,
     },

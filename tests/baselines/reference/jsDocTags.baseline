@@ -70,7 +70,8 @@
       "tags": [
         {
           "name": "myjsdoctag",
-          "text": "this is a comment"
+          "text": "this is a comment",
+          "links": []
         }
       ]
     }
@@ -116,7 +117,8 @@
       "tags": [
         {
           "name": "mytag",
-          "text": "comment1 comment2"
+          "text": "comment1 comment2",
+          "links": []
         }
       ]
     }
@@ -192,7 +194,8 @@
       "tags": [
         {
           "name": "mytag",
-          "text": "comment1 comment2"
+          "text": "comment1 comment2",
+          "links": []
         }
       ]
     }
@@ -345,7 +348,8 @@
       "tags": [
         {
           "name": "returns",
-          "text": "a value"
+          "text": "a value",
+          "links": []
         }
       ]
     }
@@ -438,11 +442,13 @@
       "tags": [
         {
           "name": "param",
-          "text": "foo A value."
+          "text": "foo A value.",
+          "links": []
         },
         {
           "name": "returns",
-          "text": "Another value"
+          "text": "Another value",
+          "links": []
         },
         {
           "name": "mytag"
@@ -508,7 +514,8 @@
       "tags": [
         {
           "name": "mytag",
-          "text": "comment1 comment2"
+          "text": "comment1 comment2",
+          "links": []
         }
       ]
     }
@@ -571,11 +578,13 @@
       "tags": [
         {
           "name": "mytag1",
-          "text": "some comments\nsome more comments about mytag1"
+          "text": "some comments\nsome more comments about mytag1",
+          "links": []
         },
         {
           "name": "mytag2",
-          "text": "here all the comments are on a new line"
+          "text": "here all the comments are on a new line",
+          "links": []
         },
         {
           "name": "mytag3"

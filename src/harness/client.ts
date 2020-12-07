@@ -518,7 +518,7 @@ namespace ts.server {
             lineMap = lineMap || this.getLineMap(fileName);
             return createTextSpanFromBounds(
                 this.lineOffsetToPosition(fileName, span.start, lineMap),
-                this.lineOffsetToPosition(fileName, span.end, lineMap));
+                this.lineOffsetToPosition(fileName, Debug.checkDefined(span.end, JSON.stringify(span)), lineMap));
         }
 
         private decodeLink(tags: readonly protocol.JSDocTagInfo[]): readonly JSDocTagInfo[] {
@@ -527,11 +527,12 @@ namespace ts.server {
                 links: tag.links?.map(link => ({
                     ...link,
                     target: {
-                        textSpan: this.decodeSpan(link.target),
+                        // TODO: May still need to decode MOST of the link.targets
+                        textSpan: link.target as unknown as TextSpan,
                         fileName: link.target.file,
                     }
                 }))
-            }))
+            }));
         }
 
         getNameOrDottedNameSpan(_fileName: string, _startPos: number, _endPos: number): TextSpan {
@@ -554,8 +555,9 @@ namespace ts.server {
 
             const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
 
-            const applicableSpan = this.decodeSpan(encodedApplicableSpan, fileName);
-            const items = encodedItems.map(item => ({ ...item, tags: this.decodeLink(item.tags) }))
+            // TODO: I thought that applicable span was a protocol span now?! I guess not.
+            const applicableSpan = encodedApplicableSpan as unknown as TextSpan; //this.decodeSpan(encodedApplicableSpan, fileName);
+            const items = encodedItems.map(item => ({ ...item, tags: this.decodeLink(item.tags) }));
 
             return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
         }

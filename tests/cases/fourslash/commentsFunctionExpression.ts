@@ -88,8 +88,8 @@ verify.completions({
         text: "(parameter) s: string",
         documentation: "On parameter\nparam on expression\nthe first parameter!",
         tags: [
-            { name: "param", text: "s param on expression" },
-            { name: "param", text: "s the first parameter!" },
+            { name: "param", text: "s param on expression", links: [] },
+            { name: "param", text: "s the first parameter!", links: [] },
         ],
     },
 });
@@ -101,10 +101,10 @@ verify.completions({
         text: "var assigned: (s: string) => number",
         documentation: "Summary on expression\nOn variable",
         tags: [
-            { name: "param", text: "s param on expression" },
-            { name: "returns", text: "return on expression" },
-            { name: "param", text: "s the first parameter!" },
-            { name: "returns", text: "the parameter's length" },
+            { name: "param", text: "s param on expression", links: [] },
+            { name: "returns", text: "return on expression", links: [] },
+            { name: "param", text: "s the first parameter!", links: [] },
+            { name: "returns", text: "the parameter's length", links: [] },
         ],
     },
 ]});
@@ -113,9 +113,9 @@ verify.signatureHelp({
     docComment: "Summary on expression\nOn variable",
     parameterDocComment: "On parameter\nparam on expression\nthe first parameter!",
     tags: [
-        { name: "param", text: "s param on expression" },
-        { name: "returns", text: "return on expression" },
-        { name: "param", text: "s the first parameter!" },
-        { name: "returns", text: "the parameter's length" },
+        { name: "param", text: "s param on expression", links: [] },
+        { name: "returns", text: "return on expression", links: [] },
+        { name: "param", text: "s the first parameter!", links: [] },
+        { name: "returns", text: "the parameter's length", links: [] },
     ],
 });

@@ -324,7 +324,7 @@ oh.no
 }
  * Forgot to close this one {@link https://typescriptlang.org
  * But it's still OK.
- * And it shouldn't mess up subsequent margins (I hope).
+ * Although it skips the newline so parses the asterisks in the wrong state.
  * This shouldn't work: {@link
  * nope
  * }, because of the intermediate asterisks.

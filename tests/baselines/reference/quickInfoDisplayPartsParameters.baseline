@@ -157,7 +157,8 @@
       "tags": [
         {
           "name": "return",
-          "text": "*crunch*"
+          "text": "*crunch*",
+          "links": []
         }
       ]
     }

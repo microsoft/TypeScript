@@ -1260,7 +1260,7 @@ namespace ts.server {
                 links: links?.map(link => ({
                     ...link,
                     target: this.toFileSpan(link.target.fileName, link.target.textSpan, project),
-                    }))}))
+                    }))}));
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {

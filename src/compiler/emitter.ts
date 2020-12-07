@@ -3512,7 +3512,7 @@ namespace ts {
         //
         function emitJSDoc(node: JSDoc) {
             write("/**");
-            if (node.comment) {
+            if (node.comment?.text) {
                 const lines = node.comment.text.split(/\r\n?|\n/g);
                 for (const line of lines) {
                     writeLine();
@@ -3653,7 +3653,7 @@ namespace ts {
         }
 
         function emitJSDocComment(comment: JSDocComment | undefined) {
-            if (comment) {
+            if (comment?.text) {
                 writeSpace();
                 write(comment.text);
             }

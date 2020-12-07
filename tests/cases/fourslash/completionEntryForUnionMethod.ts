@@ -14,8 +14,8 @@ verify.completions({
         text,
         documentation,
         tags: [
-            { name: "param", text: "callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array." },
-            { name: "param", text: "thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value." }
+            { name: "param", text: "callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.", links: [] },
+            { name: "param", text: "thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.", links: [] }
         ],
     },
 });

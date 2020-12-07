@@ -83,6 +83,6 @@ verify.completions({
         text: "(method) Foo.newMethod(): void",
         documentation: "method documentation",
         kind: "method",
-        tags: [{ name: "mytag", text: "a JSDoc tag" }],
+        tags: [{ name: "mytag", text: "a JSDoc tag", links: [] }],
     },
 });

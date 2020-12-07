@@ -7359,7 +7359,7 @@ namespace ts {
                                     state = JSDocState.SavingComments;
                                     // TODO: Maybe shouldn't use 1 as the length of { ?
                                     const link = parseLink(scanner.getTextPos() - 1);
-                                    links.push(link)
+                                    links.push(link);
                                     pushComment(scanner.getText().slice(link.pos, link.end));
                                     break;
                                 }
@@ -7588,9 +7588,9 @@ namespace ts {
                                 // TODO: Put a manual `tok = nextTokenJSDoc()` here and only call `lookAhead` if its AtToken.
                                 // THat means I'll have to save getTextPos *before* the nextTokenJSDoc and unconditionally `continue` afterward
                                 if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
-                                    const link = parseLink(scanner.getTextPos() - 1)
-                                    links.push(link)
-                                    pushComment(scanner.getText().slice(link.pos, link.end))
+                                    const link = parseLink(scanner.getTextPos() - 1);
+                                    links.push(link);
+                                    pushComment(scanner.getText().slice(link.pos, link.end));
                                 }
                                 else {
                                     pushComment(scanner.getTokenText());
@@ -7632,19 +7632,17 @@ namespace ts {
                 function parseLink(start: number) {
                     nextTokenJSDoc(); // @
                     nextTokenJSDoc(); // link
-                    nextTokenJSDoc(); // ' ' TODO: make sure that each of these tokens after @link are actually the expected ones
-                    nextTokenJSDoc(); // first token TODO: Skip multiple whitespace/newlines
-                    // TODO: When failing, decide whether to parse a trailing }. Probably doesn't matter since the only thing we're interested inside comment text is `@` (and *, newline, etc)
-                    // oh, except for `{@link}` should parse correctly
-                    const name = tokenIsIdentifierOrKeyword(token()) ? parseEntityName(/*allowReservedWords*/ true) : createMissingNode<Identifier>(SyntaxKind.Identifier, false);  // don't try to parseEntityName, it'll assert
-                    // TODO: I'm pretty sure you getting a MissingIdentifier for a bad parse, or soething like that
-                    // in any case, most of the time you'll have `http` as the first identifier and you'll be fine
-                    // now skip past everything including a close brace.
-                    // .. also stop at newlines (TODO: Measure this (it's probably fine, and the penalty for being wrong is just a too-small span), and then write tests)
+
+                    nextTokenJSDoc(); // start at token after link, then skip any whitespace
+                    skipWhitespace();
+                    // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
+                    const name = tokenIsIdentifierOrKeyword(token())
+                        ? parseEntityName(/*allowReservedWords*/ true)
+                        : createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false);
                     while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia) {
                         nextTokenJSDoc();
                     }
-                    return finishNode(factory.createJSDocLinkNode(name), start, scanner.getTextPos())
+                    return finishNode(factory.createJSDocLinkNode(name), start, scanner.getTextPos());
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {

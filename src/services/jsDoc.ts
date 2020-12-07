@@ -124,13 +124,13 @@ namespace ts.JsDoc {
     }
 
     function getLinks(tag: JSDocTag, checker: TypeChecker): JSDocLink[] | undefined {
-        const links = tag.comment?.links
+        const links = tag.comment?.links;
         if (links) {
             return mapDefined(links, link => {
-                if (!link.name) return
+                if (!link.name) return;
                 // TODO: Test this, I think getSymbolAtLocation eventually calls checkQualifiedName and then returns resolvedSymbol, but it's hard to be sure
-                const symbol = checker.getSymbolAtLocation(link.name)
-                if (!symbol || !symbol.valueDeclaration) return
+                const symbol = checker.getSymbolAtLocation(link.name);
+                if (!symbol || !symbol.valueDeclaration) return;
                 return {
                     fileName: getSourceFileOfNode(see).fileName,
                     textSpan: createTextSpanFromNode(see),
@@ -138,8 +138,8 @@ namespace ts.JsDoc {
                         fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
                         textSpan: createTextSpanFromNode(symbol.valueDeclaration)
                     }
-                }
-            })
+                };
+            });
         }
         const see = tag as JSDocSeeTag;
     }
@@ -175,7 +175,7 @@ namespace ts.JsDoc {
         }
 
         function addComment(s: string) {
-            return comment === undefined ? s : `${s} ${comment}`;
+            return comment === undefined ? s : `${s} ${comment.text}`;
         }
     }
 

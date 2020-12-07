@@ -251,8 +251,8 @@ verify.completions({
         text: "function sum(a: number, b: number): number",
         documentation: "Adds two integers and returns the result",
         tags: [
-            { name: "param", text: "a first number" },
-            { name: "param", text: "b second number" },
+            { name: "param", text: "a first number", links: [] },
+            { name: "param", text: "b second number", links: [] },
         ],
     },
 });
@@ -283,8 +283,8 @@ verify.quickInfoAt("17aq", "(parameter) b: number", "second number");
 verify.completions({
     marker: "18",
     includes: [
-        { name: "a", text: "(parameter) a: number", documentation: "first number", tags: [{ name: "param", text: "a first number" }] },
-        { name: "b", text: "(parameter) b: number", documentation: "second number", tags: [{ name: "param", text: "b second number" }] },
+        { name: "a", text: "(parameter) a: number", documentation: "first number", tags: [{ name: "param", text: "a first number", links: [] }] },
+        { name: "b", text: "(parameter) b: number", documentation: "second number", tags: [{ name: "param", text: "b second number", links: [] }] },
     ],
 });
 
@@ -327,7 +327,7 @@ verify.completions({
             name: "opt",
             text: "(parameter) opt: any",
             documentation: "optional parameter",
-            tags: [{ name: "param", text: "opt optional parameter" }],
+            tags: [{ name: "param", text: "opt optional parameter", links: [] }],
         },
     ]
 });
@@ -357,21 +357,21 @@ verify.completions({
             text: "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
             documentation: "This is multiplication function",
             tags: [
-                { name: "param", text: "" },
-                { name: "param", text: "a first number" },
-                { name: "param", text: "b" },
-                { name: "param", text: "c" },
-                { name: "param", text: "d" },
-                { name: "anotherTag", text: undefined },
-                { name: "param", text: "e LastParam" },
-                { name: "anotherTag", text: undefined },
+                { name: "param", text: "", links: undefined },
+                { name: "param", text: "a first number", links: [] },
+                { name: "param", text: "b", links: undefined },
+                { name: "param", text: "c", links: undefined },
+                { name: "param", text: "d", links: undefined },
+                { name: "anotherTag", text: undefined, links: undefined },
+                { name: "param", text: "e LastParam", links: [] },
+                { name: "anotherTag", text: undefined, links: undefined },
             ],
         },
         {
             name: "f1",
             text: "function f1(a: number): any (+1 overload)",
             documentation: "fn f1 with number",
-            tags: [{ name: "param", text: "b about b" }],
+            tags: [{ name: "param", text: "b about b", links: [] }],
         },
     ],
 });
@@ -471,14 +471,14 @@ verify.completions({
             name: "a",
             text: "(parameter) a: number",
             documentation: "this is inline comment for a\nit is first parameter",
-            tags: [{ name: "param", text: "a it is first parameter" }],
+            tags: [{ name: "param", text: "a it is first parameter", links: [] }],
         },
         { name: "b", text: "(parameter) b: number", documentation: "this is inline comment for b" },
         {
             name: "c",
             text: "(parameter) c: number",
             documentation: "it is third parameter",
-            tags: [{ name: "param", text: "c it is third parameter" }],
+            tags: [{ name: "param", text: "c it is third parameter", links: [] }],
         },
         { name: "d", text: "(parameter) d: number" },
     ],
@@ -518,8 +518,8 @@ verify.completions({
             text: "function jsDocParamTest(a: number, b: number, c: number, d: number): number",
             documentation: jsdocTestDocComment,
             tags: [
-                { name: "param", text: "a it is first parameter" },
-                { name: "param", text: "c it is third parameter" },
+                { name: "param", text: "a it is first parameter", links: [] },
+                { name: "param", text: "c it is third parameter", links: [] },
             ],
         },
         { name: "x", text: "var x: any", documentation: "This is a comment" },

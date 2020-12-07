@@ -1,7 +1,7 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 646,
+    "end": 674,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
@@ -104,7 +104,7 @@
         "1": {
             "kind": "JSDocParameterTag",
             "pos": 102,
-            "end": 569,
+            "end": 589,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -161,9 +161,99 @@
                                 "escapedText": "Complex"
                             }
                         }
+                    },
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 203,
+                        "end": 210,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 209,
+                            "end": 209,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": ""
+                        }
+                    },
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 244,
+                        "end": 262,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 252,
+                            "end": 259,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "doubled"
+                        }
+                    },
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 326,
+                        "end": 340,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "FirstNode",
+                            "pos": 333,
+                            "end": 338,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "left": {
+                                "kind": "Identifier",
+                                "pos": 333,
+                                "end": 335,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "oh"
+                            },
+                            "right": {
+                                "kind": "Identifier",
+                                "pos": 336,
+                                "end": 338,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "no"
+                            }
+                        }
+                    },
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 369,
+                        "end": 403,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 376,
+                            "end": 381,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "https"
+                        }
+                    },
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 526,
+                        "end": 541,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 534,
+                            "end": 534,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": ""
+                        }
                     }
                 ],
-                "text": "Or see {@link http://www.zombocom.com }\n{@link Standalone.Complex }"
+                "text": "Or see {@link http://www.zombocom.com }\n{@link Standalone.Complex }\nThis empty one: {@link} is OK.\nThis double-space one: {@link  doubled  } is OK too.\nThis should work, despite being badly formatted: {@link\noh.no\n}\nForgot to close this one {@link https://typescriptlang.org\n * But it's still OK.\nAlthough it skips the newline so parses the asterisks in the wrong state.\nThis shouldn't work: {@link\n * nope\n * }, because of the intermediate asterisks."
             },
             "name": {
                 "kind": "Identifier",
@@ -176,9 +266,44 @@
             "isNameFirst": true,
             "isBracketed": false
         },
-        "length": 2,
+        "2": {
+            "kind": "JSDocAuthorTag",
+            "pos": 589,
+            "end": 672,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 590,
+                "end": 596,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "author"
+            },
+            "comment": {
+                "links": [
+                    {
+                        "kind": "JSDocLink",
+                        "pos": 643,
+                        "end": 670,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 650,
+                            "end": 655,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "https"
+                        }
+                    }
+                ],
+                "text": "Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}"
+            }
+        },
+        "length": 3,
         "pos": 59,
-        "end": 644,
+        "end": 672,
         "hasTrailingComma": false,
         "transformFlags": 0
     }
