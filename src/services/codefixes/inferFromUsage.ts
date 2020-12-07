@@ -374,7 +374,7 @@ namespace ts.codefix {
         }
         else {
             const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
-                factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, ""));
+                factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, { text: "" }));
             addJSDocTags(changes, sourceFile, signature, paramTags);
         }
     }
