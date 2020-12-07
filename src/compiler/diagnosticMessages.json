@@ -3910,7 +3910,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', or 'react'.": {
+    "Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'.": {
         "category": "Message",
         "code": 6080
     },
