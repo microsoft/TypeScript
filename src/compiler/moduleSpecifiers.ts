@@ -179,7 +179,19 @@ namespace ts.moduleSpecifiers {
 
         const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
+        const redirectFileName = host.getProjectReferenceRedirect(moduleFileName);
+        const relativeRedirect = redirectFileName && getRelativePathToDirectoryOrUrl(baseDirectory, redirectFileName, baseDirectory, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+        const redirectRelativeToBaseUrl = relativeRedirect && removeExtensionAndIndexPostFix(relativeRedirect, ending, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(
+            removeFileExtension(bundledPkgReference),
+            importRelativeToBaseUrl,
+            paths,
+            relativeRedirect && removeFileExtension(relativeRedirect),
+            redirectRelativeToBaseUrl,
+            baseDirectory,
+            host,
+            getCanonicalFileName);
+
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
         if (!nonRelative) {
             return relativePath;
@@ -378,7 +390,31 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
+    function tryGetModuleNameFromPaths(
+        relativeToBaseUrlWithIndex: string,
+        relativeToBaseUrl: string,
+        paths: MapLike<readonly string[]>
+    ): string | undefined;
+    function tryGetModuleNameFromPaths(
+        relativeToBaseUrlWithIndex: string,
+        relativeToBaseUrl: string,
+        paths: MapLike<readonly string[]>,
+        redirectRelativeToBaseUrlWithIndex: string | undefined,
+        redirectRelativeToBaseUrl: string | undefined,
+        pathsBasePath: string,
+        host: ModuleSpecifierResolutionHost,
+        getCanonicalFileName: GetCanonicalFileName
+    ): string | undefined;
+    function tryGetModuleNameFromPaths(
+        relativeToBaseUrlWithIndex: string,
+        relativeToBaseUrl: string,
+        paths: MapLike<readonly string[]>,
+        redirectRelativeToBaseUrlWithIndex?: string | undefined,
+        redirectRelativeToBaseUrl?: string | undefined,
+        pathsBasePath?: string,
+        host?: ModuleSpecifierResolutionHost,
+        getCanonicalFileName?: GetCanonicalFileName
+    ): string | undefined {
         for (const key in paths) {
             for (const patternText of paths[key]) {
                 const pattern = removeFileExtension(normalizePath(patternText));
@@ -396,6 +432,25 @@ namespace ts.moduleSpecifiers {
                 }
                 else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
                     return key;
+                }
+                else if (host?.readFile && host.fileExists(combinePaths(pathsBasePath!, pattern, "package.json"))) {
+                    // If the path points to a directory with a package.json, see if we can resolve to its 'main' field.
+                    try {
+                        const { main } = JSON.parse(host.readFile(combinePaths(pathsBasePath!, pattern, "package.json"))!);
+                        if (typeof main !== "string") return undefined;
+                        const mainFileName = combinePaths(pattern, main);
+                        const relativeMainFileName = getRelativePathToDirectoryOrUrl(pathsBasePath!, mainFileName, pathsBasePath!, getCanonicalFileName!, /*isAbsolutePathAnUrl*/ false);
+                        const normalizedMainFileName = relativeMainFileName && removeFileExtension(normalizePath(relativeMainFileName));
+                        if (normalizedMainFileName === relativeToBaseUrl ||
+                            normalizedMainFileName === relativeToBaseUrlWithIndex ||
+                            normalizedMainFileName === redirectRelativeToBaseUrl ||
+                            normalizedMainFileName === redirectRelativeToBaseUrlWithIndex) {
+                            return key;
+                        }
+                    }
+                    catch {
+                        continue;
+                    }
                 }
             }
         }
