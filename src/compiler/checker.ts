@@ -5961,6 +5961,18 @@ namespace ts {
                         return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
                     }
                     if (isLiteralImportTypeNode(node)) {
+                        const nodeSymbol = getNodeLinks(node).resolvedSymbol;
+                        if (isInJSDoc(node) &&
+                            nodeSymbol &&
+                            (
+                                // The import type resolved using jsdoc fallback logic
+                                (!node.isTypeOf && !(nodeSymbol.flags & SymbolFlags.Type)) ||
+                                // The import type had type arguments autofilled by js fallback logic
+                                !(length(node.typeArguments) >= getMinTypeArgumentCount(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(nodeSymbol)))
+                            )
+                        ) {
+                            return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
+                        }
                         return factory.updateImportTypeNode(
                             node,
                             factory.updateLiteralTypeNode(node.argument, rewriteModuleSpecifier(node, node.argument.literal)),
@@ -6536,8 +6548,12 @@ namespace ts {
                     const commentText = jsdocAliasDecl ? jsdocAliasDecl.comment?.text || jsdocAliasDecl.parent.comment?.text : undefined;
                     const oldFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InTypeAlias;
+                    const typeNode = jsdocAliasDecl && jsdocAliasDecl.typeExpression
+                        && isJSDocTypeExpression(jsdocAliasDecl.typeExpression)
+                        && serializeExistingTypeNode(context, jsdocAliasDecl.typeExpression.type, includePrivateSymbol, bundled)
+                        || typeToTypeNodeHelper(aliasType, context);
                     addResult(setSyntheticLeadingComments(
-                        factory.createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeToTypeNodeHelper(aliasType, context)),
+                        factory.createTypeAliasDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, getInternalSymbolName(symbol, symbolName), typeParamDecls, typeNode),
                         !commentText ? [] : [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "*\n * " + commentText.replace(/\n/g, "\n * ") + "\n ", pos: -1, end: -1, hasTrailingNewLine: true }]
                     ), modifierFlags);
                     context.flags = oldFlags;
@@ -13828,9 +13844,14 @@ namespace ts {
         }
 
         function isUncalledFunctionReference(node: Node, symbol: Symbol) {
-            return !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Method))
-                || !isCallLikeExpression(findAncestor(node, n => !isAccessExpression(n)) || node.parent)
-                && every(symbol.declarations, d => !isFunctionLike(d) || !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
+            if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+                const parent = findAncestor(node.parent, n => !isAccessExpression(n)) || node.parent;
+                if (isCallLikeExpression(parent)) {
+                    return isCallOrNewExpression(parent) && isIdentifier(node) && hasMatchingArgument(parent, node);
+                }
+                return every(symbol.declarations, d => !isFunctionLike(d) || !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
+            }
+            return true;
         }
 
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags, noUncheckedIndexedAccessCandidate?: boolean, reportDeprecated?: boolean) {
@@ -20937,16 +20958,16 @@ namespace ts {
             return isMatchingReference(source, target) || containsMatchingReference(source, target);
         }
 
-        function hasMatchingArgument(callExpression: CallExpression, reference: Node) {
-            if (callExpression.arguments) {
-                for (const argument of callExpression.arguments) {
+        function hasMatchingArgument(expression: CallExpression | NewExpression, reference: Node) {
+            if (expression.arguments) {
+                for (const argument of expression.arguments) {
                     if (isOrContainsMatchingReference(reference, argument)) {
                         return true;
                     }
                 }
             }
-            if (callExpression.expression.kind === SyntaxKind.PropertyAccessExpression &&
-                isOrContainsMatchingReference(reference, (<PropertyAccessExpression>callExpression.expression).expression)) {
+            if (expression.expression.kind === SyntaxKind.PropertyAccessExpression &&
+                isOrContainsMatchingReference(reference, (<PropertyAccessExpression>expression.expression).expression)) {
                 return true;
             }
             return false;
@@ -22859,7 +22880,7 @@ namespace ts {
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             const sourceSymbol = localOrExportSymbol.flags & SymbolFlags.Alias ? resolveAlias(localOrExportSymbol) : localOrExportSymbol;
-            if (getDeclarationNodeFlagsFromSymbol(sourceSymbol) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, sourceSymbol)) {
+            if (getDeclarationNodeFlagsFromSymbol(sourceSymbol) & NodeFlags.Deprecated && isUncalledFunctionReference(node, sourceSymbol)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
 
@@ -25904,7 +25925,7 @@ namespace ts {
 
                 propType = (compilerOptions.noUncheckedIndexedAccess && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                 if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
-                    error(node, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
+                    error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
                 }
             }
             else {
@@ -30197,7 +30218,8 @@ namespace ts {
                         const operator = node.operatorToken.kind;
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                             if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                                checkTestingKnownTruthyCallableType(node.left, leftType, isIfStatement(node.parent) ? node.parent.thenStatement : undefined);
+                                const parent = walkUpParenthesizedExpressions(node.parent);
+                                checkTestingKnownTruthyCallableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                             }
                             checkTruthinessOfType(leftType, node.left);
                         }

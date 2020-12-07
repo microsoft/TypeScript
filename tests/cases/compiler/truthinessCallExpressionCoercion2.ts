@@ -46,9 +46,19 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
     // error
     if (required1 && b) {
     }
+
+    // error
+    if (((required1 && b))) {
+    }
+
     // ok
     if (required1 && b) {
-        required1()
+        required1();
+    }
+
+    // ok
+    if (((required1 && b))) {
+        required1();
     }
 }
 

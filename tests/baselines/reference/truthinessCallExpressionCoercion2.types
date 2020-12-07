@@ -153,13 +153,36 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >required1 : () => boolean
 >b : boolean
     }
+
+    // error
+    if (((required1 && b))) {
+>((required1 && b)) : boolean
+>(required1 && b) : boolean
+>required1 && b : boolean
+>required1 : () => boolean
+>b : boolean
+    }
+
     // ok
     if (required1 && b) {
 >required1 && b : boolean
 >required1 : () => boolean
 >b : boolean
 
-        required1()
+        required1();
+>required1() : boolean
+>required1 : () => boolean
+    }
+
+    // ok
+    if (((required1 && b))) {
+>((required1 && b)) : boolean
+>(required1 && b) : boolean
+>required1 && b : boolean
+>required1 : () => boolean
+>b : boolean
+
+        required1();
 >required1() : boolean
 >required1 : () => boolean
     }
