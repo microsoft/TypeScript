@@ -183,6 +183,9 @@ node_modules/npm/lib/config/core.js(409,29): error TS2769: No overload matches t
         Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/lib/config/defaults.js(20,52): error TS2345: Argument of type 'never[]' is not assignable to parameter of type '[format: any, ...param: any[]]'.
   Property '0' is optional in type 'never[]' but required in type '[format: any, ...param: any[]]'.
+node_modules/npm/lib/config/defaults.js(234,24): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+node_modules/npm/lib/config/defaults.js(234,42): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+node_modules/npm/lib/config/defaults.js(235,24): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 node_modules/npm/lib/config/gentle-fs.js(16,11): error TS2339: Property 'prefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(17,11): error TS2339: Property 'globalPrefix' does not exist on type 'EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(18,11): error TS2339: Property 'dir' does not exist on type 'EventEmitter'.

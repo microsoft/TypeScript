@@ -1104,11 +1104,7 @@
         "category": "Message",
         "code": 1369
     },
-    "Only ECMAScript imports may use 'import type'.": {
-        "category": "Error",
-        "code": 1370
-    },
-    "This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.": {
+    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
         "category": "Error",
         "code": 1371
     },
@@ -1187,6 +1183,10 @@
     "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
         "category": "Error",
         "code": 1391
+    },
+    "An import alias cannot use 'import type'": {
+        "category": "Error",
+        "code": 1392
     },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2281,7 +2281,7 @@
         "category": "Error",
         "code": 2575
     },
-    "Property '{0}' is a static member of type '{1}'.": {
+    "Property '{0}' does not exist on type '{1}'. Did you mean to access the static member '{2}' instead?": {
         "category": "Error",
         "code": 2576
     },

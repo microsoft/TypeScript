@@ -300,6 +300,8 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
+        /* @internal */
         getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;

@@ -1023,7 +1023,7 @@ namespace ts {
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
-     * (Not neeeded for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
+     * (Not needed for `loadModuleFromNodeModules` as that looks up the `package.json` as part of resolution.)
      *
      * packageDirectory is the directory of the package itself.
      *   For `blah/node_modules/foo/index.d.ts` this is packageDirectory: "foo"
@@ -1422,7 +1422,8 @@ namespace ts {
     export function getPackageNameFromTypesPackageName(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            return unmangleScopedPackageName(withoutAtTypePrefix);
+            const withoutAtTypeNodePrefix = removePrefix(withoutAtTypePrefix, "node/");
+            return unmangleScopedPackageName(withoutAtTypeNodePrefix);
         }
         return mangledName;
     }

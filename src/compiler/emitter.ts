@@ -2812,7 +2812,7 @@ namespace ts {
             if (isSimilarNode && currentSourceFile) {
                 pos = skipTrivia(currentSourceFile.text, pos);
             }
-            if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
+            if (isSimilarNode && contextNode.pos !== startPos) {
                 const needsIndent = indentLeading && currentSourceFile && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
                 if (needsIndent) {
                     increaseIndent();
@@ -2823,7 +2823,7 @@ namespace ts {
                 }
             }
             pos = writeTokenText(token, writer, pos);
-            if (emitTrailingCommentsOfPosition && isSimilarNode && contextNode.end !== pos) {
+            if (isSimilarNode && contextNode.end !== pos) {
                 emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
             }
             return pos;
@@ -3155,6 +3155,10 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
             writeSpace();
+            if (node.isTypeOnly) {
+                emitTokenWithComment(SyntaxKind.TypeKeyword, node.pos, writeKeyword, node);
+                writeSpace();
+            }
             emit(node.name);
             writeSpace();
             emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
@@ -3469,7 +3473,7 @@ namespace ts {
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
-            if (emitTrailingCommentsOfPosition && (getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
+            if ((getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
                 const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
@@ -4600,7 +4604,8 @@ namespace ts {
 
             const flags = (neverAsciiEscape ? GetLiteralTextFlags.NeverAsciiEscape : 0)
                 | (jsxAttributeEscape ? GetLiteralTextFlags.JsxAttributeEscape : 0)
-                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0);
+                | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
+                | (printerOptions.target && printerOptions.target === ScriptTarget.ESNext ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
             return getLiteralText(node, currentSourceFile!, flags);
         }

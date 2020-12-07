@@ -1,5 +1,6 @@
 //// [classStaticPropertyAccess.ts]
 class A {
+    public static "\""() {}
     public static x: number = 1;
     public static y: number = 1;
     private static _b: number = 2;
@@ -7,9 +8,10 @@ class A {
 
 const a = new A();
 
-a['y'] // Error
-a.y    // Error
-A._b   // Error
+a["\""] // Error
+a['y']  // Error
+a.y     // Error
+A._b    // Error
 A.a
 
 
@@ -18,12 +20,14 @@ A.a
 var A = /** @class */ (function () {
     function A() {
     }
+    A["\""] = function () { };
     A.x = 1;
     A.y = 1;
     A._b = 2;
     return A;
 }());
 var a = new A();
+a["\""]; // Error
 a['y']; // Error
 a.y; // Error
 A._b; // Error
