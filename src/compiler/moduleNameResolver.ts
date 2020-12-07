@@ -1422,7 +1422,6 @@ namespace ts {
     export function getPackageNameFromTypesPackageName(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            // packages must be import directly from package "node".
             const withoutAtTypeNodePrefix = removePrefix(withoutAtTypePrefix, "node/");
             return unmangleScopedPackageName(withoutAtTypeNodePrefix);
         }

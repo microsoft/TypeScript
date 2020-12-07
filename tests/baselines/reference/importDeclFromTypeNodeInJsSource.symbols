@@ -1,0 +1,35 @@
+=== /src/node_modules/@types/node/index.d.ts ===
+/// <reference path="events.d.ts" />
+No type information for this code.=== /src/node_modules/@types/node/events.d.ts ===
+declare module "events" {
+>"events" : Symbol("events", Decl(events.d.ts, 0, 0))
+
+    namespace EventEmitter {
+>EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 0, 25))
+
+        class EventEmitter {
+>EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 1, 28))
+
+            constructor();
+        }
+    }
+    export = EventEmitter;
+>EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 0, 25))
+}
+
+=== /src/b.js ===
+import { EventEmitter } from 'events';
+>EventEmitter : Symbol(EventEmitter, Decl(b.js, 0, 8))
+
+class Foo extends EventEmitter {
+>Foo : Symbol(Foo, Decl(b.js, 0, 38))
+>EventEmitter : Symbol(EventEmitter, Decl(b.js, 0, 8))
+
+    constructor() {
+        super();
+>super : Symbol(EventEmitter, Decl(events.d.ts, 1, 28))
+    }
+}
+export default Foo;
+>Foo : Symbol(Foo, Decl(b.js, 0, 38))
+
