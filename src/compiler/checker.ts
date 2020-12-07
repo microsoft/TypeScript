@@ -21814,6 +21814,7 @@ namespace ts {
                 (<BinaryExpression>parent.parent).operatorToken.kind === SyntaxKind.EqualsToken &&
                 (<BinaryExpression>parent.parent).left === parent &&
                 !isAssignmentTarget(parent.parent) &&
+                !isTemplateLiteral((<ElementAccessExpression>parent).argumentExpression) &&
                 isTypeAssignableToKind(getTypeOfExpression((<ElementAccessExpression>parent).argumentExpression), TypeFlags.NumberLike);
             return isLengthPushOrUnshift || isElementAssignment;
         }
@@ -31094,6 +31095,33 @@ namespace ts {
             return getUnionType([type1, type2], UnionReduction.Subtype);
         }
 
+        function isOrIsConstrainedToTemplate(type: Type | undefined): boolean {
+            if (!type) return false;
+            if (type.flags & TypeFlags.TemplateLiteral) {
+                return true;
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                return some((type as UnionOrIntersectionType).types, isOrIsConstrainedToTemplate);
+            }
+            if (type.flags & TypeFlags.InstantiableNonPrimitive) {
+                const constraint = getBaseConstraintOfType(type);
+                return constraint ? isOrIsConstrainedToTemplate(constraint) : false;
+            }
+            return false;
+        }
+
+        function isTemplateLiteralContext(node: Node): boolean {
+            const parent = node.parent;
+            switch (parent.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                    return isTemplateLiteralContext(parent);
+                case SyntaxKind.ElementAccessExpression:
+                    return (parent as ElementAccessExpression).argumentExpression === node &&
+                        isOrIsConstrainedToTemplate(getIndexType(getTypeOfExpression((parent as ElementAccessExpression).expression)));
+            }
+            return false;
+        }
+
         function checkTemplateExpression(node: TemplateExpression): Type {
             const texts = [node.head.text];
             const types = [];
@@ -31105,7 +31133,7 @@ namespace ts {
                 texts.push(span.literal.text);
                 types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
             }
-            return isConstContext(node) ? getTemplateLiteralType(texts, types) : stringType;
+            return isConstContext(node) || isTemplateLiteralContext(node) ? getTemplateLiteralType(texts, types) : stringType;
         }
 
         function getContextNode(node: Expression): Node {

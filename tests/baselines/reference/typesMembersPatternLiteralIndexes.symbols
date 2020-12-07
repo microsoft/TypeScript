@@ -1,0 +1,147 @@
+=== tests/cases/conformance/types/members/typesMembersPatternLiteralIndexes.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(typesMembersPatternLiteralIndexes.ts, 0, 0))
+
+    interface AriaProps {
+>AriaProps : Symbol(AriaProps, Decl(typesMembersPatternLiteralIndexes.ts, 0, 15))
+
+        [x: `aria-${string}`]: string;
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 2, 9))
+    }
+
+    const x: AriaProps = {
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 5, 9))
+>AriaProps : Symbol(AriaProps, Decl(typesMembersPatternLiteralIndexes.ts, 0, 15))
+
+        "my-prop": {"whatever": "yes"},
+>"my-prop" : Symbol("my-prop", Decl(typesMembersPatternLiteralIndexes.ts, 5, 26))
+>"whatever" : Symbol("whatever", Decl(typesMembersPatternLiteralIndexes.ts, 6, 20))
+
+        "aria-disabled": false // error
+>"aria-disabled" : Symbol("aria-disabled", Decl(typesMembersPatternLiteralIndexes.ts, 6, 39))
+
+    };
+
+    const y: AriaProps = {
+>y : Symbol(y, Decl(typesMembersPatternLiteralIndexes.ts, 10, 9))
+>AriaProps : Symbol(AriaProps, Decl(typesMembersPatternLiteralIndexes.ts, 0, 15))
+
+        "my-prop": {"whatever": "yes"}, // excess
+>"my-prop" : Symbol("my-prop", Decl(typesMembersPatternLiteralIndexes.ts, 10, 26))
+>"whatever" : Symbol("whatever", Decl(typesMembersPatternLiteralIndexes.ts, 11, 20))
+
+        "aria-disabled": "false" // OK
+>"aria-disabled" : Symbol("aria-disabled", Decl(typesMembersPatternLiteralIndexes.ts, 11, 39))
+
+    };
+
+    const z: AriaProps & { [x: string]: unknown } = {
+>z : Symbol(z, Decl(typesMembersPatternLiteralIndexes.ts, 15, 9))
+>AriaProps : Symbol(AriaProps, Decl(typesMembersPatternLiteralIndexes.ts, 0, 15))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 15, 28))
+
+        "my-prop": {"whatever": "yes"}, // OK
+>"my-prop" : Symbol("my-prop", Decl(typesMembersPatternLiteralIndexes.ts, 15, 53))
+>"whatever" : Symbol("whatever", Decl(typesMembersPatternLiteralIndexes.ts, 16, 20))
+
+        "aria-disabled": "false" // OK
+>"aria-disabled" : Symbol("aria-disabled", Decl(typesMembersPatternLiteralIndexes.ts, 16, 39))
+
+    };
+
+    const a: AriaProps & { [x: string]: unknown } = {
+>a : Symbol(a, Decl(typesMembersPatternLiteralIndexes.ts, 20, 9))
+>AriaProps : Symbol(AriaProps, Decl(typesMembersPatternLiteralIndexes.ts, 0, 15))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 20, 28))
+
+        "my-prop": {"whatever": "yes"}, // OK
+>"my-prop" : Symbol("my-prop", Decl(typesMembersPatternLiteralIndexes.ts, 20, 53))
+>"whatever" : Symbol("whatever", Decl(typesMembersPatternLiteralIndexes.ts, 21, 20))
+
+        "aria-disabled": false // error
+>"aria-disabled" : Symbol("aria-disabled", Decl(typesMembersPatternLiteralIndexes.ts, 21, 39))
+
+    };
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(typesMembersPatternLiteralIndexes.ts, 24, 1))
+
+    interface SlotProxy<T> {
+>SlotProxy : Symbol(SlotProxy, Decl(typesMembersPatternLiteralIndexes.ts, 26, 15))
+>T : Symbol(T, Decl(typesMembersPatternLiteralIndexes.ts, 27, 24))
+
+        readonly [idx: number]: T;
+>idx : Symbol(idx, Decl(typesMembersPatternLiteralIndexes.ts, 28, 18))
+>T : Symbol(T, Decl(typesMembersPatternLiteralIndexes.ts, 27, 24))
+
+        [idx: `getSlot${number}`]: () => this[number];
+>idx : Symbol(idx, Decl(typesMembersPatternLiteralIndexes.ts, 29, 9))
+
+        [idx: `setSlot${number}`]: (obj: this[number]) => this;
+>idx : Symbol(idx, Decl(typesMembersPatternLiteralIndexes.ts, 30, 9))
+>obj : Symbol(obj, Decl(typesMembersPatternLiteralIndexes.ts, 30, 36))
+    }
+
+    const obj = makeSlotProxy([{x: 12}, {y: 21}]);
+>obj : Symbol(obj, Decl(typesMembersPatternLiteralIndexes.ts, 33, 9))
+>makeSlotProxy : Symbol(makeSlotProxy, Decl(typesMembersPatternLiteralIndexes.ts, 35, 68))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 33, 32))
+>y : Symbol(y, Decl(typesMembersPatternLiteralIndexes.ts, 33, 41))
+
+    const obj2 = obj.setSlot2({x: 12}).setSlot0({y: 12}).getSlot1();
+>obj2 : Symbol(obj2, Decl(typesMembersPatternLiteralIndexes.ts, 35, 9))
+>obj : Symbol(obj, Decl(typesMembersPatternLiteralIndexes.ts, 33, 9))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 35, 31))
+>y : Symbol(y, Decl(typesMembersPatternLiteralIndexes.ts, 35, 49))
+
+    function makeSlotProxy<T>(x: T[]): SlotProxy<T> {
+>makeSlotProxy : Symbol(makeSlotProxy, Decl(typesMembersPatternLiteralIndexes.ts, 35, 68))
+>T : Symbol(T, Decl(typesMembersPatternLiteralIndexes.ts, 37, 27))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 37, 30))
+>T : Symbol(T, Decl(typesMembersPatternLiteralIndexes.ts, 37, 27))
+>SlotProxy : Symbol(SlotProxy, Decl(typesMembersPatternLiteralIndexes.ts, 26, 15))
+>T : Symbol(T, Decl(typesMembersPatternLiteralIndexes.ts, 37, 27))
+
+        const result: SlotProxy<T> = {};
+>result : Symbol(result, Decl(typesMembersPatternLiteralIndexes.ts, 38, 13))
+>SlotProxy : Symbol(SlotProxy, Decl(typesMembersPatternLiteralIndexes.ts, 26, 15))
+>T : Symbol(T, Decl(typesMembersPatternLiteralIndexes.ts, 37, 27))
+
+        for (let i = 0; i < x.length; i++) {
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 37, 30))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+
+            Object.defineProperty(result, i, { get() { return x[i]; } });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(typesMembersPatternLiteralIndexes.ts, 38, 13))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+>get : Symbol(get, Decl(typesMembersPatternLiteralIndexes.ts, 40, 46))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 37, 30))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+
+            result[`getSlot${i}`] = () => x[i];
+>result : Symbol(result, Decl(typesMembersPatternLiteralIndexes.ts, 38, 13))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 37, 30))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+
+            result[`setSlot${i}`] = (arg) => (x[i] = arg, result);
+>result : Symbol(result, Decl(typesMembersPatternLiteralIndexes.ts, 38, 13))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+>arg : Symbol(arg, Decl(typesMembersPatternLiteralIndexes.ts, 42, 37))
+>x : Symbol(x, Decl(typesMembersPatternLiteralIndexes.ts, 37, 30))
+>i : Symbol(i, Decl(typesMembersPatternLiteralIndexes.ts, 39, 16))
+>arg : Symbol(arg, Decl(typesMembersPatternLiteralIndexes.ts, 42, 37))
+>result : Symbol(result, Decl(typesMembersPatternLiteralIndexes.ts, 38, 13))
+        }
+        return result;
+>result : Symbol(result, Decl(typesMembersPatternLiteralIndexes.ts, 38, 13))
+    }
+}

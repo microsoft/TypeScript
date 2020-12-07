@@ -1,0 +1,186 @@
+=== tests/cases/conformance/types/members/typesMembersPatternLiteralIndexes.ts ===
+function f1() {
+>f1 : () => void
+
+    interface AriaProps {
+        [x: `aria-${string}`]: string;
+>x : `aria-${string}`
+    }
+
+    const x: AriaProps = {
+>x : AriaProps
+>{        "my-prop": {"whatever": "yes"},        "aria-disabled": false // error    } : { "my-prop": { whatever: string; }; "aria-disabled": boolean; }
+
+        "my-prop": {"whatever": "yes"},
+>"my-prop" : { whatever: string; }
+>{"whatever": "yes"} : { whatever: string; }
+>"whatever" : string
+>"yes" : "yes"
+
+        "aria-disabled": false // error
+>"aria-disabled" : boolean
+>false : false
+
+    };
+
+    const y: AriaProps = {
+>y : AriaProps
+>{        "my-prop": {"whatever": "yes"}, // excess        "aria-disabled": "false" // OK    } : { "my-prop": { whatever: string; }; "aria-disabled": string; }
+
+        "my-prop": {"whatever": "yes"}, // excess
+>"my-prop" : { whatever: string; }
+>{"whatever": "yes"} : { whatever: string; }
+>"whatever" : string
+>"yes" : "yes"
+
+        "aria-disabled": "false" // OK
+>"aria-disabled" : string
+>"false" : "false"
+
+    };
+
+    const z: AriaProps & { [x: string]: unknown } = {
+>z : AriaProps & { [x: string]: unknown; }
+>x : string
+>{        "my-prop": {"whatever": "yes"}, // OK        "aria-disabled": "false" // OK    } : { "my-prop": { whatever: string; }; "aria-disabled": string; }
+
+        "my-prop": {"whatever": "yes"}, // OK
+>"my-prop" : { whatever: string; }
+>{"whatever": "yes"} : { whatever: string; }
+>"whatever" : string
+>"yes" : "yes"
+
+        "aria-disabled": "false" // OK
+>"aria-disabled" : string
+>"false" : "false"
+
+    };
+
+    const a: AriaProps & { [x: string]: unknown } = {
+>a : AriaProps & { [x: string]: unknown; }
+>x : string
+>{        "my-prop": {"whatever": "yes"}, // OK        "aria-disabled": false // error    } : { "my-prop": { whatever: string; }; "aria-disabled": boolean; }
+
+        "my-prop": {"whatever": "yes"}, // OK
+>"my-prop" : { whatever: string; }
+>{"whatever": "yes"} : { whatever: string; }
+>"whatever" : string
+>"yes" : "yes"
+
+        "aria-disabled": false // error
+>"aria-disabled" : boolean
+>false : false
+
+    };
+}
+
+function f2() {
+>f2 : () => void
+
+    interface SlotProxy<T> {
+        readonly [idx: number]: T;
+>idx : number
+
+        [idx: `getSlot${number}`]: () => this[number];
+>idx : `getSlot${number}`
+
+        [idx: `setSlot${number}`]: (obj: this[number]) => this;
+>idx : `setSlot${number}`
+>obj : this[number]
+    }
+
+    const obj = makeSlotProxy([{x: 12}, {y: 21}]);
+>obj : SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>makeSlotProxy([{x: 12}, {y: 21}]) : SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>makeSlotProxy : <T>(x: T[]) => SlotProxy<T>
+>[{x: 12}, {y: 21}] : ({ x: number; } | { y: number; })[]
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+>{y: 21} : { y: number; }
+>y : number
+>21 : 21
+
+    const obj2 = obj.setSlot2({x: 12}).setSlot0({y: 12}).getSlot1();
+>obj2 : { x: number; y?: undefined; } | { y: number; x?: undefined; }
+>obj.setSlot2({x: 12}).setSlot0({y: 12}).getSlot1() : { x: number; y?: undefined; } | { y: number; x?: undefined; }
+>obj.setSlot2({x: 12}).setSlot0({y: 12}).getSlot1 : () => { x: number; y?: undefined; } | { y: number; x?: undefined; }
+>obj.setSlot2({x: 12}).setSlot0({y: 12}) : SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>obj.setSlot2({x: 12}).setSlot0 : (obj: { x: number; y?: undefined; } | { y: number; x?: undefined; }) => SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>obj.setSlot2({x: 12}) : SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>obj.setSlot2 : (obj: { x: number; y?: undefined; } | { y: number; x?: undefined; }) => SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>obj : SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>setSlot2 : (obj: { x: number; y?: undefined; } | { y: number; x?: undefined; }) => SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>{x: 12} : { x: number; }
+>x : number
+>12 : 12
+>setSlot0 : (obj: { x: number; y?: undefined; } | { y: number; x?: undefined; }) => SlotProxy<{ x: number; y?: undefined; } | { y: number; x?: undefined; }>
+>{y: 12} : { y: number; }
+>y : number
+>12 : 12
+>getSlot1 : () => { x: number; y?: undefined; } | { y: number; x?: undefined; }
+
+    function makeSlotProxy<T>(x: T[]): SlotProxy<T> {
+>makeSlotProxy : <T>(x: T[]) => SlotProxy<T>
+>x : T[]
+
+        const result: SlotProxy<T> = {};
+>result : SlotProxy<T>
+>{} : {}
+
+        for (let i = 0; i < x.length; i++) {
+>i : number
+>0 : 0
+>i < x.length : boolean
+>i : number
+>x.length : number
+>x : T[]
+>length : number
+>i++ : number
+>i : number
+
+            Object.defineProperty(result, i, { get() { return x[i]; } });
+>Object.defineProperty(result, i, { get() { return x[i]; } }) : any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object : ObjectConstructor
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>result : SlotProxy<T>
+>i : number
+>{ get() { return x[i]; } } : { get(): T; }
+>get : () => T
+>x[i] : T
+>x : T[]
+>i : number
+
+            result[`getSlot${i}`] = () => x[i];
+>result[`getSlot${i}`] = () => x[i] : () => T
+>result[`getSlot${i}`] : () => T
+>result : SlotProxy<T>
+>`getSlot${i}` : `getSlot${number}`
+>i : number
+>() => x[i] : () => T
+>x[i] : T
+>x : T[]
+>i : number
+
+            result[`setSlot${i}`] = (arg) => (x[i] = arg, result);
+>result[`setSlot${i}`] = (arg) => (x[i] = arg, result) : (arg: T) => SlotProxy<T>
+>result[`setSlot${i}`] : (obj: T) => SlotProxy<T>
+>result : SlotProxy<T>
+>`setSlot${i}` : `setSlot${number}`
+>i : number
+>(arg) => (x[i] = arg, result) : (arg: T) => SlotProxy<T>
+>arg : T
+>(x[i] = arg, result) : SlotProxy<T>
+>x[i] = arg, result : SlotProxy<T>
+>x[i] = arg : T
+>x[i] : T
+>x : T[]
+>i : number
+>arg : T
+>result : SlotProxy<T>
+        }
+        return result;
+>result : SlotProxy<T>
+    }
+}
