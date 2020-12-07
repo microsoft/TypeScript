@@ -7305,7 +7305,6 @@ namespace ts {
                         state = JSDocState.BeginningOfLine;
                         indent = 0;
                     }
-                    // TODO: Need to parse link tags in the initial comment text too
                     loop: while (true) {
                         switch (token()) {
                             case SyntaxKind.AtToken:
@@ -7354,11 +7353,9 @@ namespace ts {
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
                             case SyntaxKind.OpenBraceToken:
-                                // TODO: Refactor in the same way as the other parser, and probably dedupe into a single function
-                                if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
-                                    state = JSDocState.SavingComments;
-                                    // TODO: Maybe shouldn't use 1 as the length of { ?
-                                    const link = parseLink(scanner.getTextPos() - 1);
+                                state = JSDocState.SavingComments;
+                                const link = parseLink(scanner.getTextPos() - 1);
+                                if (link) {
                                     links.push(link);
                                     pushComment(scanner.getText().slice(link.pos, link.end));
                                     break;
@@ -7392,7 +7389,6 @@ namespace ts {
                 }
 
                 function createJSDocComment(): JSDoc {
-                    // TODO: Parse links too!
                     const comment = comments.length ? { links, text: comments.join("") } : undefined;
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     return finishNode(factory.createJSDocComment(comment, tagsArray), start, end);
@@ -7584,11 +7580,8 @@ namespace ts {
                                 break;
                             case SyntaxKind.OpenBraceToken:
                                 state = JSDocState.SavingComments;
-                                // TODO: test margins
-                                // TODO: Put a manual `tok = nextTokenJSDoc()` here and only call `lookAhead` if its AtToken.
-                                // THat means I'll have to save getTextPos *before* the nextTokenJSDoc and unconditionally `continue` afterward
-                                if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
-                                    const link = parseLink(scanner.getTextPos() - 1);
+                                const link = parseLink(scanner.getTextPos() - 1);
+                                if (link) {
                                     links.push(link);
                                     pushComment(scanner.getText().slice(link.pos, link.end));
                                 }
@@ -7630,9 +7623,9 @@ namespace ts {
                 }
 
                 function parseLink(start: number) {
-                    nextTokenJSDoc(); // @
-                    nextTokenJSDoc(); // link
-
+                    if (!tryParse(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
+                        return undefined;
+                    }
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
                     skipWhitespace();
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
