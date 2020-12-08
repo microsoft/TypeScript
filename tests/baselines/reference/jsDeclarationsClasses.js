@@ -579,10 +579,6 @@ export class N<T> extends L {
  * @extends {N<U>}
  */
 export class O<U> extends N<U> {
-    /**
-     * @param {U} param
-     */
-    constructor(param: U);
     another2: U;
 }
 declare const VariableBase_base: any;

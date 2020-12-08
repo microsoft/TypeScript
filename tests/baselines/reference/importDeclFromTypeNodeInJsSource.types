@@ -1,0 +1,36 @@
+=== /src/node_modules/@types/node/index.d.ts ===
+/// <reference path="events.d.ts" />
+No type information for this code.=== /src/node_modules/@types/node/events.d.ts ===
+declare module "events" {
+>"events" : typeof import("events")
+
+    namespace EventEmitter {
+>EventEmitter : typeof EventEmitter
+
+        class EventEmitter {
+>EventEmitter : EventEmitter
+
+            constructor();
+        }
+    }
+    export = EventEmitter;
+>EventEmitter : typeof EventEmitter
+}
+
+=== /src/b.js ===
+import { EventEmitter } from 'events';
+>EventEmitter : typeof EventEmitter
+
+class Foo extends EventEmitter {
+>Foo : Foo
+>EventEmitter : EventEmitter
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof EventEmitter
+    }
+}
+export default Foo;
+>Foo : Foo
+
