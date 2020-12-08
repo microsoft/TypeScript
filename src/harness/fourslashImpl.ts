@@ -1154,12 +1154,21 @@ namespace FourSlash {
                 for (const { textSpan } of refsByFile.find(refs => refs[0].fileName === fileName) ?? ts.emptyArray) {
                     const end = textSpan.start + textSpan.length;
                     newContent += content.slice(pos, textSpan.start);
-                    newContent += "[|";
                     pos = textSpan.start;
-                    if (fileName === marker?.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                    // It's easier to read if the /*FIND ALL REFS*/ comment is outside the range markers, which makes
+                    // this code a bit more verbose than it would be if I were less picky about the baseline format.
+                    if (fileName === marker?.fileName && marker.position === textSpan.start) {
+                        newContent += "/*FIND ALL REFS*/";
+                        newContent += "[|";
+                    }
+                    else if (fileName === marker?.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                        newContent += "[|";
                         newContent += content.slice(pos, marker.position);
                         newContent += "/*FIND ALL REFS*/";
                         pos = marker.position;
+                    }
+                    else {
+                        newContent += "[|";
                     }
                     newContent += content.slice(pos, end);
                     newContent += "|]";
