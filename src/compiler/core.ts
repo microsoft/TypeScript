@@ -1939,7 +1939,7 @@ namespace ts {
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-        let bestDistance = Math.floor(name.length * 0.4) + 0.1; // If the best result is worse than this, don't bother.
+        let bestDistance = Math.floor(name.length * 0.4) + 0.2; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
