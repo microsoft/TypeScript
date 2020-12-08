@@ -102,12 +102,23 @@
         },
         {
           "name": "see",
-          "text": "{"
-        },
-        {
-          "name": "link",
-          "text": "C} its great",
-          "links": []
+          "text": "{@link C} its great",
+          "links": [
+            {
+              "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
+              "textSpan": {
+                "start": 156,
+                "length": 9
+              },
+              "target": {
+                "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 11
+                }
+              }
+            }
+          ]
         }
       ]
     }

@@ -102,12 +102,23 @@
         },
         {
           "name": "see",
-          "text": "{"
-        },
-        {
-          "name": "link",
-          "text": "C} its great",
-          "links": []
+          "text": "{@link C} its great",
+          "links": [
+            {
+              "fileName": "/module1.ts",
+              "textSpan": {
+                "start": 177,
+                "length": 9
+              },
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            }
+          ]
         }
       ]
     }

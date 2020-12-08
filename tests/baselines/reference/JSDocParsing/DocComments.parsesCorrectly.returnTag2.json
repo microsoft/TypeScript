@@ -22,7 +22,13 @@
                 "escapedText": "return"
             },
             "comment": {
-                "links": [],
+                "links": {
+                    "length": 0,
+                    "pos": -1,
+                    "end": -1,
+                    "hasTrailingComma": false,
+                    "transformFlags": 0
+                },
                 "text": "Description text follows"
             },
             "typeExpression": {

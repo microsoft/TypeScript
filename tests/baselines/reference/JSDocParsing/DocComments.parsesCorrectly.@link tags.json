@@ -6,8 +6,8 @@
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "comment": {
-        "links": [
-            {
+        "links": {
+            "0": {
                 "kind": "JSDocLink",
                 "pos": 7,
                 "end": 21,
@@ -22,7 +22,7 @@
                     "escapedText": "first"
                 }
             },
-            {
+            "1": {
                 "kind": "JSDocLink",
                 "pos": 32,
                 "end": 49,
@@ -36,8 +36,13 @@
                     "transformFlags": 0,
                     "escapedText": "link"
                 }
-            }
-        ],
+            },
+            "length": 2,
+            "pos": -1,
+            "end": -1,
+            "hasTrailingComma": false,
+            "transformFlags": 0
+        },
         "text": "{@link first }\nInside {@link link text} thing"
     },
     "tags": {
@@ -56,8 +61,8 @@
                 "escapedText": "param"
             },
             "comment": {
-                "links": [
-                    {
+                "links": {
+                    "0": {
                         "kind": "JSDocLink",
                         "pos": 79,
                         "end": 98,
@@ -86,8 +91,13 @@
                                 "escapedText": "Reference"
                             }
                         }
-                    }
-                ],
+                    },
+                    "length": 1,
+                    "pos": -1,
+                    "end": -1,
+                    "hasTrailingComma": false,
+                    "transformFlags": 0
+                },
                 "text": "See also {@link A.Reference}"
             },
             "name": {
@@ -116,8 +126,8 @@
                 "escapedText": "param"
             },
             "comment": {
-                "links": [
-                    {
+                "links": {
+                    "0": {
                         "kind": "JSDocLink",
                         "pos": 120,
                         "end": 152,
@@ -132,7 +142,7 @@
                             "escapedText": "http"
                         }
                     },
-                    {
+                    "1": {
                         "kind": "JSDocLink",
                         "pos": 156,
                         "end": 183,
@@ -162,7 +172,7 @@
                             }
                         }
                     },
-                    {
+                    "2": {
                         "kind": "JSDocLink",
                         "pos": 203,
                         "end": 210,
@@ -177,7 +187,7 @@
                             "escapedText": ""
                         }
                     },
-                    {
+                    "3": {
                         "kind": "JSDocLink",
                         "pos": 244,
                         "end": 262,
@@ -192,7 +202,7 @@
                             "escapedText": "doubled"
                         }
                     },
-                    {
+                    "4": {
                         "kind": "JSDocLink",
                         "pos": 326,
                         "end": 340,
@@ -222,7 +232,7 @@
                             }
                         }
                     },
-                    {
+                    "5": {
                         "kind": "JSDocLink",
                         "pos": 369,
                         "end": 403,
@@ -237,7 +247,7 @@
                             "escapedText": "https"
                         }
                     },
-                    {
+                    "6": {
                         "kind": "JSDocLink",
                         "pos": 526,
                         "end": 541,
@@ -251,8 +261,13 @@
                             "transformFlags": 0,
                             "escapedText": ""
                         }
-                    }
-                ],
+                    },
+                    "length": 7,
+                    "pos": -1,
+                    "end": -1,
+                    "hasTrailingComma": false,
+                    "transformFlags": 0
+                },
                 "text": "Or see {@link http://www.zombocom.com }\n{@link Standalone.Complex }\nThis empty one: {@link} is OK.\nThis double-space one: {@link  doubled  } is OK too.\nThis should work, despite being badly formatted: {@link\noh.no\n}\nForgot to close this one {@link https://typescriptlang.org\n * But it's still OK.\nAlthough it skips the newline so parses the asterisks in the wrong state.\nThis shouldn't work: {@link\n * nope\n * }, because of the intermediate asterisks."
             },
             "name": {
@@ -282,8 +297,8 @@
             },
             "comment": {
                 "text": "Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}",
-                "links": [
-                    {
+                "links": {
+                    "0": {
                         "kind": "JSDocLink",
                         "pos": 643,
                         "end": 670,
@@ -297,8 +312,13 @@
                             "transformFlags": 0,
                             "escapedText": "https"
                         }
-                    }
-                ]
+                    },
+                    "length": 1,
+                    "pos": -1,
+                    "end": -1,
+                    "hasTrailingComma": false,
+                    "transformFlags": 0
+                }
             }
         },
         "length": 3,

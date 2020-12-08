@@ -21,7 +21,13 @@
                 "escapedText": "example"
             },
             "comment": {
-                "links": [],
+                "links": {
+                    "length": 0,
+                    "pos": -1,
+                    "end": -1,
+                    "hasTrailingComma": false,
+                    "transformFlags": 0
+                },
                 "text": "Some\n\ntext\r\nwith newlines."
             }
         },

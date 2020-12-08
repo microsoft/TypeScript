@@ -105,7 +105,7 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
-        else if (isEntityName(node) && isJSDocNameReference(node.parent)) {
+        else if (isEntityName(node) && (isJSDocNameReference(node.parent) || isJSDocLink(node.parent))) {
             return SemanticMeaning.All;
         }
         else if (isTypeReference(node)) {
