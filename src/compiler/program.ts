@@ -13,7 +13,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function computeCommonSourceDirectoryOfFilenames(fileNames: string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
+    export function computeCommonSourceDirectoryOfFilenames(fileNames: readonly string[], currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
         let commonPathComponents: string[] | undefined;
         const failed = forEach(fileNames, sourceFile => {
             // Each file contributes into common source file path
@@ -899,9 +899,15 @@ namespace ts {
                                 processSourceFile(changeExtension(out, ".d.ts"), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                             }
                             else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
+                                const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(parsedRef.commandLine, !host.useCaseSensitiveFileNames()));
                                 for (const fileName of parsedRef.commandLine.fileNames) {
                                     if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
-                                        processSourceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames()), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                        processSourceFile(
+                                            getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory),
+                                            /*isDefaultLib*/ false,
+                                            /*ignoreNoDefaultLib*/ false,
+                                            /*packageId*/ undefined
+                                        );
                                     }
                                 }
                             }
@@ -1127,25 +1133,13 @@ namespace ts {
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
                 const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, program));
-                if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
-                    // If a rootDir is specified use it as the commonSourceDirectory
-                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
-                }
-                else if (options.composite && options.configFilePath) {
-                    // Project compilations never infer their root from the input source paths
-                    commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
-                    checkSourceFilesBelongToPath(emittedFiles, commonSourceDirectory);
-                }
-                else {
-                    commonSourceDirectory = computeCommonSourceDirectory(emittedFiles);
-                }
-
-                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
-                    // Make sure directory path ends with directory separator so this string can directly
-                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                    // start with / making it rooted path
-                    commonSourceDirectory += directorySeparator;
-                }
+                commonSourceDirectory = ts.getCommonSourceDirectory(
+                    options,
+                    () => mapDefined(emittedFiles, file => file.isDeclarationFile ? undefined : file.fileName),
+                    currentDirectory,
+                    getCanonicalFileName,
+                    commonSourceDirectory => checkSourceFilesBelongToPath(emittedFiles, commonSourceDirectory)
+                );
             }
             return commonSourceDirectory;
         }
@@ -2707,9 +2701,10 @@ namespace ts {
                         mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), true);
                     }
                     else {
+                        const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(resolvedRef.commandLine, !host.useCaseSensitiveFileNames()));
                         forEach(resolvedRef.commandLine.fileNames, fileName => {
                             if (!fileExtensionIs(fileName, Extension.Dts) && !fileExtensionIs(fileName, Extension.Json)) {
-                                const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, host.useCaseSensitiveFileNames());
+                                const outputDts = getOutputDeclarationFileName(fileName, resolvedRef.commandLine, !host.useCaseSensitiveFileNames(), getCommonSourceDirectory);
                                 mapFromToProjectReferenceRedirectSource!.set(toPath(outputDts), fileName);
                             }
                         });
@@ -2971,11 +2966,6 @@ namespace ts {
                 // no imports - drop cached module resolutions
                 file.resolvedModules = undefined;
             }
-        }
-
-        function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
-            const fileNames = mapDefined(sourceFiles, file => file.isDeclarationFile ? undefined : file.fileName);
-            return computeCommonSourceDirectoryOfFilenames(fileNames, currentDirectory, getCanonicalFileName);
         }
 
         function checkSourceFilesBelongToPath(sourceFiles: readonly SourceFile[], rootDirectory: string): boolean {

@@ -31,7 +31,7 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
 
 [7m1[0m import {B} from './b'
 [7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
@@ -110,7 +110,7 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
 
 [7m1[0m import {B} from './b'
 [7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m

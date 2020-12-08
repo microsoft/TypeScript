@@ -3155,7 +3155,7 @@ namespace ts {
 
             const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
 
-            let emitFlags: EmitFlags = 0;
+            let emitFlags: EmitFlags = EmitFlags.ReuseTempVariableScope;
             if (currentState.containsLexicalThis) emitFlags |= EmitFlags.CapturesThis;
             if (containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0) emitFlags |= EmitFlags.AsyncFunctionBody;
 
