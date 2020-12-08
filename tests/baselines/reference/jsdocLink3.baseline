@@ -1,0 +1,115 @@
+[
+  {
+    "marker": {
+      "fileName": "/module1.ts",
+      "position": 210
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 210,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "CC",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "{@link C}",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "wat",
+          "text": "Makes a {@link C}. A default one.\n{@link C()}\n{@link C|postfix text}\n{@link unformatted postfix text}",
+          "links": [
+            {
+              "fileName": "/module1.ts",
+              "textSpan": {
+                "start": 66,
+                "length": 9
+              },
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            },
+            {
+              "fileName": "/module1.ts",
+              "textSpan": {
+                "start": 95,
+                "length": 11
+              },
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            },
+            {
+              "fileName": "/module1.ts",
+              "textSpan": {
+                "start": 110,
+                "length": 22
+              },
+              "target": {
+                "fileName": "/jsdocLink3.ts",
+                "textSpan": {
+                  "start": 0,
+                  "length": 18
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "see",
+          "text": "{"
+        },
+        {
+          "name": "link",
+          "text": "C} its great",
+          "links": []
+        }
+      ]
+    }
+  }
+]

@@ -481,10 +481,12 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<JSDocFunctionType>node).parameters) ||
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
             case SyntaxKind.JSDocComment:
-                return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
+                return visitNodes(cbNode, cbNodes, (node as JSDoc).comment?.links)
+                    || visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
             case SyntaxKind.JSDocSeeTag:
                 return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
-                    visitNode(cbNode, (node as JSDocSeeTag).name);
+                    visitNode(cbNode, (node as JSDocSeeTag).name) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocNameReference:
                 return visitNode(cbNode, (node as JSDocNameReference).name);
             case SyntaxKind.JSDocParameterTag:
@@ -492,39 +494,48 @@ namespace ts {
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     ((node as JSDocPropertyLikeTag).isNameFirst
                         ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
+                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links)
                         : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name)) ||
+                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.JSDocImplementsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocImplementsTag>node).class);
+                    visitNode(cbNode, (<JSDocImplementsTag>node).class) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocAugmentsTag>node).class);
+                    visitNode(cbNode, (<JSDocAugmentsTag>node).class) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocTemplateTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
-                    visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
+                    visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocTypedefTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     ((node as JSDocTypedefTag).typeExpression &&
                         (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
                         ? visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName)
+                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
+                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links)
                         : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
+                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression)) ||
+                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+                    visitNode(cbNode, (node as JSDocCallbackTag).typeExpression) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocReturnTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
             case SyntaxKind.JSDocEnumTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression);
+                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.JSDocSignature:
                 return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
                     forEach((<JSDocSignature>node).parameters, cbNode) ||
@@ -539,8 +550,8 @@ namespace ts {
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocReadonlyTag:
-                return visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links)
-                    || visitNode(cbNode, (node as JSDocTag).tagName);
+                return visitNode(cbNode, (node as JSDocTag).tagName)
+                 || visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
         }

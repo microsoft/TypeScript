@@ -37569,7 +37569,7 @@ namespace ts {
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
             }
             else if (name.parent.kind === SyntaxKind.JSDocLink) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value | SymbolFlags.Alias;
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ true);
             }
 
