@@ -518,16 +518,16 @@ namespace ts.server {
             lineMap = lineMap || this.getLineMap(fileName);
             return createTextSpanFromBounds(
                 this.lineOffsetToPosition(fileName, span.start, lineMap),
-                this.lineOffsetToPosition(fileName, Debug.checkDefined(span.end, JSON.stringify(span)), lineMap));
+                this.lineOffsetToPosition(fileName, span.end, lineMap));
         }
 
-        private decodeLink(tags: readonly protocol.JSDocTagInfo[]): readonly JSDocTagInfo[] {
+        private decodeLink(tags: protocol.JSDocTagInfo[]): JSDocTagInfo[] {
             return tags.map(tag => ({
                 ...tag,
                 links: tag.links?.map(link => ({
                     ...link,
                     target: {
-                        // TODO: May still need to decode MOST of the link.targets
+                        // TODO: The JSDocLinkInfo tag data mismatches the type!! (probably wasn't correctly encoded in the first place?)
                         textSpan: link.target as unknown as TextSpan,
                         fileName: link.target.file,
                     }
@@ -555,8 +555,8 @@ namespace ts.server {
 
             const { items: encodedItems, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
 
-            // TODO: I thought that applicable span was a protocol span now?! I guess not.
-            const applicableSpan = encodedApplicableSpan as unknown as TextSpan; //this.decodeSpan(encodedApplicableSpan, fileName);
+            // TODO: Same here, it doesn't actually seem to be encoded
+            const applicableSpan = encodedApplicableSpan as unknown as TextSpan;
             const items = encodedItems.map(item => ({ ...item, tags: this.decodeLink(item.tags) }));
 
             return { items, applicableSpan, selectedItemIndex, argumentIndex, argumentCount };

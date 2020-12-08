@@ -7280,7 +7280,7 @@ namespace ts {
                 let tagsPos: number;
                 let tagsEnd: number;
                 const comments: string[] = [];
-                const links: JSDocLinkNode[] = [];
+                const links: JSDocLink[] = [];
 
                 // + 3 for leading /**, - 5 in total for /** */
                 return scanner.scanRange(start + 3, length - 5, () => {
@@ -7529,7 +7529,7 @@ namespace ts {
 
                 function parseTagComments(indent: number, initialMargin?: string): JSDocComment | undefined {
                     const comments: string[] = [];
-                    const links: JSDocLinkNode[] = [];
+                    const links: JSDocLink[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
                     function pushComment(text: string) {

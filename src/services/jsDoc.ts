@@ -123,7 +123,7 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getLinks(tag: JSDocTag, checker: TypeChecker): JSDocLink[] | undefined {
+    function getLinks(tag: JSDocTag, checker: TypeChecker): JSDocLinkInfo[] | undefined {
         const links = tag.comment?.links;
         if (links) {
             return mapDefined(links, link => {

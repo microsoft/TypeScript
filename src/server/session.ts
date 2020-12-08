@@ -1250,7 +1250,7 @@ namespace ts.server {
                 result;
         }
 
-        private mapJSDocTagInfo(tags: readonly JSDocTagInfo[] | undefined, project: Project): readonly protocol.JSDocTagInfo[] {
+        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
             if (tags === undefined) {
                 return [];
             }

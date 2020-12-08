@@ -932,7 +932,7 @@ namespace FourSlash {
                 // assert.equal(actualDetails.kind, actual.kind);
                 assert.equal(actualDetails.kindModifiers, actual.kindModifiers, "Expected 'kindModifiers' properties to match");
                 assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
-                assert.deepEqual(actualDetails.tags, expected.tags, "Try harder, chai:" + JSON.stringify(actualDetails) + "\n" + JSON.stringify(expected) + " at " + this.lastKnownMarker);
+                assert.deepEqual(actualDetails.tags, expected.tags);
             }
             else {
                 assert(expected.documentation === undefined && expected.tags === undefined && expected.sourceDisplay === undefined, "If specifying completion details, should specify 'text'");

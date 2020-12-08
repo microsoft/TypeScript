@@ -958,10 +958,10 @@ namespace ts.server.protocol {
     export interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLink[];
+        links?: JSDocLinkInfo[];
     }
 
-    export interface JSDocLink extends DocumentSpan {
+    export interface JSDocLinkInfo extends DocumentSpan {
         target: FileSpan;
     }
 
@@ -1947,7 +1947,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags associated with symbol.
          */
-        tags: readonly JSDocTagInfo[];
+        tags: JSDocTagInfo[];
     }
 
     /**
@@ -2253,7 +2253,7 @@ namespace ts.server.protocol {
         /**
          * JSDoc tags for the symbol.
          */
-        tags?: readonly JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
 
         /**
          * The associated code actions for this entry
@@ -2357,7 +2357,7 @@ namespace ts.server.protocol {
          * The signature's JSDoc tags
          * TODO: Changing this doesn't cause the build to fail! Need tests and probably a scan of session.ts
          */
-        tags: readonly JSDocTagInfo[];
+        tags: JSDocTagInfo[];
     }
 
     /**

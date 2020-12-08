@@ -3149,16 +3149,14 @@ namespace ts {
         readonly comment?: JSDocComment;
     }
 
-    // TODO: Decide on a taxonomy (preferably ditch the -Node suffix here)
-    export interface JSDocLinkNode extends Node {
+    export interface JSDocLink extends Node {
         readonly kind: SyntaxKind.JSDocLink;
         readonly name?: EntityName;
     }
 
     export interface JSDocComment {
         text: string;
-        // TODO: Might need to be optional I don't know
-        links?: JSDocLinkNode[];
+        links?: JSDocLink[];
     }
 
     export interface JSDocUnknownTag extends JSDocTag {
@@ -7069,8 +7067,8 @@ namespace ts {
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
         createJSDocNameReference(name: EntityName): JSDocNameReference;
         updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
-        createJSDocLinkNode(name: EntityName): JSDocLinkNode;
-        updateJSDocLinkNode(node: JSDocLinkNode, name: EntityName): JSDocLinkNode;
+        createJSDocLinkNode(name: EntityName): JSDocLink;
+        updateJSDocLinkNode(node: JSDocLink, name: EntityName): JSDocLink;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;

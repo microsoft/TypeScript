@@ -1033,10 +1033,10 @@ namespace ts {
     export interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLink[];
+        links?: readonly JSDocLinkInfo[];
     }
 
-    export interface JSDocLink extends DocumentSpan {
+    export interface JSDocLinkInfo extends DocumentSpan {
         target: DocumentSpan;
     }
 
@@ -1046,7 +1046,7 @@ namespace ts {
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        tags?: readonly JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
     }
 
     export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
@@ -1098,7 +1098,7 @@ namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
-        tags: readonly JSDocTagInfo[];
+        tags: JSDocTagInfo[];
     }
 
     /**
@@ -1156,8 +1156,7 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        // TODO: Find out if readonly arrays are really De Stijl hier
-        tags?: readonly JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
     }

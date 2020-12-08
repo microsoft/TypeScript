@@ -4363,14 +4363,14 @@ namespace ts {
         }
 
         // @api
-        function createJSDocLinkNode(name: EntityName): JSDocLinkNode {
-            const node = createBaseNode<JSDocLinkNode>(SyntaxKind.JSDocLink);
+        function createJSDocLinkNode(name: EntityName): JSDocLink {
+            const node = createBaseNode<JSDocLink>(SyntaxKind.JSDocLink);
             node.name = name;
             return node;
         }
 
         // @api
-        function updateJSDocLinkNode(node: JSDocLinkNode, name: EntityName): JSDocLinkNode {
+        function updateJSDocLinkNode(node: JSDocLink, name: EntityName): JSDocLink {
             return node.name !== name
                 ? update(createJSDocLinkNode(name), node)
                 : node;
