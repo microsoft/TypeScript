@@ -627,7 +627,12 @@ namespace ts.FindAllReferences {
                         const refFileMap = program.getRefFileMap();
                         const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
                         const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
-                        return referencedFile && [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, refFileMap!, program) || emptyArray }];
+                        if (referencedFile) {
+                            return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, refFileMap!, program) || emptyArray }];
+                        }
+                        // Fall through to string literal references. This is not very likely to return
+                        // anything useful, but I guess it's better than nothing, and there's an existing
+                        // test that expects this to happen (fourslash/cases/untypedModuleImport.ts).
                     }
                     return getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
                 }
