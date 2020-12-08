@@ -6758,7 +6758,12 @@ namespace ts {
                                 return cleanup(/*result*/ undefined);
                             }
                         }
-                        return cleanup(factory.createExpressionWithTypeArguments(expr, map(e.typeArguments, a => serializeExistingTypeNode(context, a, includePrivateSymbol, bundled) || typeToTypeNodeHelper(getTypeFromTypeNode(a), context))));
+                        return cleanup(factory.createExpressionWithTypeArguments(expr,
+                            map(e.typeArguments, a =>
+                                serializeExistingTypeNode(context, a, includePrivateSymbol, bundled)
+                                || typeToTypeNodeHelper(getTypeFromTypeNode(a), context)
+                            )
+                        ));
 
                         function cleanup<T>(result: T): T {
                             context.enclosingDeclaration = oldEnclosing;
@@ -6780,7 +6785,8 @@ namespace ts {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseTypes = getBaseTypes(classType);
                     const originalImplements = originalDecl && getEffectiveImplementsTypeNodes(originalDecl);
-                    const implementsExpressions = originalImplements && sanitizeJSDocImplements(originalImplements) || mapDefined(getImplementsTypes(classType), serializeImplementedType);
+                    const implementsExpressions = originalImplements && sanitizeJSDocImplements(originalImplements)
+                        || mapDefined(getImplementsTypes(classType), serializeImplementedType);
                     const staticType = getTypeOfSymbol(symbol);
                     const isClass = !!staticType.symbol?.valueDeclaration && isClassLike(staticType.symbol.valueDeclaration);
                     const staticBaseType = isClass
