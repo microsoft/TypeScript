@@ -7789,7 +7789,7 @@ namespace ts {
                         return finishNode(factory.createJSDocAuthorTag(tagName, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                     }
 
-                    let comments: JSDocComment = { text: authorInfoWithEmail };
+                    const comments: JSDocComment = { text: authorInfoWithEmail };
                     if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
                         const tagComments = parseTagComments(indent);
                         if (tagComments) {
