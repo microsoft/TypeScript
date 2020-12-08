@@ -13137,7 +13137,7 @@ namespace ts {
                 i--;
                 const t = types[i];
                 const remove =
-                    t.flags & TypeFlags.StringLiteral && includes & TypeFlags.String ||
+                    t.flags & TypeFlags.StringLikeLiteral && includes & TypeFlags.String ||
                     t.flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                     t.flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                     t.flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
@@ -13184,7 +13184,7 @@ namespace ts {
                 }
                 switch (unionReduction) {
                     case UnionReduction.Literal:
-                        if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol)) {
+                        if (includes & (TypeFlags.FreshableLiteral | TypeFlags.UniqueESSymbol)) {
                             removeRedundantLiteralTypes(typeSet, includes);
                         }
                         if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
@@ -13715,6 +13715,7 @@ namespace ts {
             let type = templateLiteralTypes.get(id);
             if (!type) {
                 templateLiteralTypes.set(id, type = createTemplateLiteralType(newTexts, newTypes));
+                type.regularType = type;
             }
             return type;
 
@@ -14753,26 +14754,28 @@ namespace ts {
         }
 
         function getFreshTypeOfLiteralType(type: Type): Type {
-            if (type.flags & TypeFlags.Literal) {
-                if (!(<LiteralType>type).freshType) {
-                    const freshType = createLiteralType(type.flags, (<LiteralType>type).value, (<LiteralType>type).symbol);
-                    freshType.regularType = <LiteralType>type;
+            if (type.flags & TypeFlags.FreshableLiteral) {
+                if (!(<FreshableLiteralType>type).freshType) {
+                    const freshType = type.flags & TypeFlags.TemplateLiteral ?
+                        createTemplateLiteralType((<TemplateLiteralType>type).texts, (<TemplateLiteralType>type).types) :
+                        createLiteralType(type.flags, (<LiteralType>type).value, (<LiteralType>type).symbol);
+                    freshType.regularType = <FreshableLiteralType>type;
                     freshType.freshType = freshType;
-                    (<LiteralType>type).freshType = freshType;
+                    (<FreshableLiteralType>type).freshType = freshType;
                 }
-                return (<LiteralType>type).freshType;
+                return (<FreshableLiteralType>type).freshType;
             }
             return type;
         }
 
         function getRegularTypeOfLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.Literal ? (<LiteralType>type).regularType :
+            return type.flags & TypeFlags.FreshableLiteral ? (<FreshableLiteralType>type).regularType :
                 type.flags & TypeFlags.Union ? ((<UnionType>type).regularType || ((<UnionType>type).regularType = getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) as UnionType)) :
                 type;
         }
 
         function isFreshLiteralType(type: Type) {
-            return !!(type.flags & TypeFlags.Literal) && (<LiteralType>type).freshType === type;
+            return !!(type.flags & TypeFlags.FreshableLiteral) && (<FreshableLiteralType>type).freshType === type;
         }
 
         function getLiteralType(value: string): StringLiteralType;
@@ -19100,7 +19103,7 @@ namespace ts {
 
         function getBaseTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & TypeFlags.StringLiteral ? stringType :
+                type.flags & TypeFlags.StringLikeLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BigIntLiteral ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
@@ -19110,7 +19113,7 @@ namespace ts {
 
         function getWidenedLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral && isFreshLiteralType(type) ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & TypeFlags.StringLiteral && isFreshLiteralType(type) ? stringType :
+                type.flags & TypeFlags.StringLikeLiteral && isFreshLiteralType(type) ? stringType :
                 type.flags & TypeFlags.NumberLiteral && isFreshLiteralType(type) ? numberType :
                 type.flags & TypeFlags.BigIntLiteral && isFreshLiteralType(type) ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(type) ? booleanType :
@@ -20611,7 +20614,7 @@ namespace ts {
         }
 
         function isTypeOrBaseIdenticalTo(s: Type, t: Type) {
-            return isTypeIdenticalTo(s, t) || !!(t.flags & TypeFlags.String && s.flags & TypeFlags.StringLiteral || t.flags & TypeFlags.Number && s.flags & TypeFlags.NumberLiteral);
+            return isTypeIdenticalTo(s, t) || !!(t.flags & TypeFlags.String && s.flags & TypeFlags.StringLikeLiteral || t.flags & TypeFlags.Number && s.flags & TypeFlags.NumberLiteral);
         }
 
         function isTypeCloselyMatchedBy(s: Type, t: Type) {
@@ -30753,7 +30756,7 @@ namespace ts {
                 texts.push(span.literal.text);
                 types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
             }
-            return isConstContext(node) ? getTemplateLiteralType(texts, types) : stringType;
+            return getFreshTypeOfLiteralType(getTemplateLiteralType(texts, types));
         }
 
         function getContextNode(node: Expression): Node {
@@ -30774,7 +30777,7 @@ namespace ts {
                 // We strip literal freshness when an appropriate contextual type is present such that contextually typed
                 // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
                 // here would be to not mark contextually typed literals as fresh in the first place.
-                const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
+                const result = maybeTypeOfKind(type, TypeFlags.FreshableLiteral) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
                     getRegularTypeOfLiteralType(type) : type;
                 return result;
             }
@@ -30864,7 +30867,7 @@ namespace ts {
                     // this a literal context for literals of that primitive type. For example, given a
                     // type parameter 'T extends string', infer string literal types for T.
                     const constraint = getBaseConstraintOfType(contextualType) || unknownType;
-                    return maybeTypeOfKind(constraint, TypeFlags.String) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                    return maybeTypeOfKind(constraint, TypeFlags.String) && maybeTypeOfKind(candidateType, TypeFlags.StringLikeLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.Number) && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.BigInt) && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
                         maybeTypeOfKind(constraint, TypeFlags.ESSymbol) && maybeTypeOfKind(candidateType, TypeFlags.UniqueESSymbol) ||
@@ -30872,7 +30875,7 @@ namespace ts {
                 }
                 // If the contextual type is a literal of a particular primitive type, we consider this a
                 // literal context for all literals of that primitive type.
-                return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+                return !!(contextualType.flags & (TypeFlags.StringLikeLiteral | TypeFlags.Index | TypeFlags.StringMapping) && maybeTypeOfKind(candidateType, TypeFlags.StringLikeLiteral) ||
                     contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                     contextualType.flags & TypeFlags.BigIntLiteral && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
                     contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||
@@ -38398,7 +38401,8 @@ namespace ts {
 
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
-                return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
+                const type = getTypeOfSymbol(getSymbolOfNode(node));
+                return !!(type.flags & TypeFlags.Literal) && isFreshLiteralType(type);
             }
             return false;
         }

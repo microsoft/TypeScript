@@ -4894,6 +4894,8 @@ namespace ts {
         Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
+        StringLikeLiteral = StringLiteral | TemplateLiteral,
+        FreshableLiteral = Literal | TemplateLiteral,
         /* @internal */
         StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
@@ -4988,7 +4990,8 @@ namespace ts {
     }
 
     /* @internal */
-    export type FreshableType = LiteralType | FreshableIntrinsicType;
+    export type FreshableLiteralType = LiteralType | TemplateLiteralType;
+    export type FreshableType = FreshableLiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
@@ -5386,6 +5389,8 @@ namespace ts {
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];  // Always one element longer than types
         types: readonly Type[];  // Always at least one element
+        freshType: TemplateLiteralType;  // Fresh version of type
+        regularType: TemplateLiteralType;  // Regular version of type
     }
 
     export interface StringMappingType extends InstantiableType {
