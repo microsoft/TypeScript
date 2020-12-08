@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-////let ABCDEFGHIJK = 1;
-////let abcdefghijkl = 1;
-////[|abcdefghijk|]
+////let ABCDEFGHIJKLMNOPQR = 1;
+////let abcdefghijklmnopqrs = 1;
+////[|abcdefghijklmnopqr|]
 
-verify.rangeAfterCodeFix('abcdefghijkl');
+verify.rangeAfterCodeFix('abcdefghijklmnopqrs');

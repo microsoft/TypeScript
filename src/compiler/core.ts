@@ -1939,7 +1939,7 @@ namespace ts {
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-        let bestDistance = Math.floor(name.length * 0.4) + 0.9; // If the best result is worse than this, don't bother.
+        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
@@ -1953,7 +1953,7 @@ namespace ts {
                     continue;
                 }
 
-                const distance = levenshteinWithMax(name, candidateName, bestDistance);
+                const distance = levenshteinWithMax(name, candidateName, bestDistance - 0.1);
                 if (distance === undefined) {
                     continue;
                 }
@@ -2011,7 +2011,7 @@ namespace ts {
         }
 
         const res = previous[s2.length];
-        return res >= max ? undefined : res;
+        return res > max ? undefined : res;
     }
 
     export function endsWith(str: string, suffix: string): boolean {
