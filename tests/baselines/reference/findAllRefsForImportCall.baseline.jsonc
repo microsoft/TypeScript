@@ -1,5 +1,5 @@
 // === /app.ts ===
-// /*FIND ALL REFS*/export function [|hello|]() {};
+// export function [|he/*FIND ALL REFS*/llo|]() {};
 
 // === /indirect-use.ts ===
 // import("./re-export").then(mod => mod.services.app.[|hello|]());
