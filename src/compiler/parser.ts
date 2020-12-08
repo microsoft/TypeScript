@@ -7740,63 +7740,31 @@ namespace ts {
                 }
 
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
-                    const authorInfoWithEmail = tryParse(() => tryParseAuthorNameAndEmail());
-                    if (!authorInfoWithEmail) {
-                        const end = getNodePos();
-                        return finishNode(factory.createJSDocAuthorTag(tagName, parseTrailingTagComments(start, end, indent, indentText)), start, end);
-                    }
-
-                    let comments = authorInfoWithEmail;
-                    if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
-                        const comment = parseTagComments(indent);
-                        if (comment) {
-                            comments += comment;
-                        }
-                    }
-
-                    return finishNode(factory.createJSDocAuthorTag(tagName, comments), start);
+                    const comments = parseAuthorNameAndEmail() + (parseTrailingTagComments(start, end, indent, indentText) || "");
+                    return finishNode(factory.createJSDocAuthorTag(tagName, comments || undefined), start);
                 }
 
-                function tryParseAuthorNameAndEmail(): string | undefined {
+                function parseAuthorNameAndEmail(): string {
                     const comments: string[] = [];
-                    let seenLessThan = false;
-                    let seenGreaterThan = false;
+                    let inEmail = false;
                     let token = scanner.getToken();
-
-                    loop: while (true) {
-                        switch (token) {
-                            case SyntaxKind.Identifier:
-                            case SyntaxKind.WhitespaceTrivia:
-                            case SyntaxKind.DotToken:
-                            case SyntaxKind.AtToken:
-                                comments.push(scanner.getTokenText());
-                                break;
-                            case SyntaxKind.LessThanToken:
-                                if (seenLessThan || seenGreaterThan) {
-                                    return;
-                                }
-                                seenLessThan = true;
-                                comments.push(scanner.getTokenText());
-                                break;
-                            case SyntaxKind.GreaterThanToken:
-                                if (!seenLessThan || seenGreaterThan) {
-                                    return;
-                                }
-                                seenGreaterThan = true;
-                                comments.push(scanner.getTokenText());
-                                scanner.setTextPos(scanner.getTokenPos() + 1);
-                                break loop;
-                            case SyntaxKind.NewLineTrivia:
-                            case SyntaxKind.EndOfFileToken:
-                                break loop;
+                    while (token !== SyntaxKind.EndOfFileToken && token !== SyntaxKind.NewLineTrivia) {
+                        if (token === SyntaxKind.LessThanToken) {
+                            inEmail = true;
                         }
-
+                        else if (token === SyntaxKind.AtToken && !inEmail) {
+                            break;
+                        }
+                        else if (token === SyntaxKind.GreaterThanToken && inEmail) {
+                            comments.push(scanner.getTokenText());
+                            scanner.setTextPos(scanner.getTokenPos() + 1);
+                            break;
+                        }
+                        comments.push(scanner.getTokenText());
                         token = nextTokenJSDoc();
                     }
 
-                    if (seenLessThan && seenGreaterThan) {
-                        return comments.length === 0 ? undefined : comments.join("");
-                    }
+                    return comments.join("");
                 }
 
                 function parseImplementsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImplementsTag {
