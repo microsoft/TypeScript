@@ -5860,6 +5860,32 @@ namespace ts {
                 return typeToTypeNodeHelper(type, context);
             }
 
+            function trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(node: T, context: NodeBuilderContext, includePrivateSymbol?: (s: Symbol) => void) {
+                let introducesError = false;
+                const leftmost = getFirstIdentifier(node);
+                if (isInJSFile(node) && (isExportsIdentifier(leftmost) || isModuleExportsAccessExpression(leftmost.parent) || (isQualifiedName(leftmost.parent) && isModuleIdentifier(leftmost.parent.left) && isExportsIdentifier(leftmost.parent.right)))) {
+                    introducesError = true;
+                    return { introducesError, node };
+                }
+                const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
+                if (sym) {
+                    if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                        introducesError = true;
+                    }
+                    else {
+                        context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
+                        includePrivateSymbol?.(sym);
+                    }
+                    if (isIdentifier(node)) {
+                        const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
+                        name.symbol = sym; // for quickinfo, which uses identifier symbol information
+                        return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
+                    }
+                }
+
+                return { introducesError, node };
+            }
+
             function serializeExistingTypeNode(context: NodeBuilderContext, existing: TypeNode, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
@@ -5983,25 +6009,10 @@ namespace ts {
                     }
 
                     if (isEntityName(node) || isEntityNameExpression(node)) {
-                        const leftmost = getFirstIdentifier(node);
-                        if (isInJSFile(node) && (isExportsIdentifier(leftmost) || isModuleExportsAccessExpression(leftmost.parent) || (isQualifiedName(leftmost.parent) && isModuleIdentifier(leftmost.parent.left) && isExportsIdentifier(leftmost.parent.right)))) {
-                            hadError = true;
-                            return node;
-                        }
-                        const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
-                        if (sym) {
-                            if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
-                                hadError = true;
-                            }
-                            else {
-                                context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
-                                includePrivateSymbol?.(sym);
-                            }
-                            if (isIdentifier(node)) {
-                                const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
-                                name.symbol = sym; // for quickinfo, which uses identifier symbol information
-                                return setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping);
-                            }
+                        const { introducesError, node: result } = trackExistingEntityName(node, context, includePrivateSymbol);
+                        hadError = hadError || introducesError;
+                        if (result !== node) {
+                            return result;
                         }
                     }
 
@@ -6732,12 +6743,50 @@ namespace ts {
                         !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && getEffectiveModifierFlags(p.valueDeclaration) & ModifierFlags.Static && isClassLike(p.valueDeclaration.parent));
                 }
 
+                function sanitizeJSDocImplements(clauses: readonly ExpressionWithTypeArguments[]): ExpressionWithTypeArguments[] | undefined {
+                    const result = mapDefined(clauses, e => {
+                        const oldEnclosing = context.enclosingDeclaration;
+                        context.enclosingDeclaration = e;
+                        let expr = e.expression;
+                        if (isEntityNameExpression(expr)) {
+                            if (isIdentifier(expr) && idText(expr) === "") {
+                                return cleanup(/*result*/ undefined); // Empty heritage clause, should be an error, but prefer emitting no heritage clauses to reemitting the empty one
+                            }
+                            let introducesError: boolean;
+                            ({ introducesError, node: expr } = trackExistingEntityName(expr, context, includePrivateSymbol));
+                            if (introducesError) {
+                                return cleanup(/*result*/ undefined);
+                            }
+                        }
+                        return cleanup(factory.createExpressionWithTypeArguments(expr,
+                            map(e.typeArguments, a =>
+                                serializeExistingTypeNode(context, a, includePrivateSymbol, bundled)
+                                || typeToTypeNodeHelper(getTypeFromTypeNode(a), context)
+                            )
+                        ));
+
+                        function cleanup<T>(result: T): T {
+                            context.enclosingDeclaration = oldEnclosing;
+                            return result;
+                        }
+                    });
+                    if (result.length === clauses.length) {
+                        return result;
+                    }
+                    return undefined;
+                }
+
                 function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
+                    const originalDecl = find(symbol.declarations, isClassLike);
+                    const oldEnclosing = context.enclosingDeclaration;
+                    context.enclosingDeclaration = originalDecl || oldEnclosing;
                     const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseTypes = getBaseTypes(classType);
-                    const implementsExpressions = mapDefined(getImplementsTypes(classType), serializeImplementedType);
+                    const originalImplements = originalDecl && getEffectiveImplementsTypeNodes(originalDecl);
+                    const implementsExpressions = originalImplements && sanitizeJSDocImplements(originalImplements)
+                        || mapDefined(getImplementsTypes(classType), serializeImplementedType);
                     const staticType = getTypeOfSymbol(symbol);
                     const isClass = !!staticType.symbol?.valueDeclaration && isClassLike(staticType.symbol.valueDeclaration);
                     const staticBaseType = isClass
@@ -6790,6 +6839,7 @@ namespace ts {
                         [factory.createConstructorDeclaration(/*decorators*/ undefined, factory.createModifiersFromModifierFlags(ModifierFlags.Private), [], /*body*/ undefined)] :
                         serializeSignatures(SignatureKind.Construct, staticType, staticBaseType, SyntaxKind.Constructor) as ConstructorDeclaration[];
                     const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
+                    context.enclosingDeclaration = oldEnclosing;
                     addResult(setTextRange(factory.createClassDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
@@ -14089,13 +14139,6 @@ namespace ts {
             }
         }
 
-        function unwrapSubstitution(type: Type): Type {
-            if (type.flags & TypeFlags.Substitution) {
-                return (type as SubstitutionType).substitute;
-            }
-            return type;
-        }
-
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible. The writing flag indicates that the type is
         // the target of an assignment.
@@ -14107,7 +14150,7 @@ namespace ts {
             type[cache] = circularConstraintType;
             // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
-            const objectType = unwrapSubstitution(getSimplifiedType(type.objectType, writing));
+            const objectType = getSimplifiedType(type.objectType, writing);
             const indexType = getSimplifiedType(type.indexType, writing);
             // T[A | B] -> T[A] | T[B] (reading)
             // T[A | B] -> T[A] & T[B] (writing)
@@ -14325,11 +14368,7 @@ namespace ts {
                 let combinedMapper: TypeMapper | undefined;
                 if (root.inferTypeParameters) {
                     const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                    // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
-                    // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
-                    // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
-                    // so in those cases we refain from performing inference and retain the uninfered type parameter
-                    if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
+                    if (!checkTypeInstantiable) {
                         // We don't want inferences from constraints as they may cause us to eagerly resolve the
                         // conditional type instead of deferring resolution. Also, we always want strict function
                         // types rules (i.e. proper contravariance) for inferences.
@@ -14374,10 +14413,9 @@ namespace ts {
                     }
                 }
                 // Return a deferred type for a check that is neither definitely true nor definitely false
-                const erasedCheckType = getActualTypeVariable(checkType);
                 result = <ConditionalType>createType(TypeFlags.Conditional);
                 result.root = root;
-                result.checkType = erasedCheckType;
+                result.checkType = checkType;
                 result.extendsType = extendsType;
                 result.mapper = mapper;
                 result.combinedMapper = combinedMapper;
@@ -20208,12 +20246,6 @@ namespace ts {
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         invokeOnce(source, target, inferFromObjectTypes);
-                    }
-                }
-                if (source.flags & TypeFlags.Simplifiable) {
-                    const simplified = getSimplifiedType(source, contravariant);
-                    if (simplified !== source) {
-                        inferFromTypes(simplified, target);
                     }
                 }
             }

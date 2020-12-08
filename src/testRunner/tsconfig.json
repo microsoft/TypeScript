@@ -125,6 +125,7 @@
         "unittests/tsbuild/moduleSpecifiers.ts",
         "unittests/tsbuild/noEmitOnError.ts",
         "unittests/tsbuild/outFile.ts",
+        "unittests/tsbuild/outputPaths.ts",
         "unittests/tsbuild/referencesWithRootDirInParent.ts",
         "unittests/tsbuild/resolveJsonModule.ts",
         "unittests/tsbuild/sample.ts",

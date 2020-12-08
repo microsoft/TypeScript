@@ -453,6 +453,7 @@ namespace ts.codefix {
                 break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 searchToken = containingFunction.name;
                 break;
         }

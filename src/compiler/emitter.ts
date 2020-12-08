@@ -130,36 +130,32 @@ namespace ts {
         return Extension.Js;
     }
 
-    function rootDirOfOptions(configFile: ParsedCommandLine) {
-        return configFile.options.rootDir || getDirectoryPath(Debug.checkDefined(configFile.options.configFilePath));
-    }
-
-    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined) {
+    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
         return outputDir ?
             resolvePath(
                 outputDir,
-                getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase)
+                getRelativePathFromDirectory(getCommonSourceDirectory ? getCommonSourceDirectory() : getCommonSourceDirectoryOfConfig(configFile, ignoreCase), inputFileName, ignoreCase)
             ) :
             inputFileName;
     }
 
     /* @internal */
-    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && !fileExtensionIs(inputFileName, Extension.Json));
         return changeExtension(
-            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
             Extension.Dts
         );
     }
 
-    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
         if (configFile.options.emitDeclarationOnly) return undefined;
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
-            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
             isJsonFile ?
                 Extension.Json :
-                fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
+                configFile.options.jsx === JsxEmit.Preserve && (fileExtensionIs(inputFileName, Extension.Tsx) || fileExtensionIs(inputFileName, Extension.Jsx)) ?
                     Extension.Jsx :
                     Extension.Js
         );
@@ -190,21 +186,63 @@ namespace ts {
         addOutput(buildInfoPath);
     }
 
-    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
+    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
         if (fileExtensionIs(inputFileName, Extension.Dts)) return;
-        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
         addOutput(js);
         if (fileExtensionIs(inputFileName, Extension.Json)) return;
         if (js && configFile.options.sourceMap) {
             addOutput(`${js}.map`);
         }
         if (getEmitDeclarations(configFile.options)) {
-            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             addOutput(dts);
             if (configFile.options.declarationMap) {
                 addOutput(`${dts}.map`);
             }
         }
+    }
+
+    /*@internal*/
+    export function getCommonSourceDirectory(
+        options: CompilerOptions,
+        emittedFiles: () => readonly string[],
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        checkSourceFilesBelongToPath?: (commonSourceDirectory: string) => void
+    ): string {
+        let commonSourceDirectory;
+        if (options.rootDir) {
+            // If a rootDir is specified use it as the commonSourceDirectory
+            commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
+            checkSourceFilesBelongToPath?.(options.rootDir);
+        }
+        else if (options.composite && options.configFilePath) {
+            // Project compilations never infer their root from the input source paths
+            commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
+            checkSourceFilesBelongToPath?.(commonSourceDirectory);
+        }
+        else {
+            commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(emittedFiles(), currentDirectory, getCanonicalFileName);
+        }
+
+        if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+            // Make sure directory path ends with directory separator so this string can directly
+            // used to replace with "" to get the relative path of the source file and the relative path doesn't
+            // start with / making it rooted path
+            commonSourceDirectory += directorySeparator;
+        }
+        return commonSourceDirectory;
+    }
+
+    /*@internal*/
+    export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
+        return getCommonSourceDirectory(
+            options,
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensions)) && !fileExtensionIs(file, Extension.Dts)),
+            getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
+            createGetCanonicalFileName(!ignoreCase)
+        );
     }
 
     /*@internal*/
@@ -214,8 +252,9 @@ namespace ts {
             getSingleOutputFileNames(configFile, addOutput);
         }
         else {
+            const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
             for (const inputFileName of configFile.fileNames) {
-                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput);
+                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput, getCommonSourceDirectory);
             }
             addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
         }
@@ -242,13 +281,14 @@ namespace ts {
             return Debug.checkDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
         }
 
+        const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
         for (const inputFileName of configFile.fileNames) {
             if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
-            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
             if (getEmitDeclarations(configFile.options)) {
-                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             }
         }
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(configFile.options);
