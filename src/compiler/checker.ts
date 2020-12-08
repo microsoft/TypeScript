@@ -37568,6 +37568,10 @@ namespace ts {
                 const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
                 return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
             }
+            else if (name.parent.kind === SyntaxKind.JSDocLink) {
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value | SymbolFlags.Alias;
+                return resolveEntityName(<EntityName>name, meaning, /*ignoreErrors*/ true);
+            }
 
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(<Identifier>name, /*meaning*/ SymbolFlags.FunctionScopedVariable);

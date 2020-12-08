@@ -131,8 +131,8 @@ namespace ts.JsDoc {
                 const symbol = checker.getSymbolAtLocation(link.name);
                 if (!symbol || !symbol.valueDeclaration) return;
                 return {
-                    fileName: getSourceFileOfNode(see).fileName,
-                    textSpan: createTextSpanFromNode(see),
+                    fileName: getSourceFileOfNode(link).fileName,
+                    textSpan: createTextSpanFromNode(link),
                     target: {
                         fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
                         textSpan: createTextSpanFromNode(symbol.valueDeclaration)
@@ -140,7 +140,6 @@ namespace ts.JsDoc {
                 };
             });
         }
-        const see = tag as JSDocSeeTag;
     }
 
     function getCommentText(tag: JSDocTag): string | undefined {

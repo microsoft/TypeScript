@@ -529,6 +529,8 @@ namespace ts {
                 return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
                     forEach((<JSDocSignature>node).parameters, cbNode) ||
                     visitNode(cbNode, (<JSDocSignature>node).type);
+            case SyntaxKind.JSDocLink:
+                return visitNode(cbNode, (node as JSDocLink).name);
             case SyntaxKind.JSDocTypeLiteral:
                 return forEach((node as JSDocTypeLiteral).jsDocPropertyTags, cbNode);
             case SyntaxKind.JSDocTag:
@@ -537,7 +539,8 @@ namespace ts {
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocReadonlyTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName);
+                return visitNodes(cbNode, cbNodes, (node as JSDocTag).comment?.links)
+                    || visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
         }
@@ -7389,7 +7392,7 @@ namespace ts {
                 }
 
                 function createJSDocComment(): JSDoc {
-                    const comment = comments.length ? { links, text: comments.join("") } : undefined;
+                    const comment = comments.length ? { links: createNodeArray(links, -1, -1), text: comments.join("") } : undefined;
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     return finishNode(factory.createJSDocComment(comment, tagsArray), start, end);
                 }
@@ -7619,7 +7622,7 @@ namespace ts {
 
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
-                    return comments.length === 0 ? undefined : { links, text: comments.join("") };
+                    return comments.length === 0 ? undefined : { links: createNodeArray(links, -1, -1), text: comments.join("") };
                 }
 
                 function parseLink(start: number) {

@@ -3156,7 +3156,7 @@ namespace ts {
 
     export interface JSDocComment {
         text: string;
-        links?: JSDocLink[];
+        links?: NodeArray<JSDocLink>;
     }
 
     export interface JSDocUnknownTag extends JSDocTag {
