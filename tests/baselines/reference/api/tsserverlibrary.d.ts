@@ -1750,13 +1750,13 @@ declare namespace ts {
         readonly tagName: Identifier;
         readonly comment?: JSDocComment;
     }
-    export interface JSDocLinkNode extends Node {
+    export interface JSDocLink extends Node {
         readonly kind: SyntaxKind.JSDocLink;
         readonly name?: EntityName;
     }
     export interface JSDocComment {
         text: string;
-        links?: JSDocLinkNode[];
+        links?: JSDocLink[];
     }
     export interface JSDocUnknownTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTag;
@@ -3462,8 +3462,8 @@ declare namespace ts {
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
         createJSDocNameReference(name: EntityName): JSDocNameReference;
         updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
-        createJSDocLinkNode(name: EntityName): JSDocLinkNode;
-        updateJSDocLinkNode(node: JSDocLinkNode, name: EntityName): JSDocLinkNode;
+        createJSDocLinkNode(name: EntityName): JSDocLink;
+        updateJSDocLinkNode(node: JSDocLink, name: EntityName): JSDocLink;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
@@ -5992,9 +5992,9 @@ declare namespace ts {
     interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLink[];
+        links?: readonly JSDocLinkInfo[];
     }
-    interface JSDocLink extends DocumentSpan {
+    interface JSDocLinkInfo extends DocumentSpan {
         target: DocumentSpan;
     }
     interface QuickInfo {
@@ -6003,7 +6003,7 @@ declare namespace ts {
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        tags?: readonly JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
     interface RenameInfoSuccess {
@@ -6050,7 +6050,7 @@ declare namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
-        tags: readonly JSDocTagInfo[];
+        tags: JSDocTagInfo[];
     }
     /**
      * Represents a set of signature help items, and the preferred item that should be selected.
@@ -6102,7 +6102,7 @@ declare namespace ts {
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
-        tags?: readonly JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
     }
@@ -7204,9 +7204,9 @@ declare namespace ts.server.protocol {
     interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLink[];
+        links?: JSDocLinkInfo[];
     }
-    interface JSDocLink extends DocumentSpan {
+    interface JSDocLinkInfo extends DocumentSpan {
         target: FileSpan;
     }
     interface TextSpanWithContext extends TextSpan {
@@ -7936,7 +7936,7 @@ declare namespace ts.server.protocol {
         /**
          * JSDoc tags associated with symbol.
          */
-        tags: readonly JSDocTagInfo[];
+        tags: JSDocTagInfo[];
     }
     /**
      * Quickinfo response message.
@@ -8208,7 +8208,7 @@ declare namespace ts.server.protocol {
         /**
          * JSDoc tags for the symbol.
          */
-        tags?: readonly JSDocTagInfo[];
+        tags?: JSDocTagInfo[];
         /**
          * The associated code actions for this entry
          */
@@ -8291,9 +8291,8 @@ declare namespace ts.server.protocol {
         documentation: SymbolDisplayPart[];
         /**
          * The signature's JSDoc tags
-         * TODO: Changing this doesn't cause the build to fail! Need tests and probably a scan of session.ts
          */
-        tags: readonly JSDocTagInfo[];
+        tags: JSDocTagInfo[];
     }
     /**
      * Signature help items found in the response of a signature help request.

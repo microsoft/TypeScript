@@ -128,7 +128,6 @@ namespace ts.JsDoc {
         if (links) {
             return mapDefined(links, link => {
                 if (!link.name) return;
-                // TODO: Test this, I think getSymbolAtLocation eventually calls checkQualifiedName and then returns resolvedSymbol, but it's hard to be sure
                 const symbol = checker.getSymbolAtLocation(link.name);
                 if (!symbol || !symbol.valueDeclaration) return;
                 return {
