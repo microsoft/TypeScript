@@ -5860,6 +5860,32 @@ namespace ts {
                 return typeToTypeNodeHelper(type, context);
             }
 
+            function trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(node: T, context: NodeBuilderContext, includePrivateSymbol?: (s: Symbol) => void) {
+                let introducesError = false;
+                const leftmost = getFirstIdentifier(node);
+                if (isInJSFile(node) && (isExportsIdentifier(leftmost) || isModuleExportsAccessExpression(leftmost.parent) || (isQualifiedName(leftmost.parent) && isModuleIdentifier(leftmost.parent.left) && isExportsIdentifier(leftmost.parent.right)))) {
+                    introducesError = true;
+                    return { introducesError, node };
+                }
+                const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
+                if (sym) {
+                    if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
+                        introducesError = true;
+                    }
+                    else {
+                        context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
+                        includePrivateSymbol?.(sym);
+                    }
+                    if (isIdentifier(node)) {
+                        const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
+                        name.symbol = sym; // for quickinfo, which uses identifier symbol information
+                        return { introducesError, node: setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping) };
+                    }
+                }
+
+                return { introducesError, node };
+            }
+
             function serializeExistingTypeNode(context: NodeBuilderContext, existing: TypeNode, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
@@ -5983,25 +6009,10 @@ namespace ts {
                     }
 
                     if (isEntityName(node) || isEntityNameExpression(node)) {
-                        const leftmost = getFirstIdentifier(node);
-                        if (isInJSFile(node) && (isExportsIdentifier(leftmost) || isModuleExportsAccessExpression(leftmost.parent) || (isQualifiedName(leftmost.parent) && isModuleIdentifier(leftmost.parent.left) && isExportsIdentifier(leftmost.parent.right)))) {
-                            hadError = true;
-                            return node;
-                        }
-                        const sym = resolveEntityName(leftmost, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveALias*/ true);
-                        if (sym) {
-                            if (isSymbolAccessible(sym, context.enclosingDeclaration, SymbolFlags.All, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
-                                hadError = true;
-                            }
-                            else {
-                                context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
-                                includePrivateSymbol?.(sym);
-                            }
-                            if (isIdentifier(node)) {
-                                const name = sym.flags & SymbolFlags.TypeParameter ? typeParameterToName(getDeclaredTypeOfSymbol(sym), context) : factory.cloneNode(node);
-                                name.symbol = sym; // for quickinfo, which uses identifier symbol information
-                                return setEmitFlags(setOriginalNode(name, node), EmitFlags.NoAsciiEscaping);
-                            }
+                        const { introducesError, node: result } = trackExistingEntityName(node, context, includePrivateSymbol);
+                        hadError = hadError || introducesError;
+                        if (result !== node) {
+                            return result;
                         }
                     }
 
@@ -6732,12 +6743,50 @@ namespace ts {
                         !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && getEffectiveModifierFlags(p.valueDeclaration) & ModifierFlags.Static && isClassLike(p.valueDeclaration.parent));
                 }
 
+                function sanitizeJSDocImplements(clauses: readonly ExpressionWithTypeArguments[]): ExpressionWithTypeArguments[] | undefined {
+                    const result = mapDefined(clauses, e => {
+                        const oldEnclosing = context.enclosingDeclaration;
+                        context.enclosingDeclaration = e;
+                        let expr = e.expression;
+                        if (isEntityNameExpression(expr)) {
+                            if (isIdentifier(expr) && idText(expr) === "") {
+                                return cleanup(/*result*/ undefined); // Empty heritage clause, should be an error, but prefer emitting no heritage clauses to reemitting the empty one
+                            }
+                            let introducesError: boolean;
+                            ({ introducesError, node: expr } = trackExistingEntityName(expr, context, includePrivateSymbol));
+                            if (introducesError) {
+                                return cleanup(/*result*/ undefined);
+                            }
+                        }
+                        return cleanup(factory.createExpressionWithTypeArguments(expr,
+                            map(e.typeArguments, a =>
+                                serializeExistingTypeNode(context, a, includePrivateSymbol, bundled)
+                                || typeToTypeNodeHelper(getTypeFromTypeNode(a), context)
+                            )
+                        ));
+
+                        function cleanup<T>(result: T): T {
+                            context.enclosingDeclaration = oldEnclosing;
+                            return result;
+                        }
+                    });
+                    if (result.length === clauses.length) {
+                        return result;
+                    }
+                    return undefined;
+                }
+
                 function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
+                    const originalDecl = find(symbol.declarations, isClassLike);
+                    const oldEnclosing = context.enclosingDeclaration;
+                    context.enclosingDeclaration = originalDecl || oldEnclosing;
                     const localParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseTypes = getBaseTypes(classType);
-                    const implementsExpressions = mapDefined(getImplementsTypes(classType), serializeImplementedType);
+                    const originalImplements = originalDecl && getEffectiveImplementsTypeNodes(originalDecl);
+                    const implementsExpressions = originalImplements && sanitizeJSDocImplements(originalImplements)
+                        || mapDefined(getImplementsTypes(classType), serializeImplementedType);
                     const staticType = getTypeOfSymbol(symbol);
                     const isClass = !!staticType.symbol?.valueDeclaration && isClassLike(staticType.symbol.valueDeclaration);
                     const staticBaseType = isClass
@@ -6790,6 +6839,7 @@ namespace ts {
                         [factory.createConstructorDeclaration(/*decorators*/ undefined, factory.createModifiersFromModifierFlags(ModifierFlags.Private), [], /*body*/ undefined)] :
                         serializeSignatures(SignatureKind.Construct, staticType, staticBaseType, SyntaxKind.Constructor) as ConstructorDeclaration[];
                     const indexSignatures = serializeIndexSignatures(classType, baseTypes[0]);
+                    context.enclosingDeclaration = oldEnclosing;
                     addResult(setTextRange(factory.createClassDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
