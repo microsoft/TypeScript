@@ -2355,7 +2355,6 @@ namespace ts.server.protocol {
 
         /**
          * The signature's JSDoc tags
-         * TODO: Changing this doesn't cause the build to fail! Need tests and probably a scan of session.ts
          */
         tags: JSDocTagInfo[];
     }

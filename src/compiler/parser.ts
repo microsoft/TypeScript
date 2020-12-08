@@ -7774,17 +7774,15 @@ namespace ts {
                         return finishNode(factory.createJSDocAuthorTag(tagName, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                     }
 
-                    let comments = authorInfoWithEmail;
-                    let links;
+                    let comments: JSDocComment = { text: authorInfoWithEmail };
                     if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
-                        const comment = parseTagComments(indent);
-                        if (comment) {
-                            comments += comment.text;
-                            links = comment.links;
+                        const tagComments = parseTagComments(indent);
+                        if (tagComments) {
+                            comments.text += tagComments.text;
+                            comments.links = tagComments.links;
                         }
                     }
-
-                    return finishNode(factory.createJSDocAuthorTag(tagName, { links, text: comments }), start);
+                    return finishNode(factory.createJSDocAuthorTag(tagName, comments), start);
                 }
 
                 function tryParseAuthorNameAndEmail(): string | undefined {

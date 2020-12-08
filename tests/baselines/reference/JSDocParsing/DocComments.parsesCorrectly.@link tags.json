@@ -281,6 +281,7 @@
                 "escapedText": "author"
             },
             "comment": {
+                "text": "Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}",
                 "links": [
                     {
                         "kind": "JSDocLink",
@@ -297,8 +298,7 @@
                             "escapedText": "https"
                         }
                     }
-                ],
-                "text": "Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}"
+                ]
             }
         },
         "length": 3,
