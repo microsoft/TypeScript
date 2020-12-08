@@ -1961,9 +1961,6 @@ namespace ts {
     export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
         return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
     }
-    export function textRangesEqual(a: TextRange, b: TextRange): boolean {
-        return a.pos === b.pos && a.end === b.end;
-    }
 
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
