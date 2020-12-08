@@ -14089,13 +14089,6 @@ namespace ts {
             }
         }
 
-        function unwrapSubstitution(type: Type): Type {
-            if (type.flags & TypeFlags.Substitution) {
-                return (type as SubstitutionType).substitute;
-            }
-            return type;
-        }
-
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible. The writing flag indicates that the type is
         // the target of an assignment.
@@ -14107,7 +14100,7 @@ namespace ts {
             type[cache] = circularConstraintType;
             // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
-            const objectType = unwrapSubstitution(getSimplifiedType(type.objectType, writing));
+            const objectType = getSimplifiedType(type.objectType, writing);
             const indexType = getSimplifiedType(type.indexType, writing);
             // T[A | B] -> T[A] | T[B] (reading)
             // T[A | B] -> T[A] & T[B] (writing)
@@ -14325,11 +14318,7 @@ namespace ts {
                 let combinedMapper: TypeMapper | undefined;
                 if (root.inferTypeParameters) {
                     const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                    // We skip inference of the possible `infer` types unles the `extendsType` _is_ an infer type
-                    // if it was, it's trivial to say that extendsType = checkType, however such a pattern is used to
-                    // "reset" the type being build up during constraint calculation and avoid making an apparently "infinite" constraint
-                    // so in those cases we refain from performing inference and retain the uninfered type parameter
-                    if (!checkTypeInstantiable || !some(root.inferTypeParameters, t => t === extendsType)) {
+                    if (!checkTypeInstantiable) {
                         // We don't want inferences from constraints as they may cause us to eagerly resolve the
                         // conditional type instead of deferring resolution. Also, we always want strict function
                         // types rules (i.e. proper contravariance) for inferences.
@@ -14374,10 +14363,9 @@ namespace ts {
                     }
                 }
                 // Return a deferred type for a check that is neither definitely true nor definitely false
-                const erasedCheckType = getActualTypeVariable(checkType);
                 result = <ConditionalType>createType(TypeFlags.Conditional);
                 result.root = root;
-                result.checkType = erasedCheckType;
+                result.checkType = checkType;
                 result.extendsType = extendsType;
                 result.mapper = mapper;
                 result.combinedMapper = combinedMapper;
@@ -20208,12 +20196,6 @@ namespace ts {
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         invokeOnce(source, target, inferFromObjectTypes);
-                    }
-                }
-                if (source.flags & TypeFlags.Simplifiable) {
-                    const simplified = getSimplifiedType(source, contravariant);
-                    if (simplified !== source) {
-                        inferFromTypes(simplified, target);
                     }
                 }
             }
