@@ -10,6 +10,7 @@
 
 // @Filename: /require.js
 //// require("./script/*2*/");
+//// console.log("./script/*3*/");
 
 // @Filename: /tripleSlash.ts
 //// /// <reference path="script.ts" />
@@ -17,4 +18,4 @@
 // @Filename: /stringLiteral.ts
 //// console.log("./script");
 
-verify.baselineFindAllReferences("1", "2");
+verify.baselineFindAllReferences("1", "2", "3");

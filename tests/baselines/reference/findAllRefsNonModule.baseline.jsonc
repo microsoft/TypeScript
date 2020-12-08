@@ -1,8 +1,9 @@
 // === /import.ts ===
-// /*FIND ALL REFS*/import [|"./script"|];
+// import [|"./script/*FIND ALL REFS*/"|];
 
 // === /require.js ===
 // require([|"./script"|]);
+// console.log("./script");
 
 // === /tripleSlash.ts ===
 // /// <reference path="[|script.ts|]" />
@@ -62,7 +63,8 @@
 // import [|"./script"|];
 
 // === /require.js ===
-// /*FIND ALL REFS*/require([|"./script"|]);
+// require([|"./script/*FIND ALL REFS*/"|]);
+// console.log("./script");
 
 // === /tripleSlash.ts ===
 // /// <reference path="[|script.ts|]" />
@@ -113,6 +115,71 @@
         "fileName": "/tripleSlash.ts",
         "isWriteAccess": false,
         "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /require.js ===
+// require("[|./script|]");
+// console.log("[|./script|]/*FIND ALL REFS*/");
+
+// === /stringLiteral.ts ===
+// console.log("[|./script|]");
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/require.js",
+      "kind": "var",
+      "name": "./script",
+      "textSpan": {
+        "start": 34,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "\"./script\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 8
+        },
+        "fileName": "/require.js",
+        "contextSpan": {
+          "start": 0,
+          "length": 20
+        },
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      },
+      {
+        "textSpan": {
+          "start": 34,
+          "length": 8
+        },
+        "fileName": "/require.js",
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
+      },
+      {
+        "textSpan": {
+          "start": 13,
+          "length": 8
+        },
+        "fileName": "/stringLiteral.ts",
+        "isWriteAccess": false,
+        "isDefinition": false,
+        "isInString": true
       }
     ]
   }

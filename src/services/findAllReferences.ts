@@ -623,12 +623,13 @@ namespace ts.FindAllReferences {
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
                 if (!options.implementations && isStringLiteralLike(node)) {
-                    const refFileMap = program.getRefFileMap();
-                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
-                    const referencedFile = referencedFileName && program.getSourceFile(referencedFileName);
-                    return referencedFile
-                        ? [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, refFileMap!, program) || emptyArray }]
-                        : getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
+                    if (isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ true) || isExternalModuleReference(node.parent) || isImportDeclaration(node.parent) || isImportCall(node.parent)) {
+                        const refFileMap = program.getRefFileMap();
+                        const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
+                        const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
+                        return referencedFile && [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, refFileMap!, program) || emptyArray }];
+                    }
+                    return getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
                 }
                 return undefined;
             }

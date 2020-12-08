@@ -1140,7 +1140,7 @@ namespace FourSlash {
         }
 
         private getBaselineContentForGroupedReferences(refsByFile: readonly (readonly ts.ReferenceEntry[])[], markerName?: string) {
-            const marker = markerName !== undefined && this.getMarkerByName(markerName);
+            const marker = markerName !== undefined ? this.getMarkerByName(markerName) : undefined;
             let baselineContent = "";
             for (const group of refsByFile) {
                 baselineContent += getBaselineContentForFile(group[0].fileName, this.getFileContent(group[0].fileName));
@@ -1152,15 +1152,23 @@ namespace FourSlash {
                 let newContent = `=== ${fileName} ===\n`;
                 let pos = 0;
                 for (const { textSpan } of refsByFile.find(refs => refs[0].fileName === fileName) ?? ts.emptyArray) {
-                    if (marker && fileName === marker.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
-                        newContent += "/*FIND ALL REFS*/";
-                    }
                     const end = textSpan.start + textSpan.length;
                     newContent += content.slice(pos, textSpan.start);
                     newContent += "[|";
-                    newContent += content.slice(textSpan.start, end);
+                    pos = textSpan.start;
+                    if (fileName === marker?.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                        newContent += content.slice(pos, marker.position);
+                        newContent += "/*FIND ALL REFS*/";
+                        pos = marker.position;
+                    }
+                    newContent += content.slice(pos, end);
                     newContent += "|]";
                     pos = end;
+                }
+                if (marker?.fileName === fileName && marker.position >= pos) {
+                    newContent += content.slice(pos, marker.position);
+                    newContent += "/*FIND ALL REFS*/";
+                    pos = marker.position;
                 }
                 newContent += content.slice(pos);
                 return newContent.split(/\r?\n/).map(l => "// " + l).join("\n");
