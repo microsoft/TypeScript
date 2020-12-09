@@ -170,6 +170,8 @@ Output::
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
   {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
@@ -281,6 +283,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
   {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:

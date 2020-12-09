@@ -641,6 +641,10 @@ namespace ts.server {
         errors: Diagnostic[] | undefined;
     }
 
+    interface SharedExtendedConfigFileWatcher extends FileWatcher {
+        projects: Set<ConfiguredProject>;
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -757,9 +761,7 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
-        private sharedExtendedConfigFileMap = createMultiMap<Path, ConfiguredProject>();
-        /*@internal*/
-        private sharedExtendedConfigFileWatchers = new Map<Path, FileWatcher>();
+        private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher>();
 
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
@@ -1357,51 +1359,60 @@ namespace ts.server {
 
         /*@internal*/
         private updateSharedExtendedConfigFileMap(project: ConfiguredProject) {
-            const extendedSourceFiles = project.getCompilerOptions().configFile?.extendedSourceFiles || emptyArray;
-            extendedSourceFiles.forEach((extendedSourceFile: string) => {
-                const extendedConfigPath = this.toPath(extendedSourceFile);
-                if (!this.sharedExtendedConfigFileMap.has(extendedConfigPath)) {
-                    const watcher = this.watchFactory.watchFile(
+            const extendedConfigPaths: readonly Path[] = project.getCompilerOptions().configFile?.extendedSourceFiles
+                ?.map((file) => this.toPath(file)) ?? emptyArray;
+            for (const extendedConfigPath of extendedConfigPaths) {
+                const watcher = this.sharedExtendedConfigFileWatchers.get(extendedConfigPath);
+                if (watcher) {
+                    watcher.projects.add(project);
+                }
+                else {
+                    // start watching previously unseen extended config
+                    const projects = new Set<ConfiguredProject>([project]);
+                    const fileWatcherCallback = () => {
+                        const reason = `Change in extended config file ${extendedConfigPath} detected`;
+                        projects.forEach((project: ConfiguredProject) => {
+                            // Skip refresh if project is not yet loaded
+                            if (project.isInitialLoadPending()) return;
+                            project.pendingReload = ConfigFileProgramReloadLevel.Full;
+                            project.pendingReloadReason = reason;
+                            this.delayUpdateProjectGraph(project);
+                        });
+                    };
+                    const fileWatcher = this.watchFactory.watchFile(
                         extendedConfigPath,
-                        () => this.onSharedExtendedConfigChanged(extendedConfigPath),
+                        fileWatcherCallback,
                         PollingInterval.High,
                         this.hostConfiguration.watchOptions,
                         WatchType.ExtendedConfigFile
                     );
-                    this.sharedExtendedConfigFileWatchers.set(extendedConfigPath, watcher);
+                    this.sharedExtendedConfigFileWatchers.set(extendedConfigPath, {
+                        close: () => fileWatcher.close(),
+                        projects,
+                    });
                 }
-                const otherProjects = this.sharedExtendedConfigFileMap.get(extendedConfigPath);
-                if (!otherProjects || !otherProjects.includes(project)) {
-                    this.sharedExtendedConfigFileMap.add(extendedConfigPath, project);
+            }
+            // remove project from all unrelated watchers
+            this.sharedExtendedConfigFileWatchers.forEach((watcher, extendedConfigPath) => {
+                if (!extendedConfigPaths.includes(extendedConfigPath)) {
+                    watcher.projects.delete(project);
+                    if (watcher.projects.size === 0) {
+                        watcher.close();
+                        this.sharedExtendedConfigFileWatchers.delete(extendedConfigPath);
+                    }
                 }
             });
         }
 
         /*@internal*/
         private removeProjectFromSharedExtendedConfigFileMap(project: ConfiguredProject) {
-            for (const key of arrayFrom(this.sharedExtendedConfigFileMap.keys())) {
-                this.sharedExtendedConfigFileMap.remove(key, project);
-                const otherProjects = this.sharedExtendedConfigFileMap.get(key) || emptyArray;
-                if (otherProjects.length === 0) {
-                    const watcher = this.sharedExtendedConfigFileWatchers.get(key);
-                    if (watcher) {
-                        watcher.close();
-                        this.sharedExtendedConfigFileWatchers.delete(key);
-                    }
+            for (const [sharedConfigPath, watcher] of arrayFrom(this.sharedExtendedConfigFileWatchers.entries())) {
+                watcher.projects.delete(project);
+                if (watcher.projects.size === 0) {
+                    watcher.close();
+                    this.sharedExtendedConfigFileWatchers.delete(sharedConfigPath);
                 }
             }
-        }
-
-        /*@internal*/
-        private onSharedExtendedConfigChanged(extendedConfigPath: Path) {
-            const projects = this.sharedExtendedConfigFileMap.get(extendedConfigPath) || emptyArray;
-            projects.forEach((project: ConfiguredProject) => {
-                // Skip refresh if project is not yet loaded
-                if (project.isInitialLoadPending()) return;
-                project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                project.pendingReloadReason = `Change in extended config file ${extendedConfigPath} detected`;
-                this.delayUpdateProjectGraph(project);
-            });
         }
 
         /**

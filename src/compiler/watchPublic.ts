@@ -791,13 +791,11 @@ namespace ts {
 
         function watchExtendedConfigFiles() {
             const { configFile } = builderProgram.getCompilerOptions();
-            if (configFile) {
-                updateExtendedConfigFilesMap(
-                    configFile,
-                    extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
-                    watchExtendedConfigFile
-                );
-            }
+            updateExtendedConfigFilesMap(
+                configFile,
+                extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
+                watchExtendedConfigFile
+            );
         }
 
         function watchExtendedConfigFile(extendedConfigFile: string) {

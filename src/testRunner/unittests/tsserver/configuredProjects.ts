@@ -1136,7 +1136,7 @@ foo();`
 
             projectService.openClientFile(aFile.path);
             projectService.openClientFile(bFile.path);
-            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            checkNumberOfConfiguredProjects(projectService, 2);
             const aProject = configuredProjectAt(projectService, 0);
             const bProject = configuredProjectAt(projectService, 1);
             checkProjectActualFiles(aProject, [aFile.path, aConfig.path, alphaExtendedConfig.path]);
@@ -1170,6 +1170,71 @@ foo();`
             const bOptions3 = bProject.getCompilerOptions();
             assert.isTrue(aOptions3.strict);
             assert.isFalse(bOptions3.strict);
+        });
+
+        it("should stop watching the extended configs of closed projects", () => {
+            const alphaExtendedConfig: File = {
+                path: `${tscWatch.projectRoot}/extended/alpha.tsconfig.json`,
+                content: "{}"
+            };
+            const bravoExtendedConfig: File = {
+                path: `${tscWatch.projectRoot}/extended/bravo.tsconfig.json`,
+                content: JSON.stringify({
+                    extends: "./alpha.tsconfig.json"
+                })
+            };
+            const aConfig: File = {
+                path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                content: JSON.stringify({
+                    extends: "../extended/alpha.tsconfig.json",
+                    files: ["a.ts"]
+                })
+            };
+            const aFile: File = {
+                path: `${tscWatch.projectRoot}/a/a.ts`,
+                content: `let a = 1;`
+            };
+            const bConfig: File = {
+                path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                content: JSON.stringify({
+                    extends: "../extended/bravo.tsconfig.json",
+                    files: ["b.ts"]
+                })
+            };
+            const bFile: File = {
+                path: `${tscWatch.projectRoot}/b/b.ts`,
+                content: `let b = 1;`
+            };
+
+            const host = createServerHost([
+                alphaExtendedConfig, aConfig, aFile,
+                bravoExtendedConfig, bConfig, bFile
+            ]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(aFile.path);
+            projectService.openClientFile(bFile.path);
+            checkNumberOfConfiguredProjects(projectService, 2);
+            const aProject = configuredProjectAt(projectService, 0);
+            const bProject = configuredProjectAt(projectService, 1);
+            checkProjectActualFiles(aProject, [aFile.path, aConfig.path, alphaExtendedConfig.path]);
+            checkProjectActualFiles(bProject, [bFile.path, bConfig.path, alphaExtendedConfig.path, bravoExtendedConfig.path]);
+
+            checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
+
+            projectService.closeClientFile(bFile.path);
+            host.deleteFile(bConfig.path);
+
+            assert.isTrue(bProject.isClosed());
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkWatchedFiles(host, [aConfig.path, libFile.path, alphaExtendedConfig.path, bFile.path]);
+
+            projectService.closeClientFile(aFile.path);
+            host.deleteFile(aConfig.path);
+
+            assert.isTrue(aProject.isClosed());
+            checkNumberOfConfiguredProjects(projectService, 0);
+            checkWatchedFiles(host, [aFile.path, bFile.path]);
         });
     });
 

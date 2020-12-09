@@ -210,6 +210,10 @@ namespace ts {
         originalGetSourceFile: CompilerHost["getSourceFile"];
     }
 
+    interface SharedExtendedConfigFileWatcher extends FileWatcher {
+        projects: Set<ResolvedConfigFilePath>;
+    }
+
     interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
         readonly host: SolutionBuilderHost<T>;
         readonly hostWithWatch: SolutionBuilderWithWatchHost<T>;
@@ -254,6 +258,7 @@ namespace ts {
         readonly allWatchedWildcardDirectories: ESMap<ResolvedConfigFilePath, ESMap<string, WildcardDirectoryWatcher>>;
         readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
         readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
+        readonly allWatchedExtendedConfigFiles: ESMap<ResolvedConfigFilePath, SharedExtendedConfigFileWatcher>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
@@ -325,6 +330,7 @@ namespace ts {
             allWatchedWildcardDirectories: new Map(),
             allWatchedInputFiles: new Map(),
             allWatchedConfigFiles: new Map(),
+            allWatchedExtendedConfigFiles: new Map(),
 
             timerToBuildInvalidatedProject: undefined,
             reportFileChangeDetected: false,
@@ -461,6 +467,18 @@ namespace ts {
                 currentProjects,
                 { onDeleteValue: closeFileWatcher }
             );
+
+            state.allWatchedExtendedConfigFiles.forEach((watcher, extendedConfigFilePath) => {
+                watcher.projects.forEach((project) => {
+                    if (!currentProjects.has(project)) {
+                        watcher.projects.delete(project);
+                    }
+                });
+                if (watcher.projects.size === 0) {
+                    watcher.close();
+                    state.allWatchedExtendedConfigFiles.delete(extendedConfigFilePath);
+                }
+            });
 
             mutateMapSkippingNewValues(
                 state.allWatchedWildcardDirectories,
@@ -1165,6 +1183,7 @@ namespace ts {
 
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
                 watchConfigFile(state, project, projectPath, config);
+                watchExtendedConfigFiles(state, projectPath, config);
                 watchWildCardDirectories(state, project, projectPath, config);
                 watchInputFiles(state, project, projectPath, config);
             }
@@ -1789,6 +1808,51 @@ namespace ts {
         ));
     }
 
+    function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
+        const extendedSourceFiles = parsed?.options.configFile?.extendedSourceFiles || emptyArray;
+        const extendedConfigs = new Map(extendedSourceFiles.map((extendedSourceFile) => {
+            const extendedConfigFileName = extendedSourceFile as ResolvedConfigFileName;
+            const extendedConfigFilePath = toResolvedConfigFilePath(state, extendedConfigFileName);
+            return [extendedConfigFilePath, extendedConfigFileName] as const;
+        }));
+        extendedConfigs.forEach((extendedConfigFileName, extendedConfigFilePath) => {
+            const watcher = state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath);
+            if (watcher) {
+                watcher.projects.add(resolvedPath);
+            }
+            else {
+                // start watching previously unseen extended config
+                const projects = new Set<ResolvedConfigFilePath>([resolvedPath]);
+                const fileWatcher = state.watchFile(
+                    extendedConfigFileName,
+                    () => {
+                        projects.forEach((projectConfigFilePath) => {
+                            invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full);
+                        });
+                    },
+                    PollingInterval.High,
+                    parsed?.watchOptions,
+                    WatchType.ExtendedConfigFile,
+                    extendedConfigFileName
+                );
+                state.allWatchedExtendedConfigFiles.set(extendedConfigFilePath, {
+                    close: () => fileWatcher.close(),
+                    projects,
+                });
+            }
+        });
+        // remove project from all unrelated watchers
+        state.allWatchedExtendedConfigFiles.forEach((watcher, extendedConfigFilePath) => {
+            if (!extendedConfigs.has(extendedConfigFilePath)) {
+                watcher.projects.delete(resolvedPath);
+                if (watcher.projects.size === 0) {
+                    watcher.close();
+                    state.allWatchedExtendedConfigFiles.delete(extendedConfigFilePath);
+                }
+            }
+        });
+    }
+
     function watchWildCardDirectories(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
         if (!state.watch) return;
         updateWatchingWildcardDirectories(
@@ -1846,6 +1910,7 @@ namespace ts {
             const cfg = parseConfigFile(state, resolved, resolvedPath);
             // Watch this file
             watchConfigFile(state, resolved, resolvedPath, cfg);
+            watchExtendedConfigFiles(state, resolvedPath, cfg);
             if (cfg) {
                 // Update watchers for wildcard directories
                 watchWildCardDirectories(state, resolved, resolvedPath, cfg);
@@ -1858,6 +1923,7 @@ namespace ts {
 
     function stopWatching(state: SolutionBuilderState) {
         clearMap(state.allWatchedConfigFiles, closeFileWatcher);
+        clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcher);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
     }

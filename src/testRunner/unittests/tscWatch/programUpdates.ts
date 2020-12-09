@@ -1766,5 +1766,82 @@ import { x } from "../b";`),
                 }
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works correctly when project with extended config is removed",
+            commandLineArgs: ["-b", "-w", configFilePath],
+            sys: () => {
+                const alphaExtendedConfigFile: File = {
+                    path: "/a/b/alpha.tsconfig.json",
+                    content: JSON.stringify({
+                        strict: true
+                    })
+                };
+                const project1Config: File = {
+                    path: "/a/b/project1.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [commonFile1.path, commonFile2.path]
+                    })
+                };
+                const bravoExtendedConfigFile: File = {
+                    path: "/a/b/bravo.tsconfig.json",
+                    content: JSON.stringify({
+                        strict: true
+                    })
+                };
+                const otherFile: File = {
+                    path: "/a/b/other.ts",
+                    content: "let z = 0;",
+                };
+                const project2Config: File = {
+                    path: "/a/b/project2.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./bravo.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [otherFile.path]
+                    })
+                };
+                const configFile: File = {
+                    path: configFilePath,
+                    content: JSON.stringify({
+                        references: [
+                            {
+                                path: "./project1.tsconfig.json",
+                            },
+                            {
+                                path: "./project2.tsconfig.json",
+                            },
+                        ],
+                        files: [],
+                    })
+                };
+                return createWatchedSystem([
+                    libFile, configFile,
+                    alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                    bravoExtendedConfigFile, project2Config, otherFile
+                ]);
+            },
+            changes: [
+                {
+                    caption: "Remove project2 from base config",
+                    change: sys => sys.modifyFile(configFilePath, JSON.stringify({
+                        references: [
+                            {
+                                path: "./project1.tsconfig.json",
+                            },
+                        ],
+                        files: [],
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                }
+            ]
+        });
     });
 }
