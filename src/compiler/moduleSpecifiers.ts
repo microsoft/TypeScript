@@ -391,7 +391,7 @@ namespace ts.moduleSpecifiers {
             d => isModuleDeclaration(d)
             && d?.parent?.parent?.parent
             && isModuleBlock(d.parent) && isAmbientModule(d.parent.parent) && isSourceFile(d.parent.parent.parent)
-            && ((d.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment).expression  as Identifier).escapedText === getTextOfIdentifierOrLiteral(d.name)
+            && ((d.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment).expression as Identifier).escapedText === getTextOfIdentifierOrLiteral(d.name)
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
         if (exportModuleDeclare) {
             return ((exportModuleDeclare.parent.parent as AmbientModuleDeclaration).name as StringLiteral).text;
