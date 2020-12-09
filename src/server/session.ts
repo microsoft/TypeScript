@@ -689,7 +689,7 @@ namespace ts.server {
         typesMapLocation?: string;
     }
 
-    export class Session implements EventSender {
+    export class Session<TMessage = string> implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -2907,7 +2907,7 @@ namespace ts.server {
             }
         }
 
-        public onMessage(message: string) {
+        public onMessage(message: TMessage) {
             this.gcTimer.scheduleCollect();
 
             this.performanceData = undefined;
@@ -2916,18 +2916,18 @@ namespace ts.server {
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`request:${indent(message)}`);
+                    this.logger.info(`request:${indent(this.toStringMessage(message))}`);
                 }
             }
 
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                request = <protocol.Request>JSON.parse(message);
+                request = this.parseMessage(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
                 tracing.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-                perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
+                perfLogger.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
 
                 tracing.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
                 const { response, responseRequired } = this.executeCommand(request);
@@ -2965,7 +2965,7 @@ namespace ts.server {
                     return;
                 }
 
-                this.logErrorWorker(err, message, relevantFile);
+                this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
                 tracing.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
 
@@ -2976,6 +2976,14 @@ namespace ts.server {
                     /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
+        }
+
+        protected parseMessage(message: TMessage): protocol.Request {
+            return <protocol.Request>JSON.parse(message as any as string);
+        }
+
+        protected toStringMessage(message: TMessage): string {
+            return message as any as string;
         }
 
         private getFormatOptions(file: NormalizedPath): FormatCodeSettings {
