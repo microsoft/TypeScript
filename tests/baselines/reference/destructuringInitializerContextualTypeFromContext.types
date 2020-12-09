@@ -34,7 +34,7 @@ const Parent: SFC<Props> = ({
 
 const Child: SFC<Props> = ({
 >Child : SFC<Props>
->({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name, ...props }: Props & { children?: any; }) => string
+>({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name, ...props }: Props & { children?: any; }) => `name: Apollo props: ${string}` | `name: Artemis props: ${string}` | `name: Dionysus props: ${string}` | `name: Persephone props: ${string}`
 
     children,
 >children : any
@@ -47,7 +47,7 @@ const Child: SFC<Props> = ({
 >props : {}
 
 }) => `name: ${name} props: ${JSON.stringify(props)}`;
->`name: ${name} props: ${JSON.stringify(props)}` : string
+>`name: ${name} props: ${JSON.stringify(props)}` : `name: Apollo props: ${string}` | `name: Artemis props: ${string}` | `name: Dionysus props: ${string}` | `name: Persephone props: ${string}`
 >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
 >JSON.stringify(props) : string
 >JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }

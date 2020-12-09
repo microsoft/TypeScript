@@ -10,7 +10,7 @@ let n = Math.random();
 
 let s = `${n}`;
 >s : string
->`${n}` : string
+>`${n}` : `${number}`
 >n : number
 
 const numericIndex = { [n]: 1 };

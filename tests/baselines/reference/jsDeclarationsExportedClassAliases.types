@@ -28,7 +28,7 @@ class FancyError extends Error {
         super(`error with status ${status}`);
 >super(`error with status ${status}`) : void
 >super : ErrorConstructor
->`error with status ${status}` : string
+>`error with status ${status}` : `error with status ${any}`
 >status : any
     }
 }

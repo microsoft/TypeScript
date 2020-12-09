@@ -2484,6 +2484,8 @@ declare namespace ts {
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
+        StringLikeLiteral = 134217856,
+        FreshableLiteral = 134220672,
         PossiblyFalsy = 117724,
         StringLike = 402653316,
         NumberLike = 296,
@@ -2509,6 +2511,7 @@ declare namespace ts {
         aliasSymbol?: Symbol;
         aliasTypeArguments?: readonly Type[];
     }
+    export type FreshableType = FreshableLiteralType | FreshableIntrinsicType;
     export interface LiteralType extends Type {
         value: string | number | PseudoBigInt;
         freshType: LiteralType;
@@ -2653,6 +2656,8 @@ declare namespace ts {
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];
         types: readonly Type[];
+        freshType: TemplateLiteralType;
+        regularType: TemplateLiteralType;
     }
     export interface StringMappingType extends InstantiableType {
         symbol: Symbol;
