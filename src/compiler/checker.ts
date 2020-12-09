@@ -17616,17 +17616,20 @@ namespace ts {
                     }
                 }
                 else if (source.flags & TypeFlags.TemplateLiteral) {
-                    if (target.flags & TypeFlags.TemplateLiteral &&
-                        (source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
-                        (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
-                        every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
-                        every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
-                        return Ternary.True;
+                    if (target.flags & TypeFlags.TemplateLiteral) {
+                        if ((source as TemplateLiteralType).texts.length === (target as TemplateLiteralType).texts.length &&
+                            (source as TemplateLiteralType).types.length === (target as TemplateLiteralType).types.length &&
+                            every((source as TemplateLiteralType).texts, (t, i) => t === (target as TemplateLiteralType).texts[i]) &&
+                            every((instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers)) as TemplateLiteralType).types, (t, i) => !!((target as TemplateLiteralType).types[i].flags & (TypeFlags.Any | TypeFlags.String)) || !!isRelatedTo(t, (target as TemplateLiteralType).types[i], /*reportErrors*/ false))) {
+                            return Ternary.True;
+                        }
                     }
-                    const constraint = getBaseConstraintOfType(source);
-                    if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
-                        resetErrorInfo(saveErrorInfo);
-                        return result;
+                    else {
+                        const constraint = getBaseConstraintOfType(source);
+                        if (result = isRelatedTo(constraint && constraint !== source ? constraint : stringType, target, reportErrors)) {
+                            resetErrorInfo(saveErrorInfo);
+                            return result;
+                        }
                     }
                 }
                 else if (source.flags & TypeFlags.StringMapping) {
