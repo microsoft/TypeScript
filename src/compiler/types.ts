@@ -4894,7 +4894,9 @@ namespace ts {
         Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
+        /* @internal */
         StringLikeLiteral = StringLiteral | TemplateLiteral,
+        /* @internal */
         FreshableLiteral = Literal | TemplateLiteral,
         /* @internal */
         StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
