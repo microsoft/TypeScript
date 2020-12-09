@@ -2484,8 +2484,6 @@ declare namespace ts {
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
-        StringLikeLiteral = 134217856,
-        FreshableLiteral = 134220672,
         PossiblyFalsy = 117724,
         StringLike = 402653316,
         NumberLike = 296,
