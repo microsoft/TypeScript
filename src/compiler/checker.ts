@@ -17258,14 +17258,29 @@ namespace ts {
                 return Ternary.False;
             }
 
+            function getUndefinedStrippedTargetIfNeeded(source: Type, target: Type) {
+                // As a builtin type, `undefined` is a very low type ID - making it almsot always first, making this a very fast check to see
+                // if we need to strip `undefined` from the target
+                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union &&
+                    !((source as UnionType).types[0].flags & TypeFlags.Undefined) && (target as UnionType).types[0].flags & TypeFlags.Undefined) {
+                    return extractTypesOfKind(target, ~TypeFlags.Undefined);
+                }
+                return target;
+            }
+
             function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
+                const undefinedStrippedTarget = getUndefinedStrippedTargetIfNeeded(source, target as UnionType);
                 for (let i = 0; i < sourceTypes.length; i++) {
                     const sourceType = sourceTypes[i];
-                    if (target.flags & TypeFlags.Union && (target as UnionType).types.length === sourceTypes.length) {
+                    if (undefinedStrippedTarget.flags & TypeFlags.Union && sourceTypes.length >= (undefinedStrippedTarget as UnionType).types.length && sourceTypes.length % (undefinedStrippedTarget as UnionType).types.length === 0) {
                         // many unions are mappings of one another; in such cases, simply comparing members at the same index can shortcut the comparison
-                        const related = isRelatedTo(sourceType, (target as UnionType).types[i], /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                        // such unions will have identical lengths, and their corresponding elements will match up. Another common scenario is where a large
+                        // union has a union of objects intersected with it. In such cases, if the input was, eg `("a" | "b" | "c") & (string | boolean | {} | {whatever})`,
+                        // the result will have the structure `"a" | "b" | "c" | "a" & {} | "b" & {} | "c" & {} | "a" & {whatever} | "b" & {whatever} | "c" & {whatever}`
+                        // - the resulting union has a length which is a multiple of the original union, and the elements correspond modulo the length of the original union
+                        const related = isRelatedTo(sourceType, (undefinedStrippedTarget as UnionType).types[i % (undefinedStrippedTarget as UnionType).types.length], /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                         if (related) {
                             result &= related;
                             continue;
