@@ -22869,7 +22869,7 @@ namespace ts {
         function markAliasReferenced(symbol: Symbol, location: Node) {
             if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
                 const target = resolveAlias(symbol);
-                if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                if (target.flags & SymbolFlags.Value) {
                     if (compilerOptions.preserveConstEnums && isExportOrExportExpression(location) || !isConstEnumOrConstEnumOnlyModule(target)) {
                         markAliasSymbolAsReferenced(symbol);
                     }
