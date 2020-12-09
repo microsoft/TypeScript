@@ -271,6 +271,7 @@ namespace FourSlash {
                 }
             }
 
+            let configParseResult: ts.ParsedCommandLine | undefined;
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
                 const files: vfs.FileSet = { [baseDir]: {} };
@@ -281,7 +282,8 @@ namespace FourSlash {
                 const fs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: baseDir, files });
                 const host = new fakes.ParseConfigHost(fs);
                 const jsonSourceFile = ts.parseJsonText(configFileName, this.inputFiles.get(configFileName)!);
-                compilationOptions = ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, baseDir, compilationOptions, configFileName).options;
+                configParseResult = ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, baseDir, compilationOptions, configFileName);
+                compilationOptions = configParseResult.options;
             }
 
             if (compilationOptions.typeRoots) {
@@ -336,7 +338,11 @@ namespace FourSlash {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 this.inputFiles.forEach((file, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
+                        // all files if config file not specified, otherwise root files from the config and typings cache files are root files
+                        const isRootFile = !configParseResult ||
+                            ts.contains(configParseResult.fileNames, fileName) ||
+                            (ts.isDeclarationFileName(fileName) && ts.containsPath("/Library/Caches/typescript", fileName));
+                        this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                     }
                 });
 
