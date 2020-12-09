@@ -376,6 +376,26 @@ namespace ts.moduleSpecifiers {
         if (decl) {
             return decl.name.text;
         }
+
+        // the module could be a namespace, which is default export from an ambient module.
+        /**
+         * declare module "m" {
+         *     namespace ns {
+         *         class c {}
+         *     }
+         *     export = ns;
+         * }
+         */
+        // `import {c} from "m";` is valid, in which case, moduleSymbol is "ns", but the module name should be "m"
+        const exportModuleDeclare = find(moduleSymbol.declarations,
+            d => isModuleDeclaration(d)
+            && d?.parent?.parent?.parent
+            && isModuleBlock(d.parent) && isAmbientModule(d.parent.parent) && isSourceFile(d.parent.parent.parent)
+            && ((d.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment).expression  as Identifier).escapedText === getTextOfIdentifierOrLiteral(d.name)
+        ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
+        if (exportModuleDeclare) {
+            return ((exportModuleDeclare.parent.parent as AmbientModuleDeclaration).name as StringLiteral).text;
+        }
     }
 
     function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
