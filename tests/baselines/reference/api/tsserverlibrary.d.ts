@@ -2511,7 +2511,6 @@ declare namespace ts {
         aliasSymbol?: Symbol;
         aliasTypeArguments?: readonly Type[];
     }
-    export type FreshableType = FreshableLiteralType | FreshableIntrinsicType;
     export interface LiteralType extends Type {
         value: string | number | PseudoBigInt;
         freshType: LiteralType;

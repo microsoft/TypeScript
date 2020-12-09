@@ -4991,6 +4991,7 @@ namespace ts {
 
     /* @internal */
     export type FreshableLiteralType = LiteralType | TemplateLiteralType;
+    /* @internal */
     export type FreshableType = FreshableLiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
