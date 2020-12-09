@@ -257,6 +257,32 @@ function ft13(s: string, cond: boolean) {
 type T0 = string | `${number}px`;
 >T0 : string
 
+function ft14(t: `foo${number}`) {
+>ft14 : (t: `foo${number}`) => void
+>t : `foo${number}`
+
+    let x1: string = t;
+>x1 : string
+>t : `foo${number}`
+
+    let x2: String = t;
+>x2 : String
+>t : `foo${number}`
+
+    let x3: Object = t;
+>x3 : Object
+>t : `foo${number}`
+
+    let x4: {} = t;
+>x4 : {}
+>t : `foo${number}`
+
+    let x6: { length: number } = t;
+>x6 : { length: number; }
+>length : number
+>t : `foo${number}`
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;

@@ -65,6 +65,14 @@ function ft13(s: string, cond: boolean) {
 
 type T0 = string | `${number}px`;
 
+function ft14(t: `foo${number}`) {
+    let x1: string = t;
+    let x2: String = t;
+    let x3: Object = t;
+    let x4: {} = t;
+    let x6: { length: number } = t;
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;

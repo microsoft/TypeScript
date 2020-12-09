@@ -63,6 +63,14 @@ function ft13(s: string, cond: boolean) {
 
 type T0 = string | `${number}px`;
 
+function ft14(t: `foo${number}`) {
+    let x1: string = t;
+    let x2: String = t;
+    let x3: Object = t;
+    let x4: {} = t;
+    let x6: { length: number } = t;
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
@@ -146,6 +154,13 @@ function ft13(s, cond) {
     var y1 = nonWidening("foo" + s);
     var y2 = nonWidening(cond ? 'a' : "foo" + s);
 }
+function ft14(t) {
+    var x1 = t;
+    var x2 = t;
+    var x3 = t;
+    var x4 = t;
+    var x6 = t;
+}
 var t1 = takesLiteral("foo.bar.baz"); // "baz"
 var id2 = "foo.bar.baz";
 var t2 = takesLiteral(id2); // "baz"
@@ -169,6 +184,7 @@ declare function widening<T>(x: T): T;
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
 declare function ft13(s: string, cond: boolean): void;
 declare type T0 = string | `${number}px`;
+declare function ft14(t: `foo${number}`): void;
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 declare const t1: "baz";
 declare const id2 = "foo.bar.baz";
