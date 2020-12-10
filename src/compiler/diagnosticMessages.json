@@ -6139,6 +6139,14 @@
         "category": "Message",
         "code": 95148
     },
+    "Function body must be a braceless expression": {
+        "category": "Message",
+        "code": 95149
+    },
+    "Function body must be a one line return statement": {
+        "category": "Message",
+        "code": 95150
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

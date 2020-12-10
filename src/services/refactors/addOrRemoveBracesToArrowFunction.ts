@@ -110,7 +110,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): InfoOrError | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true, refactorKind?: string): InfoOrError | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
 
@@ -130,27 +130,22 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             return undefined;
         }
 
-        if (isExpression(func.body)) {
-            return {
-                info: {
-                    func,
-                    addBraces: true,
-                    expression: func.body
-                }
-            };
-        }
-        else if (func.body.statements.length === 1) {
-            const firstStatement = first(func.body.statements);
-            if (isReturnStatement(firstStatement)) {
-                return {
-                    info: {
-                        func,
-                        addBraces: false,
-                        expression: firstStatement.expression,
-                        returnStatement: firstStatement
-                    }
-                };
+        if (refactorKindBeginsWith(rewriteArrowBracesAddKind, refactorKind)) {
+            if (isExpression(func.body)) {
+                return { info: { func, addBraces: true, expression: func.body } };
+            } else {
+                return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_braceless_expression) }
             }
+        } else if (refactorKindBeginsWith(rewriteArrowBracesRemoveKind, refactorKind)) {
+            if (isBlock(func.body) && func.body.statements.length === 1) {
+                const firstStatement = first(func.body.statements);
+                if (isReturnStatement(firstStatement)) {
+                    return {
+                        info: { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement }
+                    };
+                }
+            }
+            return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_one_line_return_statement) }
         }
         return undefined;
     }
