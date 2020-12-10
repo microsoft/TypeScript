@@ -672,11 +672,14 @@ namespace ts.FindAllReferences {
             for (const ref of references) {
                 if (isReferencedFile(ref)) {
                     const referencingFile = program.getSourceFileByPath(ref.file)!;
-                    entries = append(entries, {
-                        kind: EntryKind.Span,
-                        fileName: referencingFile.fileName,
-                        textSpan: createTextSpanFromRange(getRangeOfRef(ref, referencingFile))
-                    });
+                    const location = getReferencedFileLocation(program.getSourceFileByPath, ref);
+                    if (isReferenceFileLocation(location)) {
+                        entries = append(entries, {
+                            kind: EntryKind.Span,
+                            fileName: referencingFile.fileName,
+                            textSpan: createTextSpanFromRange(location)
+                        });
+                    }
                 }
             }
             return entries;
