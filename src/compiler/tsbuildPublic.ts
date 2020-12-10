@@ -474,10 +474,7 @@ namespace ts {
                         watcher.projects.delete(project);
                     }
                 });
-                if (watcher.projects.size === 0) {
-                    watcher.close();
-                    state.allWatchedExtendedConfigFiles.delete(extendedConfigFilePath);
-                }
+                watcher.close();
             });
 
             mutateMapSkippingNewValues(
@@ -1809,12 +1806,10 @@ namespace ts {
     }
 
     function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
-        const extendedSourceFiles = parsed?.options.configFile?.extendedSourceFiles || emptyArray;
-        const extendedConfigs = new Map(extendedSourceFiles.map((extendedSourceFile) => {
-            const extendedConfigFileName = extendedSourceFile as ResolvedConfigFileName;
-            const extendedConfigFilePath = toResolvedConfigFilePath(state, extendedConfigFileName);
-            return [extendedConfigFilePath, extendedConfigFileName] as const;
-        }));
+        const extendedConfigs = arrayToMap(
+            parsed?.options.configFile?.extendedSourceFiles || emptyArray  as readonly ResolvedConfigFileName[],
+            extendedSourceFile => toResolvedConfigFilePath(state, extendedConfigFileName)
+        );
         extendedConfigs.forEach((extendedConfigFileName, extendedConfigFilePath) => {
             const watcher = state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath);
             if (watcher) {
@@ -1823,7 +1818,7 @@ namespace ts {
             else {
                 // start watching previously unseen extended config
                 const projects = new Set<ResolvedConfigFilePath>([resolvedPath]);
-                const fileWatcher = state.watchFile(
+                let fileWatcher = state.watchFile(
                     extendedConfigFileName,
                     () => {
                         projects.forEach((projectConfigFilePath) => {
@@ -1836,7 +1831,14 @@ namespace ts {
                     extendedConfigFileName
                 );
                 state.allWatchedExtendedConfigFiles.set(extendedConfigFilePath, {
-                    close: () => fileWatcher.close(),
+                    close: () => {
+                        if (projects.size === 0) {
+                            Debug.assert(fileWatcher !== undefined);
+                            fileWatcher.close();
+                            fileWatcher = undefined!;
+                            state.allWatchedExtendedConfigFiles.delete(extendedConfigFilePath);
+                        }
+                    },
                     projects,
                 });
             }
@@ -1845,10 +1847,7 @@ namespace ts {
         state.allWatchedExtendedConfigFiles.forEach((watcher, extendedConfigFilePath) => {
             if (!extendedConfigs.has(extendedConfigFilePath)) {
                 watcher.projects.delete(resolvedPath);
-                if (watcher.projects.size === 0) {
-                    watcher.close();
-                    state.allWatchedExtendedConfigFiles.delete(extendedConfigFilePath);
-                }
+                watcher.close();
             }
         });
     }
