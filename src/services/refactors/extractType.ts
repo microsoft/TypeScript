@@ -4,7 +4,18 @@ namespace ts.refactor {
     const extractToTypeAlias = "Extract to type alias";
     const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
+
+    const extractToTypeKind = "refactor.extract.type";
+    const extractToInterfaceKind = "refactor.extract.interface";
+    const extractToTypeDefKind = "refactor.extract.typedef";
+    const refactorKinds = [
+        extractToTypeKind,
+        extractToInterfaceKind,
+        extractToTypeDefKind,
+    ];
+
     registerRefactor(refactorName, {
+        refactorKinds,
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
@@ -14,11 +25,11 @@ namespace ts.refactor {
                     name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                     actions: info.info.isJS ? [{
-                        name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef)
+                        name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), refactorKind: extractToTypeDefKind
                     }] : append([{
-                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
+                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), refactorKind: extractToTypeKind
                     }], info.info.typeElements && {
-                        name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface)
+                        name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), refactorKind: extractToInterfaceKind
                     })
                 }];
             }
@@ -28,9 +39,9 @@ namespace ts.refactor {
                     name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                     actions: [
-                        { name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), notApplicableReason: info.error },
-                        { name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), notApplicableReason: info.error },
-                        { name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), notApplicableReason: info.error },
+                        { name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), notApplicableReason: info.error, refactorKind: extractToTypeDefKind },
+                        { name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), notApplicableReason: info.error, refactorKind: extractToTypeKind },
+                        { name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), notApplicableReason: info.error, refactorKind: extractToInterfaceKind },
                     ]
                 }];
             }

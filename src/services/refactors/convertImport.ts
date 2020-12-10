@@ -4,6 +4,13 @@ namespace ts.refactor {
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
 
+    const rewriteImportToNamedKind = "refactor.rewrite.import.named";
+    const rewriteImportToNamespaceKind = "refactor.rewrite.import.namespace";
+    const refactorKinds = [
+        rewriteImportToNamedKind,
+        rewriteImportToNamespaceKind
+    ];
+
     type NamedImportBindingsOrError = {
         info: NamedImportBindings,
         error?: never
@@ -13,20 +20,25 @@ namespace ts.refactor {
     };
 
     registerRefactor(refactorName, {
+        refactorKinds,
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const i = getImportToConvert(context, context.triggerReason === "invoked");
             if (!i) return emptyArray;
 
             if (i.error === undefined) {
-                const description = i.info.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
-                const actionName = i.info.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
-                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+                const namespaceImport = i.info.kind === SyntaxKind.NamespaceImport;
+                const description = namespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
+                const actionName = namespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
+                const refactorKind = namespaceImport ? rewriteImportToNamedKind : rewriteImportToNamespaceKind;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description, refactorKind }] }];
             }
 
             if (context.preferences.provideRefactorNotApplicableReason) {
                 return [
-                    { name: refactorName, description: Diagnostics.Convert_namespace_import_to_named_imports.message, actions: [{ name: actionNameNamespaceToNamed, description: Diagnostics.Convert_namespace_import_to_named_imports.message, notApplicableReason: i.error }] },
-                    { name: refactorName, description: Diagnostics.Convert_named_imports_to_namespace_import.message, actions: [{ name: actionNameNamedToNamespace, description: Diagnostics.Convert_named_imports_to_namespace_import.message, notApplicableReason: i.error }] }
+                    { name: refactorName, description: Diagnostics.Convert_namespace_import_to_named_imports.message,
+                        actions: [{ name: actionNameNamespaceToNamed, description: Diagnostics.Convert_namespace_import_to_named_imports.message, notApplicableReason: i.error, refactorKind: rewriteImportToNamedKind }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_imports_to_namespace_import.message,
+                        actions: [{ name: actionNameNamedToNamespace, description: Diagnostics.Convert_named_imports_to_namespace_import.message, notApplicableReason: i.error, refactorKind: rewriteImportToNamespaceKind }] }
                 ];
             }
 

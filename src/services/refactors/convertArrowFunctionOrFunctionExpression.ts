@@ -11,7 +11,16 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     const toNamedFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_named_function);
     const toArrowFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function);
 
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const rewriteFunctionAnonymousKind = "refactor.rewrite.function.anonymous";
+    const rewriteFunctionArrowKind = "refactor.rewite.function.arrow";
+    const rewriteFunctioNamedKind = "refactor.rewite.function.named";
+    const refactorKinds = [
+        rewriteFunctionAnonymousKind,
+        rewriteFunctionArrowKind,
+        rewriteFunctioNamedKind,
+    ];
+
+    registerRefactor(refactorName, { refactorKinds, getEditsForAction, getAvailableActions });
 
     interface FunctionInfo {
         readonly selectedVariableDeclaration: boolean;

@@ -2,8 +2,9 @@
 namespace ts.refactor.convertParamsToDestructuredObject {
     const refactorName = "Convert parameters to destructured object";
     const minimumParameterLength = 2;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const rewriteParametersToDestructuredKind = "refactor.rewrite.parameters.toDestructured";
 
+    registerRefactor(refactorName, { refactorKinds: [rewriteParametersToDestructuredKind], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
@@ -18,7 +19,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             description,
             actions: [{
                 name: refactorName,
-                description
+                description,
+                refactorKind: rewriteParametersToDestructuredKind
             }]
         }];
     }

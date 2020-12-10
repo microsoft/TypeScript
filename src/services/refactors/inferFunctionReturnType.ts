@@ -2,7 +2,9 @@
 namespace ts.refactor.inferFunctionReturnType {
     const refactorName = "Infer function return type";
     const refactorDescription = Diagnostics.Infer_function_return_type.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const rewriteFunctionReturnType = "refactor.rewrite.function.returnType";
+
+    registerRefactor(refactorName, { refactorKinds: [rewriteFunctionReturnType], getEditsForAction, getAvailableActions });
 
     function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
         const info = getInfo(context);

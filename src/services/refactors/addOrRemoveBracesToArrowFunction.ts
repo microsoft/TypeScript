@@ -6,7 +6,15 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const removeBracesActionName = "Remove braces from arrow function";
     const addBracesActionDescription = Diagnostics.Add_braces_to_arrow_function.message;
     const removeBracesActionDescription = Diagnostics.Remove_braces_from_arrow_function.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+
+    const rewriteArrowBracesRemoveKind = "refactor.rewrite.arrow.braces.remove";
+    const rewriteArrowBracesAddKind = "refactor.rewrite.arrow.braces.add";
+    const refactorKinds = [
+        rewriteArrowBracesAddKind,
+        rewriteArrowBracesRemoveKind
+    ];
+
+    registerRefactor(refactorName, { refactorKinds, getEditsForAction, getAvailableActions });
 
     interface Info {
         func: ArrowFunction;
@@ -36,10 +44,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                     info.info.addBraces ?
                         {
                             name: addBracesActionName,
-                            description: addBracesActionDescription
+                            description: addBracesActionDescription,
+                            refactorKind: rewriteArrowBracesAddKind
                         } : {
                             name: removeBracesActionName,
-                            description: removeBracesActionDescription
+                            description: removeBracesActionDescription,
+                            refactorKind: rewriteArrowBracesRemoveKind
                         }
                 ]
             }];
@@ -52,11 +62,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 actions: [{
                     name: addBracesActionName,
                     description: addBracesActionDescription,
-                    notApplicableReason: info.error
+                    notApplicableReason: info.error,
+                    refactorKind: rewriteArrowBracesAddKind
                 }, {
                     name: removeBracesActionName,
                     description: removeBracesActionDescription,
-                    notApplicableReason: info.error
+                    notApplicableReason: info.error,
+                    refactorKind: rewriteArrowBracesRemoveKind
                 }]
             }];
         }

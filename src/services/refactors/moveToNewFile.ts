@@ -1,7 +1,10 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Move to a new file";
+    const refactorMoveNewFile = "refactor.move.newFile";
+
     registerRefactor(refactorName, {
+        refactorKinds: [refactorMoveNewFile],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

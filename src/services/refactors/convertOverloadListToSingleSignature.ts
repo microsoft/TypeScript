@@ -2,8 +2,9 @@
 namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const refactorName = "Convert overload list to single signature";
     const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const rewriteFunctionOverloadListKind = "refactor.rewrite.function.overloadList";
 
+    registerRefactor(refactorName, { refactorKinds: [rewriteFunctionOverloadListKind], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
@@ -15,7 +16,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             description: refactorDescription,
             actions: [{
                 name: refactorName,
-                description: refactorDescription
+                description: refactorDescription,
+                refactorKind: rewriteFunctionOverloadListKind
             }]
         }];
     }

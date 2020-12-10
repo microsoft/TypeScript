@@ -4,7 +4,15 @@ namespace ts.refactor {
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
 
+    const rewriteExportToNamedKind = "refactor.rewrite.export.named";
+    const rewriteExportToDefaultKind = "refactor.rewrite.export.default";
+    const refactorKinds = [
+        rewriteExportToDefaultKind,
+        rewriteExportToNamedKind
+    ];
+
     registerRefactor(refactorName, {
+        refactorKinds,
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
@@ -12,13 +20,16 @@ namespace ts.refactor {
             if (info.error === undefined) {
                 const description = info.info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
                 const actionName = info.info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
-                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+                const refactorKind = info.info.wasDefault ? rewriteExportToNamedKind : rewriteExportToDefaultKind;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description, refactorKind }] }];
             }
 
             if (context.preferences.provideRefactorNotApplicableReason) {
                 return [
-                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, notApplicableReason: info.error }] },
-                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, notApplicableReason: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message,
+                        actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, notApplicableReason: info.error, refactorKind: rewriteExportToNamedKind }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message,
+                        actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, notApplicableReason: info.error, refactorKind: rewriteExportToDefaultKind }] },
                 ];
             }
 

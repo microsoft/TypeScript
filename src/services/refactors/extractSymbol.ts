@@ -1,7 +1,15 @@
 /* @internal */
 namespace ts.refactor.extractSymbol {
     const refactorName = "Extract Symbol";
-    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
+
+    const extractConstantKind = "refactor.extract.constant";
+    const extractFunctionKind = "refactor.extract.function";
+    const refactorKinds = [
+        extractConstantKind,
+        extractFunctionKind,
+    ];
+
+    registerRefactor(refactorName, { refactorKinds, getAvailableActions, getEditsForAction });
 
     /**
      * Compute the associated code actions
@@ -22,7 +30,8 @@ namespace ts.refactor.extractSymbol {
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                     name: "function_extract_error",
-                    notApplicableReason: getStringError(rangeToExtract.errors)
+                    notApplicableReason: getStringError(rangeToExtract.errors),
+                    refactorKind: extractFunctionKind
                 }]
             },
             {
@@ -31,7 +40,8 @@ namespace ts.refactor.extractSymbol {
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                     name: "constant_extract_error",
-                    notApplicableReason: getStringError(rangeToExtract.errors)
+                    notApplicableReason: getStringError(rangeToExtract.errors),
+                    refactorKind: extractConstantKind
                 }]
             }];
         }
@@ -61,7 +71,8 @@ namespace ts.refactor.extractSymbol {
                     usedFunctionNames.set(description, true);
                     functionActions.push({
                         description,
-                        name: `function_scope_${i}`
+                        name: `function_scope_${i}`,
+                        refactorKind: extractFunctionKind
                     });
                 }
             }
@@ -69,7 +80,8 @@ namespace ts.refactor.extractSymbol {
                 innermostErrorFunctionAction = {
                     description,
                     name: `function_scope_${i}`,
-                    notApplicableReason: getStringError(functionExtraction.errors)
+                    notApplicableReason: getStringError(functionExtraction.errors),
+                    refactorKind: extractFunctionKind
                 };
             }
 
@@ -83,7 +95,8 @@ namespace ts.refactor.extractSymbol {
                     usedConstantNames.set(description, true);
                     constantActions.push({
                         description,
-                        name: `constant_scope_${i}`
+                        name: `constant_scope_${i}`,
+                        refactorKind: extractConstantKind
                     });
                 }
             }
@@ -91,7 +104,8 @@ namespace ts.refactor.extractSymbol {
                 innermostErrorConstantAction = {
                     description,
                     name: `constant_scope_${i}`,
-                    notApplicableReason: getStringError(constantExtraction.errors)
+                    notApplicableReason: getStringError(constantExtraction.errors),
+                    refactorKind: extractConstantKind
                 };
             }
 
@@ -106,7 +120,7 @@ namespace ts.refactor.extractSymbol {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
+                actions: functionActions,
             });
         }
         else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorFunctionAction) {

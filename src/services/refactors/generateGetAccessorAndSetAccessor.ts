@@ -2,7 +2,10 @@
 namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionName = "Generate 'get' and 'set' accessors";
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
+    const rewritePropertyGenerateAccessors = "refactor.rewrite.property.generateAccessors";
+
     registerRefactor(actionName, {
+        refactorKinds: [rewritePropertyGenerateAccessors],
         getEditsForAction(context, actionName) {
             if (!context.endPosition) return undefined;
             const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);
@@ -29,7 +32,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                     actions: [
                         {
                             name: actionName,
-                            description: actionDescription
+                            description: actionDescription,
+                            refactorKind: rewritePropertyGenerateAccessors
                         }
                     ]
                 }];
@@ -42,7 +46,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                     actions: [{
                         name: actionName,
                         description: actionDescription,
-                        notApplicableReason: info.error
+                        notApplicableReason: info.error,
+                        refactorKind: rewritePropertyGenerateAccessors
                     }]
                 }];
             }

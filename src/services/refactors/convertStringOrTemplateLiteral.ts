@@ -2,8 +2,9 @@
 namespace ts.refactor.convertStringOrTemplateLiteral {
     const refactorName = "Convert to template string";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
+    const rewriteStringKind = "refactor.rewrite.string";
 
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, { refactorKinds: [rewriteStringKind], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
@@ -12,7 +13,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
         if (isBinaryExpression(maybeBinary) && isStringConcatenationValid(maybeBinary)) {
-            refactorInfo.actions.push({ name: refactorName, description: refactorDescription });
+            refactorInfo.actions.push({ name: refactorName, description: refactorDescription, refactorKind: rewriteStringKind });
             return [refactorInfo];
         }
         return emptyArray;

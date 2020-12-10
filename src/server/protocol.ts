@@ -563,7 +563,8 @@ namespace ts.server.protocol {
         arguments: GetApplicableRefactorsRequestArgs;
     }
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
-        triggerReason?: RefactorTriggerReason
+        triggerReason?: RefactorTriggerReason;
+        refactorKind?: string;
     };
 
     export type RefactorTriggerReason = "implicit" | "invoked";
