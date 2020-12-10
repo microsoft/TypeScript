@@ -9,6 +9,15 @@ namespace ts.refactor.extractSymbol {
         extractFunctionKind,
     ];
 
+    /**
+     * Checks if string "first" begins with string "second".
+     * Used to match requested refactorKinds with a known refactorKind.
+     */
+    function refactorKindBeginsWith(first: string, second: string | undefined): boolean {
+        if(!second) return true;
+        return first.substr(0, second.length) === second;
+    }
+
     registerRefactor(refactorName, { refactorKinds, getAvailableActions, getEditsForAction });
 
     /**
@@ -16,34 +25,41 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
+        const requestedRefactor = context.refactorKind;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
-
         const targetRange = rangeToExtract.targetRange;
+
         if (targetRange === undefined) {
             if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorNotApplicableReason) {
                 return emptyArray;
             }
 
-            return [{
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: [{
+            const errors = [];
+            if (refactorKindBeginsWith(extractFunctionKind, requestedRefactor)) {
+                errors.push({
+                    name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                    name: "function_extract_error",
-                    notApplicableReason: getStringError(rangeToExtract.errors),
-                    refactorKind: extractFunctionKind
-                }]
-            },
-            {
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                actions: [{
+                    actions: [{
+                        description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                        name: "function_extract_error",
+                        notApplicableReason: getStringError(rangeToExtract.errors),
+                        refactorKind: extractFunctionKind
+                    }]
+                });
+            }
+            if (refactorKindBeginsWith(extractConstantKind, requestedRefactor)) {
+                errors.push({
+                    name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                    name: "constant_extract_error",
-                    notApplicableReason: getStringError(rangeToExtract.errors),
-                    refactorKind: extractConstantKind
-                }]
-            }];
+                    actions: [{
+                        description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
+                        name: "constant_extract_error",
+                        notApplicableReason: getStringError(rangeToExtract.errors),
+                        refactorKind: extractConstantKind
+                    }]
+                });
+            }
+            return errors;
         }
 
         const extractions = getPossibleExtractions(targetRange, context);
@@ -63,50 +79,54 @@ namespace ts.refactor.extractSymbol {
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
             const description = functionExtraction.description;
-            if (functionExtraction.errors.length === 0) {
-                // Don't issue refactorings with duplicated names.
-                // Scopes come back in "innermost first" order, so extractions will
-                // preferentially go into nearer scopes
-                if (!usedFunctionNames.has(description)) {
-                    usedFunctionNames.set(description, true);
-                    functionActions.push({
+            if(refactorKindBeginsWith(extractFunctionKind, requestedRefactor)){
+                if (functionExtraction.errors.length === 0) {
+                    // Don't issue refactorings with duplicated names.
+                    // Scopes come back in "innermost first" order, so extractions will
+                    // preferentially go into nearer scopes
+                    if (!usedFunctionNames.has(description)) {
+                        usedFunctionNames.set(description, true);
+                        functionActions.push({
+                            description,
+                            name: `function_scope_${i}`,
+                            refactorKind: extractFunctionKind
+                        });
+                    }
+                }
+                else if (!innermostErrorFunctionAction) {
+                    innermostErrorFunctionAction = {
                         description,
                         name: `function_scope_${i}`,
+                        notApplicableReason: getStringError(functionExtraction.errors),
                         refactorKind: extractFunctionKind
-                    });
+                    };
                 }
-            }
-            else if (!innermostErrorFunctionAction) {
-                innermostErrorFunctionAction = {
-                    description,
-                    name: `function_scope_${i}`,
-                    notApplicableReason: getStringError(functionExtraction.errors),
-                    refactorKind: extractFunctionKind
-                };
             }
 
             // Skip these since we don't have a way to report errors yet
-            if (constantExtraction.errors.length === 0) {
-                // Don't issue refactorings with duplicated names.
-                // Scopes come back in "innermost first" order, so extractions will
-                // preferentially go into nearer scopes
-                const description = constantExtraction.description;
-                if (!usedConstantNames.has(description)) {
-                    usedConstantNames.set(description, true);
-                    constantActions.push({
+            if(refactorKindBeginsWith(extractConstantKind, requestedRefactor)) {
+                if (constantExtraction.errors.length === 0) {
+                    // Don't issue refactorings with duplicated names.
+                    // Scopes come back in "innermost first" order, so extractions will
+                    // preferentially go into nearer scopes
+                    const description = constantExtraction.description;
+                    if (!usedConstantNames.has(description)) {
+                        usedConstantNames.set(description, true);
+                        constantActions.push({
+                            description,
+                            name: `constant_scope_${i}`,
+                            refactorKind: extractConstantKind
+                        });
+                    }
+                }
+                else if (!innermostErrorConstantAction) {
+                    innermostErrorConstantAction = {
                         description,
                         name: `constant_scope_${i}`,
+                        notApplicableReason: getStringError(constantExtraction.errors),
                         refactorKind: extractConstantKind
-                    });
+                    };
                 }
-            }
-            else if (!innermostErrorConstantAction) {
-                innermostErrorConstantAction = {
-                    description,
-                    name: `constant_scope_${i}`,
-                    notApplicableReason: getStringError(constantExtraction.errors),
-                    refactorKind: extractConstantKind
-                };
             }
 
             // *do* increment i anyway because we'll look for the i-th scope
