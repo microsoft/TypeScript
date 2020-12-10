@@ -263,11 +263,12 @@ namespace ts {
     export function updateExtendedConfigFilesMap(
         configFile: TsConfigSourceFile | undefined,
         extendedConfigFilesMap: ESMap<Path, FileWatcher>,
-        createExtendedConfigFileWatch: (extendedConfigPath: string) => FileWatcher,
+        toPath: (file: string) => Path,
+        createExtendedConfigFileWatch: (extendedConfigPath: Path) => FileWatcher,
     ) {
         const extendedSourceFiles = configFile?.extendedSourceFiles ?? emptyArray;
         // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
-        const newExtendedConfigFilesMap = arrayToMap(extendedSourceFiles, identity, returnTrue);
+        const newExtendedConfigFilesMap = arrayToMap(extendedSourceFiles, toPath, returnTrue);
         // Update the extended config files watcher
         mutateMap(
             extendedConfigFilesMap,

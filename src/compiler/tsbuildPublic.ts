@@ -468,7 +468,7 @@ namespace ts {
                 { onDeleteValue: closeFileWatcher }
             );
 
-            state.allWatchedExtendedConfigFiles.forEach((watcher, extendedConfigFilePath) => {
+            state.allWatchedExtendedConfigFiles.forEach((watcher) => {
                 watcher.projects.forEach((project) => {
                     if (!currentProjects.has(project)) {
                         watcher.projects.delete(project);
@@ -1807,8 +1807,8 @@ namespace ts {
 
     function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
         const extendedConfigs = arrayToMap(
-            parsed?.options.configFile?.extendedSourceFiles || emptyArray  as readonly ResolvedConfigFileName[],
-            extendedSourceFile => toResolvedConfigFilePath(state, extendedConfigFileName)
+            (parsed?.options.configFile?.extendedSourceFiles || emptyArray) as ResolvedConfigFileName[],
+            extendedSourceFile => toResolvedConfigFilePath(state, extendedSourceFile)
         );
         extendedConfigs.forEach((extendedConfigFileName, extendedConfigFilePath) => {
             const watcher = state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath);

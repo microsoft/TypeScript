@@ -793,11 +793,12 @@ namespace ts {
             updateExtendedConfigFilesMap(
                 compilerOptions.configFile,
                 extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
+                toPath,
                 watchExtendedConfigFile
             );
         }
 
-        function watchExtendedConfigFile(extendedConfigFile: string) {
+        function watchExtendedConfigFile(extendedConfigFile: Path) {
             return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ExtendedConfigFile);
         }
     }
