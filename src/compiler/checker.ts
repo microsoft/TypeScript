@@ -18478,7 +18478,11 @@ namespace ts {
                         continue;
                     }
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
-                        const related = isRelatedTo(getTypeOfSymbol(prop), target, reportErrors);
+                        const propType = getTypeOfSymbol(prop);
+                        const type = propType.flags & TypeFlags.Undefined || !(kind === IndexKind.String && prop.flags & SymbolFlags.Optional)
+                            ? propType
+                            : getTypeWithFacts(propType, TypeFacts.NEUndefined);
+                        const related = isRelatedTo(type, target, reportErrors);
                         if (!related) {
                             if (reportErrors) {
                                 reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
