@@ -2924,12 +2924,12 @@ namespace ts {
     }
 
     /**
-     * Checks if string "first" begins with string "second".
+     * Checks if string "known" begins with string "requested".
      * Used to match requested refactorKinds with a known refactorKind.
      */
-    export function refactorKindBeginsWith(first: string, second: string | undefined): boolean {
-        if(!second) return true;
-        return first.substr(0, second.length) === second;
+    export function refactorKindBeginsWith(known: string, requested: string | undefined): boolean {
+        if(!requested) return true;
+        return known.substr(0, requested.length) === requested;
     }
 
     // #endregion
