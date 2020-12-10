@@ -3211,10 +3211,6 @@
         "category": "Error",
         "code": 2796
     },
-    "Expression requires comparison of excessively large union or intersection types.": {
-        "category": "Error",
-        "code": 2797
-    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

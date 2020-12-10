@@ -16952,9 +16952,7 @@ namespace ts {
                     return Ternary.False;
                 }
 
-                if (areUnionsOrIntersectionsTooLarge(source, target, reportErrors)) {
-                    return Ternary.False;
-                }
+                traceUnionsOrIntersectionsTooLarge(source, target, reportErrors);
 
                 let result = Ternary.False;
                 const saveErrorInfo = captureErrorCalculationState();
@@ -17091,28 +17089,35 @@ namespace ts {
                 }
             }
 
-            function areUnionsOrIntersectionsTooLarge(source: Type, target: Type, reportErrors: boolean) {
+            function traceUnionsOrIntersectionsTooLarge(source: Type, target: Type, reportErrors: boolean): void {
+                if (!tracing.isTracing()) {
+                    return;
+                }
+
                 if ((source.flags & TypeFlags.UnionOrIntersection) && (target.flags & TypeFlags.UnionOrIntersection)) {
                     const sourceUnionOrIntersection = source as UnionOrIntersectionType;
                     const targetUnionOrIntersection = target as UnionOrIntersectionType;
 
                     if (sourceUnionOrIntersection.objectFlags & targetUnionOrIntersection.objectFlags & ObjectFlags.PrimitiveUnion) {
                         // There's a fast path for comparing primitive unions
-                        return false;
+                        return;
                     }
 
                     const sourceSize = sourceUnionOrIntersection.types.length;
                     const targetSize = targetUnionOrIntersection.types.length;
                     if (sourceSize * targetSize > 1E6) {
                         if (reportErrors) {
-                            tracing.instant(tracing.Phase.CheckTypes, "areUnionsOrIntersectionsTooLarge_DepthLimit", { sourceId: source.id, sourceSize, targetId: target.id, targetSize });
-                            reportError(Diagnostics.Expression_requires_comparison_of_excessively_large_union_or_intersection_types);
+                            tracing.instant(tracing.Phase.CheckTypes, "traceUnionsOrIntersectionsTooLarge_DepthLimit", {
+                                sourceId: source.id,
+                                sourceSize,
+                                targetId: target.id,
+                                targetSize,
+                                pos: errorNode?.pos,
+                                end: errorNode?.end
+                            });
                         }
-                        return true;
                     }
                 }
-
-                return false;
             }
 
             function isIdenticalTo(source: Type, target: Type, reportErrors: boolean): Ternary {
@@ -17120,9 +17125,7 @@ namespace ts {
                 if (!(flags & TypeFlags.Substructure)) {
                     return Ternary.False;
                 }
-                if (areUnionsOrIntersectionsTooLarge(source, target, reportErrors)) {
-                    return Ternary.False;
-                }
+                traceUnionsOrIntersectionsTooLarge(source, target, reportErrors);
                 if (flags & TypeFlags.UnionOrIntersection) {
                     let result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target);
                     if (result) {
