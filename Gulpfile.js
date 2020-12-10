@@ -308,6 +308,8 @@ const watchLssl = () => watch([
     "src/services/**/*.ts",
     "src/server/tsconfig.json",
     "src/server/**/*.ts",
+    "src/webServer/tsconfig.json",
+    "src/webServer/**/*.ts",
     "src/tsserver/tsconfig.json",
     "src/tsserver/**/*.ts",
 ], buildLssl);

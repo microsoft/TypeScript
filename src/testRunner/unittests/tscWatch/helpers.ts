@@ -216,27 +216,32 @@ namespace ts.tscWatch {
         );
     }
 
+    export function getDiagnosticMessageChain(message: DiagnosticMessage, args?: (string | number)[], next?: DiagnosticMessageChain[]): DiagnosticMessageChain {
+        let text = getLocaleSpecificMessage(message);
+        if (args?.length) {
+            text = formatStringFromArgs(text, args);
+        }
+        return {
+            messageText: text,
+            category: message.category,
+            code: message.code,
+            next
+        };
+    }
+
     function isDiagnosticMessageChain(message: DiagnosticMessage | DiagnosticMessageChain): message is DiagnosticMessageChain {
         return !!(message as DiagnosticMessageChain).messageText;
     }
 
-    export function getDiagnosticOfFileFrom(file: SourceFile | undefined, start: number | undefined, length: number | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ..._args: (string | number)[]): Diagnostic {
-        let text: DiagnosticMessageChain | string;
-        if (isDiagnosticMessageChain(message)) {
-            text = message;
-        }
-        else {
-            text = getLocaleSpecificMessage(message);
-            if (arguments.length > 4) {
-                text = formatStringFromArgs(text, arguments, 4);
-            }
-        }
+    export function getDiagnosticOfFileFrom(file: SourceFile | undefined, start: number | undefined, length: number | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
         return {
             file,
             start,
             length,
 
-            messageText: text,
+            messageText: isDiagnosticMessageChain(message) ?
+                message :
+                getDiagnosticMessageChain(message, args).messageText,
             category: message.category,
             code: message.code,
         };

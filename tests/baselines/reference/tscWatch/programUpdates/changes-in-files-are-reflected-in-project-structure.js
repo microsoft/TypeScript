@@ -22,17 +22,23 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -w /a/b/f1.ts
+/a/lib/tsc.js -w /a/b/f1.ts --explainFiles
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
+a/lib/lib.d.ts
+  Default library
+a/b/f2.ts
+  Imported via "./f2" from file 'a/b/f1.ts'
+a/b/f1.ts
+  Root file specified for compilation
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"explainFiles":true}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -93,12 +99,20 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
+a/lib/lib.d.ts
+  Default library
+a/c/f3.ts
+  Imported via "../c/f3" from file 'a/b/f2.ts'
+a/b/f2.ts
+  Imported via "./f2" from file 'a/b/f1.ts'
+a/b/f1.ts
+  Root file specified for compilation
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"explainFiles":true}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts

@@ -22868,11 +22868,14 @@ namespace ts {
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
             if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
-                if (compilerOptions.preserveConstEnums && isExportOrExportExpression(location) || !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
-                    markAliasSymbolAsReferenced(symbol);
-                }
-                else {
-                    markConstEnumAliasAsReferenced(symbol);
+                const target = resolveAlias(symbol);
+                if (target.flags & SymbolFlags.Value) {
+                    if (compilerOptions.preserveConstEnums && isExportOrExportExpression(location) || !isConstEnumOrConstEnumOnlyModule(target)) {
+                        markAliasSymbolAsReferenced(symbol);
+                    }
+                    else {
+                        markConstEnumAliasAsReferenced(symbol);
+                    }
                 }
             }
         }

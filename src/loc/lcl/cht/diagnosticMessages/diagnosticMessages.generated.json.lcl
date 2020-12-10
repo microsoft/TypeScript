@@ -1854,6 +1854,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_import_alias_cannot_use_import_type_1392" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An import alias cannot use 'import type']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[匯入別名不能使用 'import type']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_import_declaration_can_only_be_used_in_a_namespace_or_module_1232" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An import declaration can only be used in a namespace or module.]]></Val>
@@ -7542,15 +7551,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Only_ECMAScript_imports_may_use_import_type_1370" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Only ECMAScript imports may use 'import type'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只有 ECMAScript 匯入可以使用 'import type'。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement_1091" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only a single variable declaration is allowed in a 'for...in' statement.]]></Val>
@@ -11229,11 +11229,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_import_is_never_used_as_a_value_and_must_use_import_type_because_the_importsNotUsedAsValues_is__1371" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set__1371" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
+          <Val><![CDATA[This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[因為 'importsNotUsedAsValues' 設定為 'error'，所以此匯入永遠不會作為值使用，而且必須使用 'import type'。]]></Val>
+            <Val><![CDATA[因為 'importsNotUsedAsValues' 設為 'error'，所以永遠不會使用此匯入作為值，且必須使用 'import type'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

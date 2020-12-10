@@ -84,6 +84,7 @@ namespace ts {
             ignoreDtsChanged?: true;
             ignoreDtsUnchanged?: true;
             baselineOnly?: true;
+            additionalCommandLineArgs?: string[];
         }
 
         function verifyOutFileScenario({
@@ -92,7 +93,8 @@ namespace ts {
             modifyAgainFs,
             ignoreDtsChanged,
             ignoreDtsUnchanged,
-            baselineOnly
+            baselineOnly,
+            additionalCommandLineArgs,
         }: VerifyOutFileScenarioInput) {
             const incrementalScenarios: TscIncremental[] = [];
             if (!ignoreDtsChanged) {
@@ -117,7 +119,7 @@ namespace ts {
                 subScenario,
                 fs: () => outFileFs,
                 scenario: "outfile-concat",
-                commandLineArgs: ["--b", "/src/third", "--verbose"],
+                commandLineArgs: ["--b", "/src/third", "--verbose", ...(additionalCommandLineArgs || [])],
                 baselineSourceMap: true,
                 modifyFs,
                 baselineReadFileCalls: !baselineOnly,
@@ -131,6 +133,12 @@ namespace ts {
         // Verify initial + incremental edits
         verifyOutFileScenario({
             subScenario: "baseline sectioned sourcemaps",
+        });
+
+        verifyOutFileScenario({
+            subScenario: "explainFiles",
+            additionalCommandLineArgs: ["--explainFiles"],
+            baselineOnly: true
         });
 
         // Verify baseline with build info + dts unChanged

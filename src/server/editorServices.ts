@@ -1279,7 +1279,6 @@ namespace ts.server {
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
-                        configFileSpecs: project.configFileSpecs!,
                         extraFileExtensions: this.hostConfiguration.extraFileExtensions,
                         currentDirectory: this.currentDirectory,
                         options: project.getCompilationSettings(),
@@ -2128,7 +2127,6 @@ namespace ts.server {
                     configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined
                 };
             }
-            project.configFileSpecs = parsedCommandLine.configFileSpecs;
             project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
@@ -2237,11 +2235,11 @@ namespace ts.server {
          */
         /*@internal*/
         reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
-            const configFileSpecs = project.configFileSpecs!; // TODO: GH#18217
+            const configFileSpecs = project.getCompilerOptions().configFile!.configFileSpecs!;
             const configFileName = project.getConfigFilePath();
-            const fileNamesResult = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
-            project.updateErrorOnNoInputFiles(fileNamesResult);
-            this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
+            const fileNames = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
+            project.updateErrorOnNoInputFiles(fileNames);
+            this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
         }
 
