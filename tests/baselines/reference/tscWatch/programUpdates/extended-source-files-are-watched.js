@@ -19,7 +19,7 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"extends":"./second.tsconfig.json","compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
 
 //// [/a/b/first.tsconfig.json]
 {"compilerOptions":{"strict":true}}
@@ -38,8 +38,63 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"strict":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+WatchedFiles::
+/a/b/tsconfig.json:
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+/a/b/commonfile1.ts:
+  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
+/a/b/commonfile2.ts:
+  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/a/b/node_modules/@types:
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+Change:: Change config to extend another config
+
+Input::
+//// [/a/b/tsconfig.json]
+{"extends":"./second.tsconfig.json","compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+
+
+Output::
+>> Screen clear
+[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
+Program options: {"strict":true,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
@@ -72,16 +127,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js]
-"use strict";
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-"use strict";
-var y = 1;
-
-
 
 Change:: Change first extended config
 
@@ -92,9 +137,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -143,9 +188,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -175,6 +220,53 @@ WatchedFiles::
   {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
 /a/b/first.tsconfig.json:
   {"fileName":"/a/b/first.tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/a/b/node_modules/@types:
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
+
+Change:: Change config to stop extending another config
+
+Input::
+//// [/a/b/tsconfig.json]
+{"compilerOptions":{},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
+
+
+Output::
+>> Screen clear
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/commonFile1.ts
+/a/b/commonFile2.ts
+
+WatchedFiles::
+/a/b/tsconfig.json:
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+/a/b/commonfile1.ts:
+  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
+/a/b/commonfile2.ts:
+  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 

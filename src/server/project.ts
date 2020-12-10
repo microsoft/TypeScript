@@ -2292,6 +2292,7 @@ namespace ts.server {
             }
 
             this.stopWatchingWildCards();
+            this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
             this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;

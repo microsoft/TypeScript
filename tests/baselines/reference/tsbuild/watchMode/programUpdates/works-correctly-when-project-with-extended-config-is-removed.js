@@ -37,12 +37,25 @@ let y = 1
 let z = 0;
 
 
-/a/lib/tsc.js -b -w /a/b/tsconfig.json
+/a/lib/tsc.js -b -w -v
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:28 AM[0m] Projects in this build: 
+    * project1.tsconfig.json
+    * project2.tsconfig.json
+    * tsconfig.json
+
+[[90m12:00:29 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'commonFile1.js' does not exist
+
+[[90m12:00:30 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+
+[[90m12:00:41 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
+
+[[90m12:00:42 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+
+[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -194,9 +207,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

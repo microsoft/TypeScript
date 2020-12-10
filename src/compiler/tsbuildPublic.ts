@@ -210,10 +210,6 @@ namespace ts {
         originalGetSourceFile: CompilerHost["getSourceFile"];
     }
 
-    interface SharedExtendedConfigFileWatcher extends FileWatcher {
-        projects: Set<ResolvedConfigFilePath>;
-    }
-
     interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
         readonly host: SolutionBuilderHost<T>;
         readonly hostWithWatch: SolutionBuilderWithWatchHost<T>;
@@ -258,7 +254,7 @@ namespace ts {
         readonly allWatchedWildcardDirectories: ESMap<ResolvedConfigFilePath, ESMap<string, WildcardDirectoryWatcher>>;
         readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
         readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
-        readonly allWatchedExtendedConfigFiles: ESMap<ResolvedConfigFilePath, SharedExtendedConfigFileWatcher>;
+        readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
@@ -468,8 +464,8 @@ namespace ts {
                 { onDeleteValue: closeFileWatcher }
             );
 
-            state.allWatchedExtendedConfigFiles.forEach((watcher) => {
-                watcher.projects.forEach((project) => {
+            state.allWatchedExtendedConfigFiles.forEach(watcher => {
+                watcher.projects.forEach(project => {
                     if (!currentProjects.has(project)) {
                         watcher.projects.delete(project);
                     }
@@ -1806,50 +1802,21 @@ namespace ts {
     }
 
     function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
-        const extendedConfigs = arrayToMap(
-            (parsed?.options.configFile?.extendedSourceFiles || emptyArray) as ResolvedConfigFileName[],
-            extendedSourceFile => toResolvedConfigFilePath(state, extendedSourceFile)
+        updateSharedExtendedConfigFileWatcher(
+            resolvedPath,
+            parsed,
+            state.allWatchedExtendedConfigFiles,
+            (extendedConfigFileName, extendedConfigFilePath) => state.watchFile(
+                extendedConfigFileName,
+                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath =>
+                    invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)
+                ),
+                PollingInterval.High,
+                parsed?.watchOptions,
+                WatchType.ExtendedConfigFile,
+            ),
+            fileName => toPath(state, fileName),
         );
-        extendedConfigs.forEach((extendedConfigFileName, extendedConfigFilePath) => {
-            const watcher = state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath);
-            if (watcher) {
-                watcher.projects.add(resolvedPath);
-            }
-            else {
-                // start watching previously unseen extended config
-                const projects = new Set<ResolvedConfigFilePath>([resolvedPath]);
-                let fileWatcher = state.watchFile(
-                    extendedConfigFileName,
-                    () => {
-                        projects.forEach((projectConfigFilePath) => {
-                            invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full);
-                        });
-                    },
-                    PollingInterval.High,
-                    parsed?.watchOptions,
-                    WatchType.ExtendedConfigFile,
-                    extendedConfigFileName
-                );
-                state.allWatchedExtendedConfigFiles.set(extendedConfigFilePath, {
-                    close: () => {
-                        if (projects.size === 0) {
-                            Debug.assert(fileWatcher !== undefined);
-                            fileWatcher.close();
-                            fileWatcher = undefined!;
-                            state.allWatchedExtendedConfigFiles.delete(extendedConfigFilePath);
-                        }
-                    },
-                    projects,
-                });
-            }
-        });
-        // remove project from all unrelated watchers
-        state.allWatchedExtendedConfigFiles.forEach((watcher, extendedConfigFilePath) => {
-            if (!extendedConfigs.has(extendedConfigFilePath)) {
-                watcher.projects.delete(resolvedPath);
-                watcher.close();
-            }
-        });
     }
 
     function watchWildCardDirectories(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
@@ -1922,7 +1889,10 @@ namespace ts {
 
     function stopWatching(state: SolutionBuilderState) {
         clearMap(state.allWatchedConfigFiles, closeFileWatcher);
-        clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcher);
+        clearMap(state.allWatchedExtendedConfigFiles, watcher => {
+            watcher.projects.clear();
+            watcher.close();
+        });
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
     }

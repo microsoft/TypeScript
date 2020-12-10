@@ -641,10 +641,6 @@ namespace ts.server {
         errors: Diagnostic[] | undefined;
     }
 
-    interface SharedExtendedConfigFileWatcher extends FileWatcher {
-        projects: Set<ConfiguredProject>;
-    }
-
     export class ProjectService {
 
         /*@internal*/
@@ -761,7 +757,7 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
-        private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher>();
+        private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
 
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
@@ -1358,61 +1354,40 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private updateSharedExtendedConfigFileMap(project: ConfiguredProject) {
-            const extendedConfigPaths: readonly Path[] = project.getCompilerOptions().configFile?.extendedSourceFiles
-                ?.map((file) => this.toPath(file)) ?? emptyArray;
-            for (const extendedConfigPath of extendedConfigPaths) {
-                const watcher = this.sharedExtendedConfigFileWatchers.get(extendedConfigPath);
-                if (watcher) {
-                    watcher.projects.add(project);
-                }
-                else {
-                    // start watching previously unseen extended config
-                    const projects = new Set<ConfiguredProject>([project]);
-                    const fileWatcherCallback = () => {
-                        const reason = `Change in extended config file ${extendedConfigPath} detected`;
-                        projects.forEach((project: ConfiguredProject) => {
+        updateSharedExtendedConfigFileMap({ canonicalConfigFilePath }: ConfiguredProject, parsedCommandLine: ParsedCommandLine) {
+            updateSharedExtendedConfigFileWatcher(
+                canonicalConfigFilePath,
+                parsedCommandLine,
+                this.sharedExtendedConfigFileWatchers,
+                (extendedConfigFileName, extendedConfigFilePath) => this.watchFactory.watchFile(
+                    extendedConfigFileName,
+                    () => {
+                        let ensureProjectsForOpenFiles = false;
+                        this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
+                            const project = this.configuredProjects.get(canonicalPath);
                             // Skip refresh if project is not yet loaded
-                            if (project.isInitialLoadPending()) return;
+                            if (!project || project.isInitialLoadPending()) return;
                             project.pendingReload = ConfigFileProgramReloadLevel.Full;
-                            project.pendingReloadReason = reason;
+                            project.pendingReloadReason = `Change in extended config file ${extendedConfigFileName} detected`;
                             this.delayUpdateProjectGraph(project);
+                            ensureProjectsForOpenFiles = true;
                         });
-                    };
-                    const fileWatcher = this.watchFactory.watchFile(
-                        extendedConfigPath,
-                        fileWatcherCallback,
-                        PollingInterval.High,
-                        this.hostConfiguration.watchOptions,
-                        WatchType.ExtendedConfigFile
-                    );
-                    this.sharedExtendedConfigFileWatchers.set(extendedConfigPath, {
-                        close: () => fileWatcher.close(),
-                        projects,
-                    });
-                }
-            }
-            // remove project from all unrelated watchers
-            this.sharedExtendedConfigFileWatchers.forEach((watcher, extendedConfigPath) => {
-                if (!extendedConfigPaths.includes(extendedConfigPath)) {
-                    watcher.projects.delete(project);
-                    if (watcher.projects.size === 0) {
-                        watcher.close();
-                        this.sharedExtendedConfigFileWatchers.delete(extendedConfigPath);
-                    }
-                }
-            });
+                        if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
+                    },
+                    PollingInterval.High,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.ExtendedConfigFile
+                ),
+                fileName => this.toPath(fileName),
+            );
         }
 
         /*@internal*/
-        private removeProjectFromSharedExtendedConfigFileMap(project: ConfiguredProject) {
-            for (const [sharedConfigPath, watcher] of arrayFrom(this.sharedExtendedConfigFileWatchers.entries())) {
-                watcher.projects.delete(project);
-                if (watcher.projects.size === 0) {
-                    watcher.close();
-                    this.sharedExtendedConfigFileWatchers.delete(sharedConfigPath);
-                }
-            }
+        removeProjectFromSharedExtendedConfigFileMap(project: ConfiguredProject) {
+            this.sharedExtendedConfigFileWatchers.forEach(watcher => {
+                watcher.projects.delete(project.canonicalConfigFilePath);
+                watcher.close();
+            });
         }
 
         /**
@@ -1470,7 +1445,6 @@ namespace ts.server {
                     this.configuredProjects.delete((<ConfiguredProject>project).canonicalConfigFilePath);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     this.setConfigFileExistenceInfoByClosedConfiguredProject(<ConfiguredProject>project);
-                    this.removeProjectFromSharedExtendedConfigFileMap(project as ConfiguredProject);
                     break;
                 case ProjectKind.Inferred:
                     unorderedRemoveItem(this.inferredProjects, <InferredProject>project);
@@ -2206,7 +2180,7 @@ namespace ts.server {
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
                 project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
-                this.updateSharedExtendedConfigFileMap(project);
+                this.updateSharedExtendedConfigFileMap(project, parsedCommandLine);
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());

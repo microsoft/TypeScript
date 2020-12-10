@@ -1629,7 +1629,7 @@ import { x } from "../b";`),
 
         verifyTscWatch({
             scenario,
-            subScenario: "works correctly when config file is changed to extend another config",
+            subScenario: "extended source files are watched",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {
                 const firstExtendedConfigFile: File = {
@@ -1666,85 +1666,7 @@ import { x } from "../b";`),
                         files: [commonFile1.path, commonFile2.path]
                     })),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
-                }
-            ]
-        });
-
-        verifyTscWatch({
-            scenario,
-            subScenario: "works correctly when config file is changed to no longer extend another config",
-            commandLineArgs: ["-w", "-p", configFilePath],
-            sys: () => {
-                const firstExtendedConfigFile: File = {
-                    path: "/a/b/first.tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            strict: true
-                        }
-                    })
-                };
-                const secondExtendedConfigFile: File = {
-                    path: "/a/b/second.tsconfig.json",
-                    content: JSON.stringify({
-                        extends: "./first.tsconfig.json"
-                    })
-                };
-                const configFile: File = {
-                    path: configFilePath,
-                    content: JSON.stringify({
-                        extends: "./second.tsconfig.json",
-                        compilerOptions: {},
-                        files: [commonFile1.path, commonFile2.path]
-                    })
-                };
-                return createWatchedSystem([
-                    libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
-                ]);
-            },
-            changes: [
-                {
-                    caption: "Change config to stop extending another config",
-                    change: sys => sys.modifyFile(configFilePath, JSON.stringify({
-                        compilerOptions: {},
-                        files: [commonFile1.path, commonFile2.path]
-                    })),
-                    timeouts: checkSingleTimeoutQueueLengthAndRun,
-                }
-            ]
-        });
-
-        verifyTscWatch({
-            scenario,
-            subScenario: "works correctly when extended config files are changed",
-            commandLineArgs: ["-w", "-p", configFilePath],
-            sys: () => {
-                const firstExtendedConfigFile: File = {
-                    path: "/a/b/first.tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            strict: true
-                        }
-                    })
-                };
-                const secondExtendedConfigFile: File = {
-                    path: "/a/b/second.tsconfig.json",
-                    content: JSON.stringify({
-                        extends: "./first.tsconfig.json"
-                    })
-                };
-                const configFile: File = {
-                    path: configFilePath,
-                    content: JSON.stringify({
-                        extends: "./second.tsconfig.json",
-                        compilerOptions: {},
-                        files: [commonFile1.path, commonFile2.path]
-                    })
-                };
-                return createWatchedSystem([
-                    libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
-                ]);
-            },
-            changes: [
+                },
                 {
                     caption: "Change first extended config",
                     change: sys => sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify({
@@ -1763,84 +1685,15 @@ import { x } from "../b";`),
                         }
                     })),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
-                }
-            ]
-        });
-
-        verifyTscWatch({
-            scenario,
-            subScenario: "works correctly when project with extended config is removed",
-            commandLineArgs: ["-b", "-w", configFilePath],
-            sys: () => {
-                const alphaExtendedConfigFile: File = {
-                    path: "/a/b/alpha.tsconfig.json",
-                    content: JSON.stringify({
-                        strict: true
-                    })
-                };
-                const project1Config: File = {
-                    path: "/a/b/project1.tsconfig.json",
-                    content: JSON.stringify({
-                        extends: "./alpha.tsconfig.json",
-                        compilerOptions: {
-                            composite: true,
-                        },
-                        files: [commonFile1.path, commonFile2.path]
-                    })
-                };
-                const bravoExtendedConfigFile: File = {
-                    path: "/a/b/bravo.tsconfig.json",
-                    content: JSON.stringify({
-                        strict: true
-                    })
-                };
-                const otherFile: File = {
-                    path: "/a/b/other.ts",
-                    content: "let z = 0;",
-                };
-                const project2Config: File = {
-                    path: "/a/b/project2.tsconfig.json",
-                    content: JSON.stringify({
-                        extends: "./bravo.tsconfig.json",
-                        compilerOptions: {
-                            composite: true,
-                        },
-                        files: [otherFile.path]
-                    })
-                };
-                const configFile: File = {
-                    path: configFilePath,
-                    content: JSON.stringify({
-                        references: [
-                            {
-                                path: "./project1.tsconfig.json",
-                            },
-                            {
-                                path: "./project2.tsconfig.json",
-                            },
-                        ],
-                        files: [],
-                    })
-                };
-                return createWatchedSystem([
-                    libFile, configFile,
-                    alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
-                    bravoExtendedConfigFile, project2Config, otherFile
-                ]);
-            },
-            changes: [
+                },
                 {
-                    caption: "Remove project2 from base config",
+                    caption: "Change config to stop extending another config",
                     change: sys => sys.modifyFile(configFilePath, JSON.stringify({
-                        references: [
-                            {
-                                path: "./project1.tsconfig.json",
-                            },
-                        ],
-                        files: [],
+                        compilerOptions: {},
+                        files: [commonFile1.path, commonFile2.path]
                     })),
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
-                }
+                },
             ]
         });
     });

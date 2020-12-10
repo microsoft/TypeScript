@@ -790,11 +790,16 @@ namespace ts {
         }
 
         function watchExtendedConfigFiles() {
-            updateExtendedConfigFilesMap(
-                compilerOptions.configFile,
-                extendedConfigFilesMap || (extendedConfigFilesMap = new Map()),
-                toPath,
-                watchExtendedConfigFile
+            // Update the extended config files watcher
+            mutateMap(
+                extendedConfigFilesMap ||= new Map(),
+                arrayToMap(compilerOptions.configFile?.extendedSourceFiles || emptyArray, toPath),
+                {
+                    // Watch the extended config files
+                    createNewValue: watchExtendedConfigFile,
+                    // Config files that are no longer extended should no longer be watched.
+                    onDeleteValue: closeFileWatcher
+                }
             );
         }
 

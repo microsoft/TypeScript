@@ -87,7 +87,7 @@ namespace ts.projectSystem {
                 verifyEventWithOpenTs(bTs, configB.path, 1);
 
                 host.writeFile(configA.path, configA.content);
-                host.checkTimeoutQueueLengthAndRun(1);
+                host.checkTimeoutQueueLengthAndRun(2);
                 const project = service.configuredProjects.get(configB.path)!;
                 verifyEvent(project, `Change in extended config file ${configA.path} detected`);
             });
