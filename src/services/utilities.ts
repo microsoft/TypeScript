@@ -2923,5 +2923,14 @@ namespace ts {
         return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
     }
 
+    /**
+     * Checks if string "first" begins with string "second".
+     * Used to match requested refactorKinds with a known refactorKind.
+     */
+    export function refactorKindBeginsWith(first: string, second: string | undefined): boolean {
+        if(!second) return true;
+        return first.substr(0, second.length) === second;
+    }
+
     // #endregion
 }

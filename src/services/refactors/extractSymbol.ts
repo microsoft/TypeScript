@@ -9,15 +9,6 @@ namespace ts.refactor.extractSymbol {
         extractFunctionKind,
     ];
 
-    /**
-     * Checks if string "first" begins with string "second".
-     * Used to match requested refactorKinds with a known refactorKind.
-     */
-    function refactorKindBeginsWith(first: string, second: string | undefined): boolean {
-        if(!second) return true;
-        return first.substr(0, second.length) === second;
-    }
-
     registerRefactor(refactorName, { refactorKinds, getAvailableActions, getEditsForAction });
 
     /**
