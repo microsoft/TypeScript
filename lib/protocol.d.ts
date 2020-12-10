@@ -2569,7 +2569,9 @@ declare namespace ts.server.protocol {
         None = "None",
         Preserve = "Preserve",
         ReactNative = "ReactNative",
-        React = "React"
+        React = "React",
+        ReactJSX = "ReactJSX",
+        ReactJSXDev = "ReactJSXDev"
     }
     const enum ModuleKind {
         None = "None",
@@ -2579,6 +2581,7 @@ declare namespace ts.server.protocol {
         System = "System",
         ES6 = "ES6",
         ES2015 = "ES2015",
+        ES2020 = "ES2020",
         ESNext = "ESNext"
     }
     const enum ModuleResolutionKind {
@@ -2599,6 +2602,7 @@ declare namespace ts.server.protocol {
         ES2018 = "ES2018",
         ES2019 = "ES2019",
         ES2020 = "ES2020",
+        JSON = "JSON",
         ESNext = "ESNext"
     }
 }
