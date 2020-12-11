@@ -1242,7 +1242,7 @@ namespace ts {
                             _fs.mkdirSync(directoryName);
                         }
                         catch (e) {
-                            if (e.code !== "EEXIST") {
+                            if ((e as {code: string}).code !== "EEXIST") {
                                 // Failed for some other reason (access denied?); still throw
                                 throw e;
                             }
@@ -1312,7 +1312,7 @@ namespace ts {
                         const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
                         return { module: require(modulePath), modulePath, error: undefined };
                     }
-                    catch (error) {
+                    catch (error: any) {
                         return { module: undefined, modulePath: undefined, error };
                     }
                 }

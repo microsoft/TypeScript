@@ -451,7 +451,7 @@ namespace ts {
                 return JSON.parse(diagnosticMessagesJson);
             }
             catch (e) {
-                this.log(e.description || "diagnosticMessages.generated.json has invalid JSON format");
+                this.log((e as { description?: string }).description || "diagnosticMessages.generated.json has invalid JSON format");
                 return null;
             }
             /* eslint-enable no-null/no-null */
@@ -579,7 +579,7 @@ namespace ts {
             const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
             return returnJson ? JSON.stringify({ result }) : result as T;
         }
-        catch (err) {
+        catch (err: any) {
             if (err instanceof OperationCanceledException) {
                 return JSON.stringify({ canceled: true });
             }
@@ -1283,7 +1283,7 @@ namespace ts {
                 const languageService = createLanguageService(hostAdapter, this.documentRegistry, /*syntaxOnly*/ false);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
-            catch (err) {
+            catch (err: any) {
                 logInternalError(host, err);
                 throw err;
             }
@@ -1293,7 +1293,7 @@ namespace ts {
             try {
                 return new ClassifierShimObject(this, logger);
             }
-            catch (err) {
+            catch (err: any) {
                 logInternalError(logger, err);
                 throw err;
             }
@@ -1304,7 +1304,7 @@ namespace ts {
                 const adapter = new CoreServicesShimHostAdapter(host);
                 return new CoreServicesShimObject(this, <Logger>host, adapter);
             }
-            catch (err) {
+            catch (err: any) {
                 logInternalError(<Logger>host, err);
                 throw err;
             }

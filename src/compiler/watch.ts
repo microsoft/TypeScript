@@ -291,7 +291,7 @@ namespace ts {
                     performance.measure("I/O Read", "beforeIORead", "afterIORead");
                 }
                 catch (e) {
-                    if (onError) {
+                    if (onError && e instanceof Error) {
                         onError(e.message);
                     }
                     text = "";
@@ -317,7 +317,7 @@ namespace ts {
             readDirectory: maybeBind(host, host.readDirectory),
         };
 
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
+        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError?: (message: string) => void) {
             try {
                 performance.mark("beforeIOWrite");
 
@@ -336,7 +336,7 @@ namespace ts {
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
             }
             catch (e) {
-                if (onError) {
+                if (onError && e instanceof Error) {
                     onError(e.message);
                 }
             }

@@ -1633,7 +1633,7 @@ namespace ts {
             text = readFile(fileName);
         }
         catch (e) {
-            return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
+            return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, (e as Error).message);
         }
         return text === undefined ? createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, fileName) : text;
     }

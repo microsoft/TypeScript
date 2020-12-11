@@ -83,7 +83,7 @@ namespace ts {
                 performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
             catch (e) {
-                if (onError) {
+                if (onError && e instanceof Error) {
                     onError(e.message);
                 }
                 text = "";
@@ -121,7 +121,7 @@ namespace ts {
                 performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
             }
             catch (e) {
-                if (onError) {
+                if (onError && e instanceof Error) {
                     onError(e.message);
                 }
             }
