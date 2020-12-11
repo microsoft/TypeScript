@@ -92,12 +92,13 @@ namespace ts.moduleSpecifiers {
     /** Returns an import for each symlink and for the realpath. */
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
+        checker: TypeChecker,
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         userPreferences: UserPreferences,
     ): readonly string[] {
-        const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
+        const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
         if (ambient) return [ambient];
 
         const info = getInfo(importingSourceFile.path, host);
@@ -369,7 +370,7 @@ namespace ts.moduleSpecifiers {
         return sortedPaths;
     }
 
-    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
+    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
         const decl = find(moduleSymbol.declarations,
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
@@ -386,15 +387,30 @@ namespace ts.moduleSpecifiers {
          *     export = ns;
          * }
          */
-        // `import {c} from "m";` is valid, in which case, moduleSymbol is "ns", but the module name should be "m"
-        const exportModuleDeclare = find(moduleSymbol.declarations,
-            d => isModuleDeclaration(d)
-            && d?.parent?.parent?.parent
-            && isModuleBlock(d.parent) && isAmbientModule(d.parent.parent) && isSourceFile(d.parent.parent.parent)
-            && ((d.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment).expression  as Identifier).escapedText === getTextOfIdentifierOrLiteral(d.name)
-        ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
-        if (exportModuleDeclare) {
-            return ((exportModuleDeclare.parent.parent as AmbientModuleDeclaration).name as StringLiteral).text;
+        // `import {c} from "m";` is valid, in which case, `moduleSymbol` is "ns", but the module name should be "m"
+        const ambientModuleDeclareCandidates = map(moduleSymbol.declarations,
+            d => {
+                if (!isModuleDeclaration(d)) return;
+                const topNamespace = getTopNamespace(d);
+                if (!(topNamespace?.parent?.parent
+                    && isModuleBlock(topNamespace.parent) && isAmbientModule(topNamespace.parent.parent) && isSourceFile(topNamespace.parent.parent.parent))) return;
+                const defaultExport = ((topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier);
+                const defaultExportSymbol = checker.getSymbolAtLocation(defaultExport);
+                if (!defaultExportSymbol) return;
+                const origionalDefaultExportSymbol = defaultExportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(defaultExportSymbol) : defaultExportSymbol;
+                if (origionalDefaultExportSymbol === d.symbol) return topNamespace.parent.parent;
+
+                function getTopNamespace(namespaceDeclaration: ModuleDeclaration) {
+                    while (namespaceDeclaration.flags & NodeFlags.NestedNamespace) {
+                        namespaceDeclaration = namespaceDeclaration.parent as ModuleDeclaration;
+                    }
+                    return namespaceDeclaration;
+                }
+            }
+        );
+        const ambientModuleDeclare = find(ambientModuleDeclareCandidates, d => !!d) as (AmbientModuleDeclaration & { name: StringLiteral }) | undefined;
+        if (ambientModuleDeclare) {
+            return ambientModuleDeclare.name.text;
         }
     }
 
