@@ -5999,6 +5999,7 @@ declare namespace ts {
         links?: readonly JSDocLinkInfo[];
     }
     interface JSDocLinkInfo extends DocumentSpan {
+        name: TextSpan;
         target: DocumentSpan;
     }
     interface QuickInfo {

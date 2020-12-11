@@ -62,6 +62,10 @@
                 "start": 45,
                 "length": 9
               },
+              "name": {
+                "start": 52,
+                "length": 1
+              },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
                 "textSpan": {
@@ -76,6 +80,10 @@
                 "start": 74,
                 "length": 11
               },
+              "name": {
+                "start": 81,
+                "length": 1
+              },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
                 "textSpan": {
@@ -89,6 +97,10 @@
               "textSpan": {
                 "start": 89,
                 "length": 22
+              },
+              "name": {
+                "start": 96,
+                "length": 1
               },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",
@@ -109,6 +121,10 @@
               "textSpan": {
                 "start": 156,
                 "length": 9
+              },
+              "name": {
+                "start": 163,
+                "length": 1
               },
               "target": {
                 "fileName": "/tests/cases/fourslash/jsdocLink1.ts",

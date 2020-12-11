@@ -962,6 +962,7 @@ namespace ts.server.protocol {
     }
 
     export interface JSDocLinkInfo extends DocumentSpan {
+        name: FileSpan;
         target: FileSpan;
     }
 

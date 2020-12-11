@@ -133,6 +133,7 @@ namespace ts.JsDoc {
                 return {
                     fileName: getSourceFileOfNode(link).fileName,
                     textSpan: createTextSpanFromNode(link),
+                    name: createTextSpanFromNode(link.name),
                     target: {
                         fileName: getSourceFileOfNode(symbol.valueDeclaration).fileName,
                         textSpan: createTextSpanFromNode(symbol.valueDeclaration)

@@ -526,6 +526,7 @@ namespace ts.server {
                 ...tag,
                 links: tag.links?.map(link => ({
                     ...link,
+                    name: link.name as unknown as TextSpan,
                     target: {
                         // TODO: The JSDocLinkInfo tag data mismatches the type!! (probably wasn't correctly encoded in the first place?)
                         textSpan: link.target as unknown as TextSpan,

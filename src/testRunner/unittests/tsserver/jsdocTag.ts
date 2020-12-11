@@ -39,6 +39,10 @@ var x = 1`);
                 tags: [{
                     links: [{
                         fileName: "someFile1.js",
+                        name: {
+                            length: 1,
+                            start: 28,
+                        },
                         target: {
                             fileName: "someFile1.js",
                             textSpan: {

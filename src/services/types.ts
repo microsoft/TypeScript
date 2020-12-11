@@ -1037,6 +1037,7 @@ namespace ts {
     }
 
     export interface JSDocLinkInfo extends DocumentSpan {
+        name: TextSpan;
         target: DocumentSpan;
     }
 

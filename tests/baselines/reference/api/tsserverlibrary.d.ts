@@ -5999,6 +5999,7 @@ declare namespace ts {
         links?: readonly JSDocLinkInfo[];
     }
     interface JSDocLinkInfo extends DocumentSpan {
+        name: TextSpan;
         target: DocumentSpan;
     }
     interface QuickInfo {
@@ -7211,6 +7212,7 @@ declare namespace ts.server.protocol {
         links?: JSDocLinkInfo[];
     }
     interface JSDocLinkInfo extends DocumentSpan {
+        name: FileSpan;
         target: FileSpan;
     }
     interface TextSpanWithContext extends TextSpan {

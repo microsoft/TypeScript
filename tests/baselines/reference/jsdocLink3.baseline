@@ -62,6 +62,10 @@
                 "start": 66,
                 "length": 9
               },
+              "name": {
+                "start": 73,
+                "length": 1
+              },
               "target": {
                 "fileName": "/jsdocLink3.ts",
                 "textSpan": {
@@ -76,6 +80,10 @@
                 "start": 95,
                 "length": 11
               },
+              "name": {
+                "start": 102,
+                "length": 1
+              },
               "target": {
                 "fileName": "/jsdocLink3.ts",
                 "textSpan": {
@@ -89,6 +97,10 @@
               "textSpan": {
                 "start": 110,
                 "length": 22
+              },
+              "name": {
+                "start": 117,
+                "length": 1
               },
               "target": {
                 "fileName": "/jsdocLink3.ts",
@@ -109,6 +121,10 @@
               "textSpan": {
                 "start": 177,
                 "length": 9
+              },
+              "name": {
+                "start": 184,
+                "length": 1
               },
               "target": {
                 "fileName": "/jsdocLink3.ts",
