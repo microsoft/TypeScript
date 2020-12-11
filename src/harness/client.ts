@@ -362,6 +362,18 @@ namespace ts.server {
             }));
         }
 
+        getFileReferences(fileName: string): ReferenceEntry[] {
+            const request = this.processRequest<protocol.FileReferencesRequest>(CommandNames.FileReferences, { file: fileName });
+            const response = this.processResponse<protocol.FileReferencesResponse>(request);
+
+            return response.body!.refs.map(entry => ({ // TODO: GH#18217
+                fileName: entry.file,
+                textSpan: this.decodeSpan(entry),
+                isWriteAccess: entry.isWriteAccess,
+                isDefinition: entry.isDefinition,
+            }));
+        }
+
         getEmitOutput(file: string): EmitOutput {
             const request = this.processRequest<protocol.EmitOutputRequest>(protocol.CommandTypes.EmitOutput, { file });
             const response = this.processResponse<protocol.EmitOutputResponse>(request);

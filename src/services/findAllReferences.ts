@@ -622,7 +622,21 @@ namespace ts.FindAllReferences {
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
                 // String literal might be a property (and thus have a symbol), so do this here rather than in getReferencedSymbolsSpecial.
-                return !options.implementations && isStringLiteralLike(node) ? getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken) : undefined;
+                if (!options.implementations && isStringLiteralLike(node)) {
+                    if (isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ true) || isExternalModuleReference(node.parent) || isImportDeclaration(node.parent) || isImportCall(node.parent)) {
+                        const fileIncludeReasons = program.getFileIncludeReasons();
+                        const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text)?.resolvedFileName;
+                        const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
+                        if (referencedFile) {
+                            return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
+                        }
+                        // Fall through to string literal references. This is not very likely to return
+                        // anything useful, but I guess it's better than nothing, and there's an existing
+                        // test that expects this to happen (fourslash/cases/untypedModuleImport.ts).
+                    }
+                    return getReferencesForStringLiteral(node, sourceFiles, checker, cancellationToken);
+                }
+                return undefined;
             }
 
             if (symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -640,6 +654,35 @@ namespace ts.FindAllReferences {
 
             const references = getReferencedSymbolsForSymbol(symbol, node, sourceFiles, sourceFilesSet, checker, cancellationToken, options);
             return mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget);
+        }
+
+        export function getReferencesForFileName(fileName: string, program: Program, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly Entry[] {
+            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
+            if (moduleSymbol) {
+                return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet)[0]?.references || emptyArray;
+            }
+            const fileIncludeReasons = program.getFileIncludeReasons();
+            const referencedFile = program.getSourceFile(fileName);
+            return referencedFile && fileIncludeReasons && getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray;
+        }
+
+        function getReferencesForNonModule(referencedFile: SourceFile, refFileMap: MultiMap<Path, FileIncludeReason>, program: Program): readonly SpanEntry[] | undefined {
+            let entries: SpanEntry[] | undefined;
+            const references = refFileMap.get(referencedFile.path) || emptyArray;
+            for (const ref of references) {
+                if (isReferencedFile(ref)) {
+                    const referencingFile = program.getSourceFileByPath(ref.file)!;
+                    const location = getReferencedFileLocation(program.getSourceFileByPath, ref);
+                    if (isReferenceFileLocation(location)) {
+                        entries = append(entries, {
+                            kind: EntryKind.Span,
+                            fileName: referencingFile.fileName,
+                            textSpan: createTextSpanFromRange(location)
+                        });
+                    }
+                }
+            }
+            return entries;
         }
 
         function getMergedAliasedSymbolOfNamespaceExportDeclaration(node: Node, symbol: Symbol, checker: TypeChecker) {

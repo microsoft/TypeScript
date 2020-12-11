@@ -37,6 +37,9 @@ namespace ts.server.protocol {
         /* @internal */
         EmitOutput = "emit-output",
         Exit = "exit",
+        FileReferences = "fileReferences",
+        /* @internal */
+        FileReferencesFull = "fileReferences-full",
         Format = "format",
         Formatonkey = "formatonkey",
         /* @internal */
@@ -1150,6 +1153,25 @@ namespace ts.server.protocol {
      */
     export interface ReferencesResponse extends Response {
         body?: ReferencesResponseBody;
+    }
+
+    export interface FileReferencesRequest extends FileRequest {
+        command: CommandTypes.FileReferences;
+    }
+
+    export interface FileReferencesResponseBody {
+        /**
+         * The file locations referencing the symbol.
+         */
+        refs: readonly ReferencesResponseItem[];
+        /**
+         * The name of the symbol.
+         */
+        symbolName: string;
+    }
+
+    export interface FileReferencesResponse extends Response {
+        body?: FileReferencesResponseBody;
     }
 
     /**
