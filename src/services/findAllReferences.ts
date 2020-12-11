@@ -308,7 +308,7 @@ namespace ts.FindAllReferences {
                     const declaration = symbol.declarations && firstOrUndefined(symbol.declarations);
                     const node = declaration ? (getNameOfDeclaration(declaration) || declaration) : originalNode;
                     return {
-                        ...getInfoFromNode(node),
+                        ...getFileAndTextSpanFromNode(node),
                         name,
                         kind,
                         displayParts,
@@ -317,24 +317,24 @@ namespace ts.FindAllReferences {
                 }
                 case DefinitionKind.Label: {
                     const { node } = def;
-                    return { ...getInfoFromNode(node), name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
+                    return { ...getFileAndTextSpanFromNode(node), name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
                 }
                 case DefinitionKind.Keyword: {
                     const { node } = def;
                     const name = tokenToString(node.kind)!;
-                    return { ...getInfoFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
+                    return { ...getFileAndTextSpanFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
                 }
                 case DefinitionKind.This: {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
                     const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
                         checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
-                    return { ...getInfoFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
+                    return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
                 case DefinitionKind.String: {
                     const { node } = def;
                     return {
-                        ...getInfoFromNode(node),
+                        ...getFileAndTextSpanFromNode(node),
                         name: node.text,
                         kind: ScriptElementKind.variableElement,
                         displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
@@ -367,7 +367,7 @@ namespace ts.FindAllReferences {
         };
     }
 
-    function getInfoFromNode(node: Node) {
+    function getFileAndTextSpanFromNode(node: Node) {
         const sourceFile = node.getSourceFile();
         return {
             sourceFile,
