@@ -21,13 +21,11 @@
                 "escapedText": "argument"
             },
             "comment": {
-                "links": {
-                    "length": 0,
-                    "pos": -1,
-                    "end": -1,
-                    "hasTrailingComma": false,
-                    "transformFlags": 0
-                },
+                "kind": "JSDocCommentComment",
+                "pos": 33,
+                "end": 47,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "text": "Description"
             },
             "typeExpression": {

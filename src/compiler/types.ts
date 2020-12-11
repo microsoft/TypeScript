@@ -373,6 +373,7 @@ namespace ts {
         // https://jsdoc.app/about-namepaths.html
         JSDocNamepathType,
         JSDocComment,
+        JSDocCommentComment,
         JSDocTypeLiteral,
         JSDocSignature,
         JSDocLink,
@@ -3154,7 +3155,7 @@ namespace ts {
         readonly name?: EntityName;
     }
 
-    export interface JSDocComment {
+    export interface JSDocComment extends Node {
         text: string;
         links?: NodeArray<JSDocLink>;
     }
@@ -7113,6 +7114,8 @@ namespace ts {
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: JSDocComment | undefined): JSDocUnknownTag;
         createJSDocDeprecatedTag(tagName: Identifier, comment?: JSDocComment): JSDocDeprecatedTag;
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: JSDocComment): JSDocDeprecatedTag;
+        createJSDocCommentComment(text: string, links?: readonly JSDocLink[]): JSDocComment;
+        updateJSDocCommentComment(node: JSDocComment, text: string, links?: readonly JSDocLink[]): JSDocComment;
         createJSDocComment(comment?: JSDocComment | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
         updateJSDocComment(node: JSDoc, comment: JSDocComment | undefined, tags: readonly JSDocTag[] | undefined): JSDoc;
 

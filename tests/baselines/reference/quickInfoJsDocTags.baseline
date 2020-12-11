@@ -74,18 +74,15 @@
         },
         {
           "name": "augments",
-          "text": "C<T> Augments it",
-          "links": []
+          "text": "C<T> Augments it"
         },
         {
           "name": "template",
-          "text": "T A template",
-          "links": []
+          "text": "T A template"
         },
         {
           "name": "type",
-          "text": "{number | string} A type",
-          "links": []
+          "text": "{number | string} A type"
         },
         {
           "name": "typedef",
@@ -93,23 +90,19 @@
         },
         {
           "name": "property",
-          "text": "{number} x The prop",
-          "links": []
+          "text": "{number} x The prop"
         },
         {
           "name": "param",
-          "text": "x The param",
-          "links": []
+          "text": "x The param"
         },
         {
           "name": "returns",
-          "text": "The result",
-          "links": []
+          "text": "The result"
         },
         {
           "name": "see",
-          "text": "x (the parameter)",
-          "links": []
+          "text": "x (the parameter)"
         }
       ]
     }

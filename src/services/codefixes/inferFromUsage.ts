@@ -282,6 +282,7 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
+
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
@@ -387,7 +388,7 @@ namespace ts.codefix {
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = factory.createJSDocComment({ text: comments.join("\n") }, factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(factory.createJSDocCommentComment(comments.join("\n")), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;

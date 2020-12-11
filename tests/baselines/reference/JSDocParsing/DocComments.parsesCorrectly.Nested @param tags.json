@@ -21,13 +21,11 @@
                 "escapedText": "param"
             },
             "comment": {
-                "links": {
-                    "length": 0,
-                    "pos": -1,
-                    "end": -1,
-                    "hasTrailingComma": false,
-                    "transformFlags": 0
-                },
+                "kind": "JSDocCommentComment",
+                "pos": 24,
+                "end": 34,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "text": "Doc doc"
             },
             "typeExpression": {
@@ -58,13 +56,11 @@
                                 "escapedText": "param"
                             },
                             "comment": {
-                                "links": {
-                                    "length": 0,
-                                    "pos": -1,
-                                    "end": -1,
-                                    "hasTrailingComma": false,
-                                    "transformFlags": 0
-                                },
+                                "kind": "JSDocCommentComment",
+                                "pos": 54,
+                                "end": 64,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
                                 "text": "Doc for f"
                             },
                             "typeExpression": {

@@ -1845,7 +1845,13 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || node.kind === SyntaxKind.JSDocNamepathType || isJSDocTag(node) || isJSDocTypeLiteral(node) || isJSDocSignature(node);
+        return node.kind === SyntaxKind.JSDocComment
+            || node.kind === SyntaxKind.JSDocCommentComment
+            || node.kind === SyntaxKind.JSDocNamepathType
+            || node.kind === SyntaxKind.JSDocLink
+            || isJSDocTag(node)
+            || isJSDocTypeLiteral(node)
+            || isJSDocSignature(node);
     }
 
     // TODO: determine what this does before making it public.

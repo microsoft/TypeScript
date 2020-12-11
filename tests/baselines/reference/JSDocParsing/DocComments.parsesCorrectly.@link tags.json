@@ -6,6 +6,12 @@
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "comment": {
+        "kind": "JSDocCommentComment",
+        "pos": 0,
+        "end": 59,
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
+        "text": "{@link first }\nInside {@link link text} thing",
         "links": {
             "0": {
                 "kind": "JSDocLink",
@@ -38,12 +44,11 @@
                 }
             },
             "length": 2,
-            "pos": -1,
-            "end": -1,
+            "pos": 7,
+            "end": 49,
             "hasTrailingComma": false,
             "transformFlags": 0
-        },
-        "text": "{@link first }\nInside {@link link text} thing"
+        }
     },
     "tags": {
         "0": {
@@ -61,6 +66,12 @@
                 "escapedText": "param"
             },
             "comment": {
+                "kind": "JSDocCommentComment",
+                "pos": 70,
+                "end": 102,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "text": "See also {@link A.Reference}",
                 "links": {
                     "0": {
                         "kind": "JSDocLink",
@@ -93,12 +104,11 @@
                         }
                     },
                     "length": 1,
-                    "pos": -1,
-                    "end": -1,
+                    "pos": 79,
+                    "end": 98,
                     "hasTrailingComma": false,
                     "transformFlags": 0
-                },
-                "text": "See also {@link A.Reference}"
+                }
             },
             "name": {
                 "kind": "Identifier",
@@ -126,6 +136,12 @@
                 "escapedText": "param"
             },
             "comment": {
+                "kind": "JSDocCommentComment",
+                "pos": 113,
+                "end": 589,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "text": "Or see {@link http://www.zombocom.com }\n{@link Standalone.Complex }\nThis empty one: {@link} is OK.\nThis double-space one: {@link  doubled  } is OK too.\nThis should work, despite being badly formatted: {@link\noh.no\n}\nForgot to close this one {@link https://typescriptlang.org\n * But it's still OK.\nAlthough it skips the newline so parses the asterisks in the wrong state.\nThis shouldn't work: {@link\n * nope\n * }, because of the intermediate asterisks.",
                 "links": {
                     "0": {
                         "kind": "JSDocLink",
@@ -263,12 +279,11 @@
                         }
                     },
                     "length": 7,
-                    "pos": -1,
-                    "end": -1,
+                    "pos": 120,
+                    "end": 541,
                     "hasTrailingComma": false,
                     "transformFlags": 0
-                },
-                "text": "Or see {@link http://www.zombocom.com }\n{@link Standalone.Complex }\nThis empty one: {@link} is OK.\nThis double-space one: {@link  doubled  } is OK too.\nThis should work, despite being badly formatted: {@link\noh.no\n}\nForgot to close this one {@link https://typescriptlang.org\n * But it's still OK.\nAlthough it skips the newline so parses the asterisks in the wrong state.\nThis shouldn't work: {@link\n * nope\n * }, because of the intermediate asterisks."
+                }
             },
             "name": {
                 "kind": "Identifier",
@@ -296,6 +311,11 @@
                 "escapedText": "author"
             },
             "comment": {
+                "kind": "JSDocCommentComment",
+                "pos": 597,
+                "end": 672,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "text": "Alfa Romero <a@parsing.com> See my home page: {@link https://example.com}",
                 "links": {
                     "0": {
@@ -314,8 +334,8 @@
                         }
                     },
                     "length": 1,
-                    "pos": -1,
-                    "end": -1,
+                    "pos": 643,
+                    "end": 670,
                     "hasTrailingComma": false,
                     "transformFlags": 0
                 }

@@ -49,8 +49,7 @@
       "tags": [
         {
           "name": "example",
-          "text": "if (true) {\n    foo()\n}",
-          "links": []
+          "text": "if (true) {\n    foo()\n}"
         }
       ]
     }
@@ -105,8 +104,7 @@
       "tags": [
         {
           "name": "example",
-          "text": "{\n    foo()\n}",
-          "links": []
+          "text": "{\n    foo()\n}"
         }
       ]
     }
@@ -161,8 +159,7 @@
       "tags": [
         {
           "name": "example",
-          "text": "  x y\n  12345\n     b",
-          "links": []
+          "text": "  x y\n  12345\n     b"
         }
       ]
     }
@@ -220,8 +217,7 @@
         },
         {
           "name": "example",
-          "text": "  x y\n  12345\n     b",
-          "links": []
+          "text": "  x y\n  12345\n     b"
         }
       ]
     }
@@ -279,8 +275,7 @@
         },
         {
           "name": "example",
-          "text": "x y\n12345\n   b",
-          "links": []
+          "text": "x y\n12345\n   b"
         }
       ]
     }

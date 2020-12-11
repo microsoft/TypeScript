@@ -49,8 +49,7 @@
       "tags": [
         {
           "name": "example",
-          "text": "```\n1 + 2\n```",
-          "links": []
+          "text": "```\n1 + 2\n```"
         }
       ]
     }
@@ -105,8 +104,7 @@
       "tags": [
         {
           "name": "example",
-          "text": "``\n1 + 2\n`",
-          "links": []
+          "text": "``\n1 + 2\n`"
         }
       ]
     }

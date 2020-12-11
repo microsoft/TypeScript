@@ -5,7 +5,7 @@ tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a functio
 
 ==== tests/cases/conformance/jsdoc/test.js (3 errors) ====
     /** @type {number} */
-        ~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function f() {
         return 1
@@ -19,7 +19,7 @@ tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a functio
     }
     
     /** @type {(a: number) => number} */
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function add1(a, b) { return a + b; }
     

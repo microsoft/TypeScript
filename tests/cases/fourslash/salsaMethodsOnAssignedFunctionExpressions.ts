@@ -19,6 +19,6 @@ verify.completions({
         name: "m",
         text: "(property) C.m: (a: string) => void",
         documentation: "The prototype method.",
-        tags: [{ name: "param", text: "a Parameter definition.", links: [] }],
+        tags: [{ name: "param", text: "a Parameter definition.", links: undefined }],
     },
 });

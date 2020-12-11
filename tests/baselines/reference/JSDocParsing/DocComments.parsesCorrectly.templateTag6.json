@@ -9,7 +9,7 @@
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
-            "end": 24,
+            "end": 58,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -21,13 +21,11 @@
                 "escapedText": "template"
             },
             "comment": {
-                "links": {
-                    "length": 0,
-                    "pos": -1,
-                    "end": -1,
-                    "hasTrailingComma": false,
-                    "transformFlags": 0
-                },
+                "kind": "JSDocCommentComment",
+                "pos": 24,
+                "end": 58,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "text": "Description of type parameters."
             },
             "typeParameters": {
@@ -70,7 +68,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 24,
+        "end": 58,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

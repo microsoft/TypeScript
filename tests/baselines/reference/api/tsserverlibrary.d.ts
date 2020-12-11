@@ -416,37 +416,38 @@ declare namespace ts {
         JSDocVariadicType = 309,
         JSDocNamepathType = 310,
         JSDocComment = 311,
-        JSDocTypeLiteral = 312,
-        JSDocSignature = 313,
-        JSDocLink = 314,
-        JSDocTag = 315,
-        JSDocAugmentsTag = 316,
-        JSDocImplementsTag = 317,
-        JSDocAuthorTag = 318,
-        JSDocDeprecatedTag = 319,
-        JSDocClassTag = 320,
-        JSDocPublicTag = 321,
-        JSDocPrivateTag = 322,
-        JSDocProtectedTag = 323,
-        JSDocReadonlyTag = 324,
-        JSDocCallbackTag = 325,
-        JSDocEnumTag = 326,
-        JSDocParameterTag = 327,
-        JSDocReturnTag = 328,
-        JSDocThisTag = 329,
-        JSDocTypeTag = 330,
-        JSDocTemplateTag = 331,
-        JSDocTypedefTag = 332,
-        JSDocSeeTag = 333,
-        JSDocPropertyTag = 334,
-        SyntaxList = 335,
-        NotEmittedStatement = 336,
-        PartiallyEmittedExpression = 337,
-        CommaListExpression = 338,
-        MergeDeclarationMarker = 339,
-        EndOfDeclarationMarker = 340,
-        SyntheticReferenceExpression = 341,
-        Count = 342,
+        JSDocCommentComment = 312,
+        JSDocTypeLiteral = 313,
+        JSDocSignature = 314,
+        JSDocLink = 315,
+        JSDocTag = 316,
+        JSDocAugmentsTag = 317,
+        JSDocImplementsTag = 318,
+        JSDocAuthorTag = 319,
+        JSDocDeprecatedTag = 320,
+        JSDocClassTag = 321,
+        JSDocPublicTag = 322,
+        JSDocPrivateTag = 323,
+        JSDocProtectedTag = 324,
+        JSDocReadonlyTag = 325,
+        JSDocCallbackTag = 326,
+        JSDocEnumTag = 327,
+        JSDocParameterTag = 328,
+        JSDocReturnTag = 329,
+        JSDocThisTag = 330,
+        JSDocTypeTag = 331,
+        JSDocTemplateTag = 332,
+        JSDocTypedefTag = 333,
+        JSDocSeeTag = 334,
+        JSDocPropertyTag = 335,
+        SyntaxList = 336,
+        NotEmittedStatement = 337,
+        PartiallyEmittedExpression = 338,
+        CommaListExpression = 339,
+        MergeDeclarationMarker = 340,
+        EndOfDeclarationMarker = 341,
+        SyntheticReferenceExpression = 342,
+        Count = 343,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -475,9 +476,9 @@ declare namespace ts {
         LastStatement = 248,
         FirstNode = 157,
         FirstJSDocNode = 301,
-        LastJSDocNode = 334,
-        FirstJSDocTagNode = 315,
-        LastJSDocTagNode = 334,
+        LastJSDocNode = 335,
+        FirstJSDocTagNode = 316,
+        LastJSDocTagNode = 335,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1754,7 +1755,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocLink;
         readonly name?: EntityName;
     }
-    export interface JSDocComment {
+    export interface JSDocComment extends Node {
         text: string;
         links?: NodeArray<JSDocLink>;
     }
@@ -3508,6 +3509,8 @@ declare namespace ts {
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: JSDocComment | undefined): JSDocUnknownTag;
         createJSDocDeprecatedTag(tagName: Identifier, comment?: JSDocComment): JSDocDeprecatedTag;
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: JSDocComment): JSDocDeprecatedTag;
+        createJSDocCommentComment(text: string, links?: readonly JSDocLink[]): JSDocComment;
+        updateJSDocCommentComment(node: JSDocComment, text: string, links?: readonly JSDocLink[]): JSDocComment;
         createJSDocComment(comment?: JSDocComment | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
         updateJSDocComment(node: JSDoc, comment: JSDocComment | undefined, tags: readonly JSDocTag[] | undefined): JSDoc;
         createJsxElement(openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement;

@@ -50,7 +50,7 @@ tests/cases/conformance/jsdoc/test.js(34,5): error TS2322: Type '1 | 2' is not a
     /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */
     
     /** @type {Gioconda} */
-        ~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function monaLisa(sb) {
         return typeof sb === 'string' ? 1 : 2;

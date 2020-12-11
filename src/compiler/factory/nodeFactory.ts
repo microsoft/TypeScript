@@ -372,6 +372,8 @@ namespace ts {
             get updateJSDocDeprecatedTag() { return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             createJSDocUnknownTag,
             updateJSDocUnknownTag,
+            createJSDocCommentComment,
+            updateJSDocCommentComment,
             createJSDocComment,
             updateJSDocComment,
             createJsxElement,
@@ -4448,6 +4450,22 @@ namespace ts {
             return node.tagName !== tagName
                 || node.comment !== comment
                 ? update(createJSDocUnknownTag(tagName, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocCommentComment(text: string, links?: readonly JSDocLink[]): JSDocComment {
+            const node = createBaseNode<JSDocComment>(SyntaxKind.JSDocCommentComment);
+            node.text = text;
+            node.links = asNodeArray(links);
+            return node;
+        }
+
+        // @api
+        function updateJSDocCommentComment(node: JSDocComment, text: string, links?: readonly JSDocLink[]): JSDocComment {
+            return node.text !== text
+                || node.links !== links
+                ? update(createJSDocCommentComment(text, links), node)
                 : node;
         }
 

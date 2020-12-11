@@ -6,13 +6,11 @@
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "comment": {
-        "links": {
-            "length": 0,
-            "pos": -1,
-            "end": -1,
-            "hasTrailingComma": false,
-            "transformFlags": 0
-        },
+        "kind": "JSDocCommentComment",
+        "pos": 0,
+        "end": 5,
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
         "text": "*"
     }
 }
