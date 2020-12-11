@@ -395,6 +395,7 @@ namespace ts.moduleSpecifiers {
                 if (!(topNamespace?.parent?.parent
                     && isModuleBlock(topNamespace.parent) && isAmbientModule(topNamespace.parent.parent) && isSourceFile(topNamespace.parent.parent.parent))) return;
                 const defaultExport = ((topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier);
+                if (!defaultExport) return;
                 const defaultExportSymbol = checker.getSymbolAtLocation(defaultExport);
                 if (!defaultExportSymbol) return;
                 const originalDefaultExportSymbol = defaultExportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(defaultExportSymbol) : defaultExportSymbol;
