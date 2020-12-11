@@ -1626,5 +1626,75 @@ import { x } from "../b";`),
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "extended source files are watched",
+            commandLineArgs: ["-w", "-p", configFilePath],
+            sys: () => {
+                const firstExtendedConfigFile: File = {
+                    path: "/a/b/first.tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            strict: true
+                        }
+                    })
+                };
+                const secondExtendedConfigFile: File = {
+                    path: "/a/b/second.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./first.tsconfig.json"
+                    })
+                };
+                const configFile: File = {
+                    path: configFilePath,
+                    content: JSON.stringify({
+                        compilerOptions: {},
+                        files: [commonFile1.path, commonFile2.path]
+                    })
+                };
+                return createWatchedSystem([
+                    libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
+                ]);
+            },
+            changes: [
+                {
+                    caption: "Change config to extend another config",
+                    change: sys => sys.modifyFile(configFilePath, JSON.stringify({
+                        extends: "./second.tsconfig.json",
+                        compilerOptions: {},
+                        files: [commonFile1.path, commonFile2.path]
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Change first extended config",
+                    change: sys => sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify({
+                        compilerOptions: {
+                            strict: false,
+                        }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Change second extended config",
+                    change: sys => sys.modifyFile("/a/b/second.tsconfig.json", JSON.stringify({
+                        extends: "./first.tsconfig.json",
+                        compilerOptions: {
+                            strictNullChecks: true,
+                        }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+                {
+                    caption: "Change config to stop extending another config",
+                    change: sys => sys.modifyFile(configFilePath, JSON.stringify({
+                        compilerOptions: {},
+                        files: [commonFile1.path, commonFile2.path]
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                },
+            ]
+        });
     });
 }

@@ -246,6 +246,7 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
+        let extendedConfigFilesMap: ESMap<Path, FileWatcher>;               // Map of file watchers for the extended config files
         let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
@@ -337,6 +338,9 @@ namespace ts {
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
+        // Update extended config file watch
+        watchExtendedConfigFiles();
+
         return configFileName ?
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close } :
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
@@ -353,6 +357,10 @@ namespace ts {
             if (configFileWatcher) {
                 configFileWatcher.close();
                 configFileWatcher = undefined;
+            }
+            if (extendedConfigFilesMap) {
+                clearMap(extendedConfigFilesMap, closeFileWatcher);
+                extendedConfigFilesMap = undefined!;
             }
             if (watchedWildcardDirectories) {
                 clearMap(watchedWildcardDirectories, closeFileWatcherOf);
@@ -657,6 +665,9 @@ namespace ts {
 
             // Update the wild card directory watch
             watchConfigFileWildCardDirectories();
+
+            // Update extended config file watch
+            watchExtendedConfigFiles();
         }
 
         function parseConfigFile() {
@@ -776,6 +787,24 @@ namespace ts {
                 watchOptions,
                 WatchType.WildcardDirectory
             );
+        }
+
+        function watchExtendedConfigFiles() {
+            // Update the extended config files watcher
+            mutateMap(
+                extendedConfigFilesMap ||= new Map(),
+                arrayToMap(compilerOptions.configFile?.extendedSourceFiles || emptyArray, toPath),
+                {
+                    // Watch the extended config files
+                    createNewValue: watchExtendedConfigFile,
+                    // Config files that are no longer extended should no longer be watched.
+                    onDeleteValue: closeFileWatcher
+                }
+            );
+        }
+
+        function watchExtendedConfigFile(extendedConfigFile: Path) {
+            return watchFile(extendedConfigFile, scheduleProgramReload, PollingInterval.High, watchOptions, WatchType.ExtendedConfigFile);
         }
     }
 }

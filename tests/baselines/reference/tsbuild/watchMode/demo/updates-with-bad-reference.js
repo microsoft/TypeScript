@@ -241,6 +241,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/demo/core/tsconfig.json:
   {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
@@ -478,6 +480,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/demo/core/tsconfig.json:
   {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
