@@ -16,19 +16,19 @@ declare module "events" {
     export = EventEmitter;
 >EventEmitter : Symbol(EventEmitter, Decl(events.d.ts, 0, 25))
 }
-declare module  "nestNamespaceModule" {
+declare module "nestNamespaceModule" {
 >"nestNamespaceModule" : Symbol("nestNamespaceModule", Decl(events.d.ts, 7, 1))
 
-    namespace a1.a2{
->a1 : Symbol(a1, Decl(events.d.ts, 8, 39), Decl(events.d.ts, 11, 5))
+    namespace a1.a2 {
+>a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
 >a2 : Symbol(a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
 
-        class d {}
->d : Symbol(d, Decl(events.d.ts, 9, 20))
+        class d { }
+>d : Symbol(d, Decl(events.d.ts, 9, 21))
     }
 
     namespace a1.a2.n3 {
->a1 : Symbol(a1, Decl(events.d.ts, 8, 39), Decl(events.d.ts, 11, 5))
+>a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
 >a2 : Symbol(a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
 >n3 : Symbol(n3, Decl(events.d.ts, 13, 20))
 
@@ -37,7 +37,7 @@ declare module  "nestNamespaceModule" {
     }
     export = a1.a2;
 >a1.a2 : Symbol(a1.a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
->a1 : Symbol(a1, Decl(events.d.ts, 8, 39), Decl(events.d.ts, 11, 5))
+>a1 : Symbol(a1, Decl(events.d.ts, 8, 38), Decl(events.d.ts, 11, 5))
 >a2 : Symbol(a1.a2, Decl(events.d.ts, 9, 17), Decl(events.d.ts, 13, 17))
 }
 declare module "renameModule" {
@@ -47,7 +47,7 @@ declare module "renameModule" {
 >a : Symbol(a, Decl(events.d.ts, 18, 31))
 >b : Symbol(b, Decl(events.d.ts, 19, 16))
 
-      class c {}
+        class c { }
 >c : Symbol(c, Decl(events.d.ts, 19, 19))
     }
     import d = a.b;
@@ -57,7 +57,7 @@ declare module "renameModule" {
 
     export = d;
 >d : Symbol(d, Decl(events.d.ts, 21, 5))
-  }
+}
 
 === /src/b.js ===
 import { EventEmitter } from 'events';

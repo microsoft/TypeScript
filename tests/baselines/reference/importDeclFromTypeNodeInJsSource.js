@@ -11,9 +11,9 @@ declare module "events" {
     }
     export = EventEmitter;
 }
-declare module  "nestNamespaceModule" {
-    namespace a1.a2{
-        class d {}
+declare module "nestNamespaceModule" {
+    namespace a1.a2 {
+        class d { }
     }
 
     namespace a1.a2.n3 {
@@ -23,11 +23,11 @@ declare module  "nestNamespaceModule" {
 }
 declare module "renameModule" {
     namespace a.b {
-      class c {}
+        class c { }
     }
     import d = a.b;
     export = d;
-  }
+}
 
 //// [b.js]
 import { EventEmitter } from 'events';

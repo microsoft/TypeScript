@@ -16,14 +16,14 @@ declare module "events" {
     export = EventEmitter;
 >EventEmitter : typeof EventEmitter
 }
-declare module  "nestNamespaceModule" {
+declare module "nestNamespaceModule" {
 >"nestNamespaceModule" : typeof import("nestNamespaceModule")
 
-    namespace a1.a2{
+    namespace a1.a2 {
 >a1 : typeof a1
 >a2 : typeof a2
 
-        class d {}
+        class d { }
 >d : d
     }
 
@@ -47,7 +47,7 @@ declare module "renameModule" {
 >a : typeof a
 >b : typeof b
 
-      class c {}
+        class c { }
 >c : c
     }
     import d = a.b;
@@ -57,7 +57,7 @@ declare module "renameModule" {
 
     export = d;
 >d : typeof d
-  }
+}
 
 === /src/b.js ===
 import { EventEmitter } from 'events';
