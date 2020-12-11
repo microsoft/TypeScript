@@ -1550,11 +1550,11 @@ namespace ts.server {
             const symbolDisplayString = nameInfo ? displayPartsToString(nameInfo.displayParts) : "";
             const nameSpan = nameInfo && nameInfo.textSpan;
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
-            const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
+            // const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
                 return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
             });
-            return { refs, symbolName, symbolStartOffset, symbolDisplayString };
+            return { refs, symbolName: "", symbolStartOffset, symbolDisplayString };
         }
 
         private getFileReferences(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.FileReferencesResponseBody | readonly ReferenceEntry[] {

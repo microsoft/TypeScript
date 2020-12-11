@@ -171,6 +171,7 @@
         "unittests/tsserver/getApplicableRefactors.ts",
         "unittests/tsserver/getEditsForFileRename.ts",
         "unittests/tsserver/getExportReferences.ts",
+        "unittests/tsserver/getFileReferences.ts",
         "unittests/tsserver/importHelpers.ts",
         "unittests/tsserver/importSuggestionsCache.ts",
         "unittests/tsserver/inferredProjects.ts",
