@@ -397,8 +397,8 @@ namespace ts.moduleSpecifiers {
                 const defaultExport = ((topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier);
                 const defaultExportSymbol = checker.getSymbolAtLocation(defaultExport);
                 if (!defaultExportSymbol) return;
-                const origionalDefaultExportSymbol = defaultExportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(defaultExportSymbol) : defaultExportSymbol;
-                if (origionalDefaultExportSymbol === d.symbol) return topNamespace.parent.parent;
+                const originalDefaultExportSymbol = defaultExportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(defaultExportSymbol) : defaultExportSymbol;
+                if (originalDefaultExportSymbol === d.symbol) return topNamespace.parent.parent;
 
                 function getTopNamespace(namespaceDeclaration: ModuleDeclaration) {
                     while (namespaceDeclaration.flags & NodeFlags.NestedNamespace) {
