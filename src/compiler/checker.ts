@@ -38263,7 +38263,8 @@ namespace ts {
         function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
             if (isAliasSymbolDeclaration(node)) {
                 const symbol = getSymbolOfNode(node);
-                if (symbol && getSymbolLinks(symbol).referenced) {
+                const links = symbol && getSymbolLinks(symbol);
+                if (links?.referenced || (compilerOptions.isolatedModules && links?.constEnumReferenced)) {
                     return true;
                 }
                 const target = getSymbolLinks(symbol!).target; // TODO: GH#18217
