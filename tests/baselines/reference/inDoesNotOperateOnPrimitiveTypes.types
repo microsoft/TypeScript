@@ -1,0 +1,37 @@
+=== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts ===
+const validHasKey = <A extends object>(
+>validHasKey : <A extends object>(thing: A, key: string) => boolean
+><A extends object>(  thing: A,  key: string,): boolean => {  return key in thing;} : <A extends object>(thing: A, key: string) => boolean
+
+  thing: A,
+>thing : A
+
+  key: string,
+>key : string
+
+): boolean => {
+  return key in thing;
+>key in thing : boolean
+>key : string
+>thing : A
+
+};
+
+const invalidHasKey = <A>(
+>invalidHasKey : <A>(thing: A, key: string) => boolean
+><A>(  thing: A,  key: string,): boolean => {  return key in thing;} : <A>(thing: A, key: string) => boolean
+
+  thing: A,
+>thing : A
+
+  key: string,
+>key : string
+
+): boolean => {
+  return key in thing;
+>key in thing : boolean
+>key : string
+>thing : A
+
+};
+
