@@ -5,13 +5,14 @@ namespace ts.FindAllReferences {
         readonly references: readonly Entry[];
     }
 
-    export const enum DefinitionKind { Symbol, Label, Keyword, This, String }
+    export const enum DefinitionKind { Symbol, Label, Keyword, This, String, TripleSlashReference }
     export type Definition =
         | { readonly type: DefinitionKind.Symbol; readonly symbol: Symbol }
         | { readonly type: DefinitionKind.Label; readonly node: Identifier }
         | { readonly type: DefinitionKind.Keyword; readonly node: Node }
         | { readonly type: DefinitionKind.This; readonly node: Node }
-        | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike };
+        | { readonly type: DefinitionKind.String; readonly node: StringLiteralLike }
+        | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: FileReference, readonly file: SourceFile };
 
     export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
     export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
@@ -298,17 +299,16 @@ namespace ts.FindAllReferences {
     }
 
     function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: TypeChecker, originalNode: Node): ReferencedSymbolDefinitionInfo {
-        const info = (() => {
+        const info = ((): { sourceFile: SourceFile, textSpan: TextSpan, name: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], context?: Node | ContextWithStartAndEndNode } => {
             switch (def.type) {
                 case DefinitionKind.Symbol: {
                     const { symbol } = def;
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
                     const name = displayParts.map(p => p.text).join("");
                     const declaration = symbol.declarations && firstOrUndefined(symbol.declarations);
+                    const node = declaration ? (getNameOfDeclaration(declaration) || declaration) : originalNode;
                     return {
-                        node: declaration ?
-                            getNameOfDeclaration(declaration) || declaration :
-                            originalNode,
+                        ...getFileAndTextSpanFromNode(node),
                         name,
                         kind,
                         displayParts,
@@ -317,32 +317,44 @@ namespace ts.FindAllReferences {
                 }
                 case DefinitionKind.Label: {
                     const { node } = def;
-                    return { node, name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
+                    return { ...getFileAndTextSpanFromNode(node), name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
                 }
                 case DefinitionKind.Keyword: {
                     const { node } = def;
                     const name = tokenToString(node.kind)!;
-                    return { node, name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
+                    return { ...getFileAndTextSpanFromNode(node), name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
                 }
                 case DefinitionKind.This: {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
                     const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
                         checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
-                    return { node, name: "this", kind: ScriptElementKind.variableElement, displayParts };
+                    return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
                 case DefinitionKind.String: {
                     const { node } = def;
-                    return { node, name: node.text, kind: ScriptElementKind.variableElement, displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)] };
+                    return {
+                        ...getFileAndTextSpanFromNode(node),
+                        name: node.text,
+                        kind: ScriptElementKind.variableElement,
+                        displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
+                    };
+                }
+                case DefinitionKind.TripleSlashReference: {
+                    return {
+                        textSpan: createTextSpanFromRange(def.reference),
+                        sourceFile: def.file,
+                        name: def.reference.fileName,
+                        kind: ScriptElementKind.string,
+                        displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)]
+                    };
                 }
                 default:
                     return Debug.assertNever(def);
             }
         })();
 
-        const { node, name, kind, displayParts, context } = info;
-        const sourceFile = node.getSourceFile();
-        const textSpan = getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile);
+        const { sourceFile, textSpan, name, kind, displayParts, context } = info;
         return {
             containerKind: ScriptElementKind.unknown,
             containerName: "",
@@ -352,6 +364,14 @@ namespace ts.FindAllReferences {
             textSpan,
             displayParts,
             ...toContextSpan(textSpan, sourceFile, context)
+        };
+    }
+
+    function getFileAndTextSpanFromNode(node: Node) {
+        const sourceFile = node.getSourceFile();
+        return {
+            sourceFile,
+            textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile)
         };
     }
 
@@ -603,9 +623,22 @@ namespace ts.FindAllReferences {
                 node = getAdjustedRenameLocation(node);
             }
             if (isSourceFile(node)) {
-                const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-                const moduleSymbol = reference && program.getTypeChecker().getMergedSymbol(reference.file.symbol);
-                return moduleSymbol && getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+                const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
+                if (!resolvedRef) {
+                    return undefined;
+                }
+                const moduleSymbol = program.getTypeChecker().getMergedSymbol(resolvedRef.file.symbol);
+                if (moduleSymbol) {
+                    return getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+                }
+                const fileIncludeReasons = program.getFileIncludeReasons();
+                if (!fileIncludeReasons) {
+                    return undefined;
+                }
+                return [{
+                    definition: { type: DefinitionKind.TripleSlashReference, reference: resolvedRef.reference, file: node },
+                    references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray
+                }];
             }
 
             if (!options.implementations) {
