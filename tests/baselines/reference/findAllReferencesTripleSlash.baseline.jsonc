@@ -1,0 +1,47 @@
+// === /c.js ===
+// require([|"./b"|]);
+
+// === /a.ts ===
+// /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "string",
+      "name": "b.ts",
+      "textSpan": {
+        "start": 21,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "\"b.ts\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 21,
+          "length": 4
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 8,
+          "length": 5
+        },
+        "fileName": "/c.js",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
