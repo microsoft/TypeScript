@@ -3789,6 +3789,10 @@
         "category": "Error",
         "code": 5090
     },
+    "Option 'isolatedModules' requires 'preserveConstEnum', as constants are not inlined in this mode.": {
+        "category": "Error",
+        "code": 5091
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
