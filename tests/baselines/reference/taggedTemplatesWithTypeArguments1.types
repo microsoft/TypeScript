@@ -20,7 +20,14 @@ export const a = f<Stuff> `
 >a : void
 >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
 >f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
->`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
+>`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : `
+    hello
+    ${string}
+    brave
+    ${string}
+    world
+    ${string}
+`
 
     hello
     ${stuff => stuff.x}
@@ -66,7 +73,14 @@ export const b = g<Stuff, number, string, boolean> `
 >b : string | number | boolean
 >g<Stuff, number, string, boolean> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string | number | boolean
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
->`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
+>`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : `
+    hello
+    ${string}
+    brave
+    ${string}
+    world
+    ${string}
+`
 
     hello
     ${stuff => stuff.x}

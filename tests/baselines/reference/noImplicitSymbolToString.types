@@ -9,8 +9,8 @@ let str = "hello ";
 >"hello " : "hello "
 
 const templateStr = `hello ${symbol}`;
->templateStr : string
->`hello ${symbol}` : string
+>templateStr : `hello ${string}`
+>`hello ${symbol}` : `hello ${string}`
 >symbol : symbol
 
 const appendStr = "hello " + symbol;
@@ -31,8 +31,8 @@ let symbolUnionString!: symbol | string;
 >symbolUnionString : string | symbol
 
 const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
->templateStrUnion : string
->`union with number ${symbolUnionNumber} and union with string ${symbolUnionString}` : string
+>templateStrUnion : `union with number ${string} and union with string ${string}`
+>`union with number ${symbolUnionNumber} and union with string ${symbolUnionString}` : `union with number ${string} and union with string ${string}`
 >symbolUnionNumber : number | symbol
 >symbolUnionString : string | symbol
 
