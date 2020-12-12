@@ -465,7 +465,7 @@ namespace ts {
                 }
 
                 function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
-                    const internal = jsDocStyle ? `/**@internal*/` : `/*@internal*/`;
+                    const internal: string = jsDocStyle ? `/**@internal*/` : `/*@internal*/`;
                     if (removeCommentsDisabled) {
                         diableRemoveCommentsInAll(fs);
                     }
