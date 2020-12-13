@@ -844,7 +844,7 @@ namespace ts {
 
             const location = moveRangePastDecorators(node);
             const classAlias = getClassAliasIfNeeded(node);
-            const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            const declName = factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
@@ -1254,7 +1254,7 @@ namespace ts {
             }
 
             const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
-            const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+            const localName = factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
             const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
             const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
             setEmitFlags(expression, EmitFlags.NoComments);
