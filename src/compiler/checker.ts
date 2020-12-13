@@ -34448,7 +34448,9 @@ namespace ts {
                         ? downlevelIteration
                             ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
                             : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
+                                ? (<IntrinsicType>yieldType).intrinsicName === "string"
+                                    ? [Diagnostics.Type_0_is_not_an_array_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
+                                    : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
                                 : [Diagnostics.Type_0_is_not_an_array_type, true]
                         : downlevelIteration
                             ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]

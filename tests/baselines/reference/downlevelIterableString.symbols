@@ -1,0 +1,11 @@
+=== tests/cases/compiler/downlevelIterableString.ts ===
+function testString(name: string) {
+>testString : Symbol(testString, Decl(downlevelIterableString.ts, 0, 0))
+>name : Symbol(name, Decl(downlevelIterableString.ts, 0, 20))
+
+    for (const _char of [...name]) {
+>_char : Symbol(_char, Decl(downlevelIterableString.ts, 1, 14))
+>name : Symbol(name, Decl(downlevelIterableString.ts, 0, 20))
+    }
+}
+

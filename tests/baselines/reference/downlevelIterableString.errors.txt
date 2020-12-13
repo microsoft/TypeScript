@@ -1,0 +1,11 @@
+tests/cases/compiler/downlevelIterableString.ts(2,29): error TS2461: Type 'string' is not an array type.
+
+
+==== tests/cases/compiler/downlevelIterableString.ts (1 errors) ====
+    function testString(name: string) {
+        for (const _char of [...name]) {
+                                ~~~~
+!!! error TS2461: Type 'string' is not an array type.
+        }
+    }
+    

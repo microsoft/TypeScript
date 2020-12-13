@@ -2425,6 +2425,10 @@
         "category": "Error",
         "code": 2569
     },
+    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+        "category": "Error",
+        "code": 2570
+    },
     "Object is of type 'unknown'.": {
         "category": "Error",
         "code": 2571

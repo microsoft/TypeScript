@@ -1,0 +1,13 @@
+=== tests/cases/compiler/downlevelIterableString.ts ===
+function testString(name: string) {
+>testString : (name: string) => void
+>name : string
+
+    for (const _char of [...name]) {
+>_char : any
+>[...name] : any[]
+>...name : any
+>name : string
+    }
+}
+
