@@ -6,9 +6,16 @@ namespace ts.refactor {
     registerRefactor(refactorName, {
         refactorKinds: [refactorMoveNewFile],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
-            return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
+            const statements = getStatementsToMove(context);
+            if (statements && context.preferences.allowTextChangesInNewFiles) {
+                return [{ name: refactorName, description, actions: [{ name: refactorName, description, refactorKind: refactorMoveNewFile }] }];
+            }
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [{ name: refactorName, description, actions: [{ name: refactorName, description, refactorKind: refactorMoveNewFile,
+                    notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
+            }
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
