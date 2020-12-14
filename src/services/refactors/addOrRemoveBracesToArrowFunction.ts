@@ -133,10 +133,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         if (refactorKindBeginsWith(rewriteArrowBracesAddKind, refactorKind)) {
             if (isExpression(func.body)) {
                 return { info: { func, addBraces: true, expression: func.body } };
-            } else {
-                return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_braceless_expression) }
             }
-        } else if (refactorKindBeginsWith(rewriteArrowBracesRemoveKind, refactorKind)) {
+            else {
+                return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_braceless_expression) };
+            }
+        }
+        else if (refactorKindBeginsWith(rewriteArrowBracesRemoveKind, refactorKind)) {
             if (isBlock(func.body) && func.body.statements.length === 1) {
                 const firstStatement = first(func.body.statements);
                 if (isReturnStatement(firstStatement)) {
@@ -145,7 +147,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                     };
                 }
             }
-            return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_one_line_return_statement) }
+            return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_one_line_return_statement) };
         }
         return undefined;
     }

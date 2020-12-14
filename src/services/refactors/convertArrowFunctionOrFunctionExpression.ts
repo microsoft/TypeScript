@@ -50,10 +50,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 description: toNamedFunctionActionDescription,
                 notApplicableReason: error,
                 refactorKind: rewriteFunctionNamedKind,
-            }
+            };
             if (error) {
                 errors.push(action);
-            } else {
+            }
+            else {
                 possibleActions.push(action);
             }
         }
@@ -66,10 +67,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 description: toAnonymousFunctionActionDescription,
                 notApplicableReason: error,
                 refactorKind: rewriteFunctionAnonymousKind
-            }
+            };
             if (error) {
                 errors.push(action);
-            } else {
+            }
+            else {
                 possibleActions.push(action);
             }
         }
@@ -81,10 +83,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 description: toArrowFunctionActionDescription,
                 notApplicableReason: error,
                 refactorKind: rewriteFunctionArrowKind
-            }
+            };
             if (error) {
                 errors.push(action);
-            } else {
+            }
+            else {
                 possibleActions.push(action);
             }
         }
