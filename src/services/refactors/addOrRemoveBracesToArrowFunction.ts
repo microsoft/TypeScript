@@ -130,24 +130,14 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             return undefined;
         }
 
-        if (refactorKindBeginsWith(rewriteArrowBracesAddKind, refactorKind)) {
-            if (isExpression(func.body)) {
-                return { info: { func, addBraces: true, expression: func.body } };
-            }
-            else {
-                return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_braceless_expression) };
-            }
+        if (refactorKindBeginsWith(rewriteArrowBracesAddKind, refactorKind) && isExpression(func.body)) {
+            return { info: { func, addBraces: true, expression: func.body } };
         }
-        else if (refactorKindBeginsWith(rewriteArrowBracesRemoveKind, refactorKind)) {
-            if (isBlock(func.body) && func.body.statements.length === 1) {
-                const firstStatement = first(func.body.statements);
-                if (isReturnStatement(firstStatement)) {
-                    return {
-                        info: { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement }
-                    };
-                }
+        else if (refactorKindBeginsWith(rewriteArrowBracesRemoveKind, refactorKind) && isBlock(func.body) && func.body.statements.length === 1) {
+            const firstStatement = first(func.body.statements);
+            if (isReturnStatement(firstStatement)) {
+                return { info: { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement } };
             }
-            return { error: getLocaleSpecificMessage(Diagnostics.Function_body_must_be_a_one_line_return_statement) };
         }
         return undefined;
     }
