@@ -15,6 +15,10 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         if (isBinaryExpression(maybeBinary) && isStringConcatenationValid(maybeBinary)) {
             refactorInfo.actions.push({ name: refactorName, description: refactorDescription, refactorKind: rewriteStringKind });
             return [refactorInfo];
+        } else if (context.preferences.provideRefactorNotApplicableReason) {
+            refactorInfo.actions.push({ name: refactorName, description: refactorDescription, refactorKind: rewriteStringKind,
+                notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation) });
+            return [refactorInfo];
         }
         return emptyArray;
     }

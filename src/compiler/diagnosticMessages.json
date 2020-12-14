@@ -6167,6 +6167,10 @@
         "category": "Message",
         "code": 95155
     },
+    "Can only convert string concatenation": {
+        "category": "Message",
+        "code": 95156
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
