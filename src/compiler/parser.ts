@@ -7659,7 +7659,7 @@ namespace ts {
                 }
 
                 function parseLink(start: number) {
-                    if (!tryParse(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
+                    if (!tryParse(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link")) {
                         return undefined;
                     }
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
@@ -7794,7 +7794,7 @@ namespace ts {
                 }
 
                 function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
-                    const isLink = lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link");
+                    const isLink = lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenValue() === "link");
                     const nameExpression = isLink ? undefined : parseJSDocNameReference();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
