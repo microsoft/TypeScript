@@ -6155,6 +6155,18 @@
         "category": "Message",
         "code": 95152
     },
+    "Could not convert to arrow function": {
+        "category": "Message",
+        "code": 95153
+    },
+    "Could not convert to named function": {
+        "category": "Message",
+        "code": 95154
+    },
+    "Could not convert to anonymous function": {
+        "category": "Message",
+        "code": 95155
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

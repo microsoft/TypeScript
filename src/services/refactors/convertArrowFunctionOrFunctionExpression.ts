@@ -12,12 +12,12 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     const toArrowFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function);
 
     const rewriteFunctionAnonymousKind = "refactor.rewrite.function.anonymous";
-    const rewriteFunctionArrowKind = "refactor.rewite.function.arrow";
-    const rewriteFunctioNamedKind = "refactor.rewite.function.named";
+    const rewriteFunctionArrowKind = "refactor.rewrite.function.arrow";
+    const rewriteFunctionNamedKind = "refactor.rewrite.function.named";
     const refactorKinds = [
         rewriteFunctionAnonymousKind,
         rewriteFunctionArrowKind,
-        rewriteFunctioNamedKind,
+        rewriteFunctionNamedKind,
     ];
 
     registerRefactor(refactorName, { refactorKinds, getEditsForAction, getAvailableActions });
@@ -35,38 +35,65 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition, program } = context;
+        const { file, startPosition, program, refactorKind } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
         if (!info) return emptyArray;
         const { selectedVariableDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
-
-        if (selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent))) {
-            possibleActions.push({
+        const errors: RefactorActionInfo[] = [];
+        if (refactorKindBeginsWith(rewriteFunctionNamedKind, refactorKind)) {
+            const error = selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent)) ?
+                undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_named_function);
+            const action = {
                 name: toNamedFunctionActionName,
-                description: toNamedFunctionActionDescription
-            });
+                description: toNamedFunctionActionDescription,
+                notApplicableReason: error,
+                refactorKind: rewriteFunctionNamedKind,
+            }
+            if (error) {
+                errors.push(action);
+            } else {
+                possibleActions.push(action);
+            }
         }
 
-        if (!selectedVariableDeclaration && isArrowFunction(func)) {
-            possibleActions.push({
+        if (refactorKindBeginsWith(rewriteFunctionAnonymousKind, refactorKind)) {
+            const error = !selectedVariableDeclaration && isArrowFunction(func) ?
+                undefined: getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
+            const action = {
                 name: toAnonymousFunctionActionName,
-                description: toAnonymousFunctionActionDescription
-            });
+                description: toAnonymousFunctionActionDescription,
+                notApplicableReason: error,
+                refactorKind: rewriteFunctionAnonymousKind
+            }
+            if (error) {
+                errors.push(action);
+            } else {
+                possibleActions.push(action);
+            }
         }
 
-        if (isFunctionExpression(func)) {
-            possibleActions.push({
+        if (refactorKindBeginsWith(rewriteFunctionArrowKind, refactorKind)) {
+            const error = isFunctionExpression(func) ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
+            const action = {
                 name: toArrowFunctionActionName,
-                description: toArrowFunctionActionDescription
-            });
+                description: toArrowFunctionActionDescription,
+                notApplicableReason: error,
+                refactorKind: rewriteFunctionArrowKind
+            }
+            if (error) {
+                errors.push(action);
+            } else {
+                possibleActions.push(action);
+            }
         }
 
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: possibleActions
+            actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason ?
+                errors : possibleActions
         }];
     }
 
