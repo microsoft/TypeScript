@@ -6147,6 +6147,14 @@
         "category": "Message",
         "code": 95150
     },
+    "Return type must be inferred from a function": {
+        "category": "Message",
+        "code": 95151
+    },
+    "Could not determine function return type": {
+        "category": "Message",
+        "code": 95152
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

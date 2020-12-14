@@ -8,7 +8,7 @@ namespace ts.refactor.inferFunctionReturnType {
 
     function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
         const info = getInfo(context);
-        if (info) {
+        if (info && "declaration" in info) {
             const edits = textChanges.ChangeTracker.with(context, t =>
                 t.tryInsertTypeAnnotation(context.file, info.declaration, info.returnTypeNode));
             return { renameFilename: undefined, renameLocation: undefined, edits };
@@ -18,13 +18,26 @@ namespace ts.refactor.inferFunctionReturnType {
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context);
-        if (info) {
+        if (info && "declaration" in info) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
                 actions: [{
                     name: refactorName,
-                    description: refactorDescription
+                    description: refactorDescription,
+                    refactorKind: rewriteFunctionReturnType
+                }]
+            }];
+        }
+        if (info && "error" in info && context.preferences.provideRefactorNotApplicableReason) {
+            return [{
+                name: refactorName,
+                description: refactorDescription,
+                actions: [{
+                    name: refactorName,
+                    description: refactorDescription,
+                    refactorKind: rewriteFunctionReturnType,
+                    notApplicableReason: info.error
                 }]
             }];
         }
@@ -37,21 +50,31 @@ namespace ts.refactor.inferFunctionReturnType {
         | ArrowFunction
         | MethodDeclaration;
 
-    interface Info {
+    type Info = FunctionInfo | Error;
+    
+    interface FunctionInfo {
         declaration: ConvertibleDeclaration;
         returnTypeNode: TypeNode;
     }
 
+    interface Error {
+        error: string
+    }
+
     function getInfo(context: RefactorContext): Info | undefined {
-        if (isInJSFile(context.file)) return;
+        if (isInJSFile(context.file) || !refactorKindBeginsWith(rewriteFunctionReturnType, context.refactorKind)) return;
 
         const token = getTokenAtPosition(context.file, context.startPosition);
         const declaration = findAncestor(token, isConvertibleDeclaration);
-        if (!declaration || !declaration.body || declaration.type) return;
+        if (!declaration || !declaration.body || declaration.type) {
+            return { error: getLocaleSpecificMessage(Diagnostics.Return_type_must_be_inferred_from_a_function) };
+        }
 
         const typeChecker = context.program.getTypeChecker();
         const returnType = tryGetReturnType(typeChecker, declaration);
-        if (!returnType) return;
+        if (!returnType) {
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
+        };
 
         const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation);
         if (returnTypeNode) {
