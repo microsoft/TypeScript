@@ -21,7 +21,7 @@
                 "escapedText": "param"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 36,
                 "end": 64,
                 "modifierFlagsCache": 0,

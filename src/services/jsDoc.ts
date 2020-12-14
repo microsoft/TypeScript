@@ -112,12 +112,12 @@ namespace ts.JsDoc {
         }
     }
 
-    export function getJsDocTagsFromDeclarations(checker: TypeChecker, declarations?: Declaration[]): JSDocTagInfo[] {
+    export function getJsDocTagsFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             for (const tag of getJSDocTags(declaration)) {
-                tags.push({ name: tag.tagName.text, text: getCommentText(tag), links: getLinks(tag, checker) });
+                tags.push({ name: tag.tagName.text, text: getCommentText(tag), links: checker ? getLinks(tag, checker) : undefined });
             }
         });
         return tags;

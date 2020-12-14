@@ -483,8 +483,8 @@ namespace ts {
             case SyntaxKind.JSDocComment:
                 return visitNode(cbNode, (node as JSDoc).comment)
                     || visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
-            case SyntaxKind.JSDocCommentComment:
-                return visitNodes(cbNode, cbNodes, (node as JSDocComment).links);
+            case SyntaxKind.JSDocCommentText:
+                return visitNodes(cbNode, cbNodes, (node as JSDocCommentText).links);
             case SyntaxKind.JSDocSeeTag:
                 return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
                     visitNode(cbNode, (node as JSDocSeeTag).name) ||
@@ -7415,7 +7415,7 @@ namespace ts {
                     const linksArray = links.length ? createNodeArray(links, linksPos, linksEnd) : undefined;
                     if (comments.length && tags) Debug.assertIsDefined(commentsPos);
                     const comment = comments.length
-                        ? finishNode(factory.createJSDocCommentComment(comments.join(""), linksArray), start, commentsPos)
+                        ? finishNode(factory.createJSDocCommentText(comments.join(""), linksArray), start, commentsPos)
                         : undefined;
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     return finishNode(factory.createJSDocComment(comment, tagsArray), start, end);
@@ -7554,7 +7554,7 @@ namespace ts {
                     return parseTagComments(margin, indentText.slice(margin));
                 }
 
-                function parseTagComments(indent: number, initialMargin?: string): JSDocComment | undefined {
+                function parseTagComments(indent: number, initialMargin?: string): JSDocCommentText | undefined {
                     const commentsPos = getNodePos();
                     const comments: string[] = [];
                     let linksPos;
@@ -7653,7 +7653,7 @@ namespace ts {
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
                     if (comments.length) {
-                        const comment = factory.createJSDocCommentComment(comments.join(""), links.length ? createNodeArray(links, linksPos ?? indent, linksEnd) : undefined);
+                        const comment = factory.createJSDocCommentText(comments.join(""), links.length ? createNodeArray(links, linksPos ?? indent, linksEnd) : undefined);
                         return finishNode(comment, commentsPos, scanner.getTextPos());
                     }
                 }
@@ -7809,7 +7809,7 @@ namespace ts {
                         text += tagComments.text;
                         links = tagComments.links;
                     }
-                    const comment = text || links ? finishNode(factory.createJSDocCommentComment(text, links), commentStart) : undefined;
+                    const comment = text || links ? finishNode(factory.createJSDocCommentText(text, links), commentStart) : undefined;
                     return finishNode(factory.createJSDocAuthorTag(tagName, comment), start);
                 }
 
@@ -7869,7 +7869,7 @@ namespace ts {
                     return node;
                 }
 
-                function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: JSDocComment) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
+                function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: JSDocCommentText) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
                     return finishNode(createTag(tagName, parseTrailingTagComments(start, getNodePos(), margin, indentText)), start);
                 }
 

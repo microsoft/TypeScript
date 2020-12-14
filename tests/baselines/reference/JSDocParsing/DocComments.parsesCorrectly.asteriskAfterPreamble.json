@@ -6,7 +6,7 @@
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "comment": {
-        "kind": "JSDocCommentComment",
+        "kind": "JSDocCommentText",
         "pos": 0,
         "end": 21,
         "modifierFlagsCache": 0,

@@ -21,7 +21,7 @@
                 "escapedText": "param"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 24,
                 "end": 34,
                 "modifierFlagsCache": 0,
@@ -56,7 +56,7 @@
                                 "escapedText": "param"
                             },
                             "comment": {
-                                "kind": "JSDocCommentComment",
+                                "kind": "JSDocCommentText",
                                 "pos": 54,
                                 "end": 64,
                                 "modifierFlagsCache": 0,

@@ -21,7 +21,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 15,
                 "end": 50,
                 "modifierFlagsCache": 0,
@@ -44,7 +44,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 58,
                 "end": 112,
                 "modifierFlagsCache": 0,
@@ -67,7 +67,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 120,
                 "end": 170,
                 "modifierFlagsCache": 0,
@@ -90,7 +90,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 178,
                 "end": 227,
                 "modifierFlagsCache": 0,
@@ -113,7 +113,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 235,
                 "end": 272,
                 "modifierFlagsCache": 0,
@@ -136,7 +136,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 280,
                 "end": 338,
                 "modifierFlagsCache": 0,
@@ -159,7 +159,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 346,
                 "end": 381,
                 "modifierFlagsCache": 0,
@@ -182,7 +182,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 389,
                 "end": 398,
                 "modifierFlagsCache": 0,
@@ -205,7 +205,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 406,
                 "end": 429,
                 "modifierFlagsCache": 0,
@@ -228,7 +228,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 437,
                 "end": 445,
                 "modifierFlagsCache": 0,
@@ -281,7 +281,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 469,
                 "end": 486,
                 "modifierFlagsCache": 0,
@@ -319,7 +319,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 510,
                 "end": 522,
                 "modifierFlagsCache": 0,
@@ -342,7 +342,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 530,
                 "end": 559,
                 "modifierFlagsCache": 0,
@@ -365,7 +365,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 567,
                 "end": 598,
                 "modifierFlagsCache": 0,
@@ -388,7 +388,7 @@
                 "escapedText": "address"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 606,
                 "end": 645,
                 "modifierFlagsCache": 0,
@@ -411,7 +411,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 653,
                 "end": 736,
                 "modifierFlagsCache": 0,

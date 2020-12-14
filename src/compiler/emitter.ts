@@ -3653,7 +3653,7 @@ namespace ts {
             emitJSDocComment(tag.comment);
         }
 
-        function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
+        function emitJSDocTypeLiteral(lit:JSDocTypeLiteral) {
             emitList(lit, factory.createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
         }
 
@@ -3692,7 +3692,7 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: JSDocComment | undefined) {
+        function emitJSDocComment(comment: JSDocCommentText | undefined) {
             if (comment?.text) {
                 writeSpace();
                 write(comment.text);

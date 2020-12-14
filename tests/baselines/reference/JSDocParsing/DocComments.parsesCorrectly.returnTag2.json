@@ -22,7 +22,7 @@
                 "escapedText": "return"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 24,
                 "end": 52,
                 "modifierFlagsCache": 0,

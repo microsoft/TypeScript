@@ -6,7 +6,7 @@
     "modifierFlagsCache": 0,
     "transformFlags": 0,
     "comment": {
-        "kind": "JSDocCommentComment",
+        "kind": "JSDocCommentText",
         "pos": 0,
         "end": 59,
         "modifierFlagsCache": 0,
@@ -66,7 +66,7 @@
                 "escapedText": "param"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 70,
                 "end": 102,
                 "modifierFlagsCache": 0,
@@ -136,7 +136,7 @@
                 "escapedText": "param"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 113,
                 "end": 589,
                 "modifierFlagsCache": 0,
@@ -311,7 +311,7 @@
                 "escapedText": "author"
             },
             "comment": {
-                "kind": "JSDocCommentComment",
+                "kind": "JSDocCommentText",
                 "pos": 597,
                 "end": 672,
                 "modifierFlagsCache": 0,
