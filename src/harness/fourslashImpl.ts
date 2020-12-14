@@ -3372,8 +3372,8 @@ namespace FourSlash {
             }
         }
 
-        public verifyRefactorKindsAvailable(refactorKind: string, expected: string[]) {
-            const refactors = this.getApplicableRefactorsAtSelection("invoked", refactorKind);
+        public verifyRefactorKindsAvailable(refactorKind: string, expected: string[], preferences = ts.emptyOptions) {
+            const refactors = this.getApplicableRefactorsAtSelection("invoked", refactorKind, preferences);
             const availableKinds = refactors.reduce((a, b) => [...a, ...b.actions.map((action) => action.refactorKind)], []);
             assert.deepEqual(availableKinds.sort(), expected.sort(), `Expected refactorKinds to be equal`);
         }
@@ -3791,8 +3791,8 @@ namespace FourSlash {
             test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
         }
 
-        private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", refactorKind?: string) {
-            return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, ts.emptyOptions, triggerReason, refactorKind);
+        private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", refactorKind?: string, preferences = ts.emptyOptions) {
+            return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, refactorKind);
         }
         private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", refactorKind?: string): readonly ts.ApplicableRefactorInfo[] {
             return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, refactorKind); // eslint-disable-line no-in-operator
