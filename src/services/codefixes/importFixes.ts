@@ -210,7 +210,9 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const compilerOptions = program.getCompilerOptions();
-        const exportInfos = getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program, /*useAutoImportProvider*/ true);
+        const exportInfos = pathIsBareSpecifier(stripQuotes(moduleSymbol.name))
+            ? [getSymbolExportInfoForSymbol(exportedSymbol, moduleSymbol, sourceFile, program, host)]
+            : getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program, /*useAutoImportProvider*/ true);
         const useRequire = shouldUseRequire(sourceFile, program);
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && !isSourceFileJS(sourceFile) && isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences)).moduleSpecifier;
@@ -226,6 +228,27 @@ namespace ts.codefix {
 
     function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
         return { description, changes, commands };
+    }
+
+    function getSymbolExportInfoForSymbol(symbol: Symbol, moduleSymbol: Symbol, importingFile: SourceFile, program: Program, host: LanguageServiceHost): SymbolExportInfo {
+        const compilerOptions = program.getCompilerOptions();
+        const mainProgramInfo = getInfoWithChecker(program.getTypeChecker());
+        if (mainProgramInfo) {
+            return mainProgramInfo;
+        }
+        const autoImportProvider = host.getPackageJsonAutoImportProvider?.()?.getTypeChecker();
+        return Debug.checkDefined(autoImportProvider && getInfoWithChecker(autoImportProvider), `Could not find symbol in specified module for code actions`);
+
+        function getInfoWithChecker(checker: TypeChecker): SymbolExportInfo | undefined {
+            const defaultInfo = getDefaultLikeExportInfo(importingFile, moduleSymbol, checker, compilerOptions);
+            if (defaultInfo && skipAlias(defaultInfo.symbol, checker) === symbol) {
+                return { moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(symbol, checker) };
+            }
+            const named = checker.tryGetMemberInModuleExportsAndProperties(symbol.name, moduleSymbol);
+            if (named && skipAlias(named, checker) === symbol) {
+                return { moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(symbol, checker) };
+            }
+        }
     }
 
     function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, host: LanguageServiceHost, program: Program, useAutoImportProvider: boolean): readonly SymbolExportInfo[] {
