@@ -3632,6 +3632,7 @@ namespace ts {
 
     export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
+        /*@internal*/ configFileSpecs?: ConfigFileSpecs;
     }
 
     export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
@@ -3701,19 +3702,93 @@ namespace ts {
     }
 
     /*@internal*/
-    export enum RefFileKind {
+    export enum FileIncludeKind {
+        RootFile,
+        SourceFromProjectReference,
+        OutputFromProjectReference,
         Import,
         ReferenceFile,
-        TypeReferenceDirective
+        TypeReferenceDirective,
+        LibFile,
+        LibReferenceDirective,
+        AutomaticTypeDirectiveFile
     }
 
     /*@internal*/
-    export interface RefFile {
-        referencedFileName: string;
-        kind: RefFileKind;
+    export interface RootFile {
+        kind: FileIncludeKind.RootFile,
         index: number;
-        file: Path;
     }
+
+    /*@internal*/
+    export interface LibFile {
+        kind: FileIncludeKind.LibFile;
+        index?: number;
+    }
+
+    /*@internal*/
+    export type ProjectReferenceFileKind = FileIncludeKind.SourceFromProjectReference |
+        FileIncludeKind.OutputFromProjectReference;
+
+    /*@internal*/
+    export interface ProjectReferenceFile {
+        kind: ProjectReferenceFileKind;
+        index: number;
+    }
+
+    /*@internal*/
+    export type ReferencedFileKind = FileIncludeKind.Import |
+        FileIncludeKind.ReferenceFile |
+        FileIncludeKind.TypeReferenceDirective |
+        FileIncludeKind.LibReferenceDirective;
+
+    /*@internal*/
+    export interface ReferencedFile {
+        kind: ReferencedFileKind;
+        file: Path;
+        index: number;
+    }
+
+    /*@internal*/
+    export interface AutomaticTypeDirectiveFile {
+        kind: FileIncludeKind.AutomaticTypeDirectiveFile;
+        typeReference: string;
+        packageId: PackageId | undefined;
+    }
+
+    /*@internal*/
+    export type FileIncludeReason =
+        RootFile |
+        LibFile |
+        ProjectReferenceFile |
+        ReferencedFile |
+        AutomaticTypeDirectiveFile;
+
+    /*@internal*/
+    export const enum FilePreprocessingDiagnosticsKind {
+        FilePreprocessingReferencedDiagnostic,
+        FilePreprocessingFileExplainingDiagnostic
+    }
+
+    /*@internal*/
+    export interface FilePreprocessingReferencedDiagnostic {
+        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
+        reason: ReferencedFile;
+        diagnostic: DiagnosticMessage;
+        args?: (string | number | undefined)[];
+    }
+
+    /*@internal*/
+    export interface FilePreprocessingFileExplainingDiagnostic {
+        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
+        file?: Path;
+        fileProcessingReason: FileIncludeReason;
+        diagnostic: DiagnosticMessage;
+        args?: (string | number | undefined)[];
+    }
+
+    /*@internal*/
+    export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
 
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
@@ -3733,8 +3808,6 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): readonly Path[];
-        /* @internal */
-        getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
@@ -3789,7 +3862,7 @@ namespace ts {
         getInstantiationCount(): number;
         getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
-        /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
+        /* @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
         /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
@@ -3807,6 +3880,8 @@ namespace ts {
         /* @internal */ redirectTargetsMap: MultiMap<string, string>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+        /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        /* @internal */ useCaseSensitiveFileNames(): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -4907,6 +4982,10 @@ namespace ts {
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
+        StringLikeLiteral = StringLiteral | TemplateLiteral,
+        /* @internal */
+        FreshableLiteral = Literal | TemplateLiteral,
+        /* @internal */
         StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral | Void | Undefined | Null,
@@ -5000,7 +5079,9 @@ namespace ts {
     }
 
     /* @internal */
-    export type FreshableType = LiteralType | FreshableIntrinsicType;
+    export type FreshableLiteralType = LiteralType | TemplateLiteralType;
+    /* @internal */
+    export type FreshableType = FreshableLiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
@@ -5398,6 +5479,8 @@ namespace ts {
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];  // Always one element longer than types
         types: readonly Type[];  // Always at least one element
+        freshType: TemplateLiteralType;  // Fresh version of type
+        regularType: TemplateLiteralType;  // Regular version of type
     }
 
     export interface StringMappingType extends InstantiableType {
@@ -5781,6 +5864,7 @@ namespace ts {
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
+        /*@internal*/explainFiles?: boolean;
         /*@internal*/listFilesOnly?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -5969,7 +6053,6 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
-        /* @internal */ configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -5991,13 +6074,6 @@ namespace ts {
         validatedFilesSpec: readonly string[] | undefined;
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
-    }
-
-    export interface ExpandResult {
-        fileNames: string[];
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
-        /* @internal */ spec: ConfigFileSpecs;
     }
 
     /* @internal */
@@ -7930,8 +8006,6 @@ namespace ts {
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(): Diagnostic[];
         getDiagnostics(fileName: string): DiagnosticWithLocation[];
-
-        reattachFileDiagnostics(newFile: SourceFile): void;
     }
 
     // SyntaxKind.SyntaxList

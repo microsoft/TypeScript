@@ -22,17 +22,23 @@ let y = 1
 {}
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/a/lib/tsc.js -w -p /a/b/tsconfig.json --explainFiles
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
+a/lib/lib.d.ts
+  Default library
+a/b/commonFile1.ts
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+a/b/commonFile2.ts
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","explainFiles":true,"configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -82,12 +88,16 @@ Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
 
+a/lib/lib.d.ts
+  Default library
+a/b/commonFile1.ts
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/commonFile1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","explainFiles":true,"configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -127,12 +137,18 @@ Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
+a/lib/lib.d.ts
+  Default library
+a/b/commonFile1.ts
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+a/b/commonFile2.ts
+  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","explainFiles":true,"configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

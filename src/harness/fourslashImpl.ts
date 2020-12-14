@@ -271,6 +271,7 @@ namespace FourSlash {
                 }
             }
 
+            let configParseResult: ts.ParsedCommandLine | undefined;
             if (configFileName) {
                 const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
                 const files: vfs.FileSet = { [baseDir]: {} };
@@ -281,7 +282,8 @@ namespace FourSlash {
                 const fs = new vfs.FileSystem(/*ignoreCase*/ true, { cwd: baseDir, files });
                 const host = new fakes.ParseConfigHost(fs);
                 const jsonSourceFile = ts.parseJsonText(configFileName, this.inputFiles.get(configFileName)!);
-                compilationOptions = ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, baseDir, compilationOptions, configFileName).options;
+                configParseResult = ts.parseJsonSourceFileConfigFileContent(jsonSourceFile, host, baseDir, compilationOptions, configFileName);
+                compilationOptions = configParseResult.options;
             }
 
             if (compilationOptions.typeRoots) {
@@ -336,7 +338,11 @@ namespace FourSlash {
                 // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
                 this.inputFiles.forEach((file, fileName) => {
                     if (!Harness.isDefaultLibraryFile(fileName)) {
-                        this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
+                        // all files if config file not specified, otherwise root files from the config and typings cache files are root files
+                        const isRootFile = !configParseResult ||
+                            ts.contains(configParseResult.fileNames, fileName) ||
+                            (ts.isDeclarationFileName(fileName) && ts.containsPath("/Library/Caches/typescript", fileName));
+                        this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                     }
                 });
 
@@ -1108,37 +1114,76 @@ namespace FourSlash {
             }
         }
 
-        public verifyBaselineFindAllReferences(markerName: string) {
-            const marker = this.getMarkerByName(markerName);
-            const references = this.languageService.findReferences(marker.fileName, marker.position);
+        public verifyBaselineFindAllReferences(...markerNames: string[]) {
+            const baseline = markerNames.map(markerName => {
+                const marker = this.getMarkerByName(markerName);
+                const references = this.languageService.findReferences(marker.fileName, marker.position);
+                const refsByFile = references
+                    ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                    : ts.emptyArray;
+
+                // Write input files
+                const baselineContent = this.getBaselineContentForGroupedReferences(refsByFile, markerName);
+
+                // Write response JSON
+                return baselineContent + JSON.stringify(references, undefined, 2);
+            }).join("\n\n");
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baseline);
+        }
+
+        public verifyBaselineGetFileReferences(fileName: string) {
+            const references = this.languageService.getFileReferences(fileName);
             const refsByFile = references
-                ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                ? ts.group(ts.sort(references, (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
                 : ts.emptyArray;
 
             // Write input files
+            let baselineContent = this.getBaselineContentForGroupedReferences(refsByFile);
+
+            // Write response JSON
+            baselineContent += JSON.stringify(references, undefined, 2);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+        }
+
+        private getBaselineContentForGroupedReferences(refsByFile: readonly (readonly ts.ReferenceEntry[])[], markerName?: string) {
+            const marker = markerName !== undefined ? this.getMarkerByName(markerName) : undefined;
             let baselineContent = "";
             for (const group of refsByFile) {
                 baselineContent += getBaselineContentForFile(group[0].fileName, this.getFileContent(group[0].fileName));
                 baselineContent += "\n\n";
             }
-
-            // Write response JSON
-            baselineContent += JSON.stringify(references, undefined, 2);
-            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+            return baselineContent;
 
             function getBaselineContentForFile(fileName: string, content: string) {
                 let newContent = `=== ${fileName} ===\n`;
                 let pos = 0;
                 for (const { textSpan } of refsByFile.find(refs => refs[0].fileName === fileName) ?? ts.emptyArray) {
-                    if (fileName === marker.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
-                        newContent += "/*FIND ALL REFS*/";
-                    }
                     const end = textSpan.start + textSpan.length;
                     newContent += content.slice(pos, textSpan.start);
-                    newContent += "[|";
-                    newContent += content.slice(textSpan.start, end);
+                    pos = textSpan.start;
+                    // It's easier to read if the /*FIND ALL REFS*/ comment is outside the range markers, which makes
+                    // this code a bit more verbose than it would be if I were less picky about the baseline format.
+                    if (fileName === marker?.fileName && marker.position === textSpan.start) {
+                        newContent += "/*FIND ALL REFS*/";
+                        newContent += "[|";
+                    }
+                    else if (fileName === marker?.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                        newContent += "[|";
+                        newContent += content.slice(pos, marker.position);
+                        newContent += "/*FIND ALL REFS*/";
+                        pos = marker.position;
+                    }
+                    else {
+                        newContent += "[|";
+                    }
+                    newContent += content.slice(pos, end);
                     newContent += "|]";
                     pos = end;
+                }
+                if (marker?.fileName === fileName && marker.position >= pos) {
+                    newContent += content.slice(pos, marker.position);
+                    newContent += "/*FIND ALL REFS*/";
+                    pos = marker.position;
                 }
                 newContent += content.slice(pos);
                 return newContent.split(/\r?\n/).map(l => "// " + l).join("\n");

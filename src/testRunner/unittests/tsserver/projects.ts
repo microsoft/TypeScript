@@ -118,7 +118,7 @@ namespace ts.projectSystem {
             const projName = "proj1";
 
             const host = createServerHost([file1, file2]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true }, { eventHandler: noop });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, eventHandler: noop });
 
             projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path, file2.path]), options: {}, projectFileName: projName });
             const proj1 = projectService.findProject(projName)!;
@@ -145,7 +145,7 @@ namespace ts.projectSystem {
 
                 const externalProjectName = "externalproject";
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
                 projectService.openExternalProject({
                     rootFiles: toExternalFiles([file1.path, config1.path]),
                     options: {},
@@ -175,7 +175,7 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
                 projectService.openClientFile(file1.path, file1.content);
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -201,7 +201,7 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
                 projectService.applyChangesInOpenFiles(singleIterator({ fileName: file1.path, content: file1.content }));
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });

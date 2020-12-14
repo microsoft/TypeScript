@@ -332,8 +332,12 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
-        public baselineFindAllReferences(markerName: string) {
-            this.state.verifyBaselineFindAllReferences(markerName);
+        public baselineFindAllReferences(...markerNames: string[]) {
+            this.state.verifyBaselineFindAllReferences(...markerNames);
+        }
+
+        public baselineGetFileReferences(fileName: string) {
+            this.state.verifyBaselineGetFileReferences(fileName);
         }
 
         public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {

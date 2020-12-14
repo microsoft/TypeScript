@@ -18,7 +18,7 @@ const a = new tag `${100} ${200}`<string>("hello", "world");
 >new tag `${100} ${200}`<string>("hello", "world") : any
 >tag `${100} ${200}` : SomethingNewable
 >tag : SomethingTaggable
->`${100} ${200}` : string
+>`${100} ${200}` : "100 200"
 >100 : 100
 >200 : 200
 >"hello" : "hello"
@@ -29,7 +29,7 @@ const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
 >new tag<number> `${"hello"} ${"world"}`(100, 200) : any
 >tag<number> `${"hello"} ${"world"}` : SomethingNewable
 >tag : SomethingTaggable
->`${"hello"} ${"world"}` : string
+>`${"hello"} ${"world"}` : "hello world"
 >"hello" : "hello"
 >"world" : "world"
 >100 : 100
@@ -41,7 +41,7 @@ const c = new tag<number> `${100} ${200}`<string>("hello", "world");
 >new tag<number> `${100} ${200}` : any
 >tag<number> `${100} ${200}` : SomethingNewable
 >tag : SomethingTaggable
->`${100} ${200}` : string
+>`${100} ${200}` : "100 200"
 >100 : 100
 >200 : 200
 >"hello" : "hello"
@@ -53,7 +53,7 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >new tag<number> `${"hello"} ${"world"}` : any
 >tag<number> `${"hello"} ${"world"}` : SomethingNewable
 >tag : SomethingTaggable
->`${"hello"} ${"world"}` : string
+>`${"hello"} ${"world"}` : "hello world"
 >"hello" : "hello"
 >"world" : "world"
 >100 : 100

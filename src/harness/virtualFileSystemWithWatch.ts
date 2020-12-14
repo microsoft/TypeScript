@@ -1012,6 +1012,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
+        prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+            this.modifyFile(path, content + this.readFile(path), options);
+        }
+
         appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
             this.modifyFile(path, this.readFile(path) + content, options);
         }

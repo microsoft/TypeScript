@@ -10,6 +10,6 @@ declare module `M${2}` {
 >declare : any
 >module `M${2}` : any
 >module : any
->`M${2}` : string
+>`M${2}` : "M2"
 >2 : 2
 }

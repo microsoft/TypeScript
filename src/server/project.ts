@@ -1375,6 +1375,8 @@ namespace ts.server {
                 for (const file of sourceFiles) {
                     strBuilder += `\t${file.fileName}\n`;
                 }
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
             }
             return strBuilder;
         }
@@ -2067,9 +2069,6 @@ namespace ts.server {
         openFileWatchTriggered = new Map<string, true>();
 
         /*@internal*/
-        configFileSpecs: ConfigFileSpecs | undefined;
-
-        /*@internal*/
         canConfigFileJsonReportNoInputFiles = false;
 
         /** Ref count to the project when opened from external project */
@@ -2293,7 +2292,8 @@ namespace ts.server {
             }
 
             this.stopWatchingWildCards();
-            this.configFileSpecs = undefined;
+            this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
+            this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;
             super.close();
@@ -2376,8 +2376,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
-            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
+        updateErrorOnNoInputFiles(fileNames: string[]) {
+            updateErrorForNoInputFiles(fileNames, this.getConfigFilePath(), this.getCompilerOptions().configFile!.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 

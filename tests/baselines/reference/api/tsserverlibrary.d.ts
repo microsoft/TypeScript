@@ -2663,6 +2663,8 @@ declare namespace ts {
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];
         types: readonly Type[];
+        freshType: TemplateLiteralType;
+        regularType: TemplateLiteralType;
     }
     export interface StringMappingType extends InstantiableType {
         symbol: Symbol;
@@ -2986,10 +2988,6 @@ declare namespace ts {
     export enum WatchDirectoryFlags {
         None = 0,
         Recursive = 1
-    }
-    export interface ExpandResult {
-        fileNames: string[];
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
     export interface CreateProgramOptions {
         rootNames: readonly string[];
@@ -5550,6 +5548,7 @@ declare namespace ts {
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
+        getFileReferences(fileName: string): ReferenceEntry[];
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
@@ -6560,6 +6559,7 @@ declare namespace ts.server.protocol {
         DefinitionAndBoundSpan = "definitionAndBoundSpan",
         Implementation = "implementation",
         Exit = "exit",
+        FileReferences = "fileReferences",
         Format = "format",
         Formatonkey = "formatonkey",
         Geterr = "geterr",
@@ -7381,6 +7381,22 @@ declare namespace ts.server.protocol {
      */
     interface ReferencesResponse extends Response {
         body?: ReferencesResponseBody;
+    }
+    interface FileReferencesRequest extends FileRequest {
+        command: CommandTypes.FileReferences;
+    }
+    interface FileReferencesResponseBody {
+        /**
+         * The file locations referencing the symbol.
+         */
+        refs: readonly ReferencesResponseItem[];
+        /**
+         * The name of the symbol.
+         */
+        symbolName: string;
+    }
+    interface FileReferencesResponse extends Response {
+        body?: FileReferencesResponseBody;
     }
     /**
      * Argument for RenameRequest request.
@@ -9939,7 +9955,7 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
     }
-    class Session implements EventSender {
+    class Session<TMessage = string> implements EventSender {
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
@@ -10014,6 +10030,7 @@ declare namespace ts.server {
         private mapRenameInfo;
         private toSpanGroups;
         private getReferences;
+        private getFileReferences;
         /**
          * @param fileName is the name of the file to be opened
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
@@ -10098,7 +10115,9 @@ declare namespace ts.server {
         private resetCurrentRequest;
         executeWithRequestId<T>(requestId: number, f: () => T): T;
         executeCommand(request: protocol.Request): HandlerResponse;
-        onMessage(message: string): void;
+        onMessage(message: TMessage): void;
+        protected parseMessage(message: TMessage): protocol.Request;
+        protected toStringMessage(message: TMessage): string;
         private getFormatOptions;
         private getPreferences;
         private getHostFormatOptions;
