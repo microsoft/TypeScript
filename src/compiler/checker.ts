@@ -11053,7 +11053,7 @@ namespace ts {
                         return t.immediateBaseConstraint = noConstraintType;
                     }
                     let result;
-                    if (!isDeeplyNestedType(t, stack, stack.length)) {
+                    if (stack.length < 10 || !isDeeplyNestedType(t, stack, stack.length)) {
                         stack.push(t);
                         constraintDepth++;
                         result = computeBaseConstraint(getSimplifiedType(t, /*writing*/ false));
