@@ -9,7 +9,7 @@ namespace ts.refactor {
         refactorKind: "refactor.move.newFile",
     };
     registerRefactor(refactorName, {
-        refactorKinds: [moveToNewFileAction.refactorKind],
+        actions: [moveToNewFileAction],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const statements = getStatementsToMove(context);
             if (statements && context.preferences.allowTextChangesInNewFiles) {

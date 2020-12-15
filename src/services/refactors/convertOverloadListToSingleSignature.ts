@@ -8,7 +8,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         refactorKind: "refactor.rewrite.function.overloadList",
     };
 
-    registerRefactor(refactorName, { refactorKinds: [functionOverloadAction.refactorKind], getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, { actions: [functionOverloadAction], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;

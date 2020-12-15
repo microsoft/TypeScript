@@ -8,7 +8,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         description: convertToOptionalChainExpressionMessage,
         refactorKind: "refactor.rewrite.expression.optionalChain",
     };
-    registerRefactor(refactorName, { refactorKinds: [toOptionalChainAction.refactorKind], getAvailableActions, getEditsForAction });
+    registerRefactor(refactorName, { actions: [toOptionalChainAction], getAvailableActions, getEditsForAction });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
@@ -18,7 +18,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             return [{
                 name: refactorName,
                 description: convertToOptionalChainExpressionMessage,
-                actions: [toOptionalChainAction]
+                actions: [toOptionalChainAction],
             }];
         }
 
@@ -26,7 +26,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             return [{
                 name: refactorName,
                 description: convertToOptionalChainExpressionMessage,
-                actions: [{ ...toOptionalChainAction, notApplicableReason: info.error }]
+                actions: [{ ...toOptionalChainAction, notApplicableReason: info.error }],
             }];
         }
         return emptyArray;

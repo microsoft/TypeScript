@@ -8,7 +8,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         description: refactorDescription,
         refactorKind: "refactor.rewrite.string"
     };
-    registerRefactor(refactorName, { refactorKinds: [convertStringAction.refactorKind], getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, { actions: [convertStringAction], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;

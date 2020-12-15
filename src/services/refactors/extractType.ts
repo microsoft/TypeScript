@@ -20,14 +20,13 @@ namespace ts.refactor {
         description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef),
         refactorKind: "refactor.extract.typedef"
     };
-    const refactorKinds = [
-        extractToTypeAliasAction.refactorKind,
-        extractToInterfaceAction.refactorKind,
-        extractToTypeDefAction.refactorKind,
-    ];
 
     registerRefactor(refactorName, {
-        refactorKinds,
+        actions: [
+            extractToTypeAliasAction,
+            extractToInterfaceAction,
+            extractToTypeDefAction
+        ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;

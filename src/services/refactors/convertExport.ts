@@ -16,13 +16,11 @@ namespace ts.refactor {
         refactorKind: rewriteExportToDefaultKind
     };
 
-    const refactorKinds = [
-        rewriteExportToDefaultKind,
-        rewriteExportToNamedKind
-    ];
-
     registerRefactor(refactorName, {
-        refactorKinds,
+        actions: [
+            defaultToNamedAction,
+            namedToDefaultAction
+        ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;

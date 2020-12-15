@@ -21,13 +21,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         refactorKind: "refactor.rewrite.function.arrow",
     };
 
-    const refactorKinds = [
-        toAnonymousFunctionAction.refactorKind,
-        toNamedFunctionAction.refactorKind,
-        toArrowFunctionAction.refactorKind,
-    ];
-
-    registerRefactor(refactorName, { refactorKinds, getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, {
+        actions: [toAnonymousFunctionAction, toNamedFunctionAction, toArrowFunctionAction],
+        getEditsForAction,
+        getAvailableActions
+    });
 
     interface FunctionInfo {
         readonly selectedVariableDeclaration: boolean;

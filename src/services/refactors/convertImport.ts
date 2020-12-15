@@ -12,13 +12,12 @@ namespace ts.refactor {
         description: Diagnostics.Convert_named_imports_to_namespace_import.message,
         refactorKind: "refactor.rewrite.import.namespace",
     };
-    const refactorKinds = [
-        namespaceToNamedAction.refactorKind,
-        namedToNamespaceAction.refactorKind
-    ];
 
     registerRefactor(refactorName, {
-        refactorKinds,
+        actions: [
+            namespaceToNamedAction,
+            namedToNamespaceAction
+        ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getImportToConvert(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;

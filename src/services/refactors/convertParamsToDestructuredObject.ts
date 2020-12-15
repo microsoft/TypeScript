@@ -9,7 +9,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         description: refactorDescription,
         refactorKind: "refactor.rewrite.parameters.toDestructured"
     };
-    registerRefactor(refactorName, { refactorKinds: [toDestructuredAction.refactorKind], getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, { actions: [toDestructuredAction], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;

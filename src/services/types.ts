@@ -1468,8 +1468,8 @@ namespace ts {
 
     /** @internal */
     export interface Refactor {
-        /** list of hierarchical refactors as dotted strings */
-        refactorKinds?: string[];
+        /** list of actions a refactor can provide */
+        actions?: RefactorActionInfo[];
 
         /** Compute the associated code actions */
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;

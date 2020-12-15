@@ -15,12 +15,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         refactorKind: "refactor.rewrite.arrow.braces.remove"
     };
 
-    const refactorKinds = [
-        addBracesAction.refactorKind,
-        removeBracesAction.refactorKind
-    ];
-
-    registerRefactor(refactorName, { refactorKinds, getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, { actions: [removeBracesAction], getEditsForAction, getAvailableActions });
 
     interface FunctionBracesInfo {
         func: ArrowFunction;
