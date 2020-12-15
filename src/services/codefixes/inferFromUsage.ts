@@ -447,7 +447,7 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const parent = containingFunction.parent;
-                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
                     parent.name :
                     containingFunction.name;
                 break;
