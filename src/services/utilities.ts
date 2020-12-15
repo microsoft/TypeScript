@@ -1463,11 +1463,11 @@ namespace ts {
     }
 
     // Get info for an expression like `f <` that may be the start of type arguments.
-    export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+    export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         // This is a rare case, but one that saves on a _lot_ of work if true - if the source file has _no_ `<` character,
         // then there obviously can't be any type arguments - no expensive brace-matching backwards scanning required
 
-        if (sourceFile.text.lastIndexOf("<", tokenIn.pos) === -1) {
+        if (sourceFile.text.lastIndexOf("<", tokenIn ? tokenIn.pos : sourceFile.text.length) === -1) {
             return undefined;
         }
 
