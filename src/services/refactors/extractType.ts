@@ -5,13 +5,25 @@ namespace ts.refactor {
     const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
 
-    const extractToTypeKind = "refactor.extract.type";
-    const extractToInterfaceKind = "refactor.extract.interface";
-    const extractToTypeDefKind = "refactor.extract.typedef";
+    const extractToTypeAliasAction = {
+        name: "Extract to type alias",
+        description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias),
+        refactorKind: "refactor.extract.type",
+    };
+    const extractToInterfaceAction = {
+        name: "Extract to interface",
+        description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface),
+        refactorKind: "refactor.extract.interface",
+    };
+    const extractToTypeDefAction = {
+        name: "Extract to typedef",
+        description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef),
+        refactorKind: "refactor.extract.typedef"
+    };
     const refactorKinds = [
-        extractToTypeKind,
-        extractToInterfaceKind,
-        extractToTypeDefKind,
+        extractToTypeAliasAction.refactorKind,
+        extractToInterfaceAction.refactorKind,
+        extractToTypeDefAction.refactorKind,
     ];
 
     registerRefactor(refactorName, {
@@ -20,17 +32,12 @@ namespace ts.refactor {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
-            if (info.error === undefined) {
+            if (!isRefactorErrorInfo(info)) {
                 return [{
                     name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_type),
-                    actions: info.info.isJS ? [{
-                        name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), refactorKind: extractToTypeDefKind
-                    }] : append([{
-                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), refactorKind: extractToTypeKind
-                    }], info.info.typeElements && {
-                        name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), refactorKind: extractToInterfaceKind
-                    })
+                    actions: info.isJS ?
+                        [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction)
                 }];
             }
 
@@ -39,9 +46,9 @@ namespace ts.refactor {
                     name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                     actions: [
-                        { name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), notApplicableReason: info.error, refactorKind: extractToTypeDefKind },
-                        { name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), notApplicableReason: info.error, refactorKind: extractToTypeKind },
-                        { name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), notApplicableReason: info.error, refactorKind: extractToInterfaceKind },
+                        { ...extractToTypeDefAction, notApplicableReason: info.error },
+                        { ...extractToTypeAliasAction, notApplicableReason: info.error },
+                        { ...extractToInterfaceAction, notApplicableReason: info.error },
                     ]
                 }];
             }
@@ -50,7 +57,8 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file, } = context;
-            const info = Debug.checkDefined(getRangeToExtract(context)?.info, "Expected to find a range to extract");
+            const info = getRangeToExtract(context);
+            Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -83,16 +91,9 @@ namespace ts.refactor {
         isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements: readonly TypeElement[];
     }
 
-    type Info = TypeAliasInfo | InterfaceInfo;
-    type InfoOrError = {
-        info: Info,
-        error?: never
-    } | {
-        info?: never,
-        error: string
-    };
+    type ExtractInfo = TypeAliasInfo | InterfaceInfo;
 
-    function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): InfoOrError | undefined {
+    function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): ExtractInfo | RefactorErrorInfo | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
         const current = getTokenAtPosition(file, startPosition);
@@ -109,7 +110,7 @@ namespace ts.refactor {
         if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
 
         const typeElements = flattenTypeLiteralNodeReference(checker, selection);
-        return { info: { isJS, selection, firstStatement, typeParameters, typeElements } };
+        return { isJS, selection, firstStatement, typeParameters, typeElements };
     }
 
     function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): readonly TypeElement[] | undefined {
@@ -220,7 +221,7 @@ namespace ts.refactor {
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
     }
 
-    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {
+    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
         const node = factory.createJSDocTypedefTag(

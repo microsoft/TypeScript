@@ -1,19 +1,24 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Move to a new file";
-    const refactorMoveNewFile = "refactor.move.newFile";
+    const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
 
+    const moveToNewFileAction = {
+        name: refactorName,
+        description,
+        refactorKind: "refactor.move.newFile",
+    };
     registerRefactor(refactorName, {
-        refactorKinds: [refactorMoveNewFile],
+        refactorKinds: [moveToNewFileAction.refactorKind],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             const statements = getStatementsToMove(context);
             if (statements && context.preferences.allowTextChangesInNewFiles) {
-                return [{ name: refactorName, description, actions: [{ name: refactorName, description, refactorKind: refactorMoveNewFile }] }];
+                return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
             }
             if (context.preferences.provideRefactorNotApplicableReason) {
-                return [{ name: refactorName, description, actions: [{ name: refactorName, description, refactorKind: refactorMoveNewFile,
-                    notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
+                return [{ name: refactorName, description, actions:
+                    [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
+                }];
             }
             return emptyArray;
         },

@@ -2,9 +2,13 @@
 namespace ts.refactor.convertStringOrTemplateLiteral {
     const refactorName = "Convert to template string";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
-    const rewriteStringKind = "refactor.rewrite.string";
 
-    registerRefactor(refactorName, { refactorKinds: [rewriteStringKind], getEditsForAction, getAvailableActions });
+    const convertStringAction = {
+        name: refactorName,
+        description: refactorDescription,
+        refactorKind: "refactor.rewrite.string"
+    };
+    registerRefactor(refactorName, { refactorKinds: [convertStringAction.refactorKind], getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
@@ -13,12 +17,13 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
         if (isBinaryExpression(maybeBinary) && isStringConcatenationValid(maybeBinary)) {
-            refactorInfo.actions.push({ name: refactorName, description: refactorDescription, refactorKind: rewriteStringKind });
+            refactorInfo.actions.push(convertStringAction);
             return [refactorInfo];
         }
         else if (context.preferences.provideRefactorNotApplicableReason) {
-            refactorInfo.actions.push({ name: refactorName, description: refactorDescription, refactorKind: rewriteStringKind,
-                notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation) });
+            refactorInfo.actions.push({ ...convertStringAction,
+                notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation)
+            });
             return [refactorInfo];
         }
         return emptyArray;

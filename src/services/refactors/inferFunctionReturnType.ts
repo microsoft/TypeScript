@@ -2,13 +2,17 @@
 namespace ts.refactor.inferFunctionReturnType {
     const refactorName = "Infer function return type";
     const refactorDescription = Diagnostics.Infer_function_return_type.message;
-    const rewriteFunctionReturnType = "refactor.rewrite.function.returnType";
 
-    registerRefactor(refactorName, { refactorKinds: [rewriteFunctionReturnType], getEditsForAction, getAvailableActions });
+    const inferReturnTypeAction = {
+        name: refactorName,
+        description: refactorDescription,
+        refactorKind: "refactor.rewrite.function.returnType"
+    };
+    registerRefactor(refactorName, { refactorKinds: [inferReturnTypeAction.refactorKind], getEditsForAction, getAvailableActions });
 
     function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
         const info = getInfo(context);
-        if (info && typeof info !== "string") {
+        if (info && !isRefactorErrorInfo(info)) {
             const edits = textChanges.ChangeTracker.with(context, t =>
                 t.tryInsertTypeAnnotation(context.file, info.declaration, info.returnTypeNode));
             return { renameFilename: undefined, renameLocation: undefined, edits };
@@ -18,27 +22,19 @@ namespace ts.refactor.inferFunctionReturnType {
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context);
-        if (info && typeof info !== "string") {
+        if (!info) return emptyArray;
+        if (!isRefactorErrorInfo(info)) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
-                actions: [{
-                    name: refactorName,
-                    description: refactorDescription,
-                    refactorKind: rewriteFunctionReturnType
-                }]
+                actions: [inferReturnTypeAction]
             }];
         }
-        if (info && typeof info === "string" && context.preferences.provideRefactorNotApplicableReason) {
+        if (context.preferences.provideRefactorNotApplicableReason) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
-                actions: [{
-                    name: refactorName,
-                    description: refactorDescription,
-                    refactorKind: rewriteFunctionReturnType,
-                    notApplicableReason: info
-                }]
+                actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }]
             }];
         }
         return emptyArray;
@@ -50,26 +46,24 @@ namespace ts.refactor.inferFunctionReturnType {
         | ArrowFunction
         | MethodDeclaration;
 
-    type InfoOrError = FunctionInfo | string;
-
     interface FunctionInfo {
         declaration: ConvertibleDeclaration;
         returnTypeNode: TypeNode;
     }
 
-    function getInfo(context: RefactorContext): InfoOrError | undefined {
-        if (isInJSFile(context.file) || !refactorKindBeginsWith(rewriteFunctionReturnType, context.refactorKind)) return;
+    function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | undefined {
+        if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.refactorKind, context.refactorKind)) return;
 
         const token = getTokenAtPosition(context.file, context.startPosition);
         const declaration = findAncestor(token, isConvertibleDeclaration);
         if (!declaration || !declaration.body || declaration.type) {
-            return getLocaleSpecificMessage(Diagnostics.Return_type_must_be_inferred_from_a_function);
+            return { error: getLocaleSpecificMessage(Diagnostics.Return_type_must_be_inferred_from_a_function) };
         }
 
         const typeChecker = context.program.getTypeChecker();
         const returnType = tryGetReturnType(typeChecker, declaration);
         if (!returnType) {
-            return getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type);
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
         };
 
         const returnTypeNode = typeChecker.typeToTypeNode(returnType, declaration, NodeBuilderFlags.NoTruncation);
