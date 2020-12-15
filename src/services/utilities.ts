@@ -2923,14 +2923,5 @@ namespace ts {
         return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
     }
 
-    /**
-     * Checks if string "known" begins with string "requested".
-     * Used to match requested refactorKinds with a known refactorKind.
-     */
-    export function refactorKindBeginsWith(known: string, requested: string | undefined): boolean {
-        if(!requested) return true;
-        return known.substr(0, requested.length) === requested;
-    }
-
     // #endregion
 }
