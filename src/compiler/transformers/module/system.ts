@@ -1732,7 +1732,7 @@ namespace ts {
             //
             // - We do not substitute generated identifiers for any reason.
             // - We do not substitute identifiers tagged with the LocalName flag.
-            if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
+            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const importDeclaration = resolver.getReferencedImportDeclaration(node);
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNamesFragment.tsx ===
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsTransformSubstitutesNamesFragment.tsx ===
 /// <reference path="react16.d.ts" />
 const a = <>
 >a : JSX.Element

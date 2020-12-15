@@ -1,7 +1,11 @@
 // @jsx: react-jsx,react-jsxdev
 // @strict: true
-// @module: commonjs
+// @module: commonjs,system
 /// <reference path="/.lib/react16.d.ts" />
-const a = <div></div>
+const a = <>
+  <p></p>
+  text
+  <div></div>
+</>
 
 export {};
