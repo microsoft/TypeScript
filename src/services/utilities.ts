@@ -1397,7 +1397,7 @@ namespace ts {
         const tokenFullStart = token.getFullStart();
         // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
         // a good, fast approximation without too much extra work in the cases where it fails.
-        const bestGuessIndex = sourceFile.text.slice(0, tokenFullStart).lastIndexOf(matchingTokenText);
+        const bestGuessIndex = sourceFile.text.lastIndexOf(matchingTokenText, tokenFullStart);
         if (bestGuessIndex === -1) {
             return undefined; // if the token text doesn't appear in the file, there can't be a match - super fast bail
         }
