@@ -7,7 +7,7 @@ declare function OverloadComponent<U>(): JSX.Element;
 >JSX : any
 
 declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
->OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>OverloadComponent : { <U>(): JSX.Element; <U>(attr: {    b: U;    a: string;    "ignore-prop": boolean;}): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >attr : { b: U; a: string; "ignore-prop": boolean; }
 >b : U
 >a : string
@@ -15,7 +15,7 @@ declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boo
 >JSX : any
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
->OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
+>OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: {    b: U;    a: T;}): JSX.Element; }
 >attr : { b: U; a: T; }
 >b : U
 >a : T

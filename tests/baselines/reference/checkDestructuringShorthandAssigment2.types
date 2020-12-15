@@ -1,0 +1,17 @@
+=== tests/cases/compiler/checkDestructuringShorthandAssigment2.ts ===
+// GH #38175 -- should not crash while checking
+
+let o: any, k: any;
+>o : any
+>k : any
+
+let { x } = { x: 1, ...o, [k]: 1 };
+>x : any
+>{ x: 1, ...o, [k]: 1 } : any
+>x : number
+>1 : 1
+>o : any
+>[k] : number
+>k : any
+>1 : 1
+

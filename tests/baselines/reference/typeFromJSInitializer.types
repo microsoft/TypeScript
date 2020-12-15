@@ -6,21 +6,21 @@ function A () {
     this.unknown = null
 >this.unknown = null : null
 >this.unknown : any
->this : any
+>this : this
 >unknown : any
 >null : null
 
     this.unknowable = undefined
 >this.unknowable = undefined : undefined
 >this.unknowable : any
->this : any
+>this : this
 >unknowable : any
 >undefined : undefined
 
     this.empty = []
 >this.empty = [] : never[]
 >this.empty : any
->this : any
+>this : this
 >empty : any
 >[] : never[]
 }

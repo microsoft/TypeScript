@@ -1,0 +1,9 @@
+/a.js(1,24): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+
+
+==== /a.js (1 errors) ====
+    /** @type {function(): number} */
+                           ~~~~~~
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+    function f() {}
+    

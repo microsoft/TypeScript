@@ -95,3 +95,18 @@ class UnreachableCodeDetection {
         }
     }
 }
+
+function positiveIntersectionTest(x: { a: string } & { b: string }) {
+    if ("a" in x) {
+        let s: string = x.a;
+    } else {
+        let n: never = x;
+    }
+}
+function negativeIntersectionTest() {
+    if ("ontouchstart" in window) {
+        window.ontouchstart
+    } else {
+        window.ontouchstart
+    }
+}

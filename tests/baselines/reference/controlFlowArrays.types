@@ -612,3 +612,31 @@ function f18() {
     return x;  // (string | number | boolean)[]
 >x : (string | number | boolean)[]
 }
+
+// Repro from #39470
+
+declare function foo(arg: { val: number }[]): void;
+>foo : (arg: {    val: number;}[]) => void
+>arg : { val: number; }[]
+>val : number
+
+let arr = []
+>arr : any[]
+>[] : never[]
+
+arr.push({ val: 1, bar: 2 });
+>arr.push({ val: 1, bar: 2 }) : number
+>arr.push : (...items: any[]) => number
+>arr : any[]
+>push : (...items: any[]) => number
+>{ val: 1, bar: 2 } : { val: number; bar: number; }
+>val : number
+>1 : 1
+>bar : number
+>2 : 2
+
+foo(arr);
+>foo(arr) : void
+>foo : (arg: { val: number; }[]) => void
+>arr : { val: number; bar: number; }[]
+

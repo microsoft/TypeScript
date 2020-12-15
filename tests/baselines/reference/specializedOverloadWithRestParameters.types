@@ -9,7 +9,7 @@ class Derived1 extends Base { bar() { } }
 >bar : () => void
 
 function f(tagName: 'span', ...args): Derived1;   // error
->f : { (tagName: "span", ...args: any[]): Derived1; (tagName: number, ...args: any[]): Base; }
+>f : { (tagName: 'span', ...args: any[]): Derived1; (tagName: number, ...args: any[]): Base; }
 >tagName : "span"
 >args : any[]
 
@@ -26,7 +26,7 @@ function f(tagName: any): Base {
 >null : null
 }
 function g(tagName: 'span', arg): Derived1;    // error
->g : { (tagName: "span", arg: any): Derived1; (tagName: number, arg: any): Base; }
+>g : { (tagName: 'span', arg: any): Derived1; (tagName: number, arg: any): Base; }
 >tagName : "span"
 >arg : any
 

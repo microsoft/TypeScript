@@ -122,7 +122,7 @@ function c2({z = 10}) { }
 >10 : 10
 
 function c3({b}: { b: number|string } = { b: "hello" }) { }
->c3 : ({ b }?: { b: string | number; }) => void
+>c3 : ({ b }?: {    b: number | string;}) => void
 >b : string | number
 >b : string | number
 >{ b: "hello" } : { b: string; }

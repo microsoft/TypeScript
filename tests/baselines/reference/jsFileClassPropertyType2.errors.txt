@@ -1,4 +1,4 @@
-tests/cases/compiler/bar.ts(1,18): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/bar.ts(1,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
 ==== tests/cases/compiler/foo.js (0 errors) ====
@@ -12,5 +12,5 @@ tests/cases/compiler/bar.ts(1,18): error TS2345: Argument of type '"string"' is 
 ==== tests/cases/compiler/bar.ts (1 errors) ====
     (new C()).p.push("string");
                      ~~~~~~~~
-!!! error TS2345: Argument of type '"string"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     

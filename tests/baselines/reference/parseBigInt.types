@@ -216,8 +216,8 @@ const doubleSeparator = 123_456__789n;
 
 // Using literals as types
 const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
->oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
->(x: 1n | 2n | 3n): bigint => x ** 2n : (x: 1n | 3n | 2n) => bigint
+>oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
+>(x: 1n | 2n | 3n): bigint => x ** 2n : (x: 1n | 2n | 3n) => bigint
 >x : 1n | 3n | 2n
 >x ** 2n : bigint
 >x : 1n | 3n | 2n

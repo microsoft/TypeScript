@@ -56,32 +56,32 @@ let [{[foo2()]: bar5}] = [{bar: "bar"}];
 >"bar" : "bar"
 
 function f1({["bar"]: x}: { bar: number }) {}
->f1 : ({ ["bar"]: x }: { bar: number; }) => void
+>f1 : ({ ["bar"]: x }: {    bar: number;}) => void
 >"bar" : "bar"
 >x : number
 >bar : number
 
 function f2({[foo]: x}: { bar: number }) {}
->f2 : ({ [foo]: x }: { bar: number; }) => void
+>f2 : ({ [foo]: x }: {    bar: number;}) => void
 >foo : string
 >x : any
 >bar : number
 
 function f3({[foo2()]: x}: { bar: number }) {}
->f3 : ({ [foo2()]: x }: { bar: number; }) => void
+>f3 : ({ [foo2()]: x }: {    bar: number;}) => void
 >foo2() : string
 >foo2 : () => string
 >x : any
 >bar : number
 
 function f4([{[foo]: x}]: [{ bar: number }]) {}
->f4 : ([{ [foo]: x }]: [{ bar: number; }]) => void
+>f4 : ([{ [foo]: x }]: [{    bar: number;}]) => void
 >foo : string
 >x : any
 >bar : number
 
 function f5([{[foo2()]: x}]: [{ bar: number }]) {}
->f5 : ([{ [foo2()]: x }]: [{ bar: number; }]) => void
+>f5 : ([{ [foo2()]: x }]: [{    bar: number;}]) => void
 >foo2() : string
 >foo2 : () => string
 >x : any

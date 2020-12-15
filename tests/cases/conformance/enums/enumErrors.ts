@@ -26,7 +26,8 @@ enum E11 {
     A = true,
     B = new Date(),
     C = window,
-    D = {}
+    D = {},
+    E = (() => 'foo')(),
 }
 
 // Enum with string valued member and computed member initializers
@@ -36,6 +37,7 @@ enum E12 {
     C = window,
     D = {},
     E = 1 + 1,
+    F = (() => 'foo')(),
 }
 
 // Enum with incorrect syntax

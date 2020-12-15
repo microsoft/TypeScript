@@ -8,7 +8,7 @@ type Params<T> = Parameters<Extract<T, AnyFunction>>;
 
 interface Wrapper<T> {
 	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
->call : <K extends keyof T>(event: K, ...args: Parameters<Extract<T[K], AnyFunction>>) => void
+>call : <K extends keyof T>(event: K, ...args: Params<T[K]>) => void
 >event : K
 >args : Parameters<Extract<T[K], AnyFunction>>
 }

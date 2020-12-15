@@ -106,8 +106,8 @@ o2?.["b"](1, ...[2, 3], 4);
 >4 : 4
 
 declare const o3: { b: ((...args: any[]) => { c: string }) | undefined };
->o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
->b : ((...args: any[]) => { c: string; }) | undefined
+>o3 : { b: ((...args: any[]) => {    c: string;}) | undefined; }
+>b : ((...args: any[]) => {    c: string;}) | undefined
 >args : any[]
 >c : string
 
@@ -257,10 +257,30 @@ const v: number | undefined = o4?.(incr);
 
 // GH#33744
 declare const o5: <T>() => undefined | (() => void);
->o5 : <T>() => (() => void) | undefined
+>o5 : <T>() => undefined | (() => void)
 
 o5<number>()?.();
 >o5<number>()?.() : void | undefined
 >o5<number>() : (() => void) | undefined
 >o5 : <T>() => (() => void) | undefined
+
+// GH#36031
+o2?.b()!.toString;
+>o2?.b()!.toString : ((radix?: number | undefined) => string) | undefined
+>o2?.b()! : number | undefined
+>o2?.b() : number | undefined
+>o2?.b : ((...args: any[]) => number) | undefined
+>o2 : { b: (...args: any[]) => number; } | undefined
+>b : ((...args: any[]) => number) | undefined
+>toString : ((radix?: number | undefined) => string) | undefined
+
+o2?.b()!.toString!;
+>o2?.b()!.toString! : (radix?: number | undefined) => string
+>o2?.b()!.toString : ((radix?: number | undefined) => string) | undefined
+>o2?.b()! : number | undefined
+>o2?.b() : number | undefined
+>o2?.b : ((...args: any[]) => number) | undefined
+>o2 : { b: (...args: any[]) => number; } | undefined
+>b : ((...args: any[]) => number) | undefined
+>toString : ((radix?: number | undefined) => string) | undefined
 

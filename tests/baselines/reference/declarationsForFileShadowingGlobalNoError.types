@@ -27,7 +27,7 @@ export const mixin = (Base: Constructor) => {
 >Base : Constructor
 
     get(domNode: DOMNode) {}
->get : (domNode: globalThis.Node) => void
+>get : (domNode: DOMNode) => void
 >domNode : globalThis.Node
   }
 }

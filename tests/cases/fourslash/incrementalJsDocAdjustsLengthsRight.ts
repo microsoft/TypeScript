@@ -9,7 +9,7 @@
 //// * @param {Number} wid/*1*/
 goTo.marker('1');
 edit.insert("th\n@");
-const c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/**\n * Pad `str` to `width`.\n *\n * "),
     c.punctuation("@"),

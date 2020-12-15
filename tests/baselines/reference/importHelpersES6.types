@@ -6,6 +6,18 @@ declare var dec: any;
 >dec : any
 >A : A
 
+    #x: number = 1;
+>#x : number
+>1 : 1
+
+    async f() { this.#x = await this.#x; }
+>f : () => Promise<void>
+>this.#x = await this.#x : number
+>this.#x : number
+>this : this
+>await this.#x : number
+>this.#x : number
+>this : this
 }
 
 const o = { a: 1 };
@@ -48,4 +60,10 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >_arguments : any
 >P : Function
 >generator : Function
+
+export declare function __classPrivateFieldGet(): any;
+>__classPrivateFieldGet : () => any
+
+export declare function __classPrivateFieldSet(): any;
+>__classPrivateFieldSet : () => any
 

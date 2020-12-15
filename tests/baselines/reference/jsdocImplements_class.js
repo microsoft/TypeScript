@@ -73,7 +73,7 @@ declare class B3 implements A {
 }
 declare namespace Ns {
     export { C1 };
-    const C5: {
+    export const C5: {
         new (): {
             method(): number;
         };

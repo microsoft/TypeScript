@@ -1,0 +1,58 @@
+=== tests/cases/compiler/arrayFakeFlatNoCrashInferenceDeclarations.ts ===
+type BadFlatArray<Arr, Depth extends number> = {obj: {
+>BadFlatArray : Symbol(BadFlatArray, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 0))
+>Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
+>Depth : Symbol(Depth, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 22))
+>obj : Symbol(obj, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 48))
+
+    "done": Arr,
+>"done" : Symbol("done", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 54))
+>Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
+
+    "recur": Arr extends ReadonlyArray<infer InnerArr>
+>"recur" : Symbol("recur", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 1, 16))
+>Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+>InnerArr : Symbol(InnerArr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 2, 44))
+
+    ? BadFlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
+>BadFlatArray : Symbol(BadFlatArray, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 0))
+>InnerArr : Symbol(InnerArr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 2, 44))
+>Depth : Symbol(Depth, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 22))
+
+    : Arr
+>Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
+
+}[Depth extends -1 ? "done" : "recur"]}["obj"];
+>Depth : Symbol(Depth, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 22))
+
+declare function flat<A, D extends number = 1>(
+>flat : Symbol(flat, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 5, 47))
+>A : Symbol(A, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 22))
+>D : Symbol(D, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 24))
+
+    arr: A,
+>arr : Symbol(arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 47))
+>A : Symbol(A, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 22))
+
+    depth?: D
+>depth : Symbol(depth, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 8, 11))
+>D : Symbol(D, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 24))
+
+): BadFlatArray<A, D>[]
+>BadFlatArray : Symbol(BadFlatArray, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 0))
+>A : Symbol(A, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 22))
+>D : Symbol(D, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 7, 24))
+
+function foo<T>(arr: T[], depth: number) {
+>foo : Symbol(foo, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 10, 23))
+>T : Symbol(T, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 12, 13))
+>arr : Symbol(arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 12, 16))
+>T : Symbol(T, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 12, 13))
+>depth : Symbol(depth, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 12, 25))
+
+    return flat(arr, depth);
+>flat : Symbol(flat, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 5, 47))
+>arr : Symbol(arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 12, 16))
+>depth : Symbol(depth, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 12, 25))
+}

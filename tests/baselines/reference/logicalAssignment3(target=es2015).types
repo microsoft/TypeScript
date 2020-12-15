@@ -1,0 +1,49 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment3.ts ===
+interface A {
+    baz: 0 | 1 | 42 | undefined | ''
+>baz : "" | 0 | 1 | 42 | undefined
+}
+
+declare const result: A;
+>result : A
+
+declare const a: A;
+>a : A
+
+declare const b: A;
+>b : A
+
+declare const c: A;
+>c : A
+
+(a.baz) &&= result.baz;
+>(a.baz) &&= result.baz : "" | 0 | 1 | 42 | undefined
+>(a.baz) : "" | 0 | 1 | 42 | undefined
+>a.baz : "" | 0 | 1 | 42 | undefined
+>a : A
+>baz : "" | 0 | 1 | 42 | undefined
+>result.baz : "" | 0 | 1 | 42 | undefined
+>result : A
+>baz : "" | 0 | 1 | 42 | undefined
+
+(b.baz) ||= result.baz;
+>(b.baz) ||= result.baz : "" | 0 | 1 | 42 | undefined
+>(b.baz) : "" | 0 | 1 | 42 | undefined
+>b.baz : "" | 0 | 1 | 42 | undefined
+>b : A
+>baz : "" | 0 | 1 | 42 | undefined
+>result.baz : "" | 0 | 1 | 42 | undefined
+>result : A
+>baz : "" | 0 | 1 | 42 | undefined
+
+(c.baz) ??= result.baz;
+>(c.baz) ??= result.baz : "" | 0 | 1 | 42 | undefined
+>(c.baz) : "" | 0 | 1 | 42 | undefined
+>c.baz : "" | 0 | 1 | 42 | undefined
+>c : A
+>baz : "" | 0 | 1 | 42 | undefined
+>result.baz : "" | 0 | 1 | 42 | undefined
+>result : A
+>baz : "" | 0 | 1 | 42 | undefined
+
+

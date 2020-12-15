@@ -14,7 +14,7 @@ interface I<T, U> {
 }
 
 declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
->foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
+>foo : <T, U>(p: I<T, U>) => {    t: T;    u: U;}
 >p : I<T, U>
 >t : T
 >u : U

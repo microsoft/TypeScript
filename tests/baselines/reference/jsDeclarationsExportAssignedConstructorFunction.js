@@ -21,4 +21,6 @@ module.exports.MyClass.prototype = {
 
 
 //// [jsDeclarationsExportAssignedConstructorFunction.d.ts]
-export {};
+export class MyClass {
+    a: () => void;
+}

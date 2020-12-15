@@ -9,7 +9,8 @@ module.exports = function (p) {
 >p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
 
     this.t = 12 + p;
->this : Symbol(module, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 7, 23))
+>this.t : Symbol(exports.t, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 31))
+>this : Symbol(exports, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 16))
 >t : Symbol(exports.t, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 31))
 >p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
 }
@@ -21,7 +22,8 @@ module.exports.Sub = function() {
 >Sub : Symbol(Sub, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 5, 1), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 9, 15))
 
     this.instance = new module.exports(10);
->this : Symbol(exports, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 16))
+>this.instance : Symbol(Sub.instance, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 6, 33))
+>this : Symbol(Sub, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 6, 20))
 >instance : Symbol(Sub.instance, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 6, 33))
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub", Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 >module : Symbol(module, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0), Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 7, 23))

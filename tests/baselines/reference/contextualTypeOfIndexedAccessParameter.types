@@ -29,7 +29,7 @@ f("a", {
 });
 
 function g<
->g : <K extends Keys>(x: ({ a: string; } & { b: string; })[K], y: string) => void
+>g : <K extends Keys>(x: ({    a: string;} & {    b: string;})[K], y: string) => void
 
     K extends "a" | "b">(x: ({ a: string } & { b: string })[K], y: string) {
 >x : ({ a: string; } & { b: string; })[K]

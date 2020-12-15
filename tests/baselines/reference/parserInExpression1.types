@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/parserInExpression1.ts ===
 console.log("a" in { "a": true });
 >console.log("a" in { "a": true }) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"a" in { "a": true } : boolean
 >"a" : "a"
 >{ "a": true } : { a: boolean; }

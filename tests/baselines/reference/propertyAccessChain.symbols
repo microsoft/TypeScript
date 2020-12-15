@@ -85,3 +85,18 @@ o1?.b ? 1 : 0;
 >o1 : Symbol(o1, Decl(propertyAccessChain.ts, 0, 13))
 >b : Symbol(b, Decl(propertyAccessChain.ts, 0, 31))
 
+// GH#36031
+o2?.b!.c;
+>o2?.b!.c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+>o2?.b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>o2 : Symbol(o2, Decl(propertyAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+
+o2?.b!.c!;
+>o2?.b!.c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+>o2?.b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>o2 : Symbol(o2, Decl(propertyAccessChain.ts, 3, 13))
+>b : Symbol(b, Decl(propertyAccessChain.ts, 3, 31))
+>c : Symbol(c, Decl(propertyAccessChain.ts, 3, 36))
+

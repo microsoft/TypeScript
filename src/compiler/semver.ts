@@ -84,7 +84,7 @@ namespace ts {
             return compareValues(this.major, other.major)
                 || compareValues(this.minor, other.minor)
                 || compareValues(this.patch, other.patch)
-                || comparePrerelaseIdentifiers(this.prerelease, other.prerelease);
+                || comparePrereleaseIdentifiers(this.prerelease, other.prerelease);
         }
 
         increment(field: "major" | "minor" | "patch") {
@@ -120,7 +120,7 @@ namespace ts {
         };
     }
 
-    function comparePrerelaseIdentifiers(left: readonly string[], right: readonly string[]) {
+    function comparePrereleaseIdentifiers(left: readonly string[], right: readonly string[]) {
         // https://semver.org/#spec-item-11
         // > When major, minor, and patch are equal, a pre-release version has lower precedence
         // > than a normal version.

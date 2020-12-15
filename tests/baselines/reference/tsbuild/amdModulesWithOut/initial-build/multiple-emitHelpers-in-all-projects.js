@@ -1,19 +1,18 @@
-//// [/lib/initial-buildOutput.txt]
-/lib/tsc --b /src/app --verbose
-12:01:00 AM - Projects in this build: 
-    * src/lib/tsconfig.json
-    * src/app/tsconfig.json
-
-12:01:00 AM - Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
-
-12:01:00 AM - Building project '/src/lib/tsconfig.json'...
-
-12:01:00 AM - Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
-
-12:01:00 AM - Building project '/src/app/tsconfig.json'...
-
-exitCode:: ExitStatus.Success
-
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/src/app/file3.ts]
 export const z = 30;
@@ -25,6 +24,75 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 const myVar = 30;
 function appfile4Spread(...b: number[]) { }
 appfile4Spread(...[10, 20, 30]);
+
+//// [/src/app/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "strict": false,
+    "downlevelIteration": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"],
+    "references": [
+        { "path": "../lib", "prepend": true }
+    ]
+}
+
+//// [/src/lib/file0.ts]
+const myGlob = 20;
+function libfile0Spread(...b: number[]) { }
+libfile0Spread(...[10, 20, 30]);
+
+//// [/src/lib/file1.ts]
+export const x = 10;function forlibfile1Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}
+
+//// [/src/lib/file2.ts]
+export const y = 20;
+
+//// [/src/lib/global.ts]
+const globalConst = 10;
+
+//// [/src/lib/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "composite": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "strict": false,
+    "downlevelIteration": true,
+        "outFile": "module.js"
+    },
+    "exclude": ["module.d.ts"]
+
+}
+
+
+
+Output::
+/lib/tsc --b /src/app --verbose
+[[90m12:01:00 AM[0m] Projects in this build: 
+    * src/lib/tsconfig.json
+    * src/app/tsconfig.json
+
+[[90m12:01:00 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.js' does not exist
+
+[[90m12:01:00 AM[0m] Building project '/src/lib/tsconfig.json'...
+
+[[90m12:01:00 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.js' does not exist
+
+[[90m12:01:00 AM[0m] Building project '/src/app/tsconfig.json'...
+
+exitCode:: ExitStatus.Success
+
 
 //// [/src/app/module.d.ts]
 declare const myGlob = 20;
@@ -352,7 +420,7 @@ appfile4Spread.apply(void 0, __spread([10, 20, 30]));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -557,29 +625,80 @@ sourceFile:../lib/file1.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(46, 9) Source(2, 1) + SourceIndex(1)
 2 >Emitted(46, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(46, 42) Source(2, 48) + SourceIndex(1)
-4 >Emitted(46, 44) Source(2, 9) + SourceIndex(1)
-5 >Emitted(46, 52) Source(2, 10) + SourceIndex(1)
-6 >Emitted(46, 54) Source(2, 12) + SourceIndex(1)
-7 >Emitted(46, 78) Source(2, 48) + SourceIndex(1)
-8 >Emitted(46, 79) Source(2, 49) + SourceIndex(1)
+3 >Emitted(46, 18) Source(2, 24) + SourceIndex(1)
+4 >Emitted(46, 20) Source(2, 26) + SourceIndex(1)
+5 >Emitted(46, 21) Source(2, 27) + SourceIndex(1)
+6 >Emitted(46, 23) Source(2, 29) + SourceIndex(1)
+7 >Emitted(46, 25) Source(2, 31) + SourceIndex(1)
+8 >Emitted(46, 27) Source(2, 33) + SourceIndex(1)
+9 >Emitted(46, 28) Source(2, 34) + SourceIndex(1)
+10>Emitted(46, 30) Source(2, 36) + SourceIndex(1)
+11>Emitted(46, 32) Source(2, 38) + SourceIndex(1)
+12>Emitted(46, 34) Source(2, 40) + SourceIndex(1)
+13>Emitted(46, 36) Source(2, 42) + SourceIndex(1)
+14>Emitted(46, 38) Source(2, 44) + SourceIndex(1)
+15>Emitted(46, 40) Source(2, 46) + SourceIndex(1)
+16>Emitted(46, 42) Source(2, 48) + SourceIndex(1)
+17>Emitted(46, 44) Source(2, 9) + SourceIndex(1)
+18>Emitted(46, 45) Source(2, 10) + SourceIndex(1)
+19>Emitted(46, 52) Source(2, 10) + SourceIndex(1)
+20>Emitted(46, 54) Source(2, 15) + SourceIndex(1)
+21>Emitted(46, 58) Source(2, 19) + SourceIndex(1)
+22>Emitted(46, 72) Source(2, 7) + SourceIndex(1)
+23>Emitted(46, 77) Source(2, 21) + SourceIndex(1)
+24>Emitted(46, 78) Source(2, 48) + SourceIndex(1)
+25>Emitted(46, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -690,29 +809,80 @@ sourceFile:file3.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(62, 9) Source(3, 1) + SourceIndex(4)
 2 >Emitted(62, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(62, 42) Source(3, 48) + SourceIndex(4)
-4 >Emitted(62, 44) Source(3, 9) + SourceIndex(4)
-5 >Emitted(62, 52) Source(3, 10) + SourceIndex(4)
-6 >Emitted(62, 54) Source(3, 12) + SourceIndex(4)
-7 >Emitted(62, 78) Source(3, 48) + SourceIndex(4)
-8 >Emitted(62, 79) Source(3, 49) + SourceIndex(4)
+3 >Emitted(62, 18) Source(3, 24) + SourceIndex(4)
+4 >Emitted(62, 20) Source(3, 26) + SourceIndex(4)
+5 >Emitted(62, 21) Source(3, 27) + SourceIndex(4)
+6 >Emitted(62, 23) Source(3, 29) + SourceIndex(4)
+7 >Emitted(62, 25) Source(3, 31) + SourceIndex(4)
+8 >Emitted(62, 27) Source(3, 33) + SourceIndex(4)
+9 >Emitted(62, 28) Source(3, 34) + SourceIndex(4)
+10>Emitted(62, 30) Source(3, 36) + SourceIndex(4)
+11>Emitted(62, 32) Source(3, 38) + SourceIndex(4)
+12>Emitted(62, 34) Source(3, 40) + SourceIndex(4)
+13>Emitted(62, 36) Source(3, 42) + SourceIndex(4)
+14>Emitted(62, 38) Source(3, 44) + SourceIndex(4)
+15>Emitted(62, 40) Source(3, 46) + SourceIndex(4)
+16>Emitted(62, 42) Source(3, 48) + SourceIndex(4)
+17>Emitted(62, 44) Source(3, 9) + SourceIndex(4)
+18>Emitted(62, 45) Source(3, 10) + SourceIndex(4)
+19>Emitted(62, 52) Source(3, 10) + SourceIndex(4)
+20>Emitted(62, 54) Source(3, 15) + SourceIndex(4)
+21>Emitted(62, 58) Source(3, 19) + SourceIndex(4)
+22>Emitted(62, 72) Source(3, 7) + SourceIndex(4)
+23>Emitted(62, 77) Source(3, 21) + SourceIndex(4)
+24>Emitted(62, 78) Source(3, 48) + SourceIndex(4)
+25>Emitted(62, 79) Source(3, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -1043,34 +1213,6 @@ declare function appfile4Spread(...b: number[]): void;
 
 ======================================================================
 
-//// [/src/app/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "strict": false,
-    "downlevelIteration": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"],
-    "references": [
-        { "path": "../lib", "prepend": true }
-    ]
-}
-
-//// [/src/lib/file0.ts]
-const myGlob = 20;
-function libfile0Spread(...b: number[]) { }
-libfile0Spread(...[10, 20, 30]);
-
-//// [/src/lib/file1.ts]
-export const x = 10;function forlibfile1Rest() {
-const { b, ...rest } = { a: 10, b: 30, yy: 30 };
-}
-
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
@@ -1292,7 +1434,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,cAAc,wBAAI,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,CAAC,GAAE;;;;;ICFnB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -1497,29 +1639,80 @@ sourceFile:file1.ts
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
 2 >        ^^^^
-3 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                         ^^
-5 >                                           ^^^^^^^^
-6 >                                                   ^^
-7 >                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                             ^
+3 >            ^^^^^
+4 >                 ^^
+5 >                   ^
+6 >                    ^^
+7 >                      ^^
+8 >                        ^^
+9 >                          ^
+10>                           ^^
+11>                             ^^
+12>                               ^^
+13>                                 ^^
+14>                                   ^^
+15>                                     ^^
+16>                                       ^^
+17>                                         ^^
+18>                                           ^
+19>                                            ^^^^^^^
+20>                                                   ^^
+21>                                                     ^^^^
+22>                                                         ^^^^^^^^^^^^^^
+23>                                                                       ^^^^^
+24>                                                                            ^
+25>                                                                             ^
 1->() {
   >
 2 >        const 
-3 >            { b, ...rest } = { a: 10, b: 30, yy: 30 }
-4 >                                         
-5 >                                           b
-6 >                                                   , 
-7 >                                                     ...rest } = { a: 10, b: 30, yy: 30 }
-8 >                                                                             ;
+3 >            { b, ...rest } = 
+4 >                 { 
+5 >                   a
+6 >                    : 
+7 >                      10
+8 >                        , 
+9 >                          b
+10>                           : 
+11>                             30
+12>                               , 
+13>                                 yy
+14>                                   : 
+15>                                     30
+16>                                        }
+17>                                         
+18>                                           b
+19>                                            
+20>                                                   , ...
+21>                                                     rest
+22>                                                         
+23>                                                                       { b, ...rest }
+24>                                                                             = { a: 10, b: 30, yy: 30 }
+25>                                                                             ;
 1->Emitted(46, 9) Source(2, 1) + SourceIndex(1)
 2 >Emitted(46, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(46, 42) Source(2, 48) + SourceIndex(1)
-4 >Emitted(46, 44) Source(2, 9) + SourceIndex(1)
-5 >Emitted(46, 52) Source(2, 10) + SourceIndex(1)
-6 >Emitted(46, 54) Source(2, 12) + SourceIndex(1)
-7 >Emitted(46, 78) Source(2, 48) + SourceIndex(1)
-8 >Emitted(46, 79) Source(2, 49) + SourceIndex(1)
+3 >Emitted(46, 18) Source(2, 24) + SourceIndex(1)
+4 >Emitted(46, 20) Source(2, 26) + SourceIndex(1)
+5 >Emitted(46, 21) Source(2, 27) + SourceIndex(1)
+6 >Emitted(46, 23) Source(2, 29) + SourceIndex(1)
+7 >Emitted(46, 25) Source(2, 31) + SourceIndex(1)
+8 >Emitted(46, 27) Source(2, 33) + SourceIndex(1)
+9 >Emitted(46, 28) Source(2, 34) + SourceIndex(1)
+10>Emitted(46, 30) Source(2, 36) + SourceIndex(1)
+11>Emitted(46, 32) Source(2, 38) + SourceIndex(1)
+12>Emitted(46, 34) Source(2, 40) + SourceIndex(1)
+13>Emitted(46, 36) Source(2, 42) + SourceIndex(1)
+14>Emitted(46, 38) Source(2, 44) + SourceIndex(1)
+15>Emitted(46, 40) Source(2, 46) + SourceIndex(1)
+16>Emitted(46, 42) Source(2, 48) + SourceIndex(1)
+17>Emitted(46, 44) Source(2, 9) + SourceIndex(1)
+18>Emitted(46, 45) Source(2, 10) + SourceIndex(1)
+19>Emitted(46, 52) Source(2, 10) + SourceIndex(1)
+20>Emitted(46, 54) Source(2, 15) + SourceIndex(1)
+21>Emitted(46, 58) Source(2, 19) + SourceIndex(1)
+22>Emitted(46, 72) Source(2, 7) + SourceIndex(1)
+23>Emitted(46, 77) Source(2, 21) + SourceIndex(1)
+24>Emitted(46, 78) Source(2, 48) + SourceIndex(1)
+25>Emitted(46, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -1727,20 +1920,4 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ======================================================================
-
-//// [/src/lib/tsconfig.json]
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "strict": false,
-    "downlevelIteration": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"]
-
-}
 

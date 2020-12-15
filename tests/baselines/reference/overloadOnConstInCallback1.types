@@ -3,9 +3,9 @@ class C {
 >C : C
 
     x1(a: number, callback: (x: 'hi') => number); // error
->x1 : (a: number, callback: (x: "hi") => number) => any
+>x1 : (a: number, callback: (x: 'hi') => number) => any
 >a : number
->callback : (x: "hi") => number
+>callback : (x: 'hi') => number
 >x : "hi"
 
     x1(a: number, callback: (x: any) => number) {

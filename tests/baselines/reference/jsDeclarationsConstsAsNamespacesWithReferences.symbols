@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export const colors = {
+>colors : Symbol(colors, Decl(index.js, 0, 12))
+
+    royalBlue: "#6400e4",
+>royalBlue : Symbol(royalBlue, Decl(index.js, 0, 23))
+
+};
+
+export const brandColors = {
+>brandColors : Symbol(brandColors, Decl(index.js, 4, 12))
+
+    purple: colors.royalBlue,
+>purple : Symbol(purple, Decl(index.js, 4, 28))
+>colors.royalBlue : Symbol(royalBlue, Decl(index.js, 0, 23))
+>colors : Symbol(colors, Decl(index.js, 0, 12))
+>royalBlue : Symbol(royalBlue, Decl(index.js, 0, 23))
+
+};

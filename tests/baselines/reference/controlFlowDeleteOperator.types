@@ -3,7 +3,7 @@ function f() {
 >f : () => void
 
     let x: { a?: number | string, b: number | string } = { b: 1 };
->x : { a?: string | number | undefined; b: string | number; }
+>x : { a?: string | number | undefined; b: number | string; }
 >a : string | number | undefined
 >b : string | number
 >{ b: 1 } : { b: number; }

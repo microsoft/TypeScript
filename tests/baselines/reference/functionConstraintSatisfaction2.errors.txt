@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(5,5): error TS2345: Argument of type '1' is not assignable to parameter of type 'Function'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(6,16): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(7,8): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts(23,14): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
@@ -31,7 +31,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
     
     foo(1);
         ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'Function'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
     foo(() => { }, 1);
                    ~
 !!! error TS2554: Expected 1 arguments, but got 2.

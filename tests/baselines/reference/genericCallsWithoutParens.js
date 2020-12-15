@@ -17,4 +17,4 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var c = new C(); // parse error
+var c = new C; // parse error

@@ -128,6 +128,7 @@ namespace ts {
                 messageText: error.messageText,
                 start: undefined,
                 reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             }));
             assertParsed(actual, expected);
         }

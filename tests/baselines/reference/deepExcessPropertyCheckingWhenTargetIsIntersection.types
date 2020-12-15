@@ -45,10 +45,10 @@ TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test lab
 >'test label' : "test label"
 
 const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (props) => {
->TestComponent2 : StatelessComponent<TestProps | { props2: { x: number; }; }>
+>TestComponent2 : StatelessComponent<TestProps | { props2: {    x: number;}; }>
 >props2 : { x: number; }
 >x : number
->(props) => {  return null;} : (props: (TestProps & { children?: number; }) | ({ props2: { x: number; }; } & { children?: number; })) => any
+>(props) => {  return null;} : (props: (TestProps & { children?: number; }) | ({ props2: {    x: number;}; } & { children?: number; })) => any
 >props : (TestProps & { children?: number; }) | ({ props2: { x: number; }; } & { children?: number; })
 
   return null;

@@ -319,8 +319,8 @@ o4.x.y;
 >y : boolean
 
 declare const o5: { x?: { y: { z?: { w: boolean } } } };
->o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
->x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
+>o5 : { x?: { y: {    z?: {        w: boolean;    };}; } | undefined; }
+>x : { y: {    z?: {        w: boolean;    };}; } | undefined
 >y : { z?: { w: boolean; } | undefined; }
 >z : { w: boolean; } | undefined
 >w : boolean
@@ -1988,16 +1988,16 @@ function someFunction(someOptionalObject: SomeObject | undefined): void {
 
         console.log(someOptionalObject);
 >console.log(someOptionalObject) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >someOptionalObject : SomeObject | undefined
 
         console.log(someOptionalObject.someProperty);  // Error
 >console.log(someOptionalObject.someProperty) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >someOptionalObject.someProperty : unknown
 >someOptionalObject : SomeObject | undefined
 >someProperty : unknown
@@ -2038,7 +2038,7 @@ let i = 0;
 >0 : 0
 
 declare const arr: { tag: ("left" | "right") }[];
->arr : { tag: "left" | "right"; }[]
+>arr : { tag: ("left" | "right"); }[]
 >tag : "left" | "right"
 
 while (arr[i]?.tag === "left") {
@@ -2066,9 +2066,9 @@ while (arr[i]?.tag === "left") {
 
         console.log("I should ALSO be reachable");
 >console.log("I should ALSO be reachable") : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"I should ALSO be reachable" : "I should ALSO be reachable"
     }
 }

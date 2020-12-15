@@ -1,0 +1,9 @@
+=== tests/cases/compiler/nestedGlobalNamespaceInClass.ts ===
+// should not crash - from #35717
+class C {
+>C : Symbol(C, Decl(nestedGlobalNamespaceInClass.ts, 0, 0))
+
+    global x
+>global : Symbol(global, Decl(nestedGlobalNamespaceInClass.ts, 1, 9))
+}
+

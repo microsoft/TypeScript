@@ -94,3 +94,23 @@ function k(t: { command: string, ok: string }) {
 >t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
 }
 
+function l(anyrequired: { a: any }) {
+>l : Symbol(l, Decl(spreadOverwritesPropertyStrict.ts, 24, 1))
+>anyrequired : Symbol(anyrequired, Decl(spreadOverwritesPropertyStrict.ts, 26, 11))
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 26, 25))
+
+    return { a: 'zzz', ...anyrequired } // error
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 27, 12))
+>anyrequired : Symbol(anyrequired, Decl(spreadOverwritesPropertyStrict.ts, 26, 11))
+}
+function m(anyoptional: { a?: any }) {
+>m : Symbol(m, Decl(spreadOverwritesPropertyStrict.ts, 28, 1))
+>anyoptional : Symbol(anyoptional, Decl(spreadOverwritesPropertyStrict.ts, 29, 11))
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 29, 25))
+
+    return { a: 'zzz', ...anyoptional } // ok
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 30, 12))
+>anyoptional : Symbol(anyoptional, Decl(spreadOverwritesPropertyStrict.ts, 29, 11))
+}
+
+

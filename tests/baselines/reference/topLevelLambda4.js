@@ -7,5 +7,6 @@ define(["require", "exports"], function (require, exports) {
     var _this = this;
     exports.__esModule = true;
     exports.x = void 0;
-    exports.x = function () { return _this.window; };
+    var x = function () { return _this.window; };
+    exports.x = x;
 });

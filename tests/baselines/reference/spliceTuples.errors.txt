@@ -1,4 +1,5 @@
-tests/cases/compiler/spliceTuples.ts(23,1): error TS2741: Property '3' is missing in type '[number, string, boolean, ...boolean[]]' but required in type '[number, string, boolean, boolean, ...boolean[]]'.
+tests/cases/compiler/spliceTuples.ts(23,1): error TS2322: Type '[number, string, boolean, ...boolean[]]' is not assignable to type '[number, string, boolean, boolean, ...boolean[]]'.
+  Property '3' is optional in type '[number, string, boolean, ...boolean[]]' but required in type '[number, string, boolean, boolean, ...boolean[]]'.
 
 
 ==== tests/cases/compiler/spliceTuples.ts (1 errors) ====
@@ -26,5 +27,6 @@ tests/cases/compiler/spliceTuples.ts(23,1): error TS2741: Property '3' is missin
     let k6: [number, string, boolean, boolean, ...boolean[]];
     k6 = [1, ...sbb_];
     ~~
-!!! error TS2741: Property '3' is missing in type '[number, string, boolean, ...boolean[]]' but required in type '[number, string, boolean, boolean, ...boolean[]]'.
+!!! error TS2322: Type '[number, string, boolean, ...boolean[]]' is not assignable to type '[number, string, boolean, boolean, ...boolean[]]'.
+!!! error TS2322:   Property '3' is optional in type '[number, string, boolean, ...boolean[]]' but required in type '[number, string, boolean, boolean, ...boolean[]]'.
     

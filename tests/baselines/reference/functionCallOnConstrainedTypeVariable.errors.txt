@@ -1,6 +1,6 @@
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(11,7): error TS2345: Argument of type '"s"' is not assignable to parameter of type 'never'.
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(15,7): error TS2345: Argument of type '"s"' is not assignable to parameter of type 'never'.
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(18,5): error TS2345: Argument of type '""' is not assignable to parameter of type 'never'.
+tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(11,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(15,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(19,9): error TS2554: Expected 1 arguments, but got 4.
 
 
@@ -17,18 +17,18 @@ tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(19,9): error TS255
     function call0(p: A | B) { 
       p.a("s"); // Error
           ~~~
-!!! error TS2345: Argument of type '"s"' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
     }
     
     function callN<T extends A | B>(p: T) {
       p.a("s"); // Error
           ~~~
-!!! error TS2345: Argument of type '"s"' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
       
       var a: T["a"] = p.a;
       a(""); // Error
         ~~
-!!! error TS2345: Argument of type '""' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
       a("", "", "", ""); // Error
             ~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 4.

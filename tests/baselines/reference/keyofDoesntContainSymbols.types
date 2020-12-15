@@ -82,7 +82,7 @@ type KeyofObj = keyof typeof obj;
 
 // "str" | "num"
 type Values<T> = T[keyof T];
->Values : T[keyof T]
+>Values : Values<T>
 
 type ValuesOfObj = Values<typeof obj>;
 >ValuesOfObj : string | number

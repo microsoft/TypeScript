@@ -1,0 +1,20 @@
+=== tests/cases/compiler/numberFormatCurrencySign.ts ===
+const str = new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999);
+>str : string
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format(999999) : string
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }).format : (value: number) => string
+>new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD', currencySign: 'accounting' }) : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>'en-NZ' : "en-NZ"
+>{ style: 'currency', currency: 'NZD', currencySign: 'accounting' } : { style: string; currency: string; currencySign: string; }
+>style : string
+>'currency' : "currency"
+>currency : string
+>'NZD' : "NZD"
+>currencySign : string
+>'accounting' : "accounting"
+>format : (value: number) => string
+>999999 : 999999
+

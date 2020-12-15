@@ -10,12 +10,10 @@ async function f():Promise<void> {
         try {
             const result = await fetch('https://typescriptlang.org');
             console.log(result);
-        }
-        catch (rejection) {
+        } catch (rejection) {
             console.log("rejected:", rejection);
         }
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err);
     }
 }

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/c/app.ts
+Input::
 //// [/a/b/c/app.ts]
 
                 import {f} from "./module"
@@ -21,29 +21,29 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/c/app.js]
-"use strict";
-exports.__esModule = true;
-var module_1 = require("./module");
-console.log(module_1.f);
 
-
-
+/a/lib/tsc.js -w /a/b/c/app.ts
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
+[96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"./module"' has no exported member 'f'.
 
-a/b/c/app.ts(2,25): error TS2305: Module '"./module"' has no exported member 'f'.
+[7m2[0m                 import {f} from "./module"
+[7m [0m [91m                        ~[0m
 
-a/b/c/app.ts(3,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+[96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
 
+[7m3[0m                 console.log(f)
+[7m [0m [91m                ~~~~~~~[0m
 
-12:00:20 AM - Found 2 errors. Watching for file changes.
+[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/c/app.ts"]
 Program options: {"watch":true}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/c/module.d.ts
@@ -69,3 +69,11 @@ FsWatchesRecursive::
   {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/c/app.js]
+"use strict";
+exports.__esModule = true;
+var module_1 = require("./module");
+console.log(module_1.f);
+
+

@@ -52,7 +52,7 @@ namespace Utils {
     }
 
     export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
-        const cache = ts.createMap<any>();
+        const cache = new ts.Map<string, any>();
 
         return <any>(function (this: any, ...args: any[]) {
             const key = memoKey(...args);
@@ -218,7 +218,7 @@ namespace Utils {
                     case "symbolCount":
                     case "identifierCount":
                     case "scriptSnapshot":
-                        // Blacklist of items we never put in the baseline file.
+                        // Blocklist of items we never put in the baseline file.
                         break;
 
                     case "originalKeywordKind":

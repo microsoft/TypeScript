@@ -13,7 +13,7 @@ namespace foo {
 >a : any
 }
 export = foo;
->foo : import("tests/cases/compiler/file1")
+>foo : import("tests/cases/compiler/file1.ts")
 
 === tests/cases/compiler/file2.ts ===
 import x = require("./file1"); 

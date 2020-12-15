@@ -16,11 +16,11 @@ class C extends A {
 >foo : () => void
 }
 function foo(name: 'hi'): B;
->foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
+>foo : { (name: 'hi'): B; (name: "bye"): C; (name: string): A; }
 >name : "hi"
 
 function foo(name: 'bye'): C;
->foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
+>foo : { (name: "hi"): B; (name: 'bye'): C; (name: string): A; }
 >name : "bye"
 
 function foo(name: string): A;

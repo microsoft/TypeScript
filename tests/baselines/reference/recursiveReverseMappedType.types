@@ -1,0 +1,31 @@
+=== tests/cases/compiler/recursiveReverseMappedType.ts ===
+// Repro from #38198
+
+type Recur<T> = (
+>Recur : Recur<T>
+
+    T extends (unknown[]) ? {} : { [K in keyof T]?: Recur<T[K]> }
+) | ['marker', ...Recur<T>[]];
+
+function join<T>(l: Recur<T>[]): Recur<T> {
+>join : <T>(l: Recur<T>[]) => Recur<T>
+>l : Recur<T>[]
+
+    return ['marker', ...l];
+>['marker', ...l] : ["marker", ...Recur<T>[]]
+>'marker' : "marker"
+>...l : Recur<T>
+>l : Recur<T>[]
+}
+
+function a<T>(l: Recur<T>[]): void {
+>a : <T>(l: Recur<T>[]) => void
+>l : Recur<T>[]
+
+    const x: Recur<T> | undefined = join(l);
+>x : (T extends unknown[] ? {} : { [K in keyof T]?: (T[K] extends unknown[] ? {} : { [K in keyof T[K]]?: (T[K][K] extends unknown[] ? {} : { [K in keyof T[K][K]]?: (T[K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K]]?: (T[K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K]]?: (T[K][K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K][K]]?: (T[K][K][K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K][K][K]]?: (T[K][K][K][K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K][K][K][K]]?: (T[K][K][K][K][K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K][K][K][K][K]]?: (T[K][K][K][K][K][K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K][K][K][K][K][K]]?: (T[K][K][K][K][K][K][K][K][K][K] extends unknown[] ? {} : { [K in keyof T[K][K][K][K][K][K][K][K][K][K]]?: (T[K][K][K][K][K][K][K][K][K][K][K] extends unknown[] ? {} : any) | ["marker", ...Recur<T[K][K][K][K][K][K][K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K][K][K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K][K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K][K]>[]] | undefined; }) | ["marker", ...Recur<T[K]>[]] | undefined; }) | ["marker", ...Recur<T>[]] | undefined
+>join(l) : Recur<T>
+>join : <T>(l: Recur<T>[]) => Recur<T>
+>l : Recur<T>[]
+}
+

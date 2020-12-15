@@ -30,8 +30,8 @@ var s = f("str").toUpperCase();
 
 console.log(s);
 >console.log(s) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >s : string
 

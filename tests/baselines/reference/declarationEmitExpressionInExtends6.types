@@ -1,0 +1,14 @@
+=== /b.ts ===
+const { Foo } = require("./a");
+>Foo : any
+>require("./a") : any
+>require : any
+>"./a" : "./a"
+
+export default class extends Foo {}
+>Foo : any
+
+=== /node_modules/@types/node/index.d.ts ===
+declare const require: any;
+>require : any
+

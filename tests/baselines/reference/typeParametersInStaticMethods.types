@@ -3,8 +3,8 @@ class foo<T> {
 >foo : foo<T>
 
     static M(x: (x: T) => { x: { y: T } }) {
->M : (x: (x: any) => { x: { y: any; }; }) => void
->x : (x: any) => { x: { y: any; }; }
+>M : (x: (x: any) => { x: {    y: T;}; }) => void
+>x : (x: any) => { x: {    y: T;}; }
 >x : any
 >x : { y: any; }
 >y : any

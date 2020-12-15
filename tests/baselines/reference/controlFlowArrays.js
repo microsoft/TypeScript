@@ -178,6 +178,15 @@ function f18() {
     return x;  // (string | number | boolean)[]
 }
 
+// Repro from #39470
+
+declare function foo(arg: { val: number }[]): void;
+
+let arr = []
+arr.push({ val: 1, bar: 2 });
+foo(arr);
+
+
 //// [controlFlowArrays.js]
 function f1() {
     var x = [];
@@ -340,3 +349,6 @@ function f18() {
     x[2] = true;
     return x; // (string | number | boolean)[]
 }
+var arr = [];
+arr.push({ val: 1, bar: 2 });
+foo(arr);

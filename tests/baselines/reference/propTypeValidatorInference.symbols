@@ -59,14 +59,14 @@ export interface Validator<T> {
 >T : Symbol(T, Decl(index.d.ts, 8, 27))
 }
 
-export interface Requireable<T> extends Validator<T | undefined | null> {
+export interface Requireable<T> extends Validator<T> {
 >Requireable : Symbol(Requireable, Decl(index.d.ts, 11, 1))
 >T : Symbol(T, Decl(index.d.ts, 13, 29))
 >Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
 >T : Symbol(T, Decl(index.d.ts, 13, 29))
 
     isRequired: Validator<NonNullable<T>>;
->isRequired : Symbol(Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >Validator : Symbol(Validator, Decl(index.d.ts, 6, 72))
 >NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(index.d.ts, 13, 29))
@@ -202,11 +202,11 @@ const innerProps = {
 
     foo: PropTypes.string.isRequired,
 >foo : Symbol(foo, Decl(file.ts, 18, 20))
->PropTypes.string.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.string.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >string : Symbol(PropTypes.string, Decl(index.d.ts, 27, 12))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     bar: PropTypes.bool,
 >bar : Symbol(bar, Decl(file.ts, 19, 37))
@@ -242,11 +242,11 @@ const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
 
     bar: PropTypes.number.isRequired
 >bar : Symbol(bar, Decl(file.ts, 25, 26))
->PropTypes.number.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.number.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.number : Symbol(PropTypes.number, Decl(index.d.ts, 28, 12))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >number : Symbol(PropTypes.number, Decl(index.d.ts, 28, 12))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
 })];
 
@@ -263,37 +263,37 @@ const propTypes: PropTypesMap = {
 
     array: PropTypes.array.isRequired,
 >array : Symbol(array, Decl(file.ts, 31, 23))
->PropTypes.array.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.array.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     bool: PropTypes.bool.isRequired,
 >bool : Symbol(bool, Decl(file.ts, 32, 38))
->PropTypes.bool.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.bool.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     shape: PropTypes.shape(innerProps).isRequired,
 >shape : Symbol(shape, Decl(file.ts, 33, 36))
->PropTypes.shape(innerProps).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.shape(innerProps).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
 >innerProps : Symbol(innerProps, Decl(file.ts, 18, 5))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 >oneOfType : Symbol(oneOfType, Decl(file.ts, 34, 50))
->PropTypes.oneOfType(arrayOfTypes).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.oneOfType(arrayOfTypes).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
 >arrayOfTypes : Symbol(arrayOfTypes, Decl(file.ts, 24, 5))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
 };
 
@@ -309,37 +309,37 @@ const propTypesWithoutAnnotation = {
 
     array: PropTypes.array.isRequired,
 >array : Symbol(array, Decl(file.ts, 40, 23))
->PropTypes.array.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.array.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >array : Symbol(PropTypes.array, Decl(index.d.ts, 25, 12))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     bool: PropTypes.bool.isRequired,
 >bool : Symbol(bool, Decl(file.ts, 41, 38))
->PropTypes.bool.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.bool.isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >bool : Symbol(PropTypes.bool, Decl(index.d.ts, 26, 12))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     shape: PropTypes.shape(innerProps).isRequired,
 >shape : Symbol(shape, Decl(file.ts, 42, 36))
->PropTypes.shape(innerProps).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.shape(innerProps).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >shape : Symbol(PropTypes.shape, Decl(index.d.ts, 28, 41))
 >innerProps : Symbol(innerProps, Decl(file.ts, 18, 5))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 >oneOfType : Symbol(oneOfType, Decl(file.ts, 43, 50))
->PropTypes.oneOfType(arrayOfTypes).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>PropTypes.oneOfType(arrayOfTypes).isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 >PropTypes.oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
 >PropTypes : Symbol(PropTypes, Decl(file.ts, 0, 6))
 >oneOfType : Symbol(PropTypes.oneOfType, Decl(index.d.ts, 29, 89))
 >arrayOfTypes : Symbol(arrayOfTypes, Decl(file.ts, 24, 5))
->isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 73))
+>isRequired : Symbol(PropTypes.Requireable.isRequired, Decl(index.d.ts, 13, 54))
 
 };
 

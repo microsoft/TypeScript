@@ -83,3 +83,13 @@ class Private {
 >value : any
 }
 
+// https://github.com/microsoft/TypeScript/issues/38401
+class C {
+>C : C
+
+    constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {
+>x : any
+>y : any
+>z : any
+    }
+}

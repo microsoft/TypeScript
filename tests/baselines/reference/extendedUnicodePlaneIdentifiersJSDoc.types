@@ -11,9 +11,9 @@ function foo(𝑚, 𝑀) {
 
     console.log(𝑀 + 𝑚);
 >console.log(𝑀 + 𝑚) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >𝑀 + 𝑚 : number
 >𝑀 : number
 >𝑚 : number

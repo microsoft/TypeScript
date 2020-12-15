@@ -358,6 +358,7 @@ declare namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
     /**
@@ -394,7 +395,10 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason;
+    };
+    type RefactorTriggerReason = "implicit" | "invoked";
     /**
      * Response is a list of available refactorings.
      * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
@@ -1303,6 +1307,16 @@ declare namespace ts.server.protocol {
          * if true - then file should be recompiled even if it does not have any changes.
          */
         forced?: boolean;
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
+    interface CompileOnSaveEmitFileResponse extends Response {
+        body: boolean | EmitResult;
+    }
+    interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
     /**
      * Quickinfo request; value of command field is
@@ -1898,6 +1912,7 @@ declare namespace ts.server.protocol {
          */
         category: string;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
          */
@@ -2107,7 +2122,7 @@ declare namespace ts.server.protocol {
     /**
      * Arguments for navto request message.
      */
-    interface NavtoRequestArgs extends FileRequestArgs {
+    interface NavtoRequestArgs {
         /**
          * Search term to navigate to from current location; term can
          * be '.*' or an identifier prefix.
@@ -2117,6 +2132,10 @@ declare namespace ts.server.protocol {
          *  Optional limit on the number of items to return.
          */
         maxResultCount?: number;
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file?: string;
         /**
          * Optional flag to indicate we want results for just the current file
          * or the entire project.
@@ -2130,7 +2149,7 @@ declare namespace ts.server.protocol {
      * match the search term given in argument 'searchTerm'.  The
      * context for the search is given by the named file.
      */
-    interface NavtoRequest extends FileRequest {
+    interface NavtoRequest extends Request {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
@@ -2330,9 +2349,11 @@ declare namespace ts.server.protocol {
     interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
     interface CallHierarchyIncomingCall {
         from: CallHierarchyItem;
@@ -2377,6 +2398,7 @@ declare namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeSettings extends EditorSettings {
         insertSpaceAfterCommaDelimiter?: boolean;

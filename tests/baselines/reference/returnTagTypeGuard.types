@@ -5,9 +5,9 @@ class Entry {
     constructor() {
         this.c = 1
 >this.c = 1 : 1
->this.c : number
+>this.c : any
 >this : this
->c : number
+>c : any
 >1 : 1
     }
     /**
@@ -28,9 +28,9 @@ class Group {
     constructor() {
         this.d = 'no'
 >this.d = 'no' : "no"
->this.d : string
+>this.d : any
 >this : this
->d : string
+>d : any
 >'no' : "no"
     }
     /**
@@ -86,7 +86,7 @@ function isBoolean(value) {
 
 /** @param {boolean | number} val */
 function foo(val) {
->foo : (val: number | boolean) => void
+>foo : (val: boolean | number) => void
 >val : number | boolean
 
     if (isBoolean(val)) {

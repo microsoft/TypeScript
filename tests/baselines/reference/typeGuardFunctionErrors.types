@@ -232,7 +232,7 @@ function b2(a: b is A) {};
 >A : any
 
 function b3(): A | b is A {
->b3 : () => any
+>b3 : () => A | b
 >is : any
 >A : typeof A
 

@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -29,6 +29,61 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+
+
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Output::
+>> Screen clear
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
+Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+WatchedFiles::
+/a/b/tsconfig.json:
+  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+/a/b/file1consumer1.ts:
+  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
+/a/b/modulefile1.ts:
+  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
+/a/b/file1consumer2.ts:
+  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
+/a/b/globalfile3.ts:
+  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
+/a/b/modulefile2.ts:
+  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/a/b/node_modules/@types:
+  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/a/b:
+  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile1.js]
 "use strict";
@@ -63,32 +118,39 @@ exports.Foo4 = 10;
 
 
 
+Change:: Change file1Consumer1 content to `export let y = Foo();`
+
+Input::
+//// [/a/b/file1Consumer1.ts]
+export let y = Foo();
+
+
 Output::
 >> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
+[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
+[96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
+[7m1[0m export let y = Foo();
+[7m [0m [91m               ~~~[0m
 
-12:00:34 AM - Found 0 errors. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
-/a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
+/a/b/moduleFile1.ts
 /a/b/file1Consumer2.ts
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -115,11 +177,6 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Change file1Consumer1 content to `export let y = Foo();`
-
-//// [/a/b/file1Consumer1.ts]
-export let y = Foo();
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
@@ -129,19 +186,29 @@ exports.y = Foo();
 
 
 
+Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
+
 Output::
 >> Screen clear
-12:00:38 AM - File change detected. Starting incremental compilation...
+[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
+[96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
-a/b/file1Consumer1.ts(1,16): error TS2304: Cannot find name 'Foo'.
+[7m1[0m export let y = Foo();
+[7m [0m [91m               ~~~[0m
 
+[[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
 
-12:00:42 AM - Found 1 error. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/file1Consumer1.ts
@@ -151,7 +218,8 @@ Program files::
 /a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/file1Consumer1.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer2.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -178,11 +246,6 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
 
 //// [/a/b/moduleFile1.js]
 "use strict";
@@ -195,30 +258,34 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer2.js] file written with same contents
 
+Change:: Add the import statements back to file1Consumer1
+
+Input::
+//// [/a/b/file1Consumer1.ts]
+import {Foo} from "./moduleFile1";let y = Foo();
+
+
 Output::
 >> Screen clear
-12:00:46 AM - File change detected. Starting incremental compilation...
+[[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
+[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
-a/b/file1Consumer1.ts(1,16): error TS2304: Cannot find name 'Foo'.
-
-
-12:00:53 AM - Found 1 error. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
-/a/b/file1Consumer1.ts
 /a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
 /a/b/file1Consumer2.ts
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/moduleFile1.ts
-/a/b/file1Consumer2.ts
+/a/b/file1Consumer1.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -245,11 +312,6 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Add the import statements back to file1Consumer1
-
-//// [/a/b/file1Consumer1.ts]
-import {Foo} from "./moduleFile1";let y = Foo();
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
@@ -259,17 +321,39 @@ var y = moduleFile1_1.Foo();
 
 
 
+Change:: Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export let y = Foo();
+
+
 Output::
 >> Screen clear
-12:00:57 AM - File change detected. Starting incremental compilation...
+[[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
+[96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
+[7m1[0m import {Foo} from "./moduleFile1";let y = Foo();
+[7m [0m [91m        ~~~[0m
 
-12:01:01 AM - Found 0 errors. Watching for file changes.
+[96ma/b/file1Consumer2.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
+
+[7m1[0m import {Foo} from "./moduleFile1"; let z = 10;
+[7m [0m [91m        ~~~[0m
+
+[96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
+
+[7m1[0m export let y = Foo();
+[7m [0m [91m               ~~~[0m
+
+[[90m12:01:15 AM[0m] Found 3 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -279,7 +363,9 @@ Program files::
 /a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -306,11 +392,6 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
-
-//// [/a/b/moduleFile1.ts]
-export let y = Foo();
 
 //// [/a/b/moduleFile1.js]
 "use strict";
@@ -322,23 +403,25 @@ exports.y = Foo();
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
 
+Change:: Multiple file edits in one go
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
+//// [/a/b/file1Consumer1.ts] file written with same contents
+
 Output::
 >> Screen clear
-12:01:05 AM - File change detected. Starting incremental compilation...
+[[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
+[[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
-a/b/file1Consumer1.ts(1,9): error TS2305: Module '"./moduleFile1"' has no exported member 'Foo'.
-
-a/b/file1Consumer2.ts(1,9): error TS2305: Module '"./moduleFile1"' has no exported member 'Foo'.
-
-a/b/moduleFile1.ts(1,16): error TS2304: Cannot find name 'Foo'.
-
-
-12:01:15 AM - Found 3 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
 Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -378,12 +461,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Multiple file edits in one go
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
-
-//// [/a/b/file1Consumer1.ts] file written with same contents
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
@@ -395,53 +472,3 @@ exports.Foo = Foo;
 
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
-
-Output::
->> Screen clear
-12:01:22 AM - File change detected. Starting incremental compilation...
-
-
-
-12:01:32 AM - Found 0 errors. Watching for file changes.
-
-
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"fileName":"/a/b/file1Consumer1.ts","pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"fileName":"/a/b/file1Consumer2.ts","pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"fileName":"/a/b/globalFile3.ts","pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
