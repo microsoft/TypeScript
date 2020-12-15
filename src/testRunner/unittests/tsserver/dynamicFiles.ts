@@ -160,6 +160,7 @@ var x = 10;`
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [],
+                links: [],
                 tags: undefined,
             });
         });

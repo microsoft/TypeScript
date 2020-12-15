@@ -123,7 +123,27 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getLinks(tag: JSDocTag, checker: TypeChecker): JSDocLinkInfo[] | undefined {
+    export function getJsDocLinksFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocLinkInfo[] {
+        // Only collect doc comments from duplicate declarations once.
+        const links: JSDocLinkInfo[] = [];
+        if (!declarations || !checker) {
+            return links;
+        }
+        forEachUnique(declarations, declaration => {
+            for (const comment of getJSDocCommentsAndTags(declaration)) {
+                if (isJSDoc(comment)) {
+                    const newLinks = getLinks(comment, checker);
+                    if (newLinks) {
+                        links.push(...newLinks);
+                    }
+                }
+            }
+        });
+        return links;
+
+    }
+
+    function getLinks(tag: JSDoc | JSDocTag, checker: TypeChecker): JSDocLinkInfo[] | undefined {
         const links = tag.comment?.links;
         if (links) {
             return mapDefined(links, link => {
@@ -209,6 +229,7 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
+            links: undefined,
             tags: undefined,
             codeActions: undefined,
         };
@@ -243,6 +264,7 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
+            links: undefined,
             tags: undefined,
             codeActions: undefined,
         };

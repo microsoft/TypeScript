@@ -73,7 +73,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -174,7 +175,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -223,7 +225,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -324,7 +327,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -373,7 +377,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -450,7 +455,8 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -543,7 +549,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -660,7 +667,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -725,7 +733,8 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -842,7 +851,8 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -907,7 +917,8 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -984,7 +995,8 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   }
 ]

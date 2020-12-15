@@ -51,6 +51,7 @@
           "kind": "text"
         }
       ],
+      "links": [],
       "tags": [
         {
           "name": "type",
@@ -111,6 +112,7 @@
           "kind": "text"
         }
       ],
+      "links": [],
       "tags": [
         {
           "name": "type",
@@ -151,6 +153,7 @@
           "kind": "text"
         }
       ],
+      "links": [],
       "tags": [
         {
           "name": "type",

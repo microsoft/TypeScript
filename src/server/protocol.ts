@@ -1968,6 +1968,11 @@ namespace ts.server.protocol {
         documentation: string;
 
         /**
+         * JSDoc links associated with symbol.
+         */
+        links: JSDocLinkInfo[];
+
+        /**
          * JSDoc tags associated with symbol.
          */
         tags: JSDocTagInfo[];
@@ -2274,6 +2279,11 @@ namespace ts.server.protocol {
         documentation?: SymbolDisplayPart[];
 
         /**
+         * JSDoc links associated with symbol.
+         */
+        links?: JSDocLinkInfo[];
+
+        /**
          * JSDoc tags for the symbol.
          */
         tags?: JSDocTagInfo[];
@@ -2375,6 +2385,11 @@ namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+
+        /**
+         * JSDoc links associated with symbol.
+         */
+        links: JSDocLinkInfo[];
 
         /**
          * The signature's JSDoc tags

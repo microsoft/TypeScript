@@ -1273,19 +1273,19 @@ namespace ts.server {
                 result;
         }
 
-        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
-            if (tags === undefined) {
+        private mapJSDocLinkInfo(links: JSDocLinkInfo[] | undefined, project: Project): protocol.JSDocLinkInfo[] {
+            if (links === undefined) {
                 return [];
             }
-            return tags.map(({ name, text, links }) => ({
-                name,
-                text,
-                links: links?.map(link => ({
+            return links.map(link => ({
                     ...link,
                     name: this.toFileSpan(link.fileName, link.name, project),
                     target: this.toFileSpan(link.target.fileName, link.target.textSpan, project),
-                }))
             }));
+        }
+
+        private mapJSDocTagInfo(tags: JSDocTagInfo[] | undefined, project: Project): protocol.JSDocTagInfo[] {
+            return tags ? tags.map(tag => ({ ...tag, links: this.mapJSDocLinkInfo(tag.links, project) })) : [];
         }
 
         private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
@@ -1710,6 +1710,7 @@ namespace ts.server {
                     end: scriptInfo.positionToLineOffset(textSpanEnd(quickInfo.textSpan)),
                     displayString,
                     documentation: docString,
+                    links: this.mapJSDocLinkInfo(quickInfo.links, project),
                     tags: this.mapJSDocTagInfo(quickInfo.tags, project)
                 };
             }
@@ -1859,6 +1860,7 @@ namespace ts.server {
                 : result.map(details => ({
                     ...details,
                     codeActions: map(details.codeActions, action => this.mapCodeAction(action)),
+                    links: this.mapJSDocLinkInfo(details.links, project),
                     tags: this.mapJSDocTagInfo(details.tags, project)
                 }));
         }

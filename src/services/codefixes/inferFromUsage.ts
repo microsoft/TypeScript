@@ -281,7 +281,8 @@ namespace ts.codefix {
         setAccessorDeclaration: SetAccessorDeclaration,
         program: Program,
         host: LanguageServiceHost,
-        cancellationToken: CancellationToken,
+        cancellationToken: CancellationToken,
+
 
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);

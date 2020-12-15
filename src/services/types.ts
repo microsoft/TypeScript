@@ -44,6 +44,7 @@ namespace ts {
         /* @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
+        getJsDocLinks(checker: TypeChecker): JSDocLinkInfo[];
     }
 
     export interface Type {
@@ -84,6 +85,7 @@ namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        getJsDocLinks(): JSDocLinkInfo[];
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -1034,7 +1036,7 @@ namespace ts {
     export interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLinkInfo[];
+        links?: JSDocLinkInfo[];
     }
 
     export interface JSDocLinkInfo extends DocumentSpan {
@@ -1048,6 +1050,7 @@ namespace ts {
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
+        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
     }
 
@@ -1100,6 +1103,7 @@ namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        links: JSDocLinkInfo[];
         tags: JSDocTagInfo[];
     }
 
@@ -1158,6 +1162,7 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
+        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];

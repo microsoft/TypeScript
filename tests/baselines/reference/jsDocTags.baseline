@@ -67,6 +67,7 @@
           "kind": "text"
         }
       ],
+      "links": [],
       "tags": [
         {
           "name": "myjsdoctag",
@@ -113,6 +114,7 @@
           "kind": "text"
         }
       ],
+      "links": [],
       "tags": [
         {
           "name": "mytag",
@@ -189,6 +191,7 @@
           "kind": "text"
         }
       ],
+      "links": [],
       "tags": [
         {
           "name": "mytag",
@@ -266,6 +269,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "mytag"
@@ -342,6 +346,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "returns",
@@ -435,6 +440,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "param",
@@ -505,6 +511,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "mytag",
@@ -568,6 +575,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "mytag1",
@@ -649,6 +657,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "mytag"

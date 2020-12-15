@@ -64,6 +64,7 @@ namespace ts.projectSystem {
                     displayPart("0", SymbolDisplayPartKind.stringLiteral),
                 ],
                 documentation: emptyArray,
+                links: [],
                 kind: ScriptElementKind.constElement,
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",

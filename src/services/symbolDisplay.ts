@@ -131,6 +131,7 @@ namespace ts.SymbolDisplay {
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        links: JSDocLinkInfo[] | undefined;
         symbolKind: ScriptElementKind;
         tags: JSDocTagInfo[] | undefined;
     }
@@ -141,6 +142,7 @@ namespace ts.SymbolDisplay {
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[] = [];
         let tags: JSDocTagInfo[] = [];
+        let links: JSDocLinkInfo[] = [];
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
         let hasAddedSymbolInfo = false;
@@ -152,7 +154,7 @@ namespace ts.SymbolDisplay {
         let hasMultipleSignatures = false;
 
         if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
-            return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
+            return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, links: undefined, tags: undefined };
         }
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
@@ -531,6 +533,7 @@ namespace ts.SymbolDisplay {
 
         if (documentation.length === 0 && !hasMultipleSignatures) {
             documentation = symbol.getContextualDocumentationComment(enclosingDeclaration, typeChecker);
+            links = symbol.getJsDocLinks(typeChecker);
         }
 
         if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
@@ -549,6 +552,7 @@ namespace ts.SymbolDisplay {
                     }
 
                     documentation = rhsSymbol.getDocumentationComment(typeChecker);
+                    links = rhsSymbol.getJsDocLinks(typeChecker);
                     tags = rhsSymbol.getJsDocTags(typeChecker);
                     if (documentation.length > 0) {
                         break;
@@ -569,7 +573,7 @@ namespace ts.SymbolDisplay {
             tags = tagsFromAlias;
         }
 
-        return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
+        return { displayParts, documentation, links, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
         function getPrinter() {
             if (!printer) {
@@ -652,6 +656,7 @@ namespace ts.SymbolDisplay {
             }
             documentation = signature.getDocumentationComment(typeChecker);
             tags = signature.getJsDocTags();
+            links = signature.getJsDocLinks();
 
             if (allSignatures.length > 1 && documentation.length === 0 && tags.length === 0) {
                 documentation = allSignatures[0].getDocumentationComment(typeChecker);

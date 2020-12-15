@@ -292,13 +292,11 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
+        tags?: JSDocTagInfo[]; // same
+        links?: JSDocLinkInfo[]; // same
 
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
-
-        // Undefined is used to indicate the value has not been computed. If, after computing, the
-        // symbol has no JSDoc tags, then the empty array will be returned.
-        tags?: JSDocTagInfo[];
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
@@ -357,6 +355,14 @@ namespace ts {
                 default:
                     return this.getDocumentationComment(checker);
             }
+        }
+
+        getJsDocLinks(checker: TypeChecker): JSDocLinkInfo[] {
+            if (this.links === undefined) {
+                this.links = JsDoc.getJsDocLinksFromDeclarations(this.declarations, checker);
+            }
+
+            return this.links;
         }
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
@@ -521,10 +527,8 @@ namespace ts {
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
-
-        // Undefined is used to indicate the value has not been computed. If, after computing, the
-        // symbol has no doc comment, then the empty array will be returned.
-        jsDocTags?: JSDocTagInfo[];
+        jsDocTags?: JSDocTagInfo[]; // same
+        jsDocLinks?: JSDocLinkInfo[]; // same
 
         constructor(checker: TypeChecker, flags: SignatureFlags) {
             this.checker = checker;
@@ -546,6 +550,14 @@ namespace ts {
 
         getDocumentationComment(): SymbolDisplayPart[] {
             return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
+        }
+
+        getJsDocLinks(): JSDocLinkInfo[] {
+            if (this.jsDocLinks === undefined) {
+                this.jsDocLinks = this.declaration ? JsDoc.getJsDocLinksFromDeclarations([this.declaration], this.checker) : [];
+            }
+
+            return this.jsDocLinks;
         }
 
         getJsDocTags(): JSDocTagInfo[] {
@@ -1598,11 +1610,12 @@ namespace ts {
                     textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                     displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
+                    links: type.symbol ? type.symbol.getJsDocLinks(typeChecker): undefined,
                     tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined
                 };
             }
 
-            const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
+            const { symbolKind, displayParts, documentation, links, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
                 SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
             );
             return {
@@ -1611,6 +1624,7 @@ namespace ts {
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,
+                links,
                 tags,
             };
         }

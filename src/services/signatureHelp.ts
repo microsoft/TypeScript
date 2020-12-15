@@ -564,9 +564,10 @@ namespace ts.SignatureHelp {
         const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
         const documentation = symbol.getDocumentationComment(checker);
+        const links = symbol.getJsDocLinks(checker);
         const tags = symbol.getJsDocTags(checker);
         const prefixDisplayParts = [...typeSymbolDisplay, punctuationPart(SyntaxKind.LessThanToken)];
-        return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, tags };
+        return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, links, tags };
     }
 
     const separatorDisplayParts: SymbolDisplayPart[] = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
@@ -577,8 +578,9 @@ namespace ts.SignatureHelp {
             const prefixDisplayParts = [...callTargetDisplayParts, ...prefix];
             const suffixDisplayParts = [...suffix, ...returnTypeToDisplayParts(candidateSignature, enclosingDeclaration, checker)];
             const documentation = candidateSignature.getDocumentationComment(checker);
+            const links = candidateSignature.getJsDocLinks();
             const tags = candidateSignature.getJsDocTags();
-            return { isVariadic, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters, documentation, tags };
+            return { isVariadic, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters, documentation, links, tags };
         });
     }
 

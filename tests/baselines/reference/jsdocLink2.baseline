@@ -51,6 +51,26 @@
           "kind": "text"
         }
       ],
+      "links": [
+        {
+          "fileName": "/tests/cases/fourslash/script.ts",
+          "textSpan": {
+            "start": 7,
+            "length": 9
+          },
+          "name": {
+            "start": 14,
+            "length": 1
+          },
+          "target": {
+            "fileName": "/tests/cases/fourslash/jsdocLink2.ts",
+            "textSpan": {
+              "start": 0,
+              "length": 11
+            }
+          }
+        }
+      ],
       "tags": [
         {
           "name": "wat",

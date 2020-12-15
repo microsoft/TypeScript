@@ -15,6 +15,18 @@
 //// a.fo/*2*/
 
 verify.completions(
-    { marker: "1", includes: { name: "foo", text: "var foo: (p1: string) => void", documentation: "Modify the parameter", tags: [{ name: "param", text: "p1", links: undefined }] } },
-    { marker: "2", exact: { name: "foo", text: "(alias) var foo: (p1: string) => void\nimport a.foo", documentation: "Modify the parameter", tags: [{ name: "param", text: "p1", links: undefined }] } },
+    { marker: "1", includes: {
+        name: "foo",
+        text: "var foo: (p1: string) => void",
+        documentation: "Modify the parameter",
+        links: [],
+        tags: [{ name: "param", text: "p1", links: [] }]
+    } },
+    { marker: "2", exact: {
+        name: "foo",
+        text: "(alias) var foo: (p1: string) => void\nimport a.foo",
+        documentation: "Modify the parameter",
+        links: [],
+        tags: [{ name: "param", text: "p1", links: [] }]
+    } },
 );

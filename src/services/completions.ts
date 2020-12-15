@@ -693,15 +693,15 @@ namespace ts.Completions {
     }
 
     export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
-        const { displayParts, documentation, symbolKind, tags } =
+        const { displayParts, documentation, links, symbolKind, tags } =
             checker.runWithCancellationToken(cancellationToken, checker =>
                 SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
             );
-        return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
+        return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, links, tags, codeActions, sourceDisplay);
     }
 
-    export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
-        return { name, kindModifiers, kind, displayParts, documentation, tags, codeActions, source };
+    export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], links?: JSDocLinkInfo[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
+        return { name, kindModifiers, kind, displayParts, documentation, links, tags, codeActions, source };
     }
 
     interface CodeActionsAndSourceDisplay {

@@ -46,6 +46,7 @@
         }
       ],
       "documentation": [],
+      "links": [],
       "tags": [
         {
           "name": "param",
@@ -100,7 +101,8 @@
           "kind": "keyword"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   }
 ]

@@ -5302,6 +5302,7 @@ declare namespace ts {
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
+        getJsDocLinks(checker: TypeChecker): JSDocLinkInfo[];
     }
     interface Type {
         getFlags(): TypeFlags;
@@ -5336,6 +5337,7 @@ declare namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        getJsDocLinks(): JSDocLinkInfo[];
         getJsDocTags(): JSDocTagInfo[];
     }
     interface SourceFile {
@@ -5996,7 +5998,7 @@ declare namespace ts {
     interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLinkInfo[];
+        links?: JSDocLinkInfo[];
     }
     interface JSDocLinkInfo extends DocumentSpan {
         name: TextSpan;
@@ -6008,6 +6010,7 @@ declare namespace ts {
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
+        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
@@ -6055,6 +6058,7 @@ declare namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        links: JSDocLinkInfo[];
         tags: JSDocTagInfo[];
     }
     /**
@@ -6107,6 +6111,7 @@ declare namespace ts {
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
+        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];
@@ -7957,6 +7962,10 @@ declare namespace ts.server.protocol {
          */
         documentation: string;
         /**
+         * JSDoc links associated with symbol.
+         */
+        links: JSDocLinkInfo[];
+        /**
          * JSDoc tags associated with symbol.
          */
         tags: JSDocTagInfo[];
@@ -8229,6 +8238,10 @@ declare namespace ts.server.protocol {
          */
         documentation?: SymbolDisplayPart[];
         /**
+         * JSDoc links associated with symbol.
+         */
+        links?: JSDocLinkInfo[];
+        /**
          * JSDoc tags for the symbol.
          */
         tags?: JSDocTagInfo[];
@@ -8312,6 +8325,10 @@ declare namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+        /**
+         * JSDoc links associated with symbol.
+         */
+        links: JSDocLinkInfo[];
         /**
          * The signature's JSDoc tags
          */
@@ -10007,6 +10024,7 @@ declare namespace ts.server {
         private mapDefinitionInfoLocations;
         private getDefinitionAndBoundSpan;
         private getEmitOutput;
+        private mapJSDocLinkInfo;
         private mapJSDocTagInfo;
         private mapDefinitionInfo;
         private static mapToOriginalLocation;

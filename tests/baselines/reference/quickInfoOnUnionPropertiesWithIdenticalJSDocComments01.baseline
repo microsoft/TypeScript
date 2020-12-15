@@ -54,7 +54,8 @@
           "text": "A language id, like `typescript`.",
           "kind": "text"
         }
-      ]
+      ],
+      "links": []
     }
   }
 ]

@@ -25,7 +25,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -70,7 +71,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -99,7 +101,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -140,7 +143,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -185,7 +189,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -234,7 +239,8 @@
           "kind": "className"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   }
 ]

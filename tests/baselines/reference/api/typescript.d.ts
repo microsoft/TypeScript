@@ -5302,6 +5302,7 @@ declare namespace ts {
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
+        getJsDocLinks(checker: TypeChecker): JSDocLinkInfo[];
     }
     interface Type {
         getFlags(): TypeFlags;
@@ -5336,6 +5337,7 @@ declare namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        getJsDocLinks(): JSDocLinkInfo[];
         getJsDocTags(): JSDocTagInfo[];
     }
     interface SourceFile {
@@ -5996,7 +5998,7 @@ declare namespace ts {
     interface JSDocTagInfo {
         name: string;
         text?: string;
-        links?: readonly JSDocLinkInfo[];
+        links?: JSDocLinkInfo[];
     }
     interface JSDocLinkInfo extends DocumentSpan {
         name: TextSpan;
@@ -6008,6 +6010,7 @@ declare namespace ts {
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
+        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
     }
     type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
@@ -6055,6 +6058,7 @@ declare namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        links: JSDocLinkInfo[];
         tags: JSDocTagInfo[];
     }
     /**
@@ -6107,6 +6111,7 @@ declare namespace ts {
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation?: SymbolDisplayPart[];
+        links?: JSDocLinkInfo[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
         source?: SymbolDisplayPart[];

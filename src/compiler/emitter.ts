@@ -3653,7 +3653,7 @@ namespace ts {
             emitJSDocComment(tag.comment);
         }
 
-        function emitJSDocTypeLiteral(lit:JSDocTypeLiteral) {
+        function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
             emitList(lit, factory.createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
         }
 

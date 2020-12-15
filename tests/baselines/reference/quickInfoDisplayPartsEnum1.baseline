@@ -25,7 +25,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -86,7 +87,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -147,7 +149,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -208,7 +211,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -249,7 +253,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -278,7 +283,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -319,7 +325,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -348,7 +355,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -409,7 +417,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -450,7 +459,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -479,7 +489,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -540,7 +551,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -581,7 +593,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -610,7 +623,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -671,7 +685,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -708,7 +723,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -769,7 +785,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -830,7 +847,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -891,7 +909,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -932,7 +951,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -969,7 +989,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1010,7 +1031,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1047,7 +1069,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1108,7 +1131,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1149,7 +1173,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1186,7 +1211,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1247,7 +1273,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1288,7 +1315,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1325,7 +1353,8 @@
           "kind": "enumName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   },
   {
@@ -1386,7 +1415,8 @@
           "kind": "numericLiteral"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "links": []
     }
   }
 ]
