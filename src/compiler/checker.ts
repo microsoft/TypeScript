@@ -17271,6 +17271,8 @@ namespace ts {
             function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
+                // We strip `undefined` from the target if the `source` trivially doesn't contain it for our correspondence-checking fastpath
+                // since `undefined` is frequently added by optionality and would otherwise spoil a potentially useful correspondence
                 const undefinedStrippedTarget = getUndefinedStrippedTargetIfNeeded(source, target as UnionType);
                 for (let i = 0; i < sourceTypes.length; i++) {
                     const sourceType = sourceTypes[i];
