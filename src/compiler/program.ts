@@ -3157,7 +3157,7 @@ namespace ts {
                 }
 
                 if (options.preserveConstEnums === false) {
-                    createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_requires_preserveConstEnum_as_constants_are_not_inlined_in_this_mode, "isolatedModules", "preserveConstEnums");
+                    createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_isolatedModules_is_enabled, "preserveConstEnums", "isolatedModules");
                 }
 
                 const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !isSourceFileJS(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);

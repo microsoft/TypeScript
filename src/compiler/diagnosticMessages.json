@@ -3789,7 +3789,7 @@
         "category": "Error",
         "code": 5090
     },
-    "Option 'isolatedModules' requires 'preserveConstEnum', as constants are not inlined in this mode.": {
+    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 5091
     },
