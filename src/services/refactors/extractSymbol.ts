@@ -13,7 +13,10 @@ namespace ts.refactor.extractSymbol {
         refactorKind: "refactor.extract.function",
     };
     registerRefactor(refactorName, {
-        actions: [extractConstantAction, extractFunctionAction],
+        refactorKinds: [
+            extractConstantAction.refactorKind,
+            extractFunctionAction.refactorKind
+        ],
         getAvailableActions,
         getEditsForAction
     });

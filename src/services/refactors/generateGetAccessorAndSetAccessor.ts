@@ -9,7 +9,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         refactorKind: "refactor.rewrite.property.generateAccessors",
     };
     registerRefactor(actionName, {
-        actions: [generateGetSetAction],
+        refactorKinds: [generateGetSetAction.refactorKind],
         getEditsForAction(context, actionName) {
             if (!context.endPosition) return undefined;
             const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);

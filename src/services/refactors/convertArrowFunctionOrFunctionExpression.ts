@@ -8,21 +8,22 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         description: getLocaleSpecificMessage(Diagnostics.Convert_to_anonymous_function),
         refactorKind: "refactor.rewrite.function.anonymous",
     };
-
     const toNamedFunctionAction = {
         name: "Convert to named function",
         description: getLocaleSpecificMessage(Diagnostics.Convert_to_named_function),
         refactorKind: "refactor.rewrite.function.named",
     };
-
     const toArrowFunctionAction = {
         name: "Convert to arrow function",
         description: getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function),
         refactorKind: "refactor.rewrite.function.arrow",
     };
-
     registerRefactor(refactorName, {
-        actions: [toAnonymousFunctionAction, toNamedFunctionAction, toArrowFunctionAction],
+        refactorKinds: [
+            toAnonymousFunctionAction.refactorKind,
+            toNamedFunctionAction.refactorKind,
+            toArrowFunctionAction.refactorKind
+        ],
         getEditsForAction,
         getAvailableActions
     });

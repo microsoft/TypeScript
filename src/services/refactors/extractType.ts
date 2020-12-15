@@ -1,9 +1,6 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Extract type";
-    const extractToTypeAlias = "Extract to type alias";
-    const extractToInterface = "Extract to interface";
-    const extractToTypeDef = "Extract to typedef";
 
     const extractToTypeAliasAction = {
         name: "Extract to type alias",
@@ -22,10 +19,10 @@ namespace ts.refactor {
     };
 
     registerRefactor(refactorName, {
-        actions: [
-            extractToTypeAliasAction,
-            extractToInterfaceAction,
-            extractToTypeDefAction
+        refactorKinds: [
+            extractToTypeAliasAction.refactorKind,
+            extractToInterfaceAction.refactorKind,
+            extractToTypeDefAction.refactorKind
         ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
@@ -62,13 +59,13 @@ namespace ts.refactor {
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
                 switch (actionName) {
-                    case extractToTypeAlias:
+                    case extractToTypeAliasAction.name:
                         Debug.assert(!info.isJS, "Invalid actionName/JS combo");
                         return doTypeAliasChange(changes, file, name, info);
-                    case extractToTypeDef:
+                    case extractToTypeDefAction.name:
                         Debug.assert(info.isJS, "Invalid actionName/JS combo");
                         return doTypedefChange(changes, file, name, info);
-                    case extractToInterface:
+                    case extractToInterfaceAction.name:
                         Debug.assert(!info.isJS && !!info.typeElements, "Invalid actionName/JS combo");
                         return doInterfaceChange(changes, file, name, info as InterfaceInfo);
                     default:

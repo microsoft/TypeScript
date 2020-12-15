@@ -8,14 +8,15 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         description: Diagnostics.Add_braces_to_arrow_function.message,
         refactorKind: "refactor.rewrite.arrow.braces.add",
     };
-
     const removeBracesAction = {
         name: "Remove braces from arrow function",
         description: Diagnostics.Remove_braces_from_arrow_function.message,
         refactorKind: "refactor.rewrite.arrow.braces.remove"
     };
-
-    registerRefactor(refactorName, { actions: [removeBracesAction], getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, {
+        refactorKinds: [removeBracesAction.refactorKind],
+        getEditsForAction,
+        getAvailableActions });
 
     interface FunctionBracesInfo {
         func: ArrowFunction;

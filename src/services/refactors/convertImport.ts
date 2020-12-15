@@ -14,9 +14,9 @@ namespace ts.refactor {
     };
 
     registerRefactor(refactorName, {
-        actions: [
-            namespaceToNamedAction,
-            namedToNamespaceAction
+        refactorKinds: [
+            namespaceToNamedAction.refactorKind,
+            namedToNamespaceAction.refactorKind
         ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getImportToConvert(context, context.triggerReason === "invoked");

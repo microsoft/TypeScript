@@ -8,7 +8,11 @@ namespace ts.refactor.inferFunctionReturnType {
         description: refactorDescription,
         refactorKind: "refactor.rewrite.function.returnType"
     };
-    registerRefactor(refactorName, { actions: [inferReturnTypeAction], getEditsForAction, getAvailableActions });
+    registerRefactor(refactorName, {
+        refactorKinds: [inferReturnTypeAction.refactorKind],
+        getEditsForAction,
+        getAvailableActions
+    });
 
     function getEditsForAction(context: RefactorContext): RefactorEditInfo | undefined {
         const info = getInfo(context);

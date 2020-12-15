@@ -8,7 +8,11 @@ namespace ts.refactor.convertToOptionalChainExpression {
         description: convertToOptionalChainExpressionMessage,
         refactorKind: "refactor.rewrite.expression.optionalChain",
     };
-    registerRefactor(refactorName, { actions: [toOptionalChainAction], getAvailableActions, getEditsForAction });
+    registerRefactor(refactorName, {
+        refactorKinds: [toOptionalChainAction.refactorKind],
+        getAvailableActions,
+        getEditsForAction
+    });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");

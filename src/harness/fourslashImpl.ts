@@ -3374,7 +3374,7 @@ namespace FourSlash {
 
         public verifyRefactorKindsAvailable(refactorKind: string, expected: string[], preferences = ts.emptyOptions) {
             const refactors = this.getApplicableRefactorsAtSelection("invoked", refactorKind, preferences);
-            const availableKinds = refactors.reduce((a, b) => [...a, ...b.actions.map((action) => action.refactorKind)], []);
+            const availableKinds = ts.flatMap(refactors, refactor => refactor.actions).map(action => action.refactorKind);
             assert.deepEqual(availableKinds.sort(), expected.sort(), `Expected refactorKinds to be equal`);
         }
 

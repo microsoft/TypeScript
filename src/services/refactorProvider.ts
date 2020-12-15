@@ -12,7 +12,7 @@ namespace ts.refactor {
     export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
         return arrayFrom(flatMapIterator(refactors.values(), refactor =>
             context.cancellationToken && context.cancellationToken.isCancellationRequested() ?
-            undefined : !refactor.actions?.some(kind => kind.refactorKind && refactorKindBeginsWith(kind.refactorKind, context.refactorKind)) ?
+            undefined : !refactor.refactorKinds?.some(kind => refactorKindBeginsWith(kind, context.refactorKind)) ?
             undefined : refactor.getAvailableActions(context)));
     }
 

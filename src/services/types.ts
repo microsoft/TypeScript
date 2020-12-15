@@ -1468,8 +1468,9 @@ namespace ts {
 
     /** @internal */
     export interface Refactor {
-        /** list of actions a refactor can provide */
-        actions?: RefactorActionInfo[];
+        /** List of action refactorKinds a refactor can provide.
+         * Used to skip unnecessary calculation when specific refactors are requested. */
+        refactorKinds?: string[];
 
         /** Compute the associated code actions */
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;

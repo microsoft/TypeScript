@@ -105,7 +105,7 @@ namespace ts.codefix {
         return modifierFlags;
     }
 
-    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): AccessorInfo | Info | undefined {
+    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): Info | undefined {
         const node = getTokenAtPosition(file, start);
         const cursorRequest = start === end && considerEmptySpans;
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
