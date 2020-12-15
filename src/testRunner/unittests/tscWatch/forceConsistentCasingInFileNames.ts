@@ -113,7 +113,7 @@ export const Fragment: unique symbol;
                     path: `${projectRoot}/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
-                        files: ["node_modules/react/Jsx-runtime/index.d.ts", "index.tsx"]
+                        files: ["node_modules/react/jsx-Runtime/index.d.ts", "index.tsx"] // NB: casing does not match disk
                     })
                 }
             ], { currentDirectory: projectRoot }),
