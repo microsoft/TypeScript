@@ -4204,15 +4204,15 @@ namespace ts {
         }
 
         // @api
-        function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: JSDocCommentText | undefined) {
+        function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | JSDocCommentText | undefined) {
             const node = createBaseNode<T>(kind);
             node.tagName = tagName;
-            node.comment = comment;
+            node.comment = typeof comment === "string" ? createJSDocCommentText(comment) : comment;
             return node;
         }
 
         // @api
-        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: JSDocCommentText): JSDocTemplateTag {
+        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | JSDocCommentText): JSDocTemplateTag {
             const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName ?? createIdentifier("template"), comment);
             node.constraint = constraint;
             node.typeParameters = createNodeArray(typeParameters);
@@ -4220,7 +4220,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: JSDocCommentText | undefined): JSDocTemplateTag {
+        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | JSDocCommentText | undefined): JSDocTemplateTag {
             return node.tagName !== tagName
                 || node.constraint !== constraint
                 || node.typeParameters !== typeParameters
@@ -4230,7 +4230,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: JSDocCommentText): JSDocTypedefTag {
+        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | JSDocCommentText): JSDocTypedefTag {
             const node = createBaseJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName ?? createIdentifier("typedef"), comment);
             node.typeExpression = typeExpression;
             node.fullName = fullName;
@@ -4239,7 +4239,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: JSDocCommentText | undefined): JSDocTypedefTag {
+        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | JSDocCommentText | undefined): JSDocTypedefTag {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -4249,7 +4249,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: JSDocCommentText): JSDocParameterTag {
+        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | JSDocCommentText): JSDocParameterTag {
             const node = createBaseJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName ?? createIdentifier("param"), comment);
             node.typeExpression = typeExpression;
             node.name = name;
@@ -4259,7 +4259,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: JSDocCommentText | undefined): JSDocParameterTag {
+        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | JSDocCommentText | undefined): JSDocParameterTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4271,7 +4271,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: JSDocCommentText): JSDocPropertyTag {
+        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | JSDocCommentText): JSDocPropertyTag {
             const node = createBaseJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName ?? createIdentifier("prop"), comment);
             node.typeExpression = typeExpression;
             node.name = name;
@@ -4281,7 +4281,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: JSDocCommentText | undefined): JSDocPropertyTag {
+        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | JSDocCommentText | undefined): JSDocPropertyTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4293,7 +4293,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: JSDocCommentText): JSDocCallbackTag {
+        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | JSDocCommentText): JSDocCallbackTag {
             const node = createBaseJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName ?? createIdentifier("callback"), comment);
             node.typeExpression = typeExpression;
             node.fullName = fullName;
@@ -4302,7 +4302,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: JSDocCommentText | undefined): JSDocCallbackTag {
+        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | JSDocCommentText | undefined): JSDocCallbackTag {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -4312,14 +4312,14 @@ namespace ts {
         }
 
         // @api
-        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: JSDocCommentText): JSDocAugmentsTag {
+        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | JSDocCommentText): JSDocAugmentsTag {
             const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
             node.class = className;
             return node;
         }
 
         // @api
-        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocAugmentsTag["class"], comment: JSDocCommentText | undefined): JSDocAugmentsTag {
+        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocAugmentsTag["class"], comment: string | JSDocCommentText | undefined): JSDocAugmentsTag {
             return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
@@ -4328,21 +4328,21 @@ namespace ts {
         }
 
         // @api
-        function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: JSDocCommentText): JSDocImplementsTag {
+        function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | JSDocCommentText): JSDocImplementsTag {
             const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
             node.class = className;
             return node;
         }
 
         // @api
-        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: JSDocCommentText): JSDocSeeTag {
+        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | JSDocCommentText): JSDocSeeTag {
             const node = createBaseJSDocTag<JSDocSeeTag>(SyntaxKind.JSDocSeeTag, tagName ?? createIdentifier("see"), comment);
             node.name = name;
             return node;
         }
 
         // @api
-        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: JSDocCommentText): JSDocSeeTag {
+        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | JSDocCommentText): JSDocSeeTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.comment !== comment
@@ -4379,7 +4379,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocImplementsTag["class"], comment: JSDocCommentText | undefined): JSDocImplementsTag {
+        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocImplementsTag["class"], comment: string | JSDocCommentText | undefined): JSDocImplementsTag {
             return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
@@ -4395,7 +4395,7 @@ namespace ts {
         // createJSDocProtectedTag
         // createJSDocReadonlyTag
         // createJSDocDeprecatedTag
-        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], tagName: Identifier | undefined, comment?: JSDocCommentText) {
+        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], tagName: Identifier | undefined, comment?: string | JSDocCommentText) {
             const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
             return node;
         }
@@ -4408,7 +4408,7 @@ namespace ts {
         // updateJSDocProtectedTag
         // updateJSDocReadonlyTag
         // updateJSDocDeprecatedTag
-        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: JSDocCommentText | undefined) {
+        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: string | JSDocCommentText | undefined) {
             return node.tagName !== tagName
                 || node.comment !== comment
                 ? update(createJSDocSimpleTagWorker(kind, tagName, comment), node) :
@@ -4420,7 +4420,7 @@ namespace ts {
         // createJSDocReturnTag
         // createJSDocThisTag
         // createJSDocEnumTag
-        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: JSDocCommentText) {
+        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | JSDocCommentText) {
             const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
             node.typeExpression = typeExpression;
             return node;
@@ -4431,7 +4431,7 @@ namespace ts {
         // updateJSDocReturnTag
         // updateJSDocThisTag
         // updateJSDocEnumTag
-        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: JSDocCommentText | undefined) {
+        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | JSDocCommentText | undefined) {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
@@ -4440,13 +4440,13 @@ namespace ts {
         }
 
         // @api
-        function createJSDocUnknownTag(tagName: Identifier, comment?: JSDocCommentText): JSDocUnknownTag {
+        function createJSDocUnknownTag(tagName: Identifier, comment?: string | JSDocCommentText): JSDocUnknownTag {
             const node = createBaseJSDocTag<JSDocUnknownTag>(SyntaxKind.JSDocTag, tagName, comment);
             return node;
         }
 
         // @api
-        function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: JSDocCommentText | undefined): JSDocUnknownTag {
+        function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | JSDocCommentText | undefined): JSDocUnknownTag {
             return node.tagName !== tagName
                 || node.comment !== comment
                 ? update(createJSDocUnknownTag(tagName, comment), node)
@@ -4470,15 +4470,15 @@ namespace ts {
         }
 
         // @api
-        function createJSDocComment(comment?: JSDocCommentText | undefined, tags?: readonly JSDocTag[] | undefined) {
+        function createJSDocComment(comment?: string | JSDocCommentText | undefined, tags?: readonly JSDocTag[] | undefined) {
             const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
-            node.comment = comment;
+            node.comment = typeof comment === "string" ? createJSDocCommentText(comment) : comment;
             node.tags = asNodeArray(tags);
             return node;
         }
 
         // @api
-        function updateJSDocComment(node: JSDoc, comment: JSDocCommentText | undefined, tags: readonly JSDocTag[] | undefined) {
+        function updateJSDocComment(node: JSDoc, comment: string | JSDocCommentText | undefined, tags: readonly JSDocTag[] | undefined) {
             return node.comment !== comment
                 || node.tags !== tags
                 ? update(createJSDocComment(comment, tags), node)
