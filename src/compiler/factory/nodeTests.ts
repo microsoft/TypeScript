@@ -787,8 +787,12 @@ namespace ts {
 
     export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
         return node.kind === SyntaxKind.JSDocDeprecatedTag;
-
     }
+
+    export function isJSDocSeeTag(node: Node): node is JSDocSeeTag {
+        return node.kind === SyntaxKind.JSDocSeeTag;
+    }
+
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
         return node.kind === SyntaxKind.JSDocEnumTag;
     }
