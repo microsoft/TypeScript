@@ -1402,7 +1402,7 @@ namespace ts {
             return undefined; // if the token text doesn't appear in the file, there can't be a match - super fast bail
         }
         // we can only use the textual result directly if we didn't have to count any close tokens within the range
-        if (sourceFile.text.slice(bestGuessIndex, tokenFullStart - 1).indexOf(closeTokenText) === -1) {
+        if (sourceFile.text.lastIndexOf(closeTokenText, tokenFullStart - 1) < bestGuessIndex) {
             const nodeAtGuess = findPrecedingToken(bestGuessIndex + 1, sourceFile);
             if (nodeAtGuess && nodeAtGuess.kind === matchingTokenKind) {
                 return nodeAtGuess;
