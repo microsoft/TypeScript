@@ -1,0 +1,1 @@
+(''.match(/ /) || []).map(s => s.toLowerCase());

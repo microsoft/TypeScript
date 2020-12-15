@@ -1,0 +1,34 @@
+=== tests/cases/compiler/subtypeReduceBivariance1.ts ===
+interface S {
+>S : Symbol(S, Decl(subtypeReduceBivariance1.ts, 0, 0), Decl(subtypeReduceBivariance1.ts, 3, 13))
+
+    f(a: number | string): void;
+>f : Symbol(S.f, Decl(subtypeReduceBivariance1.ts, 0, 13))
+>a : Symbol(a, Decl(subtypeReduceBivariance1.ts, 1, 6))
+}
+declare const S: S;
+>S : Symbol(S, Decl(subtypeReduceBivariance1.ts, 0, 0), Decl(subtypeReduceBivariance1.ts, 3, 13))
+>S : Symbol(S, Decl(subtypeReduceBivariance1.ts, 0, 0), Decl(subtypeReduceBivariance1.ts, 3, 13))
+
+function g(a: number): void { }
+>g : Symbol(g, Decl(subtypeReduceBivariance1.ts, 3, 19))
+>a : Symbol(a, Decl(subtypeReduceBivariance1.ts, 4, 11))
+
+// Force type resolution
+g;
+>g : Symbol(g, Decl(subtypeReduceBivariance1.ts, 3, 19))
+
+S.f;
+>S.f : Symbol(S.f, Decl(subtypeReduceBivariance1.ts, 0, 13))
+>S : Symbol(S, Decl(subtypeReduceBivariance1.ts, 0, 0), Decl(subtypeReduceBivariance1.ts, 3, 13))
+>f : Symbol(S.f, Decl(subtypeReduceBivariance1.ts, 0, 13))
+
+const arr: Array<(a: number | string) => void> = [g, S.f];
+>arr : Symbol(arr, Decl(subtypeReduceBivariance1.ts, 10, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(subtypeReduceBivariance1.ts, 10, 18))
+>g : Symbol(g, Decl(subtypeReduceBivariance1.ts, 3, 19))
+>S.f : Symbol(S.f, Decl(subtypeReduceBivariance1.ts, 0, 13))
+>S : Symbol(S, Decl(subtypeReduceBivariance1.ts, 0, 0), Decl(subtypeReduceBivariance1.ts, 3, 13))
+>f : Symbol(S.f, Decl(subtypeReduceBivariance1.ts, 0, 13))
+

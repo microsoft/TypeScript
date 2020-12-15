@@ -194,6 +194,7 @@ namespace ts {
         StrictCallback    = 1 << 1,
         IgnoreReturnTypes = 1 << 2,
         StrictArity       = 1 << 3,
+        IgnoreBivariance  = 1 << 4,
         Callback          = BivariantCallback | StrictCallback,
     }
 
@@ -16280,8 +16281,12 @@ namespace ts {
             }
 
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
-                kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor;
+            const strictVariance = (checkMode & SignatureCheckMode.IgnoreBivariance) ||
+                (!(checkMode & SignatureCheckMode.Callback) &&
+                strictFunctionTypes &&
+                kind !== SyntaxKind.MethodDeclaration &&
+                kind !== SyntaxKind.MethodSignature &&
+                kind !== SyntaxKind.Constructor);
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
@@ -18538,7 +18543,7 @@ namespace ts {
              */
             function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
                 return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                    relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, makeFunctionTypeMapper(reportUnreliableMarkers));
+                    relation === strictSubtypeRelation ? (SignatureCheckMode.StrictArity | SignatureCheckMode.IgnoreBivariance) : 0, reportErrors, reportError, incompatibleReporter, isRelatedTo, makeFunctionTypeMapper(reportUnreliableMarkers));
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {

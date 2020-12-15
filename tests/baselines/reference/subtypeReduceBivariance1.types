@@ -1,0 +1,31 @@
+=== tests/cases/compiler/subtypeReduceBivariance1.ts ===
+interface S {
+    f(a: number | string): void;
+>f : (a: number | string) => void
+>a : string | number
+}
+declare const S: S;
+>S : S
+
+function g(a: number): void { }
+>g : (a: number) => void
+>a : number
+
+// Force type resolution
+g;
+>g : (a: number) => void
+
+S.f;
+>S.f : (a: string | number) => void
+>S : S
+>f : (a: string | number) => void
+
+const arr: Array<(a: number | string) => void> = [g, S.f];
+>arr : ((a: number | string) => void)[]
+>a : string | number
+>[g, S.f] : ((a: number) => void)[]
+>g : (a: number) => void
+>S.f : (a: string | number) => void
+>S : S
+>f : (a: string | number) => void
+

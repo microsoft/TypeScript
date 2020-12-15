@@ -276,14 +276,14 @@ module Errors {
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 
     var r4a = [r4arg2, r4arg1];
->r4a : (new (...x: Base[]) => Base)[]
->[r4arg2, r4arg1] : (new (...x: Base[]) => Base)[]
+>r4a : ((new <T extends Derived>(...x: T[]) => T) | (new (...x: Base[]) => Base))[]
+>[r4arg2, r4arg1] : ((new <T extends Derived>(...x: T[]) => T) | (new (...x: Base[]) => Base))[]
 >r4arg2 : new (...x: Base[]) => Base
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 
     var r4b = [r4arg1, r4arg2];
->r4b : (new (...x: Base[]) => Base)[]
->[r4arg1, r4arg2] : (new (...x: Base[]) => Base)[]
+>r4b : ((new <T extends Derived>(...x: T[]) => T) | (new (...x: Base[]) => Base))[]
+>[r4arg1, r4arg2] : ((new <T extends Derived>(...x: T[]) => T) | (new (...x: Base[]) => Base))[]
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
 >r4arg2 : new (...x: Base[]) => Base
 
@@ -307,14 +307,14 @@ module Errors {
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 
     var r5a = [r5arg2, r5arg1];
->r5a : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->[r5arg2, r5arg1] : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5a : ((new <T extends Derived>(x: T, y: T) => T) | (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
+>[r5arg2, r5arg1] : ((new <T extends Derived>(x: T, y: T) => T) | (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
 >r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 
     var r5b = [r5arg1, r5arg2];
->r5b : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->[r5arg1, r5arg2] : (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
+>r5b : ((new <T extends Derived>(x: T, y: T) => T) | (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
+>[r5arg1, r5arg2] : ((new <T extends Derived>(x: T, y: T) => T) | (new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base))[]
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
 >r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 

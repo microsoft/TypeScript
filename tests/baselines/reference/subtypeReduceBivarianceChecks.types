@@ -1,0 +1,20 @@
+=== tests/cases/compiler/subtypeReduceBivarianceChecks.ts ===
+(''.match(/ /) || []).map(s => s.toLowerCase());
+>(''.match(/ /) || []).map(s => s.toLowerCase()) : any[]
+>(''.match(/ /) || []).map : (<U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>(''.match(/ /) || []) : RegExpMatchArray | undefined[]
+>''.match(/ /) || [] : RegExpMatchArray | undefined[]
+>''.match(/ /) : RegExpMatchArray
+>''.match : (regexp: string | RegExp) => RegExpMatchArray
+>'' : ""
+>match : (regexp: string | RegExp) => RegExpMatchArray
+>/ / : RegExp
+>[] : undefined[]
+>map : (<U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>s => s.toLowerCase() : (s: any) => any
+>s : any
+>s.toLowerCase() : any
+>s.toLowerCase : any
+>s : any
+>toLowerCase : any
+

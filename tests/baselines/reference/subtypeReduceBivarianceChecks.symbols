@@ -1,0 +1,9 @@
+=== tests/cases/compiler/subtypeReduceBivarianceChecks.ts ===
+(''.match(/ /) || []).map(s => s.toLowerCase());
+>(''.match(/ /) || []).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>''.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(subtypeReduceBivarianceChecks.ts, 0, 26))
+>s : Symbol(s, Decl(subtypeReduceBivarianceChecks.ts, 0, 26))
+
