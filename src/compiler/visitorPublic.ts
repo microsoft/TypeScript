@@ -36,7 +36,7 @@ namespace ts {
             return undefined;
         }
         else if (isArray(visited)) {
-            visitedNode = (lift || extractSingleNode)(visited);
+            visitedNode = (lift || extractSingleNode)(visited as unknown as NodeArray<Node>);
         }
         else {
             visitedNode = visited;
