@@ -6978,6 +6978,10 @@ declare namespace ts.server.protocol {
          * the current context.
          */
         notApplicableReason?: string;
+        /**
+         * The hierarchical dotted name of the refactor action.
+         */
+        refactorKind?: string;
     }
     interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
