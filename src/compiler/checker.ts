@@ -336,7 +336,6 @@ namespace ts {
         let totalInstantiationCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
-        let constraintDepth = 0;
         let currentNode: Node | undefined;
 
         const typeCatalog: Type[] = []; // NB: id is index + 1
@@ -11033,7 +11032,6 @@ namespace ts {
             if (type.resolvedBaseConstraint) {
                 return type.resolvedBaseConstraint;
             }
-            let nonTerminating = false;
             const stack: Type[] = [];
             return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type);
 
@@ -11042,22 +11040,16 @@ namespace ts {
                     if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
                         return circularConstraintType;
                     }
-                    if (constraintDepth >= 50) {
-                        // We have reached 50 recursive invocations of getImmediateBaseConstraint and there is a
-                        // very high likelihood we're dealing with an infinite generic type that perpetually generates
-                        // new type identities as we descend into it. We stop the recursion here and mark this type
-                        // and the outer types as having circular constraints.
-                        tracing.instant(tracing.Phase.CheckTypes, "getImmediateBaseConstraint_DepthLimit", { typeId: t.id, originalTypeId: type.id, depth: constraintDepth });
-                        error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
-                        nonTerminating = true;
-                        return t.immediateBaseConstraint = noConstraintType;
-                    }
                     let result;
-                    if (!isDeeplyNestedType(t, stack, stack.length)) {
+                    // We always explore at least 10 levels of nested constraints. Thereafter, we continue to explore
+                    // up to 50 levels of nested constraints provided there are no "deeply nested" types on the stack
+                    // (i.e. no types for which five instantiations have been recorded on the stack). If we reach 50
+                    // levels of nesting, we are presumably exploring a repeating pattern with a long cycle that hasn't
+                    // yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
+                    // nesting, so it is effectively just a safety stop.
+                    if (stack.length < 10 || stack.length < 50 && !isDeeplyNestedType(t, stack, stack.length)) {
                         stack.push(t);
-                        constraintDepth++;
                         result = computeBaseConstraint(getSimplifiedType(t, /*writing*/ false));
-                        constraintDepth--;
                         stack.pop();
                     }
                     if (!popTypeResolution()) {
@@ -11070,9 +11062,6 @@ namespace ts {
                                 }
                             }
                         }
-                        result = circularConstraintType;
-                    }
-                    if (nonTerminating) {
                         result = circularConstraintType;
                     }
                     t.immediateBaseConstraint = result || noConstraintType;
@@ -11125,10 +11114,7 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.Conditional) {
                     const constraint = getConstraintFromConditionalType(<ConditionalType>t);
-                    constraintDepth++; // Penalize repeating conditional types (this captures the recursion within getConstraintFromConditionalType and carries it forward)
-                    const result = constraint && getBaseConstraint(constraint);
-                    constraintDepth--;
-                    return result;
+                    return constraint && getBaseConstraint(constraint);
                 }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
