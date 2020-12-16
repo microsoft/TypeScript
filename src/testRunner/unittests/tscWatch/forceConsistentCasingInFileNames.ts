@@ -161,5 +161,55 @@ a;b;
 
         verifyWindowsStyleRoot("when Windows-style drive root is lowercase", "c:/", "project");
         verifyWindowsStyleRoot("when Windows-style drive root is uppercase", "C:/", "project");
+
+        function verifyFileSymlink(subScenario: string, diskPath: string, targetPath: string, importedPath: string) {
+            verifyTscWatch({
+                scenario: "forceConsistentCasingInFileNames",
+                subScenario,
+                commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+                sys: () => {
+                    const moduleA: File = {
+
+                        path: diskPath,
+                        content: `
+export const a = 1;
+export const b = 2;
+`
+                    };
+                    const symlinkA: SymLink = {
+                        path: `${projectRoot}/link.ts`,
+                        symLink: targetPath,
+                    };
+                    const moduleB: File = {
+                        path: `${projectRoot}/b.ts`,
+                        content: `
+import { a } from "${importedPath}";
+import { b } from "./link";
+
+a;b;
+`
+                    };
+                    const tsconfig: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })
+                    };
+                    return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: projectRoot });
+                },
+                changes: [
+                    {
+                        caption: "Prepend a line to moduleA",
+                        change: sys => sys.prependFile(diskPath, `// some comment
+                        `),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    }
+                ],
+            });
+        }
+
+        verifyFileSymlink("when both file symlink target and import match disk", `${projectRoot}/XY.ts`, `${projectRoot}/XY.ts`, `./XY`);
+        verifyFileSymlink("when file symlink target matches disk but import does not", `${projectRoot}/XY.ts`, `${projectRoot}/Xy.ts`, `./XY`);
+        verifyFileSymlink("when import matches disk but file symlink target does not", `${projectRoot}/XY.ts`, `${projectRoot}/XY.ts`, `./Xy`);
+        verifyFileSymlink("when import and file symlink target agree but do not match disk", `${projectRoot}/XY.ts`, `${projectRoot}/Xy.ts`, `./Xy`);
+        verifyFileSymlink("when import, file symlink target, and disk are all different", `${projectRoot}/XY.ts`, `${projectRoot}/Xy.ts`, `./yX`);
     });
 }
