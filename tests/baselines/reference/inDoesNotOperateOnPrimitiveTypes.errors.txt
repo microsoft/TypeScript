@@ -1,20 +1,27 @@
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(12,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
+tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
 
 
 ==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (1 errors) ====
-    const validHasKey = <A extends object>(
-      thing: A,
+    const validHasKey = <T extends object>(
+      thing: T,
       key: string,
     ): boolean => {
       return key in thing;
     };
     
-    const invalidHasKey = <A>(
-      thing: A,
+    const alsoValidHasKey = <T>(
+      thing: T,
       key: string,
     ): boolean => {
       return key in thing;
+    };
+    
+    function invalidHasKey<T extends string | number>(
+      thing: T,
+      key: string,
+    ): boolean {
+      return key in thing;
                     ~~~~~
 !!! error TS2361: The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.
-    };
+    }
     

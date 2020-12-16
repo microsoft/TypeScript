@@ -1,28 +1,10 @@
 === tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts ===
-const validHasKey = <A extends object>(
->validHasKey : <A extends object>(thing: A, key: string) => boolean
-><A extends object>(  thing: A,  key: string,): boolean => {  return key in thing;} : <A extends object>(thing: A, key: string) => boolean
+const validHasKey = <T extends object>(
+>validHasKey : <T extends object>(thing: T, key: string) => boolean
+><T extends object>(  thing: T,  key: string,): boolean => {  return key in thing;} : <T extends object>(thing: T, key: string) => boolean
 
-  thing: A,
->thing : A
-
-  key: string,
->key : string
-
-): boolean => {
-  return key in thing;
->key in thing : boolean
->key : string
->thing : A
-
-};
-
-const invalidHasKey = <A>(
->invalidHasKey : <A>(thing: A, key: string) => boolean
-><A>(  thing: A,  key: string,): boolean => {  return key in thing;} : <A>(thing: A, key: string) => boolean
-
-  thing: A,
->thing : A
+  thing: T,
+>thing : T
 
   key: string,
 >key : string
@@ -31,7 +13,41 @@ const invalidHasKey = <A>(
   return key in thing;
 >key in thing : boolean
 >key : string
->thing : A
+>thing : T
 
 };
+
+const alsoValidHasKey = <T>(
+>alsoValidHasKey : <T>(thing: T, key: string) => boolean
+><T>(  thing: T,  key: string,): boolean => {  return key in thing;} : <T>(thing: T, key: string) => boolean
+
+  thing: T,
+>thing : T
+
+  key: string,
+>key : string
+
+): boolean => {
+  return key in thing;
+>key in thing : boolean
+>key : string
+>thing : T
+
+};
+
+function invalidHasKey<T extends string | number>(
+>invalidHasKey : <T extends string | number>(thing: T, key: string) => boolean
+
+  thing: T,
+>thing : T
+
+  key: string,
+>key : string
+
+): boolean {
+  return key in thing;
+>key in thing : boolean
+>key : string
+>thing : T
+}
 

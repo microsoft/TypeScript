@@ -1,11 +1,11 @@
 === tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts ===
-const validHasKey = <A extends object>(
+const validHasKey = <T extends object>(
 >validHasKey : Symbol(validHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 5))
->A : Symbol(A, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))
 
-  thing: A,
+  thing: T,
 >thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 39))
->A : Symbol(A, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 0, 21))
 
   key: string,
 >key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 1, 11))
@@ -17,13 +17,13 @@ const validHasKey = <A extends object>(
 
 };
 
-const invalidHasKey = <A>(
->invalidHasKey : Symbol(invalidHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 5))
->A : Symbol(A, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 23))
+const alsoValidHasKey = <T>(
+>alsoValidHasKey : Symbol(alsoValidHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 5))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 25))
 
-  thing: A,
->thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 26))
->A : Symbol(A, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 23))
+  thing: T,
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 28))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 25))
 
   key: string,
 >key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 8, 11))
@@ -31,7 +31,24 @@ const invalidHasKey = <A>(
 ): boolean => {
   return key in thing;
 >key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 8, 11))
->thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 26))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 7, 28))
 
 };
+
+function invalidHasKey<T extends string | number>(
+>invalidHasKey : Symbol(invalidHasKey, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 12, 2))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 23))
+
+  thing: T,
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 50))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 23))
+
+  key: string,
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 15, 11))
+
+): boolean {
+  return key in thing;
+>key : Symbol(key, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 15, 11))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 14, 50))
+}
 
