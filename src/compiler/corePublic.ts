@@ -2,8 +2,10 @@ namespace ts {
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
     export const versionMajorMinor = "4.2";
+    // The following is baselined as a literal template type without intervention
     /** The version of the TypeScript compiler release */
-    export const version = `${versionMajorMinor}.0-dev`;
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+    export const version: string = `${versionMajorMinor}.0-dev`;
 
     /**
      * Type of objects whose values are all of the same type.
