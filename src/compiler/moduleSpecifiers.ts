@@ -388,18 +388,18 @@ namespace ts.moduleSpecifiers {
          * }
          */
         // `import {c} from "m";` is valid, in which case, `moduleSymbol` is "ns", but the module name should be "m"
-        const ambientModuleDeclareCandidates = map(moduleSymbol.declarations,
+        const ambientModuleDeclareCandidates = mapDefined(moduleSymbol.declarations,
             d => {
                 if (!isModuleDeclaration(d)) return;
                 const topNamespace = getTopNamespace(d);
                 if (!(topNamespace?.parent?.parent
                     && isModuleBlock(topNamespace.parent) && isAmbientModule(topNamespace.parent.parent) && isSourceFile(topNamespace.parent.parent.parent))) return;
-                const defaultExport = ((topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier);
-                if (!defaultExport) return;
-                const defaultExportSymbol = checker.getSymbolAtLocation(defaultExport);
-                if (!defaultExportSymbol) return;
-                const originalDefaultExportSymbol = defaultExportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(defaultExportSymbol) : defaultExportSymbol;
-                if (originalDefaultExportSymbol === d.symbol) return topNamespace.parent.parent;
+                const exportAssignment = ((topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier);
+                if (!exportAssignment) return;
+                const exportSymbol = checker.getSymbolAtLocation(exportAssignment);
+                if (!exportSymbol) return;
+                const originalExportSymbol = exportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(exportSymbol) : exportSymbol;
+                if (originalExportSymbol === d.symbol) return topNamespace.parent.parent;
 
                 function getTopNamespace(namespaceDeclaration: ModuleDeclaration) {
                     while (namespaceDeclaration.flags & NodeFlags.NestedNamespace) {
@@ -409,7 +409,7 @@ namespace ts.moduleSpecifiers {
                 }
             }
         );
-        const ambientModuleDeclare = find(ambientModuleDeclareCandidates, d => !!d) as (AmbientModuleDeclaration & { name: StringLiteral }) | undefined;
+        const ambientModuleDeclare = ambientModuleDeclareCandidates[0] as (AmbientModuleDeclaration & { name: StringLiteral }) | undefined;
         if (ambientModuleDeclare) {
             return ambientModuleDeclare.name.text;
         }
