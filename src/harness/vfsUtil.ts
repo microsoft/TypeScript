@@ -1036,8 +1036,11 @@ namespace vfs {
             while (true) {
                 if (depth >= 40) throw createIOError("ELOOP");
                 const lastStep = step === components.length - 1;
-                const basename = components[step];
-                const node = links.get(basename);
+                let basename = components[step];
+                const [key, node] = links.getKeyAndValue(basename);
+                if (key) {
+                    components[step] = basename = key;
+                }
                 if (lastStep && (noFollow || !isSymlink(node))) {
                     return { realpath: vpath.format(components), basename, parent, links, node };
                 }
