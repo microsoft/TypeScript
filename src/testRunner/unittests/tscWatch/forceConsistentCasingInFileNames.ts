@@ -119,5 +119,47 @@ export const Fragment: unique symbol;
             ], { currentDirectory: projectRoot }),
             changes: emptyArray,
         });
+
+        function verifyWindowsStyleRoot(subScenario: string, windowsStyleRoot: string, projectRootRelative: string) {
+            verifyTscWatch({
+                scenario: "forceConsistentCasingInFileNames",
+                subScenario,
+                commandLineArgs: ["--w", "--p", `${windowsStyleRoot}/${projectRootRelative}`, "--explainFiles"],
+                sys: () => {
+                    const moduleA: File = {
+                        path: `${windowsStyleRoot}/${projectRootRelative}/a.ts`,
+                        content: `
+export const a = 1;
+export const b = 2;
+`
+                    };
+                    const moduleB: File = {
+                        path: `${windowsStyleRoot}/${projectRootRelative}/b.ts`,
+                        content: `
+import { a } from "${windowsStyleRoot.toLocaleUpperCase()}/${projectRootRelative}/a"
+import { b } from "${windowsStyleRoot.toLocaleLowerCase()}/${projectRootRelative}/a"
+
+a;b;
+`
+                    };
+                    const tsconfig: File = {
+                        path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })
+                    };
+                    return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
+                },
+                changes: [
+                    {
+                        caption: "Prepend a line to moduleA",
+                        change: sys => sys.prependFile(`${windowsStyleRoot}/${projectRootRelative}/a.ts`, `// some comment
+                        `),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    }
+                ],
+            });
+        }
+
+        verifyWindowsStyleRoot("when Windows-style drive root is lowercase", "c:/", "project");
+        verifyWindowsStyleRoot("when Windows-style drive root is uppercase", "C:/", "project");
     });
 }
