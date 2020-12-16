@@ -10274,7 +10274,7 @@ namespace ts {
                     if (signatures !== masterList) {
                         const signature = signatures[0];
                         Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                        results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
+                        results = signature.typeParameters && some(results, s => !!s.typeParameters && !compareTypeParametersIdentical(signature.typeParameters!, s.typeParameters)) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
                         if (!results) {
                             break;
                         }
@@ -10285,18 +10285,39 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined): Symbol | undefined {
+        function compareTypeParametersIdentical(sourceParams: readonly TypeParameter[], targetParams: readonly TypeParameter[]): boolean {
+            if (sourceParams.length !== targetParams.length) {
+                return false;
+            }
+
+            const mapper = createTypeMapper(targetParams, sourceParams);
+            for (let i = 0; i < sourceParams.length; i++) {
+                const source = sourceParams[i];
+                const target = targetParams[i];
+                if (source === target) continue;
+                // We instantiate the target type parameter constraints into the source types so we can recognize `<T, U extends T>` as the same as `<A, B extends A>`
+                if (!isTypeIdenticalTo(getConstraintFromTypeParameter(source) || unknownType, instantiateType(getConstraintFromTypeParameter(target) || unknownType, mapper))) return false;
+                // We don't compare defaults - we just use the type parameter defaults from the first signature that seems to match.
+                // It might make sense to combine these defaults in the future, but doing so intelligently requires knowing
+                // if the parameter is used covariantly or contravariantly (so we intersect if it's used like a parameter or union if used like a return type)
+                // and, since it's just an inference _default_, just picking one arbitrarily works OK.
+            }
+
+            return true;
+        }
+
+        function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined, mapper: TypeMapper | undefined): Symbol | undefined {
             if (!left || !right) {
                 return left || right;
             }
             // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
             // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
             // permissive when calling, for now, we'll intersect the `this` types just like we do for param types in union signatures.
-            const thisType = getIntersectionType([getTypeOfSymbol(left), getTypeOfSymbol(right)]);
+            const thisType = getIntersectionType([getTypeOfSymbol(left), instantiateType(getTypeOfSymbol(right), mapper)]);
             return createSymbolWithType(left, thisType);
         }
 
-        function combineUnionParameters(left: Signature, right: Signature) {
+        function combineUnionParameters(left: Signature, right: Signature, mapper: TypeMapper | undefined) {
             const leftCount = getParameterCount(left);
             const rightCount = getParameterCount(right);
             const longest = leftCount >= rightCount ? left : right;
@@ -10306,8 +10327,14 @@ namespace ts {
             const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
             const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
             for (let i = 0; i < longestCount; i++) {
-                const longestParamType = tryGetTypeAtPosition(longest, i)!;
-                const shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                let longestParamType = tryGetTypeAtPosition(longest, i)!;
+                if (longest === right) {
+                    longestParamType = instantiateType(longestParamType, mapper);
+                }
+                let shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                if (shorter === right) {
+                    shorterParamType = instantiateType(shorterParamType, mapper);
+                }
                 const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
                 const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
                 const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
@@ -10328,19 +10355,28 @@ namespace ts {
             if (needsExtraRestElement) {
                 const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
                 restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, longestCount));
+                if (shorter === right) {
+                    restParamSymbol.type = instantiateType(restParamSymbol.type, mapper);
+                }
                 params[longestCount] = restParamSymbol;
             }
             return params;
         }
 
         function combineSignaturesOfUnionMembers(left: Signature, right: Signature): Signature {
+            const typeParams = left.typeParameters || right.typeParameters;
+            let paramMapper: TypeMapper | undefined;
+            if (left.typeParameters && right.typeParameters) {
+                paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
+                // We just use the type parameter defaults from the first signature
+            }
             const declaration = left.declaration;
-            const params = combineUnionParameters(left, right);
-            const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter);
+            const params = combineUnionParameters(left, right, paramMapper);
+            const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter, paramMapper);
             const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
             const result = createSignature(
                 declaration,
-                left.typeParameters || right.typeParameters,
+                typeParams,
                 thisParam,
                 params,
                 /*resolvedReturnType*/ undefined,
@@ -10349,6 +10385,9 @@ namespace ts {
                 (left.flags | right.flags) & SignatureFlags.PropagatingFlags
             );
             result.unionSignatures = concatenate(left.unionSignatures || [left], [right]);
+            if (paramMapper) {
+                result.mapper = left.mapper && left.unionSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
+            }
             return result;
         }
 
@@ -11882,7 +11921,7 @@ namespace ts {
                     return errorType;
                 }
                 let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper) :
-                    signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
+                    signature.unionSignatures ? instantiateType(getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype), signature.mapper) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (signature.flags & SignatureFlags.IsInnerCallChain) {
