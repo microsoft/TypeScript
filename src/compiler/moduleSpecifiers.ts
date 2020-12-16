@@ -378,7 +378,7 @@ namespace ts.moduleSpecifiers {
             return decl.name.text;
         }
 
-        // the module could be a namespace, which is default export from an ambient module.
+        // the module could be a namespace, which is export through "export=" from an ambient module.
         /**
          * declare module "m" {
          *     namespace ns {
