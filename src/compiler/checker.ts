@@ -16231,7 +16231,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && (isStrictSignature(target) || isStrictSignature(source));
+            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && (checkMode & SignatureCheckMode.StrictArity || isStrictSignature(target));
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
