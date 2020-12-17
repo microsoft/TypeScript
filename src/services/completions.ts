@@ -2676,7 +2676,7 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+    export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
         const hasCompletionsType = completionsType && completionsType !== contextualType;
         const type = hasCompletionsType && !(completionsType!.flags & TypeFlags.AnyOrUnknown)
             ? checker.getUnionType([contextualType, completionsType!])
