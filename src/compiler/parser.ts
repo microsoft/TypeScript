@@ -523,7 +523,7 @@ namespace ts {
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
             case SyntaxKind.JSDocEnumTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                return visitNode(cbNode, (node as any as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression);
             case SyntaxKind.JSDocSignature:
                 return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
