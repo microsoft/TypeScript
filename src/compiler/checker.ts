@@ -33372,7 +33372,7 @@ namespace ts {
             if (isInJSFile(node)) {
                 const typeTag = getJSDocTypeTag(node);
                 if (typeTag && typeTag.typeExpression && !getContextualCallSignature(getTypeFromTypeNode(typeTag.typeExpression), node)) {
-                    error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_match_the_function_s_signature);
+                    error(typeTag.typeExpression.type, Diagnostics.The_type_of_a_function_declaration_must_match_the_function_s_signature);
                 }
             }
         }
