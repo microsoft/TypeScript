@@ -8021,6 +8021,9 @@ namespace ts {
                 function parseTemplateTagTypeParameter() {
                     const typeParameterPos = getNodePos();
                     const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
+                    if (nodeIsMissing(name)) {
+                        return undefined;
+                    }
                     return finishNode(factory.createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined), typeParameterPos);
                 }
 
@@ -8029,7 +8032,10 @@ namespace ts {
                     const typeParameters = [];
                     do {
                         skipWhitespace();
-                        typeParameters.push(parseTemplateTagTypeParameter());
+                        const node = parseTemplateTagTypeParameter();
+                        if (node !== undefined) {
+                            typeParameters.push(node);
+                        }
                         skipWhitespaceOrAsterisk();
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
                     return createNodeArray(typeParameters, pos);
