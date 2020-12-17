@@ -404,7 +404,7 @@ namespace ts.codefix {
         const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
 
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
-            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, compilerOptions, sourceFile, createModuleSpecifierResolutionHost(program, host) , preferences)
+            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getTypeChecker(), compilerOptions, sourceFile, createModuleSpecifierResolutionHost(program, host), preferences)
                 .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                     // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                     exportedSymbolIsTypeOnly && isJs
