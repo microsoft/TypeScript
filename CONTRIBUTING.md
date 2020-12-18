@@ -78,6 +78,14 @@ The TypeScript repository is relatively large. To save some time, you might want
 
 Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
 
+### Dev Container
+
+This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolate development environment with all the tools you need to start working on TypeScript. To get started with the dev container and VS Code, either:
+
+- Clone the TypeScript repository locally and then use the `Open Folder in Container` command.
+
+- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
+
 ## Contributing bug fixes
 
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog milestone") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
