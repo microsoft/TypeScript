@@ -195,10 +195,10 @@ Most tests generate "baselines" to find differences in output.
 As an example, compiler tests usually emit one file each for
 
 - the `.js` and `.d.ts` output (all in the same `.js` output file),
-- the errors produced by the compiler (`.errors.txt` files),
-- the types of each expression (`.types` files),
-- the symbols for each identifier (`.symbols` files), and
-- the source map outputs for files if a test opts into them (`.js.map` files).
+- the errors produced by the compiler (in an `.errors.txt` file),
+- the types of each expression (in a `.types` file),
+- the symbols for each identifier (in a `.symbols` file), and
+- the source map outputs for files if a test opts into them (in a `.js.map` file).
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
