@@ -196,7 +196,7 @@ Compiler tests generate baselines: one file each for the emitted `.js`, the erro
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
 ```Shell
-gulp diff
+git diff --diff-filter=AM --no-index ./tests/baselines/reference ./tests/baselines/local
 ```
 
 After verifying that the changes in the baselines are correct, run
