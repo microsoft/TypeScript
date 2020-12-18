@@ -239,10 +239,30 @@ namespace ts.Completions {
             //     var x = <div> </ /*1*/
             // The completion list at "1" will contain "div>" with type any
             // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
-            const tagName = location.parent.parent.openingElement.tagName;
             const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
+            const tagName = location.parent.parent.openingElement.tagName;
+            const children = location.parent.getChildren(sourceFile);
+            let closingExpression = tagName.getFullText(sourceFile);
+            if (children.length > 0) {
+                let accessExpressionNode;
+                for (const child of children) {
+                    if (child.kind === SyntaxKind.PropertyAccessExpression) {
+                        accessExpressionNode = child;
+                        break;
+                    }
+                }
+                if (accessExpressionNode) {
+                    const expressionChildren = accessExpressionNode.getChildren(sourceFile);
+                    if (expressionChildren.length > 0) {
+                        const fullTagLength = expressionChildren[expressionChildren.length -1].end - expressionChildren[0].pos;
+                        if (fullTagLength > 0) {
+                            closingExpression = closingExpression.substring(fullTagLength);
+                        }
+                    }
+                }
+            }
             const entry: CompletionEntry = {
-                name: tagName.getFullText(sourceFile) + (hasClosingAngleBracket ? "" : ">"),
+                name: closingExpression + (hasClosingAngleBracket ? "" : ">"),
                 kind: ScriptElementKind.classElement,
                 kindModifiers: undefined,
                 sortText: SortText.LocationPriority,
