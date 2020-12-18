@@ -232,42 +232,22 @@ namespace ts.Completions {
             symbolToSortTextMap,
         } = completionData;
 
-        if (location && location.parent && isJsxClosingElement(location.parent)) {
-            // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
-            // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
-            // For example:
-            //     var x = <div> </ /*1*/
-            // The completion list at "1" will contain "div>" with type any
-            // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
-            const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
-            const tagName = location.parent.parent.openingElement.tagName;
-            const children = location.parent.getChildren(sourceFile);
-            let closingExpression = tagName.getFullText(sourceFile);
-            if (children.length > 0) {
-                let accessExpressionNode;
-                for (const child of children) {
-                    if (child.kind === SyntaxKind.PropertyAccessExpression) {
-                        accessExpressionNode = child;
-                        break;
-                    }
-                }
-                if (accessExpressionNode) {
-                    const expressionChildren = accessExpressionNode.getChildren(sourceFile);
-                    if (expressionChildren.length > 0) {
-                        const fullTagLength = expressionChildren[expressionChildren.length -1].end - expressionChildren[0].pos;
-                        if (fullTagLength > 0) {
-                            closingExpression = closingExpression.substring(fullTagLength);
-                        }
-                    }
-                }
+        if (location && location.parent) {
+            const closingTag = isJsxClosingElement(location.parent.parent)
+                ? getJsxCompletionClosingTag(location.parent, sourceFile)
+                : isJsxClosingElement(location.parent)
+                    ? getJsxCompletionClosingTag(location, sourceFile)
+                    : undefined;
+
+            if (closingTag || closingTag === "") {
+                const entry: CompletionEntry = {
+                    name: closingTag,
+                    kind: ScriptElementKind.classElement,
+                    kindModifiers: undefined,
+                    sortText: SortText.LocationPriority,
+                };
+                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
             }
-            const entry: CompletionEntry = {
-                name: closingExpression + (hasClosingAngleBracket ? "" : ">"),
-                kind: ScriptElementKind.classElement,
-                kindModifiers: undefined,
-                sortText: SortText.LocationPriority,
-            };
-            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
         }
 
         const entries: CompletionEntry[] = [];
@@ -353,6 +333,30 @@ namespace ts.Completions {
             default:
                 return false;
         }
+    }
+
+    function getJsxCompletionClosingTag(location: Node | undefined, sourceFile: SourceFile) {
+        if (location && isJsxClosingElement(location.parent)) {
+           // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
+            // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
+            // For example:
+            //     var x = <div> </ /*1*/
+            // The completion list at "1" will contain "div>" with type any
+            // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
+            const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
+            const accessExpressionNode = findChildOfKind(location.parent, SyntaxKind.PropertyAccessExpression, sourceFile);
+            const tagName = location.parent.parent.openingElement.tagName;
+            let closingTag = tagName.getFullText(sourceFile);
+            if (accessExpressionNode) {
+                const expressionChildren = accessExpressionNode.getChildren(sourceFile);
+                if (expressionChildren.length > 0) {
+                    const fullTagLength = expressionChildren[expressionChildren.length -1].end - expressionChildren[0].pos;
+                    closingTag = closingTag.substring(fullTagLength);
+                }
+            }
+            return closingTag + (hasClosingAngleBracket ? "" : ">");
+        }
+        return;
     }
 
     function getJSCompletionEntries(
