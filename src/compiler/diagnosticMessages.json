@@ -5112,6 +5112,10 @@
         "category": "Error",
         "code": 7056
     },
+    "'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.": {
+        "category": "Error",
+        "code": 7057
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
