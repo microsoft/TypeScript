@@ -1,7 +1,8 @@
 tests/cases/conformance/types/union/unionTypeReduction2.ts(33,5): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeReduction2.ts(49,9): error TS2554: Expected 0 arguments, but got 1.
 
 
-==== tests/cases/conformance/types/union/unionTypeReduction2.ts (1 errors) ====
+==== tests/cases/conformance/types/union/unionTypeReduction2.ts (2 errors) ====
     function f1(x: { f(): void }, y: { f(x?: string): void }) {
         let z = !!true ? x : y;  // { f(x?: string): void }
         z.f();
@@ -54,6 +55,8 @@ tests/cases/conformance/types/union/unionTypeReduction2.ts(33,5): error TS2554: 
         let z = !!true ? a : b;  // A | B
         z.f();
         z.f('hello');
+            ~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
     }
     
     // Repro from #35414

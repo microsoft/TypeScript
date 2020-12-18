@@ -189,8 +189,8 @@ function f11(a: A, b: B) {
 >b : B
 
     let z = !!true ? a : b;  // A | B
->z : A | B
->!!true ? a : b : A | B
+>z : A
+>!!true ? a : b : A
 >!!true : true
 >!true : false
 >true : true
@@ -199,15 +199,15 @@ function f11(a: A, b: B) {
 
     z.f();
 >z.f() : void
->z.f : ((x?: string | undefined) => void) | (() => void)
->z : A | B
->f : ((x?: string | undefined) => void) | (() => void)
+>z.f : () => void
+>z : A
+>f : () => void
 
     z.f('hello');
 >z.f('hello') : void
->z.f : ((x?: string | undefined) => void) | (() => void)
->z : A | B
->f : ((x?: string | undefined) => void) | (() => void)
+>z.f : () => void
+>z : A
+>f : () => void
 >'hello' : "hello"
 }
 

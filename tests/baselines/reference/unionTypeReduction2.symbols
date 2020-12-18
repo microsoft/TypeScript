@@ -154,14 +154,14 @@ function f11(a: A, b: B) {
 >b : Symbol(b, Decl(unionTypeReduction2.ts, 45, 18))
 
     z.f();
->z.f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10))
 >z : Symbol(z, Decl(unionTypeReduction2.ts, 46, 7))
->f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10))
 
     z.f('hello');
->z.f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+>z.f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10))
 >z : Symbol(z, Decl(unionTypeReduction2.ts, 46, 7))
->f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10), Decl(unionTypeReduction2.ts, 40, 10))
+>f : Symbol(f, Decl(unionTypeReduction2.ts, 36, 10))
 }
 
 // Repro from #35414

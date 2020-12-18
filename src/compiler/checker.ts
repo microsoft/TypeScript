@@ -13154,7 +13154,7 @@ namespace ts {
                             }
                         }
                         count++;
-                        if (isTypeRelatedTo(source, target, strictSubtypeRelation) && (
+                        if (isTypeSubtypeOf(source, target) && (!isTypeSubtypeOf(target, source) || isTypeRelatedTo(source, target, strictSubtypeRelation)) && (
                             !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
                             !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
                             isTypeDerivedFrom(source, target))) {
@@ -16231,7 +16231,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && (checkMode & SignatureCheckMode.StrictArity || isStrictSignature(target));
+            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && (checkMode & SignatureCheckMode.StrictArity || strictFunctionTypes && isStrictSignature(target));
             let result = Ternary.True;
 
             const sourceThisType = getThisTypeOfSignature(source);
