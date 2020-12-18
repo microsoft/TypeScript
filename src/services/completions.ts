@@ -233,7 +233,7 @@ namespace ts.Completions {
         } = completionData;
 
         if (location && location.parent) {
-            const closingTag = isJsxClosingElement(location.parent.parent)
+            const closingTag = location.parent.parent && isJsxClosingElement(location.parent.parent)
                 ? getJsxCompletionClosingTag(location.parent, sourceFile)
                 : isJsxClosingElement(location.parent)
                     ? getJsxCompletionClosingTag(location, sourceFile)
