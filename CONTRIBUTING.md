@@ -70,6 +70,13 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Tips
 
+### Using a development container
+
+This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
+
+- Clone the TypeScript repository locally and use the `Open Folder in Container` command.
+- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
+
 ### Faster clones
 
 The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
@@ -77,13 +84,6 @@ The TypeScript repository is relatively large. To save some time, you might want
 ### Using local builds
 
 Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
-
-### Using a development container
-
-This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
-
-- Clone the TypeScript repository locally and use the `Open Folder in Container` command.
-- Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
 
 ## Contributing bug fixes
 
