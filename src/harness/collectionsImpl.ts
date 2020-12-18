@@ -50,9 +50,9 @@ namespace collections {
             return index >= 0 ? this._values[index] : undefined;
         }
 
-        public getKeyAndValue(key: K): [ K, V ] | [ undefined, undefined ] {
+        public getEntry(key: K): [ K, V ] | undefined {
             const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
-            return index >= 0 ? [ this._keys[index], this._values[index] ] : [ undefined, undefined ];
+            return index >= 0 ? [ this._keys[index], this._values[index] ] : undefined;
         }
 
         public set(key: K, value: V) {
