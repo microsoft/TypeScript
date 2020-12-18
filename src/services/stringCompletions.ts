@@ -163,7 +163,7 @@ namespace ts.Completions.StringCompletions {
                     //      foo({
                     //          '/*completion position*/'
                     //      });
-                    return stringLiteralCompletionsFromProperties(typeChecker.getContextualType(parent.parent));
+                    return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
                 }
                 return fromContextualType();
 
@@ -251,6 +251,25 @@ namespace ts.Completions.StringCompletions {
             kind: StringLiteralCompletionKind.Properties,
             symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration))),
             hasIndexSignature: hasIndexSignature(type)
+        };
+    }
+
+    function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): StringLiteralCompletionsFromProperties | undefined {
+        const contextualType = checker.getContextualType(objectLiteralExpression);
+        if (!contextualType) return undefined;
+
+        const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.Completions);
+        const symbols = getPropertiesForObjectExpression(
+            contextualType,
+            completionsType,
+            objectLiteralExpression,
+            checker
+        );
+
+        return {
+            kind: StringLiteralCompletionKind.Properties,
+            symbols,
+            hasIndexSignature: hasIndexSignature(contextualType)
         };
     }
 
