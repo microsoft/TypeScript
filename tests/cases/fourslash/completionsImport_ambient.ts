@@ -17,6 +17,35 @@
 // @Filename: b.ts
 //// Ba/**/
 
+verify.completions({
+  marker: "",
+  exact: [
+    completion.globalThisEntry,
+    ...completion.globalsVars,
+    {
+      name: "foo",
+      sortText: completion.SortText.GlobalsOrKeywords
+    },
+    completion.undefinedVarEntry,
+    {
+      name: "Bar",
+      source: "path1",
+      hasAction: true,
+      sortText: completion.SortText.AutoImportSuggestions
+    },
+    {
+      name: "Bar",
+      source: "path2longer",
+      hasAction: true,
+      sortText: completion.SortText.AutoImportSuggestions
+    },
+    ...completion.statementKeywordsWithTypes
+  ],
+  preferences: {
+    includeCompletionsForModuleExports: true
+  }
+});
+
 verify.applyCodeActionFromCompletion("", {
   name: "Bar",
   source: "path2longer",
