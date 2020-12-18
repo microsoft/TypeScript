@@ -336,7 +336,6 @@ namespace ts {
         let totalInstantiationCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
-        let constraintDepth = 0;
         let currentNode: Node | undefined;
 
         const typeCatalog: Type[] = []; // NB: id is index + 1
@@ -5495,6 +5494,7 @@ namespace ts {
                     const specifierCompilerOptions = isBundle ? { ...compilerOptions, baseUrl: moduleResolverHost.getCommonSourceDirectory() } : compilerOptions;
                     specifier = first(moduleSpecifiers.getModuleSpecifiers(
                         symbol,
+                        checker,
                         specifierCompilerOptions,
                         contextFile,
                         moduleResolverHost,
@@ -10275,7 +10275,7 @@ namespace ts {
                     if (signatures !== masterList) {
                         const signature = signatures[0];
                         Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                        results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
+                        results = signature.typeParameters && some(results, s => !!s.typeParameters && !compareTypeParametersIdentical(signature.typeParameters!, s.typeParameters)) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
                         if (!results) {
                             break;
                         }
@@ -10286,18 +10286,39 @@ namespace ts {
             return result || emptyArray;
         }
 
-        function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined): Symbol | undefined {
+        function compareTypeParametersIdentical(sourceParams: readonly TypeParameter[], targetParams: readonly TypeParameter[]): boolean {
+            if (sourceParams.length !== targetParams.length) {
+                return false;
+            }
+
+            const mapper = createTypeMapper(targetParams, sourceParams);
+            for (let i = 0; i < sourceParams.length; i++) {
+                const source = sourceParams[i];
+                const target = targetParams[i];
+                if (source === target) continue;
+                // We instantiate the target type parameter constraints into the source types so we can recognize `<T, U extends T>` as the same as `<A, B extends A>`
+                if (!isTypeIdenticalTo(getConstraintFromTypeParameter(source) || unknownType, instantiateType(getConstraintFromTypeParameter(target) || unknownType, mapper))) return false;
+                // We don't compare defaults - we just use the type parameter defaults from the first signature that seems to match.
+                // It might make sense to combine these defaults in the future, but doing so intelligently requires knowing
+                // if the parameter is used covariantly or contravariantly (so we intersect if it's used like a parameter or union if used like a return type)
+                // and, since it's just an inference _default_, just picking one arbitrarily works OK.
+            }
+
+            return true;
+        }
+
+        function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined, mapper: TypeMapper | undefined): Symbol | undefined {
             if (!left || !right) {
                 return left || right;
             }
             // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
             // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
             // permissive when calling, for now, we'll intersect the `this` types just like we do for param types in union signatures.
-            const thisType = getIntersectionType([getTypeOfSymbol(left), getTypeOfSymbol(right)]);
+            const thisType = getIntersectionType([getTypeOfSymbol(left), instantiateType(getTypeOfSymbol(right), mapper)]);
             return createSymbolWithType(left, thisType);
         }
 
-        function combineUnionParameters(left: Signature, right: Signature) {
+        function combineUnionParameters(left: Signature, right: Signature, mapper: TypeMapper | undefined) {
             const leftCount = getParameterCount(left);
             const rightCount = getParameterCount(right);
             const longest = leftCount >= rightCount ? left : right;
@@ -10307,8 +10328,14 @@ namespace ts {
             const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
             const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
             for (let i = 0; i < longestCount; i++) {
-                const longestParamType = tryGetTypeAtPosition(longest, i)!;
-                const shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                let longestParamType = tryGetTypeAtPosition(longest, i)!;
+                if (longest === right) {
+                    longestParamType = instantiateType(longestParamType, mapper);
+                }
+                let shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                if (shorter === right) {
+                    shorterParamType = instantiateType(shorterParamType, mapper);
+                }
                 const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
                 const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
                 const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
@@ -10329,19 +10356,28 @@ namespace ts {
             if (needsExtraRestElement) {
                 const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
                 restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, longestCount));
+                if (shorter === right) {
+                    restParamSymbol.type = instantiateType(restParamSymbol.type, mapper);
+                }
                 params[longestCount] = restParamSymbol;
             }
             return params;
         }
 
         function combineSignaturesOfUnionMembers(left: Signature, right: Signature): Signature {
+            const typeParams = left.typeParameters || right.typeParameters;
+            let paramMapper: TypeMapper | undefined;
+            if (left.typeParameters && right.typeParameters) {
+                paramMapper = createTypeMapper(right.typeParameters, left.typeParameters);
+                // We just use the type parameter defaults from the first signature
+            }
             const declaration = left.declaration;
-            const params = combineUnionParameters(left, right);
-            const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter);
+            const params = combineUnionParameters(left, right, paramMapper);
+            const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter, paramMapper);
             const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
             const result = createSignature(
                 declaration,
-                left.typeParameters || right.typeParameters,
+                typeParams,
                 thisParam,
                 params,
                 /*resolvedReturnType*/ undefined,
@@ -10350,6 +10386,9 @@ namespace ts {
                 (left.flags | right.flags) & SignatureFlags.PropagatingFlags
             );
             result.unionSignatures = concatenate(left.unionSignatures || [left], [right]);
+            if (paramMapper) {
+                result.mapper = left.mapper && left.unionSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
+            }
             return result;
         }
 
@@ -11033,7 +11072,6 @@ namespace ts {
             if (type.resolvedBaseConstraint) {
                 return type.resolvedBaseConstraint;
             }
-            let nonTerminating = false;
             const stack: Type[] = [];
             return type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type);
 
@@ -11042,22 +11080,16 @@ namespace ts {
                     if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
                         return circularConstraintType;
                     }
-                    if (constraintDepth >= 50) {
-                        // We have reached 50 recursive invocations of getImmediateBaseConstraint and there is a
-                        // very high likelihood we're dealing with an infinite generic type that perpetually generates
-                        // new type identities as we descend into it. We stop the recursion here and mark this type
-                        // and the outer types as having circular constraints.
-                        tracing.instant(tracing.Phase.CheckTypes, "getImmediateBaseConstraint_DepthLimit", { typeId: t.id, originalTypeId: type.id, depth: constraintDepth });
-                        error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
-                        nonTerminating = true;
-                        return t.immediateBaseConstraint = noConstraintType;
-                    }
                     let result;
-                    if (!isDeeplyNestedType(t, stack, stack.length)) {
+                    // We always explore at least 10 levels of nested constraints. Thereafter, we continue to explore
+                    // up to 50 levels of nested constraints provided there are no "deeply nested" types on the stack
+                    // (i.e. no types for which five instantiations have been recorded on the stack). If we reach 50
+                    // levels of nesting, we are presumably exploring a repeating pattern with a long cycle that hasn't
+                    // yet triggered the deeply nested limiter. We have no test cases that actually get to 50 levels of
+                    // nesting, so it is effectively just a safety stop.
+                    if (stack.length < 10 || stack.length < 50 && !isDeeplyNestedType(t, stack, stack.length)) {
                         stack.push(t);
-                        constraintDepth++;
                         result = computeBaseConstraint(getSimplifiedType(t, /*writing*/ false));
-                        constraintDepth--;
                         stack.pop();
                     }
                     if (!popTypeResolution()) {
@@ -11070,9 +11102,6 @@ namespace ts {
                                 }
                             }
                         }
-                        result = circularConstraintType;
-                    }
-                    if (nonTerminating) {
                         result = circularConstraintType;
                     }
                     t.immediateBaseConstraint = result || noConstraintType;
@@ -11125,10 +11154,7 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.Conditional) {
                     const constraint = getConstraintFromConditionalType(<ConditionalType>t);
-                    constraintDepth++; // Penalize repeating conditional types (this captures the recursion within getConstraintFromConditionalType and carries it forward)
-                    const result = constraint && getBaseConstraint(constraint);
-                    constraintDepth--;
-                    return result;
+                    return constraint && getBaseConstraint(constraint);
                 }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
@@ -11896,7 +11922,7 @@ namespace ts {
                     return errorType;
                 }
                 let type = signature.target ? instantiateType(getReturnTypeOfSignature(signature.target), signature.mapper) :
-                    signature.unionSignatures ? getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype) :
+                    signature.unionSignatures ? instantiateType(getUnionType(map(signature.unionSignatures, getReturnTypeOfSignature), UnionReduction.Subtype), signature.mapper) :
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     (nodeIsMissing((<FunctionLikeDeclaration>signature.declaration).body) ? anyType : getReturnTypeFromBody(<FunctionLikeDeclaration>signature.declaration));
                 if (signature.flags & SignatureFlags.IsInnerCallChain) {
@@ -17292,14 +17318,31 @@ namespace ts {
                 return Ternary.False;
             }
 
+            function getUndefinedStrippedTargetIfNeeded(source: Type, target: Type) {
+                // As a builtin type, `undefined` is a very low type ID - making it almsot always first, making this a very fast check to see
+                // if we need to strip `undefined` from the target
+                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union &&
+                    !((source as UnionType).types[0].flags & TypeFlags.Undefined) && (target as UnionType).types[0].flags & TypeFlags.Undefined) {
+                    return extractTypesOfKind(target, ~TypeFlags.Undefined);
+                }
+                return target;
+            }
+
             function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
+                // We strip `undefined` from the target if the `source` trivially doesn't contain it for our correspondence-checking fastpath
+                // since `undefined` is frequently added by optionality and would otherwise spoil a potentially useful correspondence
+                const undefinedStrippedTarget = getUndefinedStrippedTargetIfNeeded(source, target as UnionType);
                 for (let i = 0; i < sourceTypes.length; i++) {
                     const sourceType = sourceTypes[i];
-                    if (target.flags & TypeFlags.Union && (target as UnionType).types.length === sourceTypes.length) {
+                    if (undefinedStrippedTarget.flags & TypeFlags.Union && sourceTypes.length >= (undefinedStrippedTarget as UnionType).types.length && sourceTypes.length % (undefinedStrippedTarget as UnionType).types.length === 0) {
                         // many unions are mappings of one another; in such cases, simply comparing members at the same index can shortcut the comparison
-                        const related = isRelatedTo(sourceType, (target as UnionType).types[i], /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
+                        // such unions will have identical lengths, and their corresponding elements will match up. Another common scenario is where a large
+                        // union has a union of objects intersected with it. In such cases, if the input was, eg `("a" | "b" | "c") & (string | boolean | {} | {whatever})`,
+                        // the result will have the structure `"a" | "b" | "c" | "a" & {} | "b" & {} | "c" & {} | "a" & {whatever} | "b" & {whatever} | "c" & {whatever}`
+                        // - the resulting union has a length which is a multiple of the original union, and the elements correspond modulo the length of the original union
+                        const related = isRelatedTo(sourceType, (undefinedStrippedTarget as UnionType).types[i % (undefinedStrippedTarget as UnionType).types.length], /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState);
                         if (related) {
                             result &= related;
                             continue;
@@ -26952,6 +26995,9 @@ namespace ts {
                 errorOutputContainer);
 
             function checkTagNameDoesNotExpectTooManyArguments(): boolean {
+                if (getJsxNamespaceContainerForImplicitImport(node)) {
+                    return true; // factory is implicitly jsx/jsxdev - assume it fits the bill, since we don't strongly look for the jsx/jsxs/jsxDEV factory APIs anywhere else (at least not yet)
+                }
                 const tagType = isJsxOpeningElement(node) || isJsxSelfClosingElement(node) && !isJsxIntrinsicIdentifier(node.tagName) ? checkExpression(node.tagName) : undefined;
                 if (!tagType) {
                     return true;
@@ -30820,8 +30866,17 @@ namespace ts {
                 return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, isAsync)
                     || anyType;
             }
-
-            return getContextualIterationType(IterationTypeKind.Next, func) || anyType;
+            let type = getContextualIterationType(IterationTypeKind.Next, func);
+            if (!type) {
+                type = anyType;
+                if (produceDiagnostics && noImplicitAny && !expressionResultIsUnused(node)) {
+                    const contextualType = getContextualType(node);
+                    if (!contextualType || isTypeAny(contextualType)) {
+                        error(node, Diagnostics.yield_expression_implicitly_results_in_an_any_type_because_its_containing_generator_lacks_a_return_type_annotation);
+                    }
+                }
+            }
+            return type;
         }
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
