@@ -2622,18 +2622,31 @@ namespace ts {
 
     export function getEffectiveJSDocHost(node: Node): Node | undefined {
         const host = getJSDocHost(node);
-        const decl = getSourceOfDefaultedAssignment(host) ||
-            getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
-            getSingleVariableOfVariableStatement(host) ||
-            getNestedModuleDeclaration(host) ||
-            host;
-        return decl;
+        if (host) {
+            return getSourceOfDefaultedAssignment(host)
+                || getSourceOfAssignment(host)
+                || getSingleInitializerOfVariableStatementOrPropertyDeclaration(host)
+                || getSingleVariableOfVariableStatement(host)
+                || getNestedModuleDeclaration(host)
+                || host;
+        }
     }
 
-    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments.  */
-    export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
+    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments. */
+    export function getJSDocHost(node: Node): HasJSDoc | undefined {
+        const jsDoc = getJSDocRoot(node);
+        if (!jsDoc) {
+            return undefined;
+        }
+
+        const host = jsDoc.parent;
+        if (host && host.jsDoc && jsDoc === lastOrUndefined(host.jsDoc)) {
+            return host;
+        }
+    }
+
+    export function getJSDocRoot(node: Node): JSDoc | undefined {
+        return findAncestor(node.parent, isJSDoc);
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
