@@ -158,25 +158,17 @@ namespace ts {
             }
 
             const target = isDelete
-                ? factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createTrue(), /*colonToken*/ undefined, factory.createDeleteExpression(rightExpression))
-                : factory.createConditionalExpression(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
+                ? factory.createConditionalExpression(createNotNullishCondition(leftExpression, /*invert*/ true), /*questionToken*/ undefined, factory.createTrue(), /*colonToken*/ undefined, factory.createDeleteExpression(rightExpression))
+                : factory.createConditionalExpression(createNotNullishCondition(leftExpression, /*invert*/ true), /*questionToken*/ undefined, factory.createVoidZero(), /*colonToken*/ undefined, rightExpression);
             setTextRange(target, node);
             return thisArg ? factory.createSyntheticReferenceExpression(target, thisArg) : target;
         }
 
-        function createNotNullCondition(left: Expression, right: Expression, invert?: boolean) {
+        function createNotNullishCondition(expr: Expression, invert?: boolean) {
             return factory.createBinaryExpression(
-                factory.createBinaryExpression(
-                    left,
-                    factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                    factory.createNull()
-                ),
-                factory.createToken(invert ? SyntaxKind.BarBarToken : SyntaxKind.AmpersandAmpersandToken),
-                factory.createBinaryExpression(
-                    right,
-                    factory.createToken(invert ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken),
-                    factory.createVoidZero()
-                )
+                expr,
+                factory.createToken(invert ? SyntaxKind.EqualsEqualsToken : SyntaxKind.ExclamationEqualsToken),
+                factory.createNull()
             );
         }
 
@@ -188,7 +180,7 @@ namespace ts {
                 left = factory.createAssignment(right, left);
             }
             return setTextRange(factory.createConditionalExpression(
-                createNotNullCondition(left, right),
+                createNotNullishCondition(left),
                 /*questionToken*/ undefined,
                 right,
                 /*colonToken*/ undefined,
