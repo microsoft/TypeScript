@@ -343,6 +343,9 @@ namespace ts.Completions {
             //     var x = <div> </ /*1*/
             // The completion list at "1" will contain "div>" with type any
             // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
+            // And at property access expressions `<MainComponent.Child> </MainComponent. /*1*/ >` the completion will
+            // return the partial opening tag as in `Child`
+            // And if the property access expression is equal or superceding the opening tag empty string will be provided
             const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
             const accessExpressionNode = findChildOfKind(location.parent, SyntaxKind.PropertyAccessExpression, sourceFile);
             const tagName = location.parent.parent.openingElement.tagName;
