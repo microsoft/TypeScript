@@ -337,7 +337,7 @@ namespace ts.Completions {
 
     function getJsxCompletionClosingTag(location: Node | undefined, sourceFile: SourceFile) {
         if (location && isJsxClosingElement(location.parent)) {
-           // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
+            // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
             // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
             // For example:
             //     var x = <div> </ /*1*/
