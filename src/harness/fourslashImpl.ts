@@ -2798,7 +2798,12 @@ namespace FourSlash {
 
             const details = this.getCompletionEntryDetails(options.name, options.source, options.preferences);
             if (!details) {
-                return this.raiseError(`No completions were found for the given name, source, and preferences.`);
+                const completions = this.getCompletionListAtCaret(options.preferences)?.entries;
+                const matchingName = completions?.filter(e => e.name === options.name);
+                const detailMessage = matchingName?.length
+                    ? `\n  Found ${matchingName.length} with name '${options.name}' from source(s) ${matchingName.map(e => `'${e.source}'`).join(", ")}.`
+                    : "";
+                return this.raiseError(`No completions were found for the given name, source, and preferences.` + detailMessage);
             }
             const codeActions = details.codeActions;
             if (codeActions?.length !== 1) {
