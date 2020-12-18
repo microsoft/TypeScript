@@ -189,15 +189,24 @@ import { f as g } from "file1";
 var x = g();
 ```
 
-## Managing the Baselines
+## Managing the baselines
 
-Compiler tests generate baselines: one file each for the emitted `.js`, the errors produced by the compiler, the type of each expression, and symbol for each identifier. Additionally, some tests generate baselines for the source map output.
+Most tests generate "baselines" to find differences in output.
+As an example, compiler tests usually emit one file each for
+
+- the `.js` and `.d.ts` output (all in the same `.js` output file),
+- the errors produced by the compiler (`.errors.txt` files),
+- the types of each expression (`.types` files),
+- the symbols for each identifier (`.symbols` files), and
+- the source map outputs for files if a test opts into them (`.js.map` files).
 
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
 ```Shell
 git diff --diff-filter=AM --no-index ./tests/baselines/reference ./tests/baselines/local
 ```
+
+Alternatively, you can set the `DIFF` environment variable and run `gulp diff`, or manually run your favorite folder diffing tool between `tests/baselines/reference` and `tests/baselines/local`. Our team largely uses Beyond Compare and WinMerge.
 
 After verifying that the changes in the baselines are correct, run
 
