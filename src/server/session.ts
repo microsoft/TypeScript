@@ -568,7 +568,7 @@ namespace ts.server {
     }
 
     function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Set<string>): void {
-        if (addToSeen(seenProjects, project)) toDo.push({ project, location });
+        if (!project.isOrphan() && addToSeen(seenProjects, project)) toDo.push({ project, location });
     }
 
     function addToSeen(seenProjects: Set<string>, project: Project) {
