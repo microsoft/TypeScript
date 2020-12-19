@@ -33,10 +33,10 @@ Note: The TypeScript Playground can be used to try older verions of TypeScript.
 
 Please keep and fill in the line that best applies:
 -->
- - This is a crash
- - This changed between versions ______ and _______
- - This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________
- - I was unable to test this on prior versions because _______
+- This is a crash
+- This changed between versions ______ and _______
+- This is the behavior in every version I tried, and I reviewed the FAQ for entries about _________
+- I was unable to test this on prior versions because _______
 
 ### ⏯ Playground Link
 
