@@ -5991,6 +5991,14 @@
         "category": "Message",
         "code": 95150
     },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95151
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95152
+    },
 
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

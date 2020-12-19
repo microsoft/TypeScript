@@ -285,10 +285,29 @@ namespace ts.codefix {
             : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
 
         if (kind === SyntaxKind.MethodDeclaration) {
-            const body = isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference);
-            return factory.createMethodDeclaration(/*decorators*/ undefined, modifiers, asteriskToken, name, /*questionToken*/ undefined, typeParameters, parameters, type, body) as T;
+            return factory.createMethodDeclaration(
+                /*decorators*/ undefined,
+                modifiers,
+                asteriskToken,
+                name,
+                /*questionToken*/ undefined,
+                typeParameters,
+                parameters,
+                type,
+                isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference)
+            ) as T;
         }
-        return factory.createFunctionDeclaration(/*decorators*/ undefined, modifiers, asteriskToken, name, typeParameters, parameters, type, createStubbedBody("Function not implemented.", quotePreference)) as T;
+
+        return factory.createFunctionDeclaration(
+            /*decorators*/ undefined,
+            modifiers,
+            asteriskToken,
+            name,
+            typeParameters,
+            parameters,
+            type,
+            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
+        ) as T;
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
@@ -392,7 +411,7 @@ namespace ts.codefix {
     }
 
     function createStubbedMethodBody(quotePreference: QuotePreference) {
-        return createStubbedBody("Method not implemented.", quotePreference);
+        return createStubbedBody(Diagnostics.Method_not_implemented.message, quotePreference);
     }
 
     export function createStubbedBody(text: string, quotePreference: QuotePreference): Block {
