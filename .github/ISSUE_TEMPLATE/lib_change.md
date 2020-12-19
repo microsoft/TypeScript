@@ -22,7 +22,7 @@ assignees: ''
 ## Configuration Check
 
 <!--
-  If you're missing common new methods like Array.includes, you have a misconfigured project.
+  If you're missing common new methods like Array.includes, you may have a misconfigured project.
   Try setting lib: "es2020" and checking whether the type you want is present.
 
   Conversely, if you are seeing built-in methods you expect to *not* see, check your 'lib' setting
