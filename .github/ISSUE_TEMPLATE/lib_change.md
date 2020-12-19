@@ -23,7 +23,8 @@ assignees: ''
 
 <!--
   If you're missing common new methods like Array.includes, you may have a misconfigured project.
-  Try setting lib: "es2020" and checking whether the type you want is present.
+  Try setting `lib: "es2020"` and checking whether the type you want is present.
+  You can diagnose further by running `tsc` with `--listFilesOnly` or `--showConfig`.
 
   Conversely, if you are seeing built-in methods you expect to *not* see, check your 'lib' setting
   or review your dependencies for lib/reference directives that might be polluting
