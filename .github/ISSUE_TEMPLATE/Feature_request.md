@@ -43,17 +43,17 @@ My suggestion meets these guidelines:
 
 <!-- A summary of what you'd like to see added or changed -->
 
+## 📃 Motivating Example
+
+<!--
+  If you were announcing this feature in a blog post, what's a short explanation that shows
+  a developer why this feature improves the language?
+-->
+
 ## 💻 Use Cases
 
 <!--
   What do you want to use this for?
   What shortcomings exist with current approaches?
   What workarounds are you using in the meantime?
--->
-
-## 📃 Motivating Example
-
-<!--
-  If you were announcing this feature in a blog post, what's a short explanation that shows
-  a developer why this feature improves the language?
 -->

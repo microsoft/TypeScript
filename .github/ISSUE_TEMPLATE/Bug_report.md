@@ -64,10 +64,10 @@ Please keep and fill in the line that best applies:
 //  - The sample is confusing or doesn't clearly demonstrate what's wrong.
 ```
 
-### 🙂 Expected behavior
-
-<!-- What you expected to happen, and why -->
-
 ### 🙁 Actual behavior
 
-<!-- What actually happened instead, and why it was wrong -->
+<!-- What happened, and why it was wrong -->
+
+### 🙂 Expected behavior
+
+<!-- What you expected to happen instead, and why -->
