@@ -27,7 +27,7 @@ assignees: ''
 
   Conversely, if you are seeing built-in methods you expect to *not* see, check your 'lib' setting
   or review your dependencies for lib/reference directives that might be polluting
-  your global scope. This is common when using the 'node' type library; see https://github.com/microsoft/TypeScript/issues/40184
+  your global scope. This is common when using the 'node' type library. See https://github.com/microsoft/TypeScript/issues/40184
 
   Replace the text below:
 -->
