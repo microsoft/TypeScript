@@ -13,7 +13,7 @@ assignees: ''
   Are you here for one of these commonly-requested lib changes?
     * Object.keys - see https://stackoverflow.com/questions/55012174/
     * Array methods - see https://github.com/microsoft/TypeScript/issues/36554
-    * parseInt, parseFloat, isFinite, isNan, etc. - see https://github.com/microsoft/TypeScript/issues/4002
+    * parseInt, parseFloat, isFinite, isNaN, etc. - see https://github.com/microsoft/TypeScript/issues/4002
 
   The DOM lib is maintained elsewhere and you can skip a step by filing issues/PRs for the DOM at that repo.
   See https://github.com/microsoft/TypeScript-DOM-lib-generator
