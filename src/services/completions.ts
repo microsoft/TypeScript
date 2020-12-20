@@ -1508,6 +1508,10 @@ namespace ts.Completions {
                         return true;
                     }
 
+                    if (isAncestor(location, symbol)) {
+                        return false;
+                    }
+                    
                     symbol = skipAlias(symbol, typeChecker);
 
                     // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
@@ -1524,6 +1528,12 @@ namespace ts.Completions {
                 // expressions are value space (which includes the value namespaces)
                 return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
             });
+        }
+
+        function isAncestor(node: Node, symbol: Symbol): boolean {
+            return !!findAncestor(node, (n) => {
+                return Array.isArray(symbol.declarations) && symbol.declarations.some(declaration => n === declaration)
+            })
         }
 
         function isTypeOnlyCompletion(): boolean {
