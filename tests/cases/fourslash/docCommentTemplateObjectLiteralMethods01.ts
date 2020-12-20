@@ -1,6 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-const singleLineOffset = 3;
 const multiLineOffset = 12;
 
 ////var x = {
@@ -19,7 +18,11 @@ const multiLineOffset = 12;
 ////    m2: (a: string, b: string) => {}
 ////}
 
-verify.docCommentTemplateAt("0", singleLineOffset, "/** */");
+verify.docCommentTemplateAt("0", multiLineOffset,
+  `/**
+     * 
+     * @returns
+     */`);
 
 verify.docCommentTemplateAt("1", multiLineOffset,
    `/**
