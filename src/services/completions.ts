@@ -1501,6 +1501,8 @@ namespace ts.Completions {
                     : KeywordCompletionFilters.TypeKeywords;
             }
 
+            const undeclaredVariable = findUndeclaredVariableIfExist(location);
+
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
                     // export = /**/ here we want to get all meanings, so any symbol is ok
@@ -1508,10 +1510,10 @@ namespace ts.Completions {
                         return true;
                     }
 
-                    if (isAncestor(location, symbol)) {
+                    if (isUndeclaredSymbol(undeclaredVariable, symbol)) {
                         return false;
                     }
-                    
+
                     symbol = skipAlias(symbol, typeChecker);
 
                     // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
@@ -1530,10 +1532,42 @@ namespace ts.Completions {
             });
         }
 
-        function isAncestor(node: Node, symbol: Symbol): boolean {
-            return !!findAncestor(node, (n) => {
-                return Array.isArray(symbol.declarations) && symbol.declarations.some(declaration => n === declaration)
-            })
+        function findUndeclaredVariableIfExist(node: Node): VariableDeclaration | undefined {
+            if (!isIdentifier(node)) {
+                return undefined;
+            }
+
+            let curNode: Node = node.parent;
+            while (curNode && curNode.parent) {
+                if (isPropertyAssignment(curNode) && isObjectLiteralExpression(curNode.parent)) {
+                    curNode = curNode.parent.parent;
+
+                    if (isVariableDeclaration(curNode)) {
+                        return curNode;
+                    }
+                }
+                else {
+                    return undefined;
+                }
+            }
+
+            return undefined;
+        }
+
+        function isUndeclaredSymbol(undeclaredVariable: VariableDeclaration | undefined, symbol: Symbol): boolean {
+            if (!undeclaredVariable) {
+                return false;
+            }
+
+            if (!symbol.declarations || symbol.declarations.length === 0) {
+                return false;
+            }
+
+            if (symbol.declarations.indexOf(undeclaredVariable) > -1) {
+                return true;
+            }
+
+            return false;
         }
 
         function isTypeOnlyCompletion(): boolean {
