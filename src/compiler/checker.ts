@@ -30004,7 +30004,7 @@ namespace ts {
             }
             if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
                 rightType.immediateBaseConstraint && allTypesAssignableToKind(rightType.immediateBaseConstraint, TypeFlags.Primitive)) {
-                error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
+                error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
             }
             return booleanType;
         }
