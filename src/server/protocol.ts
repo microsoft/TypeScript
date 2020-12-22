@@ -564,7 +564,7 @@ namespace ts.server.protocol {
     }
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
         triggerReason?: RefactorTriggerReason;
-        refactorKind?: string;
+        kind?: string;
     };
 
     export type RefactorTriggerReason = "implicit" | "invoked";
@@ -628,7 +628,7 @@ namespace ts.server.protocol {
         /**
          * The hierarchical dotted name of the refactor action.
          */
-        refactorKind?: string;
+        kind?: string;
     }
 
     export interface GetEditsForRefactorRequest extends Request {

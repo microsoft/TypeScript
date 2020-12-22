@@ -6,10 +6,10 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const convertStringAction = {
         name: refactorName,
         description: refactorDescription,
-        refactorKind: "refactor.rewrite.string"
+        kind: "refactor.rewrite.string"
     };
     registerRefactor(refactorName, {
-        refactorKinds: [convertStringAction.refactorKind],
+        kinds: [convertStringAction.kind],
         getEditsForAction,
         getAvailableActions
     });

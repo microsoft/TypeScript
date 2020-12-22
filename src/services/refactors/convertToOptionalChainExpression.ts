@@ -6,10 +6,10 @@ namespace ts.refactor.convertToOptionalChainExpression {
     const toOptionalChainAction = {
         name: refactorName,
         description: convertToOptionalChainExpressionMessage,
-        refactorKind: "refactor.rewrite.expression.optionalChain",
+        kind: "refactor.rewrite.expression.optionalChain",
     };
     registerRefactor(refactorName, {
-        refactorKinds: [toOptionalChainAction.refactorKind],
+        kinds: [toOptionalChainAction.kind],
         getAvailableActions,
         getEditsForAction
     });

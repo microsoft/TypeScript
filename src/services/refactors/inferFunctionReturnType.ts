@@ -6,10 +6,10 @@ namespace ts.refactor.inferFunctionReturnType {
     const inferReturnTypeAction = {
         name: refactorName,
         description: refactorDescription,
-        refactorKind: "refactor.rewrite.function.returnType"
+        kind: "refactor.rewrite.function.returnType"
     };
     registerRefactor(refactorName, {
-        refactorKinds: [inferReturnTypeAction.refactorKind],
+        kinds: [inferReturnTypeAction.kind],
         getEditsForAction,
         getAvailableActions
     });
@@ -56,7 +56,7 @@ namespace ts.refactor.inferFunctionReturnType {
     }
 
     function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | undefined {
-        if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.refactorKind, context.refactorKind)) return;
+        if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.kind, context.kind)) return;
 
         const token = getTokenAtPosition(context.file, context.startPosition);
         const declaration = findAncestor(token, isConvertibleDeclaration);

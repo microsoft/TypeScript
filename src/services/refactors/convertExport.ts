@@ -5,18 +5,18 @@ namespace ts.refactor {
     const defaultToNamedAction = {
         name: "Convert default export to named export",
         description: Diagnostics.Convert_default_export_to_named_export.message,
-        refactorKind: "refactor.rewrite.export.named"
+        kind: "refactor.rewrite.export.named"
     };
     const namedToDefaultAction = {
         name: "Convert named export to default export",
         description: Diagnostics.Convert_named_export_to_default_export.message,
-        refactorKind: "refactor.rewrite.export.default"
+        kind: "refactor.rewrite.export.default"
     };
 
     registerRefactor(refactorName, {
-        refactorKinds: [
-            defaultToNamedAction.refactorKind,
-            namedToDefaultAction.refactorKind
+        kinds: [
+            defaultToNamedAction.kind,
+            namedToDefaultAction.kind
         ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");

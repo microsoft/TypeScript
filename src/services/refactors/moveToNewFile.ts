@@ -6,13 +6,13 @@ namespace ts.refactor {
     const moveToNewFileAction = {
         name: refactorName,
         description,
-        refactorKind: "refactor.move.newFile",
+        kind: "refactor.move.newFile",
     };
     registerRefactor(refactorName, {
-        refactorKinds: [moveToNewFileAction.refactorKind],
+        kinds: [moveToNewFileAction.kind],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const statements = getStatementsToMove(context);
-            if (statements && context.preferences.allowTextChangesInNewFiles) {
+            if (context.preferences.allowTextChangesInNewFiles && statements) {
                 return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
             }
             if (context.preferences.provideRefactorNotApplicableReason) {

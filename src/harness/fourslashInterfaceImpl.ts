@@ -215,8 +215,8 @@ namespace FourSlashInterface {
             this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
 
-        public refactorKindAvailable(refactorKind: string, expected: string[], preferences = ts.emptyOptions) {
-            this.state.verifyRefactorKindsAvailable(refactorKind, expected, preferences);
+        public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
+            this.state.verifyRefactorKindsAvailable(kind, expected, preferences);
         }
 
         public toggleLineComment(newFileContent: string) {

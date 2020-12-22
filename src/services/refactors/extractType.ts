@@ -5,24 +5,24 @@ namespace ts.refactor {
     const extractToTypeAliasAction = {
         name: "Extract to type alias",
         description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias),
-        refactorKind: "refactor.extract.type",
+        kind: "refactor.extract.type",
     };
     const extractToInterfaceAction = {
         name: "Extract to interface",
         description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface),
-        refactorKind: "refactor.extract.interface",
+        kind: "refactor.extract.interface",
     };
     const extractToTypeDefAction = {
         name: "Extract to typedef",
         description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef),
-        refactorKind: "refactor.extract.typedef"
+        kind: "refactor.extract.typedef"
     };
 
     registerRefactor(refactorName, {
-        refactorKinds: [
-            extractToTypeAliasAction.refactorKind,
-            extractToInterfaceAction.refactorKind,
-            extractToTypeDefAction.refactorKind
+        kinds: [
+            extractToTypeAliasAction.kind,
+            extractToInterfaceAction.kind,
+            extractToTypeDefAction.kind
         ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");

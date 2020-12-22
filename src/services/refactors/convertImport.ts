@@ -5,18 +5,18 @@ namespace ts.refactor {
     const namespaceToNamedAction = {
         name: "Convert namespace import to named imports",
         description: Diagnostics.Convert_namespace_import_to_named_imports.message,
-        refactorKind: "refactor.rewrite.import.named",
+        kind: "refactor.rewrite.import.named",
     };
     const namedToNamespaceAction = {
         name: "Convert named imports to namespace import",
         description: Diagnostics.Convert_named_imports_to_namespace_import.message,
-        refactorKind: "refactor.rewrite.import.namespace",
+        kind: "refactor.rewrite.import.namespace",
     };
 
     registerRefactor(refactorName, {
-        refactorKinds: [
-            namespaceToNamedAction.refactorKind,
-            namedToNamespaceAction.refactorKind
+        kinds: [
+            namespaceToNamedAction.kind,
+            namedToNamespaceAction.kind
         ],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getImportToConvert(context, context.triggerReason === "invoked");

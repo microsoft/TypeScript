@@ -6,10 +6,10 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const generateGetSetAction = {
         name: actionName,
         description: actionDescription,
-        refactorKind: "refactor.rewrite.property.generateAccessors",
+        kind: "refactor.rewrite.property.generateAccessors",
     };
     registerRefactor(actionName, {
-        refactorKinds: [generateGetSetAction.refactorKind],
+        kinds: [generateGetSetAction.kind],
         getEditsForAction(context, actionName) {
             if (!context.endPosition) return undefined;
             const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition);

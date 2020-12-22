@@ -5,17 +5,17 @@ namespace ts.refactor.extractSymbol {
     const extractConstantAction = {
         name: "Extract Constant",
         description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-        refactorKind: "refactor.extract.constant",
+        kind: "refactor.extract.constant",
     };
     const extractFunctionAction = {
         name: "Extract Function",
         description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-        refactorKind: "refactor.extract.function",
+        kind: "refactor.extract.function",
     };
     registerRefactor(refactorName, {
-        refactorKinds: [
-            extractConstantAction.refactorKind,
-            extractFunctionAction.refactorKind
+        kinds: [
+            extractConstantAction.kind,
+            extractFunctionAction.kind
         ],
         getAvailableActions,
         getEditsForAction
@@ -26,7 +26,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const requestedRefactor = context.refactorKind;
+        const requestedRefactor = context.kind;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
         const targetRange = rangeToExtract.targetRange;
 
@@ -36,14 +36,14 @@ namespace ts.refactor.extractSymbol {
             }
 
             const errors = [];
-            if (refactorKindBeginsWith(extractFunctionAction.refactorKind, requestedRefactor)) {
+            if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
                 errors.push({
                     name: refactorName,
                     description: extractFunctionAction.description,
                     actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
                 });
             }
-            if (refactorKindBeginsWith(extractConstantAction.refactorKind, requestedRefactor)) {
+            if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
                 errors.push({
                     name: refactorName,
                     description: extractConstantAction.description,
@@ -70,7 +70,7 @@ namespace ts.refactor.extractSymbol {
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
             const description = functionExtraction.description;
-            if(refactorKindBeginsWith(extractFunctionAction.refactorKind, requestedRefactor)){
+            if(refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)){
                 if (functionExtraction.errors.length === 0) {
                     // Don't issue refactorings with duplicated names.
                     // Scopes come back in "innermost first" order, so extractions will
@@ -80,7 +80,7 @@ namespace ts.refactor.extractSymbol {
                         functionActions.push({
                             description,
                             name: `function_scope_${i}`,
-                            refactorKind: extractFunctionAction.refactorKind
+                            kind: extractFunctionAction.kind
                         });
                     }
                 }
@@ -89,13 +89,13 @@ namespace ts.refactor.extractSymbol {
                         description,
                         name: `function_scope_${i}`,
                         notApplicableReason: getStringError(functionExtraction.errors),
-                        refactorKind: extractFunctionAction.refactorKind
+                        kind: extractFunctionAction.kind
                     };
                 }
             }
 
             // Skip these since we don't have a way to report errors yet
-            if(refactorKindBeginsWith(extractConstantAction.refactorKind, requestedRefactor)) {
+            if(refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
                 if (constantExtraction.errors.length === 0) {
                     // Don't issue refactorings with duplicated names.
                     // Scopes come back in "innermost first" order, so extractions will
@@ -106,7 +106,7 @@ namespace ts.refactor.extractSymbol {
                         constantActions.push({
                             description,
                             name: `constant_scope_${i}`,
-                            refactorKind: extractConstantAction.refactorKind
+                            kind: extractConstantAction.kind
                         });
                     }
                 }
@@ -115,7 +115,7 @@ namespace ts.refactor.extractSymbol {
                         description,
                         name: `constant_scope_${i}`,
                         notApplicableReason: getStringError(constantExtraction.errors),
-                        refactorKind: extractConstantAction.refactorKind
+                        kind: extractConstantAction.kind
                     };
                 }
             }

@@ -6,15 +6,15 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const addBracesAction = {
         name: "Add braces to arrow function",
         description: Diagnostics.Add_braces_to_arrow_function.message,
-        refactorKind: "refactor.rewrite.arrow.braces.add",
+        kind: "refactor.rewrite.arrow.braces.add",
     };
     const removeBracesAction = {
         name: "Remove braces from arrow function",
         description: Diagnostics.Remove_braces_from_arrow_function.message,
-        refactorKind: "refactor.rewrite.arrow.braces.remove"
+        kind: "refactor.rewrite.arrow.braces.remove"
     };
     registerRefactor(refactorName, {
-        refactorKinds: [removeBracesAction.refactorKind],
+        kinds: [removeBracesAction.kind],
         getEditsForAction,
         getAvailableActions });
 
@@ -88,7 +88,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true, refactorKind?: string): FunctionBracesInfo | RefactorErrorInfo | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true, kind?: string): FunctionBracesInfo | RefactorErrorInfo | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
 
@@ -108,10 +108,10 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             return undefined;
         }
 
-        if (refactorKindBeginsWith(addBracesAction.refactorKind, refactorKind) && isExpression(func.body)) {
+        if (refactorKindBeginsWith(addBracesAction.kind, kind) && isExpression(func.body)) {
             return { func, addBraces: true, expression: func.body };
         }
-        else if (refactorKindBeginsWith(removeBracesAction.refactorKind, refactorKind) && isBlock(func.body) && func.body.statements.length === 1) {
+        else if (refactorKindBeginsWith(removeBracesAction.kind, kind) && isBlock(func.body) && func.body.statements.length === 1) {
             const firstStatement = first(func.body.statements);
             if (isReturnStatement(firstStatement)) {
                 return { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement };

@@ -6,10 +6,10 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const functionOverloadAction = {
         name: refactorName,
         description: refactorDescription,
-        refactorKind: "refactor.rewrite.function.overloadList",
+        kind: "refactor.rewrite.function.overloadList",
     };
     registerRefactor(refactorName, {
-        refactorKinds: [functionOverloadAction.refactorKind],
+        kinds: [functionOverloadAction.kind],
         getEditsForAction,
         getAvailableActions
     });

@@ -7,10 +7,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     const toDestructuredAction = {
         name: refactorName,
         description: refactorDescription,
-        refactorKind: "refactor.rewrite.parameters.toDestructured"
+        kind: "refactor.rewrite.parameters.toDestructured"
     };
     registerRefactor(refactorName, {
-        refactorKinds: [toDestructuredAction.refactorKind],
+        kinds: [toDestructuredAction.kind],
         getEditsForAction,
         getAvailableActions
     });
