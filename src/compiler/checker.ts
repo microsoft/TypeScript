@@ -30002,8 +30002,9 @@ namespace ts {
                   isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
+            const rightTypeConstraint = getConstraintOfType(rightType);
             if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
-                rightType.immediateBaseConstraint && allTypesAssignableToKind(rightType.immediateBaseConstraint, TypeFlags.Primitive)) {
+                rightTypeConstraint && !allTypesAssignableToKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
             }
             return booleanType;
