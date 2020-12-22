@@ -3756,7 +3756,11 @@ namespace ts {
         }
 
         function handleDirectoryCouldBeSymlink(directory: string) {
+<<<<<<< HEAD
             if (!host.getResolvedProjectReferences() || containsIgnoredPath(directory)) return;
+=======
+            if (!host.getResolvedProjectReferences() && !pathContainsPnpmDirectory(directory)) return;
+>>>>>>> 5abd4628af... Create symlink cache when a pnpm module is found
 
             // Because we already watch node_modules, handle symlinks in there
             if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
