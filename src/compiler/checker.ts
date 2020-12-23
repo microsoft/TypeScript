@@ -432,6 +432,9 @@ namespace ts {
                 return node ? getTypeFromTypeNode(node) : errorType;
             },
             getParameterType: getTypeAtPosition,
+            getParameterNameAtPosition: (nodeIn, pos) => {
+                return unescapeLeadingUnderscores(getParameterNameAtPosition(nodeIn, pos));
+            },
             getPromisedTypeOfPromise,
             getAwaitedType: type => getAwaitedType(type),
             getReturnTypeOfSignature,

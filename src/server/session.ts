@@ -1421,6 +1421,17 @@ namespace ts.server {
             });
         }
 
+        private provideSignatureArgumentsLabel(args: protocol.FileRequestArgs) {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const labels = languageService.provideSignatureArgumentsLabel(file);
+
+            return labels.map(label => ({
+                name: label.name,
+                position: scriptInfo.positionToLineOffset(label.position)
+            }));
+        }
+
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
             this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
         }
@@ -2899,6 +2910,9 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ProvideSignatureArgumentsLabel]: (request: protocol.ProvideSignatureArgumentsLabelRequest) => {
+                return this.requiredResponse(this.provideSignatureArgumentsLabel(request.arguments));
+            }
         }));
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

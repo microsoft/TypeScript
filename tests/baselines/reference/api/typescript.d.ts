@@ -5543,6 +5543,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
+        provideSignatureArgumentsLabel(fileName: string): SignatureArgumentsLabel[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5706,6 +5707,10 @@ declare namespace ts {
     interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+    interface SignatureArgumentsLabel {
+        name: string;
+        position: number;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -6315,6 +6320,12 @@ declare namespace ts {
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25
+    }
+    interface SignatureArgumentsLabelContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken?: CancellationToken;
+        host: LanguageServiceHost;
     }
 }
 declare namespace ts {

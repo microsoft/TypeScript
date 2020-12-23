@@ -5543,6 +5543,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
+        provideSignatureArgumentsLabel(fileName: string): SignatureArgumentsLabel[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5706,6 +5707,10 @@ declare namespace ts {
     interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+    interface SignatureArgumentsLabel {
+        name: string;
+        position: number;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -6316,6 +6321,12 @@ declare namespace ts {
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25
     }
+    interface SignatureArgumentsLabelContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken?: CancellationToken;
+        host: LanguageServiceHost;
+    }
 }
 declare namespace ts {
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
@@ -6592,7 +6603,8 @@ declare namespace ts.server.protocol {
         UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
-        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
+        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideSignatureArgumentsLabel = "provideSignatureArgumentsLabel"
     }
     /**
      * A TypeScript Server message
@@ -8373,6 +8385,16 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
+    interface ProvideSignatureArgumentsLabelRequest extends FileRequest {
+        command: CommandTypes.ProvideSignatureArgumentsLabel;
+    }
+    interface SignatureArgumentsLabelItem {
+        name: string;
+        position: Location;
+    }
+    interface ProvideSignatureArgumentsLabelResponse extends Response {
+        body?: SignatureArgumentsLabelItem[];
+    }
     /**
      * Synchronous request for semantic diagnostics of one file.
      */
@@ -9991,6 +10013,7 @@ declare namespace ts.server {
         private getSuggestionDiagnosticsSync;
         private getJsxClosingTag;
         private getDocumentHighlights;
+        private provideSignatureArgumentsLabel;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
         private getProjectInfoWorker;

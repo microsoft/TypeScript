@@ -1196,6 +1196,7 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
+        "provideSignatureArgumentsLabel"
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2466,6 +2467,15 @@ namespace ts {
             };
         }
 
+        function getSignatureArgumentsLabelContext(file: SourceFile): SignatureArgumentsLabelContext {
+            return {
+                file,
+                program: getProgram()!,
+                host,
+                cancellationToken,
+            };
+        }
+
         function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
@@ -2507,6 +2517,12 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+        }
+
+        function provideSignatureArgumentsLabel(fileName: string): SignatureArgumentsLabel[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            return SignatureArgumentsLabel.provideSignatureArgumentsLabel(getSignatureArgumentsLabelContext(sourceFile));
         }
 
         const ls: LanguageService = {
@@ -2574,6 +2590,7 @@ namespace ts {
             toggleMultilineComment,
             commentSelection,
             uncommentSelection,
+            provideSignatureArgumentsLabel,
         };
 
         switch (languageServiceMode) {

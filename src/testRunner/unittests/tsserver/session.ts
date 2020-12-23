@@ -278,6 +278,7 @@ namespace ts.server {
                 CommandNames.ToggleMultilineComment,
                 CommandNames.CommentSelection,
                 CommandNames.UncommentSelection,
+                CommandNames.ProvideSignatureArgumentsLabel
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

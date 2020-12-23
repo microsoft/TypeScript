@@ -481,6 +481,8 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
+        provideSignatureArgumentsLabel(fileName: string): SignatureArgumentsLabel[]
+
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -683,6 +685,11 @@ namespace ts {
     export interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+
+    export interface SignatureArgumentsLabel {
+        name: string,
+        position: number
     }
 
     export interface TodoCommentDescriptor {
@@ -1480,5 +1487,12 @@ namespace ts {
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
         triggerReason?: RefactorTriggerReason;
+    }
+
+    export interface SignatureArgumentsLabelContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken?: CancellationToken;
+        host: LanguageServiceHost;
     }
 }

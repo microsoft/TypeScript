@@ -635,6 +635,18 @@ namespace ts.server {
 
         applyCodeActionCommand = notImplemented;
 
+        provideSignatureArgumentsLabel(file: string): SignatureArgumentsLabel[] {
+            const args: protocol.FileRequestArgs = { file };
+
+            const request = this.processRequest<protocol.ProvideSignatureArgumentsLabelRequest>(CommandNames.ProvideSignatureArgumentsLabel, args);
+            const response = this.processResponse<protocol.ProvideSignatureArgumentsLabelResponse>(request);
+
+            return response.body!.map(item => ({ // TODO: GH#18217
+                name: item.name,
+                position: this.lineOffsetToPosition(file, item.position)
+            }));
+        }
+
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"
                 ? this.createFileLocationRequestArgs(fileName, positionOrRange)

@@ -154,6 +154,7 @@ namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideSignatureArgumentsLabel = "provideSignatureArgumentsLabel"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     }
@@ -2471,6 +2472,19 @@ namespace ts.server.protocol {
      */
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    export interface ProvideSignatureArgumentsLabelRequest extends FileRequest {
+        command: CommandTypes.ProvideSignatureArgumentsLabel;
+    }
+
+    export interface SignatureArgumentsLabelItem {
+        name: string
+        position: Location
+    }
+
+    export interface ProvideSignatureArgumentsLabelResponse extends Response {
+        body?: SignatureArgumentsLabelItem[];
     }
 
     /**
