@@ -7,7 +7,6 @@
 //// const obj = { exp/**/
 
 verify.completions({
-  marker: "",
-  exact: completion.globalsPlus(["obj"]),
-  preferences: { includeCompletionsForModuleExports: true }
+    marker: "",
+    preferences: { includeCompletionsForModuleExports: true },
 });
