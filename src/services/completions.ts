@@ -1501,7 +1501,7 @@ namespace ts.Completions {
                     : KeywordCompletionFilters.TypeKeywords;
             }
 
-            const undeclaredVariable = findUndeclaredVariableIfExist(location);
+            const objectLiteralVariableDeclaration = getVariableDeclarationOfObjectLiteral(location);
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1510,7 +1510,8 @@ namespace ts.Completions {
                         return true;
                     }
 
-                    if (isUndeclaredSymbol(undeclaredVariable, symbol)) {
+                    // Filter out variables from their own initializers, e.g. `const o = { prop: /* no 'o' here */ }`
+                    if (objectLiteralVariableDeclaration && symbol.valueDeclaration === objectLiteralVariableDeclaration) {
                         return false;
                     }
 
@@ -1532,12 +1533,12 @@ namespace ts.Completions {
             });
         }
 
-        function findUndeclaredVariableIfExist(node: Node): VariableDeclaration | undefined {
-            if (!isIdentifier(node)) {
+        function getVariableDeclarationOfObjectLiteral(property: Node): VariableDeclaration | undefined {
+            if (!isIdentifier(property)) {
                 return undefined;
             }
 
-            let curNode: Node = node.parent;
+            let curNode: Node = property.parent;
             while (curNode && curNode.parent) {
                 if (isPropertyAssignment(curNode) && isObjectLiteralExpression(curNode.parent)) {
                     curNode = curNode.parent.parent;
@@ -1554,21 +1555,6 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function isUndeclaredSymbol(undeclaredVariable: VariableDeclaration | undefined, symbol: Symbol): boolean {
-            if (!undeclaredVariable) {
-                return false;
-            }
-
-            if (!symbol.declarations || symbol.declarations.length === 0) {
-                return false;
-            }
-
-            if (symbol.declarations.indexOf(undeclaredVariable) > -1) {
-                return true;
-            }
-
-            return false;
-        }
 
         function isTypeOnlyCompletion(): boolean {
             return insideJsDocTagTypeExpression
