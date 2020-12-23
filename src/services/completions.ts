@@ -1504,7 +1504,7 @@ namespace ts.Completions {
                     : KeywordCompletionFilters.TypeKeywords;
             }
 
-            const objectLiteralVariableDeclaration = getVariableDeclarationOfObjectLiteral(location);
+            const variableDeclaration = getVariableDeclaration(location);
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1513,8 +1513,13 @@ namespace ts.Completions {
                         return true;
                     }
 
-                    // Filter out variables from their own initializers, e.g. `const o = { prop: /* no 'o' here */ }`
-                    if (objectLiteralVariableDeclaration && symbol.valueDeclaration === objectLiteralVariableDeclaration) {
+                    // Filter out variables from their own initializers
+                    // e.g.
+                    // 1. `const o = { prop: /* no 'o' here */ }`
+                    // 2. `const a = /* no 'a' here */`
+                    // 3. `const b = a && /* no 'b' here */`
+                    // 4. `const c = [{ prop: [/* no 'c' here */] }]`
+                    if (variableDeclaration && symbol.valueDeclaration === variableDeclaration) {
                         return false;
                     }
 
@@ -1536,28 +1541,24 @@ namespace ts.Completions {
             });
         }
 
-        function getVariableDeclarationOfObjectLiteral(property: Node): VariableDeclaration | undefined {
+        function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
             if (!isIdentifier(property)) {
                 return undefined;
             }
 
-            let curNode: Node = property.parent;
-            while (curNode && curNode.parent) {
-                if ((isPropertyAssignment(curNode) || isShorthandPropertyAssignment(curNode)) && isObjectLiteralExpression(curNode.parent)) {
-                    curNode = curNode.parent.parent;
-
-                    if (isVariableDeclaration(curNode)) {
-                        return curNode;
-                    }
+            const variableDeclaration = findAncestor(property, (node) => {
+                if (isFunctionLikeDeclaration(node)) {
+                    return "quit";
                 }
-                else {
-                    return undefined;
-                }
-            }
 
-            return undefined;
+                if (isVariableDeclaration(node)) {
+                    return true;
+                }
+                return false;
+            });
+
+            return variableDeclaration as VariableDeclaration;
         }
-
 
         function isTypeOnlyCompletion(): boolean {
             return insideJsDocTagTypeExpression
