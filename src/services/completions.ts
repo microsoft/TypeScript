@@ -1543,7 +1543,7 @@ namespace ts.Completions {
 
             let curNode: Node = property.parent;
             while (curNode && curNode.parent) {
-                if (isPropertyAssignment(curNode) && isObjectLiteralExpression(curNode.parent)) {
+                if ((isPropertyAssignment(curNode) || isShorthandPropertyAssignment(curNode)) && isObjectLiteralExpression(curNode.parent)) {
                     curNode = curNode.parent.parent;
 
                     if (isVariableDeclaration(curNode)) {
