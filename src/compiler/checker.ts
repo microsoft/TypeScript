@@ -20045,7 +20045,7 @@ namespace ts {
             // Two object types that each have a property that is unmatched in the other are definitely unrelated.
             return isTupleType(source) && isTupleType(target) ? tupleTypesDefinitelyUnrelated(source, target) :
                 !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true) &&
-                !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true);
+                !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false);
         }
 
         function getTypeFromInference(inference: InferenceInfo) {
@@ -24423,10 +24423,7 @@ namespace ts {
             return undefined;
 
             function tryFindWhenConstTypeReference(node: Expression) {
-                if(isCallLikeExpression(node.parent)){
-                    return getContextualTypeForArgument(node.parent, node);
-                }
-                return undefined;
+                return getContextualType(node);
             }
         }
 
