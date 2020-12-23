@@ -278,7 +278,9 @@ namespace ts.moduleSpecifiers {
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
-            const result = forEach(targets, p => cb(p, referenceRedirect === p));
+            // Symlinks inside node_modules/.pnpm are already filtered out of the symlink cache,
+            // so we only need to remove them from the realpath filenames.
+            const result = forEach(targets, p => !pathContainsPnpmDirectory(p) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
         const links = host.getSymlinkCache
@@ -306,8 +308,9 @@ namespace ts.moduleSpecifiers {
                 }
             });
         });
-        return result ||
-            (preferSymlinks ? forEach(targets, p => cb(p, p === referenceRedirect)) : undefined);
+        return result || (preferSymlinks
+            ? forEach(targets, p => pathContainsPnpmDirectory(p) ? undefined : cb(p, p === referenceRedirect))
+            : undefined);
     }
 
     interface ModulePath {
