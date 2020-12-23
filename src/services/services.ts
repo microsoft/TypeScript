@@ -550,9 +550,8 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations([this.declaration]) : [];
+                this.jsDocTags = this.declaration ? getJsDocTags([this.declaration], this.checker) : [];
             }
-
             return this.jsDocTags;
         }
     }
@@ -566,13 +565,26 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
+    function getJsDocTags(declarations: Declaration[], checker: TypeChecker): JSDocTagInfo[] {
+        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations);
+        if (tags.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
+            forEachUnique(declarations, declaration => {
+                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.getJsDocTags());
+                if (inheritedTags) {
+                    tags = [...inheritedTags, ...tags];
+                }
+            });
+        }
+        return tags;
+    }
+
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return emptyArray;
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
-        if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
+        if (checker && (doc.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
             forEachUnique(declarations, declaration => {
-                const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker!); // TODO: GH#18217
+                const inheritedDocs = findBaseOfDeclaration(checker, declaration, symbol => symbol.getDocumentationComment(checker));
                 // TODO: GH#16312 Return a ReadonlyArray, avoid copying inheritedDocs
                 if (inheritedDocs) doc = doc.length === 0 ? inheritedDocs.slice() : inheritedDocs.concat(lineBreakPart(), doc);
             });
@@ -580,20 +592,10 @@ namespace ts {
         return doc;
     }
 
-    /**
-     * Attempts to find JSDoc comments for possibly-inherited properties.  Checks superclasses then traverses
-     * implemented interfaces until a symbol is found with the same name and with documentation.
-     * @param declaration The possibly-inherited declaration to find comments for.
-     * @param propertyName The name of the possibly-inherited property.
-     * @param typeChecker A TypeChecker, used to find inherited properties.
-     * @returns A filled array of documentation comments if any were found, otherwise an empty array.
-     */
-    function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): readonly SymbolDisplayPart[] | undefined {
+    function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[]): T[] | undefined {
         return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
-            const superType = typeChecker.getTypeAtLocation(superTypeNode);
-            const baseProperty = superType && typeChecker.getPropertyOfType(superType, propertyName);
-            const inheritedDocs = baseProperty && baseProperty.getDocumentationComment(typeChecker);
-            return inheritedDocs && inheritedDocs.length ? inheritedDocs : undefined;
+            const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
+            return symbol ? cb(symbol) : undefined;
         });
     }
 
