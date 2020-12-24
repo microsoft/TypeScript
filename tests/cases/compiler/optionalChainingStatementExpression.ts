@@ -23,3 +23,5 @@ function closeIfYouWant() {
   poss.possibly?.maybe?.close?.();
   return poss.possibly?.maybe?.close?.();
 }
+
+void maybe.close?.()

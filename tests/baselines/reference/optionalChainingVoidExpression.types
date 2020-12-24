@@ -1,0 +1,19 @@
+=== tests/cases/compiler/optionalChainingVoidExpression.ts ===
+type MaybeClosable = {
+>MaybeClosable : MaybeClosable
+
+  close?: () => {};
+>close : (() => {}) | undefined
+
+};
+
+declare const maybe: MaybeClosable;
+>maybe : MaybeClosable
+
+void maybe.close?.()
+>void maybe.close?.() : undefined
+>maybe.close?.() : {} | undefined
+>maybe.close : (() => {}) | undefined
+>maybe : MaybeClosable
+>close : (() => {}) | undefined
+

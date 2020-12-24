@@ -82,3 +82,10 @@ function closeIfYouWant() {
 >close : (() => {}) | undefined
 }
 
+void maybe.close?.()
+>void maybe.close?.() : undefined
+>maybe.close?.() : {} | undefined
+>maybe.close : (() => {}) | undefined
+>maybe : MaybeClosable
+>close : (() => {}) | undefined
+

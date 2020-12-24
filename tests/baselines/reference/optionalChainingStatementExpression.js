@@ -23,10 +23,12 @@ function closeIfYouWant() {
   return poss.possibly?.maybe?.close?.();
 }
 
+void maybe.close?.()
+
 
 //// [optionalChainingStatementExpression.js]
 "use strict";
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;
 (_a = maybe.close) !== null && _a !== void 0 && _a.call(maybe);
 var a = (_b = maybe.close) === null || _b === void 0 ? void 0 : _b.call(maybe);
 (_d = (_c = perhaps.maybe) !== null && _c !== void 0 && _c.close) !== null && _d !== void 0 && _d.call(_c);
@@ -36,3 +38,4 @@ function closeIfYouWant() {
     (_c = (_b = (_a = poss.possibly) !== null && _a !== void 0 && _a.maybe) !== null && _b !== void 0 && _b.close) !== null && _c !== void 0 && _c.call(_b);
     return (_f = (_e = (_d = poss.possibly) === null || _d === void 0 ? void 0 : _d.maybe) === null || _e === void 0 ? void 0 : _e.close) === null || _f === void 0 ? void 0 : _f.call(_e);
 }
+(_g = maybe.close) !== null && _g !== void 0 && _g.call(maybe);

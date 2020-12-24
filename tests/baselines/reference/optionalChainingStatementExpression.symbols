@@ -81,3 +81,8 @@ function closeIfYouWant() {
 >close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
 }
 
+void maybe.close?.()
+>maybe.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 10, 13))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
