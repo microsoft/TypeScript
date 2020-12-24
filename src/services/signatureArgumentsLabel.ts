@@ -48,7 +48,7 @@ namespace ts.SignatureArgumentsLabel {
                     const argumentName = isIdentifier(arg) ? arg.text : undefined;
                     if (!argumentName || argumentName !== parameterName) {
                         result.push({
-                            name: unescapeLeadingUnderscores(parameterName),
+                            name: `${unescapeLeadingUnderscores(parameterName)}:`,
                             position: expr.arguments[i].getStart()
                         });
                     }
