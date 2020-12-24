@@ -1421,14 +1421,14 @@ namespace ts.server {
             });
         }
 
-        private provideSignatureArgumentsLabel(args: protocol.FileRequestArgs) {
+        private provideInlineHints(args: protocol.FileRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-            const labels = languageService.provideSignatureArgumentsLabel(file);
+            const hints = languageService.provideInlineHints(file);
 
-            return labels.map(label => ({
-                name: label.name,
-                position: scriptInfo.positionToLineOffset(label.position)
+            return hints.map(hint => ({
+                text: hint.text,
+                position: scriptInfo.positionToLineOffset(hint.position)
             }));
         }
 
@@ -2910,8 +2910,8 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.ProvideSignatureArgumentsLabel]: (request: protocol.ProvideSignatureArgumentsLabelRequest) => {
-                return this.requiredResponse(this.provideSignatureArgumentsLabel(request.arguments));
+            [CommandNames.ProvideInlineHints]: (request: protocol.ProvideInlineHintsRequest) => {
+                return this.requiredResponse(this.provideInlineHints(request.arguments));
             }
         }));
 

@@ -5543,7 +5543,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
-        provideSignatureArgumentsLabel(fileName: string): SignatureArgumentsLabel[];
+        provideInlineHints(fileName: string): InlineHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5708,8 +5708,8 @@ declare namespace ts {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
     }
-    interface SignatureArgumentsLabel {
-        name: string;
+    interface InlineHint {
+        text: string;
         position: number;
     }
     interface TodoCommentDescriptor {
@@ -6321,7 +6321,7 @@ declare namespace ts {
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25
     }
-    interface SignatureArgumentsLabelContext {
+    interface InlineHintsContext {
         file: SourceFile;
         program: Program;
         cancellationToken?: CancellationToken;
@@ -6604,7 +6604,7 @@ declare namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-        ProvideSignatureArgumentsLabel = "provideSignatureArgumentsLabel"
+        ProvideInlineHints = "provideInlineHints"
     }
     /**
      * A TypeScript Server message
@@ -8385,15 +8385,15 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    interface ProvideSignatureArgumentsLabelRequest extends FileRequest {
-        command: CommandTypes.ProvideSignatureArgumentsLabel;
+    interface ProvideInlineHintsRequest extends FileRequest {
+        command: CommandTypes.ProvideInlineHints;
     }
-    interface SignatureArgumentsLabelItem {
-        name: string;
+    interface HintItem {
+        text: string;
         position: Location;
     }
-    interface ProvideSignatureArgumentsLabelResponse extends Response {
-        body?: SignatureArgumentsLabelItem[];
+    interface ProvideInlineHintsResponse extends Response {
+        body?: HintItem[];
     }
     /**
      * Synchronous request for semantic diagnostics of one file.
@@ -10013,7 +10013,7 @@ declare namespace ts.server {
         private getSuggestionDiagnosticsSync;
         private getJsxClosingTag;
         private getDocumentHighlights;
-        private provideSignatureArgumentsLabel;
+        private provideInlineHints;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
         private getProjectInfoWorker;

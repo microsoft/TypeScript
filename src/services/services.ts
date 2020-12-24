@@ -1196,7 +1196,7 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
-        "provideSignatureArgumentsLabel"
+        "provideInlineHints"
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2467,7 +2467,7 @@ namespace ts {
             };
         }
 
-        function getSignatureArgumentsLabelContext(file: SourceFile): SignatureArgumentsLabelContext {
+        function getInlineHintsContext(file: SourceFile): InlineHintsContext {
             return {
                 file,
                 program: getProgram()!,
@@ -2519,10 +2519,10 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideSignatureArgumentsLabel(fileName: string): SignatureArgumentsLabel[] {
+        function provideInlineHints(fileName: string): InlineHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            return SignatureArgumentsLabel.provideSignatureArgumentsLabel(getSignatureArgumentsLabelContext(sourceFile));
+            return InlineHints.provideInlineHints(getInlineHintsContext(sourceFile));
         }
 
         const ls: LanguageService = {
@@ -2590,7 +2590,7 @@ namespace ts {
             toggleMultilineComment,
             commentSelection,
             uncommentSelection,
-            provideSignatureArgumentsLabel,
+            provideInlineHints,
         };
 
         switch (languageServiceMode) {

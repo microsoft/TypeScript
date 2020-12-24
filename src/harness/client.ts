@@ -635,14 +635,14 @@ namespace ts.server {
 
         applyCodeActionCommand = notImplemented;
 
-        provideSignatureArgumentsLabel(file: string): SignatureArgumentsLabel[] {
+        provideInlineHints(file: string): InlineHint[] {
             const args: protocol.FileRequestArgs = { file };
 
-            const request = this.processRequest<protocol.ProvideSignatureArgumentsLabelRequest>(CommandNames.ProvideSignatureArgumentsLabel, args);
-            const response = this.processResponse<protocol.ProvideSignatureArgumentsLabelResponse>(request);
+            const request = this.processRequest<protocol.ProvideInlineHintsRequest>(CommandNames.ProvideInlineHints, args);
+            const response = this.processResponse<protocol.ProvideInlineHintsResponse>(request);
 
             return response.body!.map(item => ({ // TODO: GH#18217
-                name: item.name,
+                text: item.text,
                 position: this.lineOffsetToPosition(file, item.position)
             }));
         }

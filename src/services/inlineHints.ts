@@ -1,15 +1,15 @@
 /* @internal */
-namespace ts.SignatureArgumentsLabel {
-    interface ArgumentsInfo {
-        name: string
+namespace ts.InlineHints {
+    interface HintInfo {
+        text: string
         position: number
     }
 
-    export function provideSignatureArgumentsLabel(context: SignatureArgumentsLabelContext): ArgumentsInfo[] {
+    export function provideInlineHints(context: InlineHintsContext): HintInfo[] {
         const { file, program } = context;
 
         const checker = program.getTypeChecker();
-        const result: ArgumentsInfo[] = [];
+        const result: HintInfo[] = [];
 
         visitor(file);
 
@@ -33,10 +33,10 @@ namespace ts.SignatureArgumentsLabel {
                 return;
             }
 
-            getCallArgumentsLabels(expr, signature);
+            getCallArgumentsHints(expr, signature);
         }
 
-        function getCallArgumentsLabels(expr: CallExpression | NewExpression, signature: Signature) {
+        function getCallArgumentsHints(expr: CallExpression | NewExpression, signature: Signature) {
             if (!expr.arguments || !expr.arguments.length) {
                 return;
             }
@@ -48,7 +48,7 @@ namespace ts.SignatureArgumentsLabel {
                     const argumentName = isIdentifier(arg) ? arg.text : undefined;
                     if (!argumentName || argumentName !== parameterName) {
                         result.push({
-                            name: `${unescapeLeadingUnderscores(parameterName)}:`,
+                            text: `${unescapeLeadingUnderscores(parameterName)}:`,
                             position: expr.arguments[i].getStart()
                         });
                     }

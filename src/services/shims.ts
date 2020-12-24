@@ -280,7 +280,7 @@ namespace ts {
         prepareCallHierarchy(fileName: string, position: number): string;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
-        provideSignatureArgumentsLabel(fileName: string): string;
+        provideInlineHints(fileName: string): string;
 
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
@@ -1068,10 +1068,10 @@ namespace ts {
             );
         }
 
-        public provideSignatureArgumentsLabel(fileName: string): string {
+        public provideInlineHints(fileName: string): string {
             return this.forwardJSONCall(
-                `provideSignatureArgumentsLabel('${fileName}')`,
-                () => this.languageService.provideSignatureArgumentsLabel(fileName)
+                `provideInlineHints('${fileName}')`,
+                () => this.languageService.provideInlineHints(fileName)
             );
         }
 
