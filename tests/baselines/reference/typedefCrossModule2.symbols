@@ -25,9 +25,9 @@ class Foo { } // should error
 
 /** @typedef {number} Bar */
 exports.Bar = class { }
->exports.Bar : Symbol(Bar, Decl(mod1.js, 3, 13))
->exports : Symbol(Bar, Decl(mod1.js, 3, 13))
->Bar : Symbol(Bar, Decl(mod1.js, 3, 13))
+>exports.Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
+>exports : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
+>Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 
 /** @typedef {number} Baz */
 module.exports = {

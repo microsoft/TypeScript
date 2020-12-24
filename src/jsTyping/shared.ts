@@ -57,6 +57,6 @@ namespace ts.server {
     export function nowString() {
         // E.g. "12:34:56.789"
         const d = new Date();
-        return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
+        return `${padLeft(d.getHours().toString(), 2, "0")}:${padLeft(d.getMinutes().toString(), 2, "0")}:${padLeft(d.getSeconds().toString(), 2, "0")}.${padLeft(d.getMilliseconds().toString(), 3, "0")}`;
     }
 }

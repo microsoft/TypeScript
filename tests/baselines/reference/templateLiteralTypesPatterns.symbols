@@ -1,0 +1,487 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypesPatterns.ts ===
+type RequiresLeadingSlash = `/${string}`;
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+// ok
+const a: RequiresLeadingSlash = "/bin";
+>a : Symbol(a, Decl(templateLiteralTypesPatterns.ts, 3, 5))
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+// not ok
+const b: RequiresLeadingSlash = "no slash";
+>b : Symbol(b, Decl(templateLiteralTypesPatterns.ts, 6, 5))
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+type Protocol<T extends string, U extends string> = `${T}://${U}`;
+>Protocol : Symbol(Protocol, Decl(templateLiteralTypesPatterns.ts, 6, 43))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 8, 14))
+>U : Symbol(U, Decl(templateLiteralTypesPatterns.ts, 8, 31))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 8, 14))
+>U : Symbol(U, Decl(templateLiteralTypesPatterns.ts, 8, 31))
+
+function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+>hostSpec : Symbol(hostSpec, Decl(templateLiteralTypesPatterns.ts, 9, 18))
+>Protocol : Symbol(Protocol, Decl(templateLiteralTypesPatterns.ts, 6, 43))
+
+// ok, has protocol
+download("http://example.com/protocol");
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+
+// issues error - no protocol
+download("example.com/noprotocol");
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+
+// issues error, incorrect protocol
+download("gopher://example.com/protocol");
+>download : Symbol(download, Decl(templateLiteralTypesPatterns.ts, 8, 66))
+
+const q: RequiresLeadingSlash extends string ? true : false = true;
+>q : Symbol(q, Decl(templateLiteralTypesPatterns.ts, 17, 5))
+>RequiresLeadingSlash : Symbol(RequiresLeadingSlash, Decl(templateLiteralTypesPatterns.ts, 0, 0))
+
+declare function bools(x: `${boolean}`): void;
+>bools : Symbol(bools, Decl(templateLiteralTypesPatterns.ts, 17, 67))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 19, 23))
+
+// ok
+bools("true");
+>bools : Symbol(bools, Decl(templateLiteralTypesPatterns.ts, 17, 67))
+
+bools("false");
+>bools : Symbol(bools, Decl(templateLiteralTypesPatterns.ts, 17, 67))
+
+// not ok
+bools("other");
+>bools : Symbol(bools, Decl(templateLiteralTypesPatterns.ts, 17, 67))
+
+type Pat<T extends string | null | undefined> = `${T}`
+>Pat : Symbol(Pat, Decl(templateLiteralTypesPatterns.ts, 25, 15))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 27, 9))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 27, 9))
+
+declare function nullishes(x: Pat<null | undefined>): void;
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 28, 27))
+>Pat : Symbol(Pat, Decl(templateLiteralTypesPatterns.ts, 25, 15))
+
+// ok
+nullishes("null");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+nullishes("undefined");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+// not ok
+nullishes("0");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+nullishes("false");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+nullishes("NaN");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+nullishes("");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+nullishes("other");
+>nullishes : Symbol(nullishes, Decl(templateLiteralTypesPatterns.ts, 27, 54))
+
+declare function numbers(x: `${number}`): void;
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 40, 25))
+
+// the following should work
+numbers("1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("0");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("0b1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("0x1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("0o1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1e21");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1E21");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1e-21");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1E-21");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1.1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-1.1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-1.1e-10");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-1.1E-10");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1.1e-10");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+// the following should be errors since they're not numbers
+numbers("?");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("NaN");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("Infinity");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("+Infinity");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-Infinity");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("1_000");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+// the following should be errors since they don't match the pattern
+numbers("a10");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("10a");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+// whitespace and comments aren't part of numbers
+numbers("- 1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+numbers("-/**/1");
+>numbers : Symbol(numbers, Decl(templateLiteralTypesPatterns.ts, 38, 19))
+
+declare function bigints(x: `${bigint}`): void;
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 74, 25))
+
+// the following should work
+bigints("1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0b1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0x1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0o1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// bigints do not allow scientific notation in their parsing/scanning, so these are all errors
+bigints("1e21");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1E21");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1e-21");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1E-21");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// these are all errors because they're not big_int_s
+bigints("1.0");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1.1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1.1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1.1e-10");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1.1E-10");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1.1e-10");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// the following should be errors since they're not numbers
+bigints("?");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("NaN");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("Infinity");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("+Infinity");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-Infinity");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1_000");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// whitespace and comments aren't part of numbers
+bigints("- 1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-/**/1");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// the following should be errors since they don't match the pattern
+bigints("a10n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("10an");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+// the following should all be errors because the `BigInt` constructor (and thus bigint parsing) doesn't take the trailing `n` used in literals
+bigints("1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0b1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0x1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("0o1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1e21n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1E21n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1e-21n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1E-21n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1.1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1.1n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1.1e-10n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("-1.1E-10n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+bigints("1.1e-10n");
+>bigints : Symbol(bigints, Decl(templateLiteralTypesPatterns.ts, 72, 18))
+
+type AStr = `a${string}`;
+>AStr : Symbol(AStr, Decl(templateLiteralTypesPatterns.ts, 128, 20))
+
+type ANum = `a${number}`;
+>ANum : Symbol(ANum, Decl(templateLiteralTypesPatterns.ts, 130, 25))
+
+type AAny = `a${any}`;
+>AAny : Symbol(AAny, Decl(templateLiteralTypesPatterns.ts, 131, 25))
+
+declare var str: AStr;
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+>AStr : Symbol(AStr, Decl(templateLiteralTypesPatterns.ts, 128, 20))
+
+declare var num: ANum;
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+>ANum : Symbol(ANum, Decl(templateLiteralTypesPatterns.ts, 130, 25))
+
+declare var anyish: AAny;
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+>AAny : Symbol(AAny, Decl(templateLiteralTypesPatterns.ts, 131, 25))
+
+// not ok
+num = str;
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+
+anyish = `bno`
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+// ok
+str = num;
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+
+anyish = str;
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+
+str = anyish;
+>str : Symbol(str, Decl(templateLiteralTypesPatterns.ts, 134, 11))
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+anyish = num;
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+
+num = anyish;
+>num : Symbol(num, Decl(templateLiteralTypesPatterns.ts, 135, 11))
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+anyish = `aok`
+>anyish : Symbol(anyish, Decl(templateLiteralTypesPatterns.ts, 136, 11))
+
+
+// Validates variance isn't measured as strictly covariant
+type AGen<T extends string | number> = {field: `a${T}`};
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 152, 10))
+>field : Symbol(field, Decl(templateLiteralTypesPatterns.ts, 152, 40))
+>T : Symbol(T, Decl(templateLiteralTypesPatterns.ts, 152, 10))
+
+const shouldWork1: AGen<string> = null as any as AGen<"yes">;
+>shouldWork1 : Symbol(shouldWork1, Decl(templateLiteralTypesPatterns.ts, 153, 5))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+
+const shouldWork2: AGen<string> = null as any as AGen<number>;
+>shouldWork2 : Symbol(shouldWork2, Decl(templateLiteralTypesPatterns.ts, 154, 5))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+>AGen : Symbol(AGen, Decl(templateLiteralTypesPatterns.ts, 148, 14))
+
+// validates concatenation of patterns
+type A = `${number}`;
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 154, 62))
+
+type B = `${A} ${A}`;
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 154, 62))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 154, 62))
+
+const exampleBad: B = "anything"; // fails
+>exampleBad : Symbol(exampleBad, Decl(templateLiteralTypesPatterns.ts, 159, 5))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
+
+const exampleGood: B = "1 2"; // ok
+>exampleGood : Symbol(exampleGood, Decl(templateLiteralTypesPatterns.ts, 160, 5))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 157, 21))
+
+// Repro from #41161
+
+var aa: '0';
+>aa : Symbol(aa, Decl(templateLiteralTypesPatterns.ts, 164, 3), Decl(templateLiteralTypesPatterns.ts, 165, 3))
+
+var aa: '0' & `${number}`;
+>aa : Symbol(aa, Decl(templateLiteralTypesPatterns.ts, 164, 3), Decl(templateLiteralTypesPatterns.ts, 165, 3))
+
+// Remove string literals from unions with matching template literals
+
+let t1: `foo${string}` | 'foo1' | '1foo';  // `foo${string}` | '1foo'
+>t1 : Symbol(t1, Decl(templateLiteralTypesPatterns.ts, 169, 3))
+
+let t2: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo';  // `foo${string}` | '1foo' | 'xfoo'
+>t2 : Symbol(t2, Decl(templateLiteralTypesPatterns.ts, 170, 3))
+
+let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${number}foo`;  // `foo${string}` | xfoo' | `${number}foo`
+>t3 : Symbol(t3, Decl(templateLiteralTypesPatterns.ts, 171, 3))
+
+var bb: `${number}`;
+>bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
+
+var bb: `${number}` | '0';
+>bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
+
+// Normalize `${string}` to just string
+
+type T2S<A extends string, B extends string> = `${A}${B}`;
+>T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 174, 26))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 178, 9))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 178, 26))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 178, 9))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 178, 26))
+
+type S10 = `${string}`;  // string
+>S10 : Symbol(S10, Decl(templateLiteralTypesPatterns.ts, 178, 58))
+
+type S11 = `${string}${string}${string}`;  // string
+>S11 : Symbol(S11, Decl(templateLiteralTypesPatterns.ts, 180, 23))
+
+type S12 = T2S<string, string>;  // string
+>S12 : Symbol(S12, Decl(templateLiteralTypesPatterns.ts, 181, 41))
+>T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 174, 26))
+
+function ff1(x: `${string}-${string}`) {
+>ff1 : Symbol(ff1, Decl(templateLiteralTypesPatterns.ts, 182, 31))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+
+    let s1 = x && 42;  // number
+>s1 : Symbol(s1, Decl(templateLiteralTypesPatterns.ts, 185, 7))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+
+    let s2 = x || 42;  // `${string}-${string}`
+>s2 : Symbol(s2, Decl(templateLiteralTypesPatterns.ts, 186, 7))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+}
+
+// Repro from #41651
+
+export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+>TA : Symbol(TA, Decl(templateLiteralTypesPatterns.ts, 191, 15))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+
+export class AA {}
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+
+export abstract class BB {
+>BB : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+
+    abstract get(id: Id<AA>): void;
+>get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 196, 17))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+
+    update(id: Id<AA>): void {
+>update : Symbol(BB.update, Decl(templateLiteralTypesPatterns.ts, 196, 35))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+
+        this.get(id!);
+>this.get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+>this : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+>get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+    }
+}
+

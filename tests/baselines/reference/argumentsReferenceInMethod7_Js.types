@@ -1,0 +1,21 @@
+=== /a.js ===
+class A {
+>A : A
+
+	m() {
+>m : (...args: any[]) => void
+
+		/**
+		 * @type Function
+		 */
+		this.callee = arguments.callee;
+>this.callee = arguments.callee : Function
+>this.callee : Function
+>this : this
+>callee : Function
+>arguments.callee : Function
+>arguments : IArguments
+>callee : Function
+	}
+}
+

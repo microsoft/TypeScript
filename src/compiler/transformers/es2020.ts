@@ -92,7 +92,6 @@ namespace ts {
                 if (!isSimpleCopiableExpression(expression)) {
                     thisArg = factory.createTempVariable(hoistVariableDeclaration);
                     expression = factory.createAssignment(thisArg, expression);
-                    // if (inParameterInitializer) tempVariableInParameter = true;
                 }
                 else {
                     thisArg = expression;
@@ -132,7 +131,6 @@ namespace ts {
             if (!isSimpleCopiableExpression(leftExpression)) {
                 capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
                 leftExpression = factory.createAssignment(capturedLeft, leftExpression);
-                // if (inParameterInitializer) tempVariableInParameter = true;
             }
             let rightExpression = capturedLeft;
             let thisArg: Expression | undefined;
@@ -145,7 +143,6 @@ namespace ts {
                             if (!isSimpleCopiableExpression(rightExpression)) {
                                 thisArg = factory.createTempVariable(hoistVariableDeclaration);
                                 rightExpression = factory.createAssignment(thisArg, rightExpression);
-                                // if (inParameterInitializer) tempVariableInParameter = true;
                             }
                             else {
                                 thisArg = rightExpression;
@@ -213,15 +210,14 @@ namespace ts {
             if (!isSimpleCopiableExpression(left)) {
                 right = factory.createTempVariable(hoistVariableDeclaration);
                 left = factory.createAssignment(right, left);
-                // if (inParameterInitializer) tempVariableInParameter = true;
             }
-            return factory.createConditionalExpression(
+            return setTextRange(factory.createConditionalExpression(
                 createNotNullCondition(left, right),
                 /*questionToken*/ undefined,
                 right,
                 /*colonToken*/ undefined,
                 visitNode(node.right, visitor, isExpression),
-            );
+            ), node);
         }
 
         function visitDeleteExpression(node: DeleteExpression, isExpressionStatement: boolean) {

@@ -310,3 +310,35 @@ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >x : Grow1<[], T>
 }
 
+// Repros from #41756
+
+type ParseSuccess<R extends string> = { rest: R };
+>ParseSuccess : ParseSuccess<R>
+>rest : R
+
+type ParseManyWhitespace<S extends string> =
+>ParseManyWhitespace : ParseManyWhitespace<S>
+
+    S extends ` ${infer R0}` ?
+        ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
+>null : null
+
+        ParseSuccess<S>;
+
+type TP1 = ParseManyWhitespace<" foo">;
+>TP1 : ParseSuccess<"foo">
+
+type ParseManyWhitespace2<S extends string> =
+>ParseManyWhitespace2 : ParseManyWhitespace2<S>
+
+    S extends ` ${infer R0}` ?
+        Helper<ParseManyWhitespace2<R0>> :
+        ParseSuccess<S>;
+
+type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+>Helper : Helper<T>
+>null : null
+
+type TP2 = ParseManyWhitespace2<" foo">;
+>TP2 : ParseSuccess<"foo">
+

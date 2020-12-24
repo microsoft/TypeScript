@@ -46,7 +46,7 @@ namespace ts {
         }
     }
 
-    function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+    export function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         return jsxFactoryEntity ?
             createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
             factory.createPropertyAccessExpression(
@@ -64,7 +64,7 @@ namespace ts {
             );
     }
 
-    export function createExpressionForJsxElement(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
+    export function createExpressionForJsxElement(factory: NodeFactory, callee: Expression, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
             argumentsList.push(props);
@@ -88,7 +88,7 @@ namespace ts {
 
         return setTextRange(
             factory.createCallExpression(
-                createJsxFactoryExpression(factory, jsxFactoryEntity, reactNamespace, parentElement),
+                callee,
                 /*typeArguments*/ undefined,
                 argumentsList
             ),

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/declarations/interface.ts ===
+export interface Encoder<T> {
+    encode(value: T): Uint8Array
+>encode : (value: T) => Uint8Array
+>value : T
+}
+=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+/**
+ * @template T
+ * @implements {IEncoder<T>}
+ */
+export class Encoder {
+>Encoder : Encoder<T>
+
+    /**
+     * @param {T} value 
+     */
+    encode(value) {
+>encode : (value: T) => Uint8Array
+>value : T
+
+        return new Uint8Array(0)
+>new Uint8Array(0) : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>0 : 0
+    }
+}
+
+
+/**
+ * @template T
+ * @typedef {import('./interface').Encoder<T>} IEncoder
+ */

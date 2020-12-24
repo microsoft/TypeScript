@@ -7,6 +7,7 @@ class c {
 //// [b.d.ts]
 declare function foo(): boolean;
 
+
 //// [b.js]
 var c = /** @class */ (function () {
     function c() {

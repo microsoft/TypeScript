@@ -14,7 +14,14 @@ namespace ts {
                 const expectedError = expectedErrors[i];
                 assert.equal(parsedError.code, expectedError.code);
                 assert.equal(parsedError.category, expectedError.category);
-                assert.equal(parsedError.messageText, expectedError.messageText);
+                // Allow matching a prefix of the error message
+                if (typeof expectedError.messageText === "string" && expectedError.messageText.includes("[...]")) {
+                    const prefix = expectedError.messageText.split("[...]")[0];
+                    assert(expectedError.messageText.startsWith(prefix));
+                }
+                else {
+                    assert.equal(parsedError.messageText, expectedError.messageText);
+                }
             }
 
             const parsedFileNames = parsed.fileNames;
@@ -83,7 +90,7 @@ namespace ts {
             assertParseResult(["--lib", "es5,invalidOption", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.object', 'es2019.string', 'es2019.symbol', 'es2020.bigint', 'es2020.promise', 'es2020.string', 'es2020.symbol.wellknown', 'es2020.intl', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6' [...]",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
@@ -109,7 +116,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
+                        messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react', 'react-jsx', 'react-jsxdev'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -285,7 +292,7 @@ namespace ts {
             assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.object', 'es2019.string', 'es2019.symbol', 'es2020.bigint', 'es2020.promise', 'es2020.string', 'es2020.symbol.wellknown', 'es2020.intl', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6' [...].",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
@@ -304,7 +311,7 @@ namespace ts {
             assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asyncgenerator', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.object', 'es2019.string', 'es2019.symbol', 'es2020.bigint', 'es2020.promise', 'es2020.string', 'es2020.symbol.wellknown', 'es2020.intl', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', [...]",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
@@ -656,6 +663,64 @@ namespace ts {
                         watchOptions: { fallbackPolling: undefined }
                     });
             });
+
+            it("parse --excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/temp", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeDirectories: ["**/temp"] }
+                    });
+            });
+
+            it("errors on invalid excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/../*", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeDirectories: [] }
+                    });
+            });
+
+            it("parse --excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/temp/*.ts", "0.ts"],
+                    {
+                        errors: [],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeFiles: ["**/temp/*.ts"] }
+                    });
+            });
+
+            it("errors on invalid excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/../*", "0.ts"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        fileNames: ["0.ts"],
+                        options: {},
+                        watchOptions: { excludeFiles: [] }
+                    });
+            });
         });
     });
 
@@ -903,6 +968,54 @@ namespace ts {
                         projects: ["."],
                         buildOptions: { verbose: true },
                         watchOptions: { fallbackPolling: undefined }
+                    });
+            });
+
+            it("errors on invalid excludeDirectories", () => {
+                assertParseResult(["--excludeDirectories", "**/../*"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeDirectories: [] }
+                    });
+            });
+
+            it("parse --excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/temp/*.ts"],
+                    {
+                        errors: [],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeFiles: ["**/temp/*.ts"] }
+                    });
+            });
+
+            it("errors on invalid excludeFiles", () => {
+                assertParseResult(["--excludeFiles", "**/../*"],
+                    {
+                        errors: [
+                            {
+                                messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
+                                category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
+                                code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined
+                            }
+                        ],
+                        projects: ["."],
+                        buildOptions: {},
+                        watchOptions: { excludeFiles: [] }
                     });
             });
         });

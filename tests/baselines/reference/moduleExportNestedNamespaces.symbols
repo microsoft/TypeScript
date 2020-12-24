@@ -73,8 +73,8 @@ function f(c, classic) {
 >x : Symbol(C.x, Decl(mod.js, 1, 35))
 
     classic.p
->classic.p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+>classic.p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
 >classic : Symbol(classic, Decl(use.js, 9, 13))
->p : Symbol(Classic.p, Decl(mod.js, 5, 19))
+>p : Symbol(s.Classic.p, Decl(mod.js, 5, 19))
 }
 

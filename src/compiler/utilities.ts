@@ -100,28 +100,6 @@ namespace ts {
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
-    /**
-     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
-     * At that point findAncestor returns undefined.
-     */
-    export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
-    export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
-    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined {
-        while (node) {
-            const result = callback(node);
-            if (result === "quit") {
-                return undefined;
-            }
-            else if (result) {
-                return node;
-            }
-            node = node.parent;
-        }
-        return undefined;
-    }
-
     export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefined | "quit"): T | undefined {
         while (true) {
             const res = callback(node);
@@ -562,20 +540,89 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
+    interface ScriptTargetFeatures {
+        [key: string]: { [key: string]: string[] | undefined };
+    };
+
+    export function getScriptTargetFeatures(): ScriptTargetFeatures {
+        return {
+            es2015: {
+                Array: ["find", "findIndex", "fill", "copyWithin", "entries", "keys", "values"],
+                RegExp: ["flags", "sticky", "unicode"],
+                Reflect: ["apply", "construct", "defineProperty", "deleteProperty", "get"," getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"],
+                ArrayConstructor: ["from", "of"],
+                ObjectConstructor: ["assign", "getOwnPropertySymbols", "keys", "is", "setPrototypeOf"],
+                NumberConstructor: ["isFinite", "isInteger", "isNaN", "isSafeInteger", "parseFloat", "parseInt"],
+                Math: ["clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"],
+                Map: ["entries", "keys", "values"],
+                Set: ["entries", "keys", "values"],
+                Promise: emptyArray,
+                PromiseConstructor: ["all", "race", "reject", "resolve"],
+                Symbol: ["for", "keyFor"],
+                WeakMap: ["entries", "keys", "values"],
+                WeakSet: ["entries", "keys", "values"],
+                Iterator: emptyArray,
+                AsyncIterator: emptyArray,
+                String: ["codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"],
+                StringConstructor: ["fromCodePoint", "raw"]
+            },
+            es2016: {
+                Array: ["includes"]
+            },
+            es2017: {
+                Atomics: emptyArray,
+                SharedArrayBuffer: emptyArray,
+                String: ["padStart", "padEnd"],
+                ObjectConstructor: ["values", "entries", "getOwnPropertyDescriptors"],
+                DateTimeFormat: ["formatToParts"]
+            },
+            es2018: {
+                Promise: ["finally"],
+                RegExpMatchArray: ["groups"],
+                RegExpExecArray: ["groups"],
+                RegExp: ["dotAll"],
+                Intl: ["PluralRules"],
+                AsyncIterable: emptyArray,
+                AsyncIterableIterator: emptyArray,
+                AsyncGenerator: emptyArray,
+                AsyncGeneratorFunction: emptyArray,
+            },
+            es2019: {
+                Array: ["flat", "flatMap"],
+                ObjectConstructor: ["fromEntries"],
+                String: ["trimStart", "trimEnd", "trimLeft", "trimRight"],
+                Symbol: ["description"]
+            },
+            es2020: {
+                BigInt: emptyArray,
+                BigInt64Array: emptyArray,
+                BigUint64Array: emptyArray,
+                PromiseConstructor: ["allSettled"],
+                SymbolConstructor: ["matchAll"],
+                String: ["matchAll"],
+                DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
+                RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
+            },
+            esnext: {
+                PromiseConstructor: ["any"],
+                String: ["replaceAll"],
+                NumberFormat: ["formatToParts"]
+            }
+        };
+    }
+
     export const enum GetLiteralTextFlags {
         None = 0,
         NeverAsciiEscape = 1 << 0,
         JsxAttributeEscape = 1 << 1,
         TerminateUnterminatedLiterals = 1 << 2,
+        AllowNumericSeparator = 1 << 3
     }
 
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) && !(
-            (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
-            isBigIntLiteral(node)
-        )) {
+        if (canUseOriginalText(node, flags)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -626,6 +673,18 @@ namespace ts {
         }
 
         return Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
+    }
+
+    function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): boolean {
+        if (nodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated)) {
+            return false;
+        }
+
+        if (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
+            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+        }
+
+        return !isBigIntLiteral(node);
     }
 
     export function getTextOfConstantValue(value: string | number) {
@@ -929,10 +988,37 @@ namespace ts {
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
+        return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
+    }
+
+    function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
+        Debug.assertGreaterThanOrEqual(start, 0);
+        Debug.assertGreaterThanOrEqual(length, 0);
+
+        if (file) {
+            Debug.assertLessThanOrEqual(start, file.text.length);
+            Debug.assertLessThanOrEqual(start + length, file.text.length);
+        }
+    }
+
+    export function createFileDiagnosticFromMessageChain(file: SourceFile, start: number, length: number, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+        assertDiagnosticLocation(file, start, length);
+        return {
+            file,
+            start,
+            length,
+            code: messageChain.code,
+            category: messageChain.category,
+            messageText: messageChain.next ? messageChain : messageChain.messageText,
+            relatedInformation
+        };
+    }
+
+    export function createDiagnosticForFileFromMessageChain(sourceFile: SourceFile, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
         return {
             file: sourceFile,
-            start: span.start,
-            length: span.length,
+            start: 0,
+            length: 0,
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText,
@@ -1423,6 +1509,13 @@ namespace ts {
             }
             return false;
         });
+    }
+
+    export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
+        return firstDefined(getPropertyAssignment(objectLiteral, propKey), property =>
+            isArrayLiteralExpression(property.initializer) ?
+                find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                undefined);
     }
 
     export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined): ObjectLiteralExpression | undefined {
@@ -1939,7 +2032,9 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        node = getRootDeclaration(node);
+        if (node.kind === SyntaxKind.BindingElement) {
+            node = node.parent.parent;
+        }
         return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
@@ -1955,48 +2050,6 @@ namespace ts {
 
     export function isStringDoubleQuoted(str: StringLiteralLike, sourceFile: SourceFile): boolean {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
-    }
-
-    export function getDeclarationOfExpando(node: Node): Node | undefined {
-        if (!node.parent) {
-            return undefined;
-        }
-        let name: Expression | BindingName | undefined;
-        let decl: Node | undefined;
-        if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJSFile(node) && !isVarConst(node.parent)) {
-                return undefined;
-            }
-            name = node.parent.name;
-            decl = node.parent;
-        }
-        else if (isBinaryExpression(node.parent)) {
-            const parentNode = node.parent;
-            const parentNodeOperator = node.parent.operatorToken.kind;
-            if (parentNodeOperator === SyntaxKind.EqualsToken && parentNode.right === node) {
-                name = parentNode.left;
-                decl = name;
-            }
-            else if (parentNodeOperator === SyntaxKind.BarBarToken || parentNodeOperator === SyntaxKind.QuestionQuestionToken) {
-                if (isVariableDeclaration(parentNode.parent) && parentNode.parent.initializer === parentNode) {
-                    name = parentNode.parent.name;
-                    decl = parentNode.parent;
-                }
-                else if (isBinaryExpression(parentNode.parent) && parentNode.parent.operatorToken.kind === SyntaxKind.EqualsToken && parentNode.parent.right === parentNode) {
-                    name = parentNode.parent.left;
-                    decl = name;
-                }
-
-                if (!name || !isBindableStaticNameExpression(name) || !isSameEntityName(name, parentNode.left)) {
-                    return undefined;
-                }
-            }
-        }
-
-        if (!name || !getExpandoInitializer(node, isPrototypeAccess(name))) {
-            return undefined;
-        }
-        return decl;
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
@@ -2118,7 +2171,7 @@ namespace ts {
      * var min = window.min || {}
      * my.app = self.my.app || class { }
      */
-    function isSameEntityName(name: Expression, initializer: Expression): boolean {
+    export function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
             return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
@@ -2516,7 +2569,7 @@ namespace ts {
         return result || emptyArray;
     }
 
-    function getNextJSDocCommentLocation(node: Node) {
+    export function getNextJSDocCommentLocation(node: Node) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.PropertyAssignment ||
             parent.kind === SyntaxKind.ExportAssignment ||
@@ -2569,18 +2622,31 @@ namespace ts {
 
     export function getEffectiveJSDocHost(node: Node): Node | undefined {
         const host = getJSDocHost(node);
-        const decl = getSourceOfDefaultedAssignment(host) ||
-            getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
-            getSingleVariableOfVariableStatement(host) ||
-            getNestedModuleDeclaration(host) ||
-            host;
-        return decl;
+        if (host) {
+            return getSourceOfDefaultedAssignment(host)
+                || getSourceOfAssignment(host)
+                || getSingleInitializerOfVariableStatementOrPropertyDeclaration(host)
+                || getSingleVariableOfVariableStatement(host)
+                || getNestedModuleDeclaration(host)
+                || host;
+        }
     }
 
-    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments.  */
-    export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
+    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments. */
+    export function getJSDocHost(node: Node): HasJSDoc | undefined {
+        const jsDoc = getJSDocRoot(node);
+        if (!jsDoc) {
+            return undefined;
+        }
+
+        const host = jsDoc.parent;
+        if (host && host.jsDoc && jsDoc === lastOrUndefined(host.jsDoc)) {
+            return host;
+        }
+    }
+
+    export function getJSDocRoot(node: Node): JSDoc | undefined {
+        return findAncestor(node.parent, isJSDoc);
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -2726,6 +2792,20 @@ namespace ts {
 
     export function walkUpParenthesizedExpressions(node: Node) {
         return walkUp(node, SyntaxKind.ParenthesizedExpression);
+    }
+
+    /**
+     * Walks up parenthesized types.
+     * It returns both the outermost parenthesized type and its parent.
+     * If given node is not a parenthesiezd type, undefined is return as the former.
+     */
+    export function walkUpParenthesizedTypesAndGetParentAndChild(node: Node): [ParenthesizedTypeNode | undefined, Node] {
+        let child: ParenthesizedTypeNode | undefined;
+        while (node && node.kind === SyntaxKind.ParenthesizedType) {
+            child = <ParenthesizedTypeNode>node;
+            node = node.parent;
+        }
+        return [child, node];
     }
 
     export function skipParentheses(node: Expression): Expression;
@@ -3598,6 +3678,19 @@ namespace ts {
         return -1;
     }
 
+    export function getSemanticJsxChildren(children: readonly JsxChild[]) {
+        return filter(children, i => {
+            switch (i.kind) {
+                case SyntaxKind.JsxExpression:
+                    return !!i.expression;
+                case SyntaxKind.JsxText:
+                    return !i.containsOnlyTriviaWhiteSpaces;
+                default:
+                    return true;
+            }
+        });
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
         const filesWithDiagnostics = [] as string[] as SortedArray<string>;
@@ -3609,12 +3702,7 @@ namespace ts {
             lookup,
             getGlobalDiagnostics,
             getDiagnostics,
-            reattachFileDiagnostics
         };
-
-        function reattachFileDiagnostics(newFile: SourceFile): void {
-            forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
-        }
 
         function lookup(diagnostic: Diagnostic): Diagnostic | undefined {
             let diagnostics: SortedArray<Diagnostic> | undefined;
@@ -3808,13 +3896,15 @@ namespace ts {
 
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
-        if (indentStrings[level] === undefined) {
-            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        // prepopulate cache
+        const singleLevel = indentStrings[1];
+        for (let current = indentStrings.length; current <= level; current++) {
+            indentStrings.push(indentStrings[current - 1] + singleLevel);
         }
         return indentStrings[level];
     }
@@ -4019,6 +4109,7 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
@@ -4042,7 +4133,16 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
+        if (referencePath) {
+            return ensurePathIsNonModuleName(extensionless);
+        }
+        const options = host.getCompilerOptions();
+        const rootPkgName = options.bundledPackageName || "";
+        const newPath = combinePaths(rootPkgName, extensionless);
+        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
+            return newPath.slice(0, newPath.length - "/index".length);
+        }
+        return newPath;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4073,6 +4173,12 @@ namespace ts {
 
     export function outFile(options: CompilerOptions) {
         return options.outFile || options.out;
+    }
+
+    /** Returns 'undefined' if and only if 'options.paths' is undefined. */
+    export function getPathsBasePath(options: CompilerOptions, host: { getCurrentDirectory?(): string }) {
+        if (!options.paths) return undefined;
+        return options.baseUrl ?? Debug.checkDefined(options.pathsBasePath || host.getCurrentDirectory?.(), "Encountered 'paths' without a 'baseUrl', config file, or host 'getCurrentDirectory'.");
     }
 
     export interface EmitFileNames {
@@ -5531,7 +5637,7 @@ namespace ts {
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
-        if (Debug.isDebugging) {
+        if (Debug.isDebugging || tracing.isTracing()) {
             this.checker = checker;
         }
     }
@@ -5617,9 +5723,7 @@ namespace ts {
 
     export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithDetachedLocation;
     export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
-        Debug.assertGreaterThanOrEqual(start, 0);
-        Debug.assertGreaterThanOrEqual(length, 0);
-
+        assertDiagnosticLocation(/*file*/ undefined, start, length);
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
@@ -5687,13 +5791,7 @@ namespace ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
-        Debug.assertGreaterThanOrEqual(start, 0);
-        Debug.assertGreaterThanOrEqual(length, 0);
-
-        if (file) {
-            Debug.assertLessThanOrEqual(start, file.text.length);
-            Debug.assertLessThanOrEqual(start + length, file.text.length);
-        }
+        assertDiagnosticLocation(file, start, length);
 
         let text = getLocaleSpecificMessage(message);
 
@@ -5746,7 +5844,7 @@ namespace ts {
         };
     }
 
-    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
+    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): Diagnostic {
         return {
             file: undefined,
             start: undefined,
@@ -5755,6 +5853,7 @@ namespace ts {
             code: chain.code,
             category: chain.category,
             messageText: chain.next ? chain : chain.messageText,
+            relatedInformation
         };
     }
 
@@ -5765,7 +5864,6 @@ namespace ts {
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
         }
-
         return {
             messageText: text,
             category: message.category,
@@ -5951,6 +6049,26 @@ namespace ts {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }
 
+    export function getJSXTransformEnabled(options: CompilerOptions): boolean {
+        const jsx = options.jsx;
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
+    }
+
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        return compilerOptions.jsx === JsxEmit.ReactJSX ||
+            compilerOptions.jsx === JsxEmit.ReactJSXDev ||
+            compilerOptions.jsxImportSource ||
+            jsxImportSourcePragma ?
+                jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
+                undefined;
+    }
+
+    export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
+        return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
@@ -6125,6 +6243,11 @@ namespace ts {
      */
     export function isImplicitGlob(lastPathComponent: string): boolean {
         return !/[.*?]/.test(lastPathComponent);
+    }
+
+    export function getPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude") {
+        const pattern = spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]);
+        return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
     }
 
     function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
@@ -6599,6 +6722,7 @@ namespace ts {
         if (!diagnostic.relatedInformation) {
             diagnostic.relatedInformation = [];
         }
+        Debug.assert(diagnostic.relatedInformation !== emptyArray, "Diagnostic had empty array singleton for related info, but is still being constructed!");
         diagnostic.relatedInformation.push(...relatedInformation);
         return diagnostic;
     }
@@ -6635,9 +6759,11 @@ namespace ts {
         return { pos: getTokenPosOfNode(node), end: node.end };
     }
 
-    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+    export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
         // Include the `<>`
-        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
+        const pos = typeParameters.pos - 1;
+        const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+        return { pos, end };
     }
 
     export interface HostWithIsSourceOfProjectReferenceRedirect {
@@ -6901,6 +7027,44 @@ namespace ts {
 
         function bindParentToChild(child: Node, parent: Node) {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
+        }
+    }
+
+    /**
+     * Indicates whether the result of an `Expression` will be unused.
+     *
+     * NOTE: This requires a node with a valid `parent` pointer.
+     */
+    export function expressionResultIsUnused(node: Expression): boolean {
+        Debug.assertIsDefined(node.parent);
+        while (true) {
+            const parent: Node = node.parent;
+            // walk up parenthesized expressions, but keep a pointer to the top-most parenthesized expression
+            if (isParenthesizedExpression(parent)) {
+                node = parent;
+                continue;
+            }
+            // result is unused in an expression statement, `void` expression, or the initializer or incrementer of a `for` loop
+            if (isExpressionStatement(parent) ||
+                isVoidExpression(parent) ||
+                isForStatement(parent) && (parent.initializer === node || parent.incrementor === node)) {
+                return true;
+            }
+            if (isCommaListExpression(parent)) {
+                // left side of comma is always unused
+                if (node !== last(parent.elements)) return true;
+                // right side of comma is unused if parent is unused
+                node = parent;
+                continue;
+            }
+            if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.CommaToken) {
+                // left side of comma is always unused
+                if (node === parent.left) return true;
+                // right side of comma is unused if parent is unused
+                node = parent;
+                continue;
+            }
+            return false;
         }
     }
 }

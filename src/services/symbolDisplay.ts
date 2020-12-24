@@ -71,8 +71,6 @@ namespace ts.SymbolDisplay {
                     if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                         return ScriptElementKind.memberVariableElement;
                     }
-                    // May be a Function if this was from `typeof N` with `namespace N { function f();. }`.
-                    Debug.assert(!!(rootSymbolFlags & (SymbolFlags.Method | SymbolFlags.Function)));
                 });
                 if (!unionPropertyKind) {
                     // If this was union of all methods,
@@ -102,15 +100,32 @@ namespace ts.SymbolDisplay {
         return ScriptElementKind.unknown;
     }
 
-    export function getSymbolModifiers(symbol: Symbol): string {
-        const nodeModifiers = symbol && symbol.declarations && symbol.declarations.length > 0
-            ? getNodeModifiers(symbol.declarations[0])
-            : ScriptElementKindModifier.none;
+    export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): string {
+        if (!symbol) {
+            return ScriptElementKindModifier.none;
+        }
 
-        const symbolModifiers = symbol && symbol.flags & SymbolFlags.Optional ?
-            ScriptElementKindModifier.optionalModifier
-            : ScriptElementKindModifier.none;
-        return nodeModifiers && symbolModifiers ? nodeModifiers + "," + symbolModifiers : nodeModifiers || symbolModifiers;
+        const modifiers = new Set<string>();
+        if (symbol.declarations && symbol.declarations.length > 0) {
+            const kindModifiers = getNodeModifiers(symbol.declarations[0]);
+            if (kindModifiers !== ScriptElementKindModifier.none) {
+                kindModifiers.split(",").forEach(m => modifiers.add(m));
+            }
+        }
+        if (symbol.flags & SymbolFlags.Alias) {
+            const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
+            if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
+                const kindModifiers = getNodeModifiers(resolvedSymbol.declarations[0]);
+                if (kindModifiers !== ScriptElementKindModifier.none) {
+                    kindModifiers.split(",").forEach(m => modifiers.add(m));
+                }
+            }
+        }
+        if (symbol.flags & SymbolFlags.Optional) {
+            modifiers.add(ScriptElementKindModifier.optionalModifier);
+        }
+
+        return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
@@ -236,7 +251,7 @@ namespace ts.SymbolDisplay {
             else if ((isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) || // name of function declaration
                 (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                 // get the signature from the declaration and write it
-                const functionDeclaration = <FunctionLike>location.parent;
+                const functionDeclaration = <SignatureDeclaration>location.parent;
                 // Use function declaration to write the signatures only if the symbol corresponding to this declaration
                 const locationIsSymbolDeclaration = symbol.declarations && find(symbol.declarations, declaration =>
                     declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
@@ -404,6 +419,10 @@ namespace ts.SymbolDisplay {
                         displayParts.push(lineBreakPart());
                         documentationFromAlias = resolvedInfo.documentation;
                         tagsFromAlias = resolvedInfo.tags;
+                    }
+                    else {
+                        documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
+                        tagsFromAlias = resolvedSymbol.getJsDocTags();
                     }
                 }
             }

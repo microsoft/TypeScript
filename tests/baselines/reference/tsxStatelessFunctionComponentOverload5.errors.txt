@@ -91,6 +91,7 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
 !!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
 !!! error TS2769:     Type '{ children: string; to: string; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2769:       Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+!!! related TS2793 tests/cases/conformance/jsx/file.tsx:38:17: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
     const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
     const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property

@@ -1763,7 +1763,7 @@ namespace ts {
                 return node;
             }
 
-            if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
+            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
@@ -1790,7 +1790,7 @@ namespace ts {
                         const name = importDeclaration.propertyName || importDeclaration.name;
                         return setTextRange(
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(name)
                             ),
                             /*location*/ node

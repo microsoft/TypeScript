@@ -6,22 +6,22 @@ const x = require("./lateBoundAssignmentDeclarationSupport6.js");
 >"./lateBoundAssignmentDeclarationSupport6.js" : "./lateBoundAssignmentDeclarationSupport6.js"
 
 const inst =  new x.F();
->inst : F
->new x.F() : F
->x.F : typeof F
+>inst : x.F
+>new x.F() : x.F
+>x.F : typeof x.F
 >x : typeof x
->F : typeof F
+>F : typeof x.F
 
 const y = inst["my-fake-sym"];
 >y : any
 >inst["my-fake-sym"] : any
->inst : F
+>inst : x.F
 >"my-fake-sym" : "my-fake-sym"
 
 const z = inst[x.S];
 >z : any
 >inst[x.S] : any
->inst : F
+>inst : x.F
 >x.S : unique symbol
 >x : typeof x
 >S : unique symbol

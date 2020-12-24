@@ -145,9 +145,9 @@ namespace ts {
         getCompilerOptionsDiagnostics(): string;
 
         getSyntacticClassifications(fileName: string, start: number, length: number): string;
-        getSemanticClassifications(fileName: string, start: number, length: number): string;
+        getSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
         getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string;
-        getEncodedSemanticClassifications(fileName: string, start: number, length: number): string;
+        getEncodedSemanticClassifications(fileName: string, start: number, length: number, format?: SemanticClassificationFormat): string;
 
         getCompletionsAtPosition(fileName: string, position: number, preferences: UserPreferences | undefined): string;
         getCompletionEntryDetails(fileName: string, position: number, entryName: string, formatOptions: string/*Services.FormatCodeOptions*/ | undefined, source: string | undefined, preferences: UserPreferences | undefined): string;
@@ -207,6 +207,12 @@ namespace ts {
          * { definition: <encoded>; references: <encoded>[] }[]
          */
         findReferences(fileName: string, position: number): string;
+
+        /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
+         */
+        getFileReferences(fileName: string): string;
 
         /**
          * @deprecated
@@ -913,6 +919,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `findReferences('${fileName}', ${position})`,
                 () => this.languageService.findReferences(fileName, position)
+            );
+        }
+
+        public getFileReferences(fileName: string) {
+            return this.forwardJSONCall(
+                `getFileReferences('${fileName})`,
+                () => this.languageService.getFileReferences(fileName)
             );
         }
 

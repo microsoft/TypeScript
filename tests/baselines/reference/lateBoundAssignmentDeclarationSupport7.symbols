@@ -9,7 +9,7 @@ const y = x.F["my-fake-sym"];
 >x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
 >x : Symbol(x, Decl(usage.js, 0, 5))
 >F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport7.js, 6, 15))
->"my-fake-sym" : Symbol(F.F[_str], Decl(lateBoundAssignmentDeclarationSupport7.js, 5, 15))
+>"my-fake-sym" : Symbol(x.F.F[_str], Decl(lateBoundAssignmentDeclarationSupport7.js, 5, 15))
 
 const z = x.F[x.S];
 >z : Symbol(z, Decl(usage.js, 2, 5))

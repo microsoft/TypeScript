@@ -233,6 +233,14 @@ namespace ts {
         return node.kind === SyntaxKind.ImportType;
     }
 
+    export function isTemplateLiteralTypeSpan(node: Node): node is TemplateLiteralTypeSpan {
+        return node.kind === SyntaxKind.TemplateLiteralTypeSpan;
+    }
+
+    export function isTemplateLiteralTypeNode(node: Node): node is TemplateLiteralTypeNode {
+        return node.kind === SyntaxKind.TemplateLiteralType;
+    }
+
     // Binding patterns
 
     export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
@@ -695,6 +703,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypeExpression;
     }
 
+    export function isJSDocNameReference(node: Node): node is JSDocNameReference {
+        return node.kind === SyntaxKind.JSDocNameReference;
+    }
+
     export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }
@@ -775,8 +787,12 @@ namespace ts {
 
     export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
         return node.kind === SyntaxKind.JSDocDeprecatedTag;
-
     }
+
+    export function isJSDocSeeTag(node: Node): node is JSDocSeeTag {
+        return node.kind === SyntaxKind.JSDocSeeTag;
+    }
+
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
         return node.kind === SyntaxKind.JSDocEnumTag;
     }

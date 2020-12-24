@@ -160,7 +160,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "",
+      "kindModifiers": "export",
       "textSpan": {
         "start": 104,
         "length": 2
@@ -245,7 +245,7 @@
     },
     "quickInfo": {
       "kind": "alias",
-      "kindModifiers": "",
+      "kindModifiers": "export",
       "textSpan": {
         "start": 123,
         "length": 2

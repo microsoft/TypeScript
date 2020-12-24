@@ -24,13 +24,13 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/Project/file1.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts
@@ -78,13 +78,13 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/Project/file1.ts","/user/username/projects/myproject/Project/file2.ts"]
 Program options: {"watch":true,"project":"/user/username/projects/myproject/Project","configFilePath":"/user/username/projects/myproject/Project/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/Project/file1.ts

@@ -207,6 +207,50 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [file1.path, jquery.path]);
         });
 
+        it("inferred project - type acquisition with disableFilenameBasedTypeAcquisition:true", () => {
+            // Tests:
+            // Exclude file with disableFilenameBasedTypeAcquisition:true
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+
+            const messages: string[] = [];
+            const host = createServerHost([jqueryJs]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: File[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.setCompilerOptionsForInferredProjects({
+                allowJs: true,
+                enable: true,
+                disableFilenameBasedTypeAcquisition: true
+            });
+            projectService.openClientFile(jqueryJs.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const p = projectService.inferredProjects[0];
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.installAll(/*expectedCount*/ 0);
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            // files should not be removed from project if ATA is skipped
+            checkProjectActualFiles(p, [jqueryJs.path]);
+            assert.isTrue(messages.indexOf("No new typings were requested as a result of typings discovery") > 0, "Should not request filename-based typings");
+        });
+
         it("external project - no type acquisition, no .d.ts/js files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
@@ -391,7 +435,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file2Jsx.path, file3dts.path, lodashDts.path, reactDts.path]);
         });
@@ -434,6 +478,51 @@ namespace ts.projectSystem {
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
         });
+
+        it("external project - type acquisition with disableFilenameBasedTypeAcquisition:true", () => {
+            // Tests:
+            // Exclude file with disableFilenameBasedTypeAcquisition:true
+            const jqueryJs = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+
+            const messages: string[] = [];
+            const host = createServerHost([jqueryJs]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("jquery") }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
+                }
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
+                    super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+                    const installedTypings: string[] = [];
+                    const typingFiles: File[] = [];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectFileName = "/a/app/test.csproj";
+            const projectService = createProjectService(host, { typingsInstaller: installer });
+            projectService.openExternalProject({
+                projectFileName,
+                options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
+                rootFiles: [toExternalFile(jqueryJs.path)],
+                typeAcquisition: { enable: true, disableFilenameBasedTypeAcquisition: true }
+            });
+
+            const p = projectService.externalProjects[0];
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            checkProjectActualFiles(p, [jqueryJs.path]);
+
+            installer.installAll(/*expectedCount*/ 0);
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+            // files should not be removed from project if ATA is skipped
+            checkProjectActualFiles(p, [jqueryJs.path]);
+            assert.isTrue(messages.indexOf("No new typings were requested as a result of typings discovery") > 0, "Should not request filename-based typings");
+        });
+
         it("external project - no type acquisition, with js & ts files", () => {
             // Tests:
             // 1. No typings are included for JS projects when the project contains ts files
@@ -553,7 +642,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             // Commander: Existed as a JS file
             // JQuery: Specified in 'include'
@@ -637,7 +726,7 @@ namespace ts.projectSystem {
             for (const f of typingFiles) {
                 assert.isTrue(host.fileExists(f.path), `expected file ${f.path} to exist`);
             }
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
         });
@@ -740,7 +829,7 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-            host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
+            host.checkTimeoutQueueLengthAndRun(2); // for 2 projects
             checkProjectActualFiles(p1, [file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });
