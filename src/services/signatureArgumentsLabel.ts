@@ -29,17 +29,38 @@ namespace ts.SignatureArgumentsLabel {
         function visitCallOrNewExpression(expr: CallExpression | NewExpression) {
             const candidates: Signature[] = [];
             const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
-            if (!signature || !candidates.length || !expr.arguments || !expr.arguments.length) {
+            if (!signature || !candidates.length) {
                 return;
             }
 
-            for (let i = 0; i < expr.arguments.length; ++i) {
-                const name = checker.getParameterNameAtPosition(signature, i);
-                result.push({
-                    name,
-                    position: expr.arguments[i].pos
-                });
+            getCallArgumentsLabels(expr, signature);
+        }
+
+        function getCallArgumentsLabels(expr: CallExpression | NewExpression, signature: Signature) {
+            if (!expr.arguments || !expr.arguments.length) {
+                return;
             }
+
+            const hasRestParameter = signatureHasRestParameter(signature);
+            const paramCount = signature.parameters.length - (hasRestParameter ? 1 : 0);
+
+            for (let i = 0; i < expr.arguments.length; ++i) {
+                const parameterSymbol = signature.parameters[i];
+                if (isParameterDeclarationWithName(parameterSymbol)) {
+                    const name = unescapeLeadingUnderscores(parameterSymbol.escapedName);
+                    result.push({
+                        name,
+                        position: expr.arguments[i].getStart()
+                    });
+                }
+                if (i >= paramCount) {
+                    break;
+                }
+            }
+        }
+
+        function isParameterDeclarationWithName (symbol: Symbol) {
+            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name)
         }
     }
 }
