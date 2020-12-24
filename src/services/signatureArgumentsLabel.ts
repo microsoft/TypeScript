@@ -41,26 +41,19 @@ namespace ts.SignatureArgumentsLabel {
                 return;
             }
 
-            const hasRestParameter = signatureHasRestParameter(signature);
-            const paramCount = signature.parameters.length - (hasRestParameter ? 1 : 0);
-
             for (let i = 0; i < expr.arguments.length; ++i) {
-                const parameterSymbol = signature.parameters[i];
-                if (isParameterDeclarationWithName(parameterSymbol)) {
-                    const name = unescapeLeadingUnderscores(parameterSymbol.escapedName);
-                    result.push({
-                        name,
-                        position: expr.arguments[i].getStart()
-                    });
-                }
-                if (i >= paramCount) {
-                    break;
+                const parameterName = checker.getParameterIdentifierNameAtPosition(signature, i);
+                if (parameterName) {
+                    const arg = expr.arguments[i];
+                    const argumentName = isIdentifier(arg) ? arg.text : undefined;
+                    if (!argumentName || argumentName !== parameterName) {
+                        result.push({
+                            name: unescapeLeadingUnderscores(parameterName),
+                            position: expr.arguments[i].getStart()
+                        });
+                    }
                 }
             }
-        }
-
-        function isParameterDeclarationWithName(symbol: Symbol) {
-            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name);
         }
     }
 }
