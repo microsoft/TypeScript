@@ -59,8 +59,8 @@ namespace ts.SignatureArgumentsLabel {
             }
         }
 
-        function isParameterDeclarationWithName (symbol: Symbol) {
-            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name)
+        function isParameterDeclarationWithName(symbol: Symbol) {
+            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name);
         }
     }
 }
