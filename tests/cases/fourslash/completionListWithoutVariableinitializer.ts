@@ -5,6 +5,9 @@
 //// const c = [{ prop: [c/*3*/] }];
 //// const d = () => { d/*4*/ };
 //// const e = { prop() { e/*5*/ }  };
+//// const fn = (p = /*6*/) => {}
+//// const { f, g = /*7*/ } = { ... }
+//// const [ f1, g1 = /*8*/ ] = [ ... ]
 
 verify.completions({
     marker: ["1"],
@@ -33,4 +36,20 @@ verify.completions({
 verify.completions({
     marker: ["5"],
     includes: ["a", "b", "c", "d", "e"],
+});
+
+verify.completions({
+    marker: ["6"],
+    includes: ["a", "b", "c", "d", "e"],
+    excludes: ["fn"],
+});
+
+verify.completions({
+    marker: ["7"],
+    includes: ["a", "b", "c", "d", "e", "fn"],
+});
+
+verify.completions({
+    marker: ["8"],
+    includes: ["a", "b", "c", "d", "e", "fn"],
 });
