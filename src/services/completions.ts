@@ -1542,10 +1542,6 @@ namespace ts.Completions {
         }
 
         function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
-            if (!isIdentifier(property)) {
-                return undefined;
-            }
-
             const variableDeclaration = findAncestor(property, (node) => {
                 if (isFunctionLikeDeclaration(node)) {
                     return "quit";
