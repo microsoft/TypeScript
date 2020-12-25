@@ -194,8 +194,8 @@ declare let ab: AB<string>;
 >ab : AB<string>
 
 let z = foo(ab);  // [AB<string>, string]
->z : [AB<string>, string]
->foo(ab) : [AB<string>, string]
+>z : [{ a: string; } | { b: string; }, string]
+>foo(ab) : [{ a: string; } | { b: string; }, string]
 >foo : <T, U>(obj: (T & { a: U; }) | (T & { b: U; })) => [T, U]
 >ab : AB<string>
 

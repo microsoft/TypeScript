@@ -16,7 +16,7 @@ let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? 
 >x : unknown
 >x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
 >x : unknown
->(x === 'yes' || x === 'no') ? x : 'idk' : SomeResponse
+>(x === 'yes' || x === 'no') ? x : 'idk' : "yes" | "no" | "idk"
 >(x === 'yes' || x === 'no') : boolean
 >x === 'yes' || x === 'no' : boolean
 >x === 'yes' : boolean
@@ -582,7 +582,7 @@ function switchResponse(x: unknown): SomeResponse {
 >'idk' : "idk"
 
             return x;
->x : SomeResponse
+>x : "yes" | "no" | "idk"
 
         default:
             throw new Error('unknown response');

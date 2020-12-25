@@ -30,8 +30,8 @@ function test1() {
 >t : Temp1 | Temp2
 
         const z = t.getValue("bar"); // Should be fine
->z : React.ReactText
->t.getValue("bar") : React.ReactText
+>z : string | number
+>t.getValue("bar") : string | number
 >t.getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
 >t : Temp1 | Temp2
 >getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)

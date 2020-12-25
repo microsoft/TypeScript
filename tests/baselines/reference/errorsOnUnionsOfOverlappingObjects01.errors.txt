@@ -10,7 +10,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(42,10): error TS234
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(43,10): error TS2345: Argument of type '{ man: string; bear: string; }' is not assignable to parameter of type 'ExoticAnimal'.
   Property 'pig' is missing in type '{ man: string; bear: string; }' but required in type 'ManBearPig'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(46,26): error TS2345: Argument of type '{ man: string; beer: string; }' is not assignable to parameter of type 'ExoticAnimal'.
-  Object literal may only specify known properties, and 'beer' does not exist in type 'ExoticAnimal'.
+  Object literal may only specify known properties, and 'beer' does not exist in type 'CatDog | ManBearPig | Platypus'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS2345: Argument of type '{ man: string; beer: string; }' is not assignable to parameter of type 'ExoticAnimal'.
   Type '{ man: string; beer: string; }' is missing the following properties from type 'ManBearPig': bear, pig
 
@@ -82,7 +82,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
     addToZoo({ man: "Manny", beer: "Coffee" });
                              ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ man: string; beer: string; }' is not assignable to parameter of type 'ExoticAnimal'.
-!!! error TS2345:   Object literal may only specify known properties, and 'beer' does not exist in type 'ExoticAnimal'.
+!!! error TS2345:   Object literal may only specify known properties, and 'beer' does not exist in type 'CatDog | ManBearPig | Platypus'.
     addToZoo(manBeer);
              ~~~~~~~
 !!! error TS2345: Argument of type '{ man: string; beer: string; }' is not assignable to parameter of type 'ExoticAnimal'.

@@ -1,5 +1,5 @@
 tests/cases/conformance/types/unknown/unknownType2.ts(216,13): error TS2322: Type '"yes" | "no" | "maybe"' is not assignable to type 'SomeResponse'.
-  Type '"maybe"' is not assignable to type 'SomeResponse'.
+  Type '"maybe"' is not assignable to type '"yes" | "no" | "idk"'.
 
 
 ==== tests/cases/conformance/types/unknown/unknownType2.ts (1 errors) ====
@@ -221,7 +221,7 @@ tests/cases/conformance/types/unknown/unknownType2.ts(216,13): error TS2322: Typ
                 return x; // error
                 ~~~~~~~~~
 !!! error TS2322: Type '"yes" | "no" | "maybe"' is not assignable to type 'SomeResponse'.
-!!! error TS2322:   Type '"maybe"' is not assignable to type 'SomeResponse'.
+!!! error TS2322:   Type '"maybe"' is not assignable to type '"yes" | "no" | "idk"'.
             default:
                 throw new Error('Can you repeat the question?');
         }

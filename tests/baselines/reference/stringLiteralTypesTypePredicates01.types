@@ -47,7 +47,7 @@ if (!kindIs(x, "B")) {
 >!kindIs(x, "B") : boolean
 >kindIs(x, "B") : boolean
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }
->x : Kind
+>x : "A" | "B"
 >"B" : "B"
 
     let c = x;

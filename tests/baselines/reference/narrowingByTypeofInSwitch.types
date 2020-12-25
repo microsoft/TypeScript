@@ -393,7 +393,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 }
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
->testExtendsImplicitDefault : <T extends Basic>(x: T) => string | number | boolean | symbol | object | undefined
+>testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
 >x : T
 
     switch (typeof x) {

@@ -630,14 +630,14 @@ function notallowed(arg: number) {
 
         state.tag;
 >state.tag : "one" | "two" | "three"
->state : State
+>state : { tag: "one"; } | { tag: "two"; } | { tag: "three"; }
 >tag : "one" | "two" | "three"
 
         if (state.tag !== "one" && state.tag !== "two") {
 >state.tag !== "one" && state.tag !== "two" : boolean
 >state.tag !== "one" : boolean
 >state.tag : "one" | "two" | "three"
->state : State
+>state : { tag: "one"; } | { tag: "two"; } | { tag: "three"; }
 >tag : "one" | "two" | "three"
 >"one" : "one"
 >state.tag !== "two" : boolean

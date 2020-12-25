@@ -90,9 +90,9 @@
 
                 Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
 >Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >constructor.prototype : any
 >constructor : any
 >prototype : any
