@@ -2467,12 +2467,13 @@ namespace ts {
             };
         }
 
-        function getInlineHintsContext(file: SourceFile, span: TextSpan): InlineHintsContext {
+        function getInlineHintsContext(file: SourceFile, span: TextSpan, preferences: UserPreferences): InlineHintsContext {
             return {
                 file,
                 program: getProgram()!,
                 host,
                 span,
+                preferences,
                 cancellationToken,
             };
         }
@@ -2520,10 +2521,10 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideInlineHints(fileName: string, span: TextSpan): InlineHint[] {
+        function provideInlineHints(fileName: string, span: TextSpan, preferences: InlineHintsOptions = emptyOptions): InlineHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            return InlineHints.provideInlineHints(getInlineHintsContext(sourceFile, span));
+            return InlineHints.provideInlineHints(getInlineHintsContext(sourceFile, span, preferences));
         }
 
         const ls: LanguageService = {

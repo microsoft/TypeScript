@@ -1424,7 +1424,7 @@ namespace ts.server {
         private provideInlineHints(args: protocol.ProvideInlineHintsRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-            const hints = languageService.provideInlineHints(file, args);
+            const hints = languageService.provideInlineHints(file, args, this.getPreferences(file));
 
             return hints.map(hint => ({
                 text: hint.text,

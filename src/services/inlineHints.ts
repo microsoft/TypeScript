@@ -7,8 +7,10 @@ namespace ts.InlineHints {
         whitespaceAfter?: boolean;
     }
 
+    const maxHintsLength = 20;
+
     export function provideInlineHints(context: InlineHintsContext): HintInfo[] {
-        const { file, program, span, cancellationToken } = context;
+        const { file, program, span, cancellationToken, preferences } = context;
 
         const checker = program.getTypeChecker();
         const result: HintInfo[] = [];
@@ -40,13 +42,44 @@ namespace ts.InlineHints {
                 return;
             }
 
-            if (isCallExpression(node) || isNewExpression(node)) {
+            if (preferences.includeInlineParameterName && (isCallExpression(node) || isNewExpression(node))) {
                 visitCallOrNewExpression(node);
             }
-            else if (isArrowFunction(node) || isFunctionExpression(node)) {
+            else if (preferences.includeInlineFunctionParameterType && (isArrowFunction(node) || isFunctionExpression(node))) {
                 visitFunctionExpressionLike(node);
             }
+            else if (preferences.includeInlineVariableType && (isVariableDeclaration(node))) {
+                visitVariableDeclaration(node);
+            }
             return forEachChild(node, visitor);
+        }
+
+        function addNameHints(text: string, position: number) {
+            result.push({
+                text: `${truncation(text, maxHintsLength)}:`,
+                position,
+                whitespaceAfter: true,
+            });
+        }
+
+        function addTypeHints(text: string, position: number) {
+            result.push({
+                text: `:${truncation(text, maxHintsLength)}`,
+                position,
+                whitespaceBefore: true,
+            });
+        }
+
+        function visitVariableDeclaration(decl: VariableDeclaration) {
+            if (decl.type || !decl.initializer) {
+                return;
+            }
+
+            const initializerType = checker.getTypeAtLocation(decl.initializer);
+            const typeDisplayString = displayPartsToString(typeToDisplayParts(checker, initializerType));
+            if (typeDisplayString) {
+                addTypeHints(typeDisplayString, decl.name.end);
+            }
         }
 
         function visitCallOrNewExpression(expr: CallExpression | NewExpression) {
@@ -66,11 +99,7 @@ namespace ts.InlineHints {
                     const arg = expr.arguments[i];
                     const argumentName = isIdentifier(arg) ? arg.text : undefined;
                     if (!argumentName || argumentName !== parameterName) {
-                        result.push({
-                            text: `${unescapeLeadingUnderscores(parameterName)}:`,
-                            position: expr.arguments[i].getStart(),
-                            whitespaceAfter: true,
-                        });
+                        addNameHints(unescapeLeadingUnderscores(parameterName), expr.arguments[i].getStart());
                     }
                 }
             }
@@ -98,25 +127,34 @@ namespace ts.InlineHints {
                     continue;
                 }
 
-                const signatureParam = signature.parameters[i];
-                const signatureParamType = checker.getTypeOfSymbolAtLocation(signatureParam, signatureParam.valueDeclaration);
-
-                const valueDeclaration = signatureParam.valueDeclaration;
-                if (!valueDeclaration || !isParameter(valueDeclaration) || !valueDeclaration.type) {
-                    continue;
-                }
-
-                const typeDisplayString = displayPartsToString(typeToDisplayParts(checker, signatureParamType));
+                const typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
                 if (!typeDisplayString) {
                     continue;
                 }
 
-                result.push({
-                    text: `:${typeDisplayString}`,
-                    position: param.end,
-                    whitespaceBefore: true,
-                });
+                addTypeHints(typeDisplayString, param.end);
             }
+        }
+
+        function getParameterDeclarationTypeDisplayString(symbol: Symbol) {
+            const valueDeclaration = symbol.valueDeclaration;
+            if (!valueDeclaration || !isParameter(valueDeclaration)) {
+                return undefined;
+            }
+
+            if (valueDeclaration.type) {
+                return valueDeclaration.type.getText();
+            }
+
+            const signatureParamType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration);
+            return displayPartsToString(typeToDisplayParts(checker, signatureParamType));
+        }
+
+        function truncation(text: string, maxLength: number) {
+            if (text.length > maxLength) {
+                return text.substr(0, maxLength - "...".length) + "...";
+            }
+            return text;
         }
     }
 }

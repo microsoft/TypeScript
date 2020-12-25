@@ -8245,6 +8245,9 @@ namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
+        readonly includeInlineParameterName?: boolean;
+        readonly includeInlineFunctionParameterType?: boolean;
+        readonly includeInlineVariableType?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

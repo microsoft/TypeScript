@@ -481,7 +481,7 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
-        provideInlineHints(fileName: string, span: TextSpan): InlineHint[]
+        provideInlineHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlineHint[]
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -562,6 +562,12 @@ namespace ts {
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+
+    export interface InlineHintsOptions extends UserPreferences {
+        readonly includeInlineParameterName?: boolean;
+        readonly includeInlineFunctionParameterType?: boolean,
+        readonly includeInlineVariableType?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
@@ -1497,5 +1503,6 @@ namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
+        preferences: UserPreferences;
     }
 }

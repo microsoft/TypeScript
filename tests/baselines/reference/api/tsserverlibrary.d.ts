@@ -3872,6 +3872,9 @@ declare namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
+        readonly includeInlineParameterName?: boolean;
+        readonly includeInlineFunctionParameterType?: boolean;
+        readonly includeInlineVariableType?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5543,7 +5546,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
-        provideInlineHints(fileName: string, span: TextSpan): InlineHint[];
+        provideInlineHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlineHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5602,6 +5605,11 @@ declare namespace ts {
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+    interface InlineHintsOptions extends UserPreferences {
+        readonly includeInlineParameterName?: boolean;
+        readonly includeInlineFunctionParameterType?: boolean;
+        readonly includeInlineVariableType?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
@@ -6329,6 +6337,7 @@ declare namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
+        preferences: UserPreferences;
     }
 }
 declare namespace ts {

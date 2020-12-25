@@ -599,8 +599,8 @@ namespace Harness.LanguageService {
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
         }
-        provideInlineHints(fileName: string, span: ts.TextSpan) {
-            return unwrapJSONCallResult(this.shim.provideInlineHints(fileName, span));
+        provideInlineHints(fileName: string, span: ts.TextSpan, preference: ts.InlineHintsOptions) {
+            return unwrapJSONCallResult(this.shim.provideInlineHints(fileName, span, preference));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
