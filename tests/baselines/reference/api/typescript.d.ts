@@ -7066,7 +7066,7 @@ declare namespace ts {
     /** @deprecated Use `factory.updateNamespaceExport` or the factory supplied by your transformation context instead. */
     const updateNamespaceExport: (node: NamespaceExport, name: Identifier) => NamespaceExport;
     /** @deprecated Use `factory.createToken` or the factory supplied by your transformation context instead. */
-    const createToken: <TKind extends SyntaxKind>(kind: TKind) => Token<TKind>;
+    const createToken: <TKind extends TokenSyntaxKind>(kind: TKind) => Token<TKind>;
     /** @deprecated Use `factory.createIdentifier` or the factory supplied by your transformation context instead. */
     const createIdentifier: (text: string) => Identifier;
     /** @deprecated Use `factory.createTempVariable` or the factory supplied by your transformation context instead. */

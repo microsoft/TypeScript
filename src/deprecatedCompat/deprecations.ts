@@ -914,9 +914,7 @@ namespace ts {
     export const updateNamespaceExport = Debug.deprecate(factory.updateNamespaceExport, factoryDeprecation);
 
     /** @deprecated Use `factory.createToken` or the factory supplied by your transformation context instead. */
-    //@ts-ignore this change is safe, according to https://github.com/microsoft/TypeScript/pull/35282, deprecated api would be removed in 4.3
-    export const createToken = Debug.deprecate(function createToken<TKind extends SyntaxKind>(kind: TKind): Token<TKind> {
-        //@ts-ignore
+    export const createToken = Debug.deprecate(function createToken<TKind extends TokenSyntaxKind>(kind: TKind): Token<TKind> {
         return factory.createToken(kind);
     }, factoryDeprecation);
 
