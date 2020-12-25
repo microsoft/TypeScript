@@ -3052,14 +3052,7 @@ namespace ts {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
-    export type TriviaKind =
-        SyntaxKind.SingleLineCommentTrivia
-        | SyntaxKind.MultiLineCommentTrivia
-        | SyntaxKind.NewLineTrivia
-        | SyntaxKind.WhitespaceTrivia
-        | SyntaxKind.ShebangTrivia
-        | SyntaxKind.ConflictMarkerTrivia;
-    export function isTrivia(token: SyntaxKind): token is TriviaKind {
+    export function isTrivia(token: SyntaxKind): token is TriviaSyntaxKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
