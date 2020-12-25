@@ -5543,7 +5543,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
-        provideInlineHints(fileName: string): InlineHint[];
+        provideInlineHints(fileName: string, span: TextSpan): InlineHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -6324,8 +6324,9 @@ declare namespace ts {
     interface InlineHintsContext {
         file: SourceFile;
         program: Program;
-        cancellationToken?: CancellationToken;
+        cancellationToken: CancellationToken;
         host: LanguageServiceHost;
+        span: TextSpan;
     }
 }
 declare namespace ts {

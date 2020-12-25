@@ -10,10 +10,14 @@ namespace ts.InlineHints {
 
         const checker = program.getTypeChecker();
         const result: HintInfo[] = [];
-        
+
         visitor(file);
         return result;
         function visitor(node: Node): true | undefined | void {
+            if (!node || node.getFullWidth() === 0) {
+                return;
+            }
+
             switch(node.kind) {
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -21,12 +25,13 @@ namespace ts.InlineHints {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.FunctionExpression:
+                case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.ArrowFunction:
                     cancellationToken.throwIfCancellationRequested();
-            }
 
-            if (!node || !textSpanIntersectsWith(span, node.pos, node.getFullWidth()) || node.getFullWidth() === 0) {
-                return;
+                    if (!textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
+                        return;
+                    }
             }
 
             if (isTypeNode(node)) {
