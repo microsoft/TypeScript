@@ -10622,7 +10622,7 @@ namespace ts {
                 return type;
             }
             if (type.flags & TypeFlags.Union) {
-                return getUnionType(sameMap((<UnionType>type).types, getLowerBoundOfKeyType));
+                return mapType(<UnionType>type, getLowerBoundOfKeyType);
             }
             if (type.flags & TypeFlags.Intersection) {
                 return getIntersectionType(sameMap((<UnionType>type).types, getLowerBoundOfKeyType));
@@ -11441,6 +11441,13 @@ namespace ts {
                 (<UnionType>reduced).resolvedReducedType = reduced;
             }
             return reduced;
+        }
+
+        function getUnaliasedUnionType(type: Type) {
+            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.EnumLiteral) && (<UnionType>type).aliasSymbol) {
+                return (<UnionType>type).unaliasedType || ((<UnionType>type).unaliasedType = getUnionTypeFromSortedList((<UnionType>type).types, (<UnionType>type).objectFlags));
+            }
+            return type;
         }
 
         function isNeverReducedProperty(prop: Symbol) {
@@ -13126,7 +13133,7 @@ namespace ts {
         function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
+                return addTypesToUnion(typeSet, includes | (type.aliasSymbol ? TypeFlags.Union : 0), (<UnionType>type).types);
             }
             // We ignore 'never' types in unions
             if (!(flags & TypeFlags.Never)) {
@@ -13242,6 +13249,21 @@ namespace ts {
             }
         }
 
+        function findSingleAliasedUnion(types: readonly Type[]) {
+            let aliasedUnion: UnionType | undefined;
+            for (const t of types) {
+                if (t.flags & TypeFlags.Union && (<UnionType>t).aliasSymbol) {
+                    if (!aliasedUnion) {
+                        aliasedUnion = <UnionType>t;
+                    }
+                    else if (t !== aliasedUnion) {
+                        return undefined;
+                    }
+                }
+            }
+            return aliasedUnion;
+        }
+
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -13258,6 +13280,12 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
+            if (includes & TypeFlags.Union && !aliasSymbol) {
+                const aliasedUnion = findSingleAliasedUnion(types);
+                if (aliasedUnion && arraysEqual(typeSet, aliasedUnion.types)) {
+                    return aliasedUnion;
+                }
+            }
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
@@ -13328,7 +13356,7 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const id = getTypeListId(types);
+            const id = getTypeListId(types) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
             let type = unionTypes.get(id);
             if (!type) {
                 type = <UnionType>createType(TypeFlags.Union);
@@ -14850,7 +14878,7 @@ namespace ts {
 
         function getRegularTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.FreshableLiteral ? (<FreshableLiteralType>type).regularType :
-                type.flags & TypeFlags.Union ? ((<UnionType>type).regularType || ((<UnionType>type).regularType = getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) as UnionType)) :
+                type.flags & TypeFlags.Union ? ((<UnionType>type).regularType || ((<UnionType>type).regularType = mapType(type, getRegularTypeOfLiteralType) as UnionType)) :
                 type;
         }
 
@@ -16562,7 +16590,7 @@ namespace ts {
             while (true) {
                 const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
-                    type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
+                    type.flags & TypeFlags.UnionOrIntersection ? getUnaliasedUnionType(getReducedType(type)) :
                     type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;
@@ -16960,7 +16988,7 @@ namespace ts {
                 if (isPerformingExcessPropertyChecks) {
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, reportErrors)) {
                         if (reportErrors) {
-                            reportRelationError(headMessage, source, target);
+                            reportRelationError(headMessage, source, originalTarget.aliasSymbol ? originalTarget : target);
                         }
                         return Ternary.False;
                     }
@@ -16972,14 +17000,16 @@ namespace ts {
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
                 if (isPerformingCommonPropertyChecks && !hasCommonProperties(source, target, isComparingJsxAttributes)) {
                     if (reportErrors) {
+                        const sourceString = typeToString(originalSource.aliasSymbol ? originalSource : source);
+                        const targetString = typeToString(originalTarget.aliasSymbol ? originalTarget : target);
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
                         const constructs = getSignaturesOfType(source, SignatureKind.Construct);
                         if (calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, /*reportErrors*/ false) ||
                             constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, /*reportErrors*/ false)) {
-                            reportError(Diagnostics.Value_of_type_0_has_no_properties_in_common_with_type_1_Did_you_mean_to_call_it, typeToString(source), typeToString(target));
+                            reportError(Diagnostics.Value_of_type_0_has_no_properties_in_common_with_type_1_Did_you_mean_to_call_it, sourceString, targetString);
                         }
                         else {
-                            reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, typeToString(source), typeToString(target));
+                            reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, sourceString, targetString);
                         }
                     }
                     return Ternary.False;
@@ -19238,7 +19268,7 @@ namespace ts {
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BigIntLiteral ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getBaseTypeOfLiteralType)) :
+                type.flags & TypeFlags.Union ? mapType(<UnionType>type, getBaseTypeOfLiteralType) :
                 type;
         }
 
@@ -19248,13 +19278,13 @@ namespace ts {
                 type.flags & TypeFlags.NumberLiteral && isFreshLiteralType(type) ? numberType :
                 type.flags & TypeFlags.BigIntLiteral && isFreshLiteralType(type) ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(type) ? booleanType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
+                type.flags & TypeFlags.Union ? mapType(<UnionType>type, getWidenedLiteralType) :
                 type;
         }
 
         function getWidenedUniqueESSymbolType(type: Type): Type {
             return type.flags & TypeFlags.UniqueESSymbol ? esSymbolType :
-                type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedUniqueESSymbolType)) :
+                type.flags & TypeFlags.Union ? mapType(<UnionType>type, getWidenedUniqueESSymbolType) :
                 type;
         }
 
@@ -21474,8 +21504,10 @@ namespace ts {
                 return mapper(type);
             }
             let mappedTypes: Type[] | undefined;
+            let changed = false;
             for (const t of (<UnionType>type).types) {
                 const mapped = mapper(t);
+                changed ||= t !== mapped;
                 if (mapped) {
                     if (!mappedTypes) {
                         mappedTypes = [mapped];
@@ -21485,7 +21517,7 @@ namespace ts {
                     }
                 }
             }
-            return mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal);
+            return changed ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal) : type;
         }
 
         function extractTypesOfKind(type: Type, kind: TypeFlags) {
