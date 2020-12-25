@@ -825,7 +825,7 @@ namespace ts.formatting {
     function isSemicolonDeletionContext(context: FormattingContext): boolean {
         let nextTokenKind = context.nextTokenSpan.kind;
         let nextTokenStart = context.nextTokenSpan.pos;
-        if (isTriviaSyntaxKind(nextTokenKind)) {
+        if (isTrivia(nextTokenKind)) {
             const nextRealToken = context.nextTokenParent === context.currentTokenParent
                 ? findNextToken(
                     context.currentTokenParent,
