@@ -76,7 +76,7 @@ namespace ts.InlineHints {
             }
 
             const initializerType = checker.getTypeAtLocation(decl.initializer);
-            const typeDisplayString = displayPartsToString(typeToDisplayParts(checker, initializerType));
+            const typeDisplayString = printTypeInSingleLine(initializerType);
             if (typeDisplayString) {
                 addTypeHints(typeDisplayString, decl.name.end);
             }
@@ -143,11 +143,11 @@ namespace ts.InlineHints {
             }
 
             if (valueDeclaration.type) {
-                return valueDeclaration.type.getText();
+                return printNodeInSingleLine(valueDeclaration.type);
             }
 
             const signatureParamType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration);
-            return displayPartsToString(typeToDisplayParts(checker, signatureParamType));
+            return printTypeInSingleLine(signatureParamType);
         }
 
         function truncation(text: string, maxLength: number) {
@@ -155,6 +155,39 @@ namespace ts.InlineHints {
                 return text.substr(0, maxLength - "...".length) + "...";
             }
             return text;
+        }
+
+        function createSignleLineWriter(writer: DisplayPartsSymbolWriter): DisplayPartsSymbolWriter {
+            return {
+                ...writer,
+                writeLine: () => writer.writeSpace(" ")
+            };
+        }
+
+        function printTypeInSingleLine(type: Type) {
+            const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+            const displayParts = mapToDisplayParts(writer => {
+                const singleLineWriter = createSignleLineWriter(writer);
+                const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags, singleLineWriter);
+                Debug.assertIsDefined(typeNode, "should always get typenode");
+
+                writeNodeInSignleLine(typeNode, singleLineWriter);
+            });
+            return displayPartsToString(displayParts);
+        }
+
+        function printNodeInSingleLine(node: Node) {
+            const displayParts = mapToDisplayParts(writer => {
+                const singleLineWriter = createSignleLineWriter(writer);
+                writeNodeInSignleLine(node, singleLineWriter);
+            });
+            return displayPartsToString(displayParts);
+        }
+
+        function writeNodeInSignleLine(node: Node, writer: DisplayPartsSymbolWriter) {
+            const options: PrinterOptions = { removeComments: true };
+            const printer = createPrinter(options);
+            printer.writeNode(EmitHint.Unspecified, node, /*sourceFile*/ file, writer);
         }
     }
 }
