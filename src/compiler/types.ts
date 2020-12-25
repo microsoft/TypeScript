@@ -528,27 +528,20 @@ namespace ts {
         | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
         | SyntaxKind.AmpersandEqualsToken
         | SyntaxKind.BarEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         | SyntaxKind.CaretEqualsToken
         ;
 
     export type KeywordSyntaxKind =
-        | SyntaxKind.AbstractKeyword
-        | SyntaxKind.AnyKeyword
-        | SyntaxKind.AsKeyword
-        | SyntaxKind.AssertsKeyword
-        | SyntaxKind.AsyncKeyword
-        | SyntaxKind.AwaitKeyword
-        | SyntaxKind.BigIntKeyword
-        | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
         | SyntaxKind.CaseKeyword
         | SyntaxKind.CatchKeyword
         | SyntaxKind.ClassKeyword
         | SyntaxKind.ConstKeyword
-        | SyntaxKind.ConstructorKeyword
         | SyntaxKind.ContinueKeyword
         | SyntaxKind.DebuggerKeyword
-        | SyntaxKind.DeclareKeyword
         | SyntaxKind.DefaultKeyword
         | SyntaxKind.DeleteKeyword
         | SyntaxKind.DoKeyword
@@ -559,56 +552,66 @@ namespace ts {
         | SyntaxKind.FalseKeyword
         | SyntaxKind.FinallyKeyword
         | SyntaxKind.ForKeyword
-        | SyntaxKind.FromKeyword
         | SyntaxKind.FunctionKeyword
-        | SyntaxKind.GetKeyword
-        | SyntaxKind.GlobalKeyword
         | SyntaxKind.IfKeyword
-        | SyntaxKind.ImplementsKeyword
         | SyntaxKind.ImportKeyword
-        | SyntaxKind.InferKeyword
         | SyntaxKind.InKeyword
         | SyntaxKind.InstanceOfKeyword
-        | SyntaxKind.InterfaceKeyword
-        | SyntaxKind.IntrinsicKeyword
-        | SyntaxKind.IsKeyword
-        | SyntaxKind.KeyOfKeyword
-        | SyntaxKind.LetKeyword
-        | SyntaxKind.ModuleKeyword
-        | SyntaxKind.NamespaceKeyword
-        | SyntaxKind.NeverKeyword
         | SyntaxKind.NewKeyword
         | SyntaxKind.NullKeyword
-        | SyntaxKind.NumberKeyword
-        | SyntaxKind.ObjectKeyword
-        | SyntaxKind.OfKeyword
-        | SyntaxKind.PackageKeyword
-        | SyntaxKind.PrivateKeyword
-        | SyntaxKind.ProtectedKeyword
-        | SyntaxKind.PublicKeyword
-        | SyntaxKind.ReadonlyKeyword
-        | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
-        | SyntaxKind.SetKeyword
-        | SyntaxKind.StaticKeyword
-        | SyntaxKind.StringKeyword
         | SyntaxKind.SuperKeyword
         | SyntaxKind.SwitchKeyword
-        | SyntaxKind.SymbolKeyword
         | SyntaxKind.ThisKeyword
         | SyntaxKind.ThrowKeyword
         | SyntaxKind.TrueKeyword
         | SyntaxKind.TryKeyword
-        | SyntaxKind.TypeKeyword
         | SyntaxKind.TypeOfKeyword
-        | SyntaxKind.UndefinedKeyword
-        | SyntaxKind.UniqueKeyword
-        | SyntaxKind.UnknownKeyword
         | SyntaxKind.VarKeyword
         | SyntaxKind.VoidKeyword
         | SyntaxKind.WhileKeyword
         | SyntaxKind.WithKeyword
+        | SyntaxKind.ImplementsKeyword
+        | SyntaxKind.InterfaceKeyword
+        | SyntaxKind.LetKeyword
+        | SyntaxKind.PackageKeyword
+        | SyntaxKind.PrivateKeyword
+        | SyntaxKind.ProtectedKeyword
+        | SyntaxKind.PublicKeyword
+        | SyntaxKind.StaticKeyword
         | SyntaxKind.YieldKeyword
+        | SyntaxKind.AbstractKeyword
+        | SyntaxKind.AsKeyword
+        | SyntaxKind.AssertsKeyword
+        | SyntaxKind.AnyKeyword
+        | SyntaxKind.AsyncKeyword
+        | SyntaxKind.AwaitKeyword
+        | SyntaxKind.BooleanKeyword
+        | SyntaxKind.ConstructorKeyword
+        | SyntaxKind.DeclareKeyword
+        | SyntaxKind.GetKeyword
+        | SyntaxKind.InferKeyword
+        | SyntaxKind.IntrinsicKeyword
+        | SyntaxKind.IsKeyword
+        | SyntaxKind.KeyOfKeyword
+        | SyntaxKind.ModuleKeyword
+        | SyntaxKind.NamespaceKeyword
+        | SyntaxKind.NeverKeyword
+        | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.RequireKeyword
+        | SyntaxKind.NumberKeyword
+        | SyntaxKind.ObjectKeyword
+        | SyntaxKind.SetKeyword
+        | SyntaxKind.StringKeyword
+        | SyntaxKind.SymbolKeyword
+        | SyntaxKind.TypeKeyword
+        | SyntaxKind.UndefinedKeyword
+        | SyntaxKind.UniqueKeyword
+        | SyntaxKind.UnknownKeyword
+        | SyntaxKind.FromKeyword
+        | SyntaxKind.GlobalKeyword
+        | SyntaxKind.BigIntKeyword
+        | SyntaxKind.OfKeyword
         ;
 
     export type ModifierSyntaxKind =
@@ -978,8 +981,7 @@ namespace ts {
         /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
 
-    // TODO(rbuckton): Constraint 'TKind' to 'TokenSyntaxKind'
-    export interface Token<TKind extends SyntaxKind> extends Node {
+    export interface Token<TKind extends TokenSyntaxKind> extends Node {
         readonly kind: TKind;
     }
 
@@ -6800,7 +6802,7 @@ namespace ts {
         createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
         createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
-        /*@internal*/ createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
+        /*@internal*/ createToken<TKind extends TokenSyntaxKind>(token: TKind): Token<TKind>;
 
         //
         // Reserved words

@@ -70,7 +70,7 @@ namespace ts {
 
             do {
                 token = scanner.scan();
-                if (!isTrivia(token)) {
+                if (!isTriviaSyntaxKind(token)) {
                     handleToken();
                     lastNonTriviaToken = token;
                 }
@@ -633,7 +633,7 @@ namespace ts {
                 const width = end - start;
 
                 // The moment we get something that isn't trivia, then stop processing.
-                if (!isTrivia(kind)) {
+                if (!isTriviaSyntaxKind(kind)) {
                     return start;
                 }
 

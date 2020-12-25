@@ -1057,7 +1057,7 @@ namespace ts {
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     export function isToken(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+        return isTokenSyntaxKind(n.kind);
     }
 
     // Node Arrays

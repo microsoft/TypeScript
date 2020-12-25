@@ -75,7 +75,7 @@ namespace ts.formatting {
             // Read leading trivia and token
             while (pos < endPos) {
                 const t = scanner.getToken();
-                if (!isTrivia(t)) {
+                if (!isTriviaSyntaxKind(t)) {
                     break;
                 }
 
@@ -194,7 +194,7 @@ namespace ts.formatting {
             }
             while (scanner.getStartPos() < endPos) {
                 currentToken = scanner.scan();
-                if (!isTrivia(currentToken)) {
+                if (!isTriviaSyntaxKind(currentToken)) {
                     break;
                 }
                 const trivia = createTextRangeWithKind(
@@ -272,7 +272,7 @@ namespace ts.formatting {
         function isOnToken(): boolean {
             const current = lastTokenInfo ? lastTokenInfo.token.kind : scanner.getToken();
             const startPos = lastTokenInfo ? lastTokenInfo.token.pos : scanner.getStartPos();
-            return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);
+            return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTriviaSyntaxKind(current);
         }
 
         function isOnEOF(): boolean {

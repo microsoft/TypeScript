@@ -3076,6 +3076,10 @@ namespace ts {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
+    export function isTokenSyntaxKind(token: SyntaxKind): token is TokenSyntaxKind {
+        return SyntaxKind.FirstToken <= token && token <= SyntaxKind.LastToken;
+    }
+
     export const enum FunctionFlags {
         Normal = 0,             // Function is a normal function
         Generator = 1 << 0,     // Function is a generator function or async generator function
@@ -5615,7 +5619,7 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
+        getTokenConstructor(): new <TKind extends TokenSyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
         getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
         getPrivateIdentifierConstructor(): new (kind: SyntaxKind.PrivateIdentifier, pos?: number, end?: number) => PrivateIdentifier;
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;

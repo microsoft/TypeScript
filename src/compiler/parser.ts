@@ -1522,8 +1522,8 @@ namespace ts {
             return false;
         }
 
-        function parseOptionalToken<TKind extends SyntaxKind>(t: TKind): Token<TKind>;
-        function parseOptionalToken(t: SyntaxKind): Node | undefined {
+        function parseOptionalToken<TKind extends TokenSyntaxKind>(t: TKind): Token<TKind>;
+        function parseOptionalToken(t: TokenSyntaxKind): Node | undefined {
             if (token() === t) {
                 return parseTokenNode();
             }
@@ -1538,8 +1538,8 @@ namespace ts {
             return undefined;
         }
 
-        function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
-        function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
+        function parseExpectedToken<TKind extends TokenSyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
+        function parseExpectedToken(t: TokenSyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
             return parseOptionalToken(t) ||
                 createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t));
         }
@@ -1554,6 +1554,7 @@ namespace ts {
             const pos = getNodePos();
             const kind = token();
             nextToken();
+            Debug.assert(isTokenSyntaxKind(kind));
             return <T>finishNode(factory.createToken(kind), pos);
         }
 
@@ -1561,6 +1562,7 @@ namespace ts {
             const pos = getNodePos();
             const kind = token();
             nextTokenJSDoc();
+            Debug.assert(isTokenSyntaxKind(kind));
             return <T>finishNode(factory.createToken(kind), pos);
         }
 
@@ -1622,14 +1624,32 @@ namespace ts {
             }
 
             const pos = getNodePos();
-            const result =
-                kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined) :
-                isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined) :
-                kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
-                kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
-                kind === SyntaxKind.MissingDeclaration ? factory.createMissingDeclaration() :
-                factory.createToken(kind);
+            const result = createNodeAccordingToKind(kind);
+
             return finishNode(result, pos) as T;
+
+            function createNodeAccordingToKind(kind: T["kind"]) {
+                switch (true) {
+                    case (kind === SyntaxKind.Identifier):
+                        return factory.createIdentifier("", /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined);
+                    // TODO: narrow not work for this condition
+                    case (isTemplateLiteralKind(kind)):
+                        if (isTemplateLiteralKind(kind)) {
+                            return factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined);
+                        }
+                        Debug.fail("Never");
+                        break;
+                    case (kind === SyntaxKind.NumericLiteral):
+                        return factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined);
+                    case (kind === SyntaxKind.StringLiteral):
+                        return factory.createStringLiteral("", /*isSingleQuote*/ undefined);
+                    case (kind === SyntaxKind.MissingDeclaration):
+                        return factory.createMissingDeclaration();
+                    default:
+                        Debug.assert(isTokenSyntaxKind(kind));
+                        return factory.createToken(kind);
+                }
+            }
         }
 
         function internIdentifier(text: string): string {
