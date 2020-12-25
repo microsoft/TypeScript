@@ -39,7 +39,7 @@ function tempTag2(...rest: any[]): any {
 tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 >tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }` : number
 >tempTag2 : { (templateStrs: TemplateStringsArray, f: FuncType1, x: number): number; (templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string; }
->`${ x => { x<number>(undefined); return x; }         }${ 0 }` : string
+>`${ x => { x<number>(undefined); return x; }         }${ 0 }` : `${string}0`
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >x<number>(undefined) : number
@@ -51,7 +51,7 @@ tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }`;
 >tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }` : string
 >tempTag2 : { (templateStrs: TemplateStringsArray, f: FuncType1, x: number): number; (templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string; }
->`${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }` : string
+>`${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }` : `${string}${string}hello`
 >x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
 >x : <S, T>(p: T) => T
 >x<number, string>(undefined) : string
@@ -69,7 +69,7 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
 >tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : string
 >tempTag2 : { (templateStrs: TemplateStringsArray, f: FuncType1, x: number): number; (templateStrs: TemplateStringsArray, f: FuncType2, h: FuncType2, x: string): string; }
->`${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : string
+>`${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : `${string}undefinedhello`
 >x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
 >x : <S, T>(p: T) => T
 >x<number, string>(undefined) : string

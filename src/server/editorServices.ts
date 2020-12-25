@@ -757,6 +757,9 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
+        private readonly sharedExtendedConfigFileWatchers = new Map<Path, SharedExtendedConfigFileWatcher<NormalizedPath>>();
+
+        /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
@@ -1279,7 +1282,6 @@ namespace ts.server {
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,
-                        configFileSpecs: project.configFileSpecs!,
                         extraFileExtensions: this.hostConfiguration.extraFileExtensions,
                         currentDirectory: this.currentDirectory,
                         options: project.getCompilationSettings(),
@@ -1349,6 +1351,43 @@ namespace ts.server {
                 // we would need to schedule the project reload for only the root of inferred projects
                 this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);
             }
+        }
+
+        /*@internal*/
+        updateSharedExtendedConfigFileMap({ canonicalConfigFilePath }: ConfiguredProject, parsedCommandLine: ParsedCommandLine) {
+            updateSharedExtendedConfigFileWatcher(
+                canonicalConfigFilePath,
+                parsedCommandLine,
+                this.sharedExtendedConfigFileWatchers,
+                (extendedConfigFileName, extendedConfigFilePath) => this.watchFactory.watchFile(
+                    extendedConfigFileName,
+                    () => {
+                        let ensureProjectsForOpenFiles = false;
+                        this.sharedExtendedConfigFileWatchers.get(extendedConfigFilePath)?.projects.forEach(canonicalPath => {
+                            const project = this.configuredProjects.get(canonicalPath);
+                            // Skip refresh if project is not yet loaded
+                            if (!project || project.isInitialLoadPending()) return;
+                            project.pendingReload = ConfigFileProgramReloadLevel.Full;
+                            project.pendingReloadReason = `Change in extended config file ${extendedConfigFileName} detected`;
+                            this.delayUpdateProjectGraph(project);
+                            ensureProjectsForOpenFiles = true;
+                        });
+                        if (ensureProjectsForOpenFiles) this.delayEnsureProjectForOpenFiles();
+                    },
+                    PollingInterval.High,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.ExtendedConfigFile
+                ),
+                fileName => this.toPath(fileName),
+            );
+        }
+
+        /*@internal*/
+        removeProjectFromSharedExtendedConfigFileMap(project: ConfiguredProject) {
+            this.sharedExtendedConfigFileWatchers.forEach(watcher => {
+                watcher.projects.delete(project.canonicalConfigFilePath);
+                watcher.close();
+            });
         }
 
         /**
@@ -2052,7 +2091,6 @@ namespace ts.server {
                 this,
                 this.documentRegistry,
                 cachedDirectoryStructureHost);
-            // TODO: We probably should also watch the configFiles that are extended
             project.createConfigFileWatcher();
             this.configuredProjects.set(project.canonicalConfigFilePath, project);
             this.setConfigFileExistenceByNewConfiguredProject(project);
@@ -2128,7 +2166,6 @@ namespace ts.server {
                     configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined
                 };
             }
-            project.configFileSpecs = parsedCommandLine.configFileSpecs;
             project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
@@ -2136,12 +2173,14 @@ namespace ts.server {
             if (lastFileExceededProgramSize) {
                 project.disableLanguageService(lastFileExceededProgramSize);
                 project.stopWatchingWildCards();
+                this.removeProjectFromSharedExtendedConfigFileMap(project);
             }
             else {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
                 project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
+                this.updateSharedExtendedConfigFileMap(project, parsedCommandLine);
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
@@ -2237,11 +2276,11 @@ namespace ts.server {
          */
         /*@internal*/
         reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
-            const configFileSpecs = project.configFileSpecs!; // TODO: GH#18217
+            const configFileSpecs = project.getCompilerOptions().configFile!.configFileSpecs!;
             const configFileName = project.getConfigFilePath();
-            const fileNamesResult = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
-            project.updateErrorOnNoInputFiles(fileNamesResult);
-            this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
+            const fileNames = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
+            project.updateErrorOnNoInputFiles(fileNames);
+            this.updateNonInferredProjectFiles(project, fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
         }
 

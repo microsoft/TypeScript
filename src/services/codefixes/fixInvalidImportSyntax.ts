@@ -16,6 +16,7 @@ namespace ts.codefix {
             variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
                 namespace.name,
                 factory.createExternalModuleReference(node.moduleSpecifier)
             )));

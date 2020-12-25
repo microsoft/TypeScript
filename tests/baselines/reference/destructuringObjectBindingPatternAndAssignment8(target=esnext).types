@@ -1,0 +1,48 @@
+=== tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment8.ts ===
+const K = {
+>K : { a: string; b: string; }
+>{    a: "a",    b: "b"} : { a: string; b: string; }
+
+    a: "a",
+>a : string
+>"a" : "a"
+
+    b: "b"
+>b : string
+>"b" : "b"
+}
+const { [K.a]: aVal, [K.b]: bVal } = (() => {
+>K.a : string
+>K : { a: string; b: string; }
+>a : string
+>aVal : number
+>K.b : string
+>K : { a: string; b: string; }
+>b : string
+>bVal : number
+>(() => {	return { [K.a]: 1, [K.b]: 1 };})() : { [x: string]: number; }
+>(() => {	return { [K.a]: 1, [K.b]: 1 };}) : () => { [x: string]: number; }
+>() => {	return { [K.a]: 1, [K.b]: 1 };} : () => { [x: string]: number; }
+
+	return { [K.a]: 1, [K.b]: 1 };
+>{ [K.a]: 1, [K.b]: 1 } : { [x: string]: number; }
+>[K.a] : number
+>K.a : string
+>K : { a: string; b: string; }
+>a : string
+>1 : 1
+>[K.b] : number
+>K.b : string
+>K : { a: string; b: string; }
+>b : string
+>1 : 1
+
+})();
+console.log(aVal, bVal);
+>console.log(aVal, bVal) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>aVal : number
+>bVal : number
+

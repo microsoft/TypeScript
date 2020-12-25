@@ -418,3 +418,70 @@ var bb: `${number}`;
 var bb: `${number}` | '0';
 >bb : Symbol(bb, Decl(templateLiteralTypesPatterns.ts, 173, 3), Decl(templateLiteralTypesPatterns.ts, 174, 3))
 
+// Normalize `${string}` to just string
+
+type T2S<A extends string, B extends string> = `${A}${B}`;
+>T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 174, 26))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 178, 9))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 178, 26))
+>A : Symbol(A, Decl(templateLiteralTypesPatterns.ts, 178, 9))
+>B : Symbol(B, Decl(templateLiteralTypesPatterns.ts, 178, 26))
+
+type S10 = `${string}`;  // string
+>S10 : Symbol(S10, Decl(templateLiteralTypesPatterns.ts, 178, 58))
+
+type S11 = `${string}${string}${string}`;  // string
+>S11 : Symbol(S11, Decl(templateLiteralTypesPatterns.ts, 180, 23))
+
+type S12 = T2S<string, string>;  // string
+>S12 : Symbol(S12, Decl(templateLiteralTypesPatterns.ts, 181, 41))
+>T2S : Symbol(T2S, Decl(templateLiteralTypesPatterns.ts, 174, 26))
+
+function ff1(x: `${string}-${string}`) {
+>ff1 : Symbol(ff1, Decl(templateLiteralTypesPatterns.ts, 182, 31))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+
+    let s1 = x && 42;  // number
+>s1 : Symbol(s1, Decl(templateLiteralTypesPatterns.ts, 185, 7))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+
+    let s2 = x || 42;  // `${string}-${string}`
+>s2 : Symbol(s2, Decl(templateLiteralTypesPatterns.ts, 186, 7))
+>x : Symbol(x, Decl(templateLiteralTypesPatterns.ts, 184, 13))
+}
+
+// Repro from #41651
+
+export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+>TA : Symbol(TA, Decl(templateLiteralTypesPatterns.ts, 191, 15))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+>TId : Symbol(TId, Decl(templateLiteralTypesPatterns.ts, 191, 18))
+
+export class AA {}
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+
+export abstract class BB {
+>BB : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+
+    abstract get(id: Id<AA>): void;
+>get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 196, 17))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+
+    update(id: Id<AA>): void {
+>update : Symbol(BB.update, Decl(templateLiteralTypesPatterns.ts, 196, 35))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+>Id : Symbol(Id, Decl(templateLiteralTypesPatterns.ts, 187, 1))
+>AA : Symbol(AA, Decl(templateLiteralTypesPatterns.ts, 191, 66))
+
+        this.get(id!);
+>this.get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+>this : Symbol(BB, Decl(templateLiteralTypesPatterns.ts, 193, 18))
+>get : Symbol(BB.get, Decl(templateLiteralTypesPatterns.ts, 195, 26))
+>id : Symbol(id, Decl(templateLiteralTypesPatterns.ts, 197, 11))
+    }
+}
+

@@ -21,8 +21,9 @@ declare const directory: string;
 declare const moduleFile: number;
 >moduleFile : Symbol(moduleFile, Decl(1.ts, 5, 13))
 
-import(`${directory}\${moduleFile}`);
+import(`${directory}\\${moduleFile}`);
 >directory : Symbol(directory, Decl(1.ts, 4, 13))
+>moduleFile : Symbol(moduleFile, Decl(1.ts, 5, 13))
 
 import(getSpecifier());
 >getSpecifier : Symbol(getSpecifier, Decl(1.ts, 0, 47))
@@ -78,7 +79,7 @@ function * loadModule(directories: string[]) {
 >directory : Symbol(directory, Decl(1.ts, 22, 14))
 >directories : Symbol(directories, Decl(1.ts, 21, 22))
 
-        const path = `${directory}\moduleFile`;
+        const path = `${directory}\\moduleFile`;
 >path : Symbol(path, Decl(1.ts, 23, 13))
 >directory : Symbol(directory, Decl(1.ts, 22, 14))
 
