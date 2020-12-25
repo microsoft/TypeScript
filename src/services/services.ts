@@ -2467,11 +2467,12 @@ namespace ts {
             };
         }
 
-        function getInlineHintsContext(file: SourceFile): InlineHintsContext {
+        function getInlineHintsContext(file: SourceFile, span: TextSpan): InlineHintsContext {
             return {
                 file,
                 program: getProgram()!,
                 host,
+                span,
                 cancellationToken,
             };
         }
@@ -2519,10 +2520,10 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideInlineHints(fileName: string): InlineHint[] {
+        function provideInlineHints(fileName: string, span: TextSpan): InlineHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            return InlineHints.provideInlineHints(getInlineHintsContext(sourceFile));
+            return InlineHints.provideInlineHints(getInlineHintsContext(sourceFile, span));
         }
 
         const ls: LanguageService = {

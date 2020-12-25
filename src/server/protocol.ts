@@ -2474,8 +2474,20 @@ namespace ts.server.protocol {
         body?: SignatureHelpItems;
     }
 
-    export interface ProvideInlineHintsRequest extends FileRequest {
+    export interface ProvideInlineHintsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+
+    export interface ProvideInlineHintsRequest extends Request {
         command: CommandTypes.ProvideInlineHints;
+        arguments: ProvideInlineHintsRequestArgs;
     }
 
     export interface HintItem {

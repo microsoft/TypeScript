@@ -1421,10 +1421,10 @@ namespace ts.server {
             });
         }
 
-        private provideInlineHints(args: protocol.FileRequestArgs) {
+        private provideInlineHints(args: protocol.ProvideInlineHintsRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-            const hints = languageService.provideInlineHints(file);
+            const hints = languageService.provideInlineHints(file, args);
 
             return hints.map(hint => ({
                 text: hint.text,

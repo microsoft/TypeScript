@@ -6,16 +6,29 @@ namespace ts.InlineHints {
     }
 
     export function provideInlineHints(context: InlineHintsContext): HintInfo[] {
-        const { file, program } = context;
+        const { file, program, span, cancellationToken } = context;
 
         const checker = program.getTypeChecker();
         const result: HintInfo[] = [];
-
+        
         visitor(file);
-
         return result;
-
         function visitor(node: Node): true | undefined | void {
+            switch(node.kind) {
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    cancellationToken.throwIfCancellationRequested();
+            }
+
+            if (!node || !textSpanIntersectsWith(span, node.pos, node.getFullWidth()) || node.getFullWidth() === 0) {
+                return;
+            }
+
             if (isTypeNode(node)) {
                 return;
             }

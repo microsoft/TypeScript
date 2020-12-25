@@ -635,8 +635,9 @@ namespace ts.server {
 
         applyCodeActionCommand = notImplemented;
 
-        provideInlineHints(file: string): InlineHint[] {
-            const args: protocol.FileRequestArgs = { file };
+        provideInlineHints(file: string, span: TextSpan): InlineHint[] {
+            const { start, length } = span;
+            const args: protocol.ProvideInlineHintsRequestArgs = { file, start, length };
 
             const request = this.processRequest<protocol.ProvideInlineHintsRequest>(CommandNames.ProvideInlineHints, args);
             const response = this.processResponse<protocol.ProvideInlineHintsResponse>(request);
