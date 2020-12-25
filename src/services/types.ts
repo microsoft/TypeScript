@@ -688,8 +688,10 @@ namespace ts {
     }
 
     export interface InlineHint {
-        text: string,
-        position: number
+        text: string;
+        position: number;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     export interface TodoCommentDescriptor {

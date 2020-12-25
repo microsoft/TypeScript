@@ -2491,8 +2491,10 @@ namespace ts.server.protocol {
     }
 
     export interface HintItem {
-        text: string
-        position: Location
+        text: string;
+        position: Location;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     export interface ProvideInlineHintsResponse extends Response {

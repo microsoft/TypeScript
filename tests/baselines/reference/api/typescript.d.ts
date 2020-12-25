@@ -5711,6 +5711,8 @@ declare namespace ts {
     interface InlineHint {
         text: string;
         position: number;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
     interface TodoCommentDescriptor {
         text: string;

@@ -5711,6 +5711,8 @@ declare namespace ts {
     interface InlineHint {
         text: string;
         position: number;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -8403,6 +8405,8 @@ declare namespace ts.server.protocol {
     interface HintItem {
         text: string;
         position: Location;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
     interface ProvideInlineHintsResponse extends Response {
         body?: HintItem[];

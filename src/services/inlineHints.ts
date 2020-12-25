@@ -1,8 +1,10 @@
 /* @internal */
 namespace ts.InlineHints {
     interface HintInfo {
-        text: string
-        position: number
+        text: string;
+        position: number;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     export function provideInlineHints(context: InlineHintsContext): HintInfo[] {
@@ -41,21 +43,20 @@ namespace ts.InlineHints {
             if (isCallExpression(node) || isNewExpression(node)) {
                 visitCallOrNewExpression(node);
             }
+            else if (isArrowFunction(node) || isFunctionExpression(node)) {
+                visitFunctionExpressionLike(node);
+            }
             return forEachChild(node, visitor);
         }
 
         function visitCallOrNewExpression(expr: CallExpression | NewExpression) {
-            const candidates: Signature[] = [];
-            const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
-            if (!signature || !candidates.length) {
+            if (!expr.arguments || !expr.arguments.length) {
                 return;
             }
 
-            getCallArgumentsHints(expr, signature);
-        }
-
-        function getCallArgumentsHints(expr: CallExpression | NewExpression, signature: Signature) {
-            if (!expr.arguments || !expr.arguments.length) {
+            const candidates: Signature[] = [];
+            const signature = checker.getResolvedSignatureForSignatureHelp(expr, candidates);
+            if (!signature || !candidates.length) {
                 return;
             }
 
@@ -67,10 +68,54 @@ namespace ts.InlineHints {
                     if (!argumentName || argumentName !== parameterName) {
                         result.push({
                             text: `${unescapeLeadingUnderscores(parameterName)}:`,
-                            position: expr.arguments[i].getStart()
+                            position: expr.arguments[i].getStart(),
+                            whitespaceAfter: true,
                         });
                     }
                 }
+            }
+        }
+
+        function visitFunctionExpressionLike(expr: ArrowFunction | FunctionExpression) {
+            if (!expr.parameters.length || expr.parameters.every(param => param.type)) {
+                return;
+            }
+
+            const contextualType = checker.getContextualType(expr);
+            if (!contextualType) {
+                return;
+            }
+
+            const signatures = checker.getSignaturesOfType(contextualType, SignatureKind.Call);
+            const signature = firstOrUndefined(signatures);
+            if (!signature) {
+                return;
+            }
+
+            for (let i = 0; i < expr.parameters.length && i < signature.parameters.length; ++i) {
+                const param = expr.parameters[i];
+                if (param.type) {
+                    continue;
+                }
+
+                const signatureParam = signature.parameters[i];
+                const signatureParamType = checker.getTypeOfSymbolAtLocation(signatureParam, signatureParam.valueDeclaration);
+
+                const valueDeclaration = signatureParam.valueDeclaration;
+                if (!valueDeclaration || !isParameter(valueDeclaration) || !valueDeclaration.type) {
+                    continue;
+                }
+
+                const typeDisplayString = displayPartsToString(typeToDisplayParts(checker, signatureParamType));
+                if (!typeDisplayString) {
+                    continue;
+                }
+
+                result.push({
+                    text: `:${typeDisplayString}`,
+                    position: param.end,
+                    whitespaceBefore: true,
+                });
             }
         }
     }
