@@ -381,6 +381,7 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
+        getInlineHints(expected: readonly VerifyInlineHintsOptions[], span?: TextSpan, preference?: InlineHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -614,6 +615,11 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
+    interface InlineHintsOptions extends UserPreferences {
+        readonly includeInlineParameterName?: boolean;
+        readonly includeInlineFunctionParameterType?: boolean;
+        readonly includeInlineVariableType?: boolean;
+    }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
         readonly isNewIdentifierLocation?: boolean;
@@ -710,6 +716,14 @@ declare namespace FourSlashInterface {
         readonly actions?: ReadonlyArray<{ readonly type: string, readonly data: {} }>;
         readonly commands?: ReadonlyArray<{}>;
     }
+
+    export interface VerifyInlineHintsOptions {
+        text: string;
+        position: number
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
 
     interface VerifyNavigateToOptions {
         readonly pattern: string;

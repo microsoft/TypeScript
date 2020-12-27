@@ -7,7 +7,7 @@ namespace ts.InlineHints {
         whitespaceAfter?: boolean;
     }
 
-    const maxHintsLength = 20;
+    const maxHintsLength = 30;
 
     export function provideInlineHints(context: InlineHintsContext): HintInfo[] {
         const { file, program, span, cancellationToken, preferences } = context;
