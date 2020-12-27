@@ -2695,7 +2695,7 @@ namespace ts {
             return symbol ? [symbol] : emptyArray;
         }
 
-        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => isObjectLiteralExpression(node.parent) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
         if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
             const symbol = contextualType.getProperty(name);
             if (symbol) return [symbol];
