@@ -26387,6 +26387,12 @@ namespace ts {
                 }
                 if (element.name) {
                     const nameType = getLiteralTypeFromPropertyName(element.name);
+                    if (nameType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                        const propType = getTypeOfPropertyOfContextualType(type, escapeLeadingUnderscores((nameType as LiteralType).value.toString()), nameType);
+                        if (propType) {
+                            return propType;
+                        }
+                    }
                     // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
                     return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType)?.type, /*noReductions*/ true);
                 }

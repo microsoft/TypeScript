@@ -1,0 +1,71 @@
+tests/cases/compiler/contextualTypeInObjectProperty.ts(19,17): error TS7006: Parameter 'keyC' implicitly has an 'any' type.
+tests/cases/compiler/contextualTypeInObjectProperty.ts(24,3): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+tests/cases/compiler/contextualTypeInObjectProperty.ts(24,11): error TS7006: Parameter 'keyC' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/contextualTypeInObjectProperty.ts (3 errors) ====
+    type Shape = { 
+        "a"?: (a: "a") => "a";
+        "b"?: (b: "b") => "b";
+        "c"?: (c: "c") => "c";
+    };
+    
+    const getC = () => "c" as const;
+    
+    export const obj: Shape = {
+      ["a"]: keyA => keyA,
+      ["b" as "b"]: keyB => keyB,
+      [getC()]: keyC => keyC,
+    };
+    
+    
+    const getUnion = () => "b" as "b" | "c";
+    
+    export const unionType: Shape = {
+      [getUnion()]: keyC => keyC,      // Error
+                    ~~~~
+!!! error TS7006: Parameter 'keyC' implicitly has an 'any' type.
+    };
+    
+    
+    export const func: Shape = {
+      [getC]: keyC => keyC,     // Error
+      ~~~~~~
+!!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+              ~~~~
+!!! error TS7006: Parameter 'keyC' implicitly has an 'any' type.
+    };
+    
+    const generic: {
+      c: <T>(arg: T) => T;
+    } = {
+      [getC()]: keyC => keyC,
+    };
+    
+    const thisType = {
+      [getC()]: function() {
+        this.c();
+      }
+    };
+    
+    
+    declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
+    f({ data: 0 }, {
+      [(() => 'data' as const)()](value, key) {
+    
+      },
+    });
+    
+    
+    enum Keys {
+      FIRST,
+      SECOND
+    }
+    
+    const obj2: {
+      [key in Keys]: [string, string] 
+    } = {
+      [Keys.FIRST]: ['1', '2'], 
+      [Keys['SECOND']]: ['3', '4']
+    }
+    

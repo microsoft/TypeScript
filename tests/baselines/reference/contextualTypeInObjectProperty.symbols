@@ -1,0 +1,166 @@
+=== tests/cases/compiler/contextualTypeInObjectProperty.ts ===
+type Shape = { 
+>Shape : Symbol(Shape, Decl(contextualTypeInObjectProperty.ts, 0, 0))
+
+    "a"?: (a: "a") => "a";
+>"a" : Symbol("a", Decl(contextualTypeInObjectProperty.ts, 0, 14))
+>a : Symbol(a, Decl(contextualTypeInObjectProperty.ts, 1, 11))
+
+    "b"?: (b: "b") => "b";
+>"b" : Symbol("b", Decl(contextualTypeInObjectProperty.ts, 1, 26))
+>b : Symbol(b, Decl(contextualTypeInObjectProperty.ts, 2, 11))
+
+    "c"?: (c: "c") => "c";
+>"c" : Symbol("c", Decl(contextualTypeInObjectProperty.ts, 2, 26))
+>c : Symbol(c, Decl(contextualTypeInObjectProperty.ts, 3, 11))
+
+};
+
+const getC = () => "c" as const;
+>getC : Symbol(getC, Decl(contextualTypeInObjectProperty.ts, 6, 5))
+>const : Symbol(const)
+
+export const obj: Shape = {
+>obj : Symbol(obj, Decl(contextualTypeInObjectProperty.ts, 8, 12))
+>Shape : Symbol(Shape, Decl(contextualTypeInObjectProperty.ts, 0, 0))
+
+  ["a"]: keyA => keyA,
+>["a"] : Symbol(["a"], Decl(contextualTypeInObjectProperty.ts, 8, 27))
+>"a" : Symbol(["a"], Decl(contextualTypeInObjectProperty.ts, 8, 27))
+>keyA : Symbol(keyA, Decl(contextualTypeInObjectProperty.ts, 9, 8))
+>keyA : Symbol(keyA, Decl(contextualTypeInObjectProperty.ts, 9, 8))
+
+  ["b" as "b"]: keyB => keyB,
+>["b" as "b"] : Symbol(["b" as "b"], Decl(contextualTypeInObjectProperty.ts, 9, 22))
+>keyB : Symbol(keyB, Decl(contextualTypeInObjectProperty.ts, 10, 15))
+>keyB : Symbol(keyB, Decl(contextualTypeInObjectProperty.ts, 10, 15))
+
+  [getC()]: keyC => keyC,
+>[getC()] : Symbol([getC()], Decl(contextualTypeInObjectProperty.ts, 10, 29))
+>getC : Symbol(getC, Decl(contextualTypeInObjectProperty.ts, 6, 5))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 11, 11))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 11, 11))
+
+};
+
+
+const getUnion = () => "b" as "b" | "c";
+>getUnion : Symbol(getUnion, Decl(contextualTypeInObjectProperty.ts, 15, 5))
+
+export const unionType: Shape = {
+>unionType : Symbol(unionType, Decl(contextualTypeInObjectProperty.ts, 17, 12))
+>Shape : Symbol(Shape, Decl(contextualTypeInObjectProperty.ts, 0, 0))
+
+  [getUnion()]: keyC => keyC,      // Error
+>[getUnion()] : Symbol([getUnion()], Decl(contextualTypeInObjectProperty.ts, 17, 33))
+>getUnion : Symbol(getUnion, Decl(contextualTypeInObjectProperty.ts, 15, 5))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 18, 15))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 18, 15))
+
+};
+
+
+export const func: Shape = {
+>func : Symbol(func, Decl(contextualTypeInObjectProperty.ts, 22, 12))
+>Shape : Symbol(Shape, Decl(contextualTypeInObjectProperty.ts, 0, 0))
+
+  [getC]: keyC => keyC,     // Error
+>[getC] : Symbol([getC], Decl(contextualTypeInObjectProperty.ts, 22, 28))
+>getC : Symbol(getC, Decl(contextualTypeInObjectProperty.ts, 6, 5))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 23, 9))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 23, 9))
+
+};
+
+const generic: {
+>generic : Symbol(generic, Decl(contextualTypeInObjectProperty.ts, 26, 5))
+
+  c: <T>(arg: T) => T;
+>c : Symbol(c, Decl(contextualTypeInObjectProperty.ts, 26, 16))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 27, 6))
+>arg : Symbol(arg, Decl(contextualTypeInObjectProperty.ts, 27, 9))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 27, 6))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 27, 6))
+
+} = {
+  [getC()]: keyC => keyC,
+>[getC()] : Symbol([getC()], Decl(contextualTypeInObjectProperty.ts, 28, 5))
+>getC : Symbol(getC, Decl(contextualTypeInObjectProperty.ts, 6, 5))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 29, 11))
+>keyC : Symbol(keyC, Decl(contextualTypeInObjectProperty.ts, 29, 11))
+
+};
+
+const thisType = {
+>thisType : Symbol(thisType, Decl(contextualTypeInObjectProperty.ts, 32, 5))
+
+  [getC()]: function() {
+>[getC()] : Symbol([getC()], Decl(contextualTypeInObjectProperty.ts, 32, 18))
+>getC : Symbol(getC, Decl(contextualTypeInObjectProperty.ts, 6, 5))
+
+    this.c();
+>this.c : Symbol([getC()], Decl(contextualTypeInObjectProperty.ts, 32, 18))
+>this : Symbol(thisType, Decl(contextualTypeInObjectProperty.ts, 32, 16))
+>c : Symbol([getC()], Decl(contextualTypeInObjectProperty.ts, 32, 18))
+  }
+};
+
+
+declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
+>f : Symbol(f, Decl(contextualTypeInObjectProperty.ts, 36, 2))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 39, 19))
+>data : Symbol(data, Decl(contextualTypeInObjectProperty.ts, 39, 37))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 39, 19))
+>handlers : Symbol(handlers, Decl(contextualTypeInObjectProperty.ts, 39, 45))
+>P : Symbol(P, Decl(contextualTypeInObjectProperty.ts, 39, 59))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 39, 19))
+>value : Symbol(value, Decl(contextualTypeInObjectProperty.ts, 39, 75))
+>T : Symbol(T, Decl(contextualTypeInObjectProperty.ts, 39, 19))
+>P : Symbol(P, Decl(contextualTypeInObjectProperty.ts, 39, 59))
+>prop : Symbol(prop, Decl(contextualTypeInObjectProperty.ts, 39, 87))
+>P : Symbol(P, Decl(contextualTypeInObjectProperty.ts, 39, 59))
+
+f({ data: 0 }, {
+>f : Symbol(f, Decl(contextualTypeInObjectProperty.ts, 36, 2))
+>data : Symbol(data, Decl(contextualTypeInObjectProperty.ts, 40, 3))
+
+  [(() => 'data' as const)()](value, key) {
+>[(() => 'data' as const)()] : Symbol([(() => 'data' as const)()], Decl(contextualTypeInObjectProperty.ts, 40, 16))
+>const : Symbol(const)
+>value : Symbol(value, Decl(contextualTypeInObjectProperty.ts, 41, 30))
+>key : Symbol(key, Decl(contextualTypeInObjectProperty.ts, 41, 36))
+
+  },
+});
+
+
+enum Keys {
+>Keys : Symbol(Keys, Decl(contextualTypeInObjectProperty.ts, 44, 3))
+
+  FIRST,
+>FIRST : Symbol(Keys.FIRST, Decl(contextualTypeInObjectProperty.ts, 47, 11))
+
+  SECOND
+>SECOND : Symbol(Keys.SECOND, Decl(contextualTypeInObjectProperty.ts, 48, 8))
+}
+
+const obj2: {
+>obj2 : Symbol(obj2, Decl(contextualTypeInObjectProperty.ts, 52, 5))
+
+  [key in Keys]: [string, string] 
+>key : Symbol(key, Decl(contextualTypeInObjectProperty.ts, 53, 3))
+>Keys : Symbol(Keys, Decl(contextualTypeInObjectProperty.ts, 44, 3))
+
+} = {
+  [Keys.FIRST]: ['1', '2'], 
+>[Keys.FIRST] : Symbol([Keys.FIRST], Decl(contextualTypeInObjectProperty.ts, 54, 5))
+>Keys.FIRST : Symbol(Keys.FIRST, Decl(contextualTypeInObjectProperty.ts, 47, 11))
+>Keys : Symbol(Keys, Decl(contextualTypeInObjectProperty.ts, 44, 3))
+>FIRST : Symbol(Keys.FIRST, Decl(contextualTypeInObjectProperty.ts, 47, 11))
+
+  [Keys['SECOND']]: ['3', '4']
+>[Keys['SECOND']] : Symbol([Keys['SECOND']], Decl(contextualTypeInObjectProperty.ts, 55, 27))
+>Keys : Symbol(Keys, Decl(contextualTypeInObjectProperty.ts, 44, 3))
+>'SECOND' : Symbol(Keys.SECOND, Decl(contextualTypeInObjectProperty.ts, 48, 8))
+}
+

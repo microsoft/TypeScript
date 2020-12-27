@@ -1,0 +1,192 @@
+=== tests/cases/compiler/contextualTypeInObjectProperty.ts ===
+type Shape = { 
+>Shape : Shape
+
+    "a"?: (a: "a") => "a";
+>"a" : (a: "a") => "a"
+>a : "a"
+
+    "b"?: (b: "b") => "b";
+>"b" : (b: "b") => "b"
+>b : "b"
+
+    "c"?: (c: "c") => "c";
+>"c" : (c: "c") => "c"
+>c : "c"
+
+};
+
+const getC = () => "c" as const;
+>getC : () => "c"
+>() => "c" as const : () => "c"
+>"c" as const : "c"
+>"c" : "c"
+
+export const obj: Shape = {
+>obj : Shape
+>{  ["a"]: keyA => keyA,  ["b" as "b"]: keyB => keyB,  [getC()]: keyC => keyC,} : { a: (keyA: "a") => "a"; b: (keyB: "b") => "b"; c: (keyC: "c") => "c"; }
+
+  ["a"]: keyA => keyA,
+>["a"] : (keyA: "a") => "a"
+>"a" : "a"
+>keyA => keyA : (keyA: "a") => "a"
+>keyA : "a"
+>keyA : "a"
+
+  ["b" as "b"]: keyB => keyB,
+>["b" as "b"] : (keyB: "b") => "b"
+>"b" as "b" : "b"
+>"b" : "b"
+>keyB => keyB : (keyB: "b") => "b"
+>keyB : "b"
+>keyB : "b"
+
+  [getC()]: keyC => keyC,
+>[getC()] : (keyC: "c") => "c"
+>getC() : "c"
+>getC : () => "c"
+>keyC => keyC : (keyC: "c") => "c"
+>keyC : "c"
+>keyC : "c"
+
+};
+
+
+const getUnion = () => "b" as "b" | "c";
+>getUnion : () => "b" | "c"
+>() => "b" as "b" | "c" : () => "b" | "c"
+>"b" as "b" | "c" : "b" | "c"
+>"b" : "b"
+
+export const unionType: Shape = {
+>unionType : Shape
+>{  [getUnion()]: keyC => keyC,      // Error} : { [x: string]: (keyC: any) => any; }
+
+  [getUnion()]: keyC => keyC,      // Error
+>[getUnion()] : (keyC: any) => any
+>getUnion() : "b" | "c"
+>getUnion : () => "b" | "c"
+>keyC => keyC : (keyC: any) => any
+>keyC : any
+>keyC : any
+
+};
+
+
+export const func: Shape = {
+>func : Shape
+>{  [getC]: keyC => keyC,     // Error} : {}
+
+  [getC]: keyC => keyC,     // Error
+>[getC] : (keyC: any) => any
+>getC : () => "c"
+>keyC => keyC : (keyC: any) => any
+>keyC : any
+>keyC : any
+
+};
+
+const generic: {
+>generic : { c: <T>(arg: T) => T; }
+
+  c: <T>(arg: T) => T;
+>c : <T>(arg: T) => T
+>arg : T
+
+} = {
+>{  [getC()]: keyC => keyC,} : { c: <T>(keyC: T) => T; }
+
+  [getC()]: keyC => keyC,
+>[getC()] : <T>(keyC: T) => T
+>getC() : "c"
+>getC : () => "c"
+>keyC => keyC : <T>(keyC: T) => T
+>keyC : T
+>keyC : T
+
+};
+
+const thisType = {
+>thisType : { c: () => void; }
+>{  [getC()]: function() {    this.c();  }} : { c: () => void; }
+
+  [getC()]: function() {
+>[getC()] : () => void
+>getC() : "c"
+>getC : () => "c"
+>function() {    this.c();  } : () => void
+
+    this.c();
+>this.c() : void
+>this.c : () => void
+>this : { c: () => void; }
+>c : () => void
+  }
+};
+
+
+declare function f<T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }): void;
+>f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }) => void
+>data : T
+>handlers : { [P in keyof T]: (value: T[P], prop: P) => void; }
+>value : T[P]
+>prop : P
+
+f({ data: 0 }, {
+>f({ data: 0 }, {  [(() => 'data' as const)()](value, key) {  },}) : void
+>f : <T extends object>(data: T, handlers: { [P in keyof T]: (value: T[P], prop: P) => void; }) => void
+>{ data: 0 } : { data: number; }
+>data : number
+>0 : 0
+>{  [(() => 'data' as const)()](value, key) {  },} : { data(value: number, key: "data"): void; }
+
+  [(() => 'data' as const)()](value, key) {
+>[(() => 'data' as const)()] : (value: number, key: "data") => void
+>(() => 'data' as const)() : "data"
+>(() => 'data' as const) : () => "data"
+>() => 'data' as const : () => "data"
+>'data' as const : "data"
+>'data' : "data"
+>value : number
+>key : "data"
+
+  },
+});
+
+
+enum Keys {
+>Keys : Keys
+
+  FIRST,
+>FIRST : Keys.FIRST
+
+  SECOND
+>SECOND : Keys.SECOND
+}
+
+const obj2: {
+>obj2 : { 0: [string, string]; 1: [string, string]; }
+
+  [key in Keys]: [string, string] 
+} = {
+>{  [Keys.FIRST]: ['1', '2'],   [Keys['SECOND']]: ['3', '4']} : { 0: [string, string]; 1: [string, string]; }
+
+  [Keys.FIRST]: ['1', '2'], 
+>[Keys.FIRST] : [string, string]
+>Keys.FIRST : Keys.FIRST
+>Keys : typeof Keys
+>FIRST : Keys.FIRST
+>['1', '2'] : [string, string]
+>'1' : "1"
+>'2' : "2"
+
+  [Keys['SECOND']]: ['3', '4']
+>[Keys['SECOND']] : [string, string]
+>Keys['SECOND'] : Keys.SECOND
+>Keys : typeof Keys
+>'SECOND' : "SECOND"
+>['3', '4'] : [string, string]
+>'3' : "3"
+>'4' : "4"
+}
+
