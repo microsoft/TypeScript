@@ -2,32 +2,30 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(19,17): error TS2361: T
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(23,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(27,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(41,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(45,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(49,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(53,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 
 
-==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (8 errors) ====
+==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (6 errors) ====
     const validHasKey = <T extends object>(
       thing: T,
       key: string,
     ): boolean => {
-      return key in thing;
+      return key in thing; // Ok
     };
     
     const alsoValidHasKey = <T>(
       thing: T,
       key: string,
     ): boolean => {
-      return key in thing;
+      return key in thing; // Ok (as T may be instantiated with a valid type)
     };
     
     function invalidHasKey<T extends string | number>(
       thing: T,
       key: string,
     ): boolean {
-      return key in thing;
+      return key in thing; // Error (because all possible instantiations are errors)
                     ~~~~~
 !!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
     }
@@ -52,20 +50,12 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(53,12): error TS2361: T
                ~~~~~
 !!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
       if (typeof thing !== "string" && typeof thing !== "number") {
-        "key" in thing; // Ok, because further narrowing is impossible
+        "key" in thing; // Ok (because further narrowing is impossible)
       }
     }
     
     function union4<T extends object | "hello">(thing: T) {
-      "key" in thing; // Error (because union includes string literal)
-               ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-    }
-    
-    function union5<T extends object | string>(thing: T) {
-      "key" in thing; // Error (because union includes string)
-               ~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+      "key" in thing; // Ok (because narrowing is impossible)
     }
     
     function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {

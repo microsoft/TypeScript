@@ -1,7 +1,7 @@
 === tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts ===
 const validHasKey = <T extends object>(
 >validHasKey : <T extends object>(thing: T, key: string) => boolean
-><T extends object>(  thing: T,  key: string,): boolean => {  return key in thing;} : <T extends object>(thing: T, key: string) => boolean
+><T extends object>(  thing: T,  key: string,): boolean => {  return key in thing; // Ok} : <T extends object>(thing: T, key: string) => boolean
 
   thing: T,
 >thing : T
@@ -10,7 +10,7 @@ const validHasKey = <T extends object>(
 >key : string
 
 ): boolean => {
-  return key in thing;
+  return key in thing; // Ok
 >key in thing : boolean
 >key : string
 >thing : T
@@ -19,7 +19,7 @@ const validHasKey = <T extends object>(
 
 const alsoValidHasKey = <T>(
 >alsoValidHasKey : <T>(thing: T, key: string) => boolean
-><T>(  thing: T,  key: string,): boolean => {  return key in thing;} : <T>(thing: T, key: string) => boolean
+><T>(  thing: T,  key: string,): boolean => {  return key in thing; // Ok (as T may be instantiated with a valid type)} : <T>(thing: T, key: string) => boolean
 
   thing: T,
 >thing : T
@@ -28,7 +28,7 @@ const alsoValidHasKey = <T>(
 >key : string
 
 ): boolean => {
-  return key in thing;
+  return key in thing; // Ok (as T may be instantiated with a valid type)
 >key in thing : boolean
 >key : string
 >thing : T
@@ -45,7 +45,7 @@ function invalidHasKey<T extends string | number>(
 >key : string
 
 ): boolean {
-  return key in thing;
+  return key in thing; // Error (because all possible instantiations are errors)
 >key in thing : boolean
 >key : string
 >thing : T
@@ -103,7 +103,7 @@ function union3<T>(thing: T | string | number) {
 >thing : number | T
 >"number" : "number"
 
-    "key" in thing; // Ok, because further narrowing is impossible
+    "key" in thing; // Ok (because further narrowing is impossible)
 >"key" in thing : boolean
 >"key" : "key"
 >thing : T
@@ -114,17 +114,7 @@ function union4<T extends object | "hello">(thing: T) {
 >union4 : <T extends object | "hello">(thing: T) => void
 >thing : T
 
-  "key" in thing; // Error (because union includes string literal)
->"key" in thing : boolean
->"key" : "key"
->thing : T
-}
-
-function union5<T extends object | string>(thing: T) {
->union5 : <T extends string | object>(thing: T) => void
->thing : T
-
-  "key" in thing; // Error (because union includes string)
+  "key" in thing; // Ok (because narrowing is impossible)
 >"key" in thing : boolean
 >"key" : "key"
 >thing : T
