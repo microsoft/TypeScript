@@ -1,45 +1,32 @@
-tests/cases/compiler/inKeywordTypeguard.ts(5,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(6,11): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(8,11): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(13,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(14,11): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(16,11): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(24,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(27,11): error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
   Property 'b' does not exist on type 'AWithOptionalProp'.
-tests/cases/compiler/inKeywordTypeguard.ts(40,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(42,11): error TS2339: Property 'b' does not exist on type 'AWithMethod'.
-tests/cases/compiler/inKeywordTypeguard.ts(48,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type 'never'.
 tests/cases/compiler/inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type 'never'.
 tests/cases/compiler/inKeywordTypeguard.ts(52,11): error TS2339: Property 'a' does not exist on type 'AWithMethod | BWithMethod'.
   Property 'a' does not exist on type 'BWithMethod'.
 tests/cases/compiler/inKeywordTypeguard.ts(53,11): error TS2339: Property 'b' does not exist on type 'AWithMethod | BWithMethod'.
   Property 'b' does not exist on type 'AWithMethod'.
-tests/cases/compiler/inKeywordTypeguard.ts(61,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(62,11): error TS2339: Property 'b' does not exist on type 'A | C | D'.
   Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(64,11): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(71,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(72,32): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(74,32): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(81,20): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
-tests/cases/compiler/inKeywordTypeguard.ts(92,20): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
-tests/cases/compiler/inKeywordTypeguard.ts(100,16): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 
 
-==== tests/cases/compiler/inKeywordTypeguard.ts (28 errors) ====
+==== tests/cases/compiler/inKeywordTypeguard.ts (17 errors) ====
     class A { a: string; }
     class B { b: string; }
     
     function negativeClassesTest(x: A | B) {
         if ("a" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             x.b = "1";
               ~
 !!! error TS2339: Property 'b' does not exist on type 'A'.
@@ -52,8 +39,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function positiveClassesTest(x: A | B) {
         if ("a" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             x.b = "1";
               ~
 !!! error TS2339: Property 'b' does not exist on type 'A'.
@@ -69,8 +54,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
         if ("a" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             x.a = "1";
         } else {
             x.b = "1";
@@ -90,8 +73,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
         if ("a" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             x.a();
             x.b();
               ~
@@ -102,8 +83,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWithMethod) {
         if ("c" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             x.a();
               ~
 !!! error TS2339: Property 'a' does not exist on type 'never'.
@@ -127,8 +106,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function negativeMultipleClassesTest(x: A | B | C | D) {
         if ("a" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             x.b = "1";
               ~
 !!! error TS2339: Property 'b' does not exist on type 'A | C | D'.
@@ -144,8 +121,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function negativePropTest(x: ClassWithUnionProp) {
         if ("a" in x.prop) {
-                   ~~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             let y: string = x.prop.b;
                                    ~
 !!! error TS2339: Property 'b' does not exist on type 'A'.
@@ -160,8 +135,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
         protected prop: A | B;
         inThis() {
             if ("a" in this.prop) {
-                       ~~~~~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
                 let z: number = this.prop.b;
                                           ~
 !!! error TS2339: Property 'b' does not exist on type 'A'.
@@ -177,8 +150,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
         a: string;
         inThis() {
             if ("a" in this) {
-                       ~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             } else {
                 let y = this.a;
                              ~
@@ -189,8 +160,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     
     function positiveIntersectionTest(x: { a: string } & { b: string }) {
         if ("a" in x) {
-                   ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             let s: string = x.a;
         } else {
             let n: never = x;
@@ -198,8 +167,6 @@ tests/cases/compiler/inKeywordTypeguard.ts(107,27): error TS2361: The right-hand
     }
     function negativeIntersectionTest() {
         if ("ontouchstart" in window) {
-                              ~~~~~~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
             window.ontouchstart
         } else {
             window.ontouchstart

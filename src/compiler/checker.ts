@@ -30008,7 +30008,7 @@ namespace ts {
                     // If constraint is a union/intersection, ensure no types are primitive.
                     isTypeAssignableToKind(rightType, TypeFlags.UnionOrIntersection) && !allTypesAssignableToKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
                     // Otherwise, ensure that at least one type is not a primitive.
-                    !maybeTypeOfKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive)
+                    !maybeTypeOfKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object)
                 )
             ) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
