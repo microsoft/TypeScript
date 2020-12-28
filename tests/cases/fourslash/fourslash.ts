@@ -381,7 +381,10 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
-        getInlineHints(expected: readonly VerifyInlineHintsOptions[], span?: TextSpan, preference?: InlineHintsOptions);
+        getInlineHints(expected: readonly VerifyInlineHintsOptions[], textSpan?: {
+            start: number;
+            length: number;
+        }, preference?: InlineHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
