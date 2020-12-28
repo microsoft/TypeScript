@@ -1,0 +1,16 @@
+tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts(7,15): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+
+
+==== tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts (1 errors) ====
+    declare const envVar: string | undefined;
+    if (typeof envVar === `string`) {
+      envVar.slice(0)
+    }
+    
+    declare const obj: {test: string} | {}
+    if (`test` in obj) {
+                  ~~~
+!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+      obj.test.slice(0)
+    }
+    
