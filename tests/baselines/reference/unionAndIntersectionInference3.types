@@ -6,11 +6,11 @@ type Maybe<T> = T | undefined;
 
 declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
 >concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
->args : (T | Maybe<T>[] | undefined)[]
+>args : (Maybe<T> | Maybe<T>[])[]
 
 concatMaybe([1, 2, 3], 4);
 >concatMaybe([1, 2, 3], 4) : number[]
->concatMaybe : <T>(...args: (T | Maybe<T>[] | undefined)[]) => T[]
+>concatMaybe : <T>(...args: (Maybe<T> | Maybe<T>[])[]) => T[]
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2

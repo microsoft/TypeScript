@@ -45,7 +45,7 @@ export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 }
 
 export function flatten<T extends number|TypedArray>(arr: T) {
->flatten : <T extends number | Int32Array | Uint8Array>(arr: T) => void
+>flatten : <T extends number | TypedArray>(arr: T) => void
 >arr : T
 
   if (isTypedArray(arr)) {

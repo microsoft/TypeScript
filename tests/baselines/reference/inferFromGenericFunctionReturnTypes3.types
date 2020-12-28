@@ -176,7 +176,7 @@ export type DiagnosticSeverity = 1 | 2 | 3 | 4;
 
 export interface Diagnostic {
 	severity?: DiagnosticSeverity;
->severity : 1 | 2 | 3 | 4 | undefined
+>severity : DiagnosticSeverity | undefined
 
 	code?: number | string;
 >code : string | number | undefined
