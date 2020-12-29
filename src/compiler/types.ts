@@ -5288,8 +5288,6 @@ namespace ts {
         resolvedStringIndexType: IndexType;
         /* @internal */
         resolvedBaseConstraint: Type;
-        /* @internal */
-        originalTypes?: Type[];
     }
 
     export interface UnionType extends UnionOrIntersectionType {
@@ -5299,6 +5297,14 @@ namespace ts {
         regularType?: UnionType;
         /* @internal */
         unaliasedType?: Type;
+        /* @internal */
+        origin?: UnionOrigin;
+    }
+
+    /* @internal */
+    export interface UnionOrigin {
+        types: readonly Type[];
+        isIntersection: boolean;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {

@@ -4554,14 +4554,16 @@ namespace ts {
                         : factory.createTypeReferenceNode(factory.createIdentifier("?"), /*typeArguments*/ undefined);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).originalTypes || (<UnionType>type).types) : (<IntersectionType>type).types;
+                    const isIntersection = type.flags & TypeFlags.Intersection || (<UnionType>type).origin?.isIntersection;
+                    const types = type.flags & TypeFlags.Intersection ? (<IntersectionType>type).types :
+                        isIntersection ? (<UnionType>type).origin!.types :
+                        formatUnionTypes((<UnionType>type).origin?.types || (<UnionType>type).types);
                     if (length(types) === 1) {
                         return typeToTypeNodeHelper(types[0], context);
                     }
                     const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
-                        const unionOrIntersectionTypeNode = type.flags & TypeFlags.Union ? factory.createUnionTypeNode(typeNodes) : factory.createIntersectionTypeNode(typeNodes);
-                        return unionOrIntersectionTypeNode;
+                        return isIntersection ? factory.createIntersectionTypeNode(typeNodes) : factory.createUnionTypeNode(typeNodes);
                     }
                     else {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
@@ -11444,7 +11446,7 @@ namespace ts {
         }
 
         function getUnaliasedUnionType(type: Type) {
-            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.EnumLiteral) && (<UnionType>type).aliasSymbol) {
+            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.EnumLiteral) && ((<UnionType>type).aliasSymbol || (<UnionType>type).origin)) {
                 return (<UnionType>type).unaliasedType || ((<UnionType>type).unaliasedType = getUnionTypeFromSortedList((<UnionType>type).types, (<UnionType>type).objectFlags));
             }
             return type;
@@ -13249,20 +13251,6 @@ namespace ts {
             }
         }
 
-        function reduceOriginalTypes(types: readonly Type[], typeSet: readonly Type[]) {
-            const aliasedUnions = filter(types, t => !!(t.flags & TypeFlags.Union && t.aliasSymbol));
-            const result: Type[] = [];
-            for (const t of typeSet) {
-                if (!(t.flags & TypeFlags.Union && t.aliasSymbol) && !some(aliasedUnions, union => containsType((<UnionType>union).types, t))) {
-                    result.push(t);
-                }
-            }
-            for (const t of aliasedUnions) {
-                insertType(result, t);
-            }
-            return result;
-        }
-
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -13270,7 +13258,7 @@ namespace ts {
         // expression constructs such as array literals and the || and ?: operators). Named types can
         // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
         // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-        function getUnionType(types: readonly Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+        function getUnionType(types: readonly Type[], unionReduction: UnionReduction = UnionReduction.Literal, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: UnionOrigin): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -13279,10 +13267,6 @@ namespace ts {
             }
             const typeSet: Type[] = [];
             const includes = addTypesToUnion(typeSet, 0, types);
-            const originalTypes = includes & TypeFlags.Union ? reduceOriginalTypes(types, typeSet) : undefined;
-            if (!aliasSymbol && originalTypes && originalTypes.length === 1) {
-                return originalTypes[0];
-            }
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
@@ -13308,9 +13292,27 @@ namespace ts {
                         neverType;
                 }
             }
+            if (!origin && includes & TypeFlags.Union) {
+                const aliasedUnions = filter(types, t => !!(t.flags & TypeFlags.Union && t.aliasSymbol));
+                const reducedTypes: Type[] = [];
+                for (const t of typeSet) {
+                    if (!(t.flags & TypeFlags.Union && t.aliasSymbol) && !some(aliasedUnions, union => containsType((<UnionType>union).types, t))) {
+                        reducedTypes.push(t);
+                    }
+                }
+                for (const t of aliasedUnions) {
+                    insertType(reducedTypes, t);
+                }
+                if (!aliasSymbol && reducedTypes.length === 1) {
+                    return reducedTypes[0];
+                }
+                if (reducedTypes.length <= typeSet.length) {
+                    origin = { types: reducedTypes, isIntersection: false };
+                }
+            }
             const objectFlags = (includes & TypeFlags.NotPrimitiveUnion ? 0 : ObjectFlags.PrimitiveUnion) |
                 (includes & TypeFlags.Intersection ? ObjectFlags.ContainsIntersections : 0);
-            return getUnionTypeFromSortedList(typeSet, objectFlags, originalTypes && originalTypes.length <= typeSet.length ? originalTypes : undefined, aliasSymbol, aliasTypeArguments);
+            return getUnionTypeFromSortedList(typeSet, objectFlags, aliasSymbol, aliasTypeArguments, origin);
         }
 
         function getUnionTypePredicate(signatures: readonly Signature[]): TypePredicate | undefined {
@@ -13346,21 +13348,21 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], objectFlags: ObjectFlags, originalTypes?: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+        function getUnionTypeFromSortedList(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: UnionOrigin): Type {
             if (types.length === 0) {
                 return neverType;
             }
             if (types.length === 1) {
                 return types[0];
             }
-            const id = getTypeListId(types) + (originalTypes ? `#${getTypeListId(originalTypes)}` : "") + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+            const id = getTypeListId(types) + (origin ? `${origin.isIntersection ? '&' : '|'}${getTypeListId(origin.types)}` : "") + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
             let type = unionTypes.get(id);
             if (!type) {
                 type = <UnionType>createType(TypeFlags.Union);
                 unionTypes.set(id, type);
                 type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type.types = types;
-                type.originalTypes = originalTypes;
+                type.origin = origin;
                 /*
                 Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
                 For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
@@ -13611,10 +13613,10 @@ namespace ts {
                         result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                     }
                     else if (extractIrreducible(typeSet, TypeFlags.Undefined)) {
-                        result = getUnionType([getIntersectionType(typeSet), undefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), undefinedType], aliasSymbol, aliasTypeArguments, typeSet);
                     }
                     else if (extractIrreducible(typeSet, TypeFlags.Null)) {
-                        result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), nullType], aliasSymbol, aliasTypeArguments, typeSet);
                     }
                     else {
                         // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
@@ -13625,8 +13627,8 @@ namespace ts {
                         }
                         const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
                         const unionType = <UnionType>typeSet[unionIndex];
-                        result = getUnionType(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                            UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                        result = getUnionTypeFromIntersection(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
+                            aliasSymbol, aliasTypeArguments, typeSet);
                     }
                 }
                 else {
@@ -13635,6 +13637,11 @@ namespace ts {
                 intersectionTypes.set(id, result);
             }
             return result;
+        }
+
+        function getUnionTypeFromIntersection(types: readonly Type[], aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, originalTypes: readonly Type[]) {
+            const origin = some(types, t => !!(t.flags & TypeFlags.Intersection)) ? { types: originalTypes, isIntersection: true } : undefined;
+            return getUnionType(types, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
         }
 
         function checkCrossProductUnion(types: readonly Type[]) {
@@ -15507,6 +15514,10 @@ namespace ts {
             return getConditionalType(root, mapper);
         }
 
+        function instantiateUnionOrigin(origin: UnionOrigin | undefined, mapper: TypeMapper) {
+            return origin && { types: instantiateTypes(origin.types, mapper), isIntersection: origin.isIntersection };
+        }
+
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
@@ -15552,7 +15563,7 @@ namespace ts {
                 return newTypes === types ? type :
                     flags & TypeFlags.Intersection ?
                         getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) :
-                        getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                        getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper), instantiateUnionOrigin((<UnionType>type).origin, mapper));
             }
             if (flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
