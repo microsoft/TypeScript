@@ -119,3 +119,23 @@ type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : 
 function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
     f21(y, x);  // Error
 }
+
+// Repros from #41756
+
+type ParseSuccess<R extends string> = { rest: R };
+
+type ParseManyWhitespace<S extends string> =
+    S extends ` ${infer R0}` ?
+        ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
+        ParseSuccess<S>;
+
+type TP1 = ParseManyWhitespace<" foo">;
+
+type ParseManyWhitespace2<S extends string> =
+    S extends ` ${infer R0}` ?
+        Helper<ParseManyWhitespace2<R0>> :
+        ParseSuccess<S>;
+
+type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+
+type TP2 = ParseManyWhitespace2<" foo">;

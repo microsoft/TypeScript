@@ -34,6 +34,13 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 [91merror[0m[90m TS6053: [0mFile '/a/b/commonFile3.ts' not found.
+  The file is in the program because:
+    Part of 'files' list in tsconfig.json
+
+  [96ma/b/tsconfig.json[0m:[93m5[0m:[93m25[0m
+    [7m5[0m                         "commonFile3.ts"
+    [7m [0m [96m                        ~~~~~~~~~~~~~~~~[0m
+    File is matched by 'files' list specified here.
 
 [[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 

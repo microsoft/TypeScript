@@ -28,7 +28,7 @@
 goTo.eachMarker((_, index) => {
     verify.verifyQuickInfoDisplayParts(
         "alias",
-        "",
+        "export",
         { start: index === 0 ? 25 : 117, length: 1 },
         [
             { text:"(",kind:"punctuation" },

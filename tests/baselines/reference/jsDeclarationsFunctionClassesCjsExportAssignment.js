@@ -231,7 +231,7 @@ type Input = {
 /**
  * Imports
  */
-type HookHandler = (arg: Context) => void;
+type HookHandler = import("./hook").HookHandler;
 /**
  * State type definition
  */
