@@ -6079,9 +6079,9 @@ namespace ts {
     }
 
     export interface SymlinkCache {
-        /** Gets a map from symlink to realpath */
+        /** Gets a map from symlink to realpath. Keys have trailing directory separators. */
         getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
-        /** Gets a map from realpath to symlinks */
+        /** Gets a map from realpath to symlinks. Keys have trailing directory separators. */
         getSymlinkedDirectoriesByRealpath(): MultiMap<Path, Path> | undefined;
         /** Gets a map from symlink to realpath */
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
@@ -6103,8 +6103,9 @@ namespace ts {
                 // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
                 // this path is never a candidate for a module specifier, we can ignore it entirely.
                 if (!containsIgnoredPath(symlinkPath)) {
+                    symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
                     if (directory !== false && !symlinkedDirectories?.has(symlinkPath)) {
-                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(directory.realPath, symlinkPath)
+                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(directory.realPath), symlinkPath);
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, directory);
                 }
@@ -6121,7 +6122,7 @@ namespace ts {
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
-                    toPath(commonOriginal, cwd, getCanonicalFileName),
+                    ensureTrailingDirectorySeparator(toPath(commonOriginal, cwd, getCanonicalFileName)),
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }

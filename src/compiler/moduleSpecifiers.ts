@@ -302,7 +302,7 @@ namespace ts.moduleSpecifiers {
 
         const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
         const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(importedPath), realPathDirectory => {
-            const symlinkDirectories = symlinkedDirectories.get(realPathDirectory);
+            const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(realPathDirectory));
             if (!symlinkDirectories) return undefined; // Continue to ancestor directory
 
             // Don't want to a package to globally import from itself (importNameCodeFix_symlink_own_package.ts)
