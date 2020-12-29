@@ -59,9 +59,9 @@ let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefin
 >extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
 
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
->extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
+>extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
 >extentMixed : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
->extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
+>extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [Primitive | NumCoercible, Primitive | NumCoercible]
 >extent : <T extends Numeric>(array: (Primitive | T)[]) => [Primitive | T, Primitive | T] | [undefined, undefined]
 >[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]
 >new NumCoercible(10) : NumCoercible
