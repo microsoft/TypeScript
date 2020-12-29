@@ -1543,7 +1543,7 @@ namespace ts.Completions {
 
         function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
             const variableDeclaration = findAncestor(property, (node) => {
-                if (isFunctionBlock(node) || isBindingPattern(node)) {
+                if (isFunctionBlock(node) || isBindingPattern(node) || (isArrowFunction(node.parent) && node.parent.body === node)) {
                     return "quit";
                 }
 
