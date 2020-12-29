@@ -1542,8 +1542,13 @@ namespace ts.Completions {
         }
 
         function getVariableDeclaration(property: Node): VariableDeclaration | undefined {
+
+            const isArrowFunctionExpressionWithoutArrow = (node: Node) => {
+                return node.parent && isArrowFunction(node.parent) && node.parent.body === node;
+            };
+
             const variableDeclaration = findAncestor(property, (node) => {
-                if (isFunctionBlock(node) || isBindingPattern(node) || (isArrowFunction(node.parent) && node.parent.body === node)) {
+                if (isFunctionBlock(node) || isArrowFunctionExpressionWithoutArrow(node) || isBindingPattern(node)) {
                     return "quit";
                 }
 
