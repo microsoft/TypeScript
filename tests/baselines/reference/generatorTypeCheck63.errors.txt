@@ -2,7 +2,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): err
   Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
     The types returned by 'next(...)' are incompatible between these types.
       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
-        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorReturnResult<any> | IteratorYieldResult<State>'.
+        Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, any>'.
           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
             Type 'number' is not assignable to type 'State'.
 
@@ -37,7 +37,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): err
 !!! error TS2345:   Call signature return types 'Generator<number, State, undefined>' and 'IterableIterator<State>' are incompatible.
 !!! error TS2345:     The types returned by 'next(...)' are incompatible between these types.
 !!! error TS2345:       Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, any>'.
-!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorReturnResult<any> | IteratorYieldResult<State>'.
+!!! error TS2345:         Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, any>'.
 !!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
 !!! error TS2345:             Type 'number' is not assignable to type 'State'.
         yield 1;
