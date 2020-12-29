@@ -6079,25 +6079,34 @@ namespace ts {
     }
 
     export interface SymlinkCache {
+        /** Gets a map from symlink to realpath */
         getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+        /** Gets a map from realpath to symlinks */
+        getSymlinkedDirectoriesByRealpath(): MultiMap<Path, Path> | undefined;
+        /** Gets a map from symlink to realpath */
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
-        setSymlinkedDirectory(path: Path, directory: SymlinkedDirectory | false): void;
-        setSymlinkedFile(path: Path, real: string): void;
+        setSymlinkedDirectory(symlinkPath: Path, directory: SymlinkedDirectory | false): void;
+        setSymlinkedFile(symlinkPath: Path, real: string): void;
     }
 
     export function createSymlinkCache(): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedDirectoriesByRealpath: MultiMap<Path, Path> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
+            getSymlinkedDirectoriesByRealpath: () => symlinkedDirectoriesByRealpath,
             setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
-            setSymlinkedDirectory: (path, directory) => {
+            setSymlinkedDirectory: (symlinkPath, directory) => {
                 // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
                 // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
                 // this path is never a candidate for a module specifier, we can ignore it entirely.
-                if (!containsIgnoredPath(path)) {
-                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory);
+                if (!containsIgnoredPath(symlinkPath)) {
+                    if (directory !== false && !symlinkedDirectories?.has(symlinkPath)) {
+                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(directory.realPath, symlinkPath)
+                    }
+                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, directory);
                 }
             }
         };
