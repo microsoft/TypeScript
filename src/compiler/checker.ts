@@ -11445,13 +11445,6 @@ namespace ts {
             return reduced;
         }
 
-        function getUnaliasedUnionType(type: Type) {
-            if (type.flags & TypeFlags.Union && !(type.flags & TypeFlags.EnumLiteral) && ((<UnionType>type).aliasSymbol || (<UnionType>type).origin)) {
-                return (<UnionType>type).unaliasedType || ((<UnionType>type).unaliasedType = getUnionTypeFromSortedList((<UnionType>type).types, (<UnionType>type).objectFlags));
-            }
-            return type;
-        }
-
         function isNeverReducedProperty(prop: Symbol) {
             return isDiscriminantWithNeverType(prop) || isConflictingPrivateProperty(prop);
         }
@@ -16599,7 +16592,7 @@ namespace ts {
             while (true) {
                 const t = isFreshLiteralType(type) ? (<FreshableType>type).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? createTypeReference((<TypeReference>type).target, getTypeArguments(<TypeReference>type)) :
-                    type.flags & TypeFlags.UnionOrIntersection ? getUnaliasedUnionType(getReducedType(type)) :
+                    type.flags & TypeFlags.UnionOrIntersection ? getReducedType(type) :
                     type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).baseType : (<SubstitutionType>type).substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;

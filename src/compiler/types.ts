@@ -5296,8 +5296,6 @@ namespace ts {
         /* @internal */
         regularType?: UnionType;
         /* @internal */
-        unaliasedType?: Type;
-        /* @internal */
         origin?: UnionOrigin;
     }
 
