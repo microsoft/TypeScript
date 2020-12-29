@@ -10022,7 +10022,8 @@ namespace ts {
                 }
             }
             else if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
+                const types = sameMap((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
+                return types !== (<IntersectionType>type).types ? getIntersectionType(types) : type;
             }
             return needApparentType ? getApparentType(type) : type;
         }
@@ -13348,7 +13349,7 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            const id = getTypeListId(types) + (origin ? `${origin.isIntersection ? '&' : '|'}${getTypeListId(origin.types)}` : "") + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+            const id = (origin ? `${origin.isIntersection ? "&" : "|"}${getTypeListId(origin.types)}` : getTypeListId(types)) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
             let type = unionTypes.get(id);
             if (!type) {
                 type = <UnionType>createType(TypeFlags.Union);
@@ -13595,7 +13596,7 @@ namespace ts {
             if (typeSet.length === 1) {
                 return typeSet[0];
             }
-            const id = getTypeListId(typeSet);
+            const id = getTypeListId(typeSet) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
             let result = intersectionTypes.get(id);
             if (!result) {
                 if (includes & TypeFlags.Union) {
@@ -13606,10 +13607,10 @@ namespace ts {
                         result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                     }
                     else if (extractIrreducible(typeSet, TypeFlags.Undefined)) {
-                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), undefinedType], aliasSymbol, aliasTypeArguments, typeSet);
+                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), undefinedType], aliasSymbol, aliasTypeArguments);
                     }
                     else if (extractIrreducible(typeSet, TypeFlags.Null)) {
-                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), nullType], aliasSymbol, aliasTypeArguments, typeSet);
+                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), nullType], aliasSymbol, aliasTypeArguments);
                     }
                     else {
                         // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
@@ -13632,8 +13633,8 @@ namespace ts {
             return result;
         }
 
-        function getUnionTypeFromIntersection(types: readonly Type[], aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, originalTypes: readonly Type[]) {
-            const origin = some(types, t => !!(t.flags & TypeFlags.Intersection)) ? { types: originalTypes, isIntersection: true } : undefined;
+        function getUnionTypeFromIntersection(types: readonly Type[], aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, originalTypes?: readonly Type[]) {
+            const origin = originalTypes && some(types, t => !!(t.flags & TypeFlags.Intersection)) ? { types: originalTypes, isIntersection: true } : undefined;
             return getUnionType(types, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
         }
 
@@ -14328,7 +14329,7 @@ namespace ts {
                     return objectType;
                 }
                 // Defer the operation by creating an indexed access type.
-                const id = objectType.id + "," + indexType.id + (shouldIncludeUndefined ? "?" : "");
+                const id = objectType.id + "," + indexType.id + (shouldIncludeUndefined ? "?" : "") + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
                     indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, aliasSymbol, aliasTypeArguments, shouldIncludeUndefined));
