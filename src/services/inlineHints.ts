@@ -45,13 +45,32 @@ namespace ts.InlineHints {
             if (preferences.includeInlineParameterName && (isCallExpression(node) || isNewExpression(node))) {
                 visitCallOrNewExpression(node);
             }
-            else if (preferences.includeInlineFunctionParameterType && (isArrowFunction(node) || isFunctionExpression(node))) {
-                visitFunctionExpressionLike(node);
-            }
             else if (preferences.includeInlineVariableType && (isVariableDeclaration(node))) {
-                visitVariableDeclaration(node);
+                visitVariableLikeDeclaration(node);
+            }
+            else if (preferences.includeInlinePropertyDeclarationType && isPropertyDeclaration(node)) {
+                visitVariableLikeDeclaration(node);
+            }
+            else if (preferences.includeInlineEnumMemberValue && isEnumMember(node)) {
+                visitEnumMember(node);
+            }
+            else {
+                if (preferences.includeInlineFunctionParameterType && isFunctionExpressionLike(node)) {
+                    visitFunctionExpressionLikeForParameterType(node);
+                }
+                if (preferences.includeInlineFunctionLikeReturnType &&isFunctionDeclarationLike(node)) {
+                    visitFunctionDeclarationLikeForReturnType(node);
+                }
             }
             return forEachChild(node, visitor);
+        }
+
+        function isFunctionExpressionLike(node: Node): node is ArrowFunction | FunctionExpression {
+            return isArrowFunction(node) || isFunctionExpression(node);
+        }
+
+        function isFunctionDeclarationLike(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration {
+            return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node);
         }
 
         function addNameHints(text: string, position: number) {
@@ -70,13 +89,32 @@ namespace ts.InlineHints {
             });
         }
 
-        function visitVariableDeclaration(decl: VariableDeclaration) {
+        function addEnumMemberValueHints(text: string, position: number) {
+            result.push({
+                text: `= ${truncation(text, maxHintsLength)}`,
+                position,
+                whitespaceBefore: true,
+            });
+        }
+
+        function visitEnumMember(member: EnumMember) {
+            if (member.initializer) {
+                return;
+            }
+
+            const enumValue = checker.getConstantValue(member);
+            if (enumValue !== undefined) {
+                addEnumMemberValueHints(enumValue.toString(), member.end);
+            }
+        }
+
+        function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
             if (decl.type || !decl.initializer) {
                 return;
             }
 
-            const initializerType = checker.getTypeAtLocation(decl.initializer);
-            const typeDisplayString = printTypeInSingleLine(initializerType);
+            const declarationType = checker.getTypeAtLocation(decl);
+            const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
                 addTypeHints(typeDisplayString, decl.name.end);
             }
@@ -105,7 +143,28 @@ namespace ts.InlineHints {
             }
         }
 
-        function visitFunctionExpressionLike(expr: ArrowFunction | FunctionExpression) {
+        function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+            if (decl.type || !decl.body) {
+                return;
+            }
+
+            const type = checker.getTypeAtLocation(decl);
+            const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+            const signature = firstOrUndefined(signatures);
+            if (!signature) {
+                return;
+            }
+
+            const returnType = checker.getReturnTypeOfSignature(signature);
+            const typeDisplayString = printTypeInSingleLine(returnType);
+            if (!typeDisplayString) {
+                return;
+            }
+
+            addTypeHints(typeDisplayString, decl.body.pos);
+        }
+
+        function visitFunctionExpressionLikeForParameterType(expr: ArrowFunction | FunctionExpression) {
             if (!expr.parameters.length || expr.parameters.every(param => param.type)) {
                 return;
             }
