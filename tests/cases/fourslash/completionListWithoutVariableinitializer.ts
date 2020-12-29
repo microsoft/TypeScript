@@ -4,10 +4,11 @@
 //// const b = a && b/*2*/;
 //// const c = [{ prop: [c/*3*/] }];
 //// const d = () => { d/*4*/ };
-//// const e = { prop() { e/*5*/ }  };
-//// const fn = (p = /*6*/) => {}
-//// const { f, g = /*7*/ } = { ... }
-//// const [ f1, g1 = /*8*/ ] = [ ... ]
+//// const e = () => expression/*5*/
+//// const f = { prop() { e/*6*/ }  };
+//// const fn = (p = /*7*/) => {}
+//// const { g, h = /*8*/ } = { ... }
+//// const [ g1, h1 = /*9*/ ] = [ ... ]
 
 verify.completions({
     marker: ["1"],
@@ -41,15 +42,21 @@ verify.completions({
 verify.completions({
     marker: ["6"],
     includes: ["a", "b", "c", "d", "e"],
-    excludes: ["fn"],
 });
 
 verify.completions({
     marker: ["7"],
-    includes: ["a", "b", "c", "d", "e", "fn"],
+    includes: ["a", "b", "c", "d", "e"],
+    excludes: ["fn"],
 });
 
 verify.completions({
     marker: ["8"],
     includes: ["a", "b", "c", "d", "e", "fn"],
 });
+
+verify.completions({
+    marker: ["9"],
+    includes: ["a", "b", "c", "d", "e", "fn"],
+});
+
