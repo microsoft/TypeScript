@@ -14,9 +14,11 @@ namespace ts.InlineHints {
 
         const checker = program.getTypeChecker();
         const result: HintInfo[] = [];
+        const callExpressionHintableCache = new Map<CallExpression, boolean>();
 
         visitor(file);
         return result;
+
         function visitor(node: Node): true | undefined | void {
             if (!node || node.getFullWidth() === 0) {
                 return;
@@ -42,10 +44,7 @@ namespace ts.InlineHints {
                 return;
             }
 
-            if (preferences.includeInlineParameterName && (isCallExpression(node) || isNewExpression(node))) {
-                visitCallOrNewExpression(node);
-            }
-            else if (preferences.includeInlineVariableType && (isVariableDeclaration(node))) {
+            if (preferences.includeInlineVariableType && (isVariableDeclaration(node))) {
                 visitVariableLikeDeclaration(node);
             }
             else if (preferences.includeInlinePropertyDeclarationType && isPropertyDeclaration(node)) {
@@ -54,11 +53,19 @@ namespace ts.InlineHints {
             else if (preferences.includeInlineEnumMemberValue && isEnumMember(node)) {
                 visitEnumMember(node);
             }
+            else if (isCallExpression(node) || isNewExpression(node)) {
+                if (preferences.includeInlineParameterName) {
+                    visitCallOrNewExpression(node);
+                }
+                if (preferences.includeInlineCallChains && isCallExpression(node)) {
+                    visitCallChains(node);
+                }
+            }
             else {
                 if (preferences.includeInlineFunctionParameterType && isFunctionExpressionLike(node)) {
                     visitFunctionExpressionLikeForParameterType(node);
                 }
-                if (preferences.includeInlineFunctionLikeReturnType &&isFunctionDeclarationLike(node)) {
+                if (preferences.includeInlineFunctionLikeReturnType && isFunctionDeclarationLike(node)) {
                     visitFunctionDeclarationLikeForReturnType(node);
                 }
             }
@@ -95,6 +102,42 @@ namespace ts.InlineHints {
                 position,
                 whitespaceBefore: true,
             });
+        }
+
+        function visitCallChains(call: CallExpression) {
+            if (!shouldCallExpressionHint(call)) {
+                return;
+            }
+
+            const candidates: Signature[] = [];
+            const signature = checker.getResolvedSignature(call, candidates);
+            if (!signature || !candidates.length) {
+                return;
+            }
+
+            const returnType = checker.getReturnTypeOfSignature(signature);
+            const typeDisplayString = printTypeInSingleLine(returnType);
+            if (!typeDisplayString) {
+                return;
+            }
+
+            addTypeHints(typeDisplayString, call.end);
+        }
+
+        function shouldCallExpressionHint(call: CallExpression) {
+            if (!callExpressionHintableCache.has(call)) {
+                let current = call;
+                while (true) {
+                    if (!isAccessExpression(current.parent) || !isCallExpression(current.parent.parent)) {
+                        callExpressionHintableCache.set(current, false);
+                        break;
+                    }
+
+                    callExpressionHintableCache.set(current, true);
+                    current = current.parent.parent;
+                }
+            }
+            return callExpressionHintableCache.get(call);
         }
 
         function visitEnumMember(member: EnumMember) {
@@ -220,10 +263,6 @@ namespace ts.InlineHints {
                 return undefined;
             }
 
-            if (valueDeclaration.type) {
-                return printNodeInSingleLine(valueDeclaration.type);
-            }
-
             const signatureParamType = checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration);
             return printTypeInSingleLine(signatureParamType);
         }
@@ -250,14 +289,6 @@ namespace ts.InlineHints {
                 Debug.assertIsDefined(typeNode, "should always get typenode");
 
                 writeNodeInSignleLine(typeNode, singleLineWriter);
-            });
-            return displayPartsToString(displayParts);
-        }
-
-        function printNodeInSingleLine(node: Node) {
-            const displayParts = mapToDisplayParts(writer => {
-                const singleLineWriter = createSignleLineWriter(writer);
-                writeNodeInSignleLine(node, singleLineWriter);
             });
             return displayPartsToString(displayParts);
         }

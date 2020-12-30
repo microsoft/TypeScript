@@ -574,6 +574,7 @@ namespace ts {
         readonly includeInlinePropertyDeclarationType?: boolean;
         readonly includeInlineFunctionLikeReturnType?: boolean;
         readonly includeInlineEnumMemberValue?: boolean;
+        readonly includeInlineCallChains?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";

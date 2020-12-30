@@ -1,15 +1,17 @@
 /// <reference path="fourslash.ts" />
 
-//// function f<T>(v: T, a: (v: T) => void) {}
-//// f(1, a/*a*/ => { })
+//// const z = [1, 2, 3];
+//// z
+////     .map(function (e) { return String(e) })/*a*/
+////     .map(function (e) { return Number(e) });
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: ':number',
+        text: ':string[]',
         position: markers[0].position,
         whitespaceBefore: true
     }
 ], undefined, {
-    includeInlineFunctionParameterType: true
+    includeInlineCallChains: true,
 });

@@ -13,7 +13,7 @@ verify.getInlineHints([
         whitespaceAfter: true
     },
     {
-        text: ':(c: (d: Exclude<1 | 2 | 3, ...',
+        text: ':(c: (d: 2 | 3) => void) => ...',
         position: markers[1].position,
         whitespaceBefore: true
     },
@@ -23,7 +23,7 @@ verify.getInlineHints([
         whitespaceAfter: true
     },
     {
-        text: ':Exclude<1 | 2 | 3, 1>',
+        text: ':2 | 3',
         position: markers[3].position,
         whitespaceBefore: true
     }

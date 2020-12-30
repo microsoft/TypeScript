@@ -6,7 +6,7 @@
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: ':Exclude<1 | 2 | 3, 1>',
+        text: ':2 | 3',
         position: markers[0].position,
         whitespaceBefore: true
     }

@@ -628,6 +628,7 @@ declare namespace FourSlashInterface {
         readonly includeInlinePropertyDeclarationType?: boolean;
         readonly includeInlineFunctionLikeReturnType?: boolean;
         readonly includeInlineEnumMemberValue?: boolean;
+        readonly includeInlineCallChains?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;

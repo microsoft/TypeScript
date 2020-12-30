@@ -8254,6 +8254,7 @@ namespace ts {
         readonly includeInlinePropertyDeclarationType?: boolean;
         readonly includeInlineFunctionLikeReturnType?: boolean;
         readonly includeInlineEnumMemberValue?: boolean;
+        readonly includeInlineCallChains?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

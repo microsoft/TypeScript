@@ -8,12 +8,12 @@
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: ':(c: (d: Exclude<1 | 2 | 3, ...',
+        text: ':(c: (d: 2 | 3) => void) => ...',
         position: markers[0].position,
         whitespaceBefore: true
     },
     {
-        text: ':Exclude<1 | 2 | 3, 1>',
+        text: ':2 | 3',
         position: markers[1].position,
         whitespaceBefore: true
     }
