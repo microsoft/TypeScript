@@ -232,22 +232,15 @@ namespace ts.Completions {
             symbolToSortTextMap,
         } = completionData;
 
-        if (location && location.parent) {
-            const closingTag = location.parent.parent && isJsxClosingElement(location.parent.parent)
-                ? getJsxCompletionClosingTag(location.parent, sourceFile)
-                : isJsxClosingElement(location.parent)
-                    ? getJsxCompletionClosingTag(location, sourceFile)
-                    : undefined;
-
-            if (closingTag || closingTag === "") {
-                const entry: CompletionEntry = {
-                    name: closingTag,
-                    kind: ScriptElementKind.classElement,
-                    kindModifiers: undefined,
-                    sortText: SortText.LocationPriority,
-                };
-                return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
-            }
+        const closingJsxTag = getJsxCompletionClosingTag(location, sourceFile);
+        if (closingJsxTag || closingJsxTag === "") {
+            const entry: CompletionEntry = {
+                name: closingJsxTag,
+                kind: ScriptElementKind.classElement,
+                kindModifiers: undefined,
+                sortText: SortText.LocationPriority,
+            };
+            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
         }
 
         const entries: CompletionEntry[] = [];
@@ -336,7 +329,19 @@ namespace ts.Completions {
     }
 
     function getJsxCompletionClosingTag(location: Node | undefined, sourceFile: SourceFile) {
-        if (location && location.parent && isJsxClosingElement(location.parent)) {
+        // This helps us to identify if location is a property access expression,
+        // in this case we wanna make sure if the parent of parent is a jsx closing tag
+        // The following is a possible case:
+        //   <Comp></Comp/*-*/
+        const jsxClosingElement = location && location.parent
+            ? location.parent.parent && isJsxClosingElement(location.parent.parent)
+                ? location.parent.parent
+                : isJsxClosingElement(location.parent)
+                    ? location.parent
+                    : undefined
+            : undefined;
+
+        if (jsxClosingElement) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
             // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
             // For example:
@@ -346,15 +351,22 @@ namespace ts.Completions {
             // And at property access expressions `<MainComponent.Child> </MainComponent. /*1*/ >` the completion will
             // return the partial opening tag as in `Child`
             // And if the property access expression is equal or superceding the opening tag empty string will be provided
-            const hasClosingAngleBracket = !!findChildOfKind(location.parent, SyntaxKind.GreaterThanToken, sourceFile);
-            const accessExpressionNode = findChildOfKind(location.parent, SyntaxKind.PropertyAccessExpression, sourceFile);
-            const tagName = location.parent.parent.openingElement.tagName;
+            const hasClosingAngleBracket = !!findChildOfKind(jsxClosingElement, SyntaxKind.GreaterThanToken, sourceFile);
+            const accessExpressionNode = findChildOfKind(jsxClosingElement, SyntaxKind.PropertyAccessExpression, sourceFile);
+            const tagName = jsxClosingElement.parent.openingElement.tagName;
             let closingTag = tagName.getFullText(sourceFile);
             if (accessExpressionNode) {
-                const expressionChildren = accessExpressionNode.getChildren(sourceFile);
-                if (expressionChildren.length > 0) {
-                    const fullTagLength = expressionChildren[expressionChildren.length -1].end - expressionChildren[0].pos;
-                    closingTag = closingTag.substring(fullTagLength);
+                const accessExpressionNodeText = accessExpressionNode.getFullText(sourceFile);
+                let firstToLastDiff = accessExpressionNodeText.length;
+                if (firstToLastDiff > 0) {
+                    // We wanna skip the whitespaces at the begining of this node
+                    for (const chr of accessExpressionNodeText) {
+                        if (!isWhiteSpaceLike(chr.charCodeAt(0))) {
+                            break;
+                        }
+                        firstToLastDiff--;
+                    }
+                    closingTag = closingTag.substring(firstToLastDiff);
                 }
             }
             return closingTag + (hasClosingAngleBracket ? "" : ">");
