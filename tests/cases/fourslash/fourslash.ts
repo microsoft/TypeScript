@@ -620,8 +620,14 @@ declare namespace FourSlashInterface {
     }
     interface InlineHintsOptions extends UserPreferences {
         readonly includeInlineParameterName?: boolean;
+        readonly includeInlineNonLiteralParameterName?: boolean;
+        readonly includeInlineDuplicatedParameterName?: boolean;
         readonly includeInlineFunctionParameterType?: boolean;
         readonly includeInlineVariableType?: boolean;
+        readonly includeInlineRequireAssignedVariableType?: boolean;
+        readonly includeInlinePropertyDeclarationType?: boolean;
+        readonly includeInlineFunctionLikeReturnType?: boolean;
+        readonly includeInlineEnumMemberValue?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;

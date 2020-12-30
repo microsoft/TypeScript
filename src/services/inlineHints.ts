@@ -114,7 +114,7 @@ namespace ts.InlineHints {
             }
 
             const declarationType = checker.getTypeAtLocation(decl);
-            if (!preferences.includeInlineRequireAssignedVariableType || declarationType.symbol && (declarationType.symbol.flags & SymbolFlags.Module)) {
+            if (!preferences.includeInlineRequireAssignedVariableType && declarationType.symbol && (declarationType.symbol.flags & SymbolFlags.Module)) {
                 return;
             }
 
