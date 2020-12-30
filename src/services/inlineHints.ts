@@ -151,7 +151,7 @@ namespace ts.InlineHints {
         }
 
         function isHintableExpression(node: Node) {
-            return isLiteralExpression(node) || isFunctionExpressionLike(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
+            return isLiteralExpression(node) || isBooleanLiteral(node) || isFunctionExpressionLike(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
@@ -172,7 +172,15 @@ namespace ts.InlineHints {
                 return;
             }
 
-            addTypeHints(typeDisplayString, decl.body.pos);
+            addTypeHints(typeDisplayString, getTypeAnnotationPosition(decl));
+        }
+
+        function getTypeAnnotationPosition(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+            const closeParenToken = findChildOfKind(decl, SyntaxKind.CloseParenToken, file);
+            if (closeParenToken) {
+                return closeParenToken.end;
+            }
+            return decl.parameters.end;
         }
 
         function visitFunctionExpressionLikeForParameterType(expr: ArrowFunction | FunctionExpression) {

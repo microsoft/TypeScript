@@ -2,17 +2,22 @@
 
 //// function foo (a: number, b: number) {}
 //// declare const a: 1;
-//// foo(a, /*b*/2);
+//// foo(/*a*/a, /*b*/2);
 
 const markers = test.markers();
 verify.getInlineHints([
     {
-        text: 'b:',
+        text: 'a:',
         position: markers[0].position,
+        whitespaceAfter: true
+    },
+    {
+        text: 'b:',
+        position: markers[1].position,
         whitespaceAfter: true
     },
 ], undefined, {
     includeInlineParameterName: true,
     includeInlineNonLiteralParameterName: true,
-    includeInlineDuplicatedParameterName: false,
+    includeInlineDuplicatedParameterName: true,
 });
