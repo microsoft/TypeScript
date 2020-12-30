@@ -13129,7 +13129,7 @@ namespace ts {
         function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                return addTypesToUnion(typeSet, includes | (type.aliasSymbol ? TypeFlags.Union : 0), (<UnionType>type).types);
+                return addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (<UnionType>type).types);
             }
             // We ignore 'never' types in unions
             if (!(flags & TypeFlags.Never)) {
@@ -13245,6 +13245,10 @@ namespace ts {
             }
         }
 
+        function isNamedUnionType(type: Type) {
+            return !!(type.flags & TypeFlags.Union && (type.aliasSymbol || (<UnionType>type).origin));
+        }
+
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -13287,14 +13291,14 @@ namespace ts {
                 }
             }
             if (!origin && includes & TypeFlags.Union) {
-                const aliasedUnions = filter(types, t => !!(t.flags & TypeFlags.Union && t.aliasSymbol));
+                const namedUnions = filter(types, isNamedUnionType);
                 const reducedTypes: Type[] = [];
                 for (const t of typeSet) {
-                    if (!(t.flags & TypeFlags.Union && t.aliasSymbol) && !some(aliasedUnions, union => containsType((<UnionType>union).types, t))) {
+                    if (!isNamedUnionType(t) && !some(namedUnions, union => containsType((<UnionType>union).types, t))) {
                         reducedTypes.push(t);
                     }
                 }
-                for (const t of aliasedUnions) {
+                for (const t of namedUnions) {
                     insertType(reducedTypes, t);
                 }
                 if (!aliasSymbol && reducedTypes.length === 1) {
@@ -13357,12 +13361,6 @@ namespace ts {
                 type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
                 type.types = types;
                 type.origin = origin;
-                /*
-                Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
-                For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
-                (In the language service, the order may depend on the order in which a user takes actions, such as hovering over symbols.)
-                It's important that we create equivalent union types only once, so that's an unfortunate side effect.
-                */
                 type.aliasSymbol = aliasSymbol;
                 type.aliasTypeArguments = aliasTypeArguments;
             }
@@ -13607,10 +13605,10 @@ namespace ts {
                         result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                     }
                     else if (extractIrreducible(typeSet, TypeFlags.Undefined)) {
-                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), undefinedType], aliasSymbol, aliasTypeArguments);
+                        result = getUnionType([getIntersectionType(typeSet), undefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                     else if (extractIrreducible(typeSet, TypeFlags.Null)) {
-                        result = getUnionTypeFromIntersection([getIntersectionType(typeSet), nullType], aliasSymbol, aliasTypeArguments);
+                        result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                     else {
                         // We are attempting to construct a type of the form X & (A | B) & Y. Transform this into a type of
@@ -13619,10 +13617,9 @@ namespace ts {
                         if (!checkCrossProductUnion(typeSet)) {
                             return errorType;
                         }
-                        const unionIndex = findIndex(typeSet, t => (t.flags & TypeFlags.Union) !== 0);
-                        const unionType = <UnionType>typeSet[unionIndex];
-                        result = getUnionTypeFromIntersection(map(unionType.types, t => getIntersectionType(replaceElement(typeSet, unionIndex, t))),
-                            aliasSymbol, aliasTypeArguments, typeSet);
+                        const constituents = getCrossProductIntersections(typeSet);
+                        const origin = some(constituents, t => !!(t.flags & TypeFlags.Intersection)) ? { types: typeSet, isIntersection: true } : undefined;
+                        result = getUnionType(constituents, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
                     }
                 }
                 else {
@@ -13633,11 +13630,6 @@ namespace ts {
             return result;
         }
 
-        function getUnionTypeFromIntersection(types: readonly Type[], aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, originalTypes?: readonly Type[]) {
-            const origin = originalTypes && some(types, t => !!(t.flags & TypeFlags.Intersection)) ? { types: originalTypes, isIntersection: true } : undefined;
-            return getUnionType(types, UnionReduction.Literal, aliasSymbol, aliasTypeArguments, origin);
-        }
-
         function checkCrossProductUnion(types: readonly Type[]) {
             const size = reduceLeft(types, (n, t) => n * (t.flags & TypeFlags.Union ? (<UnionType>t).types.length : t.flags & TypeFlags.Never ? 0 : 1), 1);
             if (size >= 100000) {
@@ -13646,6 +13638,26 @@ namespace ts {
                 return false;
             }
             return true;
+        }
+
+        function getCrossProductIntersections(typeSet: readonly Type[]) {
+            const count = reduceLeft(typeSet, (n, t) => t.flags & TypeFlags.Union ? n * (<UnionType>t).types.length : n, 1);
+            const intersections: Type[] = [];
+            for (let i = 0; i < count; i++) {
+                const constituents = typeSet.slice();
+                let n = i;
+                for (let j = typeSet.length - 1; j >= 0; j--) {
+                    if (typeSet[j].flags & TypeFlags.Union) {
+                        const types = (<UnionType>typeSet[j]).types;
+                        const length = types.length;
+                        constituents[j] = types[n % length];
+                        n = Math.floor(n / length);
+                    }
+                }
+                const t = getIntersectionType(constituents);
+                if (!(t.flags & TypeFlags.Never)) intersections.push(t);
+            }
+            return intersections;
         }
 
         function getTypeFromIntersectionTypeNode(node: IntersectionTypeNode): Type {
