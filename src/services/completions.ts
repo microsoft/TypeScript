@@ -357,16 +357,16 @@ namespace ts.Completions {
             let closingTag = tagName.getFullText(sourceFile);
             if (accessExpressionNode) {
                 const accessExpressionNodeText = accessExpressionNode.getFullText(sourceFile);
-                let firstToLastDiff = accessExpressionNodeText.length;
-                if (firstToLastDiff > 0) {
+                let closingTagStartPos = accessExpressionNodeText.length;
+                if (closingTagStartPos > 0) {
                     // We wanna skip the whitespaces at the begining of this node
                     for (const chr of accessExpressionNodeText) {
                         if (!isWhiteSpaceLike(chr.charCodeAt(0))) {
                             break;
                         }
-                        firstToLastDiff--;
+                        closingTagStartPos--;
                     }
-                    closingTag = closingTag.substring(firstToLastDiff);
+                    closingTag = closingTag.substring(closingTagStartPos);
                 }
             }
             return closingTag + (hasClosingAngleBracket ? "" : ">");
