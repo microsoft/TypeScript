@@ -332,7 +332,7 @@ namespace ts.Completions {
         // This helps us to identify if location is a property access expression,
         // in this case we wanna make sure if the parent of parent is a jsx closing tag
         // The following is a possible case:
-        //   <Comp></Comp/*-*/
+        //   var x = <Comp.Item></Comp.Item/*1*/
         const jsxClosingElement = location && location.parent
             ? location.parent.parent && isJsxClosingElement(location.parent.parent)
                 ? location.parent.parent

@@ -28,7 +28,7 @@
 //// var x9  = <Exp.M.SFCComp></Exp.M.SFCComp/*9*/>;
 //// var x10 = <Exp.M.SFCComp></      Exp./*10*/>;
 //// var x11 = <Exp.M><//*11*/Exp.M>;
-//// var x11 = <Exp.M.SFCComp></Exp/*12*/>;
+//// var x12 = <Exp.M.SFCComp></Exp/*12*/>;
 
 verify.completions(
     { marker: ["1", "3"], exact: ["ONE", "TWO"] },
