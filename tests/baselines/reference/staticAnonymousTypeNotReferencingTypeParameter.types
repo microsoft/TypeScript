@@ -565,17 +565,17 @@ class ListWrapper {
 
       l.sort(compareFn);
 >l.sort(compareFn) : T[]
->l.sort : (compareFn?: (a: T, b: T) => number) => T[]
+>l.sort : (compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number) => T[]
 >l : T[]
->sort : (compareFn?: (a: T, b: T) => number) => T[]
+>sort : (compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number) => T[]
 >compareFn : (a: T, b: T) => number
 
     } else {
       l.sort();
 >l.sort() : T[]
->l.sort : (compareFn?: (a: T, b: T) => number) => T[]
+>l.sort : (compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number) => T[]
 >l : T[]
->sort : (compareFn?: (a: T, b: T) => number) => T[]
+>sort : (compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number) => T[]
     }
   }
   static toString<T>(dit: typeof ListWrapper, l: T[]): string { return l.toString(); }

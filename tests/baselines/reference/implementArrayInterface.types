@@ -38,11 +38,11 @@ declare class MyArray<T> implements Array<T> {
 >start : number
 >end : number
 
-    sort(compareFn?: (a: T, b: T) => number): this;
->sort : (compareFn?: (a: T, b: T) => number) => this
->compareFn : (a: T, b: T) => number
->a : T
->b : T
+    sort(compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number): this;
+>sort : (compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number) => this
+>compareFn : (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number
+>a : T extends undefined ? never : T
+>b : T extends undefined ? never : T
 
     splice(start: number): T[];
 >splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }

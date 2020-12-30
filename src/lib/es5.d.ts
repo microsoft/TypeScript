@@ -1267,7 +1267,7 @@ interface Array<T> {
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: T, b: T) => number): this;
+    sort(compareFn?: (a: T extends undefined ? never : T, b: T extends undefined ? never : T) => number): this;
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
