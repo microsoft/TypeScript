@@ -1074,8 +1074,12 @@ namespace ts {
         return SyntaxKind.FirstLiteralToken <= kind && kind <= SyntaxKind.LastLiteralToken;
     }
 
+    export function isBooleanLiteral(node: Node): node is BooleanLiteral {
+        return node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword;
+    }
+
     export function isLiteralExpression(node: Node): node is LiteralExpression {
-        return isLiteralKind(node.kind);
+        return isLiteralKind(node.kind) || isBooleanLiteral(node);
     }
 
     // Pseudo-literals

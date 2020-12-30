@@ -1014,11 +1014,13 @@ declare namespace ts {
     export interface NullLiteral extends PrimaryExpression {
         readonly kind: SyntaxKind.NullKeyword;
     }
-    export interface TrueLiteral extends PrimaryExpression {
+    export interface TrueLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.TrueKeyword;
+        readonly text: never;
     }
-    export interface FalseLiteral extends PrimaryExpression {
+    export interface FalseLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.FalseKeyword;
+        readonly text: never;
     }
     export type BooleanLiteral = TrueLiteral | FalseLiteral;
     export interface ThisExpression extends PrimaryExpression {
@@ -4205,6 +4207,7 @@ declare namespace ts {
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     function isToken(n: Node): boolean;
+    function isBooleanLiteral(node: Node): node is BooleanLiteral;
     function isLiteralExpression(node: Node): node is LiteralExpression;
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;

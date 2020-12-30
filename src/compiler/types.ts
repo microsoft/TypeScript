@@ -1740,12 +1740,14 @@ namespace ts {
         readonly kind: SyntaxKind.NullKeyword;
     }
 
-    export interface TrueLiteral extends PrimaryExpression {
+    export interface TrueLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.TrueKeyword;
+        readonly text: never
     }
 
-    export interface FalseLiteral extends PrimaryExpression {
+    export interface FalseLiteral extends LiteralExpression {
         readonly kind: SyntaxKind.FalseKeyword;
+        readonly text: never
     }
 
     export type BooleanLiteral = TrueLiteral | FalseLiteral;
