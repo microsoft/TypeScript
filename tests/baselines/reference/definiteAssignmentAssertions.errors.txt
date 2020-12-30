@@ -9,11 +9,12 @@ tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(35,15): erro
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(69,10): error TS1264: Declarations with definite assignment assertions must also have type annotations.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(70,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(71,10): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): error TS1264: Declarations with definite assignment assertions must also have type annotations.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(77,15): error TS1264: Declarations with definite assignment assertions must also have type annotations.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(77,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(80,7): error TS1255: A definite assignment assertion '!' is not permitted in this context.
 
 
-==== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts (13 errors) ====
+==== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts (14 errors) ====
     // Suppress strict property initialization check
     
     class C1 {
@@ -113,8 +114,14 @@ tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(77,15): erro
     
     declare let v1!: number;
                   ~
-!!! error TS1264: Declarations with definite assignment assertions must also have type annotations.
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
     declare var v2!: number;
                   ~
-!!! error TS1264: Declarations with definite assignment assertions must also have type annotations.
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    
+    declare namespace foo {
+    	var v!: number;
+    	     ~
+!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+    }
     
