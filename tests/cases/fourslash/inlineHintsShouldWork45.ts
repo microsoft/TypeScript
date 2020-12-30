@@ -12,6 +12,6 @@
 goTo.file('/b.js')
 const markers = test.markers();
 verify.getInlineHints([], undefined, {
-    includeInlineVariableType: true,
-    includeInlineRequireAssignedVariableType: false
+    includeInlineVariableTypeHints: true,
+    includeInlineRequireAssignedVariableTypeHints: false
 });

@@ -4,5 +4,5 @@
 //// foo(1, 2);
 
 verify.getInlineHints([], undefined, {
-    includeInlineParameterName: false
+    includeInlineParameterNameHints: false
 });

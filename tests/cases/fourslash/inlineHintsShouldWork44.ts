@@ -26,5 +26,5 @@ verify.getInlineHints([
         whitespaceBefore: true
     },
 ], undefined, {
-    includeInlineEnumMemberValue: true,
+    includeInlineEnumMemberValueHints: true,
 });

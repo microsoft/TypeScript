@@ -44,28 +44,28 @@ namespace ts.InlineHints {
                 return;
             }
 
-            if (preferences.includeInlineVariableType && (isVariableDeclaration(node))) {
+            if (preferences.includeInlineVariableTypeHints && (isVariableDeclaration(node))) {
                 visitVariableLikeDeclaration(node);
             }
-            else if (preferences.includeInlinePropertyDeclarationType && isPropertyDeclaration(node)) {
+            else if (preferences.includeInlinePropertyDeclarationTypeHints && isPropertyDeclaration(node)) {
                 visitVariableLikeDeclaration(node);
             }
-            else if (preferences.includeInlineEnumMemberValue && isEnumMember(node)) {
+            else if (preferences.includeInlineEnumMemberValueHints && isEnumMember(node)) {
                 visitEnumMember(node);
             }
             else if (isCallExpression(node) || isNewExpression(node)) {
-                if (preferences.includeInlineParameterName) {
+                if (preferences.includeInlineParameterNameHints) {
                     visitCallOrNewExpression(node);
                 }
-                if (preferences.includeInlineCallChains && isCallExpression(node)) {
+                if (preferences.includeInlineCallChainsHints && isCallExpression(node)) {
                     visitCallChains(node);
                 }
             }
             else {
-                if (preferences.includeInlineFunctionParameterType && isFunctionExpressionLike(node)) {
+                if (preferences.includeInlineFunctionParameterTypeHints && isFunctionExpressionLike(node)) {
                     visitFunctionExpressionLikeForParameterType(node);
                 }
-                if (preferences.includeInlineFunctionLikeReturnType && isFunctionDeclarationLike(node)) {
+                if (preferences.includeInlineFunctionLikeReturnTypeHints && isFunctionDeclarationLike(node)) {
                     visitFunctionDeclarationLikeForReturnType(node);
                 }
             }
@@ -157,7 +157,7 @@ namespace ts.InlineHints {
             }
 
             const declarationType = checker.getTypeAtLocation(decl);
-            if (!preferences.includeInlineRequireAssignedVariableType && declarationType.symbol && (declarationType.symbol.flags & SymbolFlags.Module)) {
+            if (!preferences.includeInlineRequireAssignedVariableTypeHints && declarationType.symbol && (declarationType.symbol.flags & SymbolFlags.Module)) {
                 return;
             }
 
@@ -180,13 +180,13 @@ namespace ts.InlineHints {
 
             for (let i = 0; i < expr.arguments.length; ++i) {
                 const arg = expr.arguments[i];
-                if (!preferences.includeInlineNonLiteralParameterName && !isHintableExpression(arg)) {
+                if (!preferences.includeInlineNonLiteralParameterNameHints && !isHintableExpression(arg)) {
                     continue;
                 }
 
                 const parameterName = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (parameterName) {
-                    if (preferences.includeInlineDuplicatedParameterName || !isIdentifier(arg) || arg.text !== parameterName) {
+                    if (preferences.includeInlineDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName) {
                         addNameHints(unescapeLeadingUnderscores(parameterName), expr.arguments[i].getStart());
                     }
                 }

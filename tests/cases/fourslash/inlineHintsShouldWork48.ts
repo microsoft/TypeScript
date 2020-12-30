@@ -13,5 +13,5 @@ verify.getInlineHints([
         whitespaceBefore: true
     }
 ], undefined, {
-    includeInlineCallChains: true,
+    includeInlineCallChainsHints: true,
 });

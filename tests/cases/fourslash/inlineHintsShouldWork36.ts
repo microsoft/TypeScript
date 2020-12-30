@@ -17,7 +17,7 @@ verify.getInlineHints([
         whitespaceAfter: true
     },
 ], undefined, {
-    includeInlineParameterName: true,
-    includeInlineNonLiteralParameterName: true,
-    includeInlineDuplicatedParameterName: true,
+    includeInlineParameterNameHints: true,
+    includeInlineNonLiteralParameterNameHints: true,
+    includeInlineDuplicatedParameterNameHints: true,
 });

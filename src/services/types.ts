@@ -565,16 +565,16 @@ namespace ts {
     }
 
     export interface InlineHintsOptions extends UserPreferences {
-        readonly includeInlineParameterName?: boolean;
-        readonly includeInlineNonLiteralParameterName?: boolean;
-        readonly includeDuplicatedParameterName?: boolean;
-        readonly includeInlineFunctionParameterType?: boolean,
-        readonly includeInlineVariableType?: boolean;
-        readonly includeInlineRequireAssignedVariableType?: boolean;
-        readonly includeInlinePropertyDeclarationType?: boolean;
-        readonly includeInlineFunctionLikeReturnType?: boolean;
-        readonly includeInlineEnumMemberValue?: boolean;
-        readonly includeInlineCallChains?: boolean;
+        readonly includeInlineParameterNameHints?: boolean;
+        readonly includeInlineNonLiteralParameterNameHints?: boolean;
+        readonly includeDuplicatedParameterNameHints?: boolean;
+        readonly includeInlineFunctionParameterTypeHints?: boolean,
+        readonly includeInlineVariableTypeHints?: boolean;
+        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
+        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlineEnumMemberValueHints?: boolean;
+        readonly includeInlineCallChainsHints?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";

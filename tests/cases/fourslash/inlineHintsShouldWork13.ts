@@ -12,7 +12,7 @@ verify.getInlineHints([
         whitespaceAfter: true
     },
 ], undefined, {
-    includeInlineParameterName: true,
-    includeInlineNonLiteralParameterName: true,
-    includeInlineDuplicatedParameterName: false,
+    includeInlineParameterNameHints: true,
+    includeInlineNonLiteralParameterNameHints: true,
+    includeInlineDuplicatedParameterNameHints: false,
 });

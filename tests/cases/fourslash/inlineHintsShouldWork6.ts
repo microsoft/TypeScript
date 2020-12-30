@@ -12,5 +12,5 @@ verify.getInlineHints([
         whitespaceAfter: true
     }
 ], undefined, {
-    includeInlineParameterName: true
+    includeInlineParameterNameHints: true
 });

@@ -3872,16 +3872,16 @@ declare namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
-        readonly includeInlineParameterName?: boolean;
-        readonly includeInlineNonLiteralParameterName?: boolean;
-        readonly includeInlineDuplicatedParameterName?: boolean;
-        readonly includeInlineFunctionParameterType?: boolean;
-        readonly includeInlineVariableType?: boolean;
-        readonly includeInlineRequireAssignedVariableType?: boolean;
-        readonly includeInlinePropertyDeclarationType?: boolean;
-        readonly includeInlineFunctionLikeReturnType?: boolean;
-        readonly includeInlineEnumMemberValue?: boolean;
-        readonly includeInlineCallChains?: boolean;
+        readonly includeInlineParameterNameHints?: boolean;
+        readonly includeInlineNonLiteralParameterNameHints?: boolean;
+        readonly includeInlineDuplicatedParameterNameHints?: boolean;
+        readonly includeInlineFunctionParameterTypeHints?: boolean;
+        readonly includeInlineVariableTypeHints?: boolean;
+        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
+        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlineEnumMemberValueHints?: boolean;
+        readonly includeInlineCallChainsHints?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5614,16 +5614,16 @@ declare namespace ts {
         includeInsertTextCompletions?: boolean;
     }
     interface InlineHintsOptions extends UserPreferences {
-        readonly includeInlineParameterName?: boolean;
-        readonly includeInlineNonLiteralParameterName?: boolean;
-        readonly includeDuplicatedParameterName?: boolean;
-        readonly includeInlineFunctionParameterType?: boolean;
-        readonly includeInlineVariableType?: boolean;
-        readonly includeInlineRequireAssignedVariableType?: boolean;
-        readonly includeInlinePropertyDeclarationType?: boolean;
-        readonly includeInlineFunctionLikeReturnType?: boolean;
-        readonly includeInlineEnumMemberValue?: boolean;
-        readonly includeInlineCallChains?: boolean;
+        readonly includeInlineParameterNameHints?: boolean;
+        readonly includeInlineNonLiteralParameterNameHints?: boolean;
+        readonly includeDuplicatedParameterNameHints?: boolean;
+        readonly includeInlineFunctionParameterTypeHints?: boolean;
+        readonly includeInlineVariableTypeHints?: boolean;
+        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
+        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlineEnumMemberValueHints?: boolean;
+        readonly includeInlineCallChainsHints?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";

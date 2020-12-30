@@ -14,5 +14,5 @@ verify.getInlineHints([
         whitespaceBefore: true
     },
 ], undefined, {
-    includeInlineFunctionLikeReturnType: true,
+    includeInlineFunctionLikeReturnTypeHints: true,
 });

@@ -18,6 +18,6 @@ verify.getInlineHints([
         whitespaceBefore: true
     }
 ], undefined, {
-    includeInlineVariableType: true,
-    includeInlineRequireAssignedVariableType: true
+    includeInlineVariableTypeHints: true,
+    includeInlineRequireAssignedVariableTypeHints: true
 });

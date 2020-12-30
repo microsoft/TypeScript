@@ -26,5 +26,5 @@ verify.getInlineHints(
             whitespaceAfter: true
         }
     }), span, {
-    includeInlineParameterName: true
+    includeInlineParameterNameHints: true
 });

@@ -5,5 +5,5 @@
 
 const markers = test.markers();
 verify.getInlineHints([], undefined, {
-    includeInlineParameterName: true
+    includeInlineParameterNameHints: true
 });

@@ -3,5 +3,5 @@
 //// const a;
 
 verify.getInlineHints([], undefined, {
-    includeInlineVariableType: true
+    includeInlineVariableTypeHints: true
 });

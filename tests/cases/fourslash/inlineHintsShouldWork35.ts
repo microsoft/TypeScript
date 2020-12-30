@@ -24,6 +24,6 @@ verify.getInlineHints(
         position: m.position,
         whitespaceAfter: true
     })) , undefined, {
-    includeInlineParameterName: true,
-    includeInlineNonLiteralParameterName: true
+    includeInlineParameterNameHints: true,
+    includeInlineNonLiteralParameterNameHints: true
 });

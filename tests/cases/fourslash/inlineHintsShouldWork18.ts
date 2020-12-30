@@ -11,5 +11,5 @@ verify.getInlineHints([
         whitespaceBefore: true
     },
 ], undefined, {
-    includeInlineVariableType: true
+    includeInlineVariableTypeHints: true
 });

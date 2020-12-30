@@ -28,6 +28,6 @@ verify.getInlineHints([
         whitespaceBefore: true
     }
 ], undefined, {
-    includeInlineParameterName: true,
-    includeInlineFunctionParameterType: true
+    includeInlineParameterNameHints: true,
+    includeInlineFunctionParameterTypeHints: true
 });

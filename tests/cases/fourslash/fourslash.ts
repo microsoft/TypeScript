@@ -619,16 +619,16 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface InlineHintsOptions extends UserPreferences {
-        readonly includeInlineParameterName?: boolean;
-        readonly includeInlineNonLiteralParameterName?: boolean;
-        readonly includeInlineDuplicatedParameterName?: boolean;
-        readonly includeInlineFunctionParameterType?: boolean;
-        readonly includeInlineVariableType?: boolean;
-        readonly includeInlineRequireAssignedVariableType?: boolean;
-        readonly includeInlinePropertyDeclarationType?: boolean;
-        readonly includeInlineFunctionLikeReturnType?: boolean;
-        readonly includeInlineEnumMemberValue?: boolean;
-        readonly includeInlineCallChains?: boolean;
+        readonly includeInlineParameterNameHints?: boolean;
+        readonly includeInlineNonLiteralParameterNameHints?: boolean;
+        readonly includeInlineDuplicatedParameterNameHints?: boolean;
+        readonly includeInlineFunctionParameterTypeHints?: boolean;
+        readonly includeInlineVariableTypeHints?: boolean;
+        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
+        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlineEnumMemberValueHints?: boolean;
+        readonly includeInlineCallChainsHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;

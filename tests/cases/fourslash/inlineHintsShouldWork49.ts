@@ -6,5 +6,5 @@
 
 const markers = test.markers();
 verify.getInlineHints([], undefined, {
-    includeInlineCallChains: true,
+    includeInlineCallChainsHints: true,
 });
