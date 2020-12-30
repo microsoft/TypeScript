@@ -3873,8 +3873,14 @@ declare namespace ts {
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly includeInlineParameterName?: boolean;
+        readonly includeInlineNonLiteralParameterName?: boolean;
+        readonly includeInlineDuplicatedParameterName?: boolean;
         readonly includeInlineFunctionParameterType?: boolean;
         readonly includeInlineVariableType?: boolean;
+        readonly includeInlineRequireAssignedVariableType?: boolean;
+        readonly includeInlinePropertyDeclarationType?: boolean;
+        readonly includeInlineFunctionLikeReturnType?: boolean;
+        readonly includeInlineEnumMemberValue?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5608,8 +5614,14 @@ declare namespace ts {
     }
     interface InlineHintsOptions extends UserPreferences {
         readonly includeInlineParameterName?: boolean;
+        readonly includeInlineNonLiteralParameterName?: boolean;
+        readonly includeDuplicatedParameterName?: boolean;
         readonly includeInlineFunctionParameterType?: boolean;
         readonly includeInlineVariableType?: boolean;
+        readonly includeInlineRequireAssignedVariableType?: boolean;
+        readonly includeInlinePropertyDeclarationType?: boolean;
+        readonly includeInlineFunctionLikeReturnType?: boolean;
+        readonly includeInlineEnumMemberValue?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";

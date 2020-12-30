@@ -8246,8 +8246,11 @@ namespace ts {
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly includeInlineParameterName?: boolean;
+        readonly includeInlineNonLiteralParameterName?: boolean;
+        readonly includeInlineDuplicatedParameterName?: boolean;
         readonly includeInlineFunctionParameterType?: boolean;
         readonly includeInlineVariableType?: boolean;
+        readonly includeInlineRequireAssignedVariableType?: boolean;
         readonly includeInlinePropertyDeclarationType?: boolean;
         readonly includeInlineFunctionLikeReturnType?: boolean;
         readonly includeInlineEnumMemberValue?: boolean;

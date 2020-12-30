@@ -114,6 +114,10 @@ namespace ts.InlineHints {
             }
 
             const declarationType = checker.getTypeAtLocation(decl);
+            if (!preferences.includeInlineRequireAssignedVariableType || declarationType.symbol && (declarationType.symbol.flags & SymbolFlags.Module)) {
+                return;
+            }
+
             const typeDisplayString = printTypeInSingleLine(declarationType);
             if (typeDisplayString) {
                 addTypeHints(typeDisplayString, decl.name.end);
@@ -132,15 +136,22 @@ namespace ts.InlineHints {
             }
 
             for (let i = 0; i < expr.arguments.length; ++i) {
+                const arg = expr.arguments[i];
+                if (!preferences.includeInlineNonLiteralParameterName && !isHintableExpression(arg)) {
+                    continue;
+                }
+
                 const parameterName = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (parameterName) {
-                    const arg = expr.arguments[i];
-                    const argumentName = isIdentifier(arg) ? arg.text : undefined;
-                    if (!argumentName || argumentName !== parameterName) {
+                    if (preferences.includeInlineDuplicatedParameterName || !isIdentifier(arg) || arg.text !== parameterName) {
                         addNameHints(unescapeLeadingUnderscores(parameterName), expr.arguments[i].getStart());
                     }
                 }
             }
+        }
+
+        function isHintableExpression(node: Node) {
+            return isLiteralExpression(node) || isFunctionExpressionLike(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
