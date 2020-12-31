@@ -10,7 +10,6 @@
 //// }
 
 //@Filename: exporter.tsx
-//// export class Thing { props: { ONE: string; TWO: number } }
 //// export module M {
 ////    export declare function SFCComp(props: { Three: number; Four: string }): JSX.Element;
 //// }
@@ -30,13 +29,13 @@
 const ranges = test.ranges();
 
 verify.completions(
-    { marker: '1', optionalReplacementSpan: ranges[0] },
-    { marker: '2', optionalReplacementSpan: ranges[1] },
-    { marker: '3', optionalReplacementSpan: ranges[2] },
-    { marker: '4', optionalReplacementSpan: ranges[3] },
-    { marker: '5', optionalReplacementSpan: ranges[4] },
-    { marker: '6', optionalReplacementSpan: ranges[5] },
-    { marker: '7', optionalReplacementSpan: ranges[6] },
-    { marker: '8', optionalReplacementSpan: ranges[7] },
-    { marker: '9', optionalReplacementSpan: ranges[8] },
+    { marker: '1', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[0] },
+    { marker: '2', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[1] },
+    { marker: '3', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[2] },
+    { marker: '4', exact: 'Exp.M.SFCComp>', optionalReplacementSpan: ranges[3] },
+    { marker: '5', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[4] },
+    { marker: '6', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[5] },
+    { marker: '7', exact: 'Exp.M', optionalReplacementSpan: ranges[6] },
+    { marker: '8', exact: 'Exp.M', optionalReplacementSpan: ranges[7] },
+    { marker: '9', exact: 'Exp.M', optionalReplacementSpan: ranges[8] },
 );
