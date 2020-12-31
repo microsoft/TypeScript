@@ -28,7 +28,6 @@
 // 5, 6: Literal member completion after member name with empty member expression.
 const exact = ["p1", "p2", "p3", "p4", ...completion.globalsPlus(["ObjectLiterals"])];
 verify.completions(
-    { marker: ["1"], exact, isNewIdentifierLocation: true },
-    { marker: ["2", "3", "5", "6"], exact },
-    { marker: "4", exact: undefined },
+    { marker: ["1",], exact, isNewIdentifierLocation: true },
+    { marker: ["2", "3", "4", "5", "6"], exact }
 );

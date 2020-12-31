@@ -1,6 +1,6 @@
 === /test.js ===
 class Abcde {
->Abcde : Symbol(Abcde, Decl(test.js, 0, 0))
+>Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))
 
   /** @type {string} */
   x;
@@ -8,9 +8,9 @@ class Abcde {
 }
 
 module.exports = {
->module.exports : Symbol("/test", Decl(test.js, 0, 0))
->module : Symbol("/test.js", Decl(test.js, 3, 1), Decl(index.ts, 0, 31))
->exports : Symbol("/test.js", Decl(test.js, 3, 1), Decl(index.ts, 0, 31))
+>module.exports : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
+>module : Symbol(module, Decl(test.js, 3, 1))
+>exports : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 
   Abcde
 >Abcde : Symbol(Abcde, Decl(test.js, 5, 18))
@@ -22,10 +22,10 @@ import { Abcde } from "./test";
 >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
 
 declare module "./test" {
->"./test" : Symbol("/test.js", Decl(test.js, 3, 1), Decl(index.ts, 0, 31))
+>"./test" : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 
   interface Abcde { b: string }
->Abcde : Symbol(Abcde, Decl(index.ts, 2, 25), Decl(test.js, 5, 18))
+>Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))
 >b : Symbol(Abcde.b, Decl(index.ts, 3, 19))
 }
 

@@ -3,7 +3,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(5,31): erro
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(6,29): error TS2550: Property 'padEnd' does not exist on type '""'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(7,44): error TS2550: Property 'values' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(8,45): error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
-tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(9,63): error TS2551: Property 'getOwnPropertyDescriptors' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyDescriptor'?
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(9,63): error TS2550: Property 'getOwnPropertyDescriptors' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(10,64): error TS2550: Property 'formatToParts' does not exist on type 'DateTimeFormat'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(11,21): error TS2583: Cannot find name 'Atomics'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
 tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(12,35): error TS2583: Cannot find name 'SharedArrayBuffer'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
@@ -54,8 +54,7 @@ tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,70): err
 !!! error TS2550: Property 'entries' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
     const testObjectConstructorGetOwnPropertyDescriptors = Object.getOwnPropertyDescriptors({});
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2551: Property 'getOwnPropertyDescriptors' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyDescriptor'?
-!!! related TS2728 /.ts/lib.es5.d.ts:172:5: 'getOwnPropertyDescriptor' is declared here.
+!!! error TS2550: Property 'getOwnPropertyDescriptors' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.
     const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
                                                                    ~~~~~~~~~~~~~
 !!! error TS2550: Property 'formatToParts' does not exist on type 'DateTimeFormat'. Do you need to change your target library? Try changing the `lib` compiler option to 'es2017' or later.

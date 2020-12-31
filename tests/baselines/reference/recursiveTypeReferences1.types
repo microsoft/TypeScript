@@ -445,7 +445,7 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >'a' : "a"
 >{ href: `#${el.id}`, rel: 'noopener', 'data-index': idx.join('.') } : { href: string; rel: string; 'data-index': string; }
 >href : string
->`#${el.id}` : string
+>`#${el.id}` : `#${string}`
 >el.id : string
 >el : HTMLHeadingElement
 >id : string

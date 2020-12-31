@@ -2663,12 +2663,14 @@ namespace ts {
                     node.transformFlags |=
                         TransformFlags.ContainsES2015 |
                         TransformFlags.ContainsES2018 |
-                        TransformFlags.ContainsDestructuringAssignment;
+                        TransformFlags.ContainsDestructuringAssignment |
+                        propagateAssignmentPatternFlags(node.left);
                 }
                 else if (isArrayLiteralExpression(node.left)) {
                     node.transformFlags |=
                         TransformFlags.ContainsES2015 |
-                        TransformFlags.ContainsDestructuringAssignment;
+                        TransformFlags.ContainsDestructuringAssignment |
+                        propagateAssignmentPatternFlags(node.left);
                 }
             }
             else if (operatorKind === SyntaxKind.AsteriskAsteriskToken || operatorKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
@@ -2678,6 +2680,27 @@ namespace ts {
                 node.transformFlags |= TransformFlags.ContainsESNext;
             }
             return node;
+        }
+
+        function propagateAssignmentPatternFlags(node: AssignmentPattern): TransformFlags {
+            if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) return TransformFlags.ContainsObjectRestOrSpread;
+            if (node.transformFlags & TransformFlags.ContainsES2018) {
+                // check for nested spread assignments, otherwise '{ x: { a, ...b } = foo } = c'
+                // will not be correctly interpreted by the ES2018 transformer
+                for (const element of getElementsOfBindingOrAssignmentPattern(node)) {
+                    const target = getTargetOfBindingOrAssignmentElement(element);
+                    if (target && isAssignmentPattern(target)) {
+                        if (target.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                            return TransformFlags.ContainsObjectRestOrSpread;
+                        }
+                        if (target.transformFlags & TransformFlags.ContainsES2018) {
+                            const flags = propagateAssignmentPatternFlags(target);
+                            if (flags) return flags;
+                        }
+                    }
+                }
+            }
+            return TransformFlags.None;
         }
 
         // @api
@@ -3753,6 +3776,7 @@ namespace ts {
         function createImportEqualsDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
+            isTypeOnly: boolean,
             name: string | Identifier,
             moduleReference: ModuleReference
         ) {
@@ -3762,6 +3786,7 @@ namespace ts {
                 modifiers,
                 name
             );
+            node.isTypeOnly = isTypeOnly;
             node.moduleReference = moduleReference;
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
@@ -3774,14 +3799,16 @@ namespace ts {
             node: ImportEqualsDeclaration,
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
+            isTypeOnly: boolean,
             name: Identifier,
             moduleReference: ModuleReference
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
+                || node.isTypeOnly !== isTypeOnly
                 || node.name !== name
                 || node.moduleReference !== moduleReference
-                ? update(createImportEqualsDeclaration(decorators, modifiers, name, moduleReference), node)
+                ? update(createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, name, moduleReference), node)
                 : node;
         }
 
@@ -5775,7 +5802,7 @@ namespace ts {
                 isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
                 isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
                 isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.name, node.moduleReference) :
                 isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
                 isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
                 isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :

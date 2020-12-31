@@ -1,0 +1,30 @@
+=== tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from "react";
+>React : typeof React
+
+type Tags = "span" | "div";
+>Tags : Tags
+
+export const Hoc = <Tag extends Tags>(
+>Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC
+><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC
+
+   TagElement: Tag,
+>TagElement : Tag
+
+): React.SFC => {
+>React : any
+
+   const Component = () => <TagElement />;
+>Component : () => JSX.Element
+>() => <TagElement /> : () => JSX.Element
+><TagElement /> : JSX.Element
+>TagElement : Tag
+
+   return Component;
+>Component : () => JSX.Element
+
+};
+
