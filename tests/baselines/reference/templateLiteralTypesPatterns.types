@@ -577,3 +577,63 @@ var bb: `${number}`;
 var bb: `${number}` | '0';
 >bb : `${number}`
 
+// Normalize `${string}` to just string
+
+type T2S<A extends string, B extends string> = `${A}${B}`;
+>T2S : `${A}${B}`
+
+type S10 = `${string}`;  // string
+>S10 : string
+
+type S11 = `${string}${string}${string}`;  // string
+>S11 : string
+
+type S12 = T2S<string, string>;  // string
+>S12 : string
+
+function ff1(x: `${string}-${string}`) {
+>ff1 : (x: `${string}-${string}`) => void
+>x : `${string}-${string}`
+
+    let s1 = x && 42;  // number
+>s1 : number
+>x && 42 : 42
+>x : `${string}-${string}`
+>42 : 42
+
+    let s2 = x || 42;  // `${string}-${string}`
+>s2 : `${string}-${string}`
+>x || 42 : `${string}-${string}`
+>x : `${string}-${string}`
+>42 : 42
+}
+
+// Repro from #41651
+
+export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
+>Id : `${TId}-${TId}`
+
+export class AA {}
+>AA : AA
+
+export abstract class BB {
+>BB : BB
+
+    abstract get(id: Id<AA>): void;
+>get : (id: Id<AA>) => void
+>id : `${string}-${string}`
+
+    update(id: Id<AA>): void {
+>update : (id: Id<AA>) => void
+>id : `${string}-${string}`
+
+        this.get(id!);
+>this.get(id!) : void
+>this.get : (id: `${string}-${string}`) => void
+>this : this
+>get : (id: `${string}-${string}`) => void
+>id! : `${string}-${string}`
+>id : `${string}-${string}`
+    }
+}
+

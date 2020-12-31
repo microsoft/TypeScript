@@ -8,7 +8,7 @@ const createScopedActionType = <S extends string>(scope: S) => <T extends string
 ><T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <T extends string>(type: T) => `${S}/${T}`
 >type : T
 >`${scope}/${type}` as `${S}/${T}` : `${S}/${T}`
->`${scope}/${type}` : string
+>`${scope}/${type}` : `${S}/${T}`
 >scope : S
 >type : T
 

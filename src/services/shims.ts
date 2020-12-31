@@ -209,6 +209,12 @@ namespace ts {
         findReferences(fileName: string, position: number): string;
 
         /**
+         * Returns a JSON-encoded value of the type:
+         * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean, isDefinition?: boolean }[]
+         */
+        getFileReferences(fileName: string): string;
+
+        /**
          * @deprecated
          * Returns a JSON-encoded value of the type:
          * { fileName: string; textSpan: { start: number; length: number}; isWriteAccess: boolean }[]
@@ -913,6 +919,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `findReferences('${fileName}', ${position})`,
                 () => this.languageService.findReferences(fileName, position)
+            );
+        }
+
+        public getFileReferences(fileName: string) {
+            return this.forwardJSONCall(
+                `getFileReferences('${fileName})`,
+                () => this.languageService.getFileReferences(fileName)
             );
         }
 

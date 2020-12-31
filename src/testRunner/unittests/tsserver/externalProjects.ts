@@ -529,7 +529,6 @@ namespace ts.projectSystem {
                     [configFile.path]);
 
                 host.deleteFile(configFile.path);
-                host.checkTimeoutQueueLengthAndRun(1);
 
                 knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info!)); // TODO: GH#18217 GH#20039
                 checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
@@ -898,6 +897,45 @@ namespace ts.projectSystem {
             assert.isTrue(inferredProject.isOrphan());
             const jsConfigProject = service.configuredProjects.get(jsConfig.path.toLowerCase())!;
             checkProjectActualFiles(jsConfigProject, [jsConfig.path, jsFilePath, libFile.path]);
+        });
+
+        it("does not crash if external file does not exist", () => {
+            const f1 = {
+                path: "/a/file1.ts",
+                content: "let x = [1, 2];",
+            };
+            const p1 = {
+                projectFileName: "/a/proj1.csproj",
+                rootFiles: [toExternalFile(f1.path)],
+                options: {},
+            };
+
+            const host = createServerHost([f1]);
+            host.require = (_initialPath, moduleName) => {
+                assert.equal(moduleName, "myplugin");
+                return {
+                    module: () => ({
+                        create(info: server.PluginCreateInfo) {
+                            return Harness.LanguageService.makeDefaultProxy(info);
+                        },
+                        getExternalFiles() {
+                            return ["/does/not/exist"];
+                        },
+                    }),
+                    error: undefined,
+                };
+            };
+            const session = createSession(host, {
+                globalPlugins: ["myplugin"],
+            });
+            const projectService = session.getProjectService();
+            // When the external project is opened, the graph will be updated,
+            // and in the process getExternalFiles() above will be called.
+            // Since the external file does not exist, there will not be a script
+            // info for it. If tsserver does not handle this case, the following
+            // method call will crash.
+            projectService.openExternalProject(p1);
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
         });
     });
 }

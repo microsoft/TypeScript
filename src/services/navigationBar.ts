@@ -490,7 +490,6 @@ namespace ts.NavigationBar {
         [AssignmentDeclarationKind.ThisProperty]: false,
     };
     function tryMergeEs5Class(a: NavigationBarNode, b: NavigationBarNode, bIndex: number, parent: NavigationBarNode): boolean | undefined {
-
         function isPossibleConstructor(node: Node) {
             return isFunctionExpression(node) || isFunctionDeclaration(node) || isVariableDeclaration(node);
         }
@@ -506,10 +505,10 @@ namespace ts.NavigationBar {
         if ((isEs5ClassMember[bAssignmentDeclarationKind] && isEs5ClassMember[aAssignmentDeclarationKind]) // merge two class elements
             || (isPossibleConstructor(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // ctor function & member
             || (isPossibleConstructor(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & ctor function
-            || (isClassDeclaration(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // class (generated) & member
+            || (isClassDeclaration(a.node) && isSynthesized(a.node) && isEs5ClassMember[bAssignmentDeclarationKind]) // class (generated) & member
             || (isClassDeclaration(b.node) && isEs5ClassMember[aAssignmentDeclarationKind]) // member & class (generated)
-            || (isClassDeclaration(a.node) && isPossibleConstructor(b.node)) // class (generated) & ctor
-            || (isClassDeclaration(b.node) && isPossibleConstructor(a.node)) // ctor & class (generated)
+            || (isClassDeclaration(a.node) && isSynthesized(a.node) && isPossibleConstructor(b.node)) // class (generated) & ctor
+            || (isClassDeclaration(b.node) && isPossibleConstructor(a.node) && isSynthesized(a.node)) // ctor & class (generated)
             ) {
 
             let lastANode = a.additionalNodes && lastOrUndefined(a.additionalNodes) || a.node;
@@ -528,11 +527,11 @@ namespace ts.NavigationBar {
                     const ctor = emptyNavigationBarNode(ctorNode);
                     ctor.indent = a.indent + 1;
                     ctor.children = a.node === ctorFunction ? a.children : b.children;
-                    a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b]) : concatenate(a.children || [a], [ctor]);
+                    a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b]) : concatenate(a.children || [{ ...a }], [ctor]);
                 }
                 else {
                     if (a.children || b.children) {
-                        a.children = concatenate(a.children || [a], b.children || [b]);
+                        a.children = concatenate(a.children || [{ ...a }], b.children || [b]);
                         if (a.children) {
                             mergeChildren(a.children, a);
                             sortChildren(a.children);
@@ -610,6 +609,10 @@ namespace ts.NavigationBar {
             default:
                 return true;
         }
+    }
+
+    function isSynthesized(node: Node) {
+        return !!(node.flags & NodeFlags.Synthesized);
     }
 
     // We want to merge own children like `I` in in `module A { interface I {} } module A { interface I {} }`
@@ -708,7 +711,7 @@ namespace ts.NavigationBar {
                     return "default";
                 }
                 // We may get a string with newlines or other whitespace in the case of an object dereference
-                // (eg: "app\n.onactivated"), so we should remove the whitespace for readabiltiy in the
+                // (eg: "app\n.onactivated"), so we should remove the whitespace for readability in the
                 // navigation bar.
                 return getFunctionOrClassName(<ArrowFunction | FunctionExpression | ClassExpression>node);
             case SyntaxKind.Constructor:
