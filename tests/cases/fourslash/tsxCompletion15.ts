@@ -21,10 +21,11 @@
 //// var x3  = <Exp.M.SFCComp></[|Exp.M./*3*/|]>;
 //// var x4  = <Exp.M.SFCComp></[|Exp.M.SFCComp/*4*/|]
 //// var x5  = <Exp.M.SFCComp></[|Exp.M.SFCComp/*5*/|]>;
-//// var x6 = <Exp.M.SFCComp></      [|Exp./*6*/|]>;
-//// var x7 = <Exp.M></[|/*7*/Exp.M|]>;
-//// var x8 = <Exp.M></[|Exp/*8*/|]>;
-//// var x9 = <Exp.M></[|Exp./*9*/|]>;
+//// var x6  = <Exp.M.SFCComp></      [|Exp./*6*/|]>;
+//// var x7  = <Exp.M.SFCComp></[|/*7*/Exp.M.SFCComp|]>;
+//// var x8  = <Exp.M.SFCComp></[|Exp/*8*/|]>;
+//// var x9  = <Exp.M.SFCComp></[|Exp.M./*9*/|]>;
+//// var x10 = <Exp.M.SFCComp></      [|/*10*/Exp.M.Foo.Bar.Baz.Wut|]>;
 
 const ranges = test.ranges();
 
@@ -35,7 +36,8 @@ verify.completions(
     { marker: '4', exact: 'Exp.M.SFCComp>', optionalReplacementSpan: ranges[3] },
     { marker: '5', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[4] },
     { marker: '6', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[5] },
-    { marker: '7', exact: 'Exp.M', optionalReplacementSpan: ranges[6] },
-    { marker: '8', exact: 'Exp.M', optionalReplacementSpan: ranges[7] },
-    { marker: '9', exact: 'Exp.M', optionalReplacementSpan: ranges[8] },
+    { marker: '7', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[6] },
+    { marker: '8', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[7] },
+    { marker: '9', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[8] },
+    { marker: '10', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[9] },
 );
