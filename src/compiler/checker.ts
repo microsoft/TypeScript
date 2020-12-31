@@ -5827,7 +5827,7 @@ namespace ts {
                 if (type !== errorType && symbol.valueDeclaration?.kind === SyntaxKind.Parameter && (symbol.valueDeclaration as ParameterDeclaration).questionToken) {
                     const nonOptionalType = getTypeWithFacts(type, TypeFacts.NEUndefined);
                     if (nonOptionalType !== type && nonOptionalType.aliasSymbol && nonOptionalType.flags & TypeFlags.Union) {
-                        context.approximateLength += symbolName(nonOptionalType.aliasSymbol).length + 12;
+                        context.approximateLength += 12; // " | undefined"
                         return factory.createUnionTypeNode([
                             typeToTypeNodeHelper(nonOptionalType, context),
                             factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)
