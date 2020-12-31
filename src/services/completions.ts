@@ -323,10 +323,11 @@ namespace ts.Completions {
     }
 
     function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: SourceFile): CompletionInfo | undefined {
-        // This helps us to identify if location is a property access expression,
-        // in this case we wanna make sure if the parent of parent is a jsx closing tag
-        // The following is a possible case:
+        // When there is a full closing tag and the tag includes a property access expression,
+        // the node hierarchy to get the JSX closing element is at grand parent of location.
+        // For example:
         //   var x = <Comp.Item></Comp.Item/*1*/
+        //   var y = <Comp.Item></Comp.Item/*2*/>
         const jsxClosingElement = location && location.parent
             ? location.parent.parent && isJsxClosingElement(location.parent.parent)
                 ? location.parent.parent
