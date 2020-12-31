@@ -27,9 +27,16 @@
 //// var x8 = <Exp.M></[|Exp/*8*/|]>;
 //// var x9 = <Exp.M></[|Exp./*9*/|]>;
 
-test.ranges().forEach((range, marker) => {
-    verify.completions({
-        marker: String(marker + 1),
-        optionalReplacementSpan: range,
-    });
-});
+const ranges = test.ranges();
+
+verify.completions(
+    { marker: '1', optionalReplacementSpan: ranges[0] },
+    { marker: '2', optionalReplacementSpan: ranges[1] },
+    { marker: '3', optionalReplacementSpan: ranges[2] },
+    { marker: '4', optionalReplacementSpan: ranges[3] },
+    { marker: '5', optionalReplacementSpan: ranges[4] },
+    { marker: '6', optionalReplacementSpan: ranges[5] },
+    { marker: '7', optionalReplacementSpan: ranges[6] },
+    { marker: '8', optionalReplacementSpan: ranges[7] },
+    { marker: '9', optionalReplacementSpan: ranges[8] },
+);
