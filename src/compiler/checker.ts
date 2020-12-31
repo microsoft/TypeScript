@@ -5264,7 +5264,7 @@ namespace ts {
                 if ((context.flags & NodeBuilderFlags.NoUndefinedOptionalParameterType) && parameterDeclaration && !isJSDocParameterTag(parameterDeclaration) && isOptionalUninitializedParameter(parameterDeclaration)) {
                     parameterType = getTypeWithFacts(parameterType, TypeFacts.NEUndefined);
                 }
-                const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
+                const parameterTypeNode = serializeParameterTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(factory.cloneNode) : undefined;
                 const isRest = parameterDeclaration && isRestParameter(parameterDeclaration) || getCheckFlags(parameterSymbol) & CheckFlags.RestParameter;
@@ -5821,6 +5821,20 @@ namespace ts {
 
             function existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing: TypeNode, type: Type) {
                 return !(getObjectFlags(type) & ObjectFlags.Reference) || !isTypeReferenceNode(existing) || length(existing.typeArguments) >= getMinTypeArgumentCount((type as TypeReference).target.typeParameters);
+            }
+
+            function serializeParameterTypeForDeclaration(context: NodeBuilderContext, type: Type, symbol: Symbol, enclosingDeclaration: Node | undefined, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
+                if (type !== errorType && symbol.valueDeclaration?.kind === SyntaxKind.Parameter && (symbol.valueDeclaration as ParameterDeclaration).questionToken) {
+                    const nonOptionalType = getTypeWithFacts(type, TypeFacts.NEUndefined);
+                    if (nonOptionalType !== type && nonOptionalType.aliasSymbol && nonOptionalType.flags & TypeFlags.Union) {
+                        context.approximateLength += symbolName(nonOptionalType.aliasSymbol).length + 12;
+                        return factory.createUnionTypeNode([
+                            typeToTypeNodeHelper(nonOptionalType, context),
+                            factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)
+                        ]);
+                    }
+                }
+                return serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled);
             }
 
             /**
