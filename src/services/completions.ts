@@ -344,6 +344,11 @@ namespace ts.Completions {
             // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
             // And at property access expressions `<MainComponent.Child> </MainComponent. /*1*/ >` the completion will
             // return full closing tag with an optional replacement span
+            // For example:
+            //     var x = <MainComponent.Child> </     MainComponent /*1*/  >
+            //     var y = <MainComponent.Child> </   /*2*/   MainComponent >
+            // the completion list at "1" and "2" will contain "MainComponent.Child" with a replacement span from `/` (slash) till `>`
+            // resulting in a clean closing tag
             const hasClosingAngleBracket = !!findChildOfKind(jsxClosingElement, SyntaxKind.GreaterThanToken, sourceFile);
             const slashToken = findChildOfKind(jsxClosingElement, SyntaxKind.SlashToken, sourceFile);
             const replacementPos = slashToken ? slashToken.pos +1 : jsxClosingElement.pos +2;
