@@ -12,13 +12,13 @@ var s;
 
 // With templateHead
 `hello ${t1 ** t2}`;
->`hello ${t1 ** t2}` : string
+>`hello ${t1 ** t2}` : `hello ${number}`
 >t1 ** t2 : number
 >t1 : number
 >t2 : number
 
 `hello ${t1 ** t2 ** t1}`;
->`hello ${t1 ** t2 ** t1}` : string
+>`hello ${t1 ** t2 ** t1}` : `hello ${number}`
 >t1 ** t2 ** t1 : number
 >t1 : number
 >t2 ** t1 : number
@@ -26,7 +26,7 @@ var s;
 >t1 : number
 
 `hello ${t1 + t2 ** t1}`;
->`hello ${t1 + t2 ** t1}` : string
+>`hello ${t1 + t2 ** t1}` : `hello ${number}`
 >t1 + t2 ** t1 : number
 >t1 : number
 >t2 ** t1 : number
@@ -34,7 +34,7 @@ var s;
 >t1 : number
 
 `hello ${t1 ** t2 + t1}`;
->`hello ${t1 ** t2 + t1}` : string
+>`hello ${t1 ** t2 + t1}` : `hello ${number}`
 >t1 ** t2 + t1 : number
 >t1 ** t2 : number
 >t1 : number
@@ -42,7 +42,7 @@ var s;
 >t1 : number
 
 `hello ${t1 + t2 ** t2 + t1 }`;
->`hello ${t1 + t2 ** t2 + t1 }` : string
+>`hello ${t1 + t2 ** t2 + t1 }` : `hello ${number}`
 >t1 + t2 ** t2 + t1 : number
 >t1 + t2 ** t2 : number
 >t1 : number
@@ -52,7 +52,7 @@ var s;
 >t1 : number
 
 `hello ${typeof (t1 ** t2 ** t1) }`;
->`hello ${typeof (t1 ** t2 ** t1) }` : string
+>`hello ${typeof (t1 ** t2 ** t1) }` : "hello string" | "hello number" | "hello bigint" | "hello boolean" | "hello symbol" | "hello undefined" | "hello object" | "hello function"
 >typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(t1 ** t2 ** t1) : number
 >t1 ** t2 ** t1 : number
@@ -62,7 +62,7 @@ var s;
 >t1 : number
 
 `hello ${1 + typeof (t1 ** t2 ** t1) }`;
->`hello ${1 + typeof (t1 ** t2 ** t1) }` : string
+>`hello ${1 + typeof (t1 ** t2 ** t1) }` : `hello ${string}`
 >1 + typeof (t1 ** t2 ** t1) : string
 >1 : 1
 >typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -74,7 +74,7 @@ var s;
 >t1 : number
 
 `hello ${t1 ** t2}${t1 ** t2}`;
->`hello ${t1 ** t2}${t1 ** t2}` : string
+>`hello ${t1 ** t2}${t1 ** t2}` : `hello ${number}${number}`
 >t1 ** t2 : number
 >t1 : number
 >t2 : number
@@ -83,7 +83,7 @@ var s;
 >t2 : number
 
 `hello ${t1 ** t2 ** t1}${t1 ** t2 ** t1}`;
->`hello ${t1 ** t2 ** t1}${t1 ** t2 ** t1}` : string
+>`hello ${t1 ** t2 ** t1}${t1 ** t2 ** t1}` : `hello ${number}${number}`
 >t1 ** t2 ** t1 : number
 >t1 : number
 >t2 ** t1 : number
@@ -96,7 +96,7 @@ var s;
 >t1 : number
 
 `hello ${t1 + t2 ** t1}${t1 + t2 ** t1}`;
->`hello ${t1 + t2 ** t1}${t1 + t2 ** t1}` : string
+>`hello ${t1 + t2 ** t1}${t1 + t2 ** t1}` : `hello ${number}${number}`
 >t1 + t2 ** t1 : number
 >t1 : number
 >t2 ** t1 : number
@@ -109,7 +109,7 @@ var s;
 >t1 : number
 
 `hello ${t1 ** t2 + t1}${t1 ** t2 + t1}`;
->`hello ${t1 ** t2 + t1}${t1 ** t2 + t1}` : string
+>`hello ${t1 ** t2 + t1}${t1 ** t2 + t1}` : `hello ${number}${number}`
 >t1 ** t2 + t1 : number
 >t1 ** t2 : number
 >t1 : number
@@ -122,7 +122,7 @@ var s;
 >t1 : number
 
 `hello ${t1 + t2 ** t2 + t1}${t1 + t2 ** t2 + t1}`;
->`hello ${t1 + t2 ** t2 + t1}${t1 + t2 ** t2 + t1}` : string
+>`hello ${t1 + t2 ** t2 + t1}${t1 + t2 ** t2 + t1}` : `hello ${number}${number}`
 >t1 + t2 ** t2 + t1 : number
 >t1 + t2 ** t2 : number
 >t1 : number
@@ -139,7 +139,7 @@ var s;
 >t1 : number
 
 `hello ${typeof (t1 ** t2 ** t1) }${typeof (t1 ** t2 ** t1) }`;
->`hello ${typeof (t1 ** t2 ** t1) }${typeof (t1 ** t2 ** t1) }` : string
+>`hello ${typeof (t1 ** t2 ** t1) }${typeof (t1 ** t2 ** t1) }` : "hello stringstring" | "hello stringnumber" | "hello stringbigint" | "hello stringboolean" | "hello stringsymbol" | "hello stringundefined" | "hello stringobject" | "hello stringfunction" | "hello numberstring" | "hello numbernumber" | "hello numberbigint" | "hello numberboolean" | "hello numbersymbol" | "hello numberundefined" | "hello numberobject" | "hello numberfunction" | "hello bigintstring" | "hello bigintnumber" | "hello bigintbigint" | "hello bigintboolean" | "hello bigintsymbol" | "hello bigintundefined" | "hello bigintobject" | "hello bigintfunction" | "hello booleanstring" | "hello booleannumber" | "hello booleanbigint" | "hello booleanboolean" | "hello booleansymbol" | "hello booleanundefined" | "hello booleanobject" | "hello booleanfunction" | "hello symbolstring" | "hello symbolnumber" | "hello symbolbigint" | "hello symbolboolean" | "hello symbolsymbol" | "hello symbolundefined" | "hello symbolobject" | "hello symbolfunction" | "hello undefinedstring" | "hello undefinednumber" | "hello undefinedbigint" | "hello undefinedboolean" | "hello undefinedsymbol" | "hello undefinedundefined" | "hello undefinedobject" | "hello undefinedfunction" | "hello objectstring" | "hello objectnumber" | "hello objectbigint" | "hello objectboolean" | "hello objectsymbol" | "hello objectundefined" | "hello objectobject" | "hello objectfunction" | "hello functionstring" | "hello functionnumber" | "hello functionbigint" | "hello functionboolean" | "hello functionsymbol" | "hello functionundefined" | "hello functionobject" | "hello functionfunction"
 >typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(t1 ** t2 ** t1) : number
 >t1 ** t2 ** t1 : number
@@ -156,7 +156,7 @@ var s;
 >t1 : number
 
 `hello ${t1 ** t2} hello world ${t1 ** t2}`;
->`hello ${t1 ** t2} hello world ${t1 ** t2}` : string
+>`hello ${t1 ** t2} hello world ${t1 ** t2}` : `hello ${number} hello world ${number}`
 >t1 ** t2 : number
 >t1 : number
 >t2 : number
@@ -165,7 +165,7 @@ var s;
 >t2 : number
 
 `hello ${t1 ** t2 ** t1} hello world ${t1 ** t2 ** t1}`;
->`hello ${t1 ** t2 ** t1} hello world ${t1 ** t2 ** t1}` : string
+>`hello ${t1 ** t2 ** t1} hello world ${t1 ** t2 ** t1}` : `hello ${number} hello world ${number}`
 >t1 ** t2 ** t1 : number
 >t1 : number
 >t2 ** t1 : number
@@ -178,7 +178,7 @@ var s;
 >t1 : number
 
 `hello ${t1 + t2 ** t1} hello world ${t1 + t2 ** t1}`;
->`hello ${t1 + t2 ** t1} hello world ${t1 + t2 ** t1}` : string
+>`hello ${t1 + t2 ** t1} hello world ${t1 + t2 ** t1}` : `hello ${number} hello world ${number}`
 >t1 + t2 ** t1 : number
 >t1 : number
 >t2 ** t1 : number
@@ -191,7 +191,7 @@ var s;
 >t1 : number
 
 `hello ${t1 ** t2 + t1} hello world ${t1 ** t2 + t1}`;
->`hello ${t1 ** t2 + t1} hello world ${t1 ** t2 + t1}` : string
+>`hello ${t1 ** t2 + t1} hello world ${t1 ** t2 + t1}` : `hello ${number} hello world ${number}`
 >t1 ** t2 + t1 : number
 >t1 ** t2 : number
 >t1 : number
@@ -204,7 +204,7 @@ var s;
 >t1 : number
 
 `hello ${t1 + t2 ** t2 + t1} hello world ${t1 + t2 ** t2 + t1}`;
->`hello ${t1 + t2 ** t2 + t1} hello world ${t1 + t2 ** t2 + t1}` : string
+>`hello ${t1 + t2 ** t2 + t1} hello world ${t1 + t2 ** t2 + t1}` : `hello ${number} hello world ${number}`
 >t1 + t2 ** t2 + t1 : number
 >t1 + t2 ** t2 : number
 >t1 : number
@@ -221,7 +221,7 @@ var s;
 >t1 : number
 
 `hello ${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }`;
->`hello ${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }` : string
+>`hello ${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }` : "hello string hello world string" | "hello string hello world number" | "hello string hello world bigint" | "hello string hello world boolean" | "hello string hello world symbol" | "hello string hello world undefined" | "hello string hello world object" | "hello string hello world function" | "hello number hello world string" | "hello number hello world number" | "hello number hello world bigint" | "hello number hello world boolean" | "hello number hello world symbol" | "hello number hello world undefined" | "hello number hello world object" | "hello number hello world function" | "hello bigint hello world string" | "hello bigint hello world number" | "hello bigint hello world bigint" | "hello bigint hello world boolean" | "hello bigint hello world symbol" | "hello bigint hello world undefined" | "hello bigint hello world object" | "hello bigint hello world function" | "hello boolean hello world string" | "hello boolean hello world number" | "hello boolean hello world bigint" | "hello boolean hello world boolean" | "hello boolean hello world symbol" | "hello boolean hello world undefined" | "hello boolean hello world object" | "hello boolean hello world function" | "hello symbol hello world string" | "hello symbol hello world number" | "hello symbol hello world bigint" | "hello symbol hello world boolean" | "hello symbol hello world symbol" | "hello symbol hello world undefined" | "hello symbol hello world object" | "hello symbol hello world function" | "hello undefined hello world string" | "hello undefined hello world number" | "hello undefined hello world bigint" | "hello undefined hello world boolean" | "hello undefined hello world symbol" | "hello undefined hello world undefined" | "hello undefined hello world object" | "hello undefined hello world function" | "hello object hello world string" | "hello object hello world number" | "hello object hello world bigint" | "hello object hello world boolean" | "hello object hello world symbol" | "hello object hello world undefined" | "hello object hello world object" | "hello object hello world function" | "hello function hello world string" | "hello function hello world number" | "hello function hello world bigint" | "hello function hello world boolean" | "hello function hello world symbol" | "hello function hello world undefined" | "hello function hello world object" | "hello function hello world function"
 >typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(t1 ** t2 ** t1) : number
 >t1 ** t2 ** t1 : number

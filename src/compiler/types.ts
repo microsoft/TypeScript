@@ -2932,6 +2932,7 @@ namespace ts {
         readonly kind: SyntaxKind.ImportEqualsDeclaration;
         readonly parent: SourceFile | ModuleBlock;
         readonly name: Identifier;
+        readonly isTypeOnly: boolean;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
         // module reference.
@@ -3044,6 +3045,7 @@ namespace ts {
 
     export type TypeOnlyCompatibleAliasDeclaration =
         | ImportClause
+        | ImportEqualsDeclaration
         | NamespaceImport
         | ImportOrExportSpecifier
         ;
@@ -3629,6 +3631,7 @@ namespace ts {
 
     export interface TsConfigSourceFile extends JsonSourceFile {
         extendedSourceFiles?: string[];
+        /*@internal*/ configFileSpecs?: ConfigFileSpecs;
     }
 
     export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
@@ -3698,19 +3701,93 @@ namespace ts {
     }
 
     /*@internal*/
-    export enum RefFileKind {
+    export enum FileIncludeKind {
+        RootFile,
+        SourceFromProjectReference,
+        OutputFromProjectReference,
         Import,
         ReferenceFile,
-        TypeReferenceDirective
+        TypeReferenceDirective,
+        LibFile,
+        LibReferenceDirective,
+        AutomaticTypeDirectiveFile
     }
 
     /*@internal*/
-    export interface RefFile {
-        referencedFileName: string;
-        kind: RefFileKind;
+    export interface RootFile {
+        kind: FileIncludeKind.RootFile,
         index: number;
-        file: Path;
     }
+
+    /*@internal*/
+    export interface LibFile {
+        kind: FileIncludeKind.LibFile;
+        index?: number;
+    }
+
+    /*@internal*/
+    export type ProjectReferenceFileKind = FileIncludeKind.SourceFromProjectReference |
+        FileIncludeKind.OutputFromProjectReference;
+
+    /*@internal*/
+    export interface ProjectReferenceFile {
+        kind: ProjectReferenceFileKind;
+        index: number;
+    }
+
+    /*@internal*/
+    export type ReferencedFileKind = FileIncludeKind.Import |
+        FileIncludeKind.ReferenceFile |
+        FileIncludeKind.TypeReferenceDirective |
+        FileIncludeKind.LibReferenceDirective;
+
+    /*@internal*/
+    export interface ReferencedFile {
+        kind: ReferencedFileKind;
+        file: Path;
+        index: number;
+    }
+
+    /*@internal*/
+    export interface AutomaticTypeDirectiveFile {
+        kind: FileIncludeKind.AutomaticTypeDirectiveFile;
+        typeReference: string;
+        packageId: PackageId | undefined;
+    }
+
+    /*@internal*/
+    export type FileIncludeReason =
+        RootFile |
+        LibFile |
+        ProjectReferenceFile |
+        ReferencedFile |
+        AutomaticTypeDirectiveFile;
+
+    /*@internal*/
+    export const enum FilePreprocessingDiagnosticsKind {
+        FilePreprocessingReferencedDiagnostic,
+        FilePreprocessingFileExplainingDiagnostic
+    }
+
+    /*@internal*/
+    export interface FilePreprocessingReferencedDiagnostic {
+        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
+        reason: ReferencedFile;
+        diagnostic: DiagnosticMessage;
+        args?: (string | number | undefined)[];
+    }
+
+    /*@internal*/
+    export interface FilePreprocessingFileExplainingDiagnostic {
+        kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
+        file?: Path;
+        fileProcessingReason: FileIncludeReason;
+        diagnostic: DiagnosticMessage;
+        args?: (string | number | undefined)[];
+    }
+
+    /*@internal*/
+    export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
 
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
@@ -3730,8 +3807,6 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): readonly Path[];
-        /* @internal */
-        getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
@@ -3786,7 +3861,7 @@ namespace ts {
         getInstantiationCount(): number;
         getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
-        /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
+        /* @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
         /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
@@ -3804,6 +3879,8 @@ namespace ts {
         /* @internal */ redirectTargetsMap: MultiMap<string, string>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+        /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        /* @internal */ useCaseSensitiveFileNames(): boolean;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -4142,6 +4219,7 @@ namespace ts {
         /* @internal */ getAllPossiblePropertiesOfTypes(type: readonly Type[]): Symbol[];
         /* @internal */ resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         /* @internal */ getJsxNamespace(location?: Node): string;
+        /* @internal */ getJsxFragmentFactory(location: Node): string | undefined;
 
         /**
          * Note that this will return undefined in the following case:
@@ -4903,6 +4981,10 @@ namespace ts {
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
+        StringLikeLiteral = StringLiteral | TemplateLiteral,
+        /* @internal */
+        FreshableLiteral = Literal | TemplateLiteral,
+        /* @internal */
         StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral | Void | Undefined | Null,
@@ -4996,7 +5078,9 @@ namespace ts {
     }
 
     /* @internal */
-    export type FreshableType = LiteralType | FreshableIntrinsicType;
+    export type FreshableLiteralType = LiteralType | TemplateLiteralType;
+    /* @internal */
+    export type FreshableType = FreshableLiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
@@ -5394,6 +5478,8 @@ namespace ts {
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];  // Always one element longer than types
         types: readonly Type[];  // Always at least one element
+        freshType: TemplateLiteralType;  // Fresh version of type
+        regularType: TemplateLiteralType;  // Regular version of type
     }
 
     export interface StringMappingType extends InstantiableType {
@@ -5777,6 +5863,7 @@ namespace ts {
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
+        /*@internal*/explainFiles?: boolean;
         /*@internal*/listFilesOnly?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -5966,7 +6053,6 @@ namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
-        /* @internal */ configFileSpecs?: ConfigFileSpecs;
     }
 
     export const enum WatchDirectoryFlags {
@@ -5988,13 +6074,6 @@ namespace ts {
         validatedFilesSpec: readonly string[] | undefined;
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
-    }
-
-    export interface ExpandResult {
-        fileNames: string[];
-        wildcardDirectories: MapLike<WatchDirectoryFlags>;
-        /* @internal */ spec: ConfigFileSpecs;
     }
 
     /* @internal */
@@ -7012,8 +7091,8 @@ namespace ts {
         updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock;
         createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
         updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
-        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
         createImportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression): ImportDeclaration;
         updateImportDeclaration(node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression): ImportDeclaration;
         createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
@@ -7530,8 +7609,8 @@ namespace ts {
     export type Visitor = (node: Node) => VisitResult<Node>;
 
     export interface NodeVisitor {
-        <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T;
-        <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
+        <T extends Node>(nodes: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
+        <T extends Node>(nodes: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
     }
 
     export interface NodesVisitor {
@@ -7872,6 +7951,7 @@ namespace ts {
         realpath?(path: string): string;
         getSymlinkCache?(): SymlinkCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
@@ -7924,8 +8004,6 @@ namespace ts {
         // Otherwise, returns all the diagnostics (global and file associated) in this collection.
         getDiagnostics(): Diagnostic[];
         getDiagnostics(fileName: string): DiagnosticWithLocation[];
-
-        reattachFileDiagnostics(newFile: SourceFile): void;
     }
 
     // SyntaxKind.SyntaxList
@@ -8173,7 +8251,7 @@ namespace ts {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

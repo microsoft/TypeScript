@@ -1678,7 +1678,7 @@ namespace ts {
                             factory.createPropertyAssignment(
                                 factory.cloneNode(name),
                                 factory.createPropertyAccessExpression(
-                                    factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                    factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                     factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                                 ),
                             ),
@@ -1747,7 +1747,7 @@ namespace ts {
                     else if (isImportSpecifier(importDeclaration)) {
                         return setTextRange(
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
                             ),
                             /*location*/ node

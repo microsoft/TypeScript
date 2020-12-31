@@ -447,7 +447,7 @@ namespace ts.Completions {
         return {
             name,
             kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location!), // TODO: GH#18217
-            kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
+            kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source: getSourceFromOrigin(origin),
             hasAction: origin && originIsExport(origin) || undefined,
@@ -697,7 +697,7 @@ namespace ts.Completions {
             checker.runWithCancellationToken(cancellationToken, checker =>
                 SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
             );
-        return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
+        return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(checker, symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
     }
 
     export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
@@ -1086,6 +1086,7 @@ namespace ts.Completions {
         const semanticStart = timestamp();
         let completionKind = CompletionKind.None;
         let isNewIdentifierLocation = false;
+        let isNonContextualObjectLiteral = false;
         let keywordFilters = KeywordCompletionFilters.None;
         // This also gets mutated in nested-functions after the return
         let symbols: Symbol[] = [];
@@ -1471,6 +1472,8 @@ namespace ts.Completions {
         }
 
         function shouldOfferImportCompletions(): boolean {
+            // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
+            if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
             if (!preferences.includeCompletionsForModuleExports) return false;
             // If already using ES6 modules, OK to continue using them.
@@ -1892,13 +1895,29 @@ namespace ts.Completions {
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
+
+                // Check completions for Object property value shorthand
                 if (instantiatedType === undefined) {
-                    return GlobalsSearch.Fail;
+                    if (objectLikeContainer.flags & NodeFlags.InWithStatement) {
+                        return GlobalsSearch.Fail;
+                    }
+                    isNonContextualObjectLiteral = true;
+                    return GlobalsSearch.Continue;
                 }
                 const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
-                isNewIdentifierLocation = hasIndexSignature(completionsType || instantiatedType);
+                const hasStringIndexType = (completionsType || instantiatedType).getStringIndexType();
+                const hasNumberIndextype = (completionsType || instantiatedType).getNumberIndexType();
+                isNewIdentifierLocation = !!hasStringIndexType || !!hasNumberIndextype;
                 typeMembers = getPropertiesForObjectExpression(instantiatedType, completionsType, objectLikeContainer, typeChecker);
                 existingMembers = objectLikeContainer.properties;
+
+                if (typeMembers.length === 0) {
+                    // Edge case: If NumberIndexType exists
+                    if (!hasNumberIndextype) {
+                        isNonContextualObjectLiteral = true;
+                        return GlobalsSearch.Continue;
+                    }
+                }
             }
             else {
                 Debug.assert(objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern);
@@ -2270,6 +2289,7 @@ namespace ts.Completions {
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
+                case SyntaxKind.InferKeyword:
                 case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
 
@@ -2316,6 +2336,7 @@ namespace ts.Completions {
             }
 
             return isDeclarationName(contextToken)
+                && !isShorthandPropertyAssignment(contextToken.parent)
                 && !isJsxAttribute(contextToken.parent)
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
                 // If `contextToken !== previousToken`, this is `class C ex/**/`.
@@ -2681,7 +2702,7 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+    export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
         const hasCompletionsType = completionsType && completionsType !== contextualType;
         const type = hasCompletionsType && !(completionsType!.flags & TypeFlags.AnyOrUnknown)
             ? checker.getUnionType([contextualType, completionsType!])

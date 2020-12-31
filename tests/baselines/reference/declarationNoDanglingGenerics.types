@@ -16,7 +16,7 @@ function register(kind: string): void | never {
     throw new Error(`Class with kind "${kind}" is already registered.`);
 >new Error(`Class with kind "${kind}" is already registered.`) : Error
 >Error : ErrorConstructor
->`Class with kind "${kind}" is already registered.` : string
+>`Class with kind "${kind}" is already registered.` : `Class with kind "${string}" is already registered.`
 >kind : string
   }
   kindCache[kind] = true;

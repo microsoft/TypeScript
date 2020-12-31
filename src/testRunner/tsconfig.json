@@ -21,6 +21,7 @@
         { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true },
+        { "path": "../webServer", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },
         { "path": "../harness", "prepend": true }
     ],
@@ -125,6 +126,7 @@
         "unittests/tsbuild/moduleSpecifiers.ts",
         "unittests/tsbuild/noEmitOnError.ts",
         "unittests/tsbuild/outFile.ts",
+        "unittests/tsbuild/outputPaths.ts",
         "unittests/tsbuild/referencesWithRootDirInParent.ts",
         "unittests/tsbuild/resolveJsonModule.ts",
         "unittests/tsbuild/sample.ts",
@@ -169,6 +171,7 @@
         "unittests/tsserver/getApplicableRefactors.ts",
         "unittests/tsserver/getEditsForFileRename.ts",
         "unittests/tsserver/getExportReferences.ts",
+        "unittests/tsserver/getFileReferences.ts",
         "unittests/tsserver/importHelpers.ts",
         "unittests/tsserver/importSuggestionsCache.ts",
         "unittests/tsserver/inferredProjects.ts",
@@ -204,6 +207,7 @@
         "unittests/tsserver/typingsInstaller.ts",
         "unittests/tsserver/versionCache.ts",
         "unittests/tsserver/watchEnvironment.ts",
+        "unittests/tsserver/webServer.ts",
         "unittests/debugDeprecation.ts"
     ]
 }

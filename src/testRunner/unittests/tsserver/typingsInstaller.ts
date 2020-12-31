@@ -435,7 +435,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file2Jsx.path, file3dts.path, lodashDts.path, reactDts.path]);
         });
@@ -642,7 +642,7 @@ namespace ts.projectSystem {
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             // Commander: Existed as a JS file
             // JQuery: Specified in 'include'
@@ -726,7 +726,7 @@ namespace ts.projectSystem {
             for (const f of typingFiles) {
                 assert.isTrue(host.fileExists(f.path), `expected file ${f.path} to exist`);
             }
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLengthAndRun(1);
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             checkProjectActualFiles(p, [file3.path, commander.path, express.path, jquery.path, moment.path, lodash.path]);
         });
@@ -829,7 +829,7 @@ namespace ts.projectSystem {
             assert.equal(installer.pendingRunRequests.length, 0, "expected no throttled requests");
 
             installer.executePendingCommands();
-            host.checkTimeoutQueueLengthAndRun(3); // for 2 projects and 1 refreshing inferred project
+            host.checkTimeoutQueueLengthAndRun(2); // for 2 projects
             checkProjectActualFiles(p1, [file3.path, commander.path, jquery.path, lodash.path, cordova.path]);
             checkProjectActualFiles(p2, [file3.path, grunt.path, gulp.path]);
         });

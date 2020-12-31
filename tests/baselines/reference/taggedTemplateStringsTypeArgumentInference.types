@@ -28,7 +28,7 @@ function someGenerics1a<T, U>(n: T, m: number) { }
 someGenerics1a `${3}`;
 >someGenerics1a `${3}` : void
 >someGenerics1a : <T, U>(n: T, m: number) => void
->`${3}` : string
+>`${3}` : "3"
 >3 : 3
 
 function someGenerics1b<T, U>(n: TemplateStringsArray, m: U) { }
@@ -39,7 +39,7 @@ function someGenerics1b<T, U>(n: TemplateStringsArray, m: U) { }
 someGenerics1b `${3}`;
 >someGenerics1b `${3}` : void
 >someGenerics1b : <T, U>(n: TemplateStringsArray, m: U) => void
->`${3}` : string
+>`${3}` : "3"
 >3 : 3
 
 // Generic tag with argument of function type whose parameter is of type parameter type
@@ -111,7 +111,7 @@ function someGenerics4<T, U>(strs: TemplateStringsArray, n: T, f: (x: U) => void
 someGenerics4 `${4}${ () => null }`;
 >someGenerics4 `${4}${ () => null }` : void
 >someGenerics4 : <T, U>(strs: TemplateStringsArray, n: T, f: (x: U) => void) => void
->`${4}${ () => null }` : string
+>`${4}${ () => null }` : `4${string}`
 >4 : 4
 >() => null : () => any
 >null : null
@@ -127,7 +127,7 @@ someGenerics4 `${''}${ () => 3 }`;
 someGenerics4 `${ null }${ null }`;
 >someGenerics4 `${ null }${ null }` : void
 >someGenerics4 : <T, U>(strs: TemplateStringsArray, n: T, f: (x: U) => void) => void
->`${ null }${ null }` : string
+>`${ null }${ null }` : "nullnull"
 >null : null
 >null : null
 
@@ -142,7 +142,7 @@ function someGenerics5<U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void
 someGenerics5 `${ 4 } ${ () => null }`;
 >someGenerics5 `${ 4 } ${ () => null }` : void
 >someGenerics5 : <U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void) => void
->`${ 4 } ${ () => null }` : string
+>`${ 4 } ${ () => null }` : `4 ${string}`
 >4 : 4
 >() => null : () => any
 >null : null
@@ -158,7 +158,7 @@ someGenerics5 `${ '' }${ () => 3 }`;
 someGenerics5 `${null}${null}`;
 >someGenerics5 `${null}${null}` : void
 >someGenerics5 : <U, T>(strs: TemplateStringsArray, n: T, f: (x: U) => void) => void
->`${null}${null}` : string
+>`${null}${null}` : "nullnull"
 >null : null
 >null : null
 
@@ -285,7 +285,7 @@ var x = someGenerics8 `${ someGenerics7 }`;
 x `${null}${null}${null}`;
 >x `${null}${null}${null}` : void
 >x : <A, B, C>(strs: TemplateStringsArray, a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->`${null}${null}${null}` : string
+>`${null}${null}${null}` : "nullnullnull"
 >null : null
 >null : null
 >null : null
@@ -305,7 +305,7 @@ var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
 >a9a : string
 >someGenerics9 `${ '' }${ 0 }${ [] }` : ""
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
->`${ '' }${ 0 }${ [] }` : string
+>`${ '' }${ 0 }${ [] }` : `0${string}`
 >'' : ""
 >0 : 0
 >[] : undefined[]
@@ -333,7 +333,7 @@ var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y:
 >a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
->`${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : string
+>`${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : `undefined${string}${string}`
 >undefined : undefined
 >{ x: 6, z: new Date() } : { x: number; z: Date; }
 >x : number
@@ -378,7 +378,7 @@ var a = someGenerics9 `${ 7 }${ anyVar }${ 4 }`;
 >a : any
 >someGenerics9 `${ 7 }${ anyVar }${ 4 }` : any
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
->`${ 7 }${ anyVar }${ 4 }` : string
+>`${ 7 }${ anyVar }${ 4 }` : `7${any}4`
 >7 : 7
 >anyVar : any
 >4 : 4
@@ -391,7 +391,7 @@ var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 >arr : any[]
 >someGenerics9 `${ [] }${ null }${ undefined }` : any[]
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
->`${ [] }${ null }${ undefined }` : string
+>`${ [] }${ null }${ undefined }` : `${string}nullundefined`
 >[] : undefined[]
 >null : null
 >undefined : undefined

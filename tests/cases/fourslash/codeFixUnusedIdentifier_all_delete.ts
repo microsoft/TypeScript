@@ -12,8 +12,9 @@
 ////function f(a, b) {
 ////    const x = 0;
 ////}
-////function g(a, b, c) { return a; }
-////f; g;
+////function g(a) { return a; }
+////function h(c) { return c; }
+////f(); g(); h();
 ////
 ////interface I {
 ////    m(x: number): void;
@@ -70,7 +71,8 @@ used1; used2;
 function f() {
 }
 function g(a) { return a; }
-f; g;
+function h(c) { return c; }
+f(); g(); h();
 
 interface I {
     m(x: number): void;
@@ -87,10 +89,10 @@ takesCb(() => {});
 takesCb((x) => { x; });
 takesCb((x, y) => { y; });
 
-function fn1(): void {}
+function fn1(x: number, y: string): void {}
 takesCb(fn1);
 
-function fn2(x: number): void { x; }
+function fn2(x: number, y: string): void { x; }
 takesCb(fn2);
 
 function fn3(x: number, y: string): void { y; }

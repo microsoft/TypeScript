@@ -6,7 +6,7 @@ var x = {
 
     a: `abc${ 123 }def`,
 >a : string
->`abc${ 123 }def` : string
+>`abc${ 123 }def` : "abc123def"
 >123 : 123
 
     `b`: 321

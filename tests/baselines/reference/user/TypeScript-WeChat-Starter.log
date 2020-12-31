@@ -5,6 +5,7 @@ node_modules/@types/serve-static/index.d.ts(18,45): error TS2694: Namespace '"ht
 node_modules/@types/serve-static/index.d.ts(25,49): error TS2694: Namespace '"http"' has no exported member 'OutgoingMessage'.
 node_modules/@types/serve-static/index.d.ts(25,72): error TS2694: Namespace '"http"' has no exported member 'OutgoingMessage'.
 node_modules/@types/serve-static/index.d.ts(98,45): error TS2694: Namespace '"http"' has no exported member 'OutgoingMessage'.
+node_modules/@types/serve-static/index.d.ts(102,56): error TS2694: Namespace '"http"' has no exported member 'OutgoingMessage'.
 
 
 

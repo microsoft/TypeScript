@@ -30,7 +30,7 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >f `abc${ 0 }def`.member : new (s: string) => new (n: number) => new () => boolean
 >f `abc${ 0 }def` : I
 >f : I
->`abc${ 0 }def` : string
+>`abc${ 0 }def` : "abc0def"
 >0 : 0
 >member : new (s: string) => new (n: number) => new () => boolean
 >"hello" : "hello"

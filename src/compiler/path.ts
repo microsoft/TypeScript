@@ -6,7 +6,7 @@ namespace ts {
      * we expect the host to correctly handle paths in our specified format.
      */
     export const directorySeparator = "/";
-    const altDirectorySeparator = "\\";
+    export const altDirectorySeparator = "\\";
     const urlSchemeSeparator = "://";
     const backslashRegExp = /\\/g;
 

@@ -59,6 +59,6 @@ class C {
 
     static [`hello ${a} bye`]() { }
 >[`hello ${a} bye`] : () => void
->`hello ${a} bye` : string
+>`hello ${a} bye` : `hello ${any} bye`
 >a : any
 }

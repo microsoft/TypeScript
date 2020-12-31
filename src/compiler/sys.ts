@@ -621,8 +621,9 @@ namespace ts {
             const invokeMap = new Map<Path, string[]>();
 
             while (!timerToUpdateChildWatches && cacheToUpdateChildWatches.size) {
-                const { value: [dirPath, { dirName, options, fileNames }], done } = cacheToUpdateChildWatches.entries().next();
-                Debug.assert(!done);
+                const result = cacheToUpdateChildWatches.entries().next();
+                Debug.assert(!result.done);
+                const { value: [dirPath, { dirName, options, fileNames }] } = result;
                 cacheToUpdateChildWatches.delete(dirPath);
                 // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
                 // to ensure that all the changes are reflected at this time
@@ -1184,6 +1185,8 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
+            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
+
             const Buffer: {
                 new (input: string, encoding?: string): any;
                 from?(input: string, encoding?: string): any;
@@ -1270,8 +1273,8 @@ namespace ts {
                 },
                 getFileSize(path) {
                     try {
-                        const stat = _fs.statSync(path);
-                        if (stat.isFile()) {
+                        const stat = statSync(path);
+                        if (stat?.isFile()) {
                             return stat.size;
                         }
                     }
@@ -1317,6 +1320,16 @@ namespace ts {
                 }
             };
             return nodeSystem;
+
+            /**
+             * `throwIfNoEntry` was added so recently that it's not in the node types.
+             * This helper encapsulates the mitigating usage of `any`.
+             * See https://github.com/nodejs/node/pull/33716
+             */
+            function statSync(path: string): import("fs").Stats | undefined {
+                // throwIfNoEntry will be ignored by older versions of node
+                return (_fs as any).statSync(path, { throwIfNoEntry: false });
+            }
 
             /**
              * Uses the builtin inspector APIs to capture a CPU profile
@@ -1376,7 +1389,7 @@ namespace ts {
                     activeSession.post("Profiler.stop", (err, { profile }) => {
                         if (!err) {
                             try {
-                                if (_fs.statSync(profilePath).isDirectory()) {
+                                if (statSync(profilePath)?.isDirectory()) {
                                     profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
                                 }
                             }
@@ -1666,7 +1679,10 @@ namespace ts {
                             const name = combinePaths(path, entry);
 
                             try {
-                                stat = _fs.statSync(name);
+                                stat = statSync(name);
+                                if (!stat) {
+                                    continue;
+                                }
                             }
                             catch (e) {
                                 continue;
@@ -1703,7 +1719,10 @@ namespace ts {
                 Error.stackTraceLimit = 0;
 
                 try {
-                    const stat = _fs.statSync(path);
+                    const stat = statSync(path);
+                    if (!stat) {
+                        return false;
+                    }
                     switch (entryKind) {
                         case FileSystemEntryKind.File: return stat.isFile();
                         case FileSystemEntryKind.Directory: return stat.isDirectory();
@@ -1732,7 +1751,7 @@ namespace ts {
 
             function realpath(path: string): string {
                 try {
-                    return _fs.realpathSync(path);
+                    return realpathSync(path);
                 }
                 catch {
                     return path;
@@ -1741,7 +1760,7 @@ namespace ts {
 
             function getModifiedTime(path: string) {
                 try {
-                    return _fs.statSync(path).mtime;
+                    return statSync(path)?.mtime;
                 }
                 catch (e) {
                     return undefined;

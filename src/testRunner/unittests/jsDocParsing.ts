@@ -319,6 +319,21 @@ namespace ts {
                     `/**
  * @author John Doe <john.doe@example.com>
  * @author John Doe <john.doe@example.com> unexpected comment
+ * @author 108 <108@actionbutton.net> Video Games Forever
+ * @author Multiple Ats <email@quoting@how@does@it@work>
+ * @author Multiple Open Carets <hi<there@<>
+ * @author Multiple Close Carets <probably>invalid>but>who>cares>
+ * @author Unclosed Carets <joe@sloppy.gov
+ * @author Multiple @author On One <one@two.three> @author Line
+ * @author @author @author Empty authors
+ * @author
+ * @author
+ *   Comments
+ * @author Early Close Caret > <a@b>
+ * @author No Line Breaks:
+ *   <the.email@address> must be on the same line to parse
+ * @author Long Comment <long@comment.org> I
+ *  want to keep commenting down here, I dunno.
  */`);
 
                 parsesCorrectly("consecutive newline tokens",
