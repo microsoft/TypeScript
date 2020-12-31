@@ -28,15 +28,17 @@
 //// var x9  = <Exp.M.SFCComp></Exp.M.SFCComp/*9*/>;
 //// var x10 = <Exp.M.SFCComp></      Exp./*10*/>;
 //// var x11 = <Exp.M><//*11*/Exp.M>;
+//// var x12 = <Exp.M></Exp/*12*/>;
 
 verify.completions(
     { marker: ["1", "3"], exact: ["ONE", "TWO"] },
     { marker: ["2", "4"], exact: ["Three", "Four"] },
     { marker: ["5"], exact: ["Exp.M.SFCComp"] },
-    { marker: ["6"], exact: ["M.SFCComp"] },
-    { marker: ["7"], exact: ["SFCComp"] },
-    { marker: ["8"], exact: [">"] },
-    { marker: ["9"], exact: [""] },
-    { marker: ["10"], exact: ["M.SFCComp"] },
-    { marker: ["11"], exact: [""] },
+    { marker: ["6"], exact: ["Exp.M.SFCComp"], optionalReplacementSpan: { filename: "file.tsx", pos: 230, end: 234} },
+    { marker: ["7"], exact: ["Exp.M.SFCComp"], optionalReplacementSpan: { filename: "file.tsx", pos: 264, end: 270} },
+    { marker: ["8"], exact: ["Exp.M.SFCComp>"], optionalReplacementSpan: { filename: "file.tsx", pos: 300, end: 313} },
+    { marker: ["9"], exact: ["Exp.M.SFCComp"], optionalReplacementSpan: { filename: "file.tsx", pos: 341, end: 354} },
+    { marker: ["10"], exact: ["Exp.M.SFCComp"], optionalReplacementSpan: { filename: "file.tsx", pos: 384, end: 394} },
+    { marker: ["11"], exact: ["Exp.M"], optionalReplacementSpan: { filename: "file.tsx", pos: 416, end: 421} },
+    { marker: ["12"], exact: ["Exp.M"], optionalReplacementSpan: { fileName: "file.tsx", pos: 443, end: 446 } },
 );

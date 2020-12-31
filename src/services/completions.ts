@@ -232,15 +232,9 @@ namespace ts.Completions {
             symbolToSortTextMap,
         } = completionData;
 
-        const closingJsxTag = getJsxCompletionClosingTag(location, sourceFile);
-        if (closingJsxTag || closingJsxTag === "") {
-            const entry: CompletionEntry = {
-                name: closingJsxTag,
-                kind: ScriptElementKind.classElement,
-                kindModifiers: undefined,
-                sortText: SortText.LocationPriority,
-            };
-            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: getOptionalReplacementSpan(location), entries: [entry] };
+        const completionInfo = getJsxClosingTagCompletion(location, sourceFile);
+        if (completionInfo) {
+            return completionInfo;
         }
 
         const entries: CompletionEntry[] = [];
@@ -328,7 +322,7 @@ namespace ts.Completions {
         }
     }
 
-    function getJsxCompletionClosingTag(location: Node | undefined, sourceFile: SourceFile) {
+    function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: SourceFile): CompletionInfo | undefined {
         // This helps us to identify if location is a property access expression,
         // in this case we wanna make sure if the parent of parent is a jsx closing tag
         // The following is a possible case:
@@ -349,27 +343,25 @@ namespace ts.Completions {
             // The completion list at "1" will contain "div>" with type any
             // And at `<div> </ /*1*/ >` (with a closing `>`), the completion list will contain "div".
             // And at property access expressions `<MainComponent.Child> </MainComponent. /*1*/ >` the completion will
-            // return the partial opening tag as in `Child`
-            // And if the property access expression is equal or superceding the opening tag empty string will be provided
+            // return full closing tag with an optional replacement span
             const hasClosingAngleBracket = !!findChildOfKind(jsxClosingElement, SyntaxKind.GreaterThanToken, sourceFile);
-            const accessExpressionNode = findChildOfKind(jsxClosingElement, SyntaxKind.PropertyAccessExpression, sourceFile);
+            const slashToken = findChildOfKind(jsxClosingElement, SyntaxKind.SlashToken, sourceFile);
+            const replacementPos = slashToken ? slashToken.pos +1 : jsxClosingElement.pos +2;
+            const replacementEnd = hasClosingAngleBracket ? jsxClosingElement.end -1 : jsxClosingElement.end;
             const tagName = jsxClosingElement.parent.openingElement.tagName;
-            let closingTag = tagName.getFullText(sourceFile);
-            if (accessExpressionNode) {
-                const accessExpressionNodeText = accessExpressionNode.getFullText(sourceFile);
-                let closingTagStartPos = accessExpressionNodeText.length;
-                if (closingTagStartPos > 0) {
-                    // We wanna skip the whitespaces at the begining of this node
-                    for (const chr of accessExpressionNodeText) {
-                        if (!isWhiteSpaceLike(chr.charCodeAt(0))) {
-                            break;
-                        }
-                        closingTagStartPos--;
-                    }
-                    closingTag = closingTag.substring(closingTagStartPos);
-                }
-            }
-            return closingTag + (hasClosingAngleBracket ? "" : ">");
+            const closingTag = tagName.getText(sourceFile);
+            const fullClosingTag = closingTag + (hasClosingAngleBracket ? "" : ">");
+            const replacementSpan = replacementEnd - replacementPos > 0
+                ? createTextSpanFromRange({ pos: replacementPos, end: replacementEnd })
+                : undefined;
+
+            const entry: CompletionEntry = {
+                name: fullClosingTag,
+                kind: ScriptElementKind.classElement,
+                kindModifiers: undefined,
+                sortText: SortText.LocationPriority,
+            };
+            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: replacementSpan, entries: [entry] };
         }
         return;
     }
