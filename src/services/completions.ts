@@ -348,18 +348,12 @@ namespace ts.Completions {
             // For example:
             //     var x = <MainComponent.Child> </     MainComponent /*1*/  >
             //     var y = <MainComponent.Child> </   /*2*/   MainComponent >
-            // the completion list at "1" and "2" will contain "MainComponent.Child" with a replacement span from `/` (slash) till `>`
-            // resulting in a clean closing tag
+            // the completion list at "1" and "2" will contain "MainComponent.Child" with a replacement span of closing tag name
             const hasClosingAngleBracket = !!findChildOfKind(jsxClosingElement, SyntaxKind.GreaterThanToken, sourceFile);
-            const slashToken = findChildOfKind(jsxClosingElement, SyntaxKind.SlashToken, sourceFile);
-            const replacementPos = slashToken ? slashToken.pos +1 : jsxClosingElement.pos +2;
-            const replacementEnd = hasClosingAngleBracket ? jsxClosingElement.end -1 : jsxClosingElement.end;
             const tagName = jsxClosingElement.parent.openingElement.tagName;
             const closingTag = tagName.getText(sourceFile);
             const fullClosingTag = closingTag + (hasClosingAngleBracket ? "" : ">");
-            const replacementSpan = replacementEnd - replacementPos > 0
-                ? createTextSpanFromRange({ pos: replacementPos, end: replacementEnd })
-                : undefined;
+            const replacementSpan = createTextSpanFromNode(jsxClosingElement.tagName);
 
             const entry: CompletionEntry = {
                 name: fullClosingTag,
