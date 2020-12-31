@@ -3580,7 +3580,8 @@ namespace ts {
                 }
 
             // TODO: Should prefix `++` and `--` be moved to the `Update` precedence?
-            // TODO: We are missing `TypeAssertionExpression`
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.NonNullExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
@@ -3601,6 +3602,9 @@ namespace ts {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return OperatorPrecedence.Member;
+
+            case SyntaxKind.AsExpression:
+                return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
