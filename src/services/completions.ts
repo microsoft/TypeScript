@@ -328,13 +328,14 @@ namespace ts.Completions {
         // For example:
         //   var x = <Comp.Item></Comp.Item/*1*/
         //   var y = <Comp.Item></Comp.Item/*2*/>
-        const jsxClosingElement = location && location.parent
-            ? location.parent.parent && isJsxClosingElement(location.parent.parent)
-                ? location.parent.parent
-                : isJsxClosingElement(location.parent)
-                    ? location.parent
-                    : undefined
-            : undefined;
+        // We wanna bail on the 10th tries or if the parent is a jsx opening element
+        let tries = 0;
+        const jsxClosingElement = findAncestor(location, (node) =>
+            !node ||
+            isJsxOpeningElement(node) ||
+            (tries++, tries > 10)
+                ? "quit"
+                : isJsxClosingElement(node)) as JsxClosingElement | undefined;
 
         if (jsxClosingElement) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,

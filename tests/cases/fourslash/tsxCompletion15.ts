@@ -26,6 +26,7 @@
 //// var x8  = <Exp.M.SFCComp></[|Exp/*8*/|]>;
 //// var x9  = <Exp.M.SFCComp></[|Exp.M./*9*/|]>;
 //// var x10 = <Exp.M.SFCComp></      [|/*10*/Exp.M.Foo.Bar.Baz.Wut|]>;
+//// var x11 = <Exp.M.SFCComp></[|Exp./*11*/M.SFCComp|]>;
 
 const ranges = test.ranges();
 
@@ -40,4 +41,5 @@ verify.completions(
     { marker: '8', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[7] },
     { marker: '9', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[8] },
     { marker: '10', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[9] },
+    { marker: '11', exact: 'Exp.M.SFCComp', optionalReplacementSpan: ranges[10] },
 );
