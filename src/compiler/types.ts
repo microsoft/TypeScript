@@ -5296,13 +5296,7 @@ namespace ts {
         /* @internal */
         regularType?: UnionType;
         /* @internal */
-        origin?: UnionOrigin;
-    }
-
-    /* @internal */
-    export interface UnionOrigin {
-        types: readonly Type[];
-        isIntersection: boolean;
+        origin?: Type;  // Denormalized union, intersection, or index type in which union originates
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
