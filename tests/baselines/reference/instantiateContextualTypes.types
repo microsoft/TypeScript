@@ -185,7 +185,7 @@ type O = {
 >O : O
 
   on<P extends keyof R>(x: P, callback: R[P]): void;
->on : <P extends "a" | "b">(x: P, callback: R[P]) => void
+>on : <P extends keyof R>(x: P, callback: R[P]) => void
 >x : P
 >callback : R[P]
 
@@ -196,9 +196,9 @@ declare var x: O;
 
 x.on('a', a => {});
 >x.on('a', a => {}) : void
->x.on : <P extends "a" | "b">(x: P, callback: R[P]) => void
+>x.on : <P extends keyof R>(x: P, callback: R[P]) => void
 >x : O
->on : <P extends "a" | "b">(x: P, callback: R[P]) => void
+>on : <P extends keyof R>(x: P, callback: R[P]) => void
 >'a' : "a"
 >a => {} : (a: number) => void
 >a : number
