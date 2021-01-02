@@ -13249,6 +13249,20 @@ namespace ts {
             return !!(type.flags & TypeFlags.Union && (type.aliasSymbol || (<UnionType>type).origin));
         }
 
+        function addNamedUnions(namedUnions: Type[], types: readonly Type[]) {
+            for (const t of types) {
+                if (t.flags & TypeFlags.Union) {
+                    const origin = (<UnionType>t).origin;
+                    if (t.aliasSymbol || origin && !(origin.flags & TypeFlags.Union)) {
+                        namedUnions.push(t);
+                    }
+                    else if (origin && origin.flags & TypeFlags.Union) {
+                        addNamedUnions(namedUnions, (<UnionType>origin).types);
+                    }
+                }
+            }
+        }
+
         // We sort and deduplicate the constituent types based on object identity. If the subtypeReduction
         // flag is specified we also reduce the constituent type set to only include types that aren't subtypes
         // of other types. Subtype reduction is expensive for large union types and is possible only when union
@@ -13291,7 +13305,8 @@ namespace ts {
                 }
             }
             if (!origin && includes & TypeFlags.Union) {
-                const namedUnions = filter(types, isNamedUnionType);
+                const namedUnions: Type[] = [];
+                addNamedUnions(namedUnions, types);
                 const reducedTypes: Type[] = [];
                 for (const t of typeSet) {
                     if (!isNamedUnionType(t) && !some(namedUnions, union => containsType((<UnionType>union).types, t))) {
