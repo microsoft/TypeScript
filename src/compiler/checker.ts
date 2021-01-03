@@ -21552,10 +21552,12 @@ namespace ts {
             if (!(type.flags & TypeFlags.Union)) {
                 return mapper(type);
             }
+            const origin = (<UnionType>type).origin;
+            const types = origin && origin.flags & TypeFlags.Union ? (<UnionType>origin).types : (<UnionType>type).types;
             let mappedTypes: Type[] | undefined;
             let changed = false;
-            for (const t of (<UnionType>type).types) {
-                const mapped = mapper(t);
+            for (const t of types) {
+                const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions) : mapper(t);
                 changed ||= t !== mapped;
                 if (mapped) {
                     if (!mappedTypes) {
