@@ -327,9 +327,19 @@ namespace ts.Completions {
 
     function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: SourceFile): CompletionInfo | undefined {
         // We wanna walk up the tree till either we find a JSX closing element, JSX opening element or quit at end
-        const jsxClosingElement = findAncestor(location, node => isJsxOpeningElement(node)
-                ? "quit"
-                : isJsxClosingElement(node)) as JsxClosingElement | undefined;
+        const jsxClosingElement = findAncestor(location, node => {
+            switch (node.kind) {
+                case SyntaxKind.JsxClosingElement:
+                    return true;
+                case SyntaxKind.SlashToken:
+                case SyntaxKind.GreaterThanToken:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.PropertyAccessExpression:
+                    return false;
+                default:
+                    return "quit";
+            }
+        }) as JsxClosingElement | undefined;
 
         if (jsxClosingElement) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
