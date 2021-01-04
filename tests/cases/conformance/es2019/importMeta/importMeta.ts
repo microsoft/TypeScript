@@ -1,6 +1,6 @@
 
 // @target: esnext,es5
-// @module: esnext,commonjs,system
+// @module: esnext,commonjs,system,es2020
 // @lib: es5,dom
 
 // @Filename: example.ts

@@ -34,13 +34,13 @@ Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/main/index.ts"]
 Program options: {"module":1,"moduleResolution":2,"baseUrl":"/user/username/projects/myproject/main","rootDir":"/user/username/projects/myproject/main","watch":true,"configFilePath":"/user/username/projects/myproject/main/tsconfig.json"}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/linked-package/dist/other.d.ts

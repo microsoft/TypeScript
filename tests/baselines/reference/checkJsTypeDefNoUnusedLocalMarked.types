@@ -26,7 +26,7 @@ module.exports = /** @type {FooFun} */(void 0);
 >module.exports : (foo: typeof import("tests/cases/compiler/file")) => string
 >module : { "\"tests/cases/compiler/something\"": (foo: typeof import("tests/cases/compiler/file")) => string; }
 >exports : (foo: typeof import("tests/cases/compiler/file")) => string
->(void 0) : (foo: typeof import("tests/cases/compiler/file")) => string
+>(void 0) : FooFun
 >void 0 : undefined
 >0 : 0
 

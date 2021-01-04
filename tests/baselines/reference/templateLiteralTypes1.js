@@ -16,16 +16,22 @@ type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 type ToString<T extends string | number | boolean | bigint> = `${T}`;
 type TS1 = ToString<'abc' | 42 | true | -1234n>;
 
-// Casing modifiers
+// Nested template literal type normalization
 
-type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+type TL1<T extends string> = `a${T}b${T}c`;
+type TL2<U extends string> = TL1<`x${U}y`>;  // `ax${U}ybx{$U}yc`
+type TL3 = TL2<'o'>;  // 'axoybxoyc'
+
+// Casing intrinsics
+
+type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
 type TCA2 = Cases<'BAR'>;  // 'BAR bar BAR bAR'
 
 // Assignability
 
-function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`) {
+function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
     let s1: string = name;
     let s2: 'getFoo' | 'getBar' = name;
 }
@@ -63,14 +69,14 @@ type T23 = MatchPair<'[123]'>;  // unknown
 type T24 = MatchPair<'[1,2,3,4]'>;  // ['1', '2,3,4']
 
 type SnakeToCamelCase<S extends string> =
-    S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${lowercase T}` :
+    S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Lowercase<T>}` :
     SnakeToPascalCase<S>;
 
 type SnakeToPascalCase<S extends string> =
     string extends S ? string :
-    S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` :
-    S extends `${infer T}` ? `${capitalize `${lowercase T}`}` :
+    S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` :
+    S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
     never;
 
 type RR0 = SnakeToPascalCase<'hello_world_foo'>;  // 'HelloWorldFoo'
@@ -85,12 +91,6 @@ type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}${infer 
 type T25 = FirstTwoAndRest<'abcde'>;  // ['ab', 'cde']
 type T26 = FirstTwoAndRest<'ab'>;  // ['ab', '']
 type T27 = FirstTwoAndRest<'a'>;  // unknown
-
-type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-
-type TC1 = Capitalize<'foo'>;  // 'Foo'
-type TC2 = Uncapitalize<'Foo'>;  // 'foo'
 
 type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' |'8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 
@@ -205,6 +205,37 @@ type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 
 type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
 
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+
+type AA<T extends number, Q extends number> =
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+
+type BB = AA<-2, -2>;
+
+// Repro from #40970
+
+type PathKeys<T> =
+    T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+    T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+    never;
+
+type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+
+const obj2 = {
+    name: 'John',
+    age: 42,
+    cars: [
+        { make: 'Ford', age: 10 },
+        { make: 'Trabant', age: 35 }
+    ]
+} as const;
+
+let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+
 
 //// [templateLiteralTypes1.js]
 "use strict";
@@ -234,6 +265,15 @@ getPropValue(obj, 'a.b'); // {c: number, d: string }
 getPropValue(obj, 'a.b.d'); // string
 getPropValue(obj, 'a.b.x'); // unknown
 getPropValue(obj, s); // unknown
+var obj2 = {
+    name: 'John',
+    age: 42,
+    cars: [
+        { make: 'Ford', age: 10 },
+        { make: 'Trabant', age: 35 }
+    ]
+};
+var make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
 
 
 //// [templateLiteralTypes1.d.ts]
@@ -245,10 +285,13 @@ declare type EN1 = EventName<'Foo' | 'Bar' | 'Baz'>;
 declare type Loc = `${'top' | 'middle' | 'bottom'}-${'left' | 'center' | 'right'}`;
 declare type ToString<T extends string | number | boolean | bigint> = `${T}`;
 declare type TS1 = ToString<'abc' | 42 | true | -1234n>;
-declare type Cases<T extends string> = `${uppercase T} ${lowercase T} ${capitalize T} ${uncapitalize T}`;
+declare type TL1<T extends string> = `a${T}b${T}c`;
+declare type TL2<U extends string> = TL1<`x${U}y`>;
+declare type TL3 = TL2<'o'>;
+declare type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 declare type TCA1 = Cases<'bar'>;
 declare type TCA2 = Cases<'BAR'>;
-declare function test<T extends 'foo' | 'bar'>(name: `get${capitalize T}`): void;
+declare function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`): void;
 declare function fa1<T>(x: T, y: {
     [P in keyof T]: T[P];
 }, z: {
@@ -269,8 +312,8 @@ declare type T21 = MatchPair<'[foo,bar]'>;
 declare type T22 = MatchPair<' [1,2]'>;
 declare type T23 = MatchPair<'[123]'>;
 declare type T24 = MatchPair<'[1,2,3,4]'>;
-declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${lowercase T}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${lowercase T}` : SnakeToPascalCase<S>;
-declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${capitalize `${lowercase T}`}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${capitalize `${lowercase T}`}` : never;
+declare type SnakeToCamelCase<S extends string> = S extends `${infer T}_${infer U}` ? `${Lowercase<T>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Lowercase<T>}` : SnakeToPascalCase<S>;
+declare type SnakeToPascalCase<S extends string> = string extends S ? string : S extends `${infer T}_${infer U}` ? `${Capitalize<Lowercase<T>>}${SnakeToPascalCase<U>}` : S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` : never;
 declare type RR0 = SnakeToPascalCase<'hello_world_foo'>;
 declare type RR1 = SnakeToPascalCase<'FOO_BAR_BAZ'>;
 declare type RR2 = SnakeToCamelCase<'hello_world_foo'>;
@@ -279,10 +322,6 @@ declare type FirstTwoAndRest<S extends string> = S extends `${infer A}${infer B}
 declare type T25 = FirstTwoAndRest<'abcde'>;
 declare type T26 = FirstTwoAndRest<'ab'>;
 declare type T27 = FirstTwoAndRest<'a'>;
-declare type Capitalize<S extends string> = S extends `${infer H}${infer T}` ? `${uppercase H}${T}` : S;
-declare type Uncapitalize<S extends string> = S extends `${infer H}${infer T}` ? `${lowercase H}${T}` : S;
-declare type TC1 = Capitalize<'foo'>;
-declare type TC2 = Uncapitalize<'Foo'>;
 declare type HexDigit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 declare type HexColor<S extends string> = S extends `#${infer R1}${infer R2}${infer G1}${infer G2}${infer B1}${infer B2}` ? [
     R1,
@@ -454,3 +493,24 @@ declare type Digits = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 declare type D100000 = `${Digits}${Digits}${Digits}${Digits}${Digits}`;
 declare type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 declare type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];
+declare type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+declare type AA<T extends number, Q extends number> = [
+    true,
+    true
+] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+declare type BB = AA<-2, -2>;
+declare type PathKeys<T> = T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> : T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> : never;
+declare type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+declare const obj2: {
+    readonly name: "John";
+    readonly age: 42;
+    readonly cars: readonly [{
+        readonly make: "Ford";
+        readonly age: 10;
+    }, {
+        readonly make: "Trabant";
+        readonly age: 35;
+    }];
+};
+declare let make: "Trabant";

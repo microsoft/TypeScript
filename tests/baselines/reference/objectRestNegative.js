@@ -34,7 +34,7 @@ var o = { a: 1, b: 'no' };
 var a = o.a;
 var b;
 var notAssignable;
-(b = o.b, o, notAssignable = __rest(o, ["b"]));
+(b = o.b, notAssignable = __rest(o, ["b"]));
 function stillMustBeLast(_a) {
     var a = _a.a;
 }
@@ -43,4 +43,4 @@ function generic(t) {
     return rest;
 }
 var rest;
-(a = o.a, o, rest.b + rest.b = __rest(o, ["a"]));
+(a = o.a, rest.b + rest.b = __rest(o, ["a"]));

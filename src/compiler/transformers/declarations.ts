@@ -14,8 +14,8 @@ namespace ts {
     export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
         const parseTreeNode = getParseTreeNode(node);
         if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
             const text = currentSourceFile.text;
             const commentRanges = previousSibling
                 ? concatenate(
@@ -681,6 +681,7 @@ namespace ts {
                     decl,
                     /*decorators*/ undefined,
                     decl.modifiers,
+                    decl.isTypeOnly,
                     decl.name,
                     factory.updateExternalModuleReference(decl.moduleReference, rewriteModuleSpecifier(decl, specifier))
                 );
@@ -1372,6 +1373,8 @@ namespace ts {
                     }
 
                     const hasPrivateIdentifier = some(input.members, member => !!member.name && isPrivateIdentifier(member.name));
+                    // When the class has at least one private identifier, create a unique constant identifier to retain the nominal typing behavior
+                    // Prevents other classes with the same public members from being used in place of the current class
                     const privateIdentifier = hasPrivateIdentifier ? [
                         factory.createPropertyDeclaration(
                             /*decorators*/ undefined,

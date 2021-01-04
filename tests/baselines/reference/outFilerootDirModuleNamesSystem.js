@@ -9,6 +9,9 @@ foo();
 import Foo from "./a";
 export default function foo() { new Foo(); }
 
+// https://github.com/microsoft/TypeScript/issues/37429
+import("./a");
+
 
 //// [output.js]
 System.register("b", ["a"], function (exports_1, context_1) {
@@ -24,6 +27,8 @@ System.register("b", ["a"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
+            // https://github.com/microsoft/TypeScript/issues/37429
+            context_1.import("a");
         }
     };
 });

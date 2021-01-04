@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedInstanceOf.ts ===
 var x = `abc${ "hello" instanceof String }def`;
->x : string
->`abc${ "hello" instanceof String }def` : string
+>x : "abcfalsedef" | "abctruedef"
+>`abc${ "hello" instanceof String }def` : "abcfalsedef" | "abctruedef"
 >"hello" instanceof String : boolean
 >"hello" : "hello"
 >String : StringConstructor
