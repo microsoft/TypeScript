@@ -3,16 +3,16 @@
 Event.prototype.removeChildren = function () {
 >Event.prototype.removeChildren = function () {    this.textContent = 'nope, not going to happen'} : () => void
 >Event.prototype.removeChildren : any
->Event.prototype : Event
->Event : { new (type: string, eventInitDict?: EventInit): Event; prototype: Event; readonly AT_TARGET: number; readonly BUBBLING_PHASE: number; readonly CAPTURING_PHASE: number; readonly NONE: number; }
->prototype : Event
+>Event.prototype : Event<EventTarget>
+>Event : { new (type: string, eventInitDict?: EventInit): Event<EventTarget>; prototype: Event<EventTarget>; readonly AT_TARGET: number; readonly BUBBLING_PHASE: number; readonly CAPTURING_PHASE: number; readonly NONE: number; }
+>prototype : Event<EventTarget>
 >removeChildren : any
 >function () {    this.textContent = 'nope, not going to happen'} : () => void
 
     this.textContent = 'nope, not going to happen'
 >this.textContent = 'nope, not going to happen' : "nope, not going to happen"
 >this.textContent : any
->this : Event
+>this : Event<EventTarget>
 >textContent : any
 >'nope, not going to happen' : "nope, not going to happen"
 }

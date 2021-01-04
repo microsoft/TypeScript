@@ -1,0 +1,12 @@
+=== tests/cases/compiler/readyStateChangeEventOnDocument.ts ===
+document.addEventListener('readystatechange', event => event.target?.readyState === 'complete'); // should not error
+>document.addEventListener : Symbol(Document.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>addEventListener : Symbol(Document.addEventListener, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(readyStateChangeEventOnDocument.ts, 0, 45))
+>event.target?.readyState : Symbol(Document.readyState, Decl(lib.dom.d.ts, --, --))
+>event.target : Symbol(Event.target, Decl(lib.dom.d.ts, --, --))
+>event : Symbol(event, Decl(readyStateChangeEventOnDocument.ts, 0, 45))
+>target : Symbol(Event.target, Decl(lib.dom.d.ts, --, --))
+>readyState : Symbol(Document.readyState, Decl(lib.dom.d.ts, --, --))
+

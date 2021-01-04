@@ -79,4 +79,4 @@
 /** @type {int} */ declare const n: any;
 /** @type {float} */ declare const o: any;
 /** @type {integer} */ declare const p: any;
-/** @type {event} */ declare const q: Event | undefined;
+/** @type {event} */ declare const q: Event<EventTarget> | undefined;
