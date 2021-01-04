@@ -3315,9 +3315,8 @@ namespace ts {
                          * Direct users to import source with .js extension if outputting an ES module.
                          * @see https://github.com/microsoft/TypeScript/issues/42151
                          */
-                        const target = getEmitScriptTarget(compilerOptions);
                         const moduleKind = getEmitModuleKind(compilerOptions);
-                        if (target >= ScriptTarget.ES2015 && moduleKind >= ModuleKind.ES2015) {
+                        if (moduleKind >= ModuleKind.ES2015) {
                             replacedImportSource += ".js";
                         }
                         error(errorNode, diag, tsExtension, replacedImportSource);
