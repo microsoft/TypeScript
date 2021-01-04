@@ -35660,7 +35660,7 @@ namespace ts {
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
                 for (const typeRefNode of implementedTypeNodes) {
-                    if (!isEntityNameExpression(typeRefNode.expression)) {
+                    if (!isEntityNameExpression(typeRefNode.expression) || isOptionalChain(typeRefNode.expression)) {
                         error(typeRefNode.expression, Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
                     checkTypeReferenceNode(typeRefNode);
@@ -36009,7 +36009,7 @@ namespace ts {
                 checkObjectTypeForDuplicateDeclarations(node);
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
-                if (!isEntityNameExpression(heritageElement.expression)) {
+                if (!isEntityNameExpression(heritageElement.expression) || isOptionalChain(heritageElement.expression)) {
                     error(heritageElement.expression, Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
                 }
                 checkTypeReferenceNode(heritageElement);
