@@ -2561,7 +2561,7 @@ declare var BroadcastChannel: {
     new(name: string): BroadcastChannel;
 };
 
-/** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
+/** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface ByteLengthQueuingStrategy extends QueuingStrategy<ArrayBufferView> {
     highWaterMark: number;
     size(chunk: ArrayBufferView): number;
@@ -3305,7 +3305,7 @@ interface CanvasFilters {
 interface CanvasGradient {
     /**
      * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset at one end of the gradient, 1.0 is the offset at the other end.
-     *
+     * 
      * Throws an "IndexSizeError" DOMException if the offset is out of range. Throws a "SyntaxError" DOMException if the color cannot be parsed.
      */
     addColorStop(offset: number, color: string): void;
@@ -3472,13 +3472,13 @@ declare var CharacterData: {
 interface ChildNode extends Node {
     /**
      * Inserts nodes just after node, while replacing strings in nodes with equivalent Text nodes.
-     *
+     * 
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     after(...nodes: (Node | string)[]): void;
     /**
      * Inserts nodes just before node, while replacing strings in nodes with equivalent Text nodes.
-     *
+     * 
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     before(...nodes: (Node | string)[]): void;
@@ -3488,7 +3488,7 @@ interface ChildNode extends Node {
     remove(): void;
     /**
      * Replaces node with nodes, while replacing strings in nodes with equivalent Text nodes.
-     *
+     * 
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     replaceWith(...nodes: (Node | string)[]): void;
@@ -3612,7 +3612,7 @@ declare var ConvolverNode: {
     new(context: BaseAudioContext, options?: ConvolverOptions): ConvolverNode;
 };
 
-/** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
+/** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
 interface CountQueuingStrategy extends QueuingStrategy {
     highWaterMark: number;
     size(chunk: any): 1;
@@ -3906,11 +3906,11 @@ declare var DOMMatrixReadOnly: {
 interface DOMParser {
     /**
      * Parses string using either the HTML or XML parser, according to type, and returns the resulting Document. type can be "text/html" (which will invoke the HTML parser), or any of "text/xml", "application/xml", "application/xhtml+xml", or "image/svg+xml" (which will invoke the XML parser).
-     *
+     * 
      * For the XML parser, if string cannot be parsed, then the returned Document will contain elements describing the resulting error.
-     *
+     * 
      * Note that script elements are not evaluated during parsing, and the resulting document's encoding will always be UTF-8.
-     *
+     * 
      * Values other than the above for type will cause a TypeError exception to be thrown.
      */
     parseFromString(string: string, type: DOMParserSupportedType): Document;
@@ -4044,7 +4044,7 @@ declare var DOMStringList: {
     new(): DOMStringList;
 };
 
-/** Used by the dataset HTML attribute to represent data for custom attributes added to elements. */
+/** Used by the dataset HTML attribute to represent data for custom attributes added to elements. */
 interface DOMStringMap {
     [name: string]: string | undefined;
 }
@@ -4062,16 +4062,16 @@ interface DOMTokenList {
     readonly length: number;
     /**
      * Returns the associated set as string.
-     *
+     * 
      * Can be set, to change the associated attribute.
      */
     value: string;
     toString(): string;
     /**
      * Adds all arguments passed, except those already present.
-     *
+     * 
      * Throws a "SyntaxError" DOMException if one of the arguments is the empty string.
-     *
+     * 
      * Throws an "InvalidCharacterError" DOMException if one of the arguments contains any ASCII whitespace.
      */
     add(...tokens: string[]): void;
@@ -4085,35 +4085,35 @@ interface DOMTokenList {
     item(index: number): string | null;
     /**
      * Removes arguments passed, if they are present.
-     *
+     * 
      * Throws a "SyntaxError" DOMException if one of the arguments is the empty string.
-     *
+     * 
      * Throws an "InvalidCharacterError" DOMException if one of the arguments contains any ASCII whitespace.
      */
     remove(...tokens: string[]): void;
     /**
      * Replaces token with newToken.
-     *
+     * 
      * Returns true if token was replaced with newToken, and false otherwise.
-     *
+     * 
      * Throws a "SyntaxError" DOMException if one of the arguments is the empty string.
-     *
+     * 
      * Throws an "InvalidCharacterError" DOMException if one of the arguments contains any ASCII whitespace.
      */
     replace(oldToken: string, newToken: string): void;
     /**
      * Returns true if token is in the associated attribute's supported tokens. Returns false otherwise.
-     *
+     * 
      * Throws a TypeError if the associated attribute has no supported tokens defined.
      */
     supports(token: string): boolean;
     /**
      * If force is not given, "toggles" token, removing it if it's present and adding it if it's not present. If force is true, adds token (same as add()). If force is false, removes token (same as remove()).
-     *
+     * 
      * Returns true if token is now present, and false otherwise.
-     *
+     * 
      * Throws a "SyntaxError" DOMException if token is empty.
-     *
+     * 
      * Throws an "InvalidCharacterError" DOMException if token contains any spaces.
      */
     toggle(token: string, force?: boolean): boolean;
@@ -4143,17 +4143,17 @@ declare var DataCue: {
 interface DataTransfer {
     /**
      * Returns the kind of operation that is currently selected. If the kind of operation isn't one of those that is allowed by the effectAllowed attribute, then the operation will fail.
-     *
+     * 
      * Can be set, to change the selected operation.
-     *
+     * 
      * The possible values are "none", "copy", "link", and "move".
      */
     dropEffect: "none" | "copy" | "link" | "move";
     /**
      * Returns the kinds of operations that are to be allowed.
-     *
+     * 
      * Can be set (during the dragstart event), to change the allowed operations.
-     *
+     * 
      * The possible values are "none", "copy", "copyLink", "copyMove", "link", "linkMove", "move", "all", and "uninitialized",
      */
     effectAllowed: "none" | "copy" | "copyLink" | "copyMove" | "link" | "linkMove" | "move" | "all" | "uninitialized";
@@ -4424,15 +4424,15 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly contentType: string;
     /**
      * Returns the HTTP cookies that apply to the Document. If there are no cookies or cookies can't be applied to this resource, the empty string will be returned.
-     *
+     * 
      * Can be set, to add a new cookie to the element's set of HTTP cookies.
-     *
+     * 
      * If the contents are sandboxed into a unique origin (e.g. in an iframe with the sandbox attribute), a "SecurityError" DOMException will be thrown on getting and setting.
      */
     cookie: string;
     /**
      * Returns the script element, or the SVG script element, that is currently executing, as long as the element represents a classic script. In the case of reentrant script execution, returns the one that most recently started executing amongst those that have not yet finished executing.
-     *
+     * 
      * Returns null if the Document is not currently executing a script or SVG script element (e.g., because the running script is an event handler, or a timeout), or if the currently executing script or SVG script element represents a module script.
      */
     readonly currentScript: HTMLOrSVGScriptElement | null;
@@ -4555,7 +4555,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     vlinkColor: string;
     /**
      * Moves node from another document and returns it.
-     *
+     * 
      * If node is a document, throws a "NotSupportedError" DOMException or, if node is a shadow root, throws a "HierarchyRequestError" DOMException.
      */
     adoptNode<T extends Node>(source: T): T;
@@ -4599,17 +4599,17 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createElement(tagName: string, options?: ElementCreationOptions): HTMLElement;
     /**
      * Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
-     *
+     * 
      * If localName does not match the Name production an "InvalidCharacterError" DOMException will be thrown.
-     *
+     * 
      * If one of the following conditions is true a "NamespaceError" DOMException will be thrown:
-     *
+     * 
      * localName does not match the QName production.
      * Namespace prefix is not null and namespace is the empty string.
      * Namespace prefix is "xml" and namespace is not the XML namespace.
      * qualifiedName or namespace prefix is "xmlns" and namespace is not the XMLNS namespace.
      * namespace is the XMLNS namespace and neither qualifiedName nor namespace prefix is "xmlns".
-     *
+     * 
      * When supplied, options's is can be used to create a customized built-in element.
      */
     createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement;
@@ -4769,11 +4769,11 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
     /**
      * If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
-     *
+     * 
      * If only namespace is "*" returns a HTMLCollection of all descendant elements whose local name is localName.
-     *
+     * 
      * If only localName is "*" returns a HTMLCollection of all descendant elements whose namespace is namespace.
-     *
+     * 
      * Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
      */
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
@@ -4789,7 +4789,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     hasFocus(): boolean;
     /**
      * Returns a copy of node. If deep is true, the copy also includes the node's descendants.
-     *
+     * 
      * If node is a document or a shadow root, throws a "NotSupportedError" DOMException.
      */
     importNode<T extends Node>(importedNode: T, deep: boolean): T;
@@ -5176,7 +5176,7 @@ interface Element extends Node, Animatable, ChildNode, InnerHTML, NonDocumentTyp
     removeAttributeNode(attr: Attr): Attr;
     /**
      * Displays element fullscreen and resolves promise when done.
-     *
+     * 
      * When supplied, options's navigationUI member indicates whether showing navigation UI while in fullscreen is preferred or not. If set to "show", navigation simplicity is preferred over screen space, and if set to "hide", more screen space is preferred. User agents are always free to honor user preference over the application's. The default value "auto" indicates no application preference.
      */
     requestFullscreen(options?: FullscreenOptions): Promise<void>;
@@ -5201,7 +5201,7 @@ interface Element extends Node, Animatable, ChildNode, InnerHTML, NonDocumentTyp
     setPointerCapture(pointerId: number): void;
     /**
      * If force is not given, "toggles" qualifiedName, removing it if it is present and adding it if it is not present. If force is true, adds qualifiedName. If force is false, removes qualifiedName.
-     *
+     * 
      * Returns true if qualifiedName is now present, and false otherwise.
      */
     toggleAttribute(qualifiedName: string, force?: boolean): boolean;
@@ -5371,15 +5371,15 @@ declare var EventSource: {
 interface EventTarget {
     /**
      * Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-     *
+     * 
      * The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-     *
+     * 
      * When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-     *
+     * 
      * When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-     *
+     * 
      * When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-     *
+     * 
      * The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
      */
     addEventListener(type: string, listener: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions): void;
@@ -5618,16 +5618,16 @@ interface GenericTransformStream {
     readonly readable: ReadableStream;
     /**
      * Returns a writable stream which accepts [AllowShared] BufferSource chunks and runs them through encoding's decoder before making them available to readable.
-     *
+     * 
      * Typically this will be used via the pipeThrough() method on a ReadableStream source.
-     *
+     * 
      * ```
      * var decoder = new TextDecoderStream(encoding);
      * byteReadable
      *   .pipeThrough(decoder)
      *   .pipeTo(textWritable);
      * ```
-     *
+     * 
      * If the error mode is "fatal" and encoding's decoder returns error, both readable and writable will be errored with a TypeError.
      */
     readonly writable: WritableStream;
@@ -6059,9 +6059,9 @@ interface HTMLAllCollection {
     item(nameOrIndex?: string): HTMLCollection | Element | null;
     /**
      * Returns the item with ID or name name from the collection.
-     *
+     * 
      * If there are multiple matching items, then an HTMLCollection object containing all those elements is returned.
-     *
+     * 
      * Only button, form, iframe, input, map, meta, object, select, and textarea elements can have a name for the purpose of this method; their name is given by the value of their name attribute.
      */
     namedItem(name: string): HTMLCollection | Element | null;
@@ -6252,7 +6252,7 @@ declare var HTMLBRElement: {
     new(): HTMLBRElement;
 };
 
-/** Contains the base URI for a document. This object inherits all of the properties and methods as described in the HTMLElement interface. */
+/** Contains the base URI for a document. This object inherits all of the properties and methods as described in the HTMLElement interface. */
 interface HTMLBaseElement extends HTMLElement {
     /**
      * Gets or sets the baseline URL on which relative links are based.
@@ -6722,7 +6722,7 @@ declare var HTMLFontElement: {
 interface HTMLFormControlsCollection extends HTMLCollectionBase {
     /**
      * Returns the item with ID or name name from the collection.
-     *
+     * 
      * If there are multiple matching items, then a RadioNodeList object containing all those elements is returned.
      */
     namedItem(name: string): RadioNodeList | Element | null;
@@ -7555,7 +7555,7 @@ interface HTMLMediaElementEventMap extends HTMLElementEventMap {
     "waitingforkey": Event;
 }
 
-/** Adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video. */
+/** Adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video. */
 interface HTMLMediaElement extends HTMLElement {
     /**
      * Gets or sets a value that indicates whether to start playing the media automatically.
@@ -7707,7 +7707,7 @@ declare var HTMLMenuElement: {
     new(): HTMLMenuElement;
 };
 
-/** Contains descriptive metadata about a document. It inherits all of the properties and methods described in the HTMLElement interface. */
+/** Contains descriptive metadata about a document. It inherits all of the properties and methods described in the HTMLElement interface. */
 interface HTMLMetaElement extends HTMLElement {
     /**
      * Gets or sets meta-information to associate with httpEquiv or name.
@@ -7971,25 +7971,25 @@ declare var HTMLOptionElement: {
 interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
     /**
      * Returns the number of elements in the collection.
-     *
+     * 
      * When set to a smaller number, truncates the number of option elements in the corresponding container.
-     *
+     * 
      * When set to a greater number, adds new blank option elements to that container.
      */
     length: number;
     /**
      * Returns the index of the first selected item, if any, or −1 if there is no selected item.
-     *
+     * 
      * Can be set, to change the selection.
      */
     selectedIndex: number;
     /**
      * Inserts element before the node given by before.
-     *
+     * 
      * The before argument can be a number, in which case element is inserted before the item with that number, or an element from the collection, in which case element is inserted before that element.
-     *
+     * 
      * If before is omitted, null, or a number out of range, then element will be added at the end of the list.
-     *
+     * 
      * This method will throw a "HierarchyRequestError" DOMException if element is an ancestor of the element into which it is to be inserted.
      */
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number | null): void;
@@ -9002,7 +9002,7 @@ declare var HashChangeEvent: {
     new(type: string, eventInitDict?: HashChangeEventInit): HashChangeEvent;
 };
 
-/** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. */
+/** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. */
 interface Headers {
     append(name: string, value: string): void;
     delete(name: string): void;
@@ -9017,7 +9017,7 @@ declare var Headers: {
     new(init?: HeadersInit): Headers;
 };
 
-/** Allows manipulation of the browser session history, that is the pages visited in the tab or frame that the current page is loaded in. */
+/** Allows manipulation of the browser session history, that is the pages visited in the tab or frame that the current page is loaded in. */
 interface History {
     readonly length: number;
     scrollRestoration: ScrollRestoration;
@@ -9069,15 +9069,15 @@ interface IDBCursor {
     continuePrimaryKey(key: IDBValidKey, primaryKey: IDBValidKey): void;
     /**
      * Delete the record pointed at by the cursor with a new value.
-     *
+     * 
      * If successful, request's result will be undefined.
      */
     delete(): IDBRequest<undefined>;
     /**
      * Updated the record pointed at by the cursor with a new value.
-     *
+     * 
      * Throws a "DataError" DOMException if the effective object store uses in-line keys and the key would have changed.
-     *
+     * 
      * If successful, request's result will be the record's key.
      */
     update(value: any): IDBRequest<IDBValidKey>;
@@ -9132,13 +9132,13 @@ interface IDBDatabase extends EventTarget {
     close(): void;
     /**
      * Creates a new object store with the given name and options and returns a new IDBObjectStore.
-     *
+     * 
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createObjectStore(name: string, options?: IDBObjectStoreParameters): IDBObjectStore;
     /**
      * Deletes the object store with the given name.
-     *
+     * 
      * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     deleteObjectStore(name: string): void;
@@ -9161,7 +9161,7 @@ declare var IDBDatabase: {
 interface IDBFactory {
     /**
      * Compares two values as keys. Returns -1 if key1 precedes key2, 1 if key2 precedes key1, and 0 if the keys are equal.
-     *
+     * 
      * Throws a "DataError" DOMException if either input is not a valid key.
      */
     cmp(first: any, second: any): number;
@@ -9195,43 +9195,43 @@ interface IDBIndex {
     readonly unique: boolean;
     /**
      * Retrieves the number of records matching the given key or key range in query.
-     *
+     * 
      * If successful, request's result will be the count.
      */
     count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Retrieves the value of the first record matching the given key or key range in query.
-     *
+     * 
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
     get(key: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
-     *
+     * 
      * If successful, request's result will be an Array of the values.
      */
     getAll(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
-     *
+     * 
      * If successful, request's result will be an Array of the keys.
      */
     getAllKeys(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the given key or key range in query.
-     *
+     * 
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
     getKey(key: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     /**
      * Opens a cursor over the records matching query, ordered by direction. If query is null, all records in index are matched.
-     *
+     * 
      * If successful, request's result will be an IDBCursorWithValue, or null if there were no matching records.
      */
     openCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in index are matched.
-     *
+     * 
      * If successful, request's result will be an IDBCursor, or null if there were no matching records.
      */
     openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
@@ -9287,7 +9287,7 @@ declare var IDBKeyRange: {
     upperBound(upper: any, open?: boolean): IDBKeyRange;
 };
 
-/** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) */
+/** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) */
 interface IDBObjectStore {
     /**
      * Returns true if the store has a key generator, and false otherwise.
@@ -9311,88 +9311,88 @@ interface IDBObjectStore {
     readonly transaction: IDBTransaction;
     /**
      * Adds or updates a record in store with the given value and key.
-     *
+     * 
      * If the store uses in-line keys and key is specified a "DataError" DOMException will be thrown.
-     *
+     * 
      * If put() is used, any existing record with the key will be replaced. If add() is used, and if a record with the key already exists the request will fail, with request's error set to a "ConstraintError" DOMException.
-     *
+     * 
      * If successful, request's result will be the record's key.
      */
     add(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
     /**
      * Deletes all records in store.
-     *
+     * 
      * If successful, request's result will be undefined.
      */
     clear(): IDBRequest<undefined>;
     /**
      * Retrieves the number of records matching the given key or key range in query.
-     *
+     * 
      * If successful, request's result will be the count.
      */
     count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     createIndex(name: string, keyPath: string | string[], options?: IDBIndexParameters): IDBIndex;
     /**
      * Deletes records in store with the given key or in the given key range in query.
-     *
+     * 
      * If successful, request's result will be undefined.
      */
     delete(key: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
     /**
      * Deletes the index in store with the given name.
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
      */
     deleteIndex(name: string): void;
     /**
      * Retrieves the value of the first record matching the given key or key range in query.
-     *
+     * 
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
     get(query: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
-     *
+     * 
      * If successful, request's result will be an Array of the values.
      */
     getAll(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
-     *
+     * 
      * If successful, request's result will be an Array of the keys.
      */
     getAllKeys(query?: IDBValidKey | IDBKeyRange | null, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the given key or key range in query.
-     *
+     * 
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
     getKey(query: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     index(name: string): IDBIndex;
     /**
      * Opens a cursor over the records matching query, ordered by direction. If query is null, all records in store are matched.
-     *
+     * 
      * If successful, request's result will be an IDBCursorWithValue pointing at the first matching record, or null if there were no matching records.
      */
     openCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in store are matched.
-     *
+     * 
      * If successful, request's result will be an IDBCursor pointing at the first matching record, or null if there were no matching records.
      */
     openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
     /**
      * Adds or updates a record in store with the given value and key.
-     *
+     * 
      * If the store uses in-line keys and key is specified a "DataError" DOMException will be thrown.
-     *
+     * 
      * If put() is used, any existing record with the key will be replaced. If add() is used, and if a record with the key already exists the request will fail, with request's error set to a "ConstraintError" DOMException.
-     *
+     * 
      * If successful, request's result will be the record's key.
      */
     put(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
@@ -9519,7 +9519,7 @@ declare var IDBVersionChangeEvent: {
     new(type: string, eventInitDict?: IDBVersionChangeEventInit): IDBVersionChangeEvent;
 };
 
-/** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. */
+/** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. */
 interface IIRFilterNode extends AudioNode {
     getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
 }
@@ -9712,25 +9712,25 @@ interface Location {
     readonly ancestorOrigins: DOMStringList;
     /**
      * Returns the Location object's URL's fragment (includes leading "#" if non-empty).
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed fragment (ignores leading "#").
      */
     hash: string;
     /**
      * Returns the Location object's URL's host and port (if different from the default port for the scheme).
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed host and port.
      */
     host: string;
     /**
      * Returns the Location object's URL's host.
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed host.
      */
     hostname: string;
     /**
      * Returns the Location object's URL.
-     *
+     * 
      * Can be set, to navigate to the given URL.
      */
     href: string;
@@ -9741,25 +9741,25 @@ interface Location {
     readonly origin: string;
     /**
      * Returns the Location object's URL's path.
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed path.
      */
     pathname: string;
     /**
      * Returns the Location object's URL's port.
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed port.
      */
     port: string;
     /**
      * Returns the Location object's URL's scheme.
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed scheme.
      */
     protocol: string;
     /**
      * Returns the Location object's URL's query (includes leading "?" if non-empty).
-     *
+     * 
      * Can be set, to navigate to the same URL with a changed query (ignores leading "?").
      */
     search: string;
@@ -10127,7 +10127,7 @@ interface MediaKeySessionEventMap {
     "message": MediaKeyMessageEvent;
 }
 
-/** This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM). */
+/** This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM). */
 interface MediaKeySession extends EventTarget {
     readonly closed: Promise<void>;
     readonly expiration: number;
@@ -10273,7 +10273,7 @@ interface MediaStreamEventMap {
     "removetrack": MediaStreamTrackEvent;
 }
 
-/** A stream of media content. A stream consists of several tracks such as video or audio tracks. Each track is specified as an instance of MediaStreamTrack. */
+/** A stream of media content. A stream consists of several tracks such as video or audio tracks. Each track is specified as an instance of MediaStreamTrack. */
 interface MediaStream extends EventTarget {
     readonly active: boolean;
     readonly id: string;
@@ -10464,7 +10464,7 @@ interface MessagePort extends EventTarget {
     close(): void;
     /**
      * Posts a message through the channel. Objects listed in transfer are transferred, not just cloned, meaning that they are no longer usable on the sending side.
-     *
+     * 
      * Throws a "DataCloneError" DOMException if transfer contains duplicate objects or port, or if message could not be cloned.
      */
     postMessage(message: any, transfer: Transferable[]): void;
@@ -10509,7 +10509,7 @@ declare var MimeType: {
     new(): MimeType;
 };
 
-/** Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes. */
+/** Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes. */
 interface MimeTypeArray {
     readonly length: number;
     item(index: number): MimeType | null;
@@ -10581,7 +10581,7 @@ interface MutationObserver {
     disconnect(): void;
     /**
      * Instructs the user agent to observe a given target (a node) and report any mutations based on the criteria given by options (an object).
-     *
+     * 
      * The options argument allows for setting mutation observation options via object members.
      */
     observe(target: Node, options?: MutationObserverInit): void;
@@ -11172,27 +11172,27 @@ declare var OfflineAudioContext: {
 interface OffscreenCanvas extends EventTarget {
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
-     *
+     * 
      * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
      */
     height: number;
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
-     *
+     * 
      * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
      */
     width: number;
     /**
      * Returns a promise that will fulfill with a new Blob object representing a file containing the image in the OffscreenCanvas object.
-     *
+     * 
      * The argument, if provided, is a dictionary that controls the encoding options of the image file to be created. The type field specifies the file format and has a default value of "image/png"; that type is also used if the requested type isn't supported. If the image format supports variable quality (such as "image/jpeg"), then the quality field is a number in the range 0.0 to 1.0 inclusive indicating the desired quality level for the resulting image.
      */
     convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
     /**
      * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
-     *
+     * 
      * This specification defines the "2d" context below, which is similar but distinct from the "2d" context that is created from a canvas element. The WebGL specifications define the "webgl" and "webgl2" contexts. [WEBGL]
-     *
+     * 
      * Returns null if the canvas has already been initialized with another context type (e.g., trying to get a "2d" context after getting a "webgl" context).
      */
     getContext(contextId: "2d", options?: CanvasRenderingContext2DSettings): OffscreenCanvasRenderingContext2D | null;
@@ -11221,7 +11221,7 @@ declare var OffscreenCanvasRenderingContext2D: {
     new(): OffscreenCanvasRenderingContext2D;
 };
 
-/** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. */
+/** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. */
 interface OscillatorNode extends AudioScheduledSourceNode {
     readonly detune: AudioParam;
     readonly frequency: AudioParam;
@@ -11268,11 +11268,11 @@ declare var OverflowEvent: {
 interface PageTransitionEvent extends Event {
     /**
      * For the pageshow event, returns false if the page is newly being loaded (and the load event will fire). Otherwise, returns true.
-     *
+     * 
      * For the pagehide event, returns false if the page is going away for the last time. Otherwise, returns true, meaning that (if nothing conspires to make the page unsalvageable) the page might be reused if the user navigates back to this page.
-     *
+     * 
      * Things that can cause the page to be unsalvageable include:
-     *
+     * 
      * Listening for beforeunload events
      * Listening for unload events
      * Having iframes that are not salvageable
@@ -11330,13 +11330,13 @@ interface ParentNode {
     readonly lastElementChild: Element | null;
     /**
      * Inserts nodes after the last child of node, while replacing strings in nodes with equivalent Text nodes.
-     *
+     * 
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     append(...nodes: (Node | string)[]): void;
     /**
      * Inserts nodes before the first child of node, while replacing strings in nodes with equivalent Text nodes.
-     *
+     * 
      * Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
      */
     prepend(...nodes: (Node | string)[]): void;
@@ -11521,7 +11521,7 @@ declare var PerformanceEntry: {
     new(): PerformanceEntry;
 };
 
-/** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. */
+/** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. */
 interface PerformanceMark extends PerformanceEntry {
 }
 
@@ -11746,7 +11746,7 @@ declare var Plugin: {
     new(): Plugin;
 };
 
-/** Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods. */
+/** Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods. */
 interface PluginArray {
     readonly length: number;
     item(index: number): Plugin | null;
@@ -12253,7 +12253,7 @@ declare var RTCPeerConnectionIceEvent: {
     new(type: string, eventInitDict?: RTCPeerConnectionIceEventInit): RTCPeerConnectionIceEvent;
 };
 
-/** This WebRTC API interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection. */
+/** This WebRTC API interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection. */
 interface RTCRtpReceiver {
     readonly rtcpTransport: RTCDtlsTransport | null;
     readonly track: MediaStreamTrack;
@@ -12843,7 +12843,7 @@ declare var SVGAnimatedRect: {
     new(): SVGAnimatedRect;
 };
 
-/** The SVGAnimatedString interface represents string attributes which can be animated from each SVG declaration. You need to create SVG attribute before doing anything else, everything should be declared inside this. */
+/** The SVGAnimatedString interface represents string attributes which can be animated from each SVG declaration. You need to create SVG attribute before doing anything else, everything should be declared inside this. */
 interface SVGAnimatedString {
     readonly animVal: string;
     baseVal: string;
@@ -14847,7 +14847,7 @@ declare var SecurityPolicyViolationEvent: {
     new(type: string, eventInitDict?: SecurityPolicyViolationEventInit): SecurityPolicyViolationEvent;
 };
 
-/** A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a Selection object for examination or modification, call Window.getSelection(). */
+/** A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a Selection object for examination or modification, call Window.getSelection(). */
 interface Selection {
     readonly anchorNode: Node | null;
     readonly anchorOffset: number;
@@ -14913,7 +14913,7 @@ interface ServiceWorkerContainerEventMap {
     "messageerror": MessageEvent;
 }
 
-/** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. */
+/** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. */
 interface ServiceWorkerContainer extends EventTarget {
     readonly controller: ServiceWorker | null;
     oncontrollerchange: ((this: ServiceWorkerContainer, ev: Event) => any) | null;
@@ -14935,7 +14935,7 @@ declare var ServiceWorkerContainer: {
     new(): ServiceWorkerContainer;
 };
 
-/** This ServiceWorker API interface contains information about an event sent to a ServiceWorkerContainer target. This extends the default message event to allow setting a ServiceWorker object as the source of a message. The event object is accessed via the handler function of a message event, when fired by a message received from a service worker. */
+/** This ServiceWorker API interface contains information about an event sent to a ServiceWorkerContainer target. This extends the default message event to allow setting a ServiceWorker object as the source of a message. The event object is accessed via the handler function of a message event, when fired by a message received from a service worker. */
 interface ServiceWorkerMessageEvent extends Event {
     readonly data: any;
     readonly lastEventId: string;
@@ -15020,7 +15020,7 @@ interface SourceBufferEventMap {
     "updatestart": Event;
 }
 
-/** A chunk of media to be passed into an HTMLMediaElement and played, via a MediaSource object. This can be made up of one or several media segments. */
+/** A chunk of media to be passed into an HTMLMediaElement and played, via a MediaSource object. This can be made up of one or several media segments. */
 interface SourceBuffer extends EventTarget {
     appendWindowEnd: number;
     appendWindowStart: number;
@@ -15321,7 +15321,7 @@ interface Storage {
     removeItem(key: string): void;
     /**
      * Sets the value of the pair identified by key to value, creating a new key/value pair if none existed for key previously.
-     *
+     * 
      * Throws a "QuotaExceededError" DOMException exception if the new value couldn't be set. (Setting could fail if, e.g., the user has disabled storage for the site, or if the quota has been exceeded.)
      */
     setItem(key: string, value: string): void;
@@ -15467,11 +15467,11 @@ declare var Text: {
     new(data?: string): Text;
 };
 
-/** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
+/** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
 interface TextDecoder extends TextDecoderCommon {
     /**
      * Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented stream. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
-     *
+     * 
      * ```
      * var string = "", decoder = new TextDecoder(encoding), buffer;
      * while(buffer = next_chunk()) {
@@ -15479,7 +15479,7 @@ interface TextDecoder extends TextDecoderCommon {
      * }
      * string += decoder.decode(); // end-of-stream
      * ```
-     *
+     * 
      * If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
      */
     decode(input?: BufferSource, options?: TextDecodeOptions): string;
@@ -15652,9 +15652,9 @@ interface TextTrack extends EventTarget {
     readonly cues: TextTrackCueList | null;
     /**
      * Returns the ID of the given track.
-     *
+     * 
      * For in-band tracks, this is the ID that can be used with a fragment if the format supports media fragment syntax, and that can be used with the getTrackById() method.
-     *
+     * 
      * For TextTrack objects corresponding to track elements, this is the ID of the track element.
      */
     readonly id: string;
@@ -15676,7 +15676,7 @@ interface TextTrack extends EventTarget {
     readonly language: string;
     /**
      * Returns the text track mode, represented by a string from the following list:
-     *
+     * 
      * Can be set, to change the mode.
      */
     mode: TextTrackMode;
@@ -15710,13 +15710,13 @@ interface TextTrackCueEventMap {
 interface TextTrackCue extends EventTarget {
     /**
      * Returns the text track cue end time, in seconds.
-     *
+     * 
      * Can be set.
      */
     endTime: number;
     /**
      * Returns the text track cue identifier.
-     *
+     * 
      * Can be set.
      */
     id: string;
@@ -15724,13 +15724,13 @@ interface TextTrackCue extends EventTarget {
     onexit: ((this: TextTrackCue, ev: Event) => any) | null;
     /**
      * Returns true if the text track cue pause-on-exit flag is set, false otherwise.
-     *
+     * 
      * Can be set.
      */
     pauseOnExit: boolean;
     /**
      * Returns the text track cue start time, in seconds.
-     *
+     * 
      * Can be set.
      */
     startTime: number;
@@ -15756,7 +15756,7 @@ interface TextTrackCueList {
     readonly length: number;
     /**
      * Returns the first text track cue (in text track cue order) with text track cue identifier id.
-     *
+     * 
      * Returns null if none of the cues have the given identifier or if the argument is the empty string.
      */
     getCueById(id: string): TextTrackCue | null;
@@ -15792,7 +15792,7 @@ declare var TextTrackList: {
     new(): TextTrackList;
 };
 
-/** Used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements. */
+/** Used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements. */
 interface TimeRanges {
     /**
      * Returns the number of ranges in the object.
@@ -15800,13 +15800,13 @@ interface TimeRanges {
     readonly length: number;
     /**
      * Returns the time for the end of the range with the given index.
-     *
+     * 
      * Throws an "IndexSizeError" DOMException if the index is out of range.
      */
     end(index: number): number;
     /**
      * Returns the time for the start of the range with the given index.
-     *
+     * 
      * Throws an "IndexSizeError" DOMException if the index is out of range.
      */
     start(index: number): number;
@@ -15949,7 +15949,7 @@ declare var UIEvent: {
     new(type: string, eventInitDict?: UIEventInit): UIEvent;
 };
 
-/** The URL interface represents an object providing static methods used for creating object URLs. */
+/** The URL interface represents an object providing static methods used for creating object URLs. */
 interface URL {
     hash: string;
     host: string;
@@ -18272,13 +18272,13 @@ interface WebSocketEventMap {
 interface WebSocket extends EventTarget {
     /**
      * Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
-     *
+     * 
      * Can be set, to change how binary data is returned. The default is "blob".
      */
     binaryType: BinaryType;
     /**
      * Returns the number of bytes of application data (UTF-8 text and binary data) that have been queued using send() but not yet been transmitted to the network.
-     *
+     * 
      * If the WebSocket connection is closed, this attribute's value will only increase with each call to the send() method. (The number does not reset to zero once the connection closes.)
      */
     readonly bufferedAmount: number;
@@ -18687,7 +18687,7 @@ declare var Worklet: {
     new(): Worklet;
 };
 
-/** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
+/** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
 interface WritableStream<W = any> {
     readonly locked: boolean;
     abort(reason?: any): Promise<void>;
@@ -18699,7 +18699,7 @@ declare var WritableStream: {
     new<W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>;
 };
 
-/** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
+/** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
 interface WritableStreamDefaultController {
     error(error?: any): void;
 }
@@ -18755,26 +18755,26 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     readonly response: any;
     /**
      * Returns the text response.
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "text".
      */
     readonly responseText: string;
     /**
      * Returns the response type.
-     *
+     * 
      * Can be set to change the response type. Values are: the empty string (default), "arraybuffer", "blob", "document", "json", and "text".
-     *
+     * 
      * When set: setting to "document" is ignored if current global object is not a Window object.
-     *
+     * 
      * When set: throws an "InvalidStateError" DOMException if state is loading or done.
-     *
+     * 
      * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
      */
     responseType: XMLHttpRequestResponseType;
     readonly responseURL: string;
     /**
      * Returns the document response.
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "document".
      */
     readonly responseXML: Document | null;
@@ -18782,7 +18782,7 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     readonly statusText: string;
     /**
      * Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the request has not yet completed, and the synchronous flag is unset, a timeout event will then be dispatched, or a "TimeoutError" DOMException will be thrown otherwise (for the send() method).
-     *
+     * 
      * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
      */
     timeout: number;
@@ -18792,7 +18792,7 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     readonly upload: XMLHttpRequestUpload;
     /**
      * True when credentials are to be included in a cross-origin request. False when they are to be excluded in a cross-origin request and when cookies are to be ignored in its response. Initially false.
-     *
+     * 
      * When set: throws an "InvalidStateError" DOMException if state is not unsent or opened, or if the send() flag is set.
      */
     withCredentials: boolean;
@@ -18804,32 +18804,32 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     getResponseHeader(name: string): string | null;
     /**
      * Sets the request method, request URL, and synchronous flag.
-     *
+     * 
      * Throws a "SyntaxError" DOMException if either method is not a valid HTTP method or url cannot be parsed.
-     *
+     * 
      * Throws a "SecurityError" DOMException if method is a case-insensitive match for `CONNECT`, `TRACE`, or `TRACK`.
-     *
+     * 
      * Throws an "InvalidAccessError" DOMException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
      */
     open(method: string, url: string): void;
     open(method: string, url: string, async: boolean, username?: string | null, password?: string | null): void;
     /**
      * Acts as if the `Content-Type` header value for response is mime. (It does not actually change the header though.)
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if state is loading or done.
      */
     overrideMimeType(mime: string): void;
     /**
      * Initiates the request. The body argument provides the request body, if any, and is ignored if the request method is GET or HEAD.
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
      */
     send(body?: Document | BodyInit | null): void;
     /**
      * Combines a header in author request headers.
-     *
+     * 
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
-     *
+     * 
      * Throws a "SyntaxError" DOMException if name is not a header name or if value is not a header value.
      */
     setRequestHeader(name: string, value: string): void;
@@ -18905,7 +18905,7 @@ declare var XMLSerializer: {
     new(): XMLSerializer;
 };
 
-/** The XPathEvaluator interface allows to compile and evaluate XPath expressions. */
+/** The XPathEvaluator interface allows to compile and evaluate XPath expressions. */
 interface XPathEvaluator extends XPathEvaluatorBase {
 }
 
@@ -19036,52 +19036,52 @@ declare namespace CSS {
 declare namespace WebAssembly {
     interface CompileError {
     }
-
+    
     var CompileError: {
         prototype: CompileError;
         new(): CompileError;
     };
-
+    
     interface Global {
         value: any;
         valueOf(): any;
     }
-
+    
     var Global: {
         prototype: Global;
         new(descriptor: GlobalDescriptor, v?: any): Global;
     };
-
+    
     interface Instance {
         readonly exports: Exports;
     }
-
+    
     var Instance: {
         prototype: Instance;
         new(module: Module, importObject?: Imports): Instance;
     };
-
+    
     interface LinkError {
     }
-
+    
     var LinkError: {
         prototype: LinkError;
         new(): LinkError;
     };
-
+    
     interface Memory {
         readonly buffer: ArrayBuffer;
         grow(delta: number): number;
     }
-
+    
     var Memory: {
         prototype: Memory;
         new(descriptor: MemoryDescriptor): Memory;
     };
-
+    
     interface Module {
     }
-
+    
     var Module: {
         prototype: Module;
         new(bytes: BufferSource): Module;
@@ -19089,59 +19089,59 @@ declare namespace WebAssembly {
         exports(moduleObject: Module): ModuleExportDescriptor[];
         imports(moduleObject: Module): ModuleImportDescriptor[];
     };
-
+    
     interface RuntimeError {
     }
-
+    
     var RuntimeError: {
         prototype: RuntimeError;
         new(): RuntimeError;
     };
-
+    
     interface Table {
         readonly length: number;
         get(index: number): Function | null;
         grow(delta: number): number;
         set(index: number, value: Function | null): void;
     }
-
+    
     var Table: {
         prototype: Table;
         new(descriptor: TableDescriptor): Table;
     };
-
+    
     interface GlobalDescriptor {
         mutable?: boolean;
         value: ValueType;
     }
-
+    
     interface MemoryDescriptor {
         initial: number;
         maximum?: number;
     }
-
+    
     interface ModuleExportDescriptor {
         kind: ImportExportKind;
         name: string;
     }
-
+    
     interface ModuleImportDescriptor {
         kind: ImportExportKind;
         module: string;
         name: string;
     }
-
+    
     interface TableDescriptor {
         element: TableKind;
         initial: number;
         maximum?: number;
     }
-
+    
     interface WebAssemblyInstantiatedSource {
         instance: Instance;
         module: Module;
     }
-
+    
     type ImportExportKind = "function" | "global" | "memory" | "table";
     type TableKind = "anyfunc";
     type ValueType = "f32" | "f64" | "i32" | "i64";
