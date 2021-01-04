@@ -21,7 +21,6 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(41,11): error TS2769: 
     The 'this' context of type '(this: C, a: number, b: string) => string' is not assignable to method's 'this' of type '(this: C, ...args: (10 | 20)[]) => string'.
       Types of parameters 'b' and 'args' are incompatible.
         Type 'number' is not assignable to type 'string'.
-          Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(42,11): error TS2769: No overload matches this call.
   Overload 1 of 6, '(this: (this: C, a: number, b: string) => string, thisArg: C): (a: number, b: string) => string', gave the following error.
     Argument of type 'undefined' is not assignable to parameter of type 'C'.
@@ -49,7 +48,6 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(62,11): error TS2769: 
         Type 'new (a: number, b: string) => C' is not assignable to type 'new (...args: (10 | 20)[]) => C'.
           Types of parameters 'b' and 'args' are incompatible.
             Type 'number' is not assignable to type 'string'.
-              Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(65,3): error TS2554: Expected 3 arguments, but got 2.
 tests/cases/conformance/functions/strictBindCallApply1.ts(66,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(67,24): error TS2554: Expected 3 arguments, but got 4.
@@ -133,7 +131,6 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
 !!! error TS2769:     The 'this' context of type '(this: C, a: number, b: string) => string' is not assignable to method's 'this' of type '(this: C, ...args: (10 | 20)[]) => string'.
 !!! error TS2769:       Types of parameters 'b' and 'args' are incompatible.
 !!! error TS2769:         Type 'number' is not assignable to type 'string'.
-!!! error TS2769:           Type 'number' is not assignable to type 'string'.
     let f14 = c.foo.bind(undefined);  // Error
               ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
@@ -192,7 +189,6 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
 !!! error TS2769:         Type 'new (a: number, b: string) => C' is not assignable to type 'new (...args: (10 | 20)[]) => C'.
 !!! error TS2769:           Types of parameters 'b' and 'args' are incompatible.
 !!! error TS2769:             Type 'number' is not assignable to type 'string'.
-!!! error TS2769:               Type 'number' is not assignable to type 'string'.
     
     C.call(c, 10, "hello");
     C.call(c, 10);  // Error

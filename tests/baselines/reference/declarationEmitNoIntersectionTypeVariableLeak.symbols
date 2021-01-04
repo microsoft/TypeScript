@@ -1,0 +1,41 @@
+=== tests/cases/compiler/declarationEmitNoIntersectionTypeVariableLeak.ts ===
+type Wrap<A> = {
+>Wrap : Symbol(Wrap, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 0, 0))
+>A : Symbol(A, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 0, 10))
+
+    nest: A
+>nest : Symbol(nest, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 0, 16))
+>A : Symbol(A, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 0, 10))
+
+};
+interface PreventInliningInDeclarationEmit {
+>PreventInliningInDeclarationEmit : Symbol(PreventInliningInDeclarationEmit, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 2, 2))
+}
+export type PublicWrap<X, Y = {}> = Wrap<Y> & PreventInliningInDeclarationEmit;
+>PublicWrap : Symbol(PublicWrap, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 4, 1))
+>X : Symbol(X, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 5, 23))
+>Y : Symbol(Y, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 5, 25))
+>Wrap : Symbol(Wrap, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 0, 0))
+>Y : Symbol(Y, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 5, 25))
+>PreventInliningInDeclarationEmit : Symbol(PreventInliningInDeclarationEmit, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 2, 2))
+
+export function fn<T>(arg: T): PublicWrap<T> {
+>fn : Symbol(fn, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 5, 79))
+>T : Symbol(T, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 6, 19))
+>arg : Symbol(arg, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 6, 22))
+>T : Symbol(T, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 6, 19))
+>PublicWrap : Symbol(PublicWrap, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 4, 1))
+>T : Symbol(T, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 6, 19))
+
+    return { nest: arg }
+>nest : Symbol(nest, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 7, 12))
+>arg : Symbol(arg, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 6, 22))
+}
+const nested = fn({ foo: 1 });   // Syntax Error in declaration emit here
+>nested : Symbol(nested, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 9, 5))
+>fn : Symbol(fn, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 5, 79))
+>foo : Symbol(foo, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 9, 19))
+
+export default nested;
+>nested : Symbol(nested, Decl(declarationEmitNoIntersectionTypeVariableLeak.ts, 9, 5))
+

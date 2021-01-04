@@ -1,0 +1,33 @@
+=== tests/cases/compiler/declarationEmitNoIntersectionTypeVariableLeak.ts ===
+type Wrap<A> = {
+>Wrap : Wrap<A>
+
+    nest: A
+>nest : A
+
+};
+interface PreventInliningInDeclarationEmit {
+}
+export type PublicWrap<X, Y = {}> = Wrap<Y> & PreventInliningInDeclarationEmit;
+>PublicWrap : PublicWrap<unknown, Y>
+
+export function fn<T>(arg: T): PublicWrap<T> {
+>fn : <T>(arg: T) => PublicWrap<T>
+>arg : T
+
+    return { nest: arg }
+>{ nest: arg } : { nest: T; }
+>nest : T
+>arg : T
+}
+const nested = fn({ foo: 1 });   // Syntax Error in declaration emit here
+>nested : PublicWrap<unknown, {}>
+>fn({ foo: 1 }) : PublicWrap<unknown, {}>
+>fn : <T>(arg: T) => PublicWrap<unknown, {}>
+>{ foo: 1 } : { foo: number; }
+>foo : number
+>1 : 1
+
+export default nested;
+>nested : PublicWrap<unknown, {}>
+
