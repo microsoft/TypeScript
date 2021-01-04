@@ -15,10 +15,10 @@
 >new URL("../hamsters.jpg", import.meta.url) : URL
 >URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
 >"../hamsters.jpg" : "../hamsters.jpg"
->import.meta.url : any
+>import.meta.url : string
 >import.meta : ImportMeta
 >meta : any
->url : any
+>url : string
 >toString : () => string
 
   const blob = await response.blob();
