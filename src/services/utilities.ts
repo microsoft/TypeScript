@@ -1588,9 +1588,11 @@ namespace ts {
         return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
-    export function getNodeModifiers(node: Node): string {
-        const flags = isDeclaration(node) ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) : ModifierFlags.None;
+    export function getNodeModifiers(node: Node, excludeFlags = ModifierFlags.None): string {
         const result: string[] = [];
+        const flags = isDeclaration(node)
+            ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) & ~excludeFlags
+            : ModifierFlags.None;
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);

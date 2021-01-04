@@ -1,0 +1,110 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags1.ts",
+      "position": 298
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 298,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Doc",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "author",
+          "text": "Me <me@domain.tld>"
+        },
+        {
+          "name": "augments",
+          "text": "C<T> Augments it"
+        },
+        {
+          "name": "template",
+          "text": "T A template"
+        },
+        {
+          "name": "type",
+          "text": "{number | string} A type"
+        },
+        {
+          "name": "typedef",
+          "text": "NumOrStr"
+        },
+        {
+          "name": "property",
+          "text": "{number} x The prop"
+        },
+        {
+          "name": "param",
+          "text": "x The param"
+        },
+        {
+          "name": "returns",
+          "text": "The result"
+        },
+        {
+          "name": "see",
+          "text": "x (the parameter)"
+        }
+      ]
+    }
+  }
+]

@@ -4,7 +4,8 @@ namespace ts.codefix {
     type AcceptedNameType = Identifier | StringLiteral;
     type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
-    interface Info {
+    type Info = AccessorInfo | refactor.RefactorErrorInfo;
+    interface AccessorInfo {
         readonly container: ContainerDeclaration;
         readonly isStatic: boolean;
         readonly isReadonly: boolean;
@@ -16,20 +17,12 @@ namespace ts.codefix {
         readonly renameAccessor: boolean;
     }
 
-    type InfoOrError = {
-        info: Info,
-        error?: never
-    } | {
-        info?: never,
-        error: string
-    };
-
     export function generateAccessorFromProperty(file: SourceFile, program: Program, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
         const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, program, start, end);
-        if (!fieldInfo || !fieldInfo.info) return undefined;
+        if (!fieldInfo || refactor.isRefactorErrorInfo(fieldInfo)) return undefined;
 
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
-        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo.info;
+        const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
         suppressLeadingAndTrailingTrivia(accessorName);
@@ -112,7 +105,7 @@ namespace ts.codefix {
         return modifierFlags;
     }
 
-    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): InfoOrError | undefined {
+    export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): Info | undefined {
         const node = getTokenAtPosition(file, start);
         const cursorRequest = start === end && considerEmptySpans;
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
@@ -142,17 +135,15 @@ namespace ts.codefix {
         const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
         const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
-            info: {
-                isStatic: hasStaticModifier(declaration),
-                isReadonly: hasEffectiveReadonlyModifier(declaration),
-                type: getDeclarationType(declaration, program),
-                container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
-                originalName: (<AcceptedNameType>declaration.name).text,
-                declaration,
-                fieldName,
-                accessorName,
-                renameAccessor: startWithUnderscore
-            }
+            isStatic: hasStaticModifier(declaration),
+            isReadonly: hasEffectiveReadonlyModifier(declaration),
+            type: getDeclarationType(declaration, program),
+            container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
+            originalName: (<AcceptedNameType>declaration.name).text,
+            declaration,
+            fieldName,
+            accessorName,
+            renameAccessor: startWithUnderscore
         };
     }
 
