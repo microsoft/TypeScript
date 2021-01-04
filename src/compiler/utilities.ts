@@ -2992,7 +2992,7 @@ namespace ts {
     }
 
     export function getEffectiveImplementsTypeNodes(node: ClassLikeDeclaration): undefined | readonly ExpressionWithTypeArguments[]{
-        if(isInJSFile(node)) {
+        if (isInJSFile(node)) {
             return getJSDocImplementsTags(node).map(n => n.class);
         }
         else {
