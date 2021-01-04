@@ -192,7 +192,7 @@ namespace ts.Completions {
 
         switch (completionData.kind) {
             case CompletionDataKind.Data:
-                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, preferences);
+                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, preferences, host);
             case CompletionDataKind.JsDocTagName:
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
@@ -215,7 +215,7 @@ namespace ts.Completions {
         return location?.kind === SyntaxKind.Identifier ? createTextSpanFromNode(location) : undefined;
     }
 
-    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, preferences: UserPreferences): CompletionInfo | undefined {
+    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, preferences: UserPreferences, host: LanguageServiceHost): CompletionInfo | undefined {
         const {
             symbols,
             completionKind,
@@ -232,9 +232,12 @@ namespace ts.Completions {
             symbolToSortTextMap,
         } = completionData;
 
-        const completionInfo = getJsxClosingTagCompletion(location, sourceFile);
-        if (completionInfo) {
-            return completionInfo;
+        // Verify if the file is JSX language variant
+        if (getLanguageVariant(getScriptKind(sourceFile.fileName, host)) === LanguageVariant.JSX) {
+            const completionInfo = getJsxClosingTagCompletion(location, sourceFile);
+            if (completionInfo) {
+                return completionInfo;
+            }
         }
 
         const entries: CompletionEntry[] = [];
@@ -323,17 +326,8 @@ namespace ts.Completions {
     }
 
     function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: SourceFile): CompletionInfo | undefined {
-        // When there is a full closing tag and the tag includes a property access expression,
-        // the node hierarchy to get the JSX closing element is at grand parent of location.
-        // For example:
-        //   var x = <Comp.Item></Comp.Item/*1*/
-        //   var y = <Comp.Item></Comp.Item/*2*/>
-        // We wanna bail on the 10th tries or if the parent is a jsx opening element
-        let tries = 0;
-        const jsxClosingElement = findAncestor(location, (node) =>
-            !node ||
-            isJsxOpeningElement(node) ||
-            (tries++, tries > 10)
+        // We wanna walk up the tree till either we find a JSX closing element, JSX opening element or quit at end
+        const jsxClosingElement = findAncestor(location, node => isJsxOpeningElement(node)
                 ? "quit"
                 : isJsxClosingElement(node)) as JsxClosingElement | undefined;
 
