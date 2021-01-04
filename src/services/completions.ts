@@ -233,7 +233,7 @@ namespace ts.Completions {
         } = completionData;
 
         // Verify if the file is JSX language variant
-        if (getLanguageVariant(getScriptKind(sourceFile.fileName, host)) === LanguageVariant.JSX) {
+        if (getLanguageVariant(sourceFile.scriptKind) === LanguageVariant.JSX) {
             const completionInfo = getJsxClosingTagCompletion(location, sourceFile);
             if (completionInfo) {
                 return completionInfo;
