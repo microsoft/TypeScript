@@ -86,7 +86,7 @@ function f2() {
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->elOrA : string | false | (string | false)[]
+>elOrA : (string | false) | (string | false)[]
 >elOrA : (string | false)[]
 >[elOrA] : (string | false)[]
 >elOrA : string | false

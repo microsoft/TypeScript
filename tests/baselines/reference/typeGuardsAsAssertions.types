@@ -53,7 +53,7 @@ export function fn<r>(makeSome: () => r): void {
 >cond : boolean
 
         result;  // Some<r> | None
->result : None | Some<r>
+>result : Optional<r>
 
         result = someFrom(isSome(result) ? result.some : makeSome());
 >result = someFrom(isSome(result) ? result.some : makeSome()) : { some: r; }
@@ -63,7 +63,7 @@ export function fn<r>(makeSome: () => r): void {
 >isSome(result) ? result.some : makeSome() : r
 >isSome(result) : boolean
 >isSome : <a>(value: Optional<a>) => value is Some<a>
->result : None | Some<r>
+>result : Optional<r>
 >result.some : r
 >result : Some<r>
 >some : r

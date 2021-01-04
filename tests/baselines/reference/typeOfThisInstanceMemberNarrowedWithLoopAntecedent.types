@@ -92,9 +92,9 @@ class SomeClass2 {
         let n: number = this.state?.data; // This should be an error
 >n : number
 >this.state?.data : string | number
->this.state : { type: "numberVariant"; data: number; } | { type: "stringVariant"; data: string; }
+>this.state : State
 >this : this
->state : { type: "numberVariant"; data: number; } | { type: "stringVariant"; data: string; }
+>state : State
 >data : string | number
     }
 }
