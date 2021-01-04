@@ -9,7 +9,7 @@ type Wrap<A> = {
 interface PreventInliningInDeclarationEmit {
 }
 export type PublicWrap<X, Y = {}> = Wrap<Y> & PreventInliningInDeclarationEmit;
->PublicWrap : PublicWrap<unknown, Y>
+>PublicWrap : PublicWrap<X, Y>
 
 export function fn<T>(arg: T): PublicWrap<T> {
 >fn : <T>(arg: T) => PublicWrap<T>

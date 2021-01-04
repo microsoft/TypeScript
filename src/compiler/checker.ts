@@ -4535,16 +4535,16 @@ namespace ts {
                     // whose cached value is unreachable with `unknown`, as their actual value has no bearing on the constructed type. This can cause some visual oddness,
                     // like `fn<T>(arg: T): PublicWrap<T>` at a use-site becoming `fn<{x: number}>(arg: {x: number}): PublicWrap<unknown>` when `T` is independent,
                     // but has no bearing on relationships, (as the underlying types are the still just the one type) and always produces a functioning declaration file.
-                    //const variances = getAliasVariances(type.aliasSymbol);
-                    //const typeNodeOverrides = map(variances, (v, i) => {
-                    //    const typeArg = type.aliasTypeArguments?.[i];
-                    //    if ((v & VarianceFlags.VarianceMask) === VarianceFlags.Independent && !!typeArg && !!(typeArg.flags & TypeFlags.TypeParameter) && !isTypeSymbolAccessible(typeArg.symbol, context.enclosingDeclaration)) {
-                    //        context.approximateLength += 7;
-                    //        return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
-                    //    }
-                    //    return undefined;
-                    //});
-                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context, /*isBareList*/ undefined/*, typeNodeOverrides*/);
+                    const variances = getAliasVariances(type.aliasSymbol);
+                    const typeNodeOverrides = map(variances, (v, i) => {
+                       const typeArg = type.aliasTypeArguments?.[i];
+                       if ((v & VarianceFlags.VarianceMask) === VarianceFlags.Independent && !!typeArg && !!(typeArg.flags & TypeFlags.TypeParameter) && !isTypeSymbolAccessible(typeArg.symbol, context.enclosingDeclaration)) {
+                           context.approximateLength += 7;
+                           return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+                       }
+                       return undefined;
+                    });
+                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context, /*isBareList*/ undefined, typeNodeOverrides);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
