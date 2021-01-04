@@ -13309,7 +13309,7 @@ namespace ts {
                 addNamedUnions(namedUnions, types);
                 const reducedTypes: Type[] = [];
                 for (const t of typeSet) {
-                    if (!isNamedUnionType(t) && !some(namedUnions, union => containsType((<UnionType>union).types, t))) {
+                    if (!some(namedUnions, union => containsType((<UnionType>union).types, t))) {
                         reducedTypes.push(t);
                     }
                 }
