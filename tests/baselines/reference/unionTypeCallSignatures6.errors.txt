@@ -6,14 +6,12 @@ tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(38,4): error TS2
 tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(39,1): error TS2684: The 'this' context of type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' is not assignable to method's 'this' of type 'B'.
   Property 'b' is missing in type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' but required in type 'B'.
 tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(48,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
-  Type 'void' is not assignable to type 'A'.
 tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(55,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(this: A & B & C): void', gave the following error.
     The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B & C'.
       Type 'void' is not assignable to type 'A'.
   Overload 2 of 2, '(this: A & B): void', gave the following error.
     The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
-      Type 'void' is not assignable to type 'A'.
 
 
 ==== tests/cases/conformance/types/union/unionTypeCallSignatures6.ts (6 errors) ====
@@ -79,7 +77,6 @@ tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(55,1): error TS2
     f3(); // error
     ~~~~
 !!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
-!!! error TS2684:   Type 'void' is not assignable to type 'A'.
     
     interface F7 {
       (this: A & B & C): void;
@@ -94,5 +91,4 @@ tests/cases/conformance/types/union/unionTypeCallSignatures6.ts(55,1): error TS2
 !!! error TS2769:       Type 'void' is not assignable to type 'A'.
 !!! error TS2769:   Overload 2 of 2, '(this: A & B): void', gave the following error.
 !!! error TS2769:     The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
-!!! error TS2769:       Type 'void' is not assignable to type 'A'.
     

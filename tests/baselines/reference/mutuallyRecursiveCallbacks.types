@@ -16,7 +16,7 @@ declare var bar: Bar<{}>;
 >bar : Bar<{}>
 
 bar = foo;
->bar = foo : <T>(bar: Bar<T>) => void
+>bar = foo : <T>(bar: Bar<unknown>) => void
 >bar : Bar<{}>
->foo : <T>(bar: Bar<T>) => void
+>foo : <T>(bar: Bar<unknown>) => void
 

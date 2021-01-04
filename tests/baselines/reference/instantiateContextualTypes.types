@@ -149,7 +149,7 @@ createReducer(
 
     handler(NON_VOID_ACTION, (state, _payload) => state),
 >handler(NON_VOID_ACTION, (state, _payload) => state) : ActionHandler<AppState, number>
->handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
+>handler : <S, P>(actionType: ActionType<unknown>, handler: Handler<S, P>) => ActionHandler<S, P>
 >NON_VOID_ACTION : ActionType<number>
 >(state, _payload) => state : (state: AppState, _payload: number) => AppState
 >state : AppState
@@ -158,7 +158,7 @@ createReducer(
 
     handler(VOID_ACTION, state => state)
 >handler(VOID_ACTION, state => state) : ActionHandler<AppState, void>
->handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
+>handler : <S, P>(actionType: ActionType<unknown>, handler: Handler<S, P>) => ActionHandler<S, P>
 >VOID_ACTION : ActionType<void>
 >state => state : (state: AppState) => AppState
 >state : AppState

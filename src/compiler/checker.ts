@@ -17320,6 +17320,10 @@ namespace ts {
             }
 
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                return recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, typeRelatedToEachTypeWorker);
+            }
+
+            function typeRelatedToEachTypeWorker(source: Type, target: IntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
@@ -17357,7 +17361,6 @@ namespace ts {
                 return target;
             }
 
-            
             function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 // By piping the union comparison through `recursiveTypeRelatedTo`, we can prevent recursively normalizing types like those
                 // in `recursivelyExpandingUnionNoStackoverflow` from blowing the stack during comparison checking when their variance is requested.
@@ -19039,6 +19042,11 @@ namespace ts {
             if (type.flags & TypeFlags.Conditional) {
                 // The root object represents the origin of the conditional type
                 return (type as ConditionalType).root;
+            }
+            if (type.flags & TypeFlags.UnionOrIntersection && type.aliasSymbol && type.aliasTypeArguments) {
+                // Unions and intersections are difficult to make recusive, but they can be, if they have an associated alias
+                // (which is then later used to make a recursive type reference). In such cases, use the alias symbol as the identity.
+                return type.aliasSymbol;
             }
             return undefined;
         }
