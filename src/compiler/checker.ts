@@ -21658,15 +21658,6 @@ namespace ts {
             return hasEvolvingArrayType;
         }
 
-        // At flow control branch or loop junctions, if the type along every antecedent code path
-        // is an evolving array type, we construct a combined evolving array type. Otherwise we
-        // finalize all evolving array types.
-        function getUnionOrEvolvingArrayType(types: Type[], subtypeReduction: UnionReduction) {
-            return isEvolvingArrayTypeList(types) ?
-                getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType))) :
-                getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
-        }
-
         // Return true if the given node is 'x' in an 'x.length', x.push(value)', 'x.unshift(value)' or
         // 'x[n] = value' operation, where 'n' is an expression of type any, undefined, or a number-like type.
         function isEvolvingArrayOperationTarget(node: Node) {
@@ -22362,6 +22353,20 @@ namespace ts {
                     return createFlowType(result, /*incomplete*/ true);
                 }
                 cache.set(key, result);
+                return result;
+            }
+
+            // At flow control branch or loop junctions, if the type along every antecedent code path
+            // is an evolving array type, we construct a combined evolving array type. Otherwise we
+            // finalize all evolving array types.
+            function getUnionOrEvolvingArrayType(types: Type[], subtypeReduction: UnionReduction) {
+                if (isEvolvingArrayTypeList(types)) {
+                    return getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType)));
+                }
+                const result = getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction);
+                if (result !== declaredType && result.flags & declaredType.flags & TypeFlags.Union && arraysEqual((<UnionType>result).types, (<UnionType>declaredType).types)) {
+                    return declaredType;
+                }
                 return result;
             }
 
