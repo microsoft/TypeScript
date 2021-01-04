@@ -10630,6 +10630,10 @@ namespace ts {
             return type;
         }
 
+        function getIsLateCheckFlag(s: Symbol): CheckFlags {
+            return getCheckFlags(s) & CheckFlags.Late;
+        }
+
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
@@ -10688,8 +10692,9 @@ namespace ts {
                         const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
                             !(templateModifiers & MappedTypeModifiers.ExcludeReadonly) && modifiersProp && isReadonlySymbol(modifiersProp));
                         const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
+                        const lateFlag: CheckFlags = modifiersProp ? getIsLateCheckFlag(modifiersProp) : 0;
                         const prop = <MappedSymbol>createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
-                            CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
+                            lateFlag | CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
                         prop.mappedType = type;
                         prop.nameType = propNameType;
                         prop.keyType = keyType;
@@ -14666,7 +14671,7 @@ namespace ts {
                     else if (isSpreadableProperty(prop)) {
                         const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                         const flags = SymbolFlags.Property | SymbolFlags.Optional;
-                        const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
+                        const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
                         result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
                         result.declarations = prop.declarations;
                         result.nameType = getSymbolLinks(prop).nameType;
@@ -14814,7 +14819,7 @@ namespace ts {
                 return prop;
             }
             const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
-            const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
+            const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
             result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
             result.declarations = prop.declarations;
             result.nameType = getSymbolLinks(prop).nameType;
