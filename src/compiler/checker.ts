@@ -202,9 +202,8 @@ namespace ts {
         Source = 1 << 0,
         Target = 1 << 1,
         PropertyCheck = 1 << 2,
-        InPropertyCheck = 1 << 3,
-        UnionSource = 1 << 4,
-        UnionTarget = 1 << 5,
+        UnionIntersectionCheck = 1 << 3,
+        InPropertyCheck = 1 << 4,
     }
 
     const enum MappedTypeModifiers {
@@ -3311,7 +3310,17 @@ namespace ts {
                     const tsExtension = tryExtractTSExtension(moduleReference);
                     if (tsExtension) {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
-                        error(errorNode, diag, tsExtension, removeExtension(moduleReference, tsExtension));
+                        const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
+                        let replacedImportSource = importSourceWithoutExtension;
+                        /**
+                         * Direct users to import source with .js extension if outputting an ES module.
+                         * @see https://github.com/microsoft/TypeScript/issues/42151
+                         */
+                        const moduleKind = getEmitModuleKind(compilerOptions);
+                        if (moduleKind >= ModuleKind.ES2015) {
+                            replacedImportSource += ".js";
+                        }
+                        error(errorNode, diag, tsExtension, replacedImportSource);
                     }
                     else if (!compilerOptions.resolveJsonModule &&
                         fileExtensionIs(moduleReference, Extension.Json) &&
@@ -10649,6 +10658,10 @@ namespace ts {
             return type;
         }
 
+        function getIsLateCheckFlag(s: Symbol): CheckFlags {
+            return getCheckFlags(s) & CheckFlags.Late;
+        }
+
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
@@ -10707,8 +10720,9 @@ namespace ts {
                         const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
                             !(templateModifiers & MappedTypeModifiers.ExcludeReadonly) && modifiersProp && isReadonlySymbol(modifiersProp));
                         const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
+                        const lateFlag: CheckFlags = modifiersProp ? getIsLateCheckFlag(modifiersProp) : 0;
                         const prop = <MappedSymbol>createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
-                            CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
+                            lateFlag | CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0));
                         prop.mappedType = type;
                         prop.nameType = propNameType;
                         prop.keyType = keyType;
@@ -12963,7 +12977,7 @@ namespace ts {
         // is true for each of the synthesized type parameters.
         function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
             const arity = elementFlags.length;
-            const minLength = findLastIndex(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic))) + 1;
+            const minLength = countWhere(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic)));
             let typeParameters: TypeParameter[] | undefined;
             const properties: Symbol[] = [];
             let combinedFlags: ElementFlags = 0;
@@ -13020,89 +13034,90 @@ namespace ts {
         }
 
         function createNormalizedTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined) {
-            return target.objectFlags & ObjectFlags.Tuple && (<TupleType>target).combinedFlags & ElementFlags.Variadic ?
-                createNormalizedTupleType(target as TupleType, typeArguments!) :
-                createTypeReference(target, typeArguments);
+            return target.objectFlags & ObjectFlags.Tuple ? createNormalizedTupleType(target as TupleType, typeArguments!) : createTypeReference(target, typeArguments);
         }
 
         function createNormalizedTupleType(target: TupleType, elementTypes: readonly Type[]): Type {
-            // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
-            const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
-            if (unionIndex >= 0) {
-                return checkCrossProductUnion(map(elementTypes, (t, i) => target.elementFlags[i] & ElementFlags.Variadic ? t : unknownType)) ?
-                    mapType(elementTypes[unionIndex], t => createNormalizedTupleType(target, replaceElement(elementTypes, unionIndex, t))) :
-                    errorType;
-            }
-            // If there are no variadic elements with non-generic types, just create a type reference with the same target type.
-            const spreadIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic) && !(t.flags & TypeFlags.InstantiableNonPrimitive) && !isGenericMappedType(t));
-            if (spreadIndex < 0) {
+            if (!(target.combinedFlags & ElementFlags.NonRequired)) {
+                // No need to normalize when we only have regular required elements
                 return createTypeReference(target, elementTypes);
             }
-            // We have non-generic variadic elements that need normalization.
+            if (target.combinedFlags & ElementFlags.Variadic) {
+                // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
+                const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
+                if (unionIndex >= 0) {
+                    return checkCrossProductUnion(map(elementTypes, (t, i) => target.elementFlags[i] & ElementFlags.Variadic ? t : unknownType)) ?
+                        mapType(elementTypes[unionIndex], t => createNormalizedTupleType(target, replaceElement(elementTypes, unionIndex, t))) :
+                        errorType;
+                }
+            }
+            // We have optional, rest, or variadic elements that may need normalizing. Normalization ensures that all variadic
+            // elements are generic and that the tuple type has one of the following layouts, disregarding variadic elements:
+            // (1) Zero or more required elements, followed by zero or more optional elements, followed by zero or one rest element.
+            // (2) Zero or more required elements, followed by a rest element, followed by zero or more required elements.
+            // In either layout, zero or more generic variadic elements may be present at any location.
             const expandedTypes: Type[] = [];
             const expandedFlags: ElementFlags[] = [];
             let expandedDeclarations: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
-            let optionalIndex = -1;
-            let restTypes: Type[] | undefined;
+            let lastRequiredIndex = -1;
+            let firstRestIndex = -1;
+            let lastOptionalOrRestIndex = -1;
             for (let i = 0; i < elementTypes.length; i++) {
                 const type = elementTypes[i];
                 const flags = target.elementFlags[i];
                 if (flags & ElementFlags.Variadic) {
                     if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
-                        // Generic variadic elements stay as they are (except following a rest element).
-                        addElementOrRest(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
+                        // Generic variadic elements stay as they are.
+                        addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                     }
                     else if (isTupleType(type)) {
                         // Spread variadic elements with tuple types into the resulting tuple.
-                        forEach(getTypeArguments(type), (t, n) => addElementOrRest(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
+                        forEach(getTypeArguments(type), (t, n) => addElement(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
                     }
                     else {
                         // Treat everything else as an array type and create a rest element.
-                        addElementOrRest(isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
+                        addElement(isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
                     }
                 }
                 else {
                     // Copy other element kinds with no change.
-                    addElementOrRest(type, flags, target.labeledElementDeclarations?.[i]);
+                    addElement(type, flags, target.labeledElementDeclarations?.[i]);
                 }
             }
-            if (restTypes) {
-                // Create a union of the collected rest element types.
-                expandedTypes[expandedTypes.length - 1] = getUnionType(restTypes);
+            // Turn optional elements preceding the last required element into required elements
+            for (let i = 0; i < lastRequiredIndex; i++) {
+                if (expandedFlags[i] & ElementFlags.Optional) expandedFlags[i] = ElementFlags.Required;
+            }
+            if (firstRestIndex >= 0 && firstRestIndex < lastOptionalOrRestIndex) {
+                // Turn elements between first rest and last optional/rest into a single rest element
+                expandedTypes[firstRestIndex] = getUnionType(sameMap(expandedTypes.slice(firstRestIndex, lastOptionalOrRestIndex + 1),
+                    (t, i) => expandedFlags[firstRestIndex + i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t));
+                expandedTypes.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
+                expandedFlags.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
+                expandedDeclarations?.splice(firstRestIndex + 1, lastOptionalOrRestIndex - firstRestIndex);
             }
             const tupleTarget = getTupleTargetType(expandedFlags, target.readonly, expandedDeclarations);
             return tupleTarget === emptyGenericType ? emptyObjectType :
                 expandedFlags.length ? createTypeReference(tupleTarget, expandedTypes) :
                 tupleTarget;
 
-            function addElementOrRest(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
-                if (restTypes) {
-                    // A rest element was previously added, so simply collect the type of this element.
-                    restTypes.push(flags & ElementFlags.Variadic ? getIndexedAccessType(type, numberType) : type);
+            function addElement(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
+                if (flags & ElementFlags.Required) {
+                    lastRequiredIndex = expandedFlags.length;
+                }
+                if (flags & ElementFlags.Rest && firstRestIndex < 0) {
+                    firstRestIndex = expandedFlags.length;
+                }
+                if (flags & (ElementFlags.Optional | ElementFlags.Rest)) {
+                    lastOptionalOrRestIndex = expandedFlags.length;
+                }
+                expandedTypes.push(type);
+                expandedFlags.push(flags);
+                if (expandedDeclarations && declaration) {
+                    expandedDeclarations.push(declaration);
                 }
                 else {
-                    if (flags & ElementFlags.Required && optionalIndex >= 0) {
-                        // Turn preceding optional elements into required elements
-                        for (let i = optionalIndex; i < expandedFlags.length; i++) {
-                            if (expandedFlags[i] & ElementFlags.Optional) expandedFlags[i] = ElementFlags.Required;
-                        }
-                        optionalIndex = -1;
-                    }
-                    else if (flags & ElementFlags.Optional && optionalIndex < 0) {
-                        optionalIndex = expandedFlags.length;
-                    }
-                    else if (flags & ElementFlags.Rest) {
-                        // Start collecting element types when a rest element is added.
-                        restTypes = [type];
-                    }
-                    expandedTypes.push(type);
-                    expandedFlags.push(flags);
-                    if (expandedDeclarations && declaration) {
-                        expandedDeclarations.push(declaration);
-                    }
-                    else {
-                        expandedDeclarations = undefined;
-                    }
+                    expandedDeclarations = undefined;
                 }
             }
         }
@@ -13118,6 +13133,17 @@ namespace ts {
         function getKnownKeysOfTupleType(type: TupleTypeReference) {
             return getUnionType(append(arrayOf(type.target.fixedLength, i => getLiteralType("" + i)),
                 getIndexType(type.target.readonly ? globalReadonlyArrayType : globalArrayType)));
+        }
+
+        // Return count of starting consecutive tuple elements of the given kind(s)
+        function getStartElementCount(type: TupleType, flags: ElementFlags) {
+            const index = findIndex(type.elementFlags, f => !(f & flags));
+            return index >= 0 ? index : type.elementFlags.length;
+        }
+
+        // Return count of ending consecutive tuple elements of the given kind(s)
+        function getEndElementCount(type: TupleType, flags: ElementFlags) {
+            return type.elementFlags.length - findLastIndex(type.elementFlags, f => !(f & flags)) - 1;
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -14685,7 +14711,7 @@ namespace ts {
                     else if (isSpreadableProperty(prop)) {
                         const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                         const flags = SymbolFlags.Property | SymbolFlags.Optional;
-                        const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
+                        const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
                         result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
                         result.declarations = prop.declarations;
                         result.nameType = getSymbolLinks(prop).nameType;
@@ -14833,7 +14859,7 @@ namespace ts {
                 return prop;
             }
             const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
-            const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
+            const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
             result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
             result.declarations = prop.declarations;
             result.nameType = getSymbolLinks(prop).nameType;
@@ -17012,38 +17038,12 @@ namespace ts {
                 // Note that these checks are specifically ordered to produce correct results. In particular,
                 // we need to deconstruct unions before intersections (because unions are always at the top),
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
-                if (source.flags & TypeFlags.Union) {
-                    result = relation === comparableRelation ?
-                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
-                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
+                if (source.flags & TypeFlags.UnionOrIntersection || target.flags & TypeFlags.UnionOrIntersection) {
+                    result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionIntersectionCheck);
                 }
-                else {
-                    if (target.flags & TypeFlags.Union) {
-                        result = typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
-                    }
-                    else if (target.flags & TypeFlags.Intersection) {
-                        result = typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
-                    }
-                    else if (source.flags & TypeFlags.Intersection) {
-                        // Check to see if any constituents of the intersection are immediately related to the target.
-                        //
-                        // Don't report errors though. Checking whether a constituent is related to the source is not actually
-                        // useful and leads to some confusing error messages. Instead it is better to let the below checks
-                        // take care of this, or to not elaborate at all. For instance,
-                        //
-                        //    - For an object type (such as 'C = A & B'), users are usually more interested in structural errors.
-                        //
-                        //    - For a union type (such as '(A | B) = (C & D)'), it's better to hold onto the whole intersection
-                        //          than to report that 'D' is not assignable to 'A' or 'B'.
-                        //
-                        //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
-                        //          breaking the intersection apart.
-                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
-                    }
-                    if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
-                        if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState)) {
-                            resetErrorInfo(saveErrorInfo);
-                        }
+                if (!result && !(source.flags & TypeFlags.Union) && (source.flags & (TypeFlags.StructuredOrInstantiable) || target.flags & TypeFlags.StructuredOrInstantiable)) {
+                    if (result = recursiveTypeRelatedTo(source, target, reportErrors, intersectionState)) {
+                        resetErrorInfo(saveErrorInfo);
                     }
                 }
                 if (!result && source.flags & (TypeFlags.Intersection | TypeFlags.TypeParameter)) {
@@ -17296,12 +17296,6 @@ namespace ts {
             }
 
             function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
-                // Just as with `eachTypeRelatedToType`, we guard this comparison with `recursiveTypeRelatedTo` to ensure that
-                // any union which recursively normalized is caught, rather than stacking out
-                return recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.UnionTarget, typeRelatedToSomeTypeWorker);
-            }
-
-            function typeRelatedToSomeTypeWorker(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
                 const targetTypes = target.types;
                 if (target.flags & TypeFlags.Union && containsType(targetTypes, source)) {
                     return Ternary.True;
@@ -17320,10 +17314,6 @@ namespace ts {
             }
 
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                return recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, typeRelatedToEachTypeWorker);
-            }
-
-            function typeRelatedToEachTypeWorker(source: Type, target: IntersectionType, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
@@ -17362,13 +17352,6 @@ namespace ts {
             }
 
             function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                // By piping the union comparison through `recursiveTypeRelatedTo`, we can prevent recursively normalizing types like those
-                // in `recursivelyExpandingUnionNoStackoverflow` from blowing the stack during comparison checking when their variance is requested.
-                // As an added bonus, this caches the comparison result.
-                return recursiveTypeRelatedTo(source, target, reportErrors, intersectionState | IntersectionState.UnionSource, eachTypeRelatedToTypeWorker);
-            }
-
-            function eachTypeRelatedToTypeWorker(source: UnionOrIntersectionType, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 // We strip `undefined` from the target if the `source` trivially doesn't contain it for our correspondence-checking fastpath
@@ -17567,6 +17550,37 @@ namespace ts {
             function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
+                }
+                if (intersectionState & IntersectionState.UnionIntersectionCheck) {
+                    // Note that these checks are specifically ordered to produce correct results. In particular,
+                    // we need to deconstruct unions before intersections (because unions are always at the top),
+                    // and we need to handle "each" relations before "some" relations for the same kind of type.
+                    if (source.flags & TypeFlags.Union) {
+                        return relation === comparableRelation ?
+                            someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & ~IntersectionState.UnionIntersectionCheck) :
+                            eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState & ~IntersectionState.UnionIntersectionCheck);
+                    }
+                    if (target.flags & TypeFlags.Union) {
+                        return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
+                    }
+                    if (target.flags & TypeFlags.Intersection) {
+                        return typeRelatedToEachType(getRegularTypeOfObjectLiteral(source), target as IntersectionType, reportErrors, IntersectionState.Target);
+                    }
+                    // Source is an intersection. Check to see if any constituents of the intersection are immediately related
+                    // to the target.
+                    //
+                    // Don't report errors though. Checking whether a constituent is related to the source is not actually
+                    // useful and leads to some confusing error messages. Instead it is better to let the below checks
+                    // take care of this, or to not elaborate at all. For instance,
+                    //
+                    //    - For an object type (such as 'C = A & B'), users are usually more interested in structural errors.
+                    //
+                    //    - For a union type (such as '(A | B) = (C & D)'), it's better to hold onto the whole intersection
+                    //          than to report that 'D' is not assignable to 'A' or 'B'.
+                    //
+                    //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
+                    //          breaking the intersection apart.
+                    return someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false, IntersectionState.Source);
                 }
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -18338,48 +18352,60 @@ namespace ts {
                             }
                             return Ternary.False;
                         }
-                        const maxArity = Math.max(sourceArity, targetArity);
-                        for (let i = 0; i < maxArity; i++) {
-                            const targetFlags = i < targetArity ? target.target.elementFlags[i] : targetRestFlag;
-                            const sourceFlags = isTupleType(source) && i < sourceArity ? source.target.elementFlags[i] : sourceRestFlag;
-                            let canExcludeDiscriminants = !!excludedProperties;
-                            if (sourceFlags && targetFlags) {
-                                if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic) ||
-                                   (sourceFlags & ElementFlags.Variadic && !(targetFlags & ElementFlags.Variable))) {
-                                    if (reportErrors) {
-                                        reportError(Diagnostics.Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other, i);
-                                    }
-                                    return Ternary.False;
+                        const sourceTypeArguments = getTypeArguments(source);
+                        const targetTypeArguments = getTypeArguments(target);
+                        const startCount = Math.min(isTupleType(source) ? getStartElementCount(source.target, ElementFlags.NonRest) : 0, getStartElementCount(target.target, ElementFlags.NonRest));
+                        const endCount = Math.min(isTupleType(source) ? getEndElementCount(source.target, ElementFlags.NonRest) : 0, targetRestFlag ? getEndElementCount(target.target, ElementFlags.NonRest) : 0);
+                        let canExcludeDiscriminants = !!excludedProperties;
+                        for (let i = 0; i < targetArity; i++) {
+                            const sourceIndex = i < targetArity - endCount ? i : i + sourceArity - targetArity;
+                            const sourceFlags = isTupleType(source) && (i < startCount || i >= targetArity - endCount) ? source.target.elementFlags[sourceIndex] : ElementFlags.Rest;
+                            const targetFlags = target.target.elementFlags[i];
+                            if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Source_provides_no_match_for_variadic_element_at_position_0_in_target, i);
                                 }
-                                if (targetFlags & ElementFlags.Required) {
-                                    if (!(sourceFlags & ElementFlags.Required)) {
-                                        if (reportErrors) {
-                                            reportError(Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2, i, typeToString(source), typeToString(target));
-                                        }
-                                        return Ternary.False;
-                                    }
-                                }
-                                // We can only exclude discriminant properties if we have not yet encountered a variable-length element.
-                                if (canExcludeDiscriminants) {
-                                    if (sourceFlags & ElementFlags.Variable || targetFlags & ElementFlags.Variable) {
-                                        canExcludeDiscriminants = false;
-                                    }
-                                    if (canExcludeDiscriminants && excludedProperties?.has(("" + i) as __String)) {
-                                        continue;
-                                    }
-                                }
-                                const sourceType = getTypeArguments(source)[Math.min(i, sourceArity - 1)];
-                                const targetType = getTypeArguments(target)[Math.min(i, targetArity - 1)];
-                                const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) : targetType;
-                                const related = isRelatedTo(sourceType, targetCheckType, reportErrors, /*headMessage*/ undefined, intersectionState);
-                                if (!related) {
-                                    if (reportErrors) {
-                                        reportIncompatibleError(Diagnostics.Types_of_property_0_are_incompatible, i);
-                                    }
-                                    return Ternary.False;
-                                }
-                                result &= related;
+                                return Ternary.False;
                             }
+                            if (sourceFlags & ElementFlags.Variadic && !(targetFlags & ElementFlags.Variable)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Variadic_element_at_position_0_in_source_does_not_match_element_at_position_1_in_target, sourceIndex, i);
+                                }
+                                return Ternary.False;
+                            }
+                            if (targetFlags & ElementFlags.Required && !(sourceFlags & ElementFlags.Required)) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Source_provides_no_match_for_required_element_at_position_0_in_target, i);
+                                }
+                                return Ternary.False;
+                            }
+                            // We can only exclude discriminant properties if we have not yet encountered a variable-length element.
+                            if (canExcludeDiscriminants) {
+                                if (sourceFlags & ElementFlags.Variable || targetFlags & ElementFlags.Variable) {
+                                    canExcludeDiscriminants = false;
+                                }
+                                if (canExcludeDiscriminants && excludedProperties?.has(("" + i) as __String)) {
+                                    continue;
+                                }
+                            }
+                            const sourceType = !isTupleType(source) ? sourceTypeArguments[0] :
+                                i < startCount || i >= targetArity - endCount ? sourceTypeArguments[sourceIndex] :
+                                getElementTypeOfSliceOfTupleType(source, startCount, endCount) || neverType;
+                            const targetType = targetTypeArguments[i];
+                            const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) : targetType;
+                            const related = isRelatedTo(sourceType, targetCheckType, reportErrors, /*headMessage*/ undefined, intersectionState);
+                            if (!related) {
+                                if (reportErrors) {
+                                    if (i < startCount || i >= targetArity - endCount || sourceArity - startCount - endCount === 1) {
+                                        reportIncompatibleError(Diagnostics.Type_at_position_0_in_source_is_not_compatible_with_type_at_position_1_in_target, sourceIndex, i);
+                                    }
+                                    else {
+                                        reportIncompatibleError(Diagnostics.Type_at_positions_0_through_1_in_source_is_not_compatible_with_type_at_position_2_in_target, startCount, sourceArity - endCount - 1, i);
+                                    }
+                                }
+                                return Ternary.False;
+                            }
+                            result &= related;
                         }
                         return result;
                     }
@@ -19348,10 +19374,6 @@ namespace ts {
         function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
             const restType = getRestTypeOfTupleType(type);
             return restType && createArrayType(restType);
-        }
-
-        function getEndLengthOfType(type: Type) {
-            return isTupleType(type) ? getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !(f & (ElementFlags.Required | ElementFlags.Optional))) - 1 : 0;
         }
 
         function getElementTypeOfSliceOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
@@ -20670,20 +20692,17 @@ namespace ts {
                                 return;
                             }
                             const startLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
-                            const sourceRestType = !isTupleType(source) || sourceArity > 0 && source.target.elementFlags[sourceArity - 1] & ElementFlags.Rest ?
-                                getTypeArguments(source)[sourceArity - 1] : undefined;
-                            const endLength = !(target.target.combinedFlags & ElementFlags.Variable) ? 0 :
-                                sourceRestType ? getEndLengthOfType(target) :
-                                Math.min(getEndLengthOfType(source), getEndLengthOfType(target));
-                            const sourceEndLength = sourceRestType ? 0 : endLength;
+                            const endLength = Math.min(isTupleType(source) ? getEndElementCount(source.target, ElementFlags.Fixed) : 0,
+                                target.target.hasRestElement ? getEndElementCount(target.target, ElementFlags.Fixed) : 0);
                             // Infer between starting fixed elements.
                             for (let i = 0; i < startLength; i++) {
                                 inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                             }
-                            if (sourceRestType && sourceArity - startLength === 1) {
+                            if (!isTupleType(source) || sourceArity - startLength - endLength === 1 && source.target.elementFlags[startLength] & ElementFlags.Rest) {
                                 // Single rest element remains in source, infer from that to every element in target
+                                const restType = getTypeArguments(source)[startLength];
                                 for (let i = startLength; i < targetArity - endLength; i++) {
-                                    inferFromTypes(elementFlags[i] & ElementFlags.Variadic ? createArrayType(sourceRestType) : sourceRestType, elementTypes[i]);
+                                    inferFromTypes(elementFlags[i] & ElementFlags.Variadic ? createArrayType(restType) : restType, elementTypes[i]);
                                 }
                             }
                             else {
@@ -20693,20 +20712,20 @@ namespace ts {
                                     const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
                                     if (targetInfo && targetInfo.impliedArity !== undefined) {
                                         // Infer slices from source based on implied arity of T.
-                                        inferFromTypes(sliceTupleType(source, startLength, sourceEndLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
-                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, sourceEndLength), elementTypes[startLength + 1]);
+                                        inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
                                     }
                                 }
                                 else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
                                     // Middle of target is exactly one variadic element. Infer the slice between the fixed parts in the source.
                                     // If target ends in optional element(s), make a lower priority a speculative inference.
                                     const endsInOptional = target.target.elementFlags[targetArity - 1] & ElementFlags.Optional;
-                                    const sourceSlice = isTupleType(source) ? sliceTupleType(source, startLength, sourceEndLength) : createArrayType(sourceRestType!);
+                                    const sourceSlice = isTupleType(source) ? sliceTupleType(source, startLength, endLength) : createArrayType(getTypeArguments(source)[0]);
                                     inferWithPriority(sourceSlice, elementTypes[startLength], endsInOptional ? InferencePriority.SpeculativeTuple : 0);
                                 }
                                 else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
                                     // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
-                                    const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, sourceEndLength) : sourceRestType;
+                                    const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, endLength) : getTypeArguments(source)[0];
                                     if (restType) {
                                         inferFromTypes(restType, elementTypes[startLength]);
                                     }
@@ -20714,7 +20733,7 @@ namespace ts {
                             }
                             // Infer between ending fixed elements
                             for (let i = 0; i < endLength; i++) {
-                                inferFromTypes(sourceRestType || getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
+                                inferFromTypes(getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
                             }
                             return;
                         }
@@ -27180,7 +27199,11 @@ namespace ts {
             }
             if (restType) {
                 const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined, checkMode);
-                const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
+                const restArgCount = args.length - argCount;
+                const errorNode = !reportErrors ? undefined :
+                    restArgCount === 0 ? node :
+                    restArgCount === 1 ? args[argCount] :
+                    setTextRangePosEnd(createSyntheticExpression(node, spreadType), args[argCount].pos, args[args.length - 1].end);
                 if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
                     maybeAddMissingAwaitInfo(errorNode, spreadType, restType);
@@ -29039,6 +29062,10 @@ namespace ts {
             return createTupleType(types, flags, /*readonly*/ false, length(names) === length(types) ? names : undefined);
         }
 
+        // Return the number of parameters in a signature. The rest parameter, if present, counts as one
+        // parameter. For example, the parameter count of (x: number, y: number, ...z: string[]) is 3 and
+        // the parameter count of (x: number, ...args: [number, ...string[], boolean])) is also 3. In the
+        // latter example, the effective rest type is [...string[], boolean].
         function getParameterCount(signature: Signature) {
             const length = signature.parameters.length;
             if (signatureHasRestParameter(signature)) {
@@ -32187,8 +32214,7 @@ namespace ts {
             let seenOptionalElement = false;
             let seenRestElement = false;
             const hasNamedElement = some(elementTypes, isNamedTupleMember);
-            for (let i = 0; i < elementTypes.length; i++) {
-                const e = elementTypes[i];
+            for (const e of elementTypes) {
                 if (e.kind !== SyntaxKind.NamedTupleMember && hasNamedElement) {
                     grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
                     break;
@@ -32205,17 +32231,21 @@ namespace ts {
                     }
                 }
                 else if (flags & ElementFlags.Rest) {
+                    if (seenRestElement) {
+                        grammarErrorOnNode(e, Diagnostics.A_rest_element_cannot_follow_another_rest_element);
+                        break;
+                    }
                     seenRestElement = true;
                 }
                 else if (flags & ElementFlags.Optional) {
+                    if (seenRestElement) {
+                        grammarErrorOnNode(e, Diagnostics.An_optional_element_cannot_follow_a_rest_element);
+                        break;
+                    }
                     seenOptionalElement = true;
                 }
                 else if (seenOptionalElement) {
                     grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
-                    break;
-                }
-                if (seenRestElement && i !== elementTypes.length - 1) {
-                    grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
                     break;
                 }
             }
@@ -35701,7 +35731,7 @@ namespace ts {
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
                 for (const typeRefNode of implementedTypeNodes) {
-                    if (!isEntityNameExpression(typeRefNode.expression)) {
+                    if (!isEntityNameExpression(typeRefNode.expression) || isOptionalChain(typeRefNode.expression)) {
                         error(typeRefNode.expression, Diagnostics.A_class_can_only_implement_an_identifier_Slashqualified_name_with_optional_type_arguments);
                     }
                     checkTypeReferenceNode(typeRefNode);
@@ -36050,7 +36080,7 @@ namespace ts {
                 checkObjectTypeForDuplicateDeclarations(node);
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
-                if (!isEntityNameExpression(heritageElement.expression)) {
+                if (!isEntityNameExpression(heritageElement.expression) || isOptionalChain(heritageElement.expression)) {
                     error(heritageElement.expression, Diagnostics.An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments);
                 }
                 checkTypeReferenceNode(heritageElement);
@@ -38695,7 +38725,10 @@ namespace ts {
                 isOptionalParameter,
                 moduleExportsSomeValue,
                 isArgumentsLocalBinding,
-                getExternalModuleFileFromDeclaration,
+                getExternalModuleFileFromDeclaration: nodeIn => {
+                    const node = getParseTreeNode(nodeIn, hasPossibleExternalModuleReference);
+                    return node && getExternalModuleFileFromDeclaration(node);
+                },
                 getTypeReferenceDirectivesForEntityName,
                 getTypeReferenceDirectivesForSymbol,
                 isLiteralConstDeclaration,
@@ -38856,7 +38889,7 @@ namespace ts {
             }
         }
 
-        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration | ImportTypeNode): SourceFile | undefined {
+        function getExternalModuleFileFromDeclaration(declaration: AnyImportOrReExport | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined {
             const specifier = declaration.kind === SyntaxKind.ModuleDeclaration ? tryCast(declaration.name, isStringLiteral) : getExternalModuleName(declaration);
             const moduleSymbol = resolveExternalModuleNameWorker(specifier!, specifier!, /*moduleNotFoundError*/ undefined); // TODO: GH#18217
             if (!moduleSymbol) {

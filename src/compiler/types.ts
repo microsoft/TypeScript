@@ -4607,7 +4607,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): SourceFile | undefined;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
@@ -5251,18 +5251,21 @@ namespace ts {
     }
 
     export const enum ElementFlags {
-        Required  = 1 << 0,  // T
-        Optional  = 1 << 1,  // T?
-        Rest      = 1 << 2,  // ...T[]
-        Variadic  = 1 << 3,  // ...T
-        Variable  = Rest | Variadic,
+        Required    = 1 << 0,  // T
+        Optional    = 1 << 1,  // T?
+        Rest        = 1 << 2,  // ...T[]
+        Variadic    = 1 << 3,  // ...T
+        Fixed       = Required | Optional,
+        Variable    = Rest | Variadic,
+        NonRequired = Optional | Rest | Variadic,
+        NonRest     = Required | Optional | Variadic,
     }
 
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
-        minLength: number;
-        fixedLength: number;
-        hasRestElement: boolean;
+        minLength: number;  // Number of required or variadic elements
+        fixedLength: number;  // Number of initial required or optional elements
+        hasRestElement: boolean;  // True if tuple has any rest or variadic elements
         combinedFlags: ElementFlags;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];

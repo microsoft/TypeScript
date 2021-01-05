@@ -907,6 +907,10 @@ namespace ts {
         }
     }
 
+    export function hasPossibleExternalModuleReference(node: Node): node is AnyImportOrReExport | ModuleDeclaration | ImportTypeNode | ImportCall {
+        return isAnyImportOrReExport(node) || isModuleDeclaration(node) || isImportTypeNode(node) || isImportCall(node);
+    }
+
     export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
         return isAnyImportSyntax(node) || isExportDeclaration(node);
     }
@@ -2426,7 +2430,7 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -2435,6 +2439,8 @@ namespace ts {
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
             case SyntaxKind.ImportType:
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
+            case SyntaxKind.CallExpression:
+                return node.arguments[0];
             default:
                 return Debug.assertNever(node);
         }
@@ -3065,14 +3071,7 @@ namespace ts {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
-    export type TriviaKind =
-        SyntaxKind.SingleLineCommentTrivia
-        | SyntaxKind.MultiLineCommentTrivia
-        | SyntaxKind.NewLineTrivia
-        | SyntaxKind.WhitespaceTrivia
-        | SyntaxKind.ShebangTrivia
-        | SyntaxKind.ConflictMarkerTrivia;
-    export function isTrivia(token: SyntaxKind): token is TriviaKind {
+    export function isTrivia(token: SyntaxKind): token is TriviaSyntaxKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 

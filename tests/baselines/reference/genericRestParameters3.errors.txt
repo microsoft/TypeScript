@@ -114,7 +114,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
     
     let a = bar(10, 20);
     let b = bar<CoolArray<number>>(10, 20);  // Error
-                                   ~~
+                                   ~~~~~~
 !!! error TS2345: Argument of type '[10, 20]' is not assignable to parameter of type 'CoolArray<number>'.
 !!! error TS2345:   Property 'hello' is missing in type '[10, 20]' but required in type 'CoolArray<number>'.
 !!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:30:5: 'hello' is declared here.
@@ -133,7 +133,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
 !!! error TS2345:   Property 'hello' is missing in type '[number]' but required in type 'CoolArray<unknown>'.
 !!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:30:5: 'hello' is declared here.
     baz(1, 2);   // Error
-        ~
+        ~~~~
 !!! error TS2345: Argument of type '[number, number]' is not assignable to parameter of type 'CoolArray<unknown>'.
 !!! error TS2345:   Property 'hello' is missing in type '[number, number]' but required in type 'CoolArray<unknown>'.
 !!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:30:5: 'hello' is declared here.
