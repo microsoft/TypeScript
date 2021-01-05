@@ -4,7 +4,7 @@
 type TV0<T extends unknown[]> = [string, ...T];
 type TV1<T extends unknown[]> = [string, ...T, number];
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
+type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
 
 // Normalization
 
@@ -206,11 +206,18 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 // Inference between variadic tuple types
 
-type First<T extends readonly unknown[]> = T[0];
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+type First<T extends readonly unknown[]> =
+    T extends readonly [unknown, ...unknown[]] ? T[0] :
+    T[0] | undefined;
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+
+type Last<T extends readonly unknown[]> =
+    T extends readonly [...unknown[], infer U] ? U :
+    T extends readonly [unknown, ...unknown[]] ? T[number] :
+    T[number] | undefined;
+
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 
 type T00 = First<[number, symbol, string]>;
 type T01 = First<[symbol, string]>;
@@ -241,8 +248,8 @@ type T23 = Last<[number, symbol, ...string[]]>;
 type T24 = Last<[symbol, ...string[]]>;
 type T25 = Last<[string?]>;
 type T26 = Last<string[]>;
-type T27 = Last<[]>;  // unknown, maybe should undefined
-type T28 = Last<any>;  // unknown, maybe should be any
+type T27 = Last<[]>;
+type T28 = Last<any>;
 type T29 = Last<never>;
 
 type T30 = DropLast<[number, symbol, string]>;
@@ -340,10 +347,6 @@ ft(['a', 'b'], ['c', 'd', 42])
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 
 call('hello', 32, (a, b) => 42);
-
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-
 call(...sa, (...x) => 42);
 
 // No inference to ending optional elements (except with identical structure)
@@ -392,7 +395,7 @@ callApi(getOrgUser);
 
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
-const data: Unbounded = [false, false];
+const data: Unbounded = [false, false];  // Error
 
 type U1 = [string, ...Numbers, boolean];
 type U2 = [...[string, ...Numbers], boolean];
@@ -588,8 +591,6 @@ ft([1, 2], [1, 2, 3]);
 ft(['a', 'b'], ['c', 'd']);
 ft(['a', 'b'], ['c', 'd', 42]);
 call('hello', 32, function (a, b) { return 42; });
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
 call.apply(void 0, __spreadArrays(sa, [function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -619,7 +620,7 @@ function callApi(method) {
 }
 callApi(getUser);
 callApi(getOrgUser);
-var data = [false, false];
+var data = [false, false]; // Error
 
 
 //// [variadicTuples1.d.ts]
@@ -641,7 +642,7 @@ declare const sa: string[];
 declare const tc1: [];
 declare const tc2: [string, number];
 declare const tc3: [number, number, number, ...string[]];
-declare const tc4: (string | number)[];
+declare const tc4: [...string[], number, number, number];
 declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
 declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
@@ -674,10 +675,10 @@ declare function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly 
 declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
-declare type First<T extends readonly unknown[]> = T[0];
-declare type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
-declare type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
-declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+declare type First<T extends readonly unknown[]> = T extends readonly [unknown, ...unknown[]] ? T[0] : T[0] | undefined;
+declare type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+declare type Last<T extends readonly unknown[]> = T extends readonly [...unknown[], infer U] ? U : T extends readonly [unknown, ...unknown[]] ? T[number] : T[number] | undefined;
+declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 declare type T00 = First<[number, symbol, string]>;
 declare type T01 = First<[symbol, string]>;
 declare type T02 = First<[string]>;
