@@ -7947,6 +7947,7 @@ namespace ts {
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         getCompilerOptions(): CompilerOptions;
+        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

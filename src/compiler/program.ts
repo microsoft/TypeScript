@@ -1649,6 +1649,7 @@ namespace ts {
                 getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo(),
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
+                getFileIncludeReasons: program.getFileIncludeReasons,
             };
         }
 
@@ -3973,7 +3974,8 @@ namespace ts {
         return res;
     }
 
-    function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: SourceFile, index: number): StringLiteralLike {
+    /* @internal */
+    export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: SourceFile, index: number): StringLiteralLike {
         if (index < imports.length) return imports[index];
         let augIndex = imports.length;
         for (const aug of moduleAugmentations) {

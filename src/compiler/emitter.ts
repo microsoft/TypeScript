@@ -849,7 +849,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
-            redirectTargetsMap: createMultiMap()
+            redirectTargetsMap: createMultiMap(),
+            getFileIncludeReasons: notImplemented,
         };
         emitFiles(
             notImplementedResolver,

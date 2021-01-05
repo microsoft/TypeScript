@@ -4378,7 +4378,8 @@ namespace ts {
                         getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
                         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
                         fileExists: fileName => host.fileExists(fileName),
-                        getCompilerOptions: () => host.getCompilerOptions()
+                        getCompilerOptions: () => host.getCompilerOptions(),
+                        getFileIncludeReasons: () => host.getFileIncludeReasons(),
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,

@@ -109,7 +109,7 @@ exports.__esModule = true;
 }
 
 //// [/src/packages/pkg2/lib/src/index.d.ts]
-export declare function fn4(): import("../../pkg1/src").IThing;
+export declare function fn4(): import("@fluentui/pkg1").IThing;
 
 
 //// [/src/packages/pkg2/lib/src/index.js]
@@ -139,7 +139,7 @@ exports.fn4 = fn4;
       },
       "../src/index.ts": {
         "version": "8515046367-import { IThings } from '@fluentui/pkg1';\nexport function fn4() {\n  const a: IThings = { thing1: { a: 'b' } };\n  return a.thing1;\n}",
-        "signature": "-10018297277-export declare function fn4(): import(\"../../pkg1/src\").IThing;\r\n",
+        "signature": "-9447422063-export declare function fn4(): import(\"@fluentui/pkg1\").IThing;\r\n",
         "affectsGlobalScope": false
       }
     },

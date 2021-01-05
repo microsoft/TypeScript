@@ -105,6 +105,14 @@ namespace ts.moduleSpecifiers {
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
 
+        const existingSpecifier = forEach(modulePaths, modulePath => forEach(
+            host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
+            reason => reason.kind === FileIncludeKind.Import && reason.file === importingSourceFile.path ?
+                getModuleNameStringLiteralAt(importingSourceFile, reason.index).text :
+                undefined
+        ));
+        if (existingSpecifier) return [existingSpecifier];
+
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
 
