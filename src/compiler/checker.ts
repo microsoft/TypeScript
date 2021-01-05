@@ -3310,7 +3310,17 @@ namespace ts {
                     const tsExtension = tryExtractTSExtension(moduleReference);
                     if (tsExtension) {
                         const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
-                        error(errorNode, diag, tsExtension, removeExtension(moduleReference, tsExtension));
+                        const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
+                        let replacedImportSource = importSourceWithoutExtension;
+                        /**
+                         * Direct users to import source with .js extension if outputting an ES module.
+                         * @see https://github.com/microsoft/TypeScript/issues/42151
+                         */
+                        const moduleKind = getEmitModuleKind(compilerOptions);
+                        if (moduleKind >= ModuleKind.ES2015) {
+                            replacedImportSource += ".js";
+                        }
+                        error(errorNode, diag, tsExtension, replacedImportSource);
                     }
                     else if (!compilerOptions.resolveJsonModule &&
                         fileExtensionIs(moduleReference, Extension.Json) &&
