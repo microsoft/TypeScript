@@ -74,8 +74,8 @@ export function assertNodeProperty<
 >tagName : T
 
         node[prop];
->node[prop] : ElementTagNameMap[T][P]
->node : ElementTagNameMap[T]
+>node[prop] : ((Node | null) & ElementTagNameMap[T])[P]
+>node : (Node | null) & ElementTagNameMap[T]
 >prop : P
     }
 }

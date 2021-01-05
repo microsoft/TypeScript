@@ -2591,7 +2591,10 @@ declare namespace ts {
         Optional = 2,
         Rest = 4,
         Variadic = 8,
-        Variable = 12
+        Fixed = 3,
+        Variable = 12,
+        NonRequired = 14,
+        NonRest = 11
     }
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
