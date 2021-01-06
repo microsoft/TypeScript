@@ -1,8 +1,12 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20): error TS2339: Property 'global' does not exist on type 'never'.
   The intersection 'I & RegExp' was reduced to 'never' because property 'global' has conflicting types in some constituents.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(31,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
+  Property 'onChanges' does not exist on type 'C'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(32,11): error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
+  Property 'onChanges' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts (1 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts (3 errors) ====
     interface I { global: string; }
     var result!: I;
     var result2!: I;
@@ -37,7 +41,13 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts(7,20)
         }
         v // Validator & Partial<OnChanges> via subtype reduction
         if (v.onChanges) {
+              ~~~~~~~~~
+!!! error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
+!!! error TS2339:   Property 'onChanges' does not exist on type 'C'.
             v.onChanges({});
+              ~~~~~~~~~
+!!! error TS2339: Property 'onChanges' does not exist on type 'C | (Validator & Partial<OnChanges>)'.
+!!! error TS2339:   Property 'onChanges' does not exist on type 'C'.
         }
     }
     

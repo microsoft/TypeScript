@@ -71,14 +71,10 @@ function foo() {
 >v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
 
     if (v.onChanges) {
->v.onChanges : Symbol(onChanges, Decl(typeGuardsWithInstanceOf.ts, 11, 21))
 >v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
->onChanges : Symbol(onChanges, Decl(typeGuardsWithInstanceOf.ts, 11, 21))
 
         v.onChanges({});
->v.onChanges : Symbol(onChanges, Decl(typeGuardsWithInstanceOf.ts, 11, 21))
 >v : Symbol(v, Decl(typeGuardsWithInstanceOf.ts, 25, 7))
->onChanges : Symbol(onChanges, Decl(typeGuardsWithInstanceOf.ts, 11, 21))
     }
 }
 
