@@ -206,7 +206,9 @@ namespace ts.moduleSpecifiers {
         }
 
         if (relativePreference === RelativePreference.ExternalNonRelative) {
-            const projectDirectory = host.getCurrentDirectory();
+            const projectDirectory = compilerOptions.configFilePath ?
+                toPath(getDirectoryPath(compilerOptions.configFilePath), host.getCurrentDirectory(), info.getCanonicalFileName) :
+                info.getCanonicalFileName(host.getCurrentDirectory());
             const modulePath = toPath(moduleFileName, projectDirectory, getCanonicalFileName);
             const sourceIsInternal = startsWith(sourceDirectory, projectDirectory);
             const targetIsInternal = startsWith(modulePath, projectDirectory);
