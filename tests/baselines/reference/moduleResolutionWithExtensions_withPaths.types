@@ -9,7 +9,7 @@ export declare function relative(): void;
 
 === /test.ts ===
 import { test } from "foo/test.js";
->test : any
+>test : () => void
 
 import { test as test2 } from "foo/test";
 >test : () => void

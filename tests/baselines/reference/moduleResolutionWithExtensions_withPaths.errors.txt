@@ -4,7 +4,6 @@ error TS6504: File '/node_modules/foo/lib/test.js' is a JavaScript file. Did you
 error TS6504: File '/relative.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Matched by include pattern '**/*' in '/tsconfig.json'
-/test.ts(1,22): error TS7016: Could not find a declaration file for module 'foo/test.js'. '/node_modules/foo/lib/test.js' implicitly has an 'any' type.
 
 
 !!! error TS6504: File '/node_modules/foo/lib/test.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
@@ -46,10 +45,8 @@ error TS6504: File '/relative.js' is a JavaScript file. Did you mean to enable t
     export declare function relative(): void;
     
     
-==== /test.ts (1 errors) ====
+==== /test.ts (0 errors) ====
     import { test } from "foo/test.js";
-                         ~~~~~~~~~~~~~
-!!! error TS7016: Could not find a declaration file for module 'foo/test.js'. '/node_modules/foo/lib/test.js' implicitly has an 'any' type.
     import { test as test2 } from "foo/test";
     import { relative } from "./relative.js";
     import { relative as relative2 } from "./relative";
