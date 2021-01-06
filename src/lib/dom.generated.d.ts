@@ -595,7 +595,7 @@ interface ImageEncodeOptions {
 }
 
 interface ImportMeta {
-    url?: string;
+    url: string;
 }
 
 interface InputEventInit extends UIEventInit {
