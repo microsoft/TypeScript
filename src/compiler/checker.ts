@@ -2028,6 +2028,10 @@ namespace ts {
                         let suggestion: Symbol | undefined;
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
+                            // Avoid suggesting "global" if it refers to a global scope augmentation declaration.
+                            if (suggestion && suggestion.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration)) {
+                                suggestion = undefined;
+                            }
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
                                 const diagnostic = error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg!), suggestionName);
