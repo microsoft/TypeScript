@@ -7033,6 +7033,17 @@ namespace ts {
         }
     }
 
+    function isPackedElement(node: Expression) {
+        return !isOmittedExpression(node);
+    }
+
+    /**
+     * Determines whether the provided node is an ArrayLiteralExpression that contains no missing elements.
+     */
+    export function isPackedArrayLiteral(node: Expression) {
+        return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
+    }
+
     /**
      * Indicates whether the result of an `Expression` will be unused.
      *
