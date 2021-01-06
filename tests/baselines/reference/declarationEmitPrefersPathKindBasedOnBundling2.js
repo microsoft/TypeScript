@@ -50,32 +50,7 @@ declare module "lib/operators/scalar" {
 }
 declare module "settings/spacing" {
     const _default: {
-        readonly xs: import("../lib/operators/scalar").Scalar;
+        readonly xs: import("lib/operators/scalar").Scalar;
     };
     export default _default;
 }
-
-
-//// [DtsFileErrors]
-
-
-dist.d.ts(10,29): error TS2792: Cannot find module '../lib/operators/scalar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-
-
-==== ./dist.d.ts (1 errors) ====
-    declare module "lib/operators/scalar" {
-        export interface Scalar {
-            (): string;
-            value: number;
-        }
-        export function scalar(value: string): Scalar;
-    }
-    declare module "settings/spacing" {
-        const _default: {
-            readonly xs: import("../lib/operators/scalar").Scalar;
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module '../lib/operators/scalar'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-        };
-        export default _default;
-    }
-    

@@ -104,16 +104,20 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
 
         const existingSpecifier = forEach(modulePaths, modulePath => forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
-            reason => reason.kind === FileIncludeKind.Import && reason.file === importingSourceFile.path ?
-                getModuleNameStringLiteralAt(importingSourceFile, reason.index).text :
-                undefined
+            reason => {
+                if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
+                const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
+                return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
+                    specifier :
+                    undefined;
+            }
         ));
         if (existingSpecifier) return [existingSpecifier];
 
-        const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
 
         // Module specifier priority:
