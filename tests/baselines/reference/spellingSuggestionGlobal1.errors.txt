@@ -1,0 +1,11 @@
+tests/cases/compiler/spellingSuggestionGlobal1.ts(3,1): error TS2552: Cannot find name 'global'. Did you mean 'global'?
+
+
+==== tests/cases/compiler/spellingSuggestionGlobal1.ts (1 errors) ====
+    export {}
+    declare global { const x: any }
+    global.x // should not suggest `global` (GH#42209)
+    ~~~~~~
+!!! error TS2552: Cannot find name 'global'. Did you mean 'global'?
+!!! related TS2728 tests/cases/compiler/spellingSuggestionGlobal1.ts:2:9: 'global' is declared here.
+    
