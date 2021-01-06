@@ -149,7 +149,7 @@ fnErr();
                             { line: 4, offset: 5 },
                             { line: 4, offset: 10 },
                             Diagnostics.Module_0_has_no_exported_member_1,
-                            [`"../dependency/fns"`, "fnErr"],
+                            [`"../decls/fns"`, "fnErr"],
                             "error",
                         )
                     ],
