@@ -6175,7 +6175,6 @@
         "category": "Message",
         "code": 95144
     },
-    
     "Use element access for '{0}'": {
         "category": "Message",
         "code": 95145
@@ -6192,7 +6191,6 @@
         "category": "Message",
         "code": 95148
     },
-
     "Return type must be inferred from a function": {
         "category": "Message",
         "code": 95149
