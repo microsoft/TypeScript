@@ -4631,7 +4631,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode): SourceFile | undefined;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
         getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): string[] | undefined;
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
@@ -5275,18 +5275,21 @@ namespace ts {
     }
 
     export const enum ElementFlags {
-        Required  = 1 << 0,  // T
-        Optional  = 1 << 1,  // T?
-        Rest      = 1 << 2,  // ...T[]
-        Variadic  = 1 << 3,  // ...T
-        Variable  = Rest | Variadic,
+        Required    = 1 << 0,  // T
+        Optional    = 1 << 1,  // T?
+        Rest        = 1 << 2,  // ...T[]
+        Variadic    = 1 << 3,  // ...T
+        Fixed       = Required | Optional,
+        Variable    = Rest | Variadic,
+        NonRequired = Optional | Rest | Variadic,
+        NonRest     = Required | Optional | Variadic,
     }
 
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
-        minLength: number;
-        fixedLength: number;
-        hasRestElement: boolean;
+        minLength: number;  // Number of required or variadic elements
+        fixedLength: number;  // Number of initial required or optional elements
+        hasRestElement: boolean;  // True if tuple has any rest or variadic elements
         combinedFlags: ElementFlags;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
@@ -6626,19 +6629,18 @@ namespace ts {
         Generator = 1 << 7,             // __generator (used by ES2015 generator transformation)
         Values = 1 << 8,                // __values (used by ES2015 for..of and yield* transformations)
         Read = 1 << 9,                  // __read (used by ES2015 iterator destructuring transformation)
-        Spread = 1 << 10,               // __spread (used by ES2015 array spread and argument list spread transformations)
-        SpreadArrays = 1 << 11,         // __spreadArrays (used by ES2015 array spread and argument list spread transformations)
-        Await = 1 << 12,                // __await (used by ES2017 async generator transformation)
-        AsyncGenerator = 1 << 13,       // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 14,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
-        ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
-        ImportStar = 1 << 17,           // __importStar (used by CommonJS/AMD/UMD module transformation)
-        ImportDefault = 1 << 18,        // __importStar (used by CommonJS/AMD/UMD module transformation)
-        MakeTemplateObject = 1 << 19,   // __makeTemplateObject (used for constructing template string array objects)
-        ClassPrivateFieldGet = 1 << 20, // __classPrivateFieldGet (used by the class private field transformation)
-        ClassPrivateFieldSet = 1 << 21, // __classPrivateFieldSet (used by the class private field transformation)
-        CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+        SpreadArray = 1 << 10,          // __spreadArray (used by ES2015 array spread and argument list spread transformations)
+        Await = 1 << 11,                // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,       // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        ImportStar = 1 << 16,           // __importStar (used by CommonJS/AMD/UMD module transformation)
+        ImportDefault = 1 << 17,        // __importStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 18,   // __makeTemplateObject (used for constructing template string array objects)
+        ClassPrivateFieldGet = 1 << 19, // __classPrivateFieldGet (used by the class private field transformation)
+        ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
+        CreateBinding = 1 << 21,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
         LastEmitHelper = CreateBinding,
 
@@ -6655,8 +6657,7 @@ namespace ts {
         AsyncDelegatorIncludes = Await | AsyncDelegator | AsyncValues,
 
         // Helpers included by ES2015 spread
-        SpreadIncludes = Read | Spread,
-
+        SpreadIncludes = Read | SpreadArray,
     }
 
     export const enum EmitHint {

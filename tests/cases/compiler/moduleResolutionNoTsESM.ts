@@ -1,3 +1,6 @@
+// ESM output
+// @module: es2015
+
 // @jsx: Preserve
 // @filename: x.ts
 export default 0;
