@@ -44,6 +44,7 @@ namespace ts.projectSystem {
                 isGlobalCompletion: true,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
+                optionalReplacementSpan: { start: { line: 1, offset: 1 }, end: { line: 1, offset: 4 } },
                 entries: [entry],
             });
 

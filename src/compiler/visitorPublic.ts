@@ -9,7 +9,7 @@ namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T;
+    export function visitNode<T extends Node>(node: T, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T;
 
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
@@ -19,9 +19,9 @@ namespace ts {
      * @param test A callback to execute to verify the Node is valid.
      * @param lift An optional callback to execute to lift a NodeArray into a valid Node.
      */
-    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined;
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined;
 
-    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: NodeArray<Node>) => T): T | undefined {
+    export function visitNode<T extends Node>(node: T | undefined, visitor: Visitor | undefined, test?: (node: Node) => boolean, lift?: (node: readonly Node[]) => T): T | undefined {
         if (node === undefined || visitor === undefined) {
             return node;
         }
@@ -565,12 +565,23 @@ namespace ts {
                 return factory.updateMappedTypeNode((<MappedTypeNode>node),
                     nodeVisitor((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
+                    nodeVisitor((<MappedTypeNode>node).nameType, visitor, isTypeNode),
                     nodeVisitor((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     nodeVisitor((<MappedTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.LiteralType:
                 return factory.updateLiteralTypeNode(<LiteralTypeNode>node,
                     nodeVisitor((<LiteralTypeNode>node).literal, visitor, isExpression));
+
+            case SyntaxKind.TemplateLiteralType:
+                return factory.updateTemplateLiteralType(<TemplateLiteralTypeNode>node,
+                    nodeVisitor((<TemplateLiteralTypeNode>node).head, visitor, isTemplateHead),
+                    nodesVisitor((<TemplateLiteralTypeNode>node).templateSpans, visitor, isTemplateLiteralTypeSpan));
+
+            case SyntaxKind.TemplateLiteralTypeSpan:
+                return factory.updateTemplateLiteralTypeSpan(<TemplateLiteralTypeSpan>node,
+                    nodeVisitor((<TemplateLiteralTypeSpan>node).type, visitor, isTypeNode),
+                    nodeVisitor((<TemplateLiteralTypeSpan>node).literal, visitor, isTemplateMiddleOrTemplateTail));
 
             // Binding patterns
             case SyntaxKind.ObjectBindingPattern:
@@ -926,6 +937,7 @@ namespace ts {
                 return factory.updateImportEqualsDeclaration(<ImportEqualsDeclaration>node,
                     nodesVisitor((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier),
+                    (<ImportEqualsDeclaration>node).isTypeOnly,
                     nodeVisitor((<ImportEqualsDeclaration>node).name, visitor, isIdentifier),
                     nodeVisitor((<ImportEqualsDeclaration>node).moduleReference, visitor, isModuleReference));
 
@@ -938,7 +950,7 @@ namespace ts {
 
             case SyntaxKind.ImportClause:
                 return factory.updateImportClause(<ImportClause>node,
-                    (node as ImportClause).isTypeOnly,
+                    (<ImportClause>node).isTypeOnly,
                     nodeVisitor((<ImportClause>node).name, visitor, isIdentifier),
                     nodeVisitor((<ImportClause>node).namedBindings, visitor, isNamedImportBindings));
 
@@ -969,7 +981,7 @@ namespace ts {
                 return factory.updateExportDeclaration(<ExportDeclaration>node,
                     nodesVisitor((<ExportDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ExportDeclaration>node).modifiers, visitor, isModifier),
-                    (node as ExportDeclaration).isTypeOnly,
+                    (<ExportDeclaration>node).isTypeOnly,
                     nodeVisitor((<ExportDeclaration>node).exportClause, visitor, isNamedExportBindings),
                     nodeVisitor((<ExportDeclaration>node).moduleSpecifier, visitor, isExpression));
 

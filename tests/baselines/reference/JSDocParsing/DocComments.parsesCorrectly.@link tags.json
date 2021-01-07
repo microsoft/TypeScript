@@ -1,32 +1,9 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 127,
+    "end": 63,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": "{@link first link}\nInside {@link link text} thing",
-    "tags": {
-        "0": {
-            "kind": "JSDocTag",
-            "pos": 63,
-            "end": 68,
-            "modifierFlagsCache": 0,
-            "transformFlags": 0,
-            "tagName": {
-                "kind": "Identifier",
-                "pos": 64,
-                "end": 67,
-                "modifierFlagsCache": 0,
-                "transformFlags": 0,
-                "escapedText": "see"
-            },
-            "comment": "{@link second link text} and {@link Foo|a foo} as well."
-        },
-        "length": 1,
-        "pos": 63,
-        "end": 68,
-        "hasTrailingComma": false,
-        "transformFlags": 0
-    }
+    "comment": "{@link first link}\nInside {@link link text} thing"
 }

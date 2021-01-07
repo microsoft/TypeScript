@@ -15,12 +15,12 @@ module.exports = class C {}
 >C : typeof wat
 
 module.exports.D = class D { }
->module.exports.D = class D { } : typeof D
->module.exports.D : typeof D
+>module.exports.D = class D { } : typeof wat.D
+>module.exports.D : typeof wat.D
 >module.exports : typeof wat
 >module : { "\"tests/cases/conformance/salsa/bug24024\"": typeof wat; }
 >exports : typeof wat
->D : typeof D
->class D { } : typeof D
->D : typeof D
+>D : typeof wat.D
+>class D { } : typeof wat.D
+>D : typeof wat.D
 

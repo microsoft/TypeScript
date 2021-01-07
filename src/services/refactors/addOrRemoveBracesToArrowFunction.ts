@@ -2,45 +2,40 @@
 namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const refactorName = "Add or remove braces in an arrow function";
     const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
-    const addBracesActionName = "Add braces to arrow function";
-    const removeBracesActionName = "Remove braces from arrow function";
-    const addBracesActionDescription = Diagnostics.Add_braces_to_arrow_function.message;
-    const removeBracesActionDescription = Diagnostics.Remove_braces_from_arrow_function.message;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
-    interface Info {
+    const addBracesAction = {
+        name: "Add braces to arrow function",
+        description: Diagnostics.Add_braces_to_arrow_function.message,
+        kind: "refactor.rewrite.arrow.braces.add",
+    };
+    const removeBracesAction = {
+        name: "Remove braces from arrow function",
+        description: Diagnostics.Remove_braces_from_arrow_function.message,
+        kind: "refactor.rewrite.arrow.braces.remove"
+    };
+    registerRefactor(refactorName, {
+        kinds: [removeBracesAction.kind],
+        getEditsForAction,
+        getAvailableActions });
+
+    interface FunctionBracesInfo {
         func: ArrowFunction;
         expression: Expression | undefined;
         returnStatement?: ReturnStatement;
         addBraces: boolean;
     }
 
-    type InfoOrError = {
-        info: Info,
-        error?: never
-    } | {
-        info?: never,
-        error: string
-    };
-
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
         if (!info) return emptyArray;
 
-        if (info.error === undefined) {
+        if (!isRefactorErrorInfo(info)) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
                 actions: [
-                    info.info.addBraces ?
-                        {
-                            name: addBracesActionName,
-                            description: addBracesActionDescription
-                        } : {
-                            name: removeBracesActionName,
-                            description: removeBracesActionDescription
-                        }
+                    info.addBraces ? addBracesAction : removeBracesAction
                 ]
             }];
         }
@@ -49,15 +44,10 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             return [{
                 name: refactorName,
                 description: refactorDescription,
-                actions: [{
-                    name: addBracesActionName,
-                    description: addBracesActionDescription,
-                    notApplicableReason: info.error
-                }, {
-                    name: removeBracesActionName,
-                    description: removeBracesActionDescription,
-                    notApplicableReason: info.error
-                }]
+                actions: [
+                    { ...addBracesAction, notApplicableReason: info.error },
+                    { ...removeBracesAction, notApplicableReason: info.error },
+                ]
             }];
         }
 
@@ -67,19 +57,19 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
-        if (!info || !info.info) return undefined;
+        Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
 
-        const { expression, returnStatement, func } = info.info;
+        const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
 
-        if (actionName === addBracesActionName) {
+        if (actionName === addBracesAction.name) {
             const returnStatement = factory.createReturnStatement(expression);
             body = factory.createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
             copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
-        else if (actionName === removeBracesActionName && returnStatement) {
+        else if (actionName === removeBracesAction.name && returnStatement) {
             const actualExpression = expression || factory.createVoidZero();
             body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
@@ -98,7 +88,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): InfoOrError | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true, kind?: string): FunctionBracesInfo | RefactorErrorInfo | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
 
@@ -118,26 +108,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             return undefined;
         }
 
-        if (isExpression(func.body)) {
-            return {
-                info: {
-                    func,
-                    addBraces: true,
-                    expression: func.body
-                }
-            };
+        if (refactorKindBeginsWith(addBracesAction.kind, kind) && isExpression(func.body)) {
+            return { func, addBraces: true, expression: func.body };
         }
-        else if (func.body.statements.length === 1) {
+        else if (refactorKindBeginsWith(removeBracesAction.kind, kind) && isBlock(func.body) && func.body.statements.length === 1) {
             const firstStatement = first(func.body.statements);
             if (isReturnStatement(firstStatement)) {
-                return {
-                    info: {
-                        func,
-                        addBraces: false,
-                        expression: firstStatement.expression,
-                        returnStatement: firstStatement
-                    }
-                };
+                return { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement };
             }
         }
         return undefined;

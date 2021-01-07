@@ -99,7 +99,19 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+                const chunkSize = 50;
+                for (let i=0; i<currentModuleInfo.exportedNames!.length; i += chunkSize) {
+                    append(
+                        statements,
+                        factory.createExpressionStatement(
+                            reduceLeft(
+                                currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
+                                (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
+                                factory.createVoidZero() as Expression
+                            )
+                        )
+                    );
+                }
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -597,7 +609,10 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
-            const argument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+            const firstArgument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
+            const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
             const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
@@ -1751,7 +1766,7 @@ namespace ts {
                 return node;
             }
 
-            if (!isGeneratedIdentifier(node) && !isLocalName(node)) {
+            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
@@ -1778,7 +1793,7 @@ namespace ts {
                         const name = importDeclaration.propertyName || importDeclaration.name;
                         return setTextRange(
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(name)
                             ),
                             /*location*/ node

@@ -1,217 +1,71 @@
 Exit Code: 2
 Standard output:
-bin/webpack.js(63,8): error TS2300: Duplicate identifier 'path'.
-bin/webpack.js(127,8): error TS2300: Duplicate identifier 'path'.
-lib/ChunkGraph.js(500,3): error TS2741: Property 'prototype' is missing in type 'RuntimeSpecSet' but required in type 'typeof RuntimeSpecSet'.
-lib/ChunkGraph.js(1160,41): error TS2339: Property 'values' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1164,14): error TS2339: Property 'keys' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1172,38): error TS2339: Property 'get' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1178,35): error TS2339: Property 'keys' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1194,27): error TS2339: Property 'has' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1225,4): error TS2322: Type 'RuntimeSpecMap<any>' is not assignable to type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1227,14): error TS2339: Property 'set' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1242,4): error TS2322: Type 'RuntimeSpecMap<any>' is not assignable to type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1245,26): error TS2339: Property 'update' does not exist on type 'typeof RuntimeSpecMap'.
-lib/ChunkGraph.js(1295,55): error TS2339: Property 'get' does not exist on type 'typeof RuntimeSpecMap'.
-lib/CodeGenerationResults.js(37,34): error TS2339: Property 'values' does not exist on type 'typeof RuntimeSpecMap'.
-lib/CodeGenerationResults.js(41,13): error TS2339: Property 'keys' does not exist on type 'typeof RuntimeSpecMap'.
-lib/CodeGenerationResults.js(49,25): error TS2339: Property 'get' does not exist on type 'typeof RuntimeSpecMap'.
-lib/CodeGenerationResults.js(55,13): error TS2339: Property 'keys' does not exist on type 'typeof RuntimeSpecMap'.
-lib/CodeGenerationResults.js(103,8): error TS2339: Property 'set' does not exist on type 'typeof RuntimeSpecMap'.
-lib/CodeGenerationResults.js(107,25): error TS2345: Argument of type 'RuntimeSpecMap<any>' is not assignable to parameter of type 'typeof RuntimeSpecMap'.
-  Property 'prototype' is missing in type 'RuntimeSpecMap<any>' but required in type 'typeof RuntimeSpecMap'.
 lib/Compilation.js(37,7): error TS2440: Import declaration conflicts with local declaration of 'Module'.
 lib/Compilation.js(49,7): error TS2440: Import declaration conflicts with local declaration of 'WebpackError'.
 lib/Compilation.js(53,7): error TS2440: Import declaration conflicts with local declaration of 'StatsFactory'.
 lib/Compilation.js(54,7): error TS2440: Import declaration conflicts with local declaration of 'StatsPrinter'.
-lib/Compilation.js(608,12): error TS2740: Type 'typeof WebpackLogger' is missing the following properties from type 'WebpackLogger': getChildLogger, error, warn, info, and 19 more.
-lib/Compilation.js(849,3): error TS2322: Type 'WebpackLogger' is not assignable to type 'typeof WebpackLogger'.
-lib/Compilation.js(901,4): error TS2345: Argument of type '(childName: string | (() => string)) => typeof WebpackLogger' is not assignable to parameter of type '(arg0: string | (() => string)) => WebpackLogger'.
-  Type 'typeof WebpackLogger' is not assignable to type 'WebpackLogger'.
-lib/Compilation.js(1675,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1678,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1682,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1704,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1737,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1742,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1744,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1873,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1875,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1931,18): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1933,18): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1937,18): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1939,18): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1946,19): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1948,19): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1952,19): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1954,19): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1958,19): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1961,20): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1963,20): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1966,19): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1971,19): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1974,20): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(1982,21): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2005,19): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2009,21): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2016,20): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2077,17): error TS2339: Property 'size' does not exist on type 'typeof RuntimeSpecSet'.
-lib/Compilation.js(2078,27): error TS2488: Type 'typeof RuntimeSpecSet' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/Compilation.js(2082,24): error TS2339: Property 'size' does not exist on type 'typeof RuntimeSpecSet'.
-lib/Compilation.js(2085,27): error TS2488: Type 'typeof RuntimeSpecSet' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/Compilation.js(2155,17): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2178,27): error TS2488: Type 'typeof RuntimeSpecSet' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/Compilation.js(2526,26): error TS2488: Type 'typeof RuntimeSpecSet' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/Compilation.js(2544,15): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2552,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2562,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2564,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2568,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2571,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2575,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2578,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2582,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2585,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2600,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2605,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2624,16): error TS2339: Property 'timeAggregate' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2626,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2654,16): error TS2339: Property 'timeAggregate' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2656,15): error TS2339: Property 'timeAggregateEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2657,15): error TS2339: Property 'timeAggregateEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2658,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2662,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2664,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compilation.js(2692,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(259,3): error TS2741: Property 'prototype' is missing in type 'WebpackLogger' but required in type 'typeof WebpackLogger'.
-lib/Compiler.js(275,4): error TS2345: Argument of type '(childName: string | (() => string)) => typeof WebpackLogger' is not assignable to parameter of type '(arg0: string | (() => string)) => WebpackLogger'.
-  Type 'typeof WebpackLogger' is not assignable to type 'WebpackLogger'.
-lib/Compiler.js(955,11): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(957,12): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(960,12): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(962,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(966,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(968,15): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(971,15): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(973,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(976,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Compiler.js(978,17): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/ExportsInfo.js(1054,28): error TS1016: A required parameter cannot follow an optional parameter.
-lib/FlagDependencyExportsPlugin.js(45,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyExportsPlugin.js(81,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyExportsPlugin.js(262,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyExportsPlugin.js(293,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyExportsPlugin.js(295,16): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyExportsPlugin.js(309,16): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyExportsPlugin.js(330,18): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/Compiler.js(156,4): error TS2322: Type 'AsyncParallelHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+lib/Compiler.js(156,4): error TS2322: Type 'AsyncParallelHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+  Types of property 'intercept' are incompatible.
+    Type '(interceptor: HookInterceptor<any, void, UnsetAdditionalOptions>) => void' is not assignable to type '(interceptor: HookInterceptor<[Compilation], void, Module>) => void'.
+      Types of parameters 'interceptor' and 'interceptor' are incompatible.
+        Type 'HookInterceptor<[Compilation], void, Module>' is not assignable to type 'HookInterceptor<any, void, UnsetAdditionalOptions>'.
+          Property '_UnsetAdditionalOptions' is missing in type 'Module' but required in type 'UnsetAdditionalOptions'.
+lib/Compiler.js(158,4): error TS2322: Type 'AsyncSeriesHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+lib/Compiler.js(158,4): error TS2322: Type 'AsyncSeriesHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+  Types of property 'intercept' are incompatible.
+    Type '(interceptor: HookInterceptor<any, void, UnsetAdditionalOptions>) => void' is not assignable to type '(interceptor: HookInterceptor<[Compilation], void, Module>) => void'.
+      Types of parameters 'interceptor' and 'interceptor' are incompatible.
+        Type 'HookInterceptor<[Compilation], void, Module>' is not assignable to type 'HookInterceptor<any, void, UnsetAdditionalOptions>'.
+lib/ExportsInfo.js(1092,28): error TS1016: A required parameter cannot follow an optional parameter.
 lib/FlagDependencyUsagePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
-lib/FlagDependencyUsagePlugin.js(252,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyUsagePlugin.js(258,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyUsagePlugin.js(260,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/FlagDependencyUsagePlugin.js(301,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
 lib/NormalModule.js(19,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
 lib/RuntimeTemplate.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'InitFragment'.
 lib/Template.js(8,9): error TS2440: Import declaration conflicts with local declaration of 'ConcatSource'.
 lib/Watching.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Stats'.
-lib/Watching.js(162,12): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(166,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(180,10): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(182,11): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(185,11): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(189,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(191,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/Watching.js(194,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/WebpackOptionsApply.js(74,12): error TS2300: Duplicate identifier 'JsonpTemplatePlugin'.
-lib/WebpackOptionsApply.js(75,12): error TS2300: Duplicate identifier 'FetchCompileWasmPlugin'.
-lib/WebpackOptionsApply.js(76,12): error TS2300: Duplicate identifier 'FetchCompileAsyncWasmPlugin'.
-lib/WebpackOptionsApply.js(77,12): error TS2300: Duplicate identifier 'NodeSourcePlugin'.
-lib/WebpackOptionsApply.js(78,12): error TS2300: Duplicate identifier 'ChunkPrefetchPreloadPlugin'.
-lib/WebpackOptionsApply.js(91,12): error TS2300: Duplicate identifier 'FetchCompileWasmPlugin'.
-lib/WebpackOptionsApply.js(92,12): error TS2300: Duplicate identifier 'FetchCompileAsyncWasmPlugin'.
-lib/WebpackOptionsApply.js(93,12): error TS2300: Duplicate identifier 'NodeSourcePlugin'.
-lib/WebpackOptionsApply.js(105,12): error TS2300: Duplicate identifier 'NodeTemplatePlugin'.
-lib/WebpackOptionsApply.js(108,12): error TS2300: Duplicate identifier 'NodeTargetPlugin'.
-lib/WebpackOptionsApply.js(121,12): error TS2300: Duplicate identifier 'JsonpTemplatePlugin'.
-lib/WebpackOptionsApply.js(122,12): error TS2300: Duplicate identifier 'NodeTargetPlugin'.
-lib/WebpackOptionsApply.js(123,12): error TS2300: Duplicate identifier 'ExternalsPlugin'.
-lib/WebpackOptionsApply.js(124,12): error TS2300: Duplicate identifier 'ChunkPrefetchPreloadPlugin'.
-lib/WebpackOptionsApply.js(133,12): error TS2300: Duplicate identifier 'NodeTemplatePlugin'.
-lib/WebpackOptionsApply.js(134,12): error TS2300: Duplicate identifier 'NodeTargetPlugin'.
-lib/WebpackOptionsApply.js(135,12): error TS2300: Duplicate identifier 'ElectronTargetPlugin'.
-lib/WebpackOptionsApply.js(146,12): error TS2300: Duplicate identifier 'FetchCompileWasmPlugin'.
-lib/WebpackOptionsApply.js(147,12): error TS2300: Duplicate identifier 'FetchCompileAsyncWasmPlugin'.
-lib/WebpackOptionsApply.js(148,12): error TS2300: Duplicate identifier 'NodeTargetPlugin'.
-lib/WebpackOptionsApply.js(149,12): error TS2300: Duplicate identifier 'ElectronTargetPlugin'.
-lib/WebpackOptionsApply.js(150,12): error TS2300: Duplicate identifier 'ChunkPrefetchPreloadPlugin'.
-lib/WebpackOptionsApply.js(152,13): error TS2300: Duplicate identifier 'JsonpTemplatePlugin'.
-lib/WebpackOptionsApply.js(155,13): error TS2300: Duplicate identifier 'NodeTemplatePlugin'.
-lib/WebpackOptionsApply.js(184,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
-lib/WebpackOptionsApply.js(445,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
-lib/WebpackOptionsApply.js(452,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
-lib/WebpackOptionsApply.js(502,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
-lib/WebpackOptionsApply.js(512,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
-lib/WebpackOptionsApply.js(525,18): error TS2322: Type 'typeof WebpackLogger' is not assignable to type 'WebpackLogger'.
-lib/buildChunkGraph.js(1075,9): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/buildChunkGraph.js(1077,3): error TS2345: Argument of type 'typeof WebpackLogger' is not assignable to parameter of type 'WebpackLogger'.
-lib/buildChunkGraph.js(1085,9): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/buildChunkGraph.js(1089,9): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/buildChunkGraph.js(1096,9): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/buildChunkGraph.js(1100,9): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/buildChunkGraph.js(1102,9): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/WebpackOptionsApply.js(79,10): error TS2300: Duplicate identifier 'ElectronTargetPlugin'.
+lib/WebpackOptionsApply.js(83,10): error TS2300: Duplicate identifier 'ElectronTargetPlugin'.
+lib/WebpackOptionsApply.js(87,10): error TS2300: Duplicate identifier 'ElectronTargetPlugin'.
+lib/WebpackOptionsApply.js(96,10): error TS2300: Duplicate identifier 'ElectronTargetPlugin'.
+lib/WebpackOptionsApply.js(100,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
+lib/WebpackOptionsApply.js(104,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
+lib/WebpackOptionsApply.js(107,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
+lib/WebpackOptionsApply.js(158,10): error TS2300: Duplicate identifier 'ExternalsPlugin'.
+lib/WebpackOptionsApply.js(423,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
+lib/WebpackOptionsApply.js(430,12): error TS2300: Duplicate identifier 'OccurrenceChunkIdsPlugin'.
+lib/WebpackOptionsApply.js(481,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
+lib/WebpackOptionsApply.js(491,12): error TS2300: Duplicate identifier 'MemoryCachePlugin'.
 lib/cache/ResolverCachePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'LazySet'.
-lib/cache/ResolverCachePlugin.js(106,13): error TS2339: Property 'log' does not exist on type 'typeof WebpackLogger'.
 lib/dependencies/CommonJsExportRequireDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/HarmonyExportImportedSpecifierDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
-lib/dependencies/HarmonyExportImportedSpecifierDependency.js(48,37): error TS1016: A required parameter cannot follow an optional parameter.
-lib/dependencies/HarmonyImportDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
+lib/dependencies/HarmonyImportDependency.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/HarmonyImportSpecifierDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/ImportDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/ModuleDecoratorDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/NullDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/dependencies/RequireIncludeDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
-lib/library/EnableLibraryPlugin.js(70,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(80,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(90,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(100,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(110,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(120,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(130,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/library/EnableLibraryPlugin.js(141,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
-lib/logging/runtime.js(25,2): error TS2322: Type 'WebpackLogger' is not assignable to type 'typeof WebpackLogger'.
-lib/logging/runtime.js(31,16): error TS2322: Type 'typeof WebpackLogger' is not assignable to type 'WebpackLogger'.
-lib/optimize/InnerGraphPlugin.js(148,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/InnerGraphPlugin.js(150,14): error TS2339: Property 'timeAggregate' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/InnerGraphPlugin.js(407,13): error TS2339: Property 'timeAggregateEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(111,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(187,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(188,14): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(194,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(198,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(200,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(209,24): error TS2488: Type 'typeof RuntimeSpecSet' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/optimize/ModuleConcatenationPlugin.js(277,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(278,14): error TS2339: Property 'debug' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(285,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(289,14): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(292,14): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(421,16): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/ModuleConcatenationPlugin.js(549,20): error TS2488: Type 'typeof RuntimeSpecSet' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/optimize/SideEffectsFlagPlugin.js(111,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SideEffectsFlagPlugin.js(155,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
+lib/dependencies/WorkerDependency.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
+lib/javascript/EnableChunkLoadingPlugin.js(84,12): error TS2300: Duplicate identifier 'CommonJsChunkLoadingPlugin'.
+lib/javascript/EnableChunkLoadingPlugin.js(91,12): error TS2300: Duplicate identifier 'CommonJsChunkLoadingPlugin'.
+lib/library/EnableLibraryPlugin.js(79,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(89,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(99,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(109,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(119,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(129,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(139,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
+lib/library/EnableLibraryPlugin.js(150,12): error TS2300: Duplicate identifier 'AssignLibraryPlugin'.
 lib/optimize/SplitChunksPlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Chunk'.
-lib/optimize/SplitChunksPlugin.js(695,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1026,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1028,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1094,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1096,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1393,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1395,13): error TS2339: Property 'time' does not exist on type 'typeof WebpackLogger'.
-lib/optimize/SplitChunksPlugin.js(1513,13): error TS2339: Property 'timeEnd' does not exist on type 'typeof WebpackLogger'.
 lib/runtime/LoadScriptRuntimeModule.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
+lib/util/registerExternalSerializer.js(319,16): error TS2339: Property 'errors' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(320,16): error TS2339: Property 'schema' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(322,17): error TS2339: Property 'headerName' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(323,25): error TS2339: Property 'baseDataPath' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(324,26): error TS2339: Property 'postFormatter' does not exist on type 'typeof ValidationError'.
+lib/util/registerExternalSerializer.js(333,4): error TS2739: Type 'ValidationError' is missing the following properties from type 'typeof ValidationError': prototype, captureStackTrace, stackTraceLimit
 lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
-lib/web/JsonpTemplatePlugin.js(10,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.
-lib/webpack.js(9,7): error TS2440: Import declaration conflicts with local declaration of 'Compiler'.
-lib/webpack.js(10,7): error TS2440: Import declaration conflicts with local declaration of 'MultiCompiler'.
+lib/webpack.js(10,7): error TS2440: Import declaration conflicts with local declaration of 'Compiler'.
+lib/webpack.js(11,7): error TS2440: Import declaration conflicts with local declaration of 'MultiCompiler'.
 
 
 

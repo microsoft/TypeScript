@@ -37,7 +37,7 @@ namespace ts {
 
         function check(node: Node) {
             if (isJsFile) {
-                if (canBeConvertedToClass(node)) {
+                if (canBeConvertedToClass(node, checker)) {
                     diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                 }
             }
@@ -190,14 +190,13 @@ namespace ts {
         return `${exp.pos.toString()}:${exp.end.toString()}`;
     }
 
-    function canBeConvertedToClass(node: Node): boolean {
+    function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
         if (node.kind === SyntaxKind.FunctionExpression) {
             if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
                 return true;
             }
 
-            const decl = getDeclarationOfExpando(node);
-            const symbol = decl?.symbol;
+            const symbol = checker.getSymbolOfExpando(node, /*allowDeclaration*/ false);
             return !!(symbol && (symbol.exports?.size || symbol.members?.size));
         }
 

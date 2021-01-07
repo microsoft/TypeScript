@@ -1,6 +1,7 @@
 // @out: a.js
 // @sourcemap: true
 // @declaration: true
+// @bundledPackageName: out
 // @Filename: a.ts
 /*--------------------------------------------------------------------------
 Copyright 

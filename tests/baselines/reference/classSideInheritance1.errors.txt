@@ -1,5 +1,5 @@
-tests/cases/compiler/classSideInheritance1.ts(12,3): error TS2576: Property 'bar' is a static member of type 'A'
-tests/cases/compiler/classSideInheritance1.ts(13,3): error TS2576: Property 'bar' is a static member of type 'C2'
+tests/cases/compiler/classSideInheritance1.ts(12,3): error TS2576: Property 'bar' does not exist on type 'A'. Did you mean to access the static member 'A.bar' instead?
+tests/cases/compiler/classSideInheritance1.ts(13,3): error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?
 
 
 ==== tests/cases/compiler/classSideInheritance1.ts (2 errors) ====
@@ -16,9 +16,9 @@ tests/cases/compiler/classSideInheritance1.ts(13,3): error TS2576: Property 'bar
     var c: C2;
     a.bar(); // static off an instance - should be an error
       ~~~
-!!! error TS2576: Property 'bar' is a static member of type 'A'
+!!! error TS2576: Property 'bar' does not exist on type 'A'. Did you mean to access the static member 'A.bar' instead?
     c.bar(); // static off an instance - should be an error
       ~~~
-!!! error TS2576: Property 'bar' is a static member of type 'C2'
+!!! error TS2576: Property 'bar' does not exist on type 'C2'. Did you mean to access the static member 'C2.bar' instead?
     A.bar(); // valid
     C2.bar(); // valid

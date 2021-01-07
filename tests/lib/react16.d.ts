@@ -2567,3 +2567,17 @@ declare module "react" {
         }
     }
 }
+
+declare module "react/jsx-runtime" {
+    import * as React from "react";
+    export function jsx(...args: any): React.ReactElement<any>;
+    export function jsxs(...args: any): React.ReactElement<any>;
+    export import Fragment = React.Fragment;
+}
+
+
+declare module "react/jsx-dev-runtime" {
+    import * as React from "react";
+    export function jsxDEV(...args: any): React.ReactElement<any>;
+    export import Fragment = React.Fragment;
+}

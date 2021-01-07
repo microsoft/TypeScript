@@ -8,17 +8,17 @@ const x = require("./lateBoundAssignmentDeclarationSupport7.js");
 const y = x.F["my-fake-sym"];
 >y : string
 >x.F["my-fake-sym"] : string
->x.F : typeof F
+>x.F : typeof x.F
 >x : typeof x
->F : typeof F
+>F : typeof x.F
 >"my-fake-sym" : "my-fake-sym"
 
 const z = x.F[x.S];
 >z : string
 >x.F[x.S] : string
->x.F : typeof F
+>x.F : typeof x.F
 >x : typeof x
->F : typeof F
+>F : typeof x.F
 >x.S : unique symbol
 >x : typeof x
 >S : unique symbol

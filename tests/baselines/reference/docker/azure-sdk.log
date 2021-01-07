@@ -2,49 +2,52 @@ Exit Code: 1
 Standard output:
 
 Rush Multi-Project Build Tool 5.X.X - https://rushjs.io
-Node.js version is 14.8.0 (pre-LTS)
+Node.js version is 15.1.0 (unstable)
 Starting "rush rebuild"
 Executing a maximum of ?simultaneous processes...
-XX of XX: [@azure/abort-controller] completed successfully in ? seconds
-XX of XX: [@azure/logger] completed successfully in ? seconds
-XX of XX: [@azure/core-asynciterator-polyfill] completed successfully in ? seconds
-XX of XX: [@azure/core-paging] completed successfully in ? seconds
-SUCCESS (4)
+BLOCKED (51)
 ================================
-@azure/abort-controller (? seconds)
-@azure/logger (? seconds)
-@azure/core-asynciterator-polyfill (? seconds)
-@azure/core-paging (? seconds)
-================================
-BLOCKED (38)
-================================
+@azure/abort-controller
 @azure/core-auth
+@azure/logger
 @azure/core-http
-@azure/core-lro
-@azure/dev-tool
+@azure/core-asynciterator-polyfill
 @azure/identity
-@azure/test-utils-recorder
+@azure/communication-common
 @azure/core-amqp
+@azure/core-lro
+@azure/core-paging
+@azure/dev-tool
+@azure/test-utils-recorder
+@azure/communication-administration
 @azure/core-https
 @azure/core-xml
+@azure/event-hubs
 @azure/event-processor-host
 @azure/keyvault-secrets
+@azure/schema-registry
 @azure/storage-blob
+@azure/ai-anomaly-detector
 @azure/ai-form-recognizer
+@azure/ai-metrics-advisor
 @azure/ai-text-analytics
 @azure/app-configuration
+@azure/communication-chat
+@azure/communication-sms
 @azure/core-arm
 @azure/core-client
 @azure/core-tracing
 @azure/cosmos
-@azure/event-hubs
+@azure/data-tables
+@azure/digital-twins-core
+@azure/eventgrid
 @azure/eventhubs-checkpointstore-blob
 @azure/keyvault-admin
 @azure/keyvault-certificates
 @azure/keyvault-common
 @azure/keyvault-keys
 @azure/monitor-opentelemetry-exporter
-@azure/schema-registry
+@azure/schema-registry-avro
 @azure/search-documents
 @azure/service-bus
 @azure/storage-blob-changefeed
@@ -52,7 +55,6 @@ BLOCKED (38)
 @azure/storage-file-share
 @azure/storage-internal-avro
 @azure/storage-queue
-@azure/tables
 @azure/template
 @azure/test-utils-perfstress
 testhub
@@ -82,44 +84,58 @@ rush rebuild - Errors! (? seconds)
 
 
 Standard error:
-
+Your version of Node.js (X.X.X) has not been tested with this release of Rush. Please consider installing a newer version of the "@microsoft/rush" package, or downgrading Node.js.
+Your version of Node.js (X.X.X) is an odd-numbered release. These releases frequently have bugs. Please consider installing a Long Term Support (LTS) version instead.
 XX of XX: [@azure/eslint-plugin-azure-sdk] failed!
-XX of XX: [@azure/ai-form-recognizer] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/ai-text-analytics] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/abort-controller] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/communication-administration] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/communication-chat] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/communication-common] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/communication-sms] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-amqp] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/event-hubs] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/service-bus] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-auth] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/ai-anomaly-detector] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/ai-form-recognizer] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/ai-metrics-advisor] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/ai-text-analytics] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-client] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-http] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/app-configuration] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-arm] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-lro] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/keyvault-admin] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/keyvault-certificates] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/keyvault-keys] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/keyvault-secrets] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-blob] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/eventhubs-checkpointstore-blob] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-blob-changefeed] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-file-datalake] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/data-tables] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/digital-twins-core] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/eventgrid] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/identity] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-internal-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/schema-registry] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/schema-registry-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-admin] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/schema-registry] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/search-documents] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-file-share] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/tables] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/template] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/test-utils-perfstress] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/test-utils-recorder] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/storage-internal-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-https] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/core-asynciterator-polyfill] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/core-paging] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-tracing] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/core-xml] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/cosmos] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/dev-tool] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/event-processor-host] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [testhub] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/logger] blocked by [@azure/eslint-plugin-azure-sdk]!
 [@azure/eslint-plugin-azure-sdk] Returned error code: 2

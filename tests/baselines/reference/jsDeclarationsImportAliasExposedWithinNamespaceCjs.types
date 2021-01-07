@@ -27,18 +27,18 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
->input : any
+>input : boolean | Function | myTypes.typeB
 
     if (typeof input === 'number') {
 >typeof input === 'number' : boolean
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->input : any
+>input : boolean | Function | myTypes.typeB
 >'number' : "number"
 
         return 2 * input;
 >2 * input : number
 >2 : 2
->input : number
+>input : never
 
     } else {
         return null;
@@ -47,12 +47,12 @@ function testFn(input) {
 }
 
 module.exports = {testFn, testFnTypes};
->module.exports = {testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: { [x: string]: any; }; }
->module.exports : { testFn: (input: any) => number; testFnTypes: { [x: string]: any; }; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/file2\"": { testFn: (input: any) => number; testFnTypes: { [x: string]: any; }; }; }
->exports : { testFn: (input: any) => number; testFnTypes: { [x: string]: any; }; }
->{testFn, testFnTypes} : { testFn: (input: any) => number; testFnTypes: { [x: string]: any; }; }
->testFn : (input: any) => number
+>module.exports = {testFn, testFnTypes} : typeof import("tests/cases/conformance/jsdoc/declarations/file2")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/file2")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/file2\"": typeof import("tests/cases/conformance/jsdoc/declarations/file2"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/file2")
+>{testFn, testFnTypes} : { testFn: (input: testFnTypes.input) => number; testFnTypes: { [x: string]: any; }; }
+>testFn : (input: testFnTypes.input) => number
 >testFnTypes : { [x: string]: any; }
 
 === tests/cases/conformance/jsdoc/declarations/file.js ===

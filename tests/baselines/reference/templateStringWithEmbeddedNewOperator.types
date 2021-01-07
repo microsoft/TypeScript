@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedNewOperator.ts ===
 var x = `abc${ new String("Hi") }def`;
 >x : string
->`abc${ new String("Hi") }def` : string
+>`abc${ new String("Hi") }def` : `abc${string}def`
 >new String("Hi") : String
 >String : StringConstructor
 >"Hi" : "Hi"
