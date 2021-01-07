@@ -1,5 +1,5 @@
-tests/cases/conformance/esnext/importAssertion/3.ts(7,11): error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
-tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+tests/cases/conformance/esnext/importAssertion/3.ts(7,11): error TS1431: Dynamic import must have a specifier as arguments and an optional assertion
+tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1431: Dynamic import must have a specifier as arguments and an optional assertion
 
 
 ==== tests/cases/conformance/esnext/importAssertion/0.ts (0 errors) ====
@@ -32,8 +32,8 @@ tests/cases/conformance/esnext/importAssertion/3.ts(8,11): error TS1392: Dynamic
     const e = import('./0', foo())
     const f = import()
               ~~~~~~~~
-!!! error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+!!! error TS1431: Dynamic import must have a specifier as arguments and an optional assertion
     const g = import('./0', {}, {})
               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1392: Dynamic import must have a specifier as arguments and an optional assertion
+!!! error TS1431: Dynamic import must have a specifier as arguments and an optional assertion
     
