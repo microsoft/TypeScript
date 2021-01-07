@@ -35779,6 +35779,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
+                checkIndexConstraints(staticType);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
             }
