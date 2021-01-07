@@ -919,7 +919,7 @@ namespace ts {
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
         let currentLineMap: readonly number[] | undefined;
-        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
+        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number }[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
         let lastNode: Node | undefined;
@@ -1245,25 +1245,25 @@ namespace ts {
                     if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                         return pipelineEmitWithNotification;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.Substitution:
                     if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
                         return pipelineEmitWithSubstitution;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.Comments:
                     if (!commentsDisabled && node.kind !== SyntaxKind.SourceFile) {
                         return pipelineEmitWithComments;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.SourceMaps:
                     if (!sourceMapsDisabled && node.kind !== SyntaxKind.SourceFile && !isInJsonFile(node)) {
                         return pipelineEmitWithSourceMap;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.Emit:
                     return pipelineEmitWithHint;
@@ -4517,6 +4517,12 @@ namespace ts {
                 return false;
             }
 
+            // Get the position next node and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
+            const originalNextNode = getNodeAtPosition(currentSourceFile!, previousNode.end + 1);
+            if (originalNextNode.pos !== nextNode.pos) {
+                return false;
+            }
+
             if (!previousNode.parent || !nextNode.parent) {
                 const previousParent = getOriginalNode(previousNode).parent;
                 return previousParent && previousParent === getOriginalNode(nextNode).parent;
@@ -4675,7 +4681,7 @@ namespace ts {
                     const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                     return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                         neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
-                        `"${escapeNonAsciiString(text)}"`;
+                            `"${escapeNonAsciiString(text)}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
