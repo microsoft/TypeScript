@@ -843,10 +843,6 @@
         "category": "Error",
         "code": 1255
     },
-    "A rest element must be last in a tuple type.": {
-        "category": "Error",
-        "code": 1256
-    },
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257
@@ -874,6 +870,14 @@
     "Declarations with definite assignment assertions must also have type annotations.": {
         "category": "Error",
         "code": 1264
+    },
+    "A rest element cannot follow another rest element.": {
+        "category": "Error",
+        "code": 1265
+    },
+    "An optional element cannot follow a rest element.": {
+        "category": "Error",
+        "code": 1266
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -2621,9 +2625,25 @@
         "category": "Error",
         "code": 2621
     },
-    "Element at index {0} is variadic in one type but not in the other.": {
+    "Source provides no match for required element at position {0} in target.": {
         "category": "Error",
-        "code": 2622
+        "code": 2623
+    },
+    "Source provides no match for variadic element at position {0} in target.": {
+        "category": "Error",
+        "code": 2624
+    },
+    "Variadic element at position {0} in source does not match element at position {1} in target.": {
+        "category": "Error",
+        "code": 2625
+    },
+    "Type at position {0} in source is not compatible with type at position {1} in target.": {
+        "category": "Error",
+        "code": 2626
+    },
+    "Type at positions {0} through {1} in source is not compatible with type at position {2} in target.": {
+        "category": "Error",
+        "code": 2627
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
