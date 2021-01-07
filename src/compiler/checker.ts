@@ -24551,15 +24551,18 @@ namespace ts {
         function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
             const managedSym = getJsxLibraryManagedAttributes(ns);
             if (managedSym) {
-                const declaredManagedType = getDeclaredTypeOfSymbol(managedSym);
+                const declaredManagedType = getDeclaredTypeOfSymbol(managedSym); // fetches interface type, or initializes symbol links type parmaeters
                 const ctorType = getStaticTypeOfReferencedJsxConstructor(context);
+                if (managedSym.flags & SymbolFlags.TypeAlias) {
+                    const params = getSymbolLinks(managedSym).typeParameters;
+                    if (length(params) >= 2) {
+                        const args = fillMissingTypeArguments([ctorType, attributesType], params, 2, isInJSFile(context));
+                        return getTypeAliasInstantiation(managedSym, args);
+                    }
+                }
                 if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
                     const args = fillMissingTypeArguments([ctorType, attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJSFile(context));
                     return createTypeReference((declaredManagedType as GenericType), args);
-                }
-                else if (length(declaredManagedType.aliasTypeArguments) >= 2) {
-                    const args = fillMissingTypeArguments([ctorType, attributesType], declaredManagedType.aliasTypeArguments, 2, isInJSFile(context));
-                    return getTypeAliasInstantiation(declaredManagedType.aliasSymbol!, args);
                 }
             }
             return attributesType;
