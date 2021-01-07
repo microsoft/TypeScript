@@ -209,7 +209,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
         suppressLeadingTrivia(statement);
 
-        const modifiersFlags = getCombinedModifierFlags(variableDeclaration) | getEffectiveModifierFlags(func);
+        const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) | getEffectiveModifierFlags(func);
         const modifiers = factory.createModifiersFromModifierFlags(modifiersFlags);
         const newNode = factory.createFunctionDeclaration(func.decorators, length(modifiers) ? modifiers : undefined, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
 
