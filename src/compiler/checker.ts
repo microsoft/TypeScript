@@ -718,6 +718,37 @@ namespace ts {
             return res;
         }
 
+        const silentNeverTypeParameterInstantiations = new Map<string, TypeParameter>();
+
+        function isSilentNeverType(type: Type): boolean {
+            return type === silentNeverType || !!silentNeverTypeParameterInstantiations.get("" + getTypeId(type));
+        }
+
+        function createSilentNeverTypeParameter(p: TypeParameter, replacement: TypeMapper, flags: InferenceFlags) {
+            const id = `${getTypeId(p)}|${flags}`; // source cache key involves inference flags since the `replacement` mapper result can vary with them
+            const existing = silentNeverTypeParameterInstantiations.get(id);
+            if (existing) {
+                return existing;
+            }
+            // Creates a `silent` never type parameter which flows through expression checking,
+            // but, importantly, _retains_ knowledge of the constraint/default that should replace it
+            // if, ultimately, it is used in a final result.
+            const newParam = createTypeParameter(p.symbol);
+            const mapper = combineTypeMappers(createTypeMapper([newParam], [p]), replacement);
+            newParam.mapper = mapper;
+            silentNeverTypeParameterInstantiations.set(id, newParam);
+            silentNeverTypeParameterInstantiations.set("" + getTypeId(newParam), newParam);
+            return newParam;
+        }
+
+        const silentNeverTypeParameterMapper = makeFunctionTypeMapper(p => {
+            const id = "" + getTypeId(p);
+            if (!silentNeverTypeParameterInstantiations.get(id)) {
+                return p;
+            }
+            return instantiateType(p, (p as TypeParameter).mapper);
+        });
+
         const tupleTypes = new Map<string, GenericType>();
         const unionTypes = new Map<string, UnionType>();
         const intersectionTypes = new Map<string, Type>();
@@ -15560,7 +15591,11 @@ namespace ts {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
             }
             if (flags & TypeFlags.TemplateLiteral) {
-                return getTemplateLiteralType((<TemplateLiteralType>type).texts, instantiateTypes((<TemplateLiteralType>type).types, mapper));
+                const result = getTemplateLiteralType((<TemplateLiteralType>type).texts, instantiateTypes((<TemplateLiteralType>type).types, mapper));
+                if (!(result.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringLiteral))) {
+                    return result;
+                }
+                return (<TemplateLiteralType>type).regularType === type ? (<TemplateLiteralType>result).regularType : (<TemplateLiteralType>result).freshType;
             }
             if (flags & TypeFlags.StringMapping) {
                 return getStringMappingType((<StringMappingType>type).symbol, instantiateType((<StringMappingType>type).type, mapper));
@@ -20258,7 +20293,7 @@ namespace ts {
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
                     // when constructing types from type parameters that had no inference candidates).
-                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType || source === silentNeverType ||
+                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType || isSilentNeverType(source) ||
                         (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
                         return;
                     }
@@ -20272,7 +20307,7 @@ namespace ts {
                                 inference.priority = priority;
                             }
                             if (priority === inference.priority) {
-                                const candidate = propagationType || source;
+                                const candidate = propagationType || instantiateType(source, silentNeverTypeParameterMapper);
                                 // We make contravariant inferences only if we are in a pure contravariant position,
                                 // i.e. only if we have not descended into a bivariant position.
                                 if (contravariant && !bivariant) {
@@ -20866,19 +20901,16 @@ namespace ts {
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
-                        inferredType = silentNeverType;
+                        // We create a function type mapped to manufacture a replacement in a deferred fashion
+                        const fallback = makeFunctionTypeMapper(p => p === inference.typeParameter
+                            ? (getTypeParameterFallbackType(inference.typeParameter) || getContextInstantiatedConstraint(inference.typeParameter) || getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault)))
+                            : p);
+                        inferredType = createSilentNeverTypeParameter(inference.typeParameter, fallback, context.flags);
                     }
                     else {
-                        // Infer either the default or the empty object type when no inferences were
-                        // made. It is important to remember that in this case, inference still
-                        // succeeds, meaning there is no error for not having inference candidates. An
-                        // inference error only occurs when there are *conflicting* candidates, i.e.
-                        // candidates with no common supertype.
-                        const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
+                        const defaultType = getTypeParameterFallbackType(inference.typeParameter);
                         if (defaultType) {
-                            // Instantiate the default type. Any forward reference to a type
-                            // parameter should be instantiated to the empty object type.
-                            inferredType = instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                            inferredType = defaultType;
                         }
                     }
                 }
@@ -20888,16 +20920,36 @@ namespace ts {
 
                 inference.inferredType = inferredType || getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
 
-                const constraint = getConstraintOfTypeParameter(inference.typeParameter);
+                const constraint = getContextInstantiatedConstraint(inference.typeParameter);
                 if (constraint) {
-                    const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                    if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                        inference.inferredType = inferredType = instantiatedConstraint;
+                    if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(constraint, inferredType))) {
+                        inference.inferredType = inferredType = constraint;
                     }
                 }
             }
 
             return inference.inferredType;
+
+            function getTypeParameterFallbackType(p: TypeParameter) {
+                // Infer either the default or the empty object type when no inferences were
+                // made. It is important to remember that in this case, inference still
+                // succeeds, meaning there is no error for not having inference candidates. An
+                // inference error only occurs when there are *conflicting* candidates, i.e.
+                // candidates with no common supertype.
+                const defaultType = getDefaultFromTypeParameter(p);
+                if (defaultType) {
+                    // Instantiate the default type. Any forward reference to a type
+                    // parameter should be instantiated to the empty object type.
+                    return instantiateType(defaultType, mergeTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
+                }
+            }
+
+            function getContextInstantiatedConstraint(p: TypeParameter) {
+                const constraint = getConstraintOfTypeParameter(p);
+                if (constraint) {
+                    return instantiateType(constraint, context.nonFixingMapper);
+                }
+            }
         }
 
         function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
@@ -26030,7 +26082,7 @@ namespace ts {
             if (isPrivateIdentifier(right)) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ClassPrivateFieldGet);
             }
-            const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
+            const isAnyLike = isTypeAny(apparentType) || isSilentNeverType(apparentType);
             let prop: Symbol | undefined;
             if (isPrivateIdentifier(right)) {
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
@@ -26555,7 +26607,7 @@ namespace ts {
             const indexExpression = node.argumentExpression;
             const indexType = checkExpression(indexExpression);
 
-            if (objectType === errorType || objectType === silentNeverType) {
+            if (objectType === errorType || isSilentNeverType(objectType)) {
                 return objectType;
             }
 
@@ -27953,8 +28005,8 @@ namespace ts {
                 reportCannotInvokePossiblyNullOrUndefinedError
             );
 
-            if (funcType === silentNeverType) {
-                return silentNeverSignature;
+            if (isSilentNeverType(funcType)) {
+                return silentNeverSignature; // TODO: propegate specific silent never in signature
             }
 
             const apparentType = getApparentType(funcType);
@@ -28049,7 +28101,7 @@ namespace ts {
             }
 
             let expressionType = checkNonNullExpression(node.expression);
-            if (expressionType === silentNeverType) {
+            if (isSilentNeverType(expressionType)) {
                 return silentNeverSignature;
             }
 
@@ -29941,8 +29993,8 @@ namespace ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
-            if (operandType === silentNeverType) {
-                return silentNeverType;
+            if (isSilentNeverType(operandType)) {
+                return operandType;
             }
             switch (node.operand.kind) {
                 case SyntaxKind.NumericLiteral:
@@ -30000,8 +30052,8 @@ namespace ts {
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             const operandType = checkExpression(node.operand);
-            if (operandType === silentNeverType) {
-                return silentNeverType;
+            if (isSilentNeverType(operandType)) {
+                return operandType;
             }
             const ok = checkArithmeticOperandType(
                 node.operand,
@@ -30078,8 +30130,8 @@ namespace ts {
         }
 
         function checkInstanceOfExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
-            if (leftType === silentNeverType || rightType === silentNeverType) {
-                return silentNeverType;
+            if (isSilentNeverType(leftType) || isSilentNeverType(rightType)) {
+                return isSilentNeverType(leftType) ? leftType : rightType;
             }
             // TypeScript 1.0 spec (April 2014): 4.15.4
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
@@ -30098,8 +30150,8 @@ namespace ts {
         }
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
-            if (leftType === silentNeverType || rightType === silentNeverType) {
-                return silentNeverType;
+            if (isSilentNeverType(leftType) || isSilentNeverType(rightType)) {
+                return isSilentNeverType(leftType) ? leftType : rightType;
             }
             leftType = checkNonNullType(leftType, left);
             rightType = checkNonNullType(rightType, right);
@@ -30503,8 +30555,8 @@ namespace ts {
                 case SyntaxKind.CaretEqualsToken:
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandEqualsToken:
-                    if (leftType === silentNeverType || rightType === silentNeverType) {
-                        return silentNeverType;
+                    if (isSilentNeverType(leftType) || isSilentNeverType(rightType)) {
+                        return isSilentNeverType(leftType) ? leftType : rightType;
                     }
 
                     leftType = checkNonNullType(leftType, left);
@@ -30558,8 +30610,8 @@ namespace ts {
                     }
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
-                    if (leftType === silentNeverType || rightType === silentNeverType) {
-                        return silentNeverType;
+                    if (isSilentNeverType(leftType) || isSilentNeverType(rightType)) {
+                        return isSilentNeverType(leftType) ? leftType : rightType;
                     }
 
                     if (!isTypeAssignableToKind(leftType, TypeFlags.StringLike) && !isTypeAssignableToKind(rightType, TypeFlags.StringLike)) {

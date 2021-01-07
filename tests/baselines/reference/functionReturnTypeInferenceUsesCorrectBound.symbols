@@ -1,0 +1,45 @@
+=== tests/cases/compiler/functionReturnTypeInferenceUsesCorrectBound.ts ===
+// External library
+type Req<B> = {
+>Req : Symbol(Req, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 0, 0))
+>B : Symbol(B, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 1, 9))
+
+    body: B
+>body : Symbol(body, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 1, 15))
+>B : Symbol(B, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 1, 9))
+}
+
+type ReqHandler<B> = (req: Req<B>) => any
+>ReqHandler : Symbol(ReqHandler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 3, 1))
+>B : Symbol(B, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 5, 16))
+>req : Symbol(req, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 5, 22))
+>Req : Symbol(Req, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 0, 0))
+>B : Symbol(B, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 5, 16))
+
+declare function use<B = string>(handler: ReqHandler<B>): any
+>use : Symbol(use, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 5, 41))
+>B : Symbol(B, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 7, 21))
+>handler : Symbol(handler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 7, 33))
+>ReqHandler : Symbol(ReqHandler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 3, 1))
+>B : Symbol(B, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 7, 21))
+
+
+// My code
+type Handler<Q> = (req: Q) => any
+>Handler : Symbol(Handler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 7, 61))
+>Q : Symbol(Q, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 11, 13))
+>req : Symbol(req, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 11, 19))
+>Q : Symbol(Q, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 11, 13))
+
+declare function createHandler<Q>(): Handler<Q>
+>createHandler : Symbol(createHandler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 11, 33))
+>Q : Symbol(Q, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 13, 31))
+>Handler : Symbol(Handler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 7, 61))
+>Q : Symbol(Q, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 13, 31))
+
+// Error: Argument of type 'Handler<Req<never>>' is not assignable to parameter of type 'ReqHandler<string>'.
+// However, intellisense says createHandler() returns Handler<Req<string>>
+use(createHandler())
+>use : Symbol(use, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 5, 41))
+>createHandler : Symbol(createHandler, Decl(functionReturnTypeInferenceUsesCorrectBound.ts, 11, 33))
+

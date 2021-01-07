@@ -1,0 +1,34 @@
+=== tests/cases/compiler/functionReturnTypeInferenceUsesCorrectBound.ts ===
+// External library
+type Req<B> = {
+>Req : Req<B>
+
+    body: B
+>body : B
+}
+
+type ReqHandler<B> = (req: Req<B>) => any
+>ReqHandler : ReqHandler<B>
+>req : Req<B>
+
+declare function use<B = string>(handler: ReqHandler<B>): any
+>use : <B = string>(handler: ReqHandler<B>) => any
+>handler : ReqHandler<B>
+
+
+// My code
+type Handler<Q> = (req: Q) => any
+>Handler : Handler<Q>
+>req : Q
+
+declare function createHandler<Q>(): Handler<Q>
+>createHandler : <Q>() => Handler<Q>
+
+// Error: Argument of type 'Handler<Req<never>>' is not assignable to parameter of type 'ReqHandler<string>'.
+// However, intellisense says createHandler() returns Handler<Req<string>>
+use(createHandler())
+>use(createHandler()) : any
+>use : <B = string>(handler: ReqHandler<B>) => any
+>createHandler() : Handler<Req<string>>
+>createHandler : <Q>() => Handler<Q>
+
