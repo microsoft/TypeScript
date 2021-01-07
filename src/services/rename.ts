@@ -52,7 +52,7 @@ namespace ts.Rename {
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);
         const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
+        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker,symbol), node, sourceFile);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {

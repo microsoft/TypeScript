@@ -75,10 +75,10 @@ class C2 extends C1<number, string, boolean> {
 >C1 : C1<number, string, boolean>
 
     public doSomethingWithSuperProperties() {
->doSomethingWithSuperProperties : () => string
+>doSomethingWithSuperProperties : () => `${any} ${any} ${any}`
 
         return `${this.a} ${this.b} ${this.c}`;
->`${this.a} ${this.b} ${this.c}` : string
+>`${this.a} ${this.b} ${this.c}` : `${any} ${any} ${any}`
 >this.a : any
 >this : this
 >a : any

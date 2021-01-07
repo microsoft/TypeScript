@@ -1188,8 +1188,8 @@ namespace ts.server {
                 // by the host for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
                 inserted => {
-                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost)!;
-                    scriptInfo.attachToProject(this);
+                    const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(inserted, this.currentDirectory, this.directoryStructureHost);
+                    scriptInfo?.attachToProject(this);
                 },
                 removed => this.detachScriptInfoFromProject(removed)
             );
@@ -1375,6 +1375,8 @@ namespace ts.server {
                 for (const file of sourceFiles) {
                     strBuilder += `\t${file.fileName}\n`;
                 }
+                strBuilder += "\n\n";
+                explainFiles(this.program, s => strBuilder += `\t${s}\n`);
             }
             return strBuilder;
         }
@@ -1649,6 +1651,11 @@ namespace ts.server {
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
+        }
+
+        /*@internal*/
+        getNearestAncestorDirectoryWithPackageJson(fileName: string): string | undefined {
+            return this.projectService.getNearestAncestorDirectoryWithPackageJson(fileName);
         }
 
         /*@internal*/
@@ -1994,6 +2001,10 @@ namespace ts.server {
             return super.updateGraph();
         }
 
+        hasRoots() {
+            return !!this.rootFileNames?.length;
+        }
+
         markAsDirty() {
             this.rootFileNames = undefined;
             super.markAsDirty();
@@ -2056,9 +2067,6 @@ namespace ts.server {
 
         /* @internal */
         openFileWatchTriggered = new Map<string, true>();
-
-        /*@internal*/
-        configFileSpecs: ConfigFileSpecs | undefined;
 
         /*@internal*/
         canConfigFileJsonReportNoInputFiles = false;
@@ -2284,7 +2292,8 @@ namespace ts.server {
             }
 
             this.stopWatchingWildCards();
-            this.configFileSpecs = undefined;
+            this.projectService.removeProjectFromSharedExtendedConfigFileMap(this);
+            this.projectErrors = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;
             super.close();
@@ -2367,8 +2376,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
-            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
+        updateErrorOnNoInputFiles(fileNames: string[]) {
+            updateErrorForNoInputFiles(fileNames, this.getConfigFilePath(), this.getCompilerOptions().configFile!.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 

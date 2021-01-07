@@ -196,7 +196,7 @@ function identifyBeast(beast: Beast) {
                 log(`unknown - ${beast.legs} legs, wings`);
 >log(`unknown - ${beast.legs} legs, wings`) : void
 >log : (s: string) => void
->`unknown - ${beast.legs} legs, wings` : string
+>`unknown - ${beast.legs} legs, wings` : `unknown - ${number} legs, wings`
 >beast.legs : number
 >beast : Beast & Legged & Winged
 >legs : number
@@ -208,7 +208,7 @@ function identifyBeast(beast: Beast) {
             log(`manbearpig - ${beast.legs} legs, no wings`);
 >log(`manbearpig - ${beast.legs} legs, no wings`) : void
 >log : (s: string) => void
->`manbearpig - ${beast.legs} legs, no wings` : string
+>`manbearpig - ${beast.legs} legs, no wings` : `manbearpig - ${number} legs, no wings`
 >beast.legs : number
 >beast : Beast & Legged
 >legs : number

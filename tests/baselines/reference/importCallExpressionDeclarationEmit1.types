@@ -16,11 +16,12 @@ import(getSpecifier());
 >getSpecifier() : string
 >getSpecifier : () => string
 
-var p0 = import(`${directory}\${moduleFile}`);
+var p0 = import(`${directory}\\${moduleFile}`);
 >p0 : Promise<any>
->import(`${directory}\${moduleFile}`) : Promise<any>
->`${directory}\${moduleFile}` : string
+>import(`${directory}\\${moduleFile}`) : Promise<any>
+>`${directory}\\${moduleFile}` : `${string}\\${number}`
 >directory : string
+>moduleFile : number
 
 var p1 = import(getSpecifier());
 >p1 : Promise<any>

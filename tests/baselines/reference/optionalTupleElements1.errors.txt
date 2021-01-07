@@ -1,16 +1,16 @@
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(11,29): error TS1257: A required element cannot follow an optional element.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(15,5): error TS2322: Type 'T2' is not assignable to type 'T1'.
-  Property '2' is optional in type '[number, string, (boolean | undefined)?]' but required in type '[number, string, boolean]'.
+  Source provides no match for required element at position 2 in target.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(16,5): error TS2322: Type 'T3' is not assignable to type 'T1'.
-  Property '1' is optional in type '[number, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, boolean]'.
+  Source provides no match for required element at position 1 in target.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(17,5): error TS2322: Type 'T4' is not assignable to type 'T1'.
-  Property '0' is optional in type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, boolean]'.
+  Source provides no match for required element at position 0 in target.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(20,5): error TS2322: Type 'T3' is not assignable to type 'T2'.
-  Property '1' is optional in type '[number, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, (boolean | undefined)?]'.
+  Source provides no match for required element at position 1 in target.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(21,5): error TS2322: Type 'T4' is not assignable to type 'T2'.
-  Property '0' is optional in type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, (boolean | undefined)?]'.
+  Source provides no match for required element at position 0 in target.
 tests/cases/conformance/types/tuple/optionalTupleElements1.ts(25,5): error TS2322: Type 'T4' is not assignable to type 'T3'.
-  Property '0' is optional in type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, (string | undefined)?, (boolean | undefined)?]'.
+  Source provides no match for required element at position 0 in target.
 
 
 ==== tests/cases/conformance/types/tuple/optionalTupleElements1.ts (7 errors) ====
@@ -33,32 +33,32 @@ tests/cases/conformance/types/tuple/optionalTupleElements1.ts(25,5): error TS232
         t1 = t2;  // Error
         ~~
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
-!!! error TS2322:   Property '2' is optional in type '[number, string, (boolean | undefined)?]' but required in type '[number, string, boolean]'.
+!!! error TS2322:   Source provides no match for required element at position 2 in target.
         t1 = t3;  // Error
         ~~
 !!! error TS2322: Type 'T3' is not assignable to type 'T1'.
-!!! error TS2322:   Property '1' is optional in type '[number, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, boolean]'.
+!!! error TS2322:   Source provides no match for required element at position 1 in target.
         t1 = t4;  // Error
         ~~
 !!! error TS2322: Type 'T4' is not assignable to type 'T1'.
-!!! error TS2322:   Property '0' is optional in type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, boolean]'.
+!!! error TS2322:   Source provides no match for required element at position 0 in target.
         t2 = t1;
         t2 = t2;
         t2 = t3;  // Error
         ~~
 !!! error TS2322: Type 'T3' is not assignable to type 'T2'.
-!!! error TS2322:   Property '1' is optional in type '[number, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, (boolean | undefined)?]'.
+!!! error TS2322:   Source provides no match for required element at position 1 in target.
         t2 = t4;  // Error
         ~~
 !!! error TS2322: Type 'T4' is not assignable to type 'T2'.
-!!! error TS2322:   Property '0' is optional in type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, string, (boolean | undefined)?]'.
+!!! error TS2322:   Source provides no match for required element at position 0 in target.
         t3 = t1;
         t3 = t2;
         t3 = t3;
         t3 = t4;  // Error
         ~~
 !!! error TS2322: Type 'T4' is not assignable to type 'T3'.
-!!! error TS2322:   Property '0' is optional in type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' but required in type '[number, (string | undefined)?, (boolean | undefined)?]'.
+!!! error TS2322:   Source provides no match for required element at position 0 in target.
         t4 = t1;
         t4 = t2;
         t4 = t3;

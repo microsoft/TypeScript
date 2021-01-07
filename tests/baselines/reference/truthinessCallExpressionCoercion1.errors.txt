@@ -2,7 +2,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(3,5): error TS2774: Th
 tests/cases/compiler/truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion1.ts(61,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since the function is always defined. Did you mean to call it instead?
 
 
 ==== tests/cases/compiler/truthinessCallExpressionCoercion1.ts (5 errors) ====
@@ -63,6 +63,21 @@ tests/cases/compiler/truthinessCallExpressionCoercion1.ts(61,9): error TS2774: T
     
         // ok
         x.foo.bar ? x.foo.bar : undefined;
+    
+        var chrome = {
+            platformKeys: {
+                subtleCrypto() {
+                    return {
+                        sign() {},
+                        exportKey() { return true }
+                    }
+                }
+            }
+        }
+        // ok
+        if (chrome.platformKeys.subtleCrypto().exportKey) {
+            chrome.platformKeys.subtleCrypto().exportKey
+        }
     }
     
     class Foo {

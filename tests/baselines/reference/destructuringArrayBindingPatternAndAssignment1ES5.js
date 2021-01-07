@@ -70,12 +70,10 @@ var [c14, c15, c16] = [1, 2, "string"];
  * AssignmentRestElement:
  *      ...   LeftHandSideExpression
  */
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 // In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
 // An expression of type S is considered assignable to an assignment target V if one of the following is true
@@ -95,7 +93,7 @@ var _e = foo(), b6 = _e[0], b7 = _e[1];
 var b8 = foo().slice(0);
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _f = __spreadArrays(temp), c0 = _f[0], c1 = _f[1];
+var _f = __spreadArray([], temp), c0 = _f[0], c1 = _f[1];
 var c2 = [][0];
 var _g = [[[]], [[[[]]]]], c3 = _g[0][0][0], c4 = _g[1][0][0][0][0];
 var _h = [[1], true], c5 = _h[0][0], c6 = _h[1];

@@ -52,6 +52,6 @@ namespace ts.codefix {
     function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
         return diagCode === errorCodeCannotFindModule
             ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
-            : (host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined); // TODO: GH#18217
+            : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
     }
 }

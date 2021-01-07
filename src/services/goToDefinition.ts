@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
-        const reference = getReferenceAtPosition(sourceFile, position, program);
-        if (reference) {
-            return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
+        const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
+        if (resolvedRef) {
+            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.file.fileName)];
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -96,12 +96,6 @@ namespace ts.GoToDefinition {
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
-    function isShorthandPropertyAssignmentOfModuleExports(symbol: Symbol): boolean {
-        const shorthandProperty = tryCast(symbol.valueDeclaration, isShorthandPropertyAssignment);
-        const binaryExpression = tryCast(shorthandProperty?.parent.parent, isAssignmentExpression);
-        return !!binaryExpression && getAssignmentDeclarationKind(binaryExpression) === AssignmentDeclarationKind.ModuleExports;
-    }
-
     /**
      * True if we should not add definitions for both the signature symbol and the definition symbol.
      * True for `const |f = |() => 0`, false for `function |f() {} const |g = f;`.
@@ -114,24 +108,24 @@ namespace ts.GoToDefinition {
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { fileName: referencePath.fileName, file };
+            return file && { reference: referencePath, file };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { fileName: typeReferenceDirective.fileName, file };
+            return file && { reference: typeReferenceDirective, file };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { fileName: libReferenceDirective.fileName, file };
+            return file && { reference: libReferenceDirective, file };
         }
 
         return undefined;
@@ -204,29 +198,15 @@ namespace ts.GoToDefinition {
     }
 
     function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {
-        let symbol = checker.getSymbolAtLocation(node);
+        const symbol = checker.getSymbolAtLocation(node);
         // If this is an alias, and the request came at the declaration location
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        while (symbol) {
-            if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
-                const aliased = checker.getAliasedSymbol(symbol);
-                if (!aliased.declarations) {
-                    break;
-                }
-                symbol = aliased;
-            }
-            else if (isShorthandPropertyAssignmentOfModuleExports(symbol)) {
-                // Skip past `module.exports = { Foo }` even though 'Foo' is not a real alias
-                const shorthandTarget = checker.resolveName(symbol.name, symbol.valueDeclaration, SymbolFlags.Value, /*excludeGlobals*/ false);
-                if (!some(shorthandTarget?.declarations)) {
-                    break;
-                }
-                symbol = shorthandTarget;
-            }
-            else {
-                break;
+        if (symbol && symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+            const aliased = checker.getAliasedSymbol(symbol);
+            if (aliased.declarations) {
+                return aliased;
             }
         }
         return symbol;

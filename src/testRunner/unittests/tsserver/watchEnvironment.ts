@@ -700,7 +700,7 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const service = createProjectService(host, {}, { useInferredProjectPerProjectRoot: true });
+                const service = createProjectService(host, { useInferredProjectPerProjectRoot: true });
                 setupConfigureHost(service, configureHost);
                 service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["node_modules"] }, tscWatch.projectRoot);
                 service.openClientFile(main.path, main.content, ScriptKind.TS, tscWatch.projectRoot);
@@ -743,7 +743,7 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const service = createProjectService(host, {}, { useInferredProjectPerProjectRoot: true });
+                const service = createProjectService(host, { useInferredProjectPerProjectRoot: true });
                 service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["**/../*"] }, tscWatch.projectRoot);
                 service.openClientFile(main.path, main.content, ScriptKind.TS, tscWatch.projectRoot);
                 const project = service.inferredProjects[0];

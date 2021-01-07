@@ -2,6 +2,6 @@
 var x = +`abc${ 123 }def`;
 >x : number
 >+`abc${ 123 }def` : number
->`abc${ 123 }def` : string
+>`abc${ 123 }def` : "abc123def"
 >123 : 123
 

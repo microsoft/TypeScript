@@ -4,6 +4,19 @@ lib/Compilation.js(37,7): error TS2440: Import declaration conflicts with local 
 lib/Compilation.js(49,7): error TS2440: Import declaration conflicts with local declaration of 'WebpackError'.
 lib/Compilation.js(53,7): error TS2440: Import declaration conflicts with local declaration of 'StatsFactory'.
 lib/Compilation.js(54,7): error TS2440: Import declaration conflicts with local declaration of 'StatsPrinter'.
+lib/Compiler.js(156,4): error TS2322: Type 'AsyncParallelHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+lib/Compiler.js(156,4): error TS2322: Type 'AsyncParallelHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+  Types of property 'intercept' are incompatible.
+    Type '(interceptor: HookInterceptor<any, void, UnsetAdditionalOptions>) => void' is not assignable to type '(interceptor: HookInterceptor<[Compilation], void, Module>) => void'.
+      Types of parameters 'interceptor' and 'interceptor' are incompatible.
+        Type 'HookInterceptor<[Compilation], void, Module>' is not assignable to type 'HookInterceptor<any, void, UnsetAdditionalOptions>'.
+          Property '_UnsetAdditionalOptions' is missing in type 'Module' but required in type 'UnsetAdditionalOptions'.
+lib/Compiler.js(158,4): error TS2322: Type 'AsyncSeriesHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+lib/Compiler.js(158,4): error TS2322: Type 'AsyncSeriesHook<any, UnsetAdditionalOptions>' is not assignable to type 'AsyncParallelHook<[Compilation], Module>'.
+  Types of property 'intercept' are incompatible.
+    Type '(interceptor: HookInterceptor<any, void, UnsetAdditionalOptions>) => void' is not assignable to type '(interceptor: HookInterceptor<[Compilation], void, Module>) => void'.
+      Types of parameters 'interceptor' and 'interceptor' are incompatible.
+        Type 'HookInterceptor<[Compilation], void, Module>' is not assignable to type 'HookInterceptor<any, void, UnsetAdditionalOptions>'.
 lib/ExportsInfo.js(1092,28): error TS1016: A required parameter cannot follow an optional parameter.
 lib/FlagDependencyUsagePlugin.js(8,7): error TS2440: Import declaration conflicts with local declaration of 'Dependency'.
 lib/NormalModule.js(19,7): error TS2440: Import declaration conflicts with local declaration of 'Compilation'.

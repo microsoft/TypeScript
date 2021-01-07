@@ -10,8 +10,9 @@ BLOCKED (51)
 @azure/abort-controller
 @azure/core-auth
 @azure/logger
-@azure/core-asynciterator-polyfill
 @azure/core-http
+@azure/core-asynciterator-polyfill
+@azure/identity
 @azure/communication-common
 @azure/core-amqp
 @azure/core-lro
@@ -41,7 +42,6 @@ BLOCKED (51)
 @azure/digital-twins-core
 @azure/eventgrid
 @azure/eventhubs-checkpointstore-blob
-@azure/identity
 @azure/keyvault-admin
 @azure/keyvault-certificates
 @azure/keyvault-common
@@ -117,13 +117,13 @@ XX of XX: [@azure/data-tables] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/digital-twins-core] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/eventgrid] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/identity] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/schema-registry] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/schema-registry-avro] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/keyvault-common] blocked by [@azure/eslint-plugin-azure-sdk]!
+XX of XX: [@azure/monitor-opentelemetry-exporter] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/search-documents] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/storage-file-share] blocked by [@azure/eslint-plugin-azure-sdk]!
-XX of XX: [@azure/storage-queue] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/template] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/test-utils-perfstress] blocked by [@azure/eslint-plugin-azure-sdk]!
 XX of XX: [@azure/test-utils-recorder] blocked by [@azure/eslint-plugin-azure-sdk]!

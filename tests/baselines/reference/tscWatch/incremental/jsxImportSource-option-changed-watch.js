@@ -55,17 +55,23 @@ export const App = () => <div propA={true}></div>;
 {"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
 
 
-/a/lib/tsc.js -w
+/a/lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
+../../../../a/lib/lib.d.ts
+  Default library
+node_modules/react/jsx-runtime/index.d.ts
+  Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
+index.tsx
+  Matched by include pattern '**/*' in 'tsconfig.json'
 [[90m12:00:44 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","watch":true,"explainFiles":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -134,6 +140,7 @@ exports.App = App;
       "incremental": true,
       "jsxImportSource": "react",
       "watch": true,
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
@@ -173,12 +180,18 @@ Output::
 [7m1[0m export const App = () => <div propA={true}></div>;
 [7m [0m [91m                              ~~~~~[0m
 
+../../../../a/lib/lib.d.ts
+  Default library
+node_modules/preact/jsx-runtime/index.d.ts
+  Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
+index.tsx
+  Matched by include pattern '**/*' in 'tsconfig.json'
 [[90m12:00:55 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preact","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"preact","watch":true,"explainFiles":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -247,6 +260,7 @@ exports.App = App;
       "incremental": true,
       "jsxImportSource": "preact",
       "watch": true,
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
