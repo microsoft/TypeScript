@@ -73,12 +73,10 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 function fn(a, b, c, d, e, f, g) {
     var c_1, c_1_1;
@@ -96,7 +94,7 @@ function fn(a, b, c, d, e, f, g) {
                     b++;
                     --b;
                     a === b;
-                    __spreadArrays(c);
+                    __spreadArray([], c);
                     for (_i = 0, c_2 = c; _i < c_2.length; _i++) {
                         s = c_2[_i];
                         fn(b, b, c, d, e, f, g);

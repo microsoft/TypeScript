@@ -9,7 +9,6 @@ tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(2,1): error TS236
 tests/cases/conformance/es2019/importMeta/assignmentTargets.ts(11,21): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.
 tests/cases/conformance/es2019/importMeta/example.ts(2,2): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.
 tests/cases/conformance/es2019/importMeta/example.ts(3,59): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.
-tests/cases/conformance/es2019/importMeta/example.ts(3,71): error TS2339: Property 'url' does not exist on type 'ImportMeta'.
 tests/cases/conformance/es2019/importMeta/example.ts(6,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.
 tests/cases/conformance/es2019/importMeta/example.ts(6,28): error TS2339: Property 'scriptElement' does not exist on type 'ImportMeta'.
 tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts(1,16): error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.
@@ -25,7 +24,7 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
 
 
 !!! error TS2468: Cannot find global value 'Promise'.
-==== tests/cases/conformance/es2019/importMeta/example.ts (5 errors) ====
+==== tests/cases/conformance/es2019/importMeta/example.ts (4 errors) ====
     // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
     (async () => {
      ~~~~~~~~~~~~~
@@ -33,8 +32,6 @@ tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts(3,22): error TS
       const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
                                                               ~~~~~~~~~~~
 !!! error TS1343: The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.
-                                                                          ~~~
-!!! error TS2339: Property 'url' does not exist on type 'ImportMeta'.
       const blob = await response.blob();
     
       const size = import.meta.scriptElement.dataset.size || 300;

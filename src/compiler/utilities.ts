@@ -907,6 +907,10 @@ namespace ts {
         }
     }
 
+    export function hasPossibleExternalModuleReference(node: Node): node is AnyImportOrReExport | ModuleDeclaration | ImportTypeNode | ImportCall {
+        return isAnyImportOrReExport(node) || isModuleDeclaration(node) || isImportTypeNode(node) || isImportCall(node);
+    }
+
     export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
         return isAnyImportSyntax(node) || isExportDeclaration(node);
     }
@@ -2426,7 +2430,7 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -2435,6 +2439,8 @@ namespace ts {
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
             case SyntaxKind.ImportType:
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
+            case SyntaxKind.CallExpression:
+                return node.arguments[0];
             default:
                 return Debug.assertNever(node);
         }
@@ -2992,7 +2998,7 @@ namespace ts {
     }
 
     export function getEffectiveImplementsTypeNodes(node: ClassLikeDeclaration): undefined | readonly ExpressionWithTypeArguments[]{
-        if(isInJSFile(node)) {
+        if (isInJSFile(node)) {
             return getJSDocImplementsTags(node).map(n => n.class);
         }
         else {
@@ -3065,14 +3071,7 @@ namespace ts {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
-    export type TriviaKind =
-        SyntaxKind.SingleLineCommentTrivia
-        | SyntaxKind.MultiLineCommentTrivia
-        | SyntaxKind.NewLineTrivia
-        | SyntaxKind.WhitespaceTrivia
-        | SyntaxKind.ShebangTrivia
-        | SyntaxKind.ConflictMarkerTrivia;
-    export function isTrivia(token: SyntaxKind): token is TriviaKind {
+    export function isTrivia(token: SyntaxKind): token is TriviaSyntaxKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
@@ -3580,7 +3579,8 @@ namespace ts {
                 }
 
             // TODO: Should prefix `++` and `--` be moved to the `Update` precedence?
-            // TODO: We are missing `TypeAssertionExpression`
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.NonNullExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
@@ -3601,6 +3601,9 @@ namespace ts {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return OperatorPrecedence.Member;
+
+            case SyntaxKind.AsExpression:
+                return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
@@ -7046,6 +7049,17 @@ namespace ts {
         function bindParentToChild(child: Node, parent: Node) {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
         }
+    }
+
+    function isPackedElement(node: Expression) {
+        return !isOmittedExpression(node);
+    }
+
+    /**
+     * Determines whether the provided node is an ArrayLiteralExpression that contains no missing elements.
+     */
+    export function isPackedArrayLiteral(node: Expression) {
+        return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
     }
 
     /**
