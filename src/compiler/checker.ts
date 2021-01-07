@@ -3816,6 +3816,23 @@ namespace ts {
                 members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
+        function getResolvedTypeWithoutAbstractConstructSignatures(type: ResolvedType) {
+            if (type.constructSignatures.length === 0) return type;
+            if (type.objectTypeWithoutAbstractConstructSignatures) return type.objectTypeWithoutAbstractConstructSignatures;
+            const constructSignatures = filter(type.constructSignatures, signature => !(signature.flags & SignatureFlags.Abstract));
+            if (type.constructSignatures === constructSignatures) return type;
+            const typeCopy = createAnonymousType(
+                type.symbol,
+                type.members,
+                type.callSignatures,
+                some(constructSignatures) ? constructSignatures : emptyArray,
+                type.stringIndexInfo,
+                type.numberIndexInfo);
+            type.objectTypeWithoutAbstractConstructSignatures = typeCopy;
+            typeCopy.objectTypeWithoutAbstractConstructSignatures = typeCopy;
+            return typeCopy;
+        }
+
         function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable) => T): T {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
@@ -4762,13 +4779,38 @@ namespace ts {
                         }
                     }
 
+                    const abstractSignatures = filter(resolved.constructSignatures, signature => !!(signature.flags & SignatureFlags.Abstract));
+                    if (some(abstractSignatures)) {
+                        const types = map(abstractSignatures, getOrCreateTypeFromSignature);
+                        // count the number of type elements excluding abstract constructors
+                        const typeElementCount =
+                            resolved.callSignatures.length +
+                            (resolved.constructSignatures.length - abstractSignatures.length) +
+                            (resolved.stringIndexInfo ? 1 : 0) +
+                            (resolved.numberIndexInfo ? 1 : 0) +
+                            // exclude `prototype` when writing a class expression as a type literal, as per
+                            // the logic in `createTypeNodesFromResolvedType`.
+                            (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral ?
+                                countWhere(resolved.properties, p => !(p.flags & SymbolFlags.Prototype)) :
+                                length(resolved.properties));
+                        // don't include an empty object literal if there were no other static-side
+                        // properties to write, i.e. `abstract class C { }` becomes `abstract new () => {}`
+                        // and not `(abstract new () => {}) & {}`
+                        if (typeElementCount) {
+                            // create a copy of the object type without any abstract construct signatures.
+                            types.push(getResolvedTypeWithoutAbstractConstructSignatures(resolved));
+                        }
+                        return typeToTypeNodeHelper(getIntersectionType(types), context);
+                    }
+
                     const savedFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = factory.createTypeLiteralNode(members);
                     context.approximateLength += 2;
-                    return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
+                    setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
+                    return typeLiteralNode;
                 }
 
                 function typeReferenceToTypeNode(type: TypeReference) {
@@ -4938,6 +4980,7 @@ namespace ts {
                         typeElements.push(<CallSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.CallSignature, context));
                     }
                     for (const signature of resolvedType.constructSignatures) {
+                        if (signature.flags & SignatureFlags.Abstract) continue;
                         typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context));
                     }
                     if (resolvedType.stringIndexInfo) {

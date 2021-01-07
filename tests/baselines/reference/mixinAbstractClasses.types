@@ -19,7 +19,7 @@ function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass:
         }
     }
     return MixinClass;
->MixinClass : { new (...args: any): MixinClass; prototype: Mixin<any>.MixinClass; } & TBaseClass
+>MixinClass : ((abstract new (...args: any) => MixinClass) & { prototype: Mixin<any>.MixinClass; }) & TBaseClass
 }
 
 class ConcreteBase {
