@@ -1109,9 +1109,9 @@ define(function () {
 >Array : ArrayConstructor
 
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
->Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>isArray : (arg: any) => arg is any[]
 >function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (value: any) => boolean
 >value : any
 >Object.prototype.toString.call(value) === '[object Array]' : boolean

@@ -128,3 +128,49 @@ console.log(c, d);
 >c : C
 >d : C.Two
 
+=== /h.ts ===
+class H {}
+>H : H
+
+export = H;
+>H : H
+
+=== /i.ts ===
+import H = require('./h'); // Error
+>H : typeof H
+
+let h: H = {};
+>h : H
+>{} : {}
+
+console.log(h);
+>console.log(h) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>h : H
+
+=== /j.ts ===
+import H = require('./h'); // noUnusedLocals error only
+No type information for this code.
+No type information for this code.=== /k.ts ===
+const enum K { One, Two }
+>K : K
+>One : K.One
+>Two : K.Two
+
+export = K;
+>K : K
+
+=== /l.ts ===
+import K = require('./k');
+>K : typeof K
+
+K.One;
+>K.One : K.One
+>K : typeof K
+>One : K.One
+
+=== /j.ts ===
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
+No type information for this code.

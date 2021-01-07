@@ -23,7 +23,7 @@ class HelloWorld {
 >Log.info : (msg: string) => void
 >Log : { info(msg: string): void; }
 >info : (msg: string) => void
->`Hello ${this.name}` : string
+>`Hello ${this.name}` : `Hello ${string}`
 >this.name : string
 >this : this
 >name : string

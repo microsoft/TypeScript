@@ -145,7 +145,7 @@ function newExpression4() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, new (x.bind.apply(x, __spreadArrays([void 0], y, [z])))()];
+                case 0: return [4 /*yield*/, new (x.bind.apply(x, __spreadArray(__spreadArray([void 0], y), [z])))()];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -160,7 +160,7 @@ function newExpression5() {
             switch (_b.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    new ((_a = (_b.sent())).bind.apply(_a, __spreadArrays([void 0], y, [z])))();
+                    new ((_a = (_b.sent())).bind.apply(_a, __spreadArray(__spreadArray([void 0], y), [z])))();
                     return [2 /*return*/];
             }
         });
@@ -177,7 +177,7 @@ function newExpression6() {
                     _d = [[void 0]];
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([(_e.sent()), [z]]))])))();
+                    new (_b.apply(_a, _c.concat([__spreadArray.apply(void 0, [__spreadArray.apply(void 0, _d.concat([(_e.sent())])), [z]])])))();
                     return [2 /*return*/];
             }
         });
@@ -191,10 +191,10 @@ function newExpression7() {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
-                    _d = [[void 0], y];
+                    _d = [__spreadArray([void 0], y)];
                     return [4 /*yield*/, z];
                 case 1:
-                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([[_e.sent()]]))])))();
+                    new (_b.apply(_a, _c.concat([__spreadArray.apply(void 0, _d.concat([[_e.sent()]]))])))();
                     return [2 /*return*/];
             }
         });
@@ -211,7 +211,7 @@ function newExpression8() {
                     _d = [void 0];
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, [_d.concat([_e.sent()]), z])])))();
+                    new (_b.apply(_a, _c.concat([__spreadArray.apply(void 0, [_d.concat([_e.sent()]), z])])))();
                     return [2 /*return*/];
             }
         });
@@ -228,7 +228,7 @@ function newExpression9() {
                     _d = [[void 0, y]];
                     return [4 /*yield*/, z];
                 case 1:
-                    new (_b.apply(_a, _c.concat([__spreadArrays.apply(void 0, _d.concat([(_e.sent())]))])))();
+                    new (_b.apply(_a, _c.concat([__spreadArray.apply(void 0, _d.concat([(_e.sent())]))])))();
                     return [2 /*return*/];
             }
         });

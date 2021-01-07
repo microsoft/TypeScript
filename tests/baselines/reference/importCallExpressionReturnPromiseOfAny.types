@@ -21,10 +21,11 @@ declare const directory: string;
 declare const moduleFile: number;
 >moduleFile : number
 
-import(`${directory}\${moduleFile}`);
->import(`${directory}\${moduleFile}`) : Promise<any>
->`${directory}\${moduleFile}` : string
+import(`${directory}\\${moduleFile}`);
+>import(`${directory}\\${moduleFile}`) : Promise<any>
+>`${directory}\\${moduleFile}` : `${string}\\${number}`
 >directory : string
+>moduleFile : number
 
 import(getSpecifier());
 >import(getSpecifier()) : Promise<any>
@@ -93,22 +94,22 @@ var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >getSpecifier : () => string
 
 function * loadModule(directories: string[]) {
->loadModule : (directories: string[]) => Generator<string, void, string>
+>loadModule : (directories: string[]) => Generator<`${string}\\moduleFile`, void, string>
 >directories : string[]
 
     for (const directory of directories) {
 >directory : string
 >directories : string[]
 
-        const path = `${directory}\moduleFile`;
->path : string
->`${directory}\moduleFile` : string
+        const path = `${directory}\\moduleFile`;
+>path : `${string}\\moduleFile`
+>`${directory}\\moduleFile` : `${string}\\moduleFile`
 >directory : string
 
         import(yield path);
 >import(yield path) : Promise<any>
 >yield path : any
->path : string
+>path : `${string}\\moduleFile`
     }
 }
 

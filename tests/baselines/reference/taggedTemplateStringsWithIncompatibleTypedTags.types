@@ -32,7 +32,7 @@ f `abc`
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : I
 >f : I
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 
@@ -47,7 +47,7 @@ f `abc${1}def${2}ghi`.member;
 >f `abc${1}def${2}ghi`.member : I
 >f `abc${1}def${2}ghi` : I
 >f : I
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 >member : I
@@ -63,7 +63,7 @@ f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : I
 >f `abc${1}def${2}ghi` : I
 >f : I
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 >"member" : "member"
@@ -77,7 +77,7 @@ f `abc`[0].member `abc${1}def${2}ghi`;
 >`abc` : "abc"
 >0 : 0
 >member : I
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 
@@ -87,12 +87,12 @@ f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi`["member"] : I
 >f `abc${1}def${2}ghi` : I
 >f : I
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 >"member" : "member"
 >member : I
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 
@@ -102,12 +102,12 @@ f `abc${ true }def${ true }ghi`["member"].member `abc${ 1 }def${ 2 }ghi`;
 >f `abc${ true }def${ true }ghi`["member"] : I
 >f `abc${ true }def${ true }ghi` : I
 >f : I
->`abc${ true }def${ true }ghi` : string
+>`abc${ true }def${ true }ghi` : "abctruedeftrueghi"
 >true : true
 >true : true
 >"member" : "member"
 >member : I
->`abc${ 1 }def${ 2 }ghi` : string
+>`abc${ 1 }def${ 2 }ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 
@@ -123,7 +123,7 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag : (x: string) => void
 >f : I
 >thisIsNotATag : (x: string) => void
->`abc${1}def${2}ghi` : string
+>`abc${1}def${2}ghi` : "abc1def2ghi"
 >1 : 1
 >2 : 2
 

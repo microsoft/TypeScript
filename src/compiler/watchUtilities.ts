@@ -257,6 +257,51 @@ namespace ts {
         Full
     }
 
+    export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
+        fileWatcher: FileWatcher;
+        projects: Set<T>;
+    }
+
+    /**
+     * Updates the map of shared extended config file watches with a new set of extended config files from a base config file of the project
+     */
+    export function updateSharedExtendedConfigFileWatcher<T>(
+        projectPath: T,
+        parsed: ParsedCommandLine | undefined,
+        extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+        createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
+        toPath: (fileName: string) => Path,
+    ) {
+        const extendedConfigs = arrayToMap(parsed?.options.configFile?.extendedSourceFiles || emptyArray, toPath);
+        // remove project from all unrelated watchers
+        extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
+            if (!extendedConfigs.has(extendedConfigFilePath)) {
+                watcher.projects.delete(projectPath);
+                watcher.close();
+            }
+        });
+        // Update the extended config files watcher
+        extendedConfigs.forEach((extendedConfigFileName, extendedConfigFilePath) => {
+            const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
+            if (existing) {
+                existing.projects.add(projectPath);
+            }
+            else {
+                // start watching previously unseen extended config
+                extendedConfigFilesMap.set(extendedConfigFilePath, {
+                    projects: new Set([projectPath]),
+                    fileWatcher: createExtendedConfigFileWatch(extendedConfigFileName, extendedConfigFilePath),
+                    close: () => {
+                        const existing = extendedConfigFilesMap.get(extendedConfigFilePath);
+                        if (!existing || existing.projects.size !== 0) return;
+                        existing.fileWatcher.close();
+                        extendedConfigFilesMap.delete(extendedConfigFilePath);
+                    },
+                });
+            }
+        });
+    }
+
     /**
      * Updates the existing missing file watches with the new set of missing files after new program is created
      */
@@ -336,7 +381,6 @@ namespace ts {
         fileOrDirectoryPath: Path;
         configFileName: string;
         options: CompilerOptions;
-        configFileSpecs: ConfigFileSpecs;
         program: BuilderProgram | Program | undefined;
         extraFileExtensions?: readonly FileExtensionInfo[];
         currentDirectory: string;
@@ -346,7 +390,7 @@ namespace ts {
     /* @internal */
     export function isIgnoredFileFromWildCardWatching({
         watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
-        configFileName, options, configFileSpecs, program, extraFileExtensions,
+        configFileName, options, program, extraFileExtensions,
         currentDirectory, useCaseSensitiveFileNames,
         writeLog,
     }: IsIgnoredFileFromWildCardWatchingInput): boolean {
@@ -366,7 +410,7 @@ namespace ts {
             return true;
         }
 
-        if (isExcludedFile(fileOrDirectory, configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
+        if (isExcludedFile(fileOrDirectory, options.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
             writeLog(`Project: ${configFileName} Detected excluded file: ${fileOrDirectory}`);
             return true;
         }
