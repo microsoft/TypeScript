@@ -4395,6 +4395,7 @@ namespace ts {
                         getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
                         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
                         fileExists: fileName => host.fileExists(fileName),
+                        getFileIncludeReasons: () => host.getFileIncludeReasons(),
                     } : undefined },
                     encounteredError: false,
                     visitedTypes: undefined,

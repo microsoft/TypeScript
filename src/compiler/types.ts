@@ -7953,6 +7953,7 @@ namespace ts {
         readonly redirectTargetsMap: RedirectTargetsMap;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
