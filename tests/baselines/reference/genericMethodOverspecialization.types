@@ -21,7 +21,7 @@ declare var document: Document;
 
 interface Document {
     getElementById(elementId: string): HTMLElement;
->getElementById : { <E extends Element = HTMLElement>(elementId: string): E; (elementId: string): HTMLElement; }
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >elementId : string
 }
 
@@ -36,9 +36,9 @@ var elements = names.map(function (name) {
 
     return document.getElementById(name);
 >document.getElementById(name) : HTMLElement
->document.getElementById : { <E extends Element = HTMLElement>(elementId: string): E; (elementId: string): HTMLElement; }
+>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >document : Document
->getElementById : { <E extends Element = HTMLElement>(elementId: string): E; (elementId: string): HTMLElement; }
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >name : string
 
 });

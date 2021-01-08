@@ -19,8 +19,7 @@ namespace ts {
         // ES2015 Helpers
         createExtendsHelper(name: Identifier): Expression;
         createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
-        createSpreadHelper(argumentList: readonly Expression[]): Expression;
-        createSpreadArraysHelper(argumentList: readonly Expression[]): Expression;
+        createSpreadArrayHelper(to: Expression, from: Expression): Expression;
         // ES2015 Destructuring Helpers
         createValuesHelper(expression: Expression): Expression;
         createReadHelper(iteratorRecord: Expression, count: number | undefined): Expression;
@@ -58,8 +57,7 @@ namespace ts {
             // ES2015 Helpers
             createExtendsHelper,
             createTemplateObjectHelper,
-            createSpreadHelper,
-            createSpreadArraysHelper,
+            createSpreadArrayHelper,
             // ES2015 Destructuring Helpers
             createValuesHelper,
             createReadHelper,
@@ -284,22 +282,12 @@ namespace ts {
             );
         }
 
-        function createSpreadHelper(argumentList: readonly Expression[]) {
-            context.requestEmitHelper(readHelper);
-            context.requestEmitHelper(spreadHelper);
+        function createSpreadArrayHelper(to: Expression, from: Expression) {
+            context.requestEmitHelper(spreadArrayHelper);
             return factory.createCallExpression(
-                getUnscopedHelperName("__spread"),
+                getUnscopedHelperName("__spreadArray"),
                 /*typeArguments*/ undefined,
-                argumentList
-            );
-        }
-
-        function createSpreadArraysHelper(argumentList: readonly Expression[]) {
-            context.requestEmitHelper(spreadArraysHelper);
-            return factory.createCallExpression(
-                getUnscopedHelperName("__spreadArrays"),
-                /*typeArguments*/ undefined,
-                argumentList
+                [to, from]
             );
         }
 
@@ -629,29 +617,15 @@ namespace ts {
             };`
     };
 
-    export const spreadHelper: UnscopedEmitHelper = {
-        name: "typescript:spread",
-        importName: "__spread",
-        scoped: false,
-        dependencies: [readHelper],
-        text: `
-            var __spread = (this && this.__spread) || function () {
-                for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-                return ar;
-            };`
-    };
-
-    export const spreadArraysHelper: UnscopedEmitHelper = {
-        name: "typescript:spreadArrays",
-        importName: "__spreadArrays",
+    export const spreadArrayHelper: UnscopedEmitHelper = {
+        name: "typescript:spreadArray",
+        importName: "__spreadArray",
         scoped: false,
         text: `
-            var __spreadArrays = (this && this.__spreadArrays) || function () {
-                for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-                for (var r = Array(s), k = 0, i = 0; i < il; i++)
-                    for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                        r[k] = a[j];
-                return r;
+            var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+                for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+                    to[j] = from[i];
+                return to;
             };`
     };
 
@@ -886,8 +860,7 @@ namespace ts {
             awaiterHelper,
             extendsHelper,
             templateObjectHelper,
-            spreadHelper,
-            spreadArraysHelper,
+            spreadArrayHelper,
             valuesHelper,
             readHelper,
             generatorHelper,
@@ -917,4 +890,11 @@ namespace ts {
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
             })(name => super[name], (name, value) => super[name] = value);`
     };
+
+    export function isCallToHelper(firstSegment: Expression, helperName: __String) {
+        return isCallExpression(firstSegment)
+            && isIdentifier(firstSegment.expression)
+            && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+            && firstSegment.expression.escapedText === helperName;
+    }
 }

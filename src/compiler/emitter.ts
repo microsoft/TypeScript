@@ -2132,6 +2132,7 @@ namespace ts {
 
         function emitConstructorType(node: ConstructorTypeNode) {
             pushNameGenerationScope(node);
+            emitModifiers(node, node.modifiers);
             writeKeyword("new");
             writeSpace();
             emitTypeParameters(node, node.typeParameters);

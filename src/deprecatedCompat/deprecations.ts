@@ -164,10 +164,23 @@ namespace ts {
     export const updateFunctionTypeNode = Debug.deprecate(factory.updateFunctionTypeNode, factoryDeprecation);
 
     /** @deprecated Use `factory.createConstructorTypeNode` or the factory supplied by your transformation context instead. */
-    export const createConstructorTypeNode = Debug.deprecate(factory.createConstructorTypeNode, factoryDeprecation);
+    export const createConstructorTypeNode = Debug.deprecate((
+        typeParameters: readonly TypeParameterDeclaration[] | undefined,
+        parameters: readonly ParameterDeclaration[],
+        type: TypeNode
+    ) => {
+        return factory.createConstructorTypeNode(/*modifiers*/ undefined, typeParameters, parameters, type);
+    }, factoryDeprecation);
 
     /** @deprecated Use `factory.updateConstructorTypeNode` or the factory supplied by your transformation context instead. */
-    export const updateConstructorTypeNode = Debug.deprecate(factory.updateConstructorTypeNode, factoryDeprecation);
+    export const updateConstructorTypeNode = Debug.deprecate((
+        node: ConstructorTypeNode,
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+        parameters: NodeArray<ParameterDeclaration>,
+        type: TypeNode
+    ) => {
+        return factory.updateConstructorTypeNode(node, node.modifiers, typeParameters, parameters, type);
+    }, factoryDeprecation);
 
     /** @deprecated Use `factory.createTypeQueryNode` or the factory supplied by your transformation context instead. */
     export const createTypeQueryNode = Debug.deprecate(factory.createTypeQueryNode, factoryDeprecation);

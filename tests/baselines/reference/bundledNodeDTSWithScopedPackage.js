@@ -29,22 +29,53 @@ export class B {}
 
 
 //// [out.d.ts]
-declare module "@test/my-pkg/nested/shared" {
+declare module "nested/shared" {
     export class B {
     }
 }
-declare module "@test/my-pkg/nested/base" {
-    import { B } from "@test/my-pkg/nested/shared";
+declare module "nested/base" {
+    import { B } from "nested/shared";
     export function f(): B;
 }
-declare module "@test/my-pkg/nested/derived" {
-    export function g(): import("@test/my-pkg").B;
+declare module "nested/derived" {
+    export function g(): import("nested").B;
 }
-declare module "@test/my-pkg/nested" {
-    export * from "@test/my-pkg/nested/base";
-    export * from "@test/my-pkg/nested/derived";
-    export * from "@test/my-pkg/nested/shared";
+declare module "nested/index" {
+    export * from "nested/base";
+    export * from "nested/derived";
+    export * from "nested/shared";
 }
-declare module "@test/my-pkg" {
-    export * from "@test/my-pkg/nested";
+declare module "index" {
+    export * from "nested/index";
 }
+
+
+//// [DtsFileErrors]
+
+
+dist/out.d.ts(10,33): error TS2307: Cannot find module 'nested' or its corresponding type declarations.
+
+
+==== ./dist/out.d.ts (1 errors) ====
+    declare module "nested/shared" {
+        export class B {
+        }
+    }
+    declare module "nested/base" {
+        import { B } from "nested/shared";
+        export function f(): B;
+    }
+    declare module "nested/derived" {
+        export function g(): import("nested").B;
+                                    ~~~~~~~~
+!!! error TS2307: Cannot find module 'nested' or its corresponding type declarations.
+    }
+    declare module "nested/index" {
+        export * from "nested/base";
+        export * from "nested/derived";
+        export * from "nested/shared";
+    }
+    declare module "index" {
+        export * from "nested/index";
+    }
+    
