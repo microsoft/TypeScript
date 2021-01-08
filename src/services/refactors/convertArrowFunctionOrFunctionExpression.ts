@@ -3,15 +3,30 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     const refactorName = "Convert arrow function or function expression";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
-    const toAnonymousFunctionActionName = "Convert to anonymous function";
-    const toNamedFunctionActionName = "Convert to named function";
-    const toArrowFunctionActionName = "Convert to arrow function";
-
-    const toAnonymousFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_anonymous_function);
-    const toNamedFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_named_function);
-    const toArrowFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function);
-
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const toAnonymousFunctionAction = {
+        name: "Convert to anonymous function",
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_anonymous_function),
+        kind: "refactor.rewrite.function.anonymous",
+    };
+    const toNamedFunctionAction = {
+        name: "Convert to named function",
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_named_function),
+        kind: "refactor.rewrite.function.named",
+    };
+    const toArrowFunctionAction = {
+        name: "Convert to arrow function",
+        description: getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function),
+        kind: "refactor.rewrite.function.arrow",
+    };
+    registerRefactor(refactorName, {
+        kinds: [
+            toAnonymousFunctionAction.kind,
+            toNamedFunctionAction.kind,
+            toArrowFunctionAction.kind
+        ],
+        getEditsForAction,
+        getAvailableActions
+    });
 
     interface FunctionInfo {
         readonly selectedVariableDeclaration: boolean;
@@ -26,38 +41,50 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition, program } = context;
+        const { file, startPosition, program, kind } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
         if (!info) return emptyArray;
         const { selectedVariableDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
-
-        if (selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent))) {
-            possibleActions.push({
-                name: toNamedFunctionActionName,
-                description: toNamedFunctionActionDescription
-            });
+        const errors: RefactorActionInfo[] = [];
+        if (refactorKindBeginsWith(toNamedFunctionAction.kind, kind)) {
+            const error = selectedVariableDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent)) ?
+                undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_named_function);
+            if (error) {
+                errors.push({ ...toNamedFunctionAction, notApplicableReason: error });
+            }
+            else {
+                possibleActions.push(toNamedFunctionAction);
+            }
         }
 
-        if (!selectedVariableDeclaration && isArrowFunction(func)) {
-            possibleActions.push({
-                name: toAnonymousFunctionActionName,
-                description: toAnonymousFunctionActionDescription
-            });
+        if (refactorKindBeginsWith(toAnonymousFunctionAction.kind, kind)) {
+            const error = !selectedVariableDeclaration && isArrowFunction(func) ?
+                undefined: getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
+            if (error) {
+                errors.push({ ...toAnonymousFunctionAction, notApplicableReason: error });
+            }
+            else {
+                possibleActions.push(toAnonymousFunctionAction);
+            }
         }
 
-        if (isFunctionExpression(func)) {
-            possibleActions.push({
-                name: toArrowFunctionActionName,
-                description: toArrowFunctionActionDescription
-            });
+        if (refactorKindBeginsWith(toArrowFunctionAction.kind, kind)) {
+            const error = isFunctionExpression(func) ? undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_arrow_function);
+            if (error) {
+                errors.push({ ...toArrowFunctionAction, notApplicableReason: error });
+            }
+            else {
+                possibleActions.push(toArrowFunctionAction);
+            }
         }
 
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: possibleActions
+            actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason ?
+                errors : possibleActions
         }];
     }
 
@@ -70,18 +97,18 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const edits: FileTextChanges[] = [];
 
         switch (actionName) {
-            case toAnonymousFunctionActionName:
+            case toAnonymousFunctionAction.name:
                 edits.push(...getEditInfoForConvertToAnonymousFunction(context, func));
                 break;
 
-            case toNamedFunctionActionName:
+            case toNamedFunctionAction.name:
                 const variableInfo = getVariableInfo(func);
                 if (!variableInfo) return undefined;
 
                 edits.push(...getEditInfoForConvertToNamedFunction(context, func, variableInfo));
                 break;
 
-            case toArrowFunctionActionName:
+            case toArrowFunctionAction.name:
                 if (!isFunctionExpression(func)) return undefined;
                 edits.push(...getEditInfoForConvertToArrowFunction(context, func));
                 break;

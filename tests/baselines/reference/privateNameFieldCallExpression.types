@@ -73,7 +73,7 @@ class A {
 >this.#fieldFunc2`head${1}middle${2}tail` : void
 >this.#fieldFunc2 : (a: any, ...b: any[]) => void
 >this : this
->`head${1}middle${2}tail` : string
+>`head${1}middle${2}tail` : "head1middle2tail"
 >1 : 1
 >2 : 2
 
@@ -84,7 +84,7 @@ class A {
 >this.getInstance : () => A
 >this : this
 >getInstance : () => A
->`test${1}and${2}` : string
+>`test${1}and${2}` : "test1and2"
 >1 : 1
 >2 : 2
     }

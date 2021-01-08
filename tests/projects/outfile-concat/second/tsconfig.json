@@ -7,7 +7,6 @@
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "bundledPackageName": "second",
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },

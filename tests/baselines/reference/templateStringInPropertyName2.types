@@ -5,7 +5,7 @@ var x = {
 >{ : {}
 
     `abc${ 123 }def${ 456 }ghi`: 321
->`abc${ 123 }def${ 456 }ghi` : string
+>`abc${ 123 }def${ 456 }ghi` : "abc123def456ghi"
 >123 : 123
 >456 : 456
 >321 : 321

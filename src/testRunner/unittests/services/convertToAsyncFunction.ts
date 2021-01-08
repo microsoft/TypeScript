@@ -1579,6 +1579,18 @@ function [#|f|]() {
 }
 `);
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_emptyCatch1", `
+function [#|f|]() {
+    return Promise.resolve().catch();
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_emptyCatch2", `
+function [#|f|]() {
+    return Promise.resolve(0).then(x => x).catch();
+}
+`);
+
         _testConvertToAsyncFunctionWithModule("convertToAsyncFunction_importedFunction", `
 import { fn } from "./module";
 function [#|f|]() {

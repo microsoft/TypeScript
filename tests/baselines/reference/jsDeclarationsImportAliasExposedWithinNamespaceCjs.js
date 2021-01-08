@@ -63,7 +63,7 @@ export const myTypes: {
     [x: string]: any;
 };
 export namespace myTypes {
-    type typeA = string | RegExp | (string | RegExp)[];
+    type typeA = string | RegExp | Array<string | RegExp>;
     type typeB = {
         /**
          * - Prop 1.
@@ -74,7 +74,7 @@ export namespace myTypes {
          */
         prop2: string;
     };
-    type typeC = Function | typeB;
+    type typeC = myTypes.typeB | Function;
 }
 //// [file2.d.ts]
 /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
@@ -94,6 +94,6 @@ export const testFnTypes: {
     [x: string]: any;
 };
 export namespace testFnTypes {
-    type input = boolean | Function | myTypes.typeB;
+    type input = boolean | myTypes.typeC;
 }
 import { myTypes } from "./file.js";

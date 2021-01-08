@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmbeddedTypeOfOperator.ts ===
 var x = `abc${ typeof "hi" }def`;
->x : string
->`abc${ typeof "hi" }def` : string
+>x : "abcstringdef" | "abcnumberdef" | "abcbigintdef" | "abcbooleandef" | "abcsymboldef" | "abcundefineddef" | "abcobjectdef" | "abcfunctiondef"
+>`abc${ typeof "hi" }def` : "abcstringdef" | "abcnumberdef" | "abcbigintdef" | "abcbooleandef" | "abcsymboldef" | "abcundefineddef" | "abcobjectdef" | "abcfunctiondef"
 >typeof "hi" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >"hi" : "hi"
 

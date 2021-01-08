@@ -90,8 +90,6 @@ namespace ts {
                     return visitPropertyDeclaration(node as PropertyDeclaration);
                 case SyntaxKind.VariableStatement:
                     return visitVariableStatement(node as VariableStatement);
-                case SyntaxKind.ComputedPropertyName:
-                    return visitComputedPropertyName(node as ComputedPropertyName);
                 case SyntaxKind.PropertyAccessExpression:
                     return visitPropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.PrefixUnaryExpression:
@@ -184,7 +182,7 @@ namespace ts {
             let node = visitEachChild(name, visitor, context);
             if (some(pendingExpressions)) {
                 const expressions = pendingExpressions;
-                expressions.push(name.expression);
+                expressions.push(node.expression);
                 pendingExpressions = [];
                 node = factory.updateComputedPropertyName(
                     node,
