@@ -2,8 +2,17 @@
 namespace ts.refactor {
     const refactorName = "Introduce destruction";
     const refactorKind = "refactor.rewrite.expression.toDestructured";
-    const actionNameIntroduceObjectDestruction = "Convert access to destruction";
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction, kinds: [refactorKind] });
+
+    const introduceObjectDestructionAction = {
+        name: refactorName,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_access_expression_to_destruction),
+        kind: refactorKind
+    }
+
+    function makeRefactorActionWithErrorReason (reason: string) {
+        return { ...introduceObjectDestructionAction, notApplicableReason: reason };
+    }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, program, cancellationToken } = context;
@@ -11,17 +20,22 @@ namespace ts.refactor {
         if (isJSFile || !cancellationToken) return emptyArray;
 
         const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ false, context.triggerReason === "invoked");
-        if (!info) return emptyArray;
-
-        return [{
-            name: refactorName,
-            description: actionNameIntroduceObjectDestruction,
-            actions: [{
+        if (!isErrorResult(info)) {
+            return [{
                 name: refactorName,
-                description: actionNameIntroduceObjectDestruction,
-                kind: refactorKind
-            }]
-        }];
+                description: getLocaleSpecificMessage(Diagnostics.Convert_access_expression_to_destruction),
+                actions: [introduceObjectDestructionAction]
+            }];
+        }
+
+        if (context.preferences.provideRefactorNotApplicableReason) {
+            return [{
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Convert_access_expression_to_destruction),
+                actions: [makeRefactorActionWithErrorReason(info.reason)]
+            }];
+        }
+        return  emptyArray;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
@@ -33,9 +47,9 @@ namespace ts.refactor {
         if (isJSFile || !cancellationToken) return emptyResult;
 
         const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ true);
-        if (!info) return emptyResult;
+        if (isErrorResult(info)) return emptyResult;
 
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(t, file, info));
+        const edits = textChanges.ChangeTracker.with(context, t => doChange(t, file, info.value));
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
@@ -206,8 +220,7 @@ namespace ts.refactor {
         namesNeedUniqueName: Set<string>
         isArrayLikeType: boolean
     }
-
-    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean, considerEmptySpans = true): Info | undefined {
+    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean, considerEmptySpans = true): Result<Info> {
         const current = getTokenAtPosition(file, context.startPosition);
         const compilerOptions = context.program.getCompilerOptions();
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
@@ -217,12 +230,16 @@ namespace ts.refactor {
             cursorRequest || nodeOverlapsWithStartEnd(node, file, range.pos, range.end)
         )));
 
-        if (!node || !isAccessExpression(node.parent)) return undefined;
+        if (!node || !isAccessExpression(node.parent)) {
+            return Err(Diagnostics.No_convertible_access_expression_at_location.message);
+        }
 
         const isLeftOfAccess = node.parent.expression === node;
 
         const symbol = checker.getSymbolAtLocation(isLeftOfAccess ? node.parent.expression : node.parent);
-        if (!symbol || checker.isUnknownSymbol(symbol) || !symbol.valueDeclaration || !isVariableLike(symbol.valueDeclaration) || isEnumMember(symbol.valueDeclaration)) return undefined;
+        if (!symbol || checker.isUnknownSymbol(symbol) || !symbol.valueDeclaration || !isVariableLike(symbol.valueDeclaration) || isEnumMember(symbol.valueDeclaration)) {
+            return Err(Diagnostics.Cannot_find_convertible_value_declaration.message);
+        }
 
         // Find only current file
         const references = FindAllReferences.getReferenceEntriesForNode(-1, node, program, [file], cancellationToken);
@@ -281,7 +298,9 @@ namespace ts.refactor {
                 isNumericAccess: false
             });
         });
-        if (!firstReferenced || !firstReferencedStatement || !referencedAccessExpression.length || !some(referencedAccessExpression, ({ expression }) => rangeContainsRange(expression, current))) return undefined;
+        if (!firstReferenced || !firstReferencedStatement || !referencedAccessExpression.length || !some(referencedAccessExpression, ({ expression }) => rangeContainsRange(expression, current))) {
+            return Err(Diagnostics.Cannot_find_convertible_references.message);
+        }
 
         let hasUnconvertableReference = false;
         const namesNeedUniqueName = new Set<string>();
@@ -311,7 +330,9 @@ namespace ts.refactor {
                 }
             }
         });
-        if (hasUnconvertableReference) return undefined;
+        if (hasUnconvertableReference) {
+            return Err(Diagnostics.Some_references_are_un_convertible.message);
+        }
 
         if (resolveUniqueName) {
             forEach(referencedAccessExpression, ({ name }) => {
@@ -322,14 +343,14 @@ namespace ts.refactor {
             });
         }
 
-        return {
+        return Ok({
             replacementExpression: node.parent.expression,
             firstReferenced,
             firstReferencedStatement,
             referencedAccessExpression,
             namesNeedUniqueName,
             isArrayLikeType
-        };
+        });
     }
 
     function getAccessExpressionIfValidReference(node: Node, symbol: Symbol, container: Node, allReferencedAcccessExpression: Node[], isLeftOfAccess: boolean): AccessExpression | undefined {

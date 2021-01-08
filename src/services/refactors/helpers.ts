@@ -22,4 +22,33 @@ namespace ts.refactor {
         if(!requested) return true;
         return known.substr(0, requested.length) === requested;
     }
+
+    export const enum ResultStatus {
+        Ok,
+        Err
+    }
+
+    export interface OkResult<T> {
+        status: ResultStatus.Ok;
+        value: T;
+    }
+
+    export interface ErrResult {
+        status: ResultStatus.Err;
+        reason: string;
+    }
+
+    export type Result<T> = OkResult<T> | ErrResult;
+
+    export function isErrorResult<T>(result: Result<T>): result is ErrResult {
+        return result.status === ResultStatus.Err;
+    }
+
+    export function Err(reason: string): ErrResult {
+        return { status: ResultStatus.Err, reason };
+    }
+
+    export function Ok<T>(value: T): OkResult<T> {
+        return { status: ResultStatus.Ok, value };
+    }
 }

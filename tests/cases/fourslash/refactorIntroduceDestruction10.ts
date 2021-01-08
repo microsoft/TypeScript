@@ -8,7 +8,7 @@ goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Introduce destruction",
     actionName: "Introduce destruction",
-    actionDescription: "Convert access to destruction",
+    actionDescription: ts.Diagnostics.Convert_access_expression_to_destruction.message,
     newContent: `function foo (item: { a: string, b: number }) {
     const { a, b } = item;
     call(a, b)

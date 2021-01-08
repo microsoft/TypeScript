@@ -6195,6 +6195,10 @@
         "category": "Message",
         "code": 95155
     },
+    "Convert access expression to destruction": {
+        "category": "Message",
+        "code": 95156
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -6303,5 +6307,21 @@
     "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 18035
+    },
+    "No convertible access expression at location.": {
+        "category": "Error",
+        "code": 18036
+    },
+    "Cannot find convertible value declaration.": {
+        "category": "Error",
+        "code": 18037
+    },
+    "Cannot find convertible references.": {
+        "category": "Error",
+        "code": 18038
+    },
+    "Some references are un-convertible.": {
+        "category": "Error",
+        "code": 18039
     }
 }

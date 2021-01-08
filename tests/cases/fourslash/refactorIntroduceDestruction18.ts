@@ -21,7 +21,7 @@ goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Introduce destruction",
     actionName: "Introduce destruction",
-    actionDescription: "Convert access to destruction",
+    actionDescription: ts.Diagnostics.Convert_access_expression_to_destruction.message,
     newContent: `interface A {
     f: 1,
     b: number
