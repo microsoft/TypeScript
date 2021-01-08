@@ -18,7 +18,7 @@ type ExtractValueType<T> = T extends ReactSelectProps<infer U> ? U : never;
 >ExtractValueType : ExtractValueType<T>
 
 export type ReactSingleSelectProps<
->ReactSingleSelectProps : Overwrite<Omit<WrappedProps, "multi">, Props<ExtractValueType<WrappedProps>>>
+>ReactSingleSelectProps : ReactSingleSelectProps<WrappedProps>
 
     WrappedProps extends ReactSelectProps<any>
 > = Overwrite<
@@ -118,11 +118,11 @@ declare class ReactSelectClass<TValue = OptionValues> extends React.Component<Re
 }
 
 export type OptionComponentType<TValue = OptionValues> = React.ComponentType<OptionComponentProps<TValue>>;
->OptionComponentType : React.ComponentType<OptionComponentProps<TValue>>
+>OptionComponentType : OptionComponentType<TValue>
 >React : any
 
 export type ValueComponentType<TValue = OptionValues> =  React.ComponentType<ValueComponentProps<TValue>>;
->ValueComponentType : React.ComponentType<ValueComponentProps<TValue>>
+>ValueComponentType : ValueComponentType<TValue>
 >React : any
 
 export type HandlerRendererResult = JSX.Element | null | false;
@@ -859,7 +859,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      * option component to render in dropdown
      */
     optionComponent?: OptionComponentType<TValue>;
->optionComponent : React.ComponentType<OptionComponentProps<TValue>> | undefined
+>optionComponent : OptionComponentType<TValue> | undefined
 
     /**
      * function which returns a custom way to render the options in the menu
@@ -973,7 +973,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      *  value component to render
      */
     valueComponent?: ValueComponentType<TValue>;
->valueComponent : React.ComponentType<ValueComponentProps<TValue>> | undefined
+>valueComponent : ValueComponentType<TValue> | undefined
 
     /**
      *  optional style to apply to the component wrapper
