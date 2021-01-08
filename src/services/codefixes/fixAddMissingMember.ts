@@ -75,7 +75,7 @@ namespace ts.codefix {
                         const { parentDeclaration, declSourceFile, modifierFlags, token, call, isJSFile } = info;
                         // Always prefer to add a method declaration if possible.
                         if (call && !isPrivateIdentifier(token)) {
-                            addMethodDeclaration(context, changes, call, token.text, modifierFlags & ModifierFlags.Static, parentDeclaration, declSourceFile);
+                            addMethodDeclaration(context, changes, call, token, modifierFlags & ModifierFlags.Static, parentDeclaration, declSourceFile);
                         }
                         else {
                             if (isJSFile && !isInterfaceDeclaration(parentDeclaration)) {
@@ -347,7 +347,7 @@ namespace ts.codefix {
         }
 
         const methodName = token.text;
-        const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, methodName, modifierFlags, parentDeclaration, declSourceFile));
+        const addMethodDeclarationChanges = (modifierFlags: ModifierFlags) => textChanges.ChangeTracker.with(context, t => addMethodDeclaration(context, t, call, token, modifierFlags, parentDeclaration, declSourceFile));
         const actions = [createCodeFixAction(fixMissingMember, addMethodDeclarationChanges(modifierFlags & ModifierFlags.Static), [modifierFlags & ModifierFlags.Static ? Diagnostics.Declare_static_method_0 : Diagnostics.Declare_method_0, methodName], fixMissingMember, Diagnostics.Add_all_missing_members)];
         if (modifierFlags & ModifierFlags.Private) {
             actions.unshift(createCodeFixActionWithoutFixAll(fixMissingMember, addMethodDeclarationChanges(ModifierFlags.Private), [Diagnostics.Declare_private_method_0, methodName]));
@@ -359,13 +359,13 @@ namespace ts.codefix {
         context: CodeFixContextBase,
         changes: textChanges.ChangeTracker,
         callExpression: CallExpression,
-        methodName: string,
+        name: Identifier,
         modifierFlags: ModifierFlags,
         parentDeclaration: ClassOrInterface,
         sourceFile: SourceFile,
     ): void {
         const importAdder = createImportAdder(sourceFile, context.program, context.preferences, context.host);
-        const methodDeclaration = createFunctionFromCallExpression<MethodDeclaration>(SyntaxKind.MethodDeclaration, context, importAdder, callExpression, methodName, modifierFlags, parentDeclaration);
+        const methodDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.MethodDeclaration, context, importAdder, callExpression, name, modifierFlags, parentDeclaration) as MethodDeclaration;
         const containingMethodDeclaration = findAncestor(callExpression, n => isMethodDeclaration(n) || isConstructorDeclaration(n));
         if (containingMethodDeclaration && containingMethodDeclaration.parent === parentDeclaration) {
             changes.insertNodeAfter(sourceFile, containingMethodDeclaration, methodDeclaration);
@@ -402,7 +402,7 @@ namespace ts.codefix {
 
     function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo) {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-        const functionDeclaration = createFunctionFromCallExpression<FunctionDeclaration>(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, info.token, info.modifierFlags, info.parentDeclaration);
+        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, info.token, info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
     }
 }

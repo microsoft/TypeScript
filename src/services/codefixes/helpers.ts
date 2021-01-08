@@ -247,15 +247,15 @@ namespace ts.codefix {
         );
     }
 
-    export function createFunctionFromCallExpression<T extends FunctionDeclaration | MethodDeclaration>(
-        kind: T["kind"] | SyntaxKind.MethodDeclaration,
+    export function createSignatureDeclarationFromCallExpression(
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration,
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
-        name: Identifier | string,
+        name: Identifier,
         modifierFlags: ModifierFlags,
         contextNode: Node
-    ): T {
+    ) {
         const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver(context);
@@ -295,9 +295,8 @@ namespace ts.codefix {
                 parameters,
                 type,
                 isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference)
-            ) as T;
+            );
         }
-
         return factory.createFunctionDeclaration(
             /*decorators*/ undefined,
             modifiers,
@@ -307,7 +306,7 @@ namespace ts.codefix {
             parameters,
             type,
             createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
-        ) as T;
+        );
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
