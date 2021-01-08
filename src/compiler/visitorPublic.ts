@@ -485,6 +485,7 @@ namespace ts {
 
             case SyntaxKind.ConstructorType:
                 return factory.updateConstructorTypeNode(<ConstructorTypeNode>node,
+                    nodesVisitor((<ConstructorTypeNode>node).modifiers, visitor, isModifier),
                     nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<ConstructorTypeNode>node).parameters, visitor, isParameterDeclaration),
                     nodeVisitor((<ConstructorTypeNode>node).type, visitor, isTypeNode));
