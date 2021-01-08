@@ -257,7 +257,7 @@ namespace ts.refactor {
         let hasNumericAccess = false;
         const referencedAccessExpression: ReferencedAccessInfo[] = [];
         const allReferencedAcccessExpression: AccessExpression[] = [];
-        const container = isParameter(symbol.valueDeclaration) ? symbol.valueDeclaration : findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
+        const container = getContainingParameterDeclaration(symbol.valueDeclaration) || findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
         Debug.assertIsDefined(container);
         forEach(references, reference => {
             if (reference.kind !== FindAllReferences.EntryKind.Node) {
@@ -371,6 +371,10 @@ namespace ts.refactor {
             namesNeedUniqueName,
             isArrayLikeType
         });
+    }
+
+    function getContainingParameterDeclaration(decl: Declaration) {
+        return findAncestor(decl, node => isFunctionLike(node) ? "quit" : isParameter(node)) as ParameterDeclaration | undefined;
     }
 
     function getAccessExpressionIfValidReference(node: Node, symbol: Symbol, container: Node, allReferencedAcccessExpression: Node[], isLeftOfAccess: boolean): AccessExpression | undefined {
