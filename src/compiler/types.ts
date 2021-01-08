@@ -4745,6 +4745,8 @@ namespace ts {
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
         instantiations?: ESMap<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
+        aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
+        aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
         inferredClassSymbol?: ESMap<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
         referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
