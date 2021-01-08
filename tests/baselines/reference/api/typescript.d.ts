@@ -2796,7 +2796,6 @@ declare namespace ts {
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
         baseUrl?: string;
-        bundledPackageName?: string;
         charset?: string;
         checkJs?: boolean;
         declaration?: boolean;
