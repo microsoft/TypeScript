@@ -47,10 +47,10 @@ declare function parseInt(s: string, radix?: number): number;
 declare function parseFloat(string: string): number;
 
 /**
- * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a number).
- * @param number A numeric value.
+ * Returns a Boolean value that indicates whether a value is NaN (not a number).
+ * @param value Any value to test.
  */
-declare function isNaN(number: number): boolean;
+declare function isNaN(value: any): boolean;
 
 /**
  * Determines whether a supplied number is finite.
