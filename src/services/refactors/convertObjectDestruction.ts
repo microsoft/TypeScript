@@ -113,11 +113,13 @@ namespace ts.refactor {
             ),
         );
 
-        changeTracker.insertNodeBefore(
-            file,
-            info.firstReferencedStatement,
-            newBinding
-        );
+        if (info.firstReferencedStatement) {
+            changeTracker.insertNodeBefore(
+                file,
+                info.firstReferencedStatement,
+                newBinding
+            );
+        }
     }
 
     function getBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker): BindingPattern | undefined {
@@ -220,12 +222,12 @@ namespace ts.refactor {
     }
 
     interface Info {
-        replacementExpression: Expression,
-        referencedAccessExpression: ReferencedAccessInfo[]
-        firstReferenced: Expression
-        firstReferencedStatement: Statement
-        namesNeedUniqueName: Set<string>
-        isArrayLikeType: boolean
+        replacementExpression: Expression;
+        referencedAccessExpression: ReferencedAccessInfo[];
+        firstReferenced: Expression | undefined;
+        firstReferencedStatement: Statement | undefined;
+        namesNeedUniqueName: Set<string>;
+        isArrayLikeType: boolean;
     }
     function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean, triggerByInvoked = true): Result<Info> {
         const current = getTokenAtPosition(file, context.startPosition);
@@ -308,6 +310,11 @@ namespace ts.refactor {
         });
         if (!firstReferenced || !firstReferencedStatement || !referencedAccessExpression.length || !some(referencedAccessExpression, ({ expression }) => rangeContainsRange(expression, current))) {
             return Err(Diagnostics.Cannot_find_convertible_references.message);
+        }
+
+        const minimumReferenceCount = 2;
+        if (!triggerByInvoked && referencedAccessExpression.length < minimumReferenceCount) {
+            return Err(formatMessage(/*_dummy*/ undefined, Diagnostics.At_least_0_references_are_required, minimumReferenceCount));
         }
 
         let hasUnconvertableReference = false;

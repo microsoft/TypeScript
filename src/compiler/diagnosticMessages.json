@@ -6327,5 +6327,9 @@
     "Too many empty array item.": {
         "category": "Error",
         "code": 18040
+    },
+    "At least '{0}' references are required.": {
+        "category": "Error",
+        "code": 18041
     }
 }
