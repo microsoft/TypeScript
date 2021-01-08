@@ -34,18 +34,19 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(62,49): erro
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(63,12): error TS2554: Expected 2 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(69,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): error TS2555: Expected at least 1 arguments, but got 0.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(73,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (27 errors) ====
+==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (28 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
     
-    // If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types, 
+    // If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types,
     // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
     var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
     numOrDate = new unionOfDifferentReturnType(10);
-    strOrBoolean = new unionOfDifferentReturnType("hello"); // error 
+    strOrBoolean = new unionOfDifferentReturnType("hello"); // error
     ~~~~~~~~~~~~
 !!! error TS2322: Type 'number | Date' is not assignable to type 'string | boolean'.
 !!! error TS2322:   Type 'number' is not assignable to type 'string | boolean'.
@@ -183,3 +184,9 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:65:37: An argument for 'a' was not provided.
+    
+    var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
+    new unionWithAbstractSignature('hello');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    

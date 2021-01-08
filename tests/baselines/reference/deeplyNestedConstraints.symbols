@@ -1,0 +1,43 @@
+=== tests/cases/compiler/deeplyNestedConstraints.ts ===
+// Repro from #41931
+
+type Enum = Record<string, string | number>;
+>Enum : Symbol(Enum, Decl(deeplyNestedConstraints.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type TypeMap<E extends Enum> = { [key in E[keyof E]]: number | boolean | string | number[] };
+>TypeMap : Symbol(TypeMap, Decl(deeplyNestedConstraints.ts, 2, 44))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 4, 13))
+>Enum : Symbol(Enum, Decl(deeplyNestedConstraints.ts, 0, 0))
+>key : Symbol(key, Decl(deeplyNestedConstraints.ts, 4, 34))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 4, 13))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 4, 13))
+
+class BufferPool<E extends Enum, M extends TypeMap<E>> {
+>BufferPool : Symbol(BufferPool, Decl(deeplyNestedConstraints.ts, 4, 93))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 6, 17))
+>Enum : Symbol(Enum, Decl(deeplyNestedConstraints.ts, 0, 0))
+>M : Symbol(M, Decl(deeplyNestedConstraints.ts, 6, 32))
+>TypeMap : Symbol(TypeMap, Decl(deeplyNestedConstraints.ts, 2, 44))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 6, 17))
+
+    setArray2<K extends E[keyof E]>(_: K, array: Extract<M[K], ArrayLike<any>>) {
+>setArray2 : Symbol(BufferPool.setArray2, Decl(deeplyNestedConstraints.ts, 6, 56))
+>K : Symbol(K, Decl(deeplyNestedConstraints.ts, 7, 14))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 6, 17))
+>E : Symbol(E, Decl(deeplyNestedConstraints.ts, 6, 17))
+>_ : Symbol(_, Decl(deeplyNestedConstraints.ts, 7, 36))
+>K : Symbol(K, Decl(deeplyNestedConstraints.ts, 7, 14))
+>array : Symbol(array, Decl(deeplyNestedConstraints.ts, 7, 41))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>M : Symbol(M, Decl(deeplyNestedConstraints.ts, 6, 32))
+>K : Symbol(K, Decl(deeplyNestedConstraints.ts, 7, 14))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+
+        array.length; // Requires exploration of >5 levels of constraints
+>array.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>array : Symbol(array, Decl(deeplyNestedConstraints.ts, 7, 41))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+

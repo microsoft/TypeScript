@@ -1391,7 +1391,23 @@ namespace ts {
         return isInsideJsxElementTraversal(getTokenAtPosition(sourceFile, position));
     }
 
-    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
+    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
+        const closeTokenText = tokenToString(token.kind)!;
+        const matchingTokenText = tokenToString(matchingTokenKind)!;
+        const tokenFullStart = token.getFullStart();
+        // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
+        // a good, fast approximation without too much extra work in the cases where it fails.
+        const bestGuessIndex = sourceFile.text.lastIndexOf(matchingTokenText, tokenFullStart);
+        if (bestGuessIndex === -1) {
+            return undefined; // if the token text doesn't appear in the file, there can't be a match - super fast bail
+        }
+        // we can only use the textual result directly if we didn't have to count any close tokens within the range
+        if (sourceFile.text.lastIndexOf(closeTokenText, tokenFullStart - 1) < bestGuessIndex) {
+            const nodeAtGuess = findPrecedingToken(bestGuessIndex + 1, sourceFile);
+            if (nodeAtGuess && nodeAtGuess.kind === matchingTokenKind) {
+                return nodeAtGuess;
+            }
+        }
         const tokenKind = token.kind;
         let remainingMatchingTokens = 0;
         while (true) {
@@ -1447,7 +1463,14 @@ namespace ts {
     }
 
     // Get info for an expression like `f <` that may be the start of type arguments.
-    export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+    export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+        // This is a rare case, but one that saves on a _lot_ of work if true - if the source file has _no_ `<` character,
+        // then there obviously can't be any type arguments - no expensive brace-matching backwards scanning required
+
+        if (sourceFile.text.lastIndexOf("<", tokenIn ? tokenIn.pos : sourceFile.text.length) === -1) {
+            return undefined;
+        }
+
         let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
@@ -1565,9 +1588,11 @@ namespace ts {
         return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
-    export function getNodeModifiers(node: Node): string {
-        const flags = isDeclaration(node) ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) : ModifierFlags.None;
+    export function getNodeModifiers(node: Node, excludeFlags = ModifierFlags.None): string {
         const result: string[] = [];
+        const flags = isDeclaration(node)
+            ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) & ~excludeFlags
+            : ModifierFlags.None;
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
@@ -1723,6 +1748,7 @@ namespace ts {
         SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,
+        SyntaxKind.InferKeyword,
         SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
         SyntaxKind.NullKeyword,
@@ -1891,38 +1917,6 @@ namespace ts {
     export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName): Symbol | undefined {
         const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
         return typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
-    }
-
-    /**
-     * Find symbol of the given property-name and add the symbol to the given result array
-     * @param symbol a symbol to start searching for the given propertyName
-     * @param propertyName a name of property to search for
-     * @param result an array of symbol of found property symbols
-     * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisiting of the same symbol.
-     *                                The value of previousIterationSymbol is undefined when the function is first called.
-     */
-    export function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-        const seen = new Map<string, true>();
-        return recur(symbol);
-
-        function recur(symbol: Symbol): T | undefined {
-            // Use `addToSeen` to ensure we don't infinitely recurse in this situation:
-            //      interface C extends C {
-            //          /*findRef*/propName: string;
-            //      }
-            if (!(symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) || !addToSeen(seen, getSymbolId(symbol))) return;
-
-            return firstDefined(symbol.declarations, declaration => firstDefined(getAllSuperTypeNodes(declaration), typeReference => {
-                const type = checker.getTypeAtLocation(typeReference);
-                const propertySymbol = type && type.symbol && checker.getPropertyOfType(type, propertyName);
-                // Visit the typeReference as well to see if it directly or indirectly uses that property
-                return type && propertySymbol && (firstDefined(checker.getRootSymbols(propertySymbol), cb) || recur(type.symbol));
-            }));
-        }
-    }
-
-    export function isMemberSymbolInBaseType(memberSymbol: Symbol, checker: TypeChecker): boolean {
-        return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
     }
 
     export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {

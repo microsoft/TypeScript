@@ -828,9 +828,9 @@ interface Array<T> { length: number; [n: number]: T; }`
                 return undefined;
             }
 
-            const realpath = this.realpath(path);
+            const realpath = this.toPath(this.realpath(path));
             if (path !== realpath) {
-                return this.getRealFsEntry(isFsEntry, this.toPath(realpath));
+                return this.getRealFsEntry(isFsEntry, realpath);
             }
 
             return undefined;
@@ -1012,6 +1012,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
+        prependFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
+            this.modifyFile(path, content + this.readFile(path), options);
+        }
+
         appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
             this.modifyFile(path, this.readFile(path) + content, options);
         }
@@ -1093,7 +1097,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 return this.realpath(fsEntry.symLink);
             }
 
-            return realFullPath;
+            // realpath supports non-existent files, so there may not be an fsEntry
+            return fsEntry?.fullPath || realFullPath;
         }
 
         readonly exitMessage = "System Exit";

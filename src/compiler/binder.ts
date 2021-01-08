@@ -174,15 +174,14 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        const tracingData: tracing.EventData = [tracing.Phase.Bind, "bindSourceFile", { path: file.path }];
-        tracing.begin(...tracingData);
+        tracing.push(tracing.Phase.Bind, "bindSourceFile", { path: file.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeBind");
         perfLogger.logStartBindFile("" + file.fileName);
         binder(file, options);
         perfLogger.logStopBindFile();
         performance.mark("afterBind");
         performance.measure("Bind", "beforeBind", "afterBind");
-        tracing.end(...tracingData);
+        tracing.pop();
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
@@ -2148,8 +2147,8 @@ namespace ts {
             const saveCurrentFlow = currentFlow;
             for (const typeAlias of delayedTypeAliases) {
                 const host = getJSDocHost(typeAlias);
-                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
-                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
+                container = (host && findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer))) || file;
+                blockScopeContainer = (host && getEnclosingBlockScopeContainer(host)) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);

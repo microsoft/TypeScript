@@ -53,12 +53,25 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig_withInclude.json
+/lib/tsc --b /src/tsconfig_withInclude.json --v --explainFiles
+[[90m12:00:00 AM[0m] Projects in this build: 
+    * src/tsconfig_withInclude.json
+
+[[90m12:00:00 AM[0m] Project 'src/tsconfig_withInclude.json' is out of date because output file 'src/dist/src/index.js' does not exist
+
+[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withInclude.json'...
+
 [96msrc/src/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6307: [0mFile '/src/src/hello.json' is not listed within the file list of project '/src/tsconfig_withInclude.json'. Projects must list all files or use an 'include' pattern.
 
 [7m1[0m import hello from "./hello.json"
 [7m [0m [91m                  ~~~~~~~~~~~~~~[0m
 
+lib/lib.d.ts
+  Default library
+src/src/hello.json
+  Imported via "./hello.json" from file 'src/src/index.ts'
+src/src/index.ts
+  Matched by include pattern 'src/**/*' in 'src/tsconfig_withInclude.json'
 
 Found 1 error.
 
@@ -94,6 +107,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "explainFiles": true,
       "configFilePath": "../tsconfig_withInclude.json"
     },
     "referencedMap": {

@@ -1,5 +1,13 @@
 //// [truthinessCallExpressionCoercion2.ts]
-function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
+declare class A {
+    static from(): string;
+}
+
+declare class B {
+    static from(): string;
+}
+
+function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
     // error
     required1 && console.log('required');
 
@@ -27,8 +35,29 @@ function test(required1: () => boolean, required2: () => boolean, optional?: () 
     // ok
     required1 && required2 && required1() && required2();
 
+    // ok
+    [].forEach((f: () => void) => f && f.apply(parent, []));
+
     // error
     required1 && required2 && required1() && console.log('foo');
+
+    // error
+    if (required1 && b) {
+    }
+
+    // error
+    if (((required1 && b))) {
+    }
+
+    // ok
+    if (required1 && b) {
+        required1();
+    }
+
+    // ok
+    if (((required1 && b))) {
+        required1();
+    }
 }
 
 function checksConsole() {
@@ -55,6 +84,20 @@ function checksPropertyAccess() {
 
     // ok
     x.foo.bar && 1 && x.foo.bar();
+
+    // ok
+    const y = A.from && (A.from as Function) !== B.from ? true : false;
+    y;
+
+    const x1 = {
+        a: { b: { c: () => {} } }
+    }
+    const x2 = {
+        a: { b: { c: () => {} } }
+    }
+
+    // error
+    x1.a.b.c && x2.a.b.c();
 }
 
 class Foo {
@@ -82,7 +125,7 @@ class Foo {
 
 
 //// [truthinessCallExpressionCoercion2.js]
-function test(required1, required2, optional) {
+function test(required1, required2, b, optional) {
     // error
     required1 && console.log('required');
     // error
@@ -101,8 +144,24 @@ function test(required1, required2, optional) {
     required1() && console.log('required call');
     // ok
     required1 && required2 && required1() && required2();
+    // ok
+    [].forEach(function (f) { return f && f.apply(parent, []); });
     // error
     required1 && required2 && required1() && console.log('foo');
+    // error
+    if (required1 && b) {
+    }
+    // error
+    if (((required1 && b))) {
+    }
+    // ok
+    if (required1 && b) {
+        required1();
+    }
+    // ok
+    if (((required1 && b))) {
+        required1();
+    }
 }
 function checksConsole() {
     // error
@@ -123,6 +182,17 @@ function checksPropertyAccess() {
     x.foo.bar && x.foo.bar();
     // ok
     x.foo.bar && 1 && x.foo.bar();
+    // ok
+    var y = A.from && A.from !== B.from ? true : false;
+    y;
+    var x1 = {
+        a: { b: { c: function () { } } }
+    };
+    var x2 = {
+        a: { b: { c: function () { } } }
+    };
+    // error
+    x1.a.b.c && x2.a.b.c();
 }
 var Foo = /** @class */ (function () {
     function Foo() {

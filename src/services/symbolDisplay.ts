@@ -71,8 +71,6 @@ namespace ts.SymbolDisplay {
                     if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                         return ScriptElementKind.memberVariableElement;
                     }
-                    // May be a Function if this was from `typeof N` with `namespace N { function f();. }`.
-                    Debug.assert(!!(rootSymbolFlags & (SymbolFlags.Method | SymbolFlags.Function)));
                 });
                 if (!unionPropertyKind) {
                     // If this was union of all methods,
@@ -102,15 +100,43 @@ namespace ts.SymbolDisplay {
         return ScriptElementKind.unknown;
     }
 
-    export function getSymbolModifiers(symbol: Symbol): string {
-        const nodeModifiers = symbol && symbol.declarations && symbol.declarations.length > 0
-            ? getNodeModifiers(symbol.declarations[0])
-            : ScriptElementKindModifier.none;
+    function isDeprecatedDeclaration(decl: Declaration) {
+        return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+    }
 
-        const symbolModifiers = symbol && symbol.flags & SymbolFlags.Optional ?
-            ScriptElementKindModifier.optionalModifier
-            : ScriptElementKindModifier.none;
-        return nodeModifiers && symbolModifiers ? nodeModifiers + "," + symbolModifiers : nodeModifiers || symbolModifiers;
+    function getNormalizedSymbolModifiers(symbol: Symbol) {
+        if (symbol.declarations && symbol.declarations.length) {
+            const [declaration, ...declarations] = symbol.declarations;
+            // omit deprecated flag if some declarations are not deprecated
+            const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d => !isDeprecatedDeclaration(d))
+                ? ModifierFlags.Deprecated
+                : ModifierFlags.None;
+            const modifiers = getNodeModifiers(declaration, excludeFlags);
+            if (modifiers) {
+                return modifiers.split(",");
+            }
+        }
+        return [];
+    }
+
+    export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): string {
+        if (!symbol) {
+            return ScriptElementKindModifier.none;
+        }
+
+        const modifiers = new Set(getNormalizedSymbolModifiers(symbol));
+        if (symbol.flags & SymbolFlags.Alias) {
+            const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
+            if (resolvedSymbol !== symbol) {
+                forEach(getNormalizedSymbolModifiers(resolvedSymbol), modifier => {
+                    modifiers.add(modifier);
+                });
+            }
+        }
+        if (symbol.flags & SymbolFlags.Optional) {
+            modifiers.add(ScriptElementKindModifier.optionalModifier);
+        }
+        return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
@@ -194,6 +220,10 @@ namespace ts.SymbolDisplay {
                         pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
+                            if (signature.flags & SignatureFlags.Abstract) {
+                                displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                displayParts.push(spacePart());
+                            }
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                             displayParts.push(spacePart());
                         }
@@ -219,6 +249,10 @@ namespace ts.SymbolDisplay {
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
+                                if (signature.flags & SignatureFlags.Abstract) {
+                                    displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                    displayParts.push(spacePart());
+                                }
                                 displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                 displayParts.push(spacePart());
                             }
@@ -404,6 +438,10 @@ namespace ts.SymbolDisplay {
                         displayParts.push(lineBreakPart());
                         documentationFromAlias = resolvedInfo.documentation;
                         tagsFromAlias = resolvedInfo.tags;
+                    }
+                    else {
+                        documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
+                        tagsFromAlias = resolvedSymbol.getJsDocTags();
                     }
                 }
             }

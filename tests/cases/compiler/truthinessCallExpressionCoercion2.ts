@@ -1,7 +1,15 @@
 // @strictNullChecks: true
 // @lib: esnext,dom
 
-function test(required1: () => boolean, required2: () => boolean, optional?: () => boolean) {
+declare class A {
+    static from(): string;
+}
+
+declare class B {
+    static from(): string;
+}
+
+function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
     // error
     required1 && console.log('required');
 
@@ -29,8 +37,29 @@ function test(required1: () => boolean, required2: () => boolean, optional?: () 
     // ok
     required1 && required2 && required1() && required2();
 
+    // ok
+    [].forEach((f: () => void) => f && f.apply(parent, []));
+
     // error
     required1 && required2 && required1() && console.log('foo');
+
+    // error
+    if (required1 && b) {
+    }
+
+    // error
+    if (((required1 && b))) {
+    }
+
+    // ok
+    if (required1 && b) {
+        required1();
+    }
+
+    // ok
+    if (((required1 && b))) {
+        required1();
+    }
 }
 
 function checksConsole() {
@@ -57,6 +86,20 @@ function checksPropertyAccess() {
 
     // ok
     x.foo.bar && 1 && x.foo.bar();
+
+    // ok
+    const y = A.from && (A.from as Function) !== B.from ? true : false;
+    y;
+
+    const x1 = {
+        a: { b: { c: () => {} } }
+    }
+    const x2 = {
+        a: { b: { c: () => {} } }
+    }
+
+    // error
+    x1.a.b.c && x2.a.b.c();
 }
 
 class Foo {

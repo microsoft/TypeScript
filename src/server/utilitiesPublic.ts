@@ -113,12 +113,12 @@ namespace ts.server {
         return /dev\/null\/inferredProject\d+\*/.test(name);
     }
 
-    export function makeInferredProjectName(counter: number) {
+    export function makeInferredProjectName(counter: number): string {
         return `/dev/null/inferredProject${counter}*`;
     }
 
     /*@internal*/
-    export function makeAutoImportProviderProjectName(counter: number) {
+    export function makeAutoImportProviderProjectName(counter: number): string {
         return `/dev/null/autoImportProviderProject${counter}*`;
     }
 

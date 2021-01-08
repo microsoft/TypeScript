@@ -12,7 +12,23 @@ import type A, { B, C } from './a';
 import type A from './a';
 export type { A };
 
+//// [c.ts]
+namespace ns {
+  export class Foo {}
+}
+import type Foo = ns.Foo;
+
 
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+//// [c.js]
+var ns;
+(function (ns) {
+    var Foo = /** @class */ (function () {
+        function Foo() {
+        }
+        return Foo;
+    }());
+    ns.Foo = Foo;
+})(ns || (ns = {}));

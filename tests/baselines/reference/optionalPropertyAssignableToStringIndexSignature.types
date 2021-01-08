@@ -1,0 +1,60 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts ===
+declare let optionalProperties: { k1?: string };
+>optionalProperties : { k1?: string | undefined; }
+>k1 : string | undefined
+
+declare let undefinedProperties: { k1: string | undefined };
+>undefinedProperties : { k1: string | undefined; }
+>k1 : string | undefined
+
+declare let stringDictionary: { [key: string]: string };
+>stringDictionary : { [key: string]: string; }
+>key : string
+
+stringDictionary = optionalProperties;  // ok
+>stringDictionary = optionalProperties : { k1?: string | undefined; }
+>stringDictionary : { [key: string]: string; }
+>optionalProperties : { k1?: string | undefined; }
+
+stringDictionary = undefinedProperties; // error
+>stringDictionary = undefinedProperties : { k1: string | undefined; }
+>stringDictionary : { [key: string]: string; }
+>undefinedProperties : { k1: string | undefined; }
+
+declare let probablyArray: { [key: number]: string };
+>probablyArray : { [key: number]: string; }
+>key : number
+
+declare let numberLiteralKeys: { 1?: string };
+>numberLiteralKeys : { 1?: string | undefined; }
+>1 : string | undefined
+
+probablyArray = numberLiteralKeys;  // error
+>probablyArray = numberLiteralKeys : { 1?: string | undefined; }
+>probablyArray : { [key: number]: string; }
+>numberLiteralKeys : { 1?: string | undefined; }
+
+declare let optionalUndefined: { k1?: undefined };
+>optionalUndefined : { k1?: undefined; }
+>k1 : undefined
+
+let dict: { [key: string]: string } = optionalUndefined; // error
+>dict : { [key: string]: string; }
+>key : string
+>optionalUndefined : { k1?: undefined; }
+
+function f<T>() {
+>f : <T>() => void
+
+	let optional: { k1?: T } = undefined!;
+>optional : { k1?: T | undefined; }
+>k1 : T | undefined
+>undefined! : never
+>undefined : undefined
+
+	let dict: { [key: string]: T | number } = optional; // ok
+>dict : { [key: string]: number | T; }
+>key : string
+>optional : { k1?: T | undefined; }
+}
+
