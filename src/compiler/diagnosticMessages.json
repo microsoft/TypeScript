@@ -6323,5 +6323,9 @@
     "Some references are un-convertible.": {
         "category": "Error",
         "code": 18039
+    },
+    "Too many empty array item.": {
+        "category": "Error",
+        "code": 18040
     }
 }

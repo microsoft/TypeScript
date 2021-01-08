@@ -47,7 +47,7 @@ namespace ts.refactor {
         if (isJSFile || !cancellationToken) return emptyResult;
 
         const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ true);
-        if (isErrorResult(info)) return emptyResult;
+        Debug.assert(!isErrorResult(info));
 
         const edits = textChanges.ChangeTracker.with(context, t => doChange(t, file, info.value));
         return { renameFilename: undefined, renameLocation: undefined, edits };
@@ -71,17 +71,22 @@ namespace ts.refactor {
                 return undefined;
             }
 
-            const value = parseInt(info.name);
+            // Check for integer.
+            const value = Number(info.name);
+            if (isNaN(value) || parseInt(value.toString(), 10) !== value) {
+                return undefined;
+            }
+
             min = Math.min(min, value);
             max = Math.max(max, value);
             indexSet.add(value);
 
-            if (isNaN(min) || isNaN(max) || min < 0 || max < 0) {
+            if (min < 0 || max < 0) {
                 return undefined;
             }
         }
 
-        if (max > 15) {
+        if (indexSet.size <= Math.floor(max / 2)) {
             return undefined;
         }
 
@@ -90,6 +95,8 @@ namespace ts.refactor {
 
     function doChange(changeTracker: textChanges.ChangeTracker, file: SourceFile, info: Info) {
         const bindingPattern = getBindingPattern(info, file, changeTracker);
+        Debug.assertIsDefined(bindingPattern);
+
         suppressLeadingAndTrailingTrivia(info.replacementExpression);
         const newBinding = factory.createVariableStatement(
             /* modifiers*/ undefined,
@@ -113,7 +120,7 @@ namespace ts.refactor {
         );
     }
 
-    function getBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker): BindingPattern {
+    function getBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker): BindingPattern | undefined {
         const denseNumericInfo = info.isArrayLikeType && getDenseNumericAccessInfo(info.referencedAccessExpression);
         if (denseNumericInfo) {
             const [max, indexSet] = denseNumericInfo;
@@ -220,11 +227,11 @@ namespace ts.refactor {
         namesNeedUniqueName: Set<string>
         isArrayLikeType: boolean
     }
-    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean, considerEmptySpans = true): Result<Info> {
+    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean, triggerByInvoked = true): Result<Info> {
         const current = getTokenAtPosition(file, context.startPosition);
         const compilerOptions = context.program.getCompilerOptions();
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
-        const cursorRequest = range.pos === range.end && considerEmptySpans;
+        const cursorRequest = range.pos === range.end && triggerByInvoked;
 
         const node = findAncestor(current, (node => node.parent && isAccessExpression(node.parent) && !rangeContainsSkipTrivia(range, node.parent, file) && (
             cursorRequest || nodeOverlapsWithStartEnd(node, file, range.pos, range.end)
@@ -245,6 +252,7 @@ namespace ts.refactor {
         const references = FindAllReferences.getReferenceEntriesForNode(-1, node, program, [file], cancellationToken);
         let firstReferenced: Expression | undefined;
         let firstReferencedStatement: Statement | undefined;
+        let hasNumericAccess = false;
         const referencedAccessExpression: ReferencedAccessInfo[] = [];
         const allReferencedAcccessExpression: AccessExpression[] = [];
         const container = isParameter(symbol.valueDeclaration) ? symbol.valueDeclaration : findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
@@ -278,7 +286,7 @@ namespace ts.refactor {
                     return;
                 }
                 if (isNumericLiteral(accessExpression.argumentExpression)) {
-                    isNumericAccess = true;
+                    hasNumericAccess = isNumericAccess = true;
                 }
                 else if (!isIdentifierText(accessExpression.argumentExpression.text, compilerOptions.target, compilerOptions.jsx ? LanguageVariant.JSX : LanguageVariant.Standard)) {
                     return;
@@ -306,6 +314,11 @@ namespace ts.refactor {
         const namesNeedUniqueName = new Set<string>();
         const type = checker.getTypeOfSymbolAtLocation(symbol, firstReferenced);
         const isArrayLikeType = checker.isArrayLikeType(type);
+
+        if (hasNumericAccess && isArrayLikeType && !getDenseNumericAccessInfo(referencedAccessExpression) && !triggerByInvoked) {
+            return Err(Diagnostics.Too_many_empty_array_item.message);
+        }
+
         forEach(allReferencedAcccessExpression, expr => {
             const referenceType = checker.getTypeAtLocation(expr.expression);
             if (referenceType !== type) {

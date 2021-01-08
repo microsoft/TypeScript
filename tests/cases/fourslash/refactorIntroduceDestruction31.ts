@@ -7,6 +7,7 @@ goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert to destruction",
     actionName: "Convert to destruction",
+    triggerReason: 'invoked',
     actionDescription: ts.Diagnostics.Convert_access_expression_to_destruction.message,
     newContent: `const item = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ] as const
 const { 14: index_14, 8: index_8, 16: index_16 } = item
