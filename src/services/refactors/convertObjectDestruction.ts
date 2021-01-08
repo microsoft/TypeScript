@@ -1,17 +1,17 @@
 /* @internal */
 namespace ts.refactor {
-    const refactorName = "Introduce destruction";
+    const refactorName = "Convert to destruction";
     const refactorKind = "refactor.rewrite.expression.toDestructured";
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction, kinds: [refactorKind] });
 
-    const introduceObjectDestructionAction = {
+    const convertToDestructionAction = {
         name: refactorName,
         description: getLocaleSpecificMessage(Diagnostics.Convert_access_expression_to_destruction),
         kind: refactorKind
-    }
+    };
 
-    function makeRefactorActionWithErrorReason (reason: string) {
-        return { ...introduceObjectDestructionAction, notApplicableReason: reason };
+    function makeRefactorActionWithErrorReason(reason: string) {
+        return { ...convertToDestructionAction, notApplicableReason: reason };
     }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -24,7 +24,7 @@ namespace ts.refactor {
             return [{
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Convert_access_expression_to_destruction),
-                actions: [introduceObjectDestructionAction]
+                actions: [convertToDestructionAction]
             }];
         }
 
@@ -35,7 +35,7 @@ namespace ts.refactor {
                 actions: [makeRefactorActionWithErrorReason(info.reason)]
             }];
         }
-        return  emptyArray;
+        return emptyArray;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {

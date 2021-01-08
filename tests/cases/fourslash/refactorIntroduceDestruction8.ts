@@ -7,8 +7,8 @@
 //// call(item.a, /*c*/item/*d*/.b(), (((/*e*/item/*f*/.b)))())
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Introduce destruction")
+verify.not.refactorAvailable("Convert to destruction")
 goTo.select("c", "d");
-verify.not.refactorAvailable("Introduce destruction")
+verify.not.refactorAvailable("Convert to destruction")
 goTo.select("e", "f");
 verify.not.refactorAvailable("Introduce destruction")

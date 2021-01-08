@@ -7,4 +7,4 @@
 //// call(/*a*/item/*b*/[key], item.b)
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Introduce destruction")
+verify.not.refactorAvailable("Convert to destruction")

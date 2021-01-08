@@ -6,4 +6,4 @@
 //// call(it/*a*/em.a, item.b)
 
 goTo.marker('a');
-verify.not.refactorAvailableForTriggerReason('implicit', 'Introduce destruction');
+verify.not.refactorAvailableForTriggerReason('implicit', 'Convert to destruction');

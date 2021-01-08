@@ -7,4 +7,4 @@
 //// /*a*/E/*b*/.A
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Introduce destruction")
+verify.not.refactorAvailable("Convert to destruction")

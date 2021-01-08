@@ -7,8 +7,8 @@
 
 goTo.marker('a');
 edit.applyRefactor({
-    refactorName: "Introduce destruction",
-    actionName: "Introduce destruction",
+    refactorName: "Convert to destruction",
+    actionName: "Convert to destruction",
     actionDescription: ts.Diagnostics.Convert_access_expression_to_destruction.message,
     triggerReason: 'invoked',
     newContent: `const item = {
