@@ -3368,16 +3368,29 @@ namespace ts {
             return finishNode(factory.createParenthesizedType(type), pos);
         }
 
+        function parseModifiersForConstructorType(): NodeArray<Modifier> | undefined {
+            let modifiers: NodeArray<Modifier> | undefined;
+            if (token() === SyntaxKind.AbstractKeyword) {
+                const pos = getNodePos();
+                nextToken();
+                const modifier = finishNode(factory.createToken(SyntaxKind.AbstractKeyword), pos);
+                modifiers = createNodeArray<Modifier>([modifier], pos);
+            }
+            return modifiers;
+        }
+
         function parseFunctionOrConstructorType(): TypeNode {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
+            const modifiers = parseModifiersForConstructorType();
             const isConstructorType = parseOptional(SyntaxKind.NewKeyword);
             const typeParameters = parseTypeParameters();
             const parameters = parseParameters(SignatureFlags.Type);
             const type = parseReturnType(SyntaxKind.EqualsGreaterThanToken, /*isType*/ false);
             const node = isConstructorType
-                ? factory.createConstructorTypeNode(typeParameters, parameters, type)
+                ? factory.createConstructorTypeNode(modifiers, typeParameters, parameters, type)
                 : factory.createFunctionTypeNode(typeParameters, parameters, type);
+            if (!isConstructorType) (node as Mutable<Node>).modifiers = modifiers;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -3678,6 +3691,11 @@ namespace ts {
             return parseUnionOrIntersectionType(SyntaxKind.BarToken, parseIntersectionTypeOrHigher, factory.createUnionTypeNode);
         }
 
+        function nextTokenIsNewKeyword(): boolean {
+            nextToken();
+            return token() === SyntaxKind.NewKeyword;
+        }
+
         function isStartOfFunctionTypeOrConstructorType(): boolean {
             if (token() === SyntaxKind.LessThanToken) {
                 return true;
@@ -3685,7 +3703,8 @@ namespace ts {
             if (token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType)) {
                 return true;
             }
-            return token() === SyntaxKind.NewKeyword;
+            return token() === SyntaxKind.NewKeyword ||
+                token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsNewKeyword);
         }
 
         function skipParameterStart(): boolean {
