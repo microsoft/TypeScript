@@ -20,7 +20,7 @@ f({}, 10, 10);
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 >f `abcdef${ 1234 }${ 5678 }ghijkl` : void
 >f : (x: TemplateStringsArray, y: number, z: number) => void
->`abcdef${ 1234 }${ 5678 }ghijkl` : string
+>`abcdef${ 1234 }${ 5678 }ghijkl` : "abcdef12345678ghijkl"
 >1234 : 1234
 >5678 : 5678
 

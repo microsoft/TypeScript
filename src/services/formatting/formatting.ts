@@ -10,7 +10,7 @@ namespace ts.formatting {
         kind: T;
     }
 
-    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaKind>;
+    export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaSyntaxKind>;
 
     export interface TokenInfo {
         leadingTrivia: TextRangeWithTriviaKind[] | undefined;

@@ -465,3 +465,65 @@ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >x : Symbol(x, Decl(recursiveConditionalTypes.ts, 114, 31))
 }
 
+// Repros from #41756
+
+type ParseSuccess<R extends string> = { rest: R };
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 120, 18))
+>rest : Symbol(rest, Decl(recursiveConditionalTypes.ts, 120, 39))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 120, 18))
+
+type ParseManyWhitespace<S extends string> =
+>ParseManyWhitespace : Symbol(ParseManyWhitespace, Decl(recursiveConditionalTypes.ts, 120, 50))
+>S : Symbol(S, Decl(recursiveConditionalTypes.ts, 122, 25))
+
+    S extends ` ${infer R0}` ?
+>S : Symbol(S, Decl(recursiveConditionalTypes.ts, 122, 25))
+>R0 : Symbol(R0, Decl(recursiveConditionalTypes.ts, 123, 23))
+
+        ParseManyWhitespace<R0> extends ParseSuccess<infer R1> ? ParseSuccess<R1> : null :
+>ParseManyWhitespace : Symbol(ParseManyWhitespace, Decl(recursiveConditionalTypes.ts, 120, 50))
+>R0 : Symbol(R0, Decl(recursiveConditionalTypes.ts, 123, 23))
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>R1 : Symbol(R1, Decl(recursiveConditionalTypes.ts, 124, 58))
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>R1 : Symbol(R1, Decl(recursiveConditionalTypes.ts, 124, 58))
+
+        ParseSuccess<S>;
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>S : Symbol(S, Decl(recursiveConditionalTypes.ts, 122, 25))
+
+type TP1 = ParseManyWhitespace<" foo">;
+>TP1 : Symbol(TP1, Decl(recursiveConditionalTypes.ts, 125, 24))
+>ParseManyWhitespace : Symbol(ParseManyWhitespace, Decl(recursiveConditionalTypes.ts, 120, 50))
+
+type ParseManyWhitespace2<S extends string> =
+>ParseManyWhitespace2 : Symbol(ParseManyWhitespace2, Decl(recursiveConditionalTypes.ts, 127, 39))
+>S : Symbol(S, Decl(recursiveConditionalTypes.ts, 129, 26))
+
+    S extends ` ${infer R0}` ?
+>S : Symbol(S, Decl(recursiveConditionalTypes.ts, 129, 26))
+>R0 : Symbol(R0, Decl(recursiveConditionalTypes.ts, 130, 23))
+
+        Helper<ParseManyWhitespace2<R0>> :
+>Helper : Symbol(Helper, Decl(recursiveConditionalTypes.ts, 132, 24))
+>ParseManyWhitespace2 : Symbol(ParseManyWhitespace2, Decl(recursiveConditionalTypes.ts, 127, 39))
+>R0 : Symbol(R0, Decl(recursiveConditionalTypes.ts, 130, 23))
+
+        ParseSuccess<S>;
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>S : Symbol(S, Decl(recursiveConditionalTypes.ts, 129, 26))
+
+type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
+>Helper : Symbol(Helper, Decl(recursiveConditionalTypes.ts, 132, 24))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 134, 12))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 134, 12))
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 134, 45))
+>ParseSuccess : Symbol(ParseSuccess, Decl(recursiveConditionalTypes.ts, 116, 1))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 134, 45))
+
+type TP2 = ParseManyWhitespace2<" foo">;
+>TP2 : Symbol(TP2, Decl(recursiveConditionalTypes.ts, 134, 73))
+>ParseManyWhitespace2 : Symbol(ParseManyWhitespace2, Decl(recursiveConditionalTypes.ts, 127, 39))
+

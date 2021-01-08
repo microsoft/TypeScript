@@ -1107,7 +1107,8 @@ namespace ts {
             case SyntaxKind.NamespaceImport:
                 return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
-                return (node as ImportClause).isTypeOnly;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
             default:
                 return false;
         }

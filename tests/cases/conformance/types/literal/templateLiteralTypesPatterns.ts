@@ -174,3 +174,29 @@ let t3: `foo1` | '1foo' | 'foofoo' | `foo${string}` | 'foox' | 'xfoo' | `${numbe
 
 var bb: `${number}`;
 var bb: `${number}` | '0';
+
+// Normalize `${string}` to just string
+
+type T2S<A extends string, B extends string> = `${A}${B}`;
+
+type S10 = `${string}`;  // string
+type S11 = `${string}${string}${string}`;  // string
+type S12 = T2S<string, string>;  // string
+
+function ff1(x: `${string}-${string}`) {
+    let s1 = x && 42;  // number
+    let s2 = x || 42;  // `${string}-${string}`
+}
+
+// Repro from #41651
+
+export type Id<TA, TId extends string = string> = `${TId}-${TId}`;
+
+export class AA {}
+
+export abstract class BB {
+    abstract get(id: Id<AA>): void;
+    update(id: Id<AA>): void {
+        this.get(id!);
+    }
+}

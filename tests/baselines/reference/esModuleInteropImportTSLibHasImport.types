@@ -19,8 +19,8 @@ const sayHello = (name?: string) => void (`Hello, ${name}!`);
 >(name?: string) => void (`Hello, ${name}!`) : (name?: string) => any
 >name : string
 >void (`Hello, ${name}!`) : undefined
->(`Hello, ${name}!`) : string
->`Hello, ${name}!` : string
+>(`Hello, ${name}!`) : `Hello, ${string}!`
+>`Hello, ${name}!` : `Hello, ${string}!`
 >name : string
 
 export default sayHello;

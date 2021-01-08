@@ -65,9 +65,9 @@ var a2 = {}.a2;
 //      S has an apparent property with the property name specified in
 //          P of a type that is assignable to the target given in P, or
 var b1 = { b1: 1 }.b1;
-var _a = { b2: { b21: "world" } }.b2, b21 = (_a === void 0 ? { b21: "string" } : _a).b21;
+var _a = { b2: { b21: "world" } }.b2, _b = _a === void 0 ? { b21: "string" } : _a, b21 = _b.b21;
 var b3 = { 1: "string" }[1];
-var _b = { b4: 100000 }.b4, b4 = _b === void 0 ? 1 : _b;
+var _c = { b4: 100000 }.b4, b4 = _c === void 0 ? 1 : _c;
 var b52 = { b5: { b52: b52 } }.b5.b52;
 function foo() {
     return {

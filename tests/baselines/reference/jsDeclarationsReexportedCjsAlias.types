@@ -3,15 +3,15 @@ const { SomeClass, SomeClass: Another } = require('./lib');
 >SomeClass : typeof SomeClass
 >SomeClass : any
 >Another : typeof SomeClass
->require('./lib') : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
+>require('./lib') : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
 >require : any
 >'./lib' : "./lib"
 
 module.exports = {
->module.exports = {    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
->module.exports : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/main\"": { SomeClass: typeof SomeClass; Another: typeof SomeClass; }; }
->exports : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
+>module.exports = {    SomeClass,    Another} : typeof import("tests/cases/conformance/jsdoc/declarations/main")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/main")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/main\"": typeof import("tests/cases/conformance/jsdoc/declarations/main"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/main")
 >{    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
 
     SomeClass,
@@ -46,10 +46,10 @@ class SomeClass {
 }
 
 module.exports = {
->module.exports = {    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
->module.exports : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/lib\"": { bar: (a: string) => string; SomeClass: typeof SomeClass; }; }
->exports : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
+>module.exports = {    bar,    SomeClass} : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/lib\"": typeof import("tests/cases/conformance/jsdoc/declarations/lib"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
 >{    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
 
     bar,

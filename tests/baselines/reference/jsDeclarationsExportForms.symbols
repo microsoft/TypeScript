@@ -50,8 +50,8 @@ const ns = require("./cls");
 
 module.exports = { ns };
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/cjs", Decl(cjs.js, 0, 0))
->module : Symbol(export=, Decl(cjs.js, 0, 28))
->exports : Symbol(export=, Decl(cjs.js, 0, 28))
+>module : Symbol(module, Decl(cjs.js, 0, 28))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/cjs", Decl(cjs.js, 0, 0))
 >ns : Symbol(ns, Decl(cjs.js, 1, 18))
 
 === tests/cases/conformance/jsdoc/declarations/cjs2.js ===

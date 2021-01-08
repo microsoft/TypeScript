@@ -84,14 +84,14 @@ var v = foo `${1}`;          // string
 >v : string
 >foo `${1}` : string
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->`${1}` : string
+>`${1}` : "1"
 >1 : 1
 
 var w = foo `${1}${2}`;      // boolean
 >w : boolean
 >foo `${1}${2}` : boolean
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->`${1}${2}` : string
+>`${1}${2}` : "12"
 >1 : 1
 >2 : 2
 
@@ -99,7 +99,7 @@ var x = foo `${1}${true}`;   // boolean (with error)
 >x : never
 >foo `${1}${true}` : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->`${1}${true}` : string
+>`${1}${true}` : "1true"
 >1 : 1
 >true : true
 
@@ -107,7 +107,7 @@ var y = foo `${1}${"2"}`;    // {}
 >y : {}
 >foo `${1}${"2"}` : {}
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->`${1}${"2"}` : string
+>`${1}${"2"}` : "12"
 >1 : 1
 >"2" : "2"
 
@@ -115,7 +115,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 >z : never
 >foo `${1}${2}${3}` : never
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->`${1}${2}${3}` : string
+>`${1}${2}${3}` : "123"
 >1 : 1
 >2 : 2
 >3 : 3
