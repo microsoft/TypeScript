@@ -117,7 +117,7 @@ namespace ts.refactor {
         const denseNumericInfo = info.isArrayLikeType && getDenseNumericAccessInfo(info.referencedAccessExpression);
         if (denseNumericInfo) {
             const [max, indexSet] = denseNumericInfo;
-            return getdenseNumericBindingPattern(info, file, max, indexSet, changeTracker);
+            return getDenseNumericBindingPattern(info, file, max, indexSet, changeTracker);
         }
         return getObjectBindingPattern(info, file, changeTracker);
     }
@@ -141,7 +141,7 @@ namespace ts.refactor {
         return factory.createObjectBindingPattern(bindingElements);
     }
 
-    function getdenseNumericBindingPattern(info: Info, file: SourceFile, max: number, indexSet: Set<number>, changeTracker: textChanges.ChangeTracker): ArrayBindingPattern {
+    function getDenseNumericBindingPattern(info: Info, file: SourceFile, max: number, indexSet: Set<number>, changeTracker: textChanges.ChangeTracker): ArrayBindingPattern {
         const nameMap = new Map<number, string>();
         const bindingElements: ArrayBindingElement[] = [];
 
