@@ -1,15 +1,16 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Introduce destruction";
+    const refactorKind = "refactor.rewrite.expression.toDestructured";
     const actionNameIntroduceObjectDestruction = "Convert access to destruction";
-    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
+    registerRefactor(refactorName, { getAvailableActions, getEditsForAction, kinds: [refactorKind] });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, program, cancellationToken } = context;
         const isJSFile = isSourceFileJS(file);
         if (isJSFile || !cancellationToken) return emptyArray;
 
-        const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ false);
+        const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ false, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
         return [{
@@ -17,7 +18,8 @@ namespace ts.refactor {
             description: actionNameIntroduceObjectDestruction,
             actions: [{
                 name: refactorName,
-                description: actionNameIntroduceObjectDestruction
+                description: actionNameIntroduceObjectDestruction,
+                kind: refactorKind
             }]
         }];
     }
@@ -205,12 +207,15 @@ namespace ts.refactor {
         isArrayLikeType: boolean
     }
 
-    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean): Info | undefined {
+    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean, considerEmptySpans = true): Info | undefined {
         const current = getTokenAtPosition(file, context.startPosition);
         const compilerOptions = context.program.getCompilerOptions();
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
+        const cursorRequest = range.pos === range.end && considerEmptySpans;
 
-        const node = findAncestor(current, (node => node.parent && isAccessExpression(node.parent) && !rangeContainsSkipTrivia(range, node.parent, file)));
+        const node = findAncestor(current, (node => node.parent && isAccessExpression(node.parent) && !rangeContainsSkipTrivia(range, node.parent, file) && (
+            cursorRequest || nodeOverlapsWithStartEnd(node, file, range.pos, range.end)
+        )));
 
         if (!node || !isAccessExpression(node.parent)) return undefined;
 
