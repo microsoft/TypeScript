@@ -40,9 +40,9 @@ function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 
     return value.hasOwnProperty('data');
 >value.hasOwnProperty('data') : boolean
->value.hasOwnProperty : (v: string | number | symbol) => boolean
+>value.hasOwnProperty : (v: PropertyKey) => boolean
 >value : T | { data: T; }
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >'data' : "data"
 }
 
@@ -70,9 +70,9 @@ function isPlainResponse<T>(value: T | { data: T}): value is T {
     return !value.hasOwnProperty('data');
 >!value.hasOwnProperty('data') : boolean
 >value.hasOwnProperty('data') : boolean
->value.hasOwnProperty : (v: string | number | symbol) => boolean
+>value.hasOwnProperty : (v: PropertyKey) => boolean
 >value : T | { data: T; }
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 >'data' : "data"
 }
 

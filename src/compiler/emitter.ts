@@ -849,7 +849,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
-            redirectTargetsMap: createMultiMap()
+            redirectTargetsMap: createMultiMap(),
+            getFileIncludeReasons: notImplemented,
         };
         emitFiles(
             notImplementedResolver,
@@ -2131,6 +2132,7 @@ namespace ts {
 
         function emitConstructorType(node: ConstructorTypeNode) {
             pushNameGenerationScope(node);
+            emitModifiers(node, node.modifiers);
             writeKeyword("new");
             writeSpace();
             emitTypeParameters(node, node.typeParameters);

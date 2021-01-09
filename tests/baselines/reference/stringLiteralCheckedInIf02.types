@@ -29,7 +29,7 @@ function f(foo: T) {
 >foo : T
 
         return foo;
->foo : S
+>foo : "a" | "b"
     }
     else { 
         return foo[0];

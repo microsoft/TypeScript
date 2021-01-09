@@ -29,7 +29,7 @@ If possible, please try testing the nightly version of TS to see if it's already
 For npm: `typescript@next`
 This is also the 'Nightly' version in the playground: http://www.typescriptlang.org/play/?ts=Nightly
 
-Note: The TypeScript Playground can be used to try older verions of TypeScript.
+Note: The TypeScript Playground can be used to try older versions of TypeScript.
 
 Please keep and fill in the line that best applies:
 -->

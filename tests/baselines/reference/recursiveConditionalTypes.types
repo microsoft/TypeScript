@@ -230,7 +230,7 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >value : { readonly value: { readonly value: any; }; }
 >{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
 >value : { readonly value: any; }
->this : { readonly value: any; } | { readonly value: { readonly value: any; }; } | Box<RecBox<{ readonly value: { readonly value: any; }; }>>
+>this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
 
 // Inference from nested instantiations of same generic types
 
