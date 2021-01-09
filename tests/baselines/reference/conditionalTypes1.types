@@ -150,7 +150,7 @@ type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 >k : K
 
 type T16 = OptionsOfKind<"a" | "b">;  // { k: "a", a: number } | { k: "b", b: string }
->T16 : T16
+>T16 : { k: "a"; a: number; } | { k: "b"; b: string; }
 
 type Select<T, K extends keyof T, V extends T[K]> = Extract<T, { [P in K]: V }>;
 >Select : Extract<T, { [P in K]: V; }>
@@ -971,13 +971,13 @@ type c2 = B2['c']; // 'c' | 'b'
 // Repro from #21929
 
 type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
->NonFooKeys1 : NonFooKeys1<T>
+>NonFooKeys1 : OldDiff<keyof T, "foo">
 
 type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 >NonFooKeys2 : Exclude<keyof T, "foo">
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
->Test1 : Test1
+>Test1 : OldDiff<"foo" | "bar" | "baz", "foo">
 >foo : 1
 >bar : 2
 >baz : 3

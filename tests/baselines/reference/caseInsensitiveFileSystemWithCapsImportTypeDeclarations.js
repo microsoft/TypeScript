@@ -60,7 +60,8 @@ export declare type TypeB = Merge<TypeA, {
     b: string;
 }>;
 //// [index.d.ts]
-import { TypeB } from './type-b';
 export declare class Broken {
-    method(): TypeB;
+    method(): import("./types").Merge<import("./type-a").TypeA, {
+        b: string;
+    }>;
 }
