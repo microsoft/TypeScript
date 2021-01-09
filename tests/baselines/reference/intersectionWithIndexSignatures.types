@@ -65,19 +65,19 @@ type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<k
 >constr : constr<Source, Tgt>
 
 type s = constr<{}, { [key: string]: { a: string } }>;
->s : constr<{}, { [key: string]: { a: string; }; }>
+>s : s
 >key : string
 >a : string
 
 declare const q: s;
->q : constr<{}, { [key: string]: { a: string; }; }>
+>q : s
 
 q["asd"].a.substr(1);
 >q["asd"].a.substr(1) : string
 >q["asd"].a.substr : (from: number, length?: number | undefined) => string
 >q["asd"].a : string
 >q["asd"] : { a: string; }
->q : constr<{}, { [key: string]: { a: string; }; }>
+>q : s
 >"asd" : "asd"
 >a : string
 >substr : (from: number, length?: number | undefined) => string
@@ -86,7 +86,7 @@ q["asd"].a.substr(1);
 q["asd"].b;  // Error
 >q["asd"].b : any
 >q["asd"] : { a: string; }
->q : constr<{}, { [key: string]: { a: string; }; }>
+>q : s
 >"asd" : "asd"
 >b : any
 
@@ -95,7 +95,7 @@ const d: { [key: string]: {a: string, b: string} } = q;  // Error
 >key : string
 >a : string
 >b : string
->q : constr<{}, { [key: string]: { a: string; }; }>
+>q : s
 
 // Repro from #32484
 

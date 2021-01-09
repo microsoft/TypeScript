@@ -596,12 +596,12 @@ type AllTests = TestA | TestB;
 >AllTests : AllTests
 
 type MapOfAllTests = Record<string, AllTests>;
->MapOfAllTests : Record<string, AllTests>
+>MapOfAllTests : MapOfAllTests
 
 const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void
 >(mapOfTests: MapOfAllTests, ids: string[]) => {    ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    });} : (mapOfTests: MapOfAllTests, ids: string[]) => void
->mapOfTests : Record<string, AllTests>
+>mapOfTests : MapOfAllTests
 >ids : string[]
 
     ids.forEach(id => {
@@ -619,7 +619,7 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >test = mapOfTests[id] : AllTests
 >test : any
 >mapOfTests[id] : AllTests
->mapOfTests : Record<string, AllTests>
+>mapOfTests : MapOfAllTests
 >id : string
 
         if (test.type === 'testA') {

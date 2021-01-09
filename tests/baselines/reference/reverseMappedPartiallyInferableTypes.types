@@ -5,7 +5,7 @@ export type Prop<T> = { (): T }
 >Prop : Prop<T>
 
 export type PropType<T> = Prop<T>;
->PropType : Prop<T>
+>PropType : PropType<T>
 
 export type PropDefaultValue<T> = T;
 >PropDefaultValue : T
@@ -16,7 +16,7 @@ export type PropValidatorFunction<T> = (value: T) => boolean;
 >value : T
 
 export type PropValidator<T> = PropOptions<T>;
->PropValidator : PropOptions<T>
+>PropValidator : PropValidator<T>
 
 
 export type PropOptions<T> = {

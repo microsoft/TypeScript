@@ -32,7 +32,7 @@ const out = myBug({obj1: {a: "test"}})
 >"test" : "test"
 
 type Value<V extends string = string> = Record<"val", V>;
->Value : Record<"val", V>
+>Value : Value<V>
 
 declare function value<V extends string>(val: V): Value<V>;
 >value : <V extends string>(val: V) => Value<V>

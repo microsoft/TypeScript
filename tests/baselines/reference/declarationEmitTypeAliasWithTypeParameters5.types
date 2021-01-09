@@ -7,7 +7,7 @@ type Foo<T, Y> = {
 
 };
 export type SubFoo<R> = Foo<string, R>;
->SubFoo : Foo<string, R>
+>SubFoo : SubFoo<R>
 
 function foo() {
 >foo : () => Foo<string, number>

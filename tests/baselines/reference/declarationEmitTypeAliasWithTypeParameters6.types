@@ -7,7 +7,7 @@ type Foo<T, Y> = {
 
 };
 type SubFoo<R, S> = Foo<S, R>;
->SubFoo : Foo<S, R>
+>SubFoo : SubFoo<R, S>
 
 function foo() {
 >foo : () => Foo<string, number>

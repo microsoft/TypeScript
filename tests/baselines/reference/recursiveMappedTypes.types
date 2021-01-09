@@ -123,14 +123,14 @@ export interface ListWidget {
 }
 
 type ListChild = Child<ListWidget>
->ListChild : Child<ListWidget>
+>ListChild : ListChild
 
 declare let x: ListChild;
->x : Child<ListWidget>
+>x : ListChild
 
 x.type;
 >x.type : any
->x : Child<ListWidget>
+>x : ListChild
 >type : any
 
 // Repros from #41790

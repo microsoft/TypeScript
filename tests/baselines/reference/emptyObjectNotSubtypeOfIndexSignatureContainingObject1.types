@@ -26,7 +26,7 @@ type ObjectIterator<TObject, TResult> = (
 ) => TResult;
 
 type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
->DictionaryIterator : ObjectIterator<Dictionary<T>, TResult>
+>DictionaryIterator : DictionaryIterator<T, TResult>
 
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues<T, TResult>(
