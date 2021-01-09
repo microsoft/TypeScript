@@ -12515,7 +12515,7 @@ namespace ts {
                 return unknownSymbol;
             }
 
-            return resolveEntityName(typeReferenceName, meaning, ignoreErrors, undefined, undefined, true) || unknownSymbol;
+            return resolveEntityName(typeReferenceName, meaning, ignoreErrors, /*dontResolveAlias*/ false, /*location*/ undefined, /*needSuggestedNameNotFoundMessage*/ true) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
