@@ -3089,7 +3089,8 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning || nodeIsSynthesized(name) ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
                 const symbolFromJSPrototype = isInJSFile(name) && !nodeIsSynthesized(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
-                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true));
+                const suggestedNameNotFoundMessage = message === Diagnostics.Cannot_find_namespace_0 || message === Diagnostics.Cannot_find_name_0 ? Diagnostics.Cannot_find_name_0_Did_you_mean_1 : undefined;
+                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true, false, suggestedNameNotFoundMessage));
                 if (!symbol) {
                     return getMergedSymbol(symbolFromJSPrototype);
                 }
