@@ -12443,17 +12443,20 @@ namespace ts {
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
 
-        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined): Type {
+        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
                 return getStringMappingType(symbol, typeArguments[0]);
             }
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters!;
-            const id = getTypeListId(typeArguments);
+            const id = getTypeListId(typeArguments) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
             let instantiation = links.instantiations!.get(id);
             if (!instantiation) {
                 links.instantiations!.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration)))));
+                links.instantiations!.set(id, instantiation = instantiateType(type,
+                    createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))),
+                    aliasSymbol, aliasTypeArguments));
             }
             return instantiation;
         }
@@ -12479,7 +12482,8 @@ namespace ts {
                         typeParameters.length);
                     return errorType;
                 }
-                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node));
+                const aliasSymbol = getAliasSymbolForTypeNode(node);
+                return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
             }
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
@@ -15658,9 +15662,9 @@ namespace ts {
             return getConditionalType(root, mapper);
         }
 
-        function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
-        function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
-        function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
+        function instantiateType(type: Type, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type;
+        function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined;
+        function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
             if (!(type && mapper && couldContainTypeVariables(type))) {
                 return type;
             }
@@ -15675,12 +15679,12 @@ namespace ts {
             totalInstantiationCount++;
             instantiationCount++;
             instantiationDepth++;
-            const result = instantiateTypeWorker(type, mapper);
+            const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
             instantiationDepth--;
             return result;
         }
 
-        function instantiateTypeWorker(type: Type, mapper: TypeMapper): Type {
+        function instantiateTypeWorker(type: Type, mapper: TypeMapper, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined): Type {
             const flags = type.flags;
             if (flags & TypeFlags.TypeParameter) {
                 return getMappedType(type, mapper);
@@ -15701,10 +15705,14 @@ namespace ts {
                 const origin = type.flags & TypeFlags.Union ? (<UnionType>type).origin : undefined;
                 const types = origin && origin.flags & TypeFlags.UnionOrIntersection ? (<UnionOrIntersectionType>origin).types : (<UnionOrIntersectionType>type).types;
                 const newTypes = instantiateTypes(types, mapper);
-                return newTypes === types ? type :
-                    flags & TypeFlags.Intersection || origin && origin.flags & TypeFlags.Intersection ?
-                        getIntersectionType(newTypes, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper)) :
-                        getUnionType(newTypes, UnionReduction.Literal, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                if (newTypes === types && aliasSymbol === type.aliasSymbol) {
+                    return type;
+                }
+                const newAliasSymbol = aliasSymbol || type.aliasSymbol;
+                const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
+                return flags & TypeFlags.Intersection || origin && origin.flags & TypeFlags.Intersection ?
+                    getIntersectionType(newTypes, newAliasSymbol, newAliasTypeArguments) :
+                    getUnionType(newTypes, UnionReduction.Literal, newAliasSymbol, newAliasTypeArguments);
             }
             if (flags & TypeFlags.Index) {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
@@ -15716,7 +15724,9 @@ namespace ts {
                 return getStringMappingType((<StringMappingType>type).symbol, instantiateType((<StringMappingType>type).type, mapper));
             }
             if (flags & TypeFlags.IndexedAccess) {
-                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), (<IndexedAccessType>type).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                const newAliasSymbol = aliasSymbol || type.aliasSymbol;
+                const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
+                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), (<IndexedAccessType>type).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
