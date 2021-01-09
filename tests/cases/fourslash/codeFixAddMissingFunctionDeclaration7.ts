@@ -1,9 +1,11 @@
 /// <reference path='fourslash.ts' />
 
-////interface Foo {}
 ////namespace Foo {
-////    export function bar() { }
+////    export const x = 0;
 ////}
+////
+////Foo.test();
+////Foo.test();
 ////Foo.test();
 
 verify.codeFix({
@@ -11,13 +13,17 @@ verify.codeFix({
     description: [ts.Diagnostics.Add_missing_function_declaration_0.message, "test"],
     applyChanges: true,
     newFileContent:
-`interface Foo {}
-namespace Foo {
-    export function bar() { }
+`namespace Foo {
+    export const x = 0;
 
     export function test() {
         throw new Error("Function not implemented.");
     }
 }
+
+Foo.test();
+Foo.test();
 Foo.test();`
 });
+
+verify.not.codeFixAvailable();

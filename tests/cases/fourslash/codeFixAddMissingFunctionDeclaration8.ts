@@ -1,23 +1,22 @@
 /// <reference path='fourslash.ts' />
 
-////interface Foo {}
 ////namespace Foo {
-////    export function bar() { }
+////    export const x = 0;
 ////}
-////Foo.test();
+////
+////Foo.test(1, "", { x: 1, y: 1 });
 
 verify.codeFix({
     index: 0,
     description: [ts.Diagnostics.Add_missing_function_declaration_0.message, "test"],
-    applyChanges: true,
     newFileContent:
-`interface Foo {}
-namespace Foo {
-    export function bar() { }
+`namespace Foo {
+    export const x = 0;
 
-    export function test() {
+    export function test(arg0: number, arg1: string, arg2: { x: number; y: number; }) {
         throw new Error("Function not implemented.");
     }
 }
-Foo.test();`
+
+Foo.test(1, "", { x: 1, y: 1 });`
 });

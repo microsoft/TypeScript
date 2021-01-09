@@ -6195,6 +6195,23 @@
         "category": "Message",
         "code": 95155
     },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95156
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95157
+    },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95158
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95159
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
