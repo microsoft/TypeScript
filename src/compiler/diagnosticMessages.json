@@ -3211,7 +3211,10 @@
         "category": "Error",
         "code": 2796
     },
-
+    "Cannot find namespace '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2797
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
