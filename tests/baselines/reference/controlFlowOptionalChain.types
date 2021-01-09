@@ -1882,12 +1882,12 @@ type Shape =
 >radius : number
 
 function getArea(shape?: Shape) {
->getArea : (shape?: { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined) => number
->shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+>getArea : (shape?: Shape | undefined) => number
+>shape : Shape | undefined
 
     switch (shape?.type) {
 >shape?.type : "rectangle" | "circle" | undefined
->shape : { type: "rectangle"; width: number; height: number; } | { type: "circle"; radius: number; } | undefined
+>shape : Shape | undefined
 >type : "rectangle" | "circle" | undefined
 
         case 'circle':

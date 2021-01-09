@@ -963,10 +963,10 @@ interface B2 extends A {
 >c : NewDiff<keyof this, "a">
 }
 type c1 = B1['c']; // 'c' | 'b'
->c1 : OldDiff<"a" | "b" | "c", "a">
+>c1 : OldDiff<keyof B1, "a">
 
 type c2 = B2['c']; // 'c' | 'b'
->c2 : OldDiff<"a" | "b" | "c", "a">
+>c2 : "b" | "c"
 
 // Repro from #21929
 
@@ -983,7 +983,7 @@ type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
 >baz : 3
 
 type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
->Test2 : OldDiff<"foo" | "bar" | "baz", "foo">
+>Test2 : "bar" | "baz"
 >foo : 1
 >bar : 2
 >baz : 3

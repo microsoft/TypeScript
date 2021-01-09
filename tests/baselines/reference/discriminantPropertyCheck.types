@@ -404,9 +404,9 @@ export function foo(obj: Obj) {
 >obj : Obj
 
     switch (obj.key) {
->obj.key : "+" | "-" | "*" | "/"
+>obj.key : Additive | Multiplicative
 >obj : Obj
->key : "+" | "-" | "*" | "/"
+>key : Additive | Multiplicative
 
         case '+': {
 >'+' : "+"
@@ -640,7 +640,7 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
         }
         switch (test.type) {
 >test.type : "testA" | "testB"
->test : AllTests
+>test : TestA | TestB
 >type : "testA" | "testB"
 
             case 'testA': {

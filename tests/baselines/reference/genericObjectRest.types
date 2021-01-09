@@ -94,7 +94,7 @@ type Item = { a: string, b: number, c: boolean };
 >c : boolean
 
 function f4<K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) {
->f4 : <K1 extends "a" | "b" | "c", K2 extends "a" | "b" | "c">(obj: Item, k1: K1, k2: K2) => void
+>f4 : <K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) => void
 >obj : Item
 >k1 : K1
 >k2 : K2

@@ -236,7 +236,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 >f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
 >obj : T
 >k1 : string
->k2 : "a" | "b"
+>k2 : keyof Item
 >k3 : keyof T
 >k4 : K
 
@@ -251,7 +251,7 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 >obj[k2] = 123 : 123
 >obj[k2] : never
 >obj : T
->k2 : "a" | "b"
+>k2 : keyof Item
 >123 : 123
 
   obj[k3] = 123;  // Error
@@ -417,7 +417,7 @@ interface Type {
 }
 
 function get123<K extends keyof Type>(): Type[K] {
->get123 : <K extends "a" | "b">() => Type[K]
+>get123 : <K extends keyof Type>() => Type[K]
 
     return 123;  // Error
 >123 : 123
