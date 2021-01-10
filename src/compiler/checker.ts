@@ -21966,8 +21966,12 @@ namespace ts {
                     return some((<FlowLabel>flow).antecedents, f => isReachableFlowNodeWorker(f, /*noCacheCheck*/ false));
                 }
                 else if (flags & FlowFlags.LoopLabel) {
+                    const antecedents = (<FlowLabel>flow).antecedents;
+                    if (antecedents === undefined || antecedents.length === 0) {
+                        return false;
+                    }
                     // A loop is reachable if the control flow path that leads to the top is reachable.
-                    flow = (<FlowLabel>flow).antecedents![0];
+                    flow = antecedents[0];
                 }
                 else if (flags & FlowFlags.SwitchClause) {
                     // The control flow path representing an unmatched value in a switch statement with
