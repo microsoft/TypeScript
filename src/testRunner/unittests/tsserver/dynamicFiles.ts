@@ -108,7 +108,7 @@ var x = 10;`
                 content: "const y = 10"
             };
             const host = createServerHost([config, file, libFile], { useCaseSensitiveFileNames: true });
-            const service = createProjectService(host, /*parameters*/ undefined, { useInferredProjectPerProjectRoot: true });
+            const service = createProjectService(host, { useInferredProjectPerProjectRoot: true });
             service.openClientFile(untitledFile, "const x = 10;", /*scriptKind*/ undefined, tscWatch.projectRoot);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [untitledFile, libFile.path]);

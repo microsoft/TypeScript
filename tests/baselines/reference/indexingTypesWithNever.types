@@ -214,7 +214,7 @@ type O0 = {};
 >O0 : O0
 
 type O3Names = OptionalPropNames<O3>; // expect 'a' | 'b'
->O3Names : RequiredPropNames<P3>
+>O3Names : OptionalPropNames<O3>
 
 type O2Names = OptionalPropNames<O2>; // expect 'a'
 >O2Names : "a"

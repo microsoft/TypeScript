@@ -37,6 +37,9 @@ namespace ts.server.protocol {
         /* @internal */
         EmitOutput = "emit-output",
         Exit = "exit",
+        FileReferences = "fileReferences",
+        /* @internal */
+        FileReferencesFull = "fileReferences-full",
         Format = "format",
         Formatonkey = "formatonkey",
         /* @internal */
@@ -563,7 +566,8 @@ namespace ts.server.protocol {
         arguments: GetApplicableRefactorsRequestArgs;
     }
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
-        triggerReason?: RefactorTriggerReason
+        triggerReason?: RefactorTriggerReason;
+        kind?: string;
     };
 
     export type RefactorTriggerReason = "implicit" | "invoked";
@@ -623,6 +627,11 @@ namespace ts.server.protocol {
          * the current context.
          */
         notApplicableReason?: string;
+
+        /**
+         * The hierarchical dotted name of the refactor action.
+         */
+        kind?: string;
     }
 
     export interface GetEditsForRefactorRequest extends Request {
@@ -1152,6 +1161,25 @@ namespace ts.server.protocol {
         body?: ReferencesResponseBody;
     }
 
+    export interface FileReferencesRequest extends FileRequest {
+        command: CommandTypes.FileReferences;
+    }
+
+    export interface FileReferencesResponseBody {
+        /**
+         * The file locations referencing the symbol.
+         */
+        refs: readonly ReferencesResponseItem[];
+        /**
+         * The name of the symbol.
+         */
+        symbolName: string;
+    }
+
+    export interface FileReferencesResponse extends Response {
+        body?: FileReferencesResponseBody;
+    }
+
     /**
      * Argument for RenameRequest request.
      */
@@ -1509,6 +1537,8 @@ namespace ts.server.protocol {
         watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
 
@@ -1763,6 +1793,11 @@ namespace ts.server.protocol {
     }
 
     /**
+     * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+     */
+    export type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+
+    /**
      * Request to set compiler options for inferred projects.
      * External projects are opened / closed explicitly.
      * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
@@ -1783,7 +1818,7 @@ namespace ts.server.protocol {
         /**
          * Compiler options to be used with inferred projects.
          */
-        options: ExternalProjectCompilerOptions;
+        options: InferredProjectCompilerOptions;
 
         /**
          * Specifies the project root path used to scope compiler options.
@@ -3191,6 +3226,7 @@ namespace ts.server.protocol {
         insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
@@ -3223,7 +3259,7 @@ namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;

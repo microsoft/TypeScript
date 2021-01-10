@@ -170,6 +170,8 @@ Output::
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
   {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
@@ -281,6 +283,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
   {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/animals/animal.ts:
   {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
 /user/username/projects/demo/animals/dog.ts:
@@ -387,7 +391,6 @@ export default interface Animal {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDog = void 0;
-var animal_1 = require("./animal");
 var dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 

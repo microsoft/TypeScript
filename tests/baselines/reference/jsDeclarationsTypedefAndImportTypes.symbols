@@ -52,8 +52,8 @@ class Wrap {
 
 module.exports = {
 >module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/usage", Decl(usage.js, 0, 0))
->module : Symbol(export=, Decl(usage.js, 13, 1))
->exports : Symbol(export=, Decl(usage.js, 13, 1))
+>module : Symbol(module, Decl(usage.js, 13, 1))
+>exports : Symbol("tests/cases/conformance/jsdoc/declarations/usage", Decl(usage.js, 0, 0))
 
     Wrap
 >Wrap : Symbol(Wrap, Decl(usage.js, 15, 18))

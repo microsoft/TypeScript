@@ -326,13 +326,13 @@ export class someClass2 { }`),
                     const coreTsConfig: File = {
                         path: core[0].path,
                         content: JSON.stringify({
-                            compilerOptions: { composite: true, declaration: true, outFile: "index.js", bundledPackageName: "core" }
+                            compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
                         })
                     };
                     const logicTsConfig: File = {
                         path: logic[0].path,
                         content: JSON.stringify({
-                            compilerOptions: { composite: true, declaration: true, outFile: "index.js", bundledPackageName: "logic" },
+                            compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                             references: [{ path: "../core", prepend: true }]
                         })
                     };
@@ -1217,6 +1217,169 @@ export function someFn() { }`),
                     timeouts: checkSingleTimeoutQueueLengthAndRun
                 },
                 noopChange
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works with extended source files",
+            commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json"],
+            sys: () => {
+                const alphaExtendedConfigFile: File = {
+                    path: "/a/b/alpha.tsconfig.json",
+                    content: "{}"
+                };
+                const project1Config: File = {
+                    path: "/a/b/project1.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [commonFile1.path, commonFile2.path]
+                    })
+                };
+                const bravoExtendedConfigFile: File = {
+                    path: "/a/b/bravo.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json"
+                    })
+                };
+                const otherFile: File = {
+                    path: "/a/b/other.ts",
+                    content: "let z = 0;",
+                };
+                const project2Config: File = {
+                    path: "/a/b/project2.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./bravo.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [otherFile.path]
+                    })
+                };
+                return createWatchedSystem([
+                    libFile,
+                    alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                    bravoExtendedConfigFile, project2Config, otherFile
+                ], { currentDirectory: "/a/b" });
+            },
+            changes: [
+                {
+                    caption: "Modify alpha config",
+                    change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
+                        compilerOptions: { strict: true }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build project1
+                },
+                {
+                    caption: "Build project 2",
+                    change: noop,
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "change bravo config",
+                    change: sys => sys.writeFile("/a/b/bravo.tsconfig.json", JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: { strict: false }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "project 2 extends alpha",
+                    change: sys => sys.writeFile("/a/b/project2.tsconfig.json", JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "update aplha config",
+                    change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", "{}"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun, // build project1
+                },
+                {
+                    caption: "Build project 2",
+                    change: noop,
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "works correctly when project with extended config is removed",
+            commandLineArgs: ["-b", "-w", "-v"],
+            sys: () => {
+                const alphaExtendedConfigFile: File = {
+                    path: "/a/b/alpha.tsconfig.json",
+                    content: JSON.stringify({
+                        strict: true
+                    })
+                };
+                const project1Config: File = {
+                    path: "/a/b/project1.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./alpha.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [commonFile1.path, commonFile2.path]
+                    })
+                };
+                const bravoExtendedConfigFile: File = {
+                    path: "/a/b/bravo.tsconfig.json",
+                    content: JSON.stringify({
+                        strict: true
+                    })
+                };
+                const otherFile: File = {
+                    path: "/a/b/other.ts",
+                    content: "let z = 0;",
+                };
+                const project2Config: File = {
+                    path: "/a/b/project2.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: "./bravo.tsconfig.json",
+                        compilerOptions: {
+                            composite: true,
+                        },
+                        files: [otherFile.path]
+                    })
+                };
+                const configFile: File = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        references: [
+                            {
+                                path: "./project1.tsconfig.json",
+                            },
+                            {
+                                path: "./project2.tsconfig.json",
+                            },
+                        ],
+                        files: [],
+                    })
+                };
+                return createWatchedSystem([
+                    libFile, configFile,
+                    alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
+                    bravoExtendedConfigFile, project2Config, otherFile
+                ], { currentDirectory: "/a/b" });
+            },
+            changes: [
+                {
+                    caption: "Remove project2 from base config",
+                    change: sys => sys.modifyFile("/a/b/tsconfig.json", JSON.stringify({
+                        references: [
+                            {
+                                path: "./project1.tsconfig.json",
+                            },
+                        ],
+                        files: [],
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                }
             ]
         });
     });

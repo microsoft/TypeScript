@@ -53,10 +53,10 @@ class ExportedThing {
 >"ok" : "ok"
 }
 module.exports = {
->module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
->module.exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
->module : { "\"tests/cases/conformance/jsdoc/declarations/mixed\"": { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }; }
->exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+>module.exports = {    doTheThing,    ExportedThing,} : typeof import("tests/cases/conformance/jsdoc/declarations/mixed")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/mixed")
+>module : { "\"tests/cases/conformance/jsdoc/declarations/mixed\"": typeof import("tests/cases/conformance/jsdoc/declarations/mixed"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/mixed")
 >{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
 
     doTheThing,

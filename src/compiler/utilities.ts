@@ -616,15 +616,13 @@ namespace ts {
         NeverAsciiEscape = 1 << 0,
         JsxAttributeEscape = 1 << 1,
         TerminateUnterminatedLiterals = 1 << 2,
+        AllowNumericSeparator = 1 << 3
     }
 
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, flags: GetLiteralTextFlags) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated) && !(
-            (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
-            isBigIntLiteral(node)
-        )) {
+        if (canUseOriginalText(node, flags)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -675,6 +673,18 @@ namespace ts {
         }
 
         return Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
+    }
+
+    function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): boolean {
+        if (nodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated)) {
+            return false;
+        }
+
+        if (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) {
+            return !!(flags & GetLiteralTextFlags.AllowNumericSeparator);
+        }
+
+        return !isBigIntLiteral(node);
     }
 
     export function getTextOfConstantValue(value: string | number) {
@@ -897,6 +907,10 @@ namespace ts {
         }
     }
 
+    export function hasPossibleExternalModuleReference(node: Node): node is AnyImportOrReExport | ModuleDeclaration | ImportTypeNode | ImportCall {
+        return isAnyImportOrReExport(node) || isModuleDeclaration(node) || isImportTypeNode(node) || isImportCall(node);
+    }
+
     export function isAnyImportOrReExport(node: Node): node is AnyImportOrReExport {
         return isAnyImportSyntax(node) || isExportDeclaration(node);
     }
@@ -978,10 +992,37 @@ namespace ts {
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         const span = getErrorSpanForNode(sourceFile, node);
+        return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
+    }
+
+    function assertDiagnosticLocation(file: SourceFile | undefined, start: number, length: number) {
+        Debug.assertGreaterThanOrEqual(start, 0);
+        Debug.assertGreaterThanOrEqual(length, 0);
+
+        if (file) {
+            Debug.assertLessThanOrEqual(start, file.text.length);
+            Debug.assertLessThanOrEqual(start + length, file.text.length);
+        }
+    }
+
+    export function createFileDiagnosticFromMessageChain(file: SourceFile, start: number, length: number, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
+        assertDiagnosticLocation(file, start, length);
+        return {
+            file,
+            start,
+            length,
+            code: messageChain.code,
+            category: messageChain.category,
+            messageText: messageChain.next ? messageChain : messageChain.messageText,
+            relatedInformation
+        };
+    }
+
+    export function createDiagnosticForFileFromMessageChain(sourceFile: SourceFile, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
         return {
             file: sourceFile,
-            start: span.start,
-            length: span.length,
+            start: 0,
+            length: 0,
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText,
@@ -1472,6 +1513,13 @@ namespace ts {
             }
             return false;
         });
+    }
+
+    export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
+        return firstDefined(getPropertyAssignment(objectLiteral, propKey), property =>
+            isArrayLiteralExpression(property.initializer) ?
+                find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+                undefined);
     }
 
     export function getTsConfigObjectLiteralExpression(tsConfigSourceFile: TsConfigSourceFile | undefined): ObjectLiteralExpression | undefined {
@@ -2382,7 +2430,7 @@ namespace ts {
         }
     }
 
-    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode): Expression | undefined {
+    export function getExternalModuleName(node: AnyImportOrReExport | ImportTypeNode | ImportCall): Expression | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -2391,6 +2439,8 @@ namespace ts {
                 return node.moduleReference.kind === SyntaxKind.ExternalModuleReference ? node.moduleReference.expression : undefined;
             case SyntaxKind.ImportType:
                 return isLiteralImportTypeNode(node) ? node.argument.literal : undefined;
+            case SyntaxKind.CallExpression:
+                return node.arguments[0];
             default:
                 return Debug.assertNever(node);
         }
@@ -2525,7 +2575,7 @@ namespace ts {
         return result || emptyArray;
     }
 
-    function getNextJSDocCommentLocation(node: Node) {
+    export function getNextJSDocCommentLocation(node: Node) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.PropertyAssignment ||
             parent.kind === SyntaxKind.ExportAssignment ||
@@ -2578,18 +2628,31 @@ namespace ts {
 
     export function getEffectiveJSDocHost(node: Node): Node | undefined {
         const host = getJSDocHost(node);
-        const decl = getSourceOfDefaultedAssignment(host) ||
-            getSourceOfAssignment(host) ||
-            getSingleInitializerOfVariableStatementOrPropertyDeclaration(host) ||
-            getSingleVariableOfVariableStatement(host) ||
-            getNestedModuleDeclaration(host) ||
-            host;
-        return decl;
+        if (host) {
+            return getSourceOfDefaultedAssignment(host)
+                || getSourceOfAssignment(host)
+                || getSingleInitializerOfVariableStatementOrPropertyDeclaration(host)
+                || getSingleVariableOfVariableStatement(host)
+                || getNestedModuleDeclaration(host)
+                || host;
+        }
     }
 
-    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments.  */
-    export function getJSDocHost(node: Node): HasJSDoc {
-        return Debug.checkDefined(findAncestor(node.parent, isJSDoc)).parent;
+    /** Use getEffectiveJSDocHost if you additionally need to look for jsdoc on parent nodes, like assignments. */
+    export function getJSDocHost(node: Node): HasJSDoc | undefined {
+        const jsDoc = getJSDocRoot(node);
+        if (!jsDoc) {
+            return undefined;
+        }
+
+        const host = jsDoc.parent;
+        if (host && host.jsDoc && jsDoc === lastOrUndefined(host.jsDoc)) {
+            return host;
+        }
+    }
+
+    export function getJSDocRoot(node: Node): JSDoc | undefined {
+        return findAncestor(node.parent, isJSDoc);
     }
 
     export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
@@ -2935,7 +2998,7 @@ namespace ts {
     }
 
     export function getEffectiveImplementsTypeNodes(node: ClassLikeDeclaration): undefined | readonly ExpressionWithTypeArguments[]{
-        if(isInJSFile(node)) {
+        if (isInJSFile(node)) {
             return getJSDocImplementsTags(node).map(n => n.class);
         }
         else {
@@ -3008,14 +3071,7 @@ namespace ts {
         return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
-    export type TriviaKind =
-        SyntaxKind.SingleLineCommentTrivia
-        | SyntaxKind.MultiLineCommentTrivia
-        | SyntaxKind.NewLineTrivia
-        | SyntaxKind.WhitespaceTrivia
-        | SyntaxKind.ShebangTrivia
-        | SyntaxKind.ConflictMarkerTrivia;
-    export function isTrivia(token: SyntaxKind): token is TriviaKind {
+    export function isTrivia(token: SyntaxKind): token is TriviaSyntaxKind {
         return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
     }
 
@@ -3523,7 +3579,8 @@ namespace ts {
                 }
 
             // TODO: Should prefix `++` and `--` be moved to the `Update` precedence?
-            // TODO: We are missing `TypeAssertionExpression`
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.NonNullExpression:
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
@@ -3544,6 +3601,9 @@ namespace ts {
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return OperatorPrecedence.Member;
+
+            case SyntaxKind.AsExpression:
+                return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
@@ -3621,6 +3681,19 @@ namespace ts {
         return -1;
     }
 
+    export function getSemanticJsxChildren(children: readonly JsxChild[]) {
+        return filter(children, i => {
+            switch (i.kind) {
+                case SyntaxKind.JsxExpression:
+                    return !!i.expression;
+                case SyntaxKind.JsxText:
+                    return !i.containsOnlyTriviaWhiteSpaces;
+                default:
+                    return true;
+            }
+        });
+    }
+
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
         const filesWithDiagnostics = [] as string[] as SortedArray<string>;
@@ -3632,12 +3705,7 @@ namespace ts {
             lookup,
             getGlobalDiagnostics,
             getDiagnostics,
-            reattachFileDiagnostics
         };
-
-        function reattachFileDiagnostics(newFile: SourceFile): void {
-            forEach(fileDiagnostics.get(newFile.fileName), diagnostic => diagnostic.file = newFile);
-        }
 
         function lookup(diagnostic: Diagnostic): Diagnostic | undefined {
             let diagnostics: SortedArray<Diagnostic> | undefined;
@@ -3831,13 +3899,15 @@ namespace ts {
 
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-") || stringContains((name as string), ":");
     }
 
     const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
-        if (indentStrings[level] === undefined) {
-            indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
+        // prepopulate cache
+        const singleLevel = indentStrings[1];
+        for (let current = indentStrings.length; current <= level; current++) {
+            indentStrings.push(indentStrings[current - 1] + singleLevel);
         }
         return indentStrings[level];
     }
@@ -4042,7 +4112,6 @@ namespace ts {
         getCanonicalFileName(p: string): string;
         getCommonSourceDirectory(): string;
         getCurrentDirectory(): string;
-        getCompilerOptions(): CompilerOptions;
     }
 
     export function getResolvedExternalModuleName(host: ResolveModuleNameResolutionHost, file: SourceFile, referenceFile?: SourceFile): string {
@@ -4066,16 +4135,7 @@ namespace ts {
         const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         const extensionless = removeFileExtension(relativePath);
-        if (referencePath) {
-            return ensurePathIsNonModuleName(extensionless);
-        }
-        const options = host.getCompilerOptions();
-        const rootPkgName = options.bundledPackageName || "";
-        const newPath = combinePaths(rootPkgName, extensionless);
-        if (rootPkgName && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && endsWith(newPath, "/index")) {
-            return newPath.slice(0, newPath.length - "/index".length);
-        }
-        return newPath;
+        return referencePath ? ensurePathIsNonModuleName(extensionless) : extensionless;
     }
 
     export function getOwnEmitOutputFilePath(fileName: string, host: EmitHost, extension: string) {
@@ -4681,7 +4741,7 @@ namespace ts {
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -5382,11 +5442,6 @@ namespace ts {
         });
     }
 
-    // Return true if the given type is the constructor type for an abstract class
-    export function isAbstractConstructorType(type: Type): boolean {
-        return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && !!type.symbol && isAbstractConstructorSymbol(type.symbol);
-    }
-
     export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
         if (symbol.flags & SymbolFlags.Class) {
             const declaration = getClassLikeDeclarationOfSymbol(symbol);
@@ -5656,9 +5711,7 @@ namespace ts {
 
     export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithDetachedLocation;
     export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
-        Debug.assertGreaterThanOrEqual(start, 0);
-        Debug.assertGreaterThanOrEqual(length, 0);
-
+        assertDiagnosticLocation(/*file*/ undefined, start, length);
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
@@ -5726,13 +5779,7 @@ namespace ts {
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
-        Debug.assertGreaterThanOrEqual(start, 0);
-        Debug.assertGreaterThanOrEqual(length, 0);
-
-        if (file) {
-            Debug.assertLessThanOrEqual(start, file.text.length);
-            Debug.assertLessThanOrEqual(start + length, file.text.length);
-        }
+        assertDiagnosticLocation(file, start, length);
 
         let text = getLocaleSpecificMessage(message);
 
@@ -5785,7 +5832,7 @@ namespace ts {
         };
     }
 
-    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
+    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): Diagnostic {
         return {
             file: undefined,
             start: undefined,
@@ -5794,6 +5841,7 @@ namespace ts {
             code: chain.code,
             category: chain.category,
             messageText: chain.next ? chain : chain.messageText,
+            relatedInformation
         };
     }
 
@@ -5994,8 +6042,8 @@ namespace ts {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
     }
 
-    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
-        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
         const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
@@ -6003,6 +6051,10 @@ namespace ts {
             jsxImportSourcePragma ?
                 jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
                 undefined;
+    }
+
+    export function getJSXRuntimeImport(base: string | undefined, options: CompilerOptions) {
+        return base ? `${base}/${options.jsx === JsxEmit.ReactJSXDev ? "jsx-dev-runtime" : "jsx-runtime"}` : undefined;
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -6179,6 +6231,11 @@ namespace ts {
      */
     export function isImplicitGlob(lastPathComponent: string): boolean {
         return !/[.*?]/.test(lastPathComponent);
+    }
+
+    export function getPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude") {
+        const pattern = spec && getSubPatternFromSpec(spec, basePath, usage, wildcardMatchers[usage]);
+        return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
     }
 
     function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
@@ -6690,9 +6747,11 @@ namespace ts {
         return { pos: getTokenPosOfNode(node), end: node.end };
     }
 
-    export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
+    export function rangeOfTypeParameters(sourceFile: SourceFile, typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
         // Include the `<>`
-        return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
+        const pos = typeParameters.pos - 1;
+        const end = skipTrivia(sourceFile.text, typeParameters.end) + 1;
+        return { pos, end };
     }
 
     export interface HostWithIsSourceOfProjectReferenceRedirect {
@@ -6956,6 +7015,55 @@ namespace ts {
 
         function bindParentToChild(child: Node, parent: Node) {
             return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
+        }
+    }
+
+    function isPackedElement(node: Expression) {
+        return !isOmittedExpression(node);
+    }
+
+    /**
+     * Determines whether the provided node is an ArrayLiteralExpression that contains no missing elements.
+     */
+    export function isPackedArrayLiteral(node: Expression) {
+        return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
+    }
+
+    /**
+     * Indicates whether the result of an `Expression` will be unused.
+     *
+     * NOTE: This requires a node with a valid `parent` pointer.
+     */
+    export function expressionResultIsUnused(node: Expression): boolean {
+        Debug.assertIsDefined(node.parent);
+        while (true) {
+            const parent: Node = node.parent;
+            // walk up parenthesized expressions, but keep a pointer to the top-most parenthesized expression
+            if (isParenthesizedExpression(parent)) {
+                node = parent;
+                continue;
+            }
+            // result is unused in an expression statement, `void` expression, or the initializer or incrementer of a `for` loop
+            if (isExpressionStatement(parent) ||
+                isVoidExpression(parent) ||
+                isForStatement(parent) && (parent.initializer === node || parent.incrementor === node)) {
+                return true;
+            }
+            if (isCommaListExpression(parent)) {
+                // left side of comma is always unused
+                if (node !== last(parent.elements)) return true;
+                // right side of comma is unused if parent is unused
+                node = parent;
+                continue;
+            }
+            if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.CommaToken) {
+                // left side of comma is always unused
+                if (node === parent.left) return true;
+                // right side of comma is unused if parent is unused
+                node = parent;
+                continue;
+            }
+            return false;
         }
     }
 }

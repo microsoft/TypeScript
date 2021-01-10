@@ -8,6 +8,6 @@ export {};
 //// [jsxJsxsCjsTransformChildren.js]
 "use strict";
 exports.__esModule = true;
-var jsx_runtime_js_1 = require("react/jsx-runtime.js");
+var jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="react16.d.ts" />
-var a = jsx_runtime_js_1.jsx("div", { children: "text" }, void 0);
+var a = jsx_runtime_1.jsx("div", { children: "text" }, void 0);

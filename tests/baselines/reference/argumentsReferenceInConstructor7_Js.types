@@ -1,0 +1,19 @@
+=== /a.js ===
+class A {
+>A : A
+
+	constructor() {
+		/**
+		 * @type Function
+		 */
+		this.callee = arguments.callee;
+>this.callee = arguments.callee : Function
+>this.callee : Function
+>this : this
+>callee : Function
+>arguments.callee : Function
+>arguments : IArguments
+>callee : Function
+	}
+}
+

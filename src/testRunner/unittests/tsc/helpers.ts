@@ -37,9 +37,6 @@ namespace ts {
         getPrograms: () => readonly CommandLineProgram[];
     }
 
-    function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-        return !!(program as T).getState;
-    }
     function isAnyProgram(program: Program | EmitAndSemanticDiagnosticsBuilderProgram | ParsedCommandLine): program is Program | EmitAndSemanticDiagnosticsBuilderProgram {
         return !!(program as Program | EmitAndSemanticDiagnosticsBuilderProgram).getCompilerOptions;
     }

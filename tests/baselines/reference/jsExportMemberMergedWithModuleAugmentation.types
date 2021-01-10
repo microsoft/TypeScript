@@ -8,10 +8,10 @@ class Abcde {
 }
 
 module.exports = {
->module.exports = {  Abcde} : { Abcde: typeof Abcde; }
->module.exports : { Abcde: typeof Abcde; }
->module : { "\"/test\"": { Abcde: typeof Abcde; }; }
->exports : { Abcde: typeof Abcde; }
+>module.exports = {  Abcde} : typeof import("/test")
+>module.exports : typeof import("/test")
+>module : { "\"/test\"": typeof import("/test"); }
+>exports : typeof import("/test")
 >{  Abcde} : { Abcde: typeof Abcde; }
 
   Abcde
@@ -24,7 +24,7 @@ import { Abcde } from "./test";
 >Abcde : typeof Abcde
 
 declare module "./test" {
->"./test" : { Abcde: typeof Abcde; }
+>"./test" : typeof import("/test")
 
   interface Abcde { b: string }
 >b : string

@@ -32,9 +32,9 @@ const _str = "my-fake-sym";
 
 Object.defineProperty(module.exports, _sym, { value: "ok" });
 >Object.defineProperty(module.exports, _sym, { value: "ok" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
 >module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
@@ -45,9 +45,9 @@ Object.defineProperty(module.exports, _sym, { value: "ok" });
 
 Object.defineProperty(module.exports, _str, { value: "ok" });
 >Object.defineProperty(module.exports, _str, { value: "ok" }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >module.exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")
 >module : { "\"tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3\"": typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3"); }
 >exports : typeof import("tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3")

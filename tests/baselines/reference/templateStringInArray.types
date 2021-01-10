@@ -4,6 +4,6 @@ var x = [1, 2, `abc${ 123 }def`];
 >[1, 2, `abc${ 123 }def`] : (string | number)[]
 >1 : 1
 >2 : 2
->`abc${ 123 }def` : string
+>`abc${ 123 }def` : "abc123def"
 >123 : 123
 

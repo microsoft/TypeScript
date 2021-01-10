@@ -42,9 +42,9 @@ A.prototype.func = function() { this._func = 0; }
 
 Object.defineProperty(A.prototype, "def", { value: 0 });
 >Object.defineProperty(A.prototype, "def", { value: 0 }) : any
->Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => any
 >A.prototype : A
 >A : typeof A
 >prototype : A

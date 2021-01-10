@@ -1,0 +1,21 @@
+=== tests/cases/compiler/instanceofNarrowReadonlyArray.ts ===
+// @strict
+
+function narrow(x: readonly number[] | number): readonly number[] {
+>narrow : (x: readonly number[] | number) => readonly number[]
+>x : number | readonly number[]
+
+    if (x instanceof Array) {
+>x instanceof Array : boolean
+>x : number | readonly number[]
+>Array : ArrayConstructor
+
+        return x;
+>x : readonly number[]
+
+    } else {
+        return [x];
+>[x] : number[]
+>x : number
+    }
+}

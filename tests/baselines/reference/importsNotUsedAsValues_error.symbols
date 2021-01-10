@@ -132,3 +132,48 @@ console.log(c, d);
 >c : Symbol(c, Decl(g.ts, 1, 3))
 >d : Symbol(d, Decl(g.ts, 2, 3))
 
+=== /h.ts ===
+class H {}
+>H : Symbol(H, Decl(h.ts, 0, 0))
+
+export = H;
+>H : Symbol(H, Decl(h.ts, 0, 0))
+
+=== /i.ts ===
+import H = require('./h'); // Error
+>H : Symbol(H, Decl(i.ts, 0, 0))
+
+let h: H = {};
+>h : Symbol(h, Decl(i.ts, 1, 3))
+>H : Symbol(H, Decl(i.ts, 0, 0))
+
+console.log(h);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>h : Symbol(h, Decl(i.ts, 1, 3))
+
+=== /j.ts ===
+import H = require('./h'); // noUnusedLocals error only
+No type information for this code.
+No type information for this code.=== /k.ts ===
+const enum K { One, Two }
+>K : Symbol(K, Decl(k.ts, 0, 0))
+>One : Symbol(K.One, Decl(k.ts, 0, 14))
+>Two : Symbol(K.Two, Decl(k.ts, 0, 19))
+
+export = K;
+>K : Symbol(K, Decl(k.ts, 0, 0))
+
+=== /l.ts ===
+import K = require('./k');
+>K : Symbol(K, Decl(l.ts, 0, 0))
+
+K.One;
+>K.One : Symbol(K.One, Decl(k.ts, 0, 14))
+>K : Symbol(K, Decl(l.ts, 0, 0))
+>One : Symbol(K.One, Decl(k.ts, 0, 14))
+
+=== /j.ts ===
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
+No type information for this code.

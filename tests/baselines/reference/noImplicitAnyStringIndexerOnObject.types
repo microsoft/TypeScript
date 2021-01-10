@@ -1,7 +1,7 @@
 === tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
 var a = {}["hello"];
->a : any
->{}["hello"] : any
+>a : undefined
+>{}["hello"] : undefined
 >{} : {}
 >"hello" : "hello"
 
@@ -188,7 +188,7 @@ const bar = d['hello'];
 
 {
   ({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'];
->({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] : any
+>({ get: (key: string) => 'hello', set: (key: string, value: string) => {} })['hello'] : undefined
 >({ get: (key: string) => 'hello', set: (key: string, value: string) => {} }) : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >{ get: (key: string) => 'hello', set: (key: string, value: string) => {} } : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >get : (key: string) => string
@@ -251,7 +251,7 @@ const bar = d['hello'];
 
 {
   ({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'];
->({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] : any
+>({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo['hello'] : undefined
 >({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }).foo : { get: (key: string) => string; set: (key: string, value: string) => void; }
 >({ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } }) : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
 >{ foo: { get: (key: string) => 'hello', set: (key: string, value: string) => {} } } : { foo: { get: (key: string) => string; set: (key: string, value: string) => void; }; }
