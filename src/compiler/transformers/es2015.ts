@@ -983,7 +983,7 @@ namespace ts {
             // In derived classes, there may be code before the necessary super() call
             // We'll remove pre-super statements to be tacked on after the rest of the body
             const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
-            const { bodyStatements, preSuperStatements, superCall } = splitConstructorBodyStatementsOnSuper(constructor.body.statements, existingPrologue);
+            const { bodyStatements, superCall, superStatementIndex } = splitConstructorBodyStatementsOnSuper(constructor.body.statements, existingPrologue);
 
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
@@ -1064,7 +1064,7 @@ namespace ts {
                     // ```
 
                     // If the super() call is the first statement, we can directly create and assign its result to `_this`
-                    if (preSuperStatements.length === 0) {
+                    if (superStatementIndex <= existingPrologue.length) {
                         insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
                     }
                     // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
@@ -1106,7 +1106,7 @@ namespace ts {
                         [
                             ...existingPrologue,
                             ...prologue,
-                            ...visitNodes(factory.createNodeArray(preSuperStatements), visitor, isStatement),
+                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex)),
                             ...statements
                         ]
                     ),
@@ -1126,8 +1126,8 @@ namespace ts {
                     // With a super() call, split the statements into pre-super() and 'body' (post-super())
                     return {
                         bodyStatements: factory.createNodeArray(originalBodyStatements.slice(i + 1)),
-                        preSuperStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length, i)),
                         superCall,
+                        superStatementIndex: i,
                     };
                 }
             }
@@ -1135,7 +1135,7 @@ namespace ts {
             // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
             return {
                 bodyStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length)),
-                preSuperStatements: emptyArray,
+                superStatementIndex: -1,
             };
         }
 
