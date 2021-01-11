@@ -46,9 +46,8 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 var _test;
 class C {
     constructor() {
+        var _a, _b;
         _test.set(this, 24);
-        var _a, _b;
-        var _a, _b;
         __classPrivateFieldSet(this, _test, +__classPrivateFieldGet(this, _test) + 1);
         __classPrivateFieldSet(this, _test, +__classPrivateFieldGet(this, _test) - 1);
         __classPrivateFieldSet(this, _test, +__classPrivateFieldGet(this, _test) + 1);

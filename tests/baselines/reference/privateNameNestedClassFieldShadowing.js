@@ -25,9 +25,8 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _x;
 class Base {
     constructor() {
+        var _x_1;
         _x.set(this, void 0);
-        var _x_1;
-        var _x_1;
         class Derived {
             constructor() {
                 _x_1.set(this, void 0);

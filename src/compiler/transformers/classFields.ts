@@ -632,20 +632,21 @@ namespace ts {
 
             const needsSyntheticConstructor = !constructor && isDerivedClass;
             let indexOfFirstStatementAfterSuper = 0;
+            let prologueStatementCount = 0;
             let superStatementIndex: number | undefined;
             let statements: Statement[] = [];
 
             if (constructor?.body?.statements) {
-                const indexAfterLastPrologueStatement = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
-                superStatementIndex = findSuperStatementIndex(constructor.body.statements, indexAfterLastPrologueStatement);
+                prologueStatementCount = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+                superStatementIndex = findSuperStatementIndex(constructor.body.statements, prologueStatementCount);
 
                 // If there was a super call, visit existing statements up to and including it
                 if (superStatementIndex !== undefined) {
                     indexOfFirstStatementAfterSuper = superStatementIndex + 1;
                     statements = [
-                        ...statements.slice(0, indexAfterLastPrologueStatement),
-                        ...visitNodes(constructor.body.statements, visitor, isStatement, indexAfterLastPrologueStatement, indexOfFirstStatementAfterSuper - indexAfterLastPrologueStatement),
-                        ...statements.slice(indexAfterLastPrologueStatement),
+                        ...statements.slice(0, prologueStatementCount),
+                        ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuper - prologueStatementCount),
+                        ...statements.slice(prologueStatementCount),
                     ];
                 }
             }
@@ -698,13 +699,11 @@ namespace ts {
                         }
                         // If a synthetic super() call was added, add them just after it
                         else if (needsSyntheticConstructor) {
-                            statements = addRange(
-                                [statements[0]],
-                                [
-                                    ...parameterProperties,
-                                    ...statements.slice(1),
-                                ]
-                            );
+                            statements = [
+                                statements[0],
+                                ...parameterProperties,
+                                ...statements.slice(1),
+                            ];
                         }
                         // Since there wasn't a super() call, add them to the top of the constructor
                         else {
@@ -716,15 +715,11 @@ namespace ts {
                 }
             }
 
-            const insertionIndex = needsSyntheticConstructor ? 1 :
-                superStatementIndex !== undefined ? undefined :
-                useDefineForClassFields ? 0 :
-                parameterPropertyDeclarationCount;
-            addPropertyStatements(statements, properties, factory.createThis(), insertionIndex);
+            addPropertyStatements(statements, properties, factory.createThis());
 
-            // Add existing statements after the initial super call
+            // Add existing statements after the initial prologues and super call
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuper));
+                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuper + prologueStatementCount));
             }
 
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
