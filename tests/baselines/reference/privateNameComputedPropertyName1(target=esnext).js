@@ -41,10 +41,10 @@ new A().test();
 class A {
     constructor() {
         this.#a = 'a';
-        this.#b = 'b';
         this.#c = 'c';
-        this.#d = 'd';
         this.#e = '';
+        this.#b = 'b';
+        this.#d = 'd';
     }
     #a;
     #b;

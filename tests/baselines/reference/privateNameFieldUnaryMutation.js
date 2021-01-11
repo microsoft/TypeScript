@@ -48,6 +48,7 @@ class C {
     constructor() {
         _test.set(this, 24);
         var _a, _b;
+        var _a, _b;
         __classPrivateFieldSet(this, _test, +__classPrivateFieldGet(this, _test) + 1);
         __classPrivateFieldSet(this, _test, +__classPrivateFieldGet(this, _test) - 1);
         __classPrivateFieldSet(this, _test, +__classPrivateFieldGet(this, _test) + 1);

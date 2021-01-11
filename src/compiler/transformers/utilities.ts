@@ -299,38 +299,16 @@ namespace ts {
         }
     }
 
-    /**
-     * Adds super call and preceding prologue directives into the list of statements.
-     *
-     * @param ctor The constructor node.
-     * @param result The list of statements.
-     * @param visitor The visitor to apply to each node added to the result array.
-     */
-    export function addPrologueDirectivesAndInitialSuperCall(factory: NodeFactory, ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor) {
-        let indexOfFirstStatementAfterSuper = 0;
-        let indexAfterLastPrologueStatement = 0;
-        let foundSuperStatement = false;
+    export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
+        for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
+            const statement = statements[i];
 
-        if (ctor.body) {
-            const statements = ctor.body.statements;
-            // add prologue directives to the list (if any)
-            indexAfterLastPrologueStatement = factory.copyPrologue(statements, result, /*ensureUseStrict*/ false, visitor);
-
-            // For each statement after prologue statements, if it's a super() call, visit it
-            // and stop trying to check further statements - this is all we need
-            for (indexOfFirstStatementAfterSuper = indexAfterLastPrologueStatement; indexOfFirstStatementAfterSuper < statements.length; indexOfFirstStatementAfterSuper += 1) {
-                const statement = statements[indexOfFirstStatementAfterSuper];
-
-                if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
-                    result.push(visitNode(statement, visitor, isStatement));
-                    indexOfFirstStatementAfterSuper += 1;
-                    foundSuperStatement = true;
-                    break;
-                }
+            if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
+                return i;
             }
         }
 
-        return { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement };
+        return undefined;
     }
 
     /**

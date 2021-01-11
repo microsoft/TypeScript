@@ -38,6 +38,7 @@ class A {
         _field.set(this, 1);
         this.otherObject = new A();
         var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+        var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         let y;
         (_b = this, { x: ({ set value(_m) { __classPrivateFieldSet(_b, _field, _m); } }).value, y } = this.testObject());
         (_c = this, [({ set value(_m) { __classPrivateFieldSet(_c, _field, _m); } }).value, y] = this.testArray());

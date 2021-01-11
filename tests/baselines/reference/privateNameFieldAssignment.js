@@ -54,6 +54,7 @@ class A {
     constructor() {
         _field.set(this, 0);
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
         __classPrivateFieldSet(this, _field, 1);
         __classPrivateFieldSet(this, _field, __classPrivateFieldGet(this, _field) + 2);
         __classPrivateFieldSet(this, _field, __classPrivateFieldGet(this, _field) - 3);

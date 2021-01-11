@@ -632,22 +632,22 @@ namespace ts {
 
             const needsSyntheticConstructor = !constructor && isDerivedClass;
             let indexOfFirstStatementAfterSuper = 0;
-            let indexAfterLastPrologueStatement = 0;
-            let foundSuperStatement = false;
+            let superStatementIndex: number | undefined;
             let statements: Statement[] = [];
 
-            if (constructor) {
-                const initialDirectivesAndSuperCall = addPrologueDirectivesAndInitialSuperCall(factory, constructor, statements, visitor);
-                indexOfFirstStatementAfterSuper = initialDirectivesAndSuperCall.indexOfFirstStatementAfterSuper;
-                indexAfterLastPrologueStatement = initialDirectivesAndSuperCall.indexAfterLastPrologueStatement;
-                foundSuperStatement = initialDirectivesAndSuperCall.foundSuperStatement;
+            if (constructor?.body?.statements) {
+                const indexAfterLastPrologueStatement = factory.copyPrologue(constructor.body.statements, statements, /*ensureUseStrict*/ false, visitor);
+                superStatementIndex = findSuperStatementIndex(constructor.body.statements, indexAfterLastPrologueStatement);
 
-                // Add existing statements before any super call
-                statements.splice(
-                    indexAfterLastPrologueStatement,
-                    0,
-                    ...visitNodes(constructor.body!.statements, visitor, isStatement, indexAfterLastPrologueStatement, indexOfFirstStatementAfterSuper - indexAfterLastPrologueStatement - (foundSuperStatement ? 1 : 0)),
-                );
+                // If there was a super call, visit existing statements up to and including it
+                if (superStatementIndex !== undefined) {
+                    indexOfFirstStatementAfterSuper = superStatementIndex + 1;
+                    statements = [
+                        ...statements.slice(0, indexAfterLastPrologueStatement),
+                        ...visitNodes(constructor.body.statements, visitor, isStatement, indexAfterLastPrologueStatement, indexOfFirstStatementAfterSuper - indexAfterLastPrologueStatement),
+                        ...statements.slice(indexAfterLastPrologueStatement),
+                    ];
+                }
             }
 
             if (needsSyntheticConstructor) {
@@ -679,7 +679,7 @@ namespace ts {
             // If we do useDefineForClassFields, they'll be converted elsewhere.
             // We instead *remove* them from the transformed output at this stage.
             let parameterPropertyDeclarationCount = 0;
-            if (constructor && constructor.body) {
+            if (constructor?.body) {
                 if (useDefineForClassFields) {
                     statements = statements.filter(statement => !isParameterPropertyDeclaration(getOriginalNode(statement), constructor));
                 }
@@ -693,7 +693,7 @@ namespace ts {
                         const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount);
 
                         // If there was a super() call found, add parameter properties immediately after it
-                        if (foundSuperStatement) {
+                        if (superStatementIndex !== undefined) {
                             addRange(statements, parameterProperties);
                         }
                         // If a synthetic super() call was added, add them just after it
@@ -708,7 +708,7 @@ namespace ts {
                         }
                         // Since there wasn't a super() call, add them to the top of the constructor
                         else {
-                            statements = [statements[0], ...parameterProperties, ...statements.slice(1)];
+                            statements = [...parameterProperties, ...statements];
                         }
 
                         indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
@@ -717,7 +717,7 @@ namespace ts {
             }
 
             const insertionIndex = needsSyntheticConstructor ? 1 :
-                foundSuperStatement ? undefined :
+                superStatementIndex !== undefined ? undefined :
                 useDefineForClassFields ? 0 :
                 parameterPropertyDeclarationCount;
             addPropertyStatements(statements, properties, factory.createThis(), insertionIndex);

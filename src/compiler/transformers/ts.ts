@@ -1946,14 +1946,16 @@ namespace ts {
 
             resumeLexicalEnvironment();
 
-            const { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement } = addPrologueDirectivesAndInitialSuperCall(factory, constructor, statements, visitor);
+            const indexAfterLastPrologueStatement = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
+            const superStatementIndex = findSuperStatementIndex(body.statements, indexAfterLastPrologueStatement);
 
-            // Add existing statements before the initial super call
-            let statementOffset = indexOfFirstStatementAfterSuper - 1;
-            statements = [
-                ...visitNodes(body.statements, visitor, isStatement, indexAfterLastPrologueStatement, statementOffset - indexAfterLastPrologueStatement),
-                ...statements,
-            ];
+            // If there was a super call, visit existing statements up to and including it
+            if (superStatementIndex !== undefined) {
+                addRange(
+                    statements,
+                    visitNodes(body.statements, visitor, isStatement, indexAfterLastPrologueStatement, superStatementIndex + 1 - indexAfterLastPrologueStatement),
+                );
+            }
 
             // Transform parameters into property assignments. Transforms this:
             //
@@ -1970,8 +1972,7 @@ namespace ts {
             const parameterPropertyAssignments = mapDefined(parametersWithPropertyAssignments, transformParameterWithPropertyAssignment);
 
             // If there is a super() call, the parameter properties go immediately after it
-            if (foundSuperStatement) {
-                statementOffset += 1;
+            if (superStatementIndex !== undefined) {
                 addRange(statements, parameterPropertyAssignments);
             }
             // Since there was no super() call, parameter properties are the first statements in the constructor
@@ -1980,7 +1981,7 @@ namespace ts {
             }
 
             // Add remaining statements from the body, skipping the super() call if it was found
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex === undefined ? 0 : superStatementIndex + 1));
 
             // End the lexical environment.
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
