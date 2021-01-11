@@ -66,7 +66,7 @@ type B = { b: string };
 >b : string
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
->T40 : string | Box<string>[] | Boxified<A> | readonly Box<A>[] | [Box<A>, Box<B>] | Box<A>[]
+>T40 : T40
 
 type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
 >ReadWrite : ReadWrite<T>
@@ -229,7 +229,7 @@ type Mapped<T> = { [K in keyof T]: T[K] };
 >Mapped : Mapped<T>
 
 type F<T> = ElementType<Mapped<T>>;
->F : ElementType<Mapped<T>>
+>F : F<T>
 
 type R1 = F<[string, number, boolean]>;  // string | number | boolean
 >R1 : string | number | boolean
@@ -262,13 +262,13 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 // Repro from #26163
 
 type Unconstrained<T> = ElementType<Mapped<T>>;
->Unconstrained : ElementType<Mapped<T>>
+>Unconstrained : Unconstrained<T>
 
 type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
 >T1 : string | number | boolean
 
 type Constrained<T extends any[]> = ElementType<Mapped<T>>;
->Constrained : ElementType<Mapped<T>>
+>Constrained : Constrained<T>
 
 type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
 >T2 : string | number | boolean

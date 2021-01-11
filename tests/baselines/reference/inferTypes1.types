@@ -427,7 +427,7 @@ type MatchingKeys<T, U, K extends keyof T = keyof T> =
     K extends keyof T ? T[K] extends U ? K : never : never;
 
 type VoidKeys<T> = MatchingKeys<T, void>;
->VoidKeys : MatchingKeys<T, void, keyof T>
+>VoidKeys : VoidKeys<T>
 
 interface test {
     a: 1,
