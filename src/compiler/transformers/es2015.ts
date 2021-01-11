@@ -982,7 +982,8 @@ namespace ts {
 
             // In derived classes, there may be code before the necessary super() call
             // We'll remove pre-super statements to be tacked on after the rest of the body
-            const { bodyStatements, existingPrologue, originalSuperStatement, preSuperStatements } = splitConstructorBodyStatementTypes(constructor.body.statements);
+            const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
+            const { bodyStatements, preSuperStatements, superCall } = splitConstructorBodyStatementsOnSuper(constructor.body.statements, existingPrologue);
 
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
@@ -998,8 +999,8 @@ namespace ts {
             if (hasSynthesizedSuper) {
                 superCallExpression = createDefaultSuperCallOrThis();
             }
-            else if (originalSuperStatement) {
-                superCallExpression = visitSuperCallInBody(originalSuperStatement);
+            else if (superCall) {
+                superCallExpression = visitSuperCallInBody(superCall);
             }
 
             if (superCallExpression) {
@@ -1118,53 +1119,23 @@ namespace ts {
             return bodyBlock;
         }
 
-        function splitConstructorBodyStatementTypes(originalBodyStatements: NodeArray<Statement>) {
-            const existingPrologue: Statement[] = [];
-            const preSuperStatements: Statement[] = [];
-            let originalSuperStatement: SuperCall | undefined;
-            let i: number;
-
-            for (i = 0; i < originalBodyStatements.length; i += 1) {
-                if (isPrologueDirective(originalBodyStatements[i])) {
-                    existingPrologue.push(originalBodyStatements[i]);
-                }
-                else {
-                    break;
-                }
-            }
-
-            for (i; i < originalBodyStatements.length; i += 1) {
+        function splitConstructorBodyStatementsOnSuper(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
+            for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
                 const statement = originalBodyStatements[i];
-                const foundSuperStatement = isExpressionStatement(statement) && isSuperCall(statement.expression)
-                    ? statement.expression
-                    : undefined;
-
-                if (foundSuperStatement !== undefined) {
-                    originalSuperStatement = foundSuperStatement;
-                    i += 1;
-                    break;
+                if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
+                    // With a super() call, split the statements into pre-super() and 'body' (post-super())
+                    return {
+                        bodyStatements: factory.createNodeArray(originalBodyStatements.slice(i + 1)),
+                        preSuperStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length, i)),
+                        superCall: statement.expression,
+                    };
                 }
-
-                preSuperStatements.push(statement);
             }
 
-            // If there was no super() call found, consider all statements to be in the main 'body'
-            if (!originalSuperStatement) {
-                return {
-                    bodyStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length)),
-                    existingPrologue,
-                    preSuperStatements: [],
-                };
-            }
-
-            // With a super() call, split the statements into pre-super() and body (post-super())
-            const bodyStatements = factory.createNodeArray(originalBodyStatements.slice(i));
-
+            // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
             return {
-                bodyStatements,
-                existingPrologue,
-                originalSuperStatement,
-                preSuperStatements: factory.createNodeArray(preSuperStatements),
+                bodyStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length)),
+                preSuperStatements: [],
             };
         }
 
