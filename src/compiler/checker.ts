@@ -32069,8 +32069,7 @@ namespace ts {
                         error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
 
-                    // A super call must be root-level (excluding prologue directives) in a constructor
-                    // if both of the following are true:
+                    // A super call must be root-level in a constructor if both of the following are true:
                     // - The containing class is a derived class.
                     // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.

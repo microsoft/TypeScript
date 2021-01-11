@@ -1135,7 +1135,9 @@ namespace ts {
 
             for (i; i < originalBodyStatements.length; i += 1) {
                 const statement = originalBodyStatements[i];
-                const foundSuperStatement = getWrappedSuperCallExpression(skipOuterExpressions(statement));
+                const foundSuperStatement = isExpressionStatement(statement) && isSuperCall(statement.expression)
+                    ? statement.expression
+                    : undefined;
 
                 if (foundSuperStatement !== undefined) {
                     originalSuperStatement = foundSuperStatement;
@@ -1164,12 +1166,6 @@ namespace ts {
                 originalSuperStatement,
                 preSuperStatements: factory.createNodeArray(preSuperStatements),
             };
-        }
-
-        function getWrappedSuperCallExpression(expression: Node) {
-            return isExpressionStatement(expression) && isSuperCall(expression.expression)
-                ? expression.expression
-                : undefined;
         }
 
         /**

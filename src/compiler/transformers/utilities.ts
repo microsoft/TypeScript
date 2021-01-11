@@ -321,7 +321,7 @@ namespace ts {
             for (indexOfFirstStatementAfterSuper = indexAfterLastPrologueStatement; indexOfFirstStatementAfterSuper < statements.length; indexOfFirstStatementAfterSuper += 1) {
                 const statement = statements[indexOfFirstStatementAfterSuper];
 
-                if (getWrappedSuperCallExpression(statement)) {
+                if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
                     result.push(visitNode(statement, visitor, isStatement));
                     indexOfFirstStatementAfterSuper += 1;
                     foundSuperStatement = true;
@@ -331,19 +331,6 @@ namespace ts {
         }
 
         return { foundSuperStatement, indexOfFirstStatementAfterSuper, indexAfterLastPrologueStatement };
-    }
-
-    /**
-     * Gets a super() call by skipping through outer expressions such as parentheses.
-     *
-     * @param expression Statement-level expression that might contain a super() call.
-     */
-    export function getWrappedSuperCallExpression(expression: Node) {
-        expression = skipOuterExpressions(expression);
-
-        return isExpressionStatement(expression) && isSuperCall(expression.expression)
-            ? expression.expression
-            : undefined;
     }
 
     /**
