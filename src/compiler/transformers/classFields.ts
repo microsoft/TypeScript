@@ -708,13 +708,7 @@ namespace ts {
                         }
                         // Since there wasn't a super() call, add them to the top of the constructor
                         else {
-                            statements = addRange(
-                                [],
-                                [
-                                    ...parameterProperties,
-                                    ...statements,
-                                ]
-                            );
+                            statements = [statements[0], ...parameterProperties, ...statements.slice(1)];
                         }
 
                         indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
@@ -722,7 +716,11 @@ namespace ts {
                 }
             }
 
-            addPropertyStatements(statements, properties, factory.createThis(), getPropertyStatementInsertionIndex(needsSyntheticConstructor, foundSuperStatement, useDefineForClassFields ? 0 : parameterPropertyDeclarationCount));
+            const insertionIndex = needsSyntheticConstructor ? 1 :
+                foundSuperStatement ? undefined :
+                useDefineForClassFields ? 0 :
+                parameterPropertyDeclarationCount;
+            addPropertyStatements(statements, properties, factory.createThis(), insertionIndex);
 
             // Add existing statements after the initial super call
             if (constructor) {
@@ -749,25 +747,6 @@ namespace ts {
 
                 return visitor(statement);
             }
-        }
-
-        /**
-         * Finds the statement to insert class properties into a class constructor.
-         *
-         * @param needsSyntheticConstructor Whether the constructor was synthesized.
-         * @param foundSuperStatement  Whether a super() statement was found in the (non-synthesized) constructor.
-         * @param parameterPropertyDeclarationCount How many parameter properties were created in the (non-synthesized) constructor.
-         */
-        function getPropertyStatementInsertionIndex(needsSyntheticConstructor: boolean, foundSuperStatement: boolean, parameterPropertyDeclarationCount: number) {
-            if (needsSyntheticConstructor) {
-                return 1;
-            }
-
-            if (!foundSuperStatement) {
-                return parameterPropertyDeclarationCount;
-            }
-
-            return undefined;
         }
 
         /**
