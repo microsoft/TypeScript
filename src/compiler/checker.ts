@@ -12361,15 +12361,18 @@ namespace ts {
             return type;
         }
 
-        function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper): DeferredTypeReference {
-            const aliasSymbol = getAliasSymbolForTypeNode(node);
-            const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
+        function createDeferredTypeReference(target: GenericType, node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, mapper?: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): DeferredTypeReference {
+            if (!aliasSymbol) {
+                aliasSymbol = getAliasSymbolForTypeNode(node);
+                const localAliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
+                aliasTypeArguments = mapper ? instantiateTypes(localAliasTypeArguments, mapper) : localAliasTypeArguments;
+            }
             const type = <DeferredTypeReference>createObjectType(ObjectFlags.Reference, target.symbol);
             type.target = target;
             type.node = node;
             type.mapper = mapper;
             type.aliasSymbol = aliasSymbol;
-            type.aliasTypeArguments = mapper ? instantiateTypes(aliasTypeArguments, mapper) : aliasTypeArguments;
+            type.aliasTypeArguments = aliasTypeArguments;
             return type;
         }
 
@@ -15460,17 +15463,19 @@ namespace ts {
                 // instantiation cache key from the type IDs of the type arguments.
                 const combinedMapper = combineTypeMappers(type.mapper, mapper);
                 const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
-                const id = getTypeListId(typeArguments) + (aliasSymbol ? `@${getSymbolId(aliasSymbol)}` : "");
+                const newAliasSymbol = aliasSymbol || type.aliasSymbol;
+                const id = getTypeListId(typeArguments) + (newAliasSymbol ? `@${getSymbolId(newAliasSymbol)}` : "");
                 if (!target.instantiations) {
                     target.instantiations = new Map<string, Type>();
-                    target.instantiations.set(getTypeListId(typeParameters), target);
+                    target.instantiations.set(getTypeListId(typeParameters) + (target.aliasSymbol ? `@${getSymbolId(target.aliasSymbol)}` : ""), target);
                 }
                 let result = target.instantiations.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(typeParameters, typeArguments);
-                    result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((<DeferredTypeReference>type).target, (<DeferredTypeReference>type).node, newMapper) :
-                        target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper, aliasSymbol, aliasTypeArguments) :
-                        instantiateAnonymousType(target, newMapper, aliasSymbol, aliasTypeArguments);
+                    const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
+                    result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((<DeferredTypeReference>type).target, (<DeferredTypeReference>type).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
+                        target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(<MappedType>target, newMapper, newAliasSymbol, newAliasTypeArguments) :
+                        instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
                     target.instantiations.set(id, result);
                 }
                 return result;
@@ -15694,15 +15699,12 @@ namespace ts {
             }
             if (flags & TypeFlags.Object) {
                 const objectFlags = (<ObjectType>type).objectFlags;
-                if (objectFlags & ObjectFlags.Reference) {
-                    if ((<TypeReference>type).node) {
-                        return getObjectTypeInstantiation(<TypeReference | AnonymousType | MappedType>type, mapper);
+                if (objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
+                    if (objectFlags & ObjectFlags.Reference && !(<TypeReference>type).node) {
+                        const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
+                        const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
+                        return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                     }
-                    const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
-                    const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                    return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((<TypeReference>type).target, newTypeArguments) : type;
-                }
-                if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                     return getObjectTypeInstantiation(<TypeReference | AnonymousType | MappedType>type, mapper, aliasSymbol, aliasTypeArguments);
                 }
                 return type;
