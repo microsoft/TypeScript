@@ -21852,10 +21852,15 @@ namespace ts {
                         return getExplicitThisType(node);
                     case SyntaxKind.SuperKeyword:
                         return checkSuperExpression(node);
-                    case SyntaxKind.PropertyAccessExpression:
+                    case SyntaxKind.PropertyAccessExpression: {
                         const type = getTypeOfDottedName((<PropertyAccessExpression>node).expression, diagnostic);
-                        const prop = type && getPropertyOfType(type, (<PropertyAccessExpression>node).name.escapedText);
-                        return prop && getExplicitTypeOfSymbol(prop, diagnostic);
+                        if (type) {
+                            const name = (<PropertyAccessExpression>node).name;
+                            const prop = getPropertyOfType(type, isPrivateIdentifier(name) ? getSymbolNameForPrivateIdentifier(type.symbol, name.escapedText) : name.escapedText);
+                            return prop && getExplicitTypeOfSymbol(prop, diagnostic);
+                        }
+                        return undefined;
+                    }
                     case SyntaxKind.ParenthesizedExpression:
                         return getTypeOfDottedName((<ParenthesizedExpression>node).expression, diagnostic);
                 }
