@@ -111,25 +111,52 @@ function union4<T extends object | "hello">(thing: T) {
 >thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 39, 44))
 }
 
+function union5<T extends object | string, U extends object | number>(p: T | U) {
+>union5 : Symbol(union5, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 41, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 42))
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 16))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 42))
+
+    // For consistency, this should probably not be an error, because useful
+    // narrowing is impossible. However, this is exceptionally strange input,
+    // and it adds a lot of complexity to distinguish between a `T | U` where
+    // one constraint is non-primitive and the other is primitive and a `T | U`
+    // like this where both constraints have primitive and non-primitive
+    // constitutents. Also, the strictly sound behavior would be to error
+    // here, which is what's happening, so "fixing" this by suppressing the
+    // error seems very low-value.
+    "key" in p;
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+
+    if (typeof p === "object") {
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+
+        "key" in p;
+>p : Symbol(p, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 70))
+    }
+}
+
 function intersection1<T extends number, U extends 0 | 1 | 2>(thing: T & U) {
->intersection1 : Symbol(intersection1, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 41, 1))
->T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 23))
->U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 40))
->thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 62))
->T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 23))
->U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 40))
+>intersection1 : Symbol(intersection1, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 56, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 23))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 40))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 62))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 23))
+>U : Symbol(U, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 40))
 
   "key" in thing; // Error (because all possible instantiations are errors)
->thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 43, 62))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 58, 62))
 }
 
 function intersection2<T>(thing: T & (0 | 1 | 2)) {
->intersection2 : Symbol(intersection2, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 45, 1))
->T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 47, 23))
->thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 47, 26))
->T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 47, 23))
+>intersection2 : Symbol(intersection2, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 60, 1))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 23))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 26))
+>T : Symbol(T, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 23))
 
   "key" in thing; // Error (because all possible instantations are errors)
->thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 47, 26))
+>thing : Symbol(thing, Decl(inDoesNotOperateOnPrimitiveTypes.ts, 62, 26))
 }
 

@@ -29996,7 +29996,23 @@ namespace ts {
             rightType = checkNonNullType(rightType, right);
             // TypeScript 1.0 spec (April 2014): 4.15.5
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
-            // and the right operand not to extend a primitive type.
+            // and the right operand to be
+            //
+            //   1. assignable to the non-primitive type,
+            //   2. an unconstrained type parameter,
+            //   3. a union or intersection including one or more type parameters, whose constituents are all assignable to the
+            //      the non-primitive type, or are unconstrainted type parameters, or have constraints assignable to the
+            //      non-primitive type, or
+            //   4. a type parameter whose constraint is
+            //      i. an object type,
+            //     ii. the non-primitive type, or
+            //    iii. a union or intersection with at least one constituent assignable to an object or non-primitive type.
+            //
+            // The divergent behavior for type parameters and unions containing type parameters is a workaround for type
+            // parameters not being narrowable. If the right operand is a concrete type, we can error if there is any chance
+            // it is a primitive. But if the operand is a type parameter, it cannot be narrowed, so we don't issue an error
+            // unless *all* instantiations would result in an error.
+            //
             // The result is always of the Boolean primitive type.
             if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
                   isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
@@ -30005,9 +30021,7 @@ namespace ts {
             const rightTypeConstraint = getConstraintOfType(rightType);
             if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
                 rightTypeConstraint && (
-                    // If constraint is a union/intersection, ensure no types are primitive.
                     isTypeAssignableToKind(rightType, TypeFlags.UnionOrIntersection) && !allTypesAssignableToKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
-                    // Otherwise, ensure that at least one type is not a primitive.
                     !maybeTypeOfKind(rightTypeConstraint, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object)
                 )
             ) {
