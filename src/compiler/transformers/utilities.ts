@@ -299,11 +299,25 @@ namespace ts {
         }
     }
 
+    /**
+     * @returns Contained super() call from descending into the statement ignoring parentheses, if that call exists.
+     */
+    export function getSuperCallFromStatement(statement: Statement) {
+        if (!isExpressionStatement(statement)) {
+            return undefined;
+        }
+
+        const expression = skipParentheses(statement.expression);
+        return isSuperCall(expression)
+            ? expression
+            : undefined;
+    }
+
     export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
         for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
             const statement = statements[i];
 
-            if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
+            if (getSuperCallFromStatement(statement)) {
                 return i;
             }
         }

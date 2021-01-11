@@ -1121,13 +1121,13 @@ namespace ts {
 
         function splitConstructorBodyStatementsOnSuper(originalBodyStatements: NodeArray<Statement>, existingPrologue: Statement[]) {
             for (let i = existingPrologue.length; i < originalBodyStatements.length; i += 1) {
-                const statement = originalBodyStatements[i];
-                if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
+                const superCall = getSuperCallFromStatement(originalBodyStatements[i]);
+                if (superCall) {
                     // With a super() call, split the statements into pre-super() and 'body' (post-super())
                     return {
                         bodyStatements: factory.createNodeArray(originalBodyStatements.slice(i + 1)),
                         preSuperStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length, i)),
-                        superCall: statement.expression,
+                        superCall,
                     };
                 }
             }
