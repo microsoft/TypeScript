@@ -453,7 +453,7 @@ export interface ArrowRendererProps {
      * Arrow mouse down event handler.
      */
     onMouseDown: React.MouseEventHandler<any>;
->onMouseDown : (event: React.MouseEvent<any>) => void
+>onMouseDown : React.MouseEventHandler<any>
 >React : any
 
     /**

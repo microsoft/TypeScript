@@ -10,10 +10,10 @@ type SubFoo<R> = Foo<string, R>;
 >SubFoo : SubFoo<R>
 
 function foo() {
->foo : () => Foo<string, number>
+>foo : () => SubFoo<number>
 
     return {} as SubFoo<number>;
->{} as SubFoo<number> : Foo<string, number>
+>{} as SubFoo<number> : SubFoo<number>
 >{} : {}
 }
 

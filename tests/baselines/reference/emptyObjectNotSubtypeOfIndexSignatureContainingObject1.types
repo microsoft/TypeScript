@@ -37,7 +37,7 @@ function mapValues<T, TResult>(
 >null : null
 
   callback: DictionaryIterator<T, TResult>
->callback : ObjectIterator<Dictionary<T>, TResult>
+>callback : DictionaryIterator<T, TResult>
 
 ): Dictionary<TResult> {
   return null as any;
@@ -73,7 +73,7 @@ export function fooToBar(
 >null : null
 >{} : {}
 >mapValues(foos, f => f.foo) : Dictionary<string>
->mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: ObjectIterator<Dictionary<T>, TResult>) => Dictionary<TResult>
+>mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
 >foos : Record<string, Foo>
 >f => f.foo : (f: Foo) => string
 >f : Foo

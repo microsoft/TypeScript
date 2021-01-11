@@ -247,38 +247,38 @@ type T31 = NonFunctionProperties<Part>;
 function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
 >f7 : <T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) => void
 >x : T
->y : Pick<T, FunctionPropertyNames<T>>
->z : Pick<T, NonFunctionPropertyNames<T>>
+>y : FunctionProperties<T>
+>z : NonFunctionProperties<T>
 
     x = y;  // Error
->x = y : Pick<T, FunctionPropertyNames<T>>
+>x = y : FunctionProperties<T>
 >x : T
->y : Pick<T, FunctionPropertyNames<T>>
+>y : FunctionProperties<T>
 
     x = z;  // Error
->x = z : Pick<T, NonFunctionPropertyNames<T>>
+>x = z : NonFunctionProperties<T>
 >x : T
->z : Pick<T, NonFunctionPropertyNames<T>>
+>z : NonFunctionProperties<T>
 
     y = x;
 >y = x : T
->y : Pick<T, FunctionPropertyNames<T>>
+>y : FunctionProperties<T>
 >x : T
 
     y = z;  // Error
->y = z : Pick<T, NonFunctionPropertyNames<T>>
->y : Pick<T, FunctionPropertyNames<T>>
->z : Pick<T, NonFunctionPropertyNames<T>>
+>y = z : NonFunctionProperties<T>
+>y : FunctionProperties<T>
+>z : NonFunctionProperties<T>
 
     z = x;
 >z = x : T
->z : Pick<T, NonFunctionPropertyNames<T>>
+>z : NonFunctionProperties<T>
 >x : T
 
     z = y;  // Error
->z = y : Pick<T, FunctionPropertyNames<T>>
->z : Pick<T, NonFunctionPropertyNames<T>>
->y : Pick<T, FunctionPropertyNames<T>>
+>z = y : FunctionProperties<T>
+>z : NonFunctionProperties<T>
+>y : FunctionProperties<T>
 }
 
 function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {

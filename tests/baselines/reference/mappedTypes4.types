@@ -61,11 +61,11 @@ type C = { c: string };
 >c : string
 
 function f1(x: A | B | C | undefined) {
->f1 : (x: A | B | C | undefined) => Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>f1 : (x: A | B | C | undefined) => Boxified<A | B | C | undefined>
 >x : A | B | C | undefined
 
     return boxify(x);
->boxify(x) : Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>boxify(x) : Boxified<A | B | C | undefined>
 >boxify : <T>(obj: T) => Boxified<T>
 >x : A | B | C | undefined
 }

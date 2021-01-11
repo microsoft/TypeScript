@@ -174,8 +174,8 @@ declare const MyComponent: ComponentType<Props>;
 >MyComponent : ComponentType<Props>
 
 withRouter(MyComponent);
->withRouter(MyComponent) : ComponentClass<Pick<Props, "username">>
->withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Pick<P, Exclude<keyof P, "route">>>
+>withRouter(MyComponent) : ComponentClass<Omit<Props, "route">>
+>withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, "route">>
 >MyComponent : ComponentType<Props>
 
 // Repro from #33490
