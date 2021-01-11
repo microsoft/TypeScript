@@ -313,6 +313,9 @@ namespace ts {
             : undefined;
     }
 
+    /**
+     * @returns The index (after prologue statements) of a super call, or -1 if not found.
+     */
     export function findSuperStatementIndex(statements: NodeArray<Statement>, indexAfterLastPrologueStatement: number) {
         for (let i = indexAfterLastPrologueStatement; i < statements.length; i += 1) {
             const statement = statements[i];
@@ -322,7 +325,7 @@ namespace ts {
             }
         }
 
-        return undefined;
+        return -1;
     }
 
     /**

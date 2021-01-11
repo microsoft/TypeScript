@@ -1135,7 +1135,7 @@ namespace ts {
             // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
             return {
                 bodyStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length)),
-                preSuperStatements: [],
+                preSuperStatements: emptyArray,
             };
         }
 

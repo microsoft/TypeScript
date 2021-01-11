@@ -633,7 +633,7 @@ namespace ts {
             const needsSyntheticConstructor = !constructor && isDerivedClass;
             let indexOfFirstStatementAfterSuper = 0;
             let prologueStatementCount = 0;
-            let superStatementIndex: number | undefined;
+            let superStatementIndex = -1;
             let statements: Statement[] = [];
 
             if (constructor?.body?.statements) {
@@ -641,7 +641,7 @@ namespace ts {
                 superStatementIndex = findSuperStatementIndex(constructor.body.statements, prologueStatementCount);
 
                 // If there was a super call, visit existing statements up to and including it
-                if (superStatementIndex !== undefined) {
+                if (superStatementIndex >= 0) {
                     indexOfFirstStatementAfterSuper = superStatementIndex + 1;
                     statements = [
                         ...statements.slice(0, prologueStatementCount),
@@ -694,7 +694,7 @@ namespace ts {
                         const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount);
 
                         // If there was a super() call found, add parameter properties immediately after it
-                        if (superStatementIndex !== undefined) {
+                        if (superStatementIndex >= 0) {
                             addRange(statements, parameterProperties);
                         }
                         // If a synthetic super() call was added, add them just after it
