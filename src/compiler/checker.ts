@@ -14567,6 +14567,23 @@ namespace ts {
             return type;
         }
 
+        function isTypicalNondistributiveConditional(root: ConditionalRoot) {
+            return !root.isDistributive
+                && root.node.checkType.kind === SyntaxKind.TupleType
+                && length((root.node.checkType as TupleTypeNode).elements) === 1
+                && root.node.extendsType.kind === SyntaxKind.TupleType
+                && length((root.node.extendsType as TupleTypeNode).elements) === 1;
+        }
+
+        /**
+         * We syntactually check for common nondistributive conditional shapes and unwrap them into
+         * the intended comparison - we do this so we can check if the unwrapped types are generic or
+         * not and appropriately defer condition calculation
+         */
+        function unwrapNondistributiveConditionalTuple(root: ConditionalRoot, type: Type) {
+            return isTypicalNondistributiveConditional(root) && isTupleType(type) ? getTypeArguments(type)[0] : type;
+        }
+
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
             let result;
             let extraTypes: Type[] | undefined;
@@ -14574,9 +14591,9 @@ namespace ts {
             // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
             // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
             while (true) {
-                const checkType = instantiateType(root.checkType, mapper);
+                const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.checkType), mapper);
                 const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
-                const extendsType = instantiateType(root.extendsType, mapper);
+                const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
                     return wildcardType;
                 }
@@ -14599,9 +14616,9 @@ namespace ts {
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
                     // then no instantiations will be and we can just return the false branch type.
-                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
+                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && ((checkType.flags & TypeFlags.Any && root.isDistributive) || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                         // Return union of trueType and falseType for 'any' since it matches anything
-                        if (checkType.flags & TypeFlags.Any) {
+                        if (checkType.flags & TypeFlags.Any && root.isDistributive) {
                             (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                         }
                         // If falseType is an immediately nested conditional type that isn't distributive or has an
@@ -14630,8 +14647,8 @@ namespace ts {
                 // Return a deferred type for a check that is neither definitely true nor definitely false
                 result = <ConditionalType>createType(TypeFlags.Conditional);
                 result.root = root;
-                result.checkType = checkType;
-                result.extendsType = extendsType;
+                result.checkType = instantiateType(root.checkType, mapper);
+                result.extendsType = instantiateType(root.extendsType, mapper);
                 result.mapper = mapper;
                 result.combinedMapper = combinedMapper;
                 result.aliasSymbol = aliasSymbol || root.aliasSymbol;
