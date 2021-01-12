@@ -4514,23 +4514,18 @@ namespace ts {
                 return false;
             }
 
-            if (isImportSpecifier(previousNode)) {
-                const getNextSpecifier = (node: ImportSpecifier): ImportSpecifier | undefined => {
-                    if (!node.parent) {
-                        return;
-                    }
-                    for (const sibling of node.parent.elements) {
-                        if (node.pos < sibling.pos) {
-                            return sibling;
-                        }
-                    }
-                };
+            if (nextNode.pos < previousNode.end) {
+                return false;
+            }
 
-                // Get the next specifier and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
-                const nextSpecifier = getNextSpecifier(previousNode);
-                if (nextSpecifier && nextSpecifier !== nextNode) {
-                    return false;
-                }
+            if (!previousNode.parent || !nextNode.parent) {
+                const previousParent = getOriginalNode(previousNode).parent;
+                return previousParent && previousParent === getOriginalNode(nextNode).parent;
+            }
+
+            // Get the next specifier and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
+            if (!nodeIsFirstNodeAtOrAfterPosition(currentSourceFile!, getOriginalNode(nextNode), previousNode.end)) {
+            return false;
             }
 
             return true;
