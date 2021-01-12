@@ -1020,12 +1020,6 @@ namespace ts {
     export function pathContainsNodeModules(path: string): boolean {
         return stringContains(path, nodeModulesPathPart);
     }
-    /*@internal*/
-    export const pnpmPathPart = "/node_modules/.pnpm/";
-    /*@internal*/
-    export function pathContainsPnpmDirectory(path: string): boolean {
-        return stringContains(path, pnpmPathPart);
-    }
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
