@@ -33839,13 +33839,16 @@ namespace ts {
         }
 
         function isValidUnusedLocalDeclaration(declaration: Declaration): boolean {
-            if (isBindingElement(declaration) && isIdentifierThatStartsWithUnderscore(declaration.name)) {
-                return !!findAncestor(declaration.parent, ancestor =>
-                    isArrayBindingPattern(ancestor) || isVariableDeclaration(ancestor) || isVariableDeclarationList(ancestor) ? false :
-                        isForOfStatement(ancestor) ? true : "quit"
-                );
+            if (isBindingElement(declaration)) {
+                if (isObjectBindingPattern(declaration.parent)) {
+                    /**
+                     * ignore starts with underscore names _
+                     * const { a: _a } = { a: 1 }
+                     */
+                    return !!(declaration.propertyName && isIdentifierThatStartsWithUnderscore(declaration.name));
+                }
+                return isIdentifierThatStartsWithUnderscore(declaration.name);
             }
-
             return isAmbientModule(declaration) ||
                 (isVariableDeclaration(declaration) && isForInOrOfStatement(declaration.parent.parent) || isImportedDeclaration(declaration)) && isIdentifierThatStartsWithUnderscore(declaration.name!);
         }
