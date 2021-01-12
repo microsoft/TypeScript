@@ -3,20 +3,26 @@ namespace ts.refactor.convertToOptionalChainExpression {
     const refactorName = "Convert to optional chain expression";
     const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
 
-    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
+    const toOptionalChainAction = {
+        name: refactorName,
+        description: convertToOptionalChainExpressionMessage,
+        kind: "refactor.rewrite.expression.optionalChain",
+    };
+    registerRefactor(refactorName, {
+        kinds: [toOptionalChainAction.kind],
+        getAvailableActions,
+        getEditsForAction
+    });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
-        if (!info.error) {
+        if (!isRefactorErrorInfo(info)) {
             return [{
                 name: refactorName,
                 description: convertToOptionalChainExpressionMessage,
-                actions: [{
-                    name: refactorName,
-                    description: convertToOptionalChainExpressionMessage
-                }]
+                actions: [toOptionalChainAction],
             }];
         }
 
@@ -24,11 +30,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             return [{
                 name: refactorName,
                 description: convertToOptionalChainExpressionMessage,
-                actions: [{
-                    name: refactorName,
-                    description: convertToOptionalChainExpressionMessage,
-                    notApplicableReason: info.error
-                }]
+                actions: [{ ...toOptionalChainAction, notApplicableReason: info.error }],
             }];
         }
         return emptyArray;
@@ -36,24 +38,16 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const info = getInfo(context);
-        if (!info || !info.info) return undefined;
+        Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(context, t =>
-            doChange(context.file, context.program.getTypeChecker(), t, Debug.checkDefined(info.info, "context must have info"), actionName)
+            doChange(context.file, context.program.getTypeChecker(), t, info, actionName)
         );
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 
-    type InfoOrError = {
-        info: Info,
-        error?: never;
-    } | {
-        info?: never,
-        error: string;
-    };
-
     type Occurrence = PropertyAccessExpression | ElementAccessExpression | Identifier;
 
-    interface Info {
+    interface OptionalChainInfo {
         finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression,
         occurrences: Occurrence[],
         expression: ValidExpression,
@@ -83,7 +77,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return isValidExpression(node) || isValidStatement(node);
     }
 
-    function getInfo(context: RefactorContext, considerEmptySpans = true): InfoOrError | undefined {
+    function getInfo(context: RefactorContext, considerEmptySpans = true): OptionalChainInfo | RefactorErrorInfo | undefined {
         const { file, program } = context;
         const span = getRefactorContextSpan(context);
 
@@ -103,7 +97,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
     }
 
-    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): InfoOrError | undefined {
+    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): OptionalChainInfo | RefactorErrorInfo | undefined {
         const condition = expression.condition;
         const finalExpression = getFinalExpressionInChain(expression.whenTrue);
 
@@ -113,16 +107,16 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
         if ((isPropertyAccessExpression(condition) || isIdentifier(condition))
             && getMatchingStart(condition, finalExpression.expression)) {
-            return { info: { finalExpression, occurrences: [condition], expression } };
+            return { finalExpression, occurrences: [condition], expression };
         }
         else if (isBinaryExpression(condition)) {
             const occurrences = getOccurrencesInExpression(finalExpression.expression, condition);
-            return occurrences ? { info: { finalExpression, occurrences, expression } } :
+            return occurrences ? { finalExpression, occurrences, expression } :
                 { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
         }
     }
 
-    function getBinaryInfo(expression: BinaryExpression): InfoOrError | undefined {
+    function getBinaryInfo(expression: BinaryExpression): OptionalChainInfo | RefactorErrorInfo | undefined {
         if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) {
             return { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_logical_AND_access_chains) };
         };
@@ -131,7 +125,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
         const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
-        return occurrences ? { info: { finalExpression, occurrences, expression } } :
+        return occurrences ? { finalExpression, occurrences, expression } :
             { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
     }
 
@@ -288,7 +282,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return toConvert;
     }
 
-    function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
+    function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
         const { finalExpression, occurrences, expression } = info;
         const firstOccurrence = occurrences[occurrences.length - 1];
         const convertedChain = convertOccurrences(checker, finalExpression, occurrences);

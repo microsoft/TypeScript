@@ -7,6 +7,6 @@ function f(...args: any[]) {
 f `\x0D${ "Interrupted CRLF" }\x0A`;
 >f `\x0D${ "Interrupted CRLF" }\x0A` : void
 >f : (...args: any[]) => void
->`\x0D${ "Interrupted CRLF" }\x0A` : string
+>`\x0D${ "Interrupted CRLF" }\x0A` : "\rInterrupted CRLF\n"
 >"Interrupted CRLF" : "Interrupted CRLF"
 

@@ -13,7 +13,7 @@ class Base {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->`x was set to ${value}` : string
+>`x was set to ${value}` : `x was set to ${number}`
 >value : number
 }
 

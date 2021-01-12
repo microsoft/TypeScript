@@ -39,7 +39,7 @@ var x: A & B | C & D;
 >x : (A & B) | (C & D)
 
 var y: (A | B) & (C | D);
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 
 a = anb;  // Ok
 >a = anb : A & B
@@ -103,41 +103,41 @@ cod = x;
 
 y = anb;
 >y = anb : A & B
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 >anb : A & B
 
 y = aob;
 >y = aob : A | B
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 >aob : A | B
 
 y = cnd;
 >y = cnd : C & D
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 >cnd : C & D
 
 y = cod;
 >y = cod : C | D
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 >cod : C | D
 
 anb = y;
->anb = y : (A & C) | (A & D) | (B & C) | (B & D)
+>anb = y : (A | B) & (C | D)
 >anb : A & B
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 
 aob = y;  // Ok
->aob = y : (A & C) | (A & D) | (B & C) | (B & D)
+>aob = y : (A | B) & (C | D)
 >aob : A | B
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 
 cnd = y;
->cnd = y : (A & C) | (A & D) | (B & C) | (B & D)
+>cnd = y : (A | B) & (C | D)
 >cnd : C & D
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 
 cod = y;  // Ok
->cod = y : (A & C) | (A & D) | (B & C) | (B & D)
+>cod = y : (A | B) & (C | D)
 >cod : C | D
->y : (A & C) | (A & D) | (B & C) | (B & D)
+>y : (A | B) & (C | D)
 

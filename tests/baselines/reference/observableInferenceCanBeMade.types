@@ -39,19 +39,19 @@ declare class Observable<T> implements Subscribable<T> {
 
 function asObservable(input: string | ObservableInput<string>): Observable<string> {
 >asObservable : (input: string | ObservableInput<string>) => Observable<string>
->input : string | Subscribable<never> | Subscribable<string>
+>input : string | ObservableInput<string>
 
     return typeof input === 'string' ? of(input) : from(input)
 >typeof input === 'string' ? of(input) : from(input) : Observable<string>
 >typeof input === 'string' : boolean
 >typeof input : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->input : string | Subscribable<never> | Subscribable<string>
+>input : string | ObservableInput<string>
 >'string' : "string"
 >of(input) : Observable<string>
 >of : <T>(a: T) => Observable<T>
 >input : string
 >from(input) : Observable<string>
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->input : ObservableInput<string>
+>input : Subscribable<never> | Subscribable<string>
 }
 

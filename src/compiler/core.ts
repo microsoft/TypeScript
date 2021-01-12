@@ -1927,11 +1927,9 @@ namespace ts {
 
     /**
      * Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
-     * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     * Names less than length 3 only check for case-insensitive equality.
      *
-     * If there is a candidate that's the same except for case, return that.
-     * If there is a candidate that's within one edit of the name, return that.
-     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     * find the candidate with the smallest Levenshtein distance,
      *    except for candidates:
      *      * With no name
      *      * Whose length differs from the target name by more than 0.34 of the length of the name.
@@ -1941,41 +1939,28 @@ namespace ts {
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
-        let justCheckExactMatches = false;
-        const nameLowerCase = name.toLowerCase();
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
-            if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
-                const candidateNameLowerCase = candidateName.toLowerCase();
-                if (candidateNameLowerCase === nameLowerCase) {
-                    if (candidateName === name) {
-                        continue;
-                    }
-                    return candidate;
-                }
-                if (justCheckExactMatches) {
+            if (candidateName !== undefined && Math.abs(candidateName.length - name.length) <= maximumLengthDifference) {
+                if (candidateName === name) {
                     continue;
                 }
-                if (candidateName.length < 3) {
-                    // Don't bother, user would have noticed a 2-character name having an extra character
+                // Only consider candidates less than 3 characters long when they differ by case.
+                // Otherwise, don't bother, since a user would usually notice differences of a 2-character name.
+                if (candidateName.length < 3 && candidateName.toLowerCase() !== name.toLowerCase()) {
                     continue;
                 }
-                // Only care about a result better than the best so far.
-                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+
+                const distance = levenshteinWithMax(name, candidateName, bestDistance - 0.1);
                 if (distance === undefined) {
                     continue;
                 }
-                if (distance < 3) {
-                    justCheckExactMatches = true;
-                    bestCandidate = candidate;
-                }
-                else {
-                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
-                    bestDistance = distance;
-                    bestCandidate = candidate;
-                }
+
+                Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+                bestDistance = distance;
+                bestCandidate = candidate;
             }
         }
         return bestCandidate;
@@ -1985,7 +1970,7 @@ namespace ts {
         let previous = new Array(s2.length + 1);
         let current = new Array(s2.length + 1);
         /** Represents any value > max. We don't care about the particular value. */
-        const big = max + 1;
+        const big = max + 0.01;
 
         for (let i = 0; i <= s2.length; i++) {
             previous[i] = i;
@@ -1993,8 +1978,8 @@ namespace ts {
 
         for (let i = 1; i <= s1.length; i++) {
             const c1 = s1.charCodeAt(i - 1);
-            const minJ = i > max ? i - max : 1;
-            const maxJ = s2.length > max + i ? max + i : s2.length;
+            const minJ = Math.ceil(i > max ? i - max : 1);
+            const maxJ = Math.floor(s2.length > max + i ? max + i : s2.length);
             current[0] = i;
             /** Smallest value of the matrix in the ith column. */
             let colMin = i;
@@ -2002,9 +1987,13 @@ namespace ts {
                 current[j] = big;
             }
             for (let j = minJ; j <= maxJ; j++) {
+                // case difference should be significantly cheaper than other differences
+                const substitutionDistance = s1[i - 1].toLowerCase() === s2[j-1].toLowerCase()
+                    ? (previous[j - 1] + 0.1)
+                    : (previous[j - 1] + 2);
                 const dist = c1 === s2.charCodeAt(j - 1)
                     ? previous[j - 1]
-                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ previous[j - 1] + 2);
+                    : Math.min(/*delete*/ previous[j] + 1, /*insert*/ current[j - 1] + 1, /*substitute*/ substitutionDistance);
                 current[j] = dist;
                 colMin = Math.min(colMin, dist);
             }

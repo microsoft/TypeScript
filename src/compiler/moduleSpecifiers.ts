@@ -92,19 +92,33 @@ namespace ts.moduleSpecifiers {
     /** Returns an import for each symlink and for the realpath. */
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
+        checker: TypeChecker,
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         userPreferences: UserPreferences,
     ): readonly string[] {
-        const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
+        const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
         if (ambient) return [ambient];
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
-
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
+
+        const existingSpecifier = forEach(modulePaths, modulePath => forEach(
+            host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
+            reason => {
+                if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
+                const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
+                // If the preference is for non relative and the module specifier is relative, ignore it
+                return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
+                    specifier :
+                    undefined;
+            }
+        ));
+        if (existingSpecifier) return [existingSpecifier];
+
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
 
         // Module specifier priority:
@@ -162,7 +176,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
-        const { baseUrl, paths, rootDirs, bundledPackageName } = compilerOptions;
+        const { baseUrl, paths, rootDirs } = compilerOptions;
         const { sourceDirectory, getCanonicalFileName } = info;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
@@ -177,9 +191,8 @@ namespace ts.moduleSpecifiers {
             return relativePath;
         }
 
-        const bundledPkgReference = bundledPackageName ? combinePaths(bundledPackageName, relativeToBaseUrl) : relativeToBaseUrl;
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(bundledPkgReference, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(bundledPkgReference), importRelativeToBaseUrl, paths);
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
         if (!nonRelative) {
             return relativePath;
@@ -369,12 +382,48 @@ namespace ts.moduleSpecifiers {
         return sortedPaths;
     }
 
-    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
+    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
         const decl = find(moduleSymbol.declarations,
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
         if (decl) {
             return decl.name.text;
+        }
+
+        // the module could be a namespace, which is export through "export=" from an ambient module.
+        /**
+         * declare module "m" {
+         *     namespace ns {
+         *         class c {}
+         *     }
+         *     export = ns;
+         * }
+         */
+        // `import {c} from "m";` is valid, in which case, `moduleSymbol` is "ns", but the module name should be "m"
+        const ambientModuleDeclareCandidates = mapDefined(moduleSymbol.declarations,
+            d => {
+                if (!isModuleDeclaration(d)) return;
+                const topNamespace = getTopNamespace(d);
+                if (!(topNamespace?.parent?.parent
+                    && isModuleBlock(topNamespace.parent) && isAmbientModule(topNamespace.parent.parent) && isSourceFile(topNamespace.parent.parent.parent))) return;
+                const exportAssignment = ((topNamespace.parent.parent.symbol.exports?.get("export=" as __String)?.valueDeclaration as ExportAssignment)?.expression as PropertyAccessExpression | Identifier);
+                if (!exportAssignment) return;
+                const exportSymbol = checker.getSymbolAtLocation(exportAssignment);
+                if (!exportSymbol) return;
+                const originalExportSymbol = exportSymbol?.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(exportSymbol) : exportSymbol;
+                if (originalExportSymbol === d.symbol) return topNamespace.parent.parent;
+
+                function getTopNamespace(namespaceDeclaration: ModuleDeclaration) {
+                    while (namespaceDeclaration.flags & NodeFlags.NestedNamespace) {
+                        namespaceDeclaration = namespaceDeclaration.parent as ModuleDeclaration;
+                    }
+                    return namespaceDeclaration;
+                }
+            }
+        );
+        const ambientModuleDeclare = ambientModuleDeclareCandidates[0] as (AmbientModuleDeclaration & { name: StringLiteral }) | undefined;
+        if (ambientModuleDeclare) {
+            return ambientModuleDeclare.name.text;
         }
     }
 

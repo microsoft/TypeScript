@@ -1,0 +1,26 @@
+// === /test.ts ===
+// import "[|./util|]";
+
+// === /index.ts ===
+// export * from "[|./util|]";
+
+[
+  {
+    "fileName": "/index.ts",
+    "textSpan": {
+      "start": 15,
+      "length": 6
+    },
+    "isWriteAccess": false,
+    "isDefinition": false
+  },
+  {
+    "fileName": "/test.ts",
+    "textSpan": {
+      "start": 8,
+      "length": 6
+    },
+    "isWriteAccess": false,
+    "isDefinition": false
+  }
+]

@@ -1017,7 +1017,7 @@ namespace ts {
                         return cleanup(factory.updateFunctionTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
                     }
                     case SyntaxKind.ConstructorType: {
-                        return cleanup(factory.updateConstructorTypeNode(input, visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
+                        return cleanup(factory.updateConstructorTypeNode(input, ensureModifiers(input), visitNodes(input.typeParameters, visitDeclarationSubtree), updateParamsList(input, input.parameters), visitNode(input.type, visitDeclarationSubtree)));
                     }
                     case SyntaxKind.ImportType: {
                         if (!isLiteralImportTypeNode(input)) return cleanup(input);

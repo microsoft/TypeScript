@@ -1377,7 +1377,7 @@ namespace ts {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
                 // A path mapping may have an extension, in contrast to an import, which should omit it.
-                const extension = tryGetExtensionFromPath(candidate);
+                const extension = tryGetExtensionFromPath(subst);
                 if (extension !== undefined) {
                     const path = tryFile(candidate, onlyRecordFailures, state);
                     if (path !== undefined) {
@@ -1422,8 +1422,7 @@ namespace ts {
     export function getPackageNameFromTypesPackageName(mangledName: string): string {
         const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
         if (withoutAtTypePrefix !== mangledName) {
-            const withoutAtTypeNodePrefix = removePrefix(withoutAtTypePrefix, "node/");
-            return unmangleScopedPackageName(withoutAtTypeNodePrefix);
+            return unmangleScopedPackageName(withoutAtTypePrefix);
         }
         return mangledName;
     }

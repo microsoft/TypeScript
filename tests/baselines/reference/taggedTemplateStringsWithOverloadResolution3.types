@@ -18,7 +18,7 @@ var s: string = fn1 `${ undefined }`;
 >s : string
 >fn1 `${ undefined }` : string
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
->`${ undefined }` : string
+>`${ undefined }` : "undefined"
 >undefined : undefined
 
 // No candidate overloads found
@@ -48,7 +48,7 @@ var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >d1 : Date
 >fn2 `${ 0 }${ undefined }` : any
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->`${ 0 }${ undefined }` : string
+>`${ 0 }${ undefined }` : "0undefined"
 >0 : 0
 >undefined : undefined
 
@@ -56,7 +56,7 @@ var d2       = fn2 `${ 0 }${ undefined }`; // any
 >d2 : any
 >fn2 `${ 0 }${ undefined }` : any
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->`${ 0 }${ undefined }` : string
+>`${ 0 }${ undefined }` : "0undefined"
 >0 : 0
 >undefined : undefined
 
@@ -74,7 +74,7 @@ d2();     // no error (typed as any)
 fn2 `${ 0 }${ '' }`; // OK
 >fn2 `${ 0 }${ '' }` : ""
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->`${ 0 }${ '' }` : string
+>`${ 0 }${ '' }` : "0"
 >0 : 0
 >'' : ""
 
@@ -82,7 +82,7 @@ fn2 `${ 0 }${ '' }`; // OK
 fn2 `${ '' }${ 0 }`; // OK
 >fn2 `${ '' }${ 0 }` : number
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->`${ '' }${ 0 }` : string
+>`${ '' }${ 0 }` : "0"
 >'' : ""
 >0 : 0
 
@@ -114,14 +114,14 @@ var s = fn3 `${ 3 }`;
 >s : string
 >fn3 `${ 3 }` : string
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->`${ 3 }` : string
+>`${ 3 }` : "3"
 >3 : 3
 
 var s = fn3 `${'' }${ 3 }${ '' }`;
 >s : string
 >fn3 `${'' }${ 3 }${ '' }` : ""
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->`${'' }${ 3 }${ '' }` : string
+>`${'' }${ 3 }${ '' }` : "3"
 >'' : ""
 >3 : 3
 >'' : ""
@@ -130,7 +130,7 @@ var n = fn3 `${ 5 }${ 5 }${ 5 }`;
 >n : number
 >fn3 `${ 5 }${ 5 }${ 5 }` : number
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->`${ 5 }${ 5 }${ 5 }` : string
+>`${ 5 }${ 5 }${ 5 }` : "555"
 >5 : 5
 >5 : 5
 >5 : 5
@@ -143,14 +143,14 @@ var s = fn3 `${ 4 }`
 >s : string
 >fn3 `${ 4 }` : string
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->`${ 4 }` : string
+>`${ 4 }` : "4"
 >4 : 4
 
 var s = fn3 `${ '' }${ '' }${ '' }`;
 >s : string
 >fn3 `${ '' }${ '' }${ '' }` : ""
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->`${ '' }${ '' }${ '' }` : string
+>`${ '' }${ '' }${ '' }` : ""
 >'' : ""
 >'' : ""
 >'' : ""
@@ -159,7 +159,7 @@ var n = fn3 `${ '' }${ '' }${ 3 }`;
 >n : number
 >fn3 `${ '' }${ '' }${ 3 }` : 3
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->`${ '' }${ '' }${ 3 }` : string
+>`${ '' }${ '' }${ 3 }` : "3"
 >'' : ""
 >'' : ""
 >3 : 3
@@ -194,28 +194,28 @@ function fn4() { }
 fn4 `${ '' }${ 3  }`;
 >fn4 `${ '' }${ 3  }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ '' }${ 3  }` : string
+>`${ '' }${ 3  }` : "3"
 >'' : ""
 >3 : 3
 
 fn4 `${ 3  }${ '' }`;
 >fn4 `${ 3  }${ '' }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ 3  }${ '' }` : string
+>`${ 3  }${ '' }` : "3"
 >3 : 3
 >'' : ""
 
 fn4 `${ 3  }${ undefined }`;
 >fn4 `${ 3  }${ undefined }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ 3  }${ undefined }` : string
+>`${ 3  }${ undefined }` : "3undefined"
 >3 : 3
 >undefined : undefined
 
 fn4 `${ '' }${ null }`;
 >fn4 `${ '' }${ null }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ '' }${ null }` : string
+>`${ '' }${ null }` : "null"
 >'' : ""
 >null : null
 
@@ -223,7 +223,7 @@ fn4 `${ '' }${ null }`;
 fn4 `${ null }${ null }`; // Error
 >fn4 `${ null }${ null }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ null }${ null }` : string
+>`${ null }${ null }` : "nullnull"
 >null : null
 >null : null
 
@@ -231,14 +231,14 @@ fn4 `${ null }${ null }`; // Error
 fn4 `${ true }${ null }`;
 >fn4 `${ true }${ null }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ true }${ null }` : string
+>`${ true }${ null }` : "truenull"
 >true : true
 >null : null
 
 fn4 `${ null }${ true }`;
 >fn4 `${ null }${ true }` : any
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->`${ null }${ true }` : string
+>`${ null }${ true }` : "nulltrue"
 >null : null
 >true : true
 

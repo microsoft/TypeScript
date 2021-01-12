@@ -235,7 +235,6 @@ namespace ts.codefix {
             return transformThen(node, transformer, prevArgName);
         }
         if (isPromiseReturningCallExpression(node, transformer.checker, "catch")) {
-            if (node.arguments.length === 0) return silentFail();
             return transformCatch(node, transformer, prevArgName);
         }
         if (isPropertyAccessExpression(node)) {
@@ -252,15 +251,13 @@ namespace ts.codefix {
     }
 
     function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
-        const func = node.arguments[0];
-        const argName = getArgBindingName(func, transformer);
+        const func = singleOrUndefined(node.arguments);
+        const argName = func ? getArgBindingName(func, transformer) : undefined;
         let possibleNameForVarDecl: SynthIdentifier | undefined;
 
-        /*
-            If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
-            To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
-            We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
-        */
+        // If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
+        // To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
+        // We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
         if (prevArgName && !shouldReturn(node, transformer)) {
             if (isSynthIdentifier(prevArgName)) {
                 possibleNameForVarDecl = prevArgName;
@@ -282,14 +279,12 @@ namespace ts.codefix {
         }
 
         const tryBlock = factory.createBlock(transformExpression(node.expression, transformer, possibleNameForVarDecl));
-        const transformationBody = getTransformationBody(func, possibleNameForVarDecl, argName, node, transformer);
+        const transformationBody = func ? getTransformationBody(func, possibleNameForVarDecl, argName, node, transformer) : emptyArray;
         const catchArg = argName ? isSynthIdentifier(argName) ? argName.identifier.text : argName.bindingPattern : "e";
         const catchVariableDeclaration = factory.createVariableDeclaration(catchArg);
         const catchClause = factory.createCatchClause(catchVariableDeclaration, factory.createBlock(transformationBody));
 
-        /*
-            In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
-        */
+        // In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
         let varDeclList: VariableStatement | undefined;
         let varDeclIdentifier: Identifier | undefined;
         if (possibleNameForVarDecl && !shouldReturn(node, transformer)) {

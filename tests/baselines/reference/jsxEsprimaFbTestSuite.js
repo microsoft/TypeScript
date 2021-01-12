@@ -69,7 +69,7 @@ baz
 </AbC_def>;
 <a b={x ? <c /> : <d />}/>;
 <a></a>;
-<a></a>;
+<a>{/* this is a comment */}</a>;
 <div>@test content</div>;
 <div><br />7x invalid-js-identifier</div>;
 <LeftRight left/>, <a />;

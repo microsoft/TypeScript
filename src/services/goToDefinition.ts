@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts.GoToDefinition {
     export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
-        const reference = getReferenceAtPosition(sourceFile, position, program);
-        if (reference) {
-            return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
+        const resolvedRef = getReferenceAtPosition(sourceFile, position, program);
+        if (resolvedRef) {
+            return [getDefinitionInfoForFileReference(resolvedRef.reference.fileName, resolvedRef.file.fileName)];
         }
 
         const node = getTouchingPropertyName(sourceFile, position);
@@ -108,24 +108,24 @@ namespace ts.GoToDefinition {
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
+    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
-            return file && { fileName: referencePath.fileName, file };
+            return file && { reference: referencePath, file };
         }
 
         const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
         if (typeReferenceDirective) {
             const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName);
             const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
-            return file && { fileName: typeReferenceDirective.fileName, file };
+            return file && { reference: typeReferenceDirective, file };
         }
 
         const libReferenceDirective = findReferenceInPosition(sourceFile.libReferenceDirectives, position);
         if (libReferenceDirective) {
             const file = program.getLibFileFromReference(libReferenceDirective);
-            return file && { fileName: libReferenceDirective.fileName, file };
+            return file && { reference: libReferenceDirective, file };
         }
 
         return undefined;

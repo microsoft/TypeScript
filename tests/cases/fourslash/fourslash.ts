@@ -244,6 +244,7 @@ declare namespace FourSlashInterface {
 
         refactorAvailable(name: string, actionName?: string): void;
         refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
+        refactorKindAvailable(refactorKind: string, expected: string[], preferences?: {}): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -289,7 +290,8 @@ declare namespace FourSlashInterface {
         goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
-        baselineFindAllReferences(markerName: string): void;
+        baselineFindAllReferences(...markerNames: string[]): void;
+        baselineGetFileReferences(fileName: string): void;
         noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;

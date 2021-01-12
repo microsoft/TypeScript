@@ -100,31 +100,42 @@ namespace ts.SymbolDisplay {
         return ScriptElementKind.unknown;
     }
 
+    function isDeprecatedDeclaration(decl: Declaration) {
+        return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+    }
+
+    function getNormalizedSymbolModifiers(symbol: Symbol) {
+        if (symbol.declarations && symbol.declarations.length) {
+            const [declaration, ...declarations] = symbol.declarations;
+            // omit deprecated flag if some declarations are not deprecated
+            const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d => !isDeprecatedDeclaration(d))
+                ? ModifierFlags.Deprecated
+                : ModifierFlags.None;
+            const modifiers = getNodeModifiers(declaration, excludeFlags);
+            if (modifiers) {
+                return modifiers.split(",");
+            }
+        }
+        return [];
+    }
+
     export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): string {
         if (!symbol) {
             return ScriptElementKindModifier.none;
         }
 
-        const modifiers = new Set<string>();
-        if (symbol.declarations && symbol.declarations.length > 0) {
-            const kindModifiers = getNodeModifiers(symbol.declarations[0]);
-            if (kindModifiers !== ScriptElementKindModifier.none) {
-                kindModifiers.split(",").forEach(m => modifiers.add(m));
-            }
-        }
+        const modifiers = new Set(getNormalizedSymbolModifiers(symbol));
         if (symbol.flags & SymbolFlags.Alias) {
             const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
-            if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
-                const kindModifiers = getNodeModifiers(resolvedSymbol.declarations[0]);
-                if (kindModifiers !== ScriptElementKindModifier.none) {
-                    kindModifiers.split(",").forEach(m => modifiers.add(m));
-                }
+            if (resolvedSymbol !== symbol) {
+                forEach(getNormalizedSymbolModifiers(resolvedSymbol), modifier => {
+                    modifiers.add(modifier);
+                });
             }
         }
         if (symbol.flags & SymbolFlags.Optional) {
             modifiers.add(ScriptElementKindModifier.optionalModifier);
         }
-
         return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
     }
 
@@ -209,6 +220,10 @@ namespace ts.SymbolDisplay {
                         pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
+                            if (signature.flags & SignatureFlags.Abstract) {
+                                displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                displayParts.push(spacePart());
+                            }
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                             displayParts.push(spacePart());
                         }
@@ -234,6 +249,10 @@ namespace ts.SymbolDisplay {
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
+                                if (signature.flags & SignatureFlags.Abstract) {
+                                    displayParts.push(keywordPart(SyntaxKind.AbstractKeyword));
+                                    displayParts.push(spacePart());
+                                }
                                 displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                 displayParts.push(spacePart());
                             }
