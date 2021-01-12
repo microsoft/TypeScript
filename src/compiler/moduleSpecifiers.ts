@@ -280,7 +280,7 @@ namespace ts.moduleSpecifiers {
         if (!preferSymlinks) {
             // Symlinks inside node_modules/.pnpm are already filtered out of the symlink cache,
             // so we only need to remove them from the realpath filenames.
-            const result = forEach(targets, p => !pathContainsPnpmDirectory(p) && cb(p, referenceRedirect === p));
+            const result = forEach(targets, p => !containsIgnoredPath(p) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
         const links = host.getSymlinkCache
@@ -309,7 +309,7 @@ namespace ts.moduleSpecifiers {
             });
         });
         return result || (preferSymlinks
-            ? forEach(targets, p => pathContainsPnpmDirectory(p) ? undefined : cb(p, p === referenceRedirect))
+            ? forEach(targets, p => containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
             : undefined);
     }
 
