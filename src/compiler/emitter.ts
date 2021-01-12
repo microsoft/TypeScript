@@ -130,36 +130,32 @@ namespace ts {
         return Extension.Js;
     }
 
-    function rootDirOfOptions(configFile: ParsedCommandLine) {
-        return configFile.options.rootDir || getDirectoryPath(Debug.checkDefined(configFile.options.configFilePath));
-    }
-
-    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined) {
+    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
         return outputDir ?
             resolvePath(
                 outputDir,
-                getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase)
+                getRelativePathFromDirectory(getCommonSourceDirectory ? getCommonSourceDirectory() : getCommonSourceDirectoryOfConfig(configFile, ignoreCase), inputFileName, ignoreCase)
             ) :
             inputFileName;
     }
 
     /* @internal */
-    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && !fileExtensionIs(inputFileName, Extension.Json));
         return changeExtension(
-            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
             Extension.Dts
         );
     }
 
-    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
         if (configFile.options.emitDeclarationOnly) return undefined;
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
-            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
             isJsonFile ?
                 Extension.Json :
-                fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
+                configFile.options.jsx === JsxEmit.Preserve && (fileExtensionIs(inputFileName, Extension.Tsx) || fileExtensionIs(inputFileName, Extension.Jsx)) ?
                     Extension.Jsx :
                     Extension.Js
         );
@@ -190,21 +186,63 @@ namespace ts {
         addOutput(buildInfoPath);
     }
 
-    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
+    function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
         if (fileExtensionIs(inputFileName, Extension.Dts)) return;
-        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+        const js = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
         addOutput(js);
         if (fileExtensionIs(inputFileName, Extension.Json)) return;
         if (js && configFile.options.sourceMap) {
             addOutput(`${js}.map`);
         }
         if (getEmitDeclarations(configFile.options)) {
-            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+            const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             addOutput(dts);
             if (configFile.options.declarationMap) {
                 addOutput(`${dts}.map`);
             }
         }
+    }
+
+    /*@internal*/
+    export function getCommonSourceDirectory(
+        options: CompilerOptions,
+        emittedFiles: () => readonly string[],
+        currentDirectory: string,
+        getCanonicalFileName: GetCanonicalFileName,
+        checkSourceFilesBelongToPath?: (commonSourceDirectory: string) => void
+    ): string {
+        let commonSourceDirectory;
+        if (options.rootDir) {
+            // If a rootDir is specified use it as the commonSourceDirectory
+            commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
+            checkSourceFilesBelongToPath?.(options.rootDir);
+        }
+        else if (options.composite && options.configFilePath) {
+            // Project compilations never infer their root from the input source paths
+            commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
+            checkSourceFilesBelongToPath?.(commonSourceDirectory);
+        }
+        else {
+            commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(emittedFiles(), currentDirectory, getCanonicalFileName);
+        }
+
+        if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+            // Make sure directory path ends with directory separator so this string can directly
+            // used to replace with "" to get the relative path of the source file and the relative path doesn't
+            // start with / making it rooted path
+            commonSourceDirectory += directorySeparator;
+        }
+        return commonSourceDirectory;
+    }
+
+    /*@internal*/
+    export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
+        return getCommonSourceDirectory(
+            options,
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensions)) && !fileExtensionIs(file, Extension.Dts)),
+            getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
+            createGetCanonicalFileName(!ignoreCase)
+        );
     }
 
     /*@internal*/
@@ -214,8 +252,9 @@ namespace ts {
             getSingleOutputFileNames(configFile, addOutput);
         }
         else {
+            const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
             for (const inputFileName of configFile.fileNames) {
-                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput);
+                getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput, getCommonSourceDirectory);
             }
             addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
         }
@@ -242,13 +281,14 @@ namespace ts {
             return Debug.checkDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
         }
 
+        const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
         for (const inputFileName of configFile.fileNames) {
             if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
-            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             if (jsFilePath) return jsFilePath;
             if (fileExtensionIs(inputFileName, Extension.Json)) continue;
             if (getEmitDeclarations(configFile.options)) {
-                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+                return getOutputDeclarationFileName(inputFileName, configFile, ignoreCase, getCommonSourceDirectory);
             }
         }
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(configFile.options);
@@ -809,7 +849,8 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: returnUndefined,
             getSourceFileFromReference: returnUndefined,
-            redirectTargetsMap: createMultiMap()
+            redirectTargetsMap: createMultiMap(),
+            getFileIncludeReasons: notImplemented,
         };
         emitFiles(
             notImplementedResolver,
@@ -2091,6 +2132,7 @@ namespace ts {
 
         function emitConstructorType(node: ConstructorTypeNode) {
             pushNameGenerationScope(node);
+            emitModifiers(node, node.modifiers);
             writeKeyword("new");
             writeSpace();
             emitTypeParameters(node, node.typeParameters);
@@ -2824,7 +2866,8 @@ namespace ts {
             }
             pos = writeTokenText(token, writer, pos);
             if (isSimilarNode && contextNode.end !== pos) {
-                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+                const isJsxExprContext = contextNode.kind === SyntaxKind.JsxExpression;
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ !isJsxExprContext, /*forceNoNewline*/ isJsxExprContext);
             }
             return pos;
         }
@@ -3381,12 +3424,35 @@ namespace ts {
             writePunctuation("}");
         }
 
+        function hasTrailingCommentsAtPosition(pos: number) {
+            let result = false;
+            forEachTrailingCommentRange(currentSourceFile?.text || "", pos + 1, () => result = true);
+            return result;
+        }
+
+        function hasLeadingCommentsAtPosition(pos: number) {
+            let result = false;
+            forEachLeadingCommentRange(currentSourceFile?.text || "", pos + 1, () => result = true);
+            return result;
+        }
+
+        function hasCommentsAtPosition(pos: number) {
+            return hasTrailingCommentsAtPosition(pos) || hasLeadingCommentsAtPosition(pos);
+        }
+
         function emitJsxExpression(node: JsxExpression) {
-            if (node.expression) {
-                writePunctuation("{");
+            if (node.expression || (!commentsDisabled && !nodeIsSynthesized(node) && hasCommentsAtPosition(node.pos))) { // preserve empty expressions if they contain comments!
+                const isMultiline = currentSourceFile && !nodeIsSynthesized(node) && getLineAndCharacterOfPosition(currentSourceFile, node.pos).line !== getLineAndCharacterOfPosition(currentSourceFile, node.end).line;
+                if (isMultiline) {
+                    writer.increaseIndent();
+                }
+                const end = emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
                 emit(node.dotDotDotToken);
                 emitExpression(node.expression);
-                writePunctuation("}");
+                emitTokenWithComment(SyntaxKind.CloseBraceToken, node.expression?.end || end, writePunctuation, node);
+                if (isMultiline) {
+                    writer.decreaseIndent();
+                }
             }
         }
 
@@ -5234,13 +5300,25 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean, forceNoNewline?: boolean) {
             if (commentsDisabled) {
                 return;
             }
             enterComment();
-            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : forceNoNewline ? emitTrailingCommentOfPositionNoNewline : emitTrailingCommentOfPosition);
             exitComment();
+        }
+
+        function emitTrailingCommentOfPositionNoNewline(commentPos: number, commentEnd: number, kind: SyntaxKind) {
+            // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+
+            emitPos(commentPos);
+            writeCommentRange(currentSourceFile!.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine(); // still write a newline for single-line comments, so closing tokens aren't written on the same line
+            }
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {

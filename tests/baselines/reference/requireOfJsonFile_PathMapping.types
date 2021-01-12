@@ -1,0 +1,10 @@
+=== /a.ts ===
+import foobar from "foo/bar/foobar.json";
+>foobar : { a: number; }
+
+=== /node_modules/foo/bar/foobar.json ===
+{ "a": 10 }
+>{ "a": 10 } : { a: number; }
+>"a" : number
+>10 : 10
+

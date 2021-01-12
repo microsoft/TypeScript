@@ -37,7 +37,7 @@ var a = tempFun `${ x => x }  ${ 10 }`
 >a : number
 >tempFun `${ x => x }  ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ x => x }  ${ 10 }` : string
+>`${ x => x }  ${ 10 }` : `${string}  10`
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -47,7 +47,7 @@ var b = tempFun `${ (x => x) }  ${ 10 }`
 >b : number
 >tempFun `${ (x => x) }  ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ (x => x) }  ${ 10 }` : string
+>`${ (x => x) }  ${ 10 }` : `${string}  10`
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -58,7 +58,7 @@ var c = tempFun `${ ((x => x)) } ${ 10 }`
 >c : number
 >tempFun `${ ((x => x)) } ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ ((x => x)) } ${ 10 }` : string
+>`${ ((x => x)) } ${ 10 }` : `${string} 10`
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
@@ -70,7 +70,7 @@ var d = tempFun `${ x => x } ${ x => x } ${ 10 }`
 >d : number
 >tempFun `${ x => x } ${ x => x } ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ x => x } ${ x => x } ${ 10 }` : string
+>`${ x => x } ${ x => x } ${ 10 }` : `${string} ${string} 10`
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -83,7 +83,7 @@ var e = tempFun `${ x => x } ${ (x => x) } ${ 10 }`
 >e : number
 >tempFun `${ x => x } ${ (x => x) } ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ x => x } ${ (x => x) } ${ 10 }` : string
+>`${ x => x } ${ (x => x) } ${ 10 }` : `${string} ${string} 10`
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -97,7 +97,7 @@ var f = tempFun `${ x => x } ${ ((x => x)) } ${ 10 }`
 >f : number
 >tempFun `${ x => x } ${ ((x => x)) } ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ x => x } ${ ((x => x)) } ${ 10 }` : string
+>`${ x => x } ${ ((x => x)) } ${ 10 }` : `${string} ${string} 10`
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -112,7 +112,7 @@ var g = tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }`
 >g : number
 >tempFun `${ (x => x) } ${ (((x => x))) } ${ 10 }` : number
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ (x => x) } ${ (((x => x))) } ${ 10 }` : string
+>`${ (x => x) } ${ (((x => x))) } ${ 10 }` : `${string} ${string} 10`
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -129,7 +129,7 @@ var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 >h : any
 >tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }` : any
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->`${ (x => x) } ${ (((x => x))) } ${ undefined }` : string
+>`${ (x => x) } ${ (((x => x))) } ${ undefined }` : `${string} ${string} undefined`
 >(x => x) : (x: any) => any
 >x => x : (x: any) => any
 >x : any

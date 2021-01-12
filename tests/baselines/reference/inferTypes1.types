@@ -54,6 +54,18 @@ class C {
 >0 : 0
 }
 
+abstract class Abstract {
+>Abstract : Abstract
+
+    x = 0;
+>x : number
+>0 : 0
+
+    y = 0;
+>y : number
+>0 : 0
+}
+
 type T10 = ReturnType<() => string>;  // string
 >T10 : string
 
@@ -103,6 +115,20 @@ type U13 = InstanceType<string>;  // Error
 
 type U14 = InstanceType<Function>;  // Error
 >U14 : any
+
+type U15 = InstanceType<typeof Abstract>;  // Abstract
+>U15 : any
+>Abstract : typeof Abstract
+
+type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
+>U16 : T[]
+>x : string
+>args : T
+
+type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]
+>U17 : any
+>x : string
+>args : T
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 >ArgumentType : ArgumentType<T>
@@ -231,7 +257,7 @@ type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
 >T61 : T61<T>
 
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
->T62 : any
+>T62 : unknown
 
 type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
 >T63 : T63<T>
@@ -401,7 +427,7 @@ type MatchingKeys<T, U, K extends keyof T = keyof T> =
     K extends keyof T ? T[K] extends U ? K : never : never;
 
 type VoidKeys<T> = MatchingKeys<T, void>;
->VoidKeys : MatchingKeys<T, void, keyof T>
+>VoidKeys : VoidKeys<T>
 
 interface test {
     a: 1,

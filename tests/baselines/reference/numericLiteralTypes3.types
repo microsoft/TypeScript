@@ -85,9 +85,9 @@ function f3(a: A, b: B, c: C, d: D) {
 >b : B
 
     c = c;
->c = c : B
+>c = c : 2 | 3
 >c : C
->c : B
+>c : 2 | 3
 
     c = d;
 >c = d : D

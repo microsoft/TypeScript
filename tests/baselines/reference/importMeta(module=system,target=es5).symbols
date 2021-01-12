@@ -6,6 +6,8 @@
 >fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --))
 >new URL("../hamsters.jpg", import.meta.url).toString : Symbol(URL.toString, Decl(lib.dom.d.ts, --, --))
 >URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+>url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 >toString : Symbol(URL.toString, Decl(lib.dom.d.ts, --, --))
 
   const blob = await response.blob();
@@ -72,7 +74,7 @@ let globalC = import.import.import.malkovich;
 === tests/cases/conformance/es2019/importMeta/assignmentTargets.ts ===
 export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
->ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+>ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 
 import.meta = foo;
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
@@ -82,7 +84,7 @@ declare global {
 >global : Symbol(global, Decl(assignmentTargets.ts, 1, 18))
 
   interface ImportMeta {
->ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+>ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 
     wellKnownProperty: { a: number, b: string, c: boolean };
 >wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))

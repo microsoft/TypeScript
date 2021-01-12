@@ -53,7 +53,7 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b src/tsconfig_withFiles.json --verbose
+/lib/tsc --b src/tsconfig_withFiles.json --verbose --explainFiles
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 
@@ -61,6 +61,13 @@ Output::
 
 [[90m12:01:00 AM[0m] Building project '/src/tsconfig_withFiles.json'...
 
+lib/lib.d.ts
+  Default library
+src/src/hello.json
+  Imported via "./hello.json" from file 'src/src/index.ts'
+  Part of 'files' list in tsconfig.json
+src/src/index.ts
+  Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
 
@@ -118,6 +125,7 @@ exports["default"] = hello_json_1["default"].hello;
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "explainFiles": true,
       "configFilePath": "../tsconfig_withFiles.json"
     },
     "referencedMap": {
@@ -142,7 +150,7 @@ Input::
 
 
 Output::
-/lib/tsc --b src/tsconfig_withFiles.json --verbose
+/lib/tsc --b src/tsconfig_withFiles.json --verbose --explainFiles
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
 

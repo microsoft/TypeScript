@@ -843,10 +843,6 @@
         "category": "Error",
         "code": 1255
     },
-    "A rest element must be last in a tuple type.": {
-        "category": "Error",
-        "code": 1256
-    },
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257
@@ -874,6 +870,14 @@
     "Declarations with definite assignment assertions must also have type annotations.": {
         "category": "Error",
         "code": 1264
+    },
+    "A rest element cannot follow another rest element.": {
+        "category": "Error",
+        "code": 1265
+    },
+    "An optional element cannot follow a rest element.": {
+        "category": "Error",
+        "code": 1266
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1196,6 +1200,158 @@
         "category": "Error",
         "code": 1392
     },
+    "Imported via {0} from file '{1}'": {
+        "category": "Message",
+        "code": 1393
+    },
+    "Imported via {0} from file '{1}' with packageId '{2}'": {
+        "category": "Message",
+        "code": 1394
+    },
+    "Imported via {0} from file '{1}' to import 'importHelpers' as specified in compilerOptions": {
+        "category": "Message",
+        "code": 1395
+    },
+    "Imported via {0} from file '{1}' with packageId '{2}' to import 'importHelpers' as specified in compilerOptions": {
+        "category": "Message",
+        "code": 1396
+    },
+    "Imported via {0} from file '{1}' to import 'jsx' and 'jsxs' factory functions": {
+        "category": "Message",
+        "code": 1397
+    },
+    "Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions": {
+        "category": "Message",
+        "code": 1398
+    },
+    "File is included via import here.": {
+        "category": "Message",
+        "code": 1399
+    },
+    "Referenced via '{0}' from file '{1}'": {
+        "category": "Message",
+        "code": 1400
+    },
+    "File is included via reference here.": {
+        "category": "Message",
+        "code": 1401
+    },
+    "Type library referenced via '{0}' from file '{1}'": {
+        "category": "Message",
+        "code": 1402
+    },
+    "Type library referenced via '{0}' from file '{1}' with packageId '{2}'": {
+        "category": "Message",
+        "code": 1403
+    },
+    "File is included via type library reference here.": {
+        "category": "Message",
+        "code": 1404
+    },
+    "Library referenced via '{0}' from file '{1}'": {
+        "category": "Message",
+        "code": 1405
+    },
+    "File is included via library reference here.": {
+        "category": "Message",
+        "code": 1406
+    },
+    "Matched by include pattern '{0}' in '{1}'": {
+        "category": "Message",
+        "code": 1407
+    },
+    "File is matched by include pattern specified here.": {
+        "category": "Message",
+        "code": 1408
+    },
+    "Part of 'files' list in tsconfig.json": {
+        "category": "Message",
+        "code": 1409
+    },
+    "File is matched by 'files' list specified here.": {
+        "category": "Message",
+        "code": 1410
+    },
+    "Output from referenced project '{0}' included because '{1}' specified": {
+        "category": "Message",
+        "code": 1411
+    },
+    "Output from referenced project '{0}' included because '--module' is specified as 'none'": {
+        "category": "Message",
+        "code": 1412
+    },
+    "File is output from referenced project specified here.": {
+        "category": "Message",
+        "code": 1413
+    },
+    "Source from referenced project '{0}' included because '{1}' specified": {
+        "category": "Message",
+        "code": 1414
+    },
+    "Source from referenced project '{0}' included because '--module' is specified as 'none'": {
+        "category": "Message",
+        "code": 1415
+    },
+    "File is source from referenced project specified here.": {
+        "category": "Message",
+        "code": 1416
+    },
+    "Entry point of type library '{0}' specified in compilerOptions": {
+        "category": "Message",
+        "code": 1417
+    },
+    "Entry point of type library '{0}' specified in compilerOptions with packageId '{1}'": {
+        "category": "Message",
+        "code": 1418
+    },
+    "File is entry point of type library specified here.": {
+        "category": "Message",
+        "code": 1419
+    },
+    "Entry point for implicit type library '{0}'": {
+        "category": "Message",
+        "code": 1420
+    },
+    "Entry point for implicit type library '{0}' with packageId '{1}'": {
+        "category": "Message",
+        "code": 1421
+    },
+    "Library '{0}' specified in compilerOptions": {
+        "category": "Message",
+        "code": 1422
+    },
+    "File is library specified here.": {
+        "category": "Message",
+        "code": 1423
+    },
+    "Default library": {
+        "category": "Message",
+        "code": 1424
+    },
+    "Default library for target '{0}'": {
+        "category": "Message",
+        "code": 1425
+    },
+    "File is default library for target specified here.": {
+        "category": "Message",
+        "code": 1426
+    },
+    "Root file specified for compilation": {
+        "category": "Message",
+        "code": 1427
+    },
+    "File is output of project reference source '{0}'": {
+        "category": "Message",
+        "code": 1428
+    },
+    "File redirects to file '{0}'": {
+        "category": "Message",
+        "code": 1429
+    },
+    "The file is in the program because:": {
+        "category": "Message",
+        "code": 1430
+    },
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
         "code": 2200
@@ -1469,7 +1625,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of an 'in' expression must not be a primitive.": {
         "category": "Error",
         "code": 2361
     },
@@ -2469,9 +2625,25 @@
         "category": "Error",
         "code": 2621
     },
-    "Element at index {0} is variadic in one type but not in the other.": {
+    "Source provides no match for required element at position {0} in target.": {
         "category": "Error",
-        "code": 2622
+        "code": 2623
+    },
+    "Source provides no match for variadic element at position {0} in target.": {
+        "category": "Error",
+        "code": 2624
+    },
+    "Variadic element at position {0} in source does not match element at position {1} in target.": {
+        "category": "Error",
+        "code": 2625
+    },
+    "Type at position {0} in source is not compatible with type at position {1} in target.": {
+        "category": "Error",
+        "code": 2626
+    },
+    "Type at positions {0} through {1} in source is not compatible with type at position {2} in target.": {
+        "category": "Error",
+        "code": 2627
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -3058,6 +3230,10 @@
     "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
         "category": "Error",
         "code": 2796
+    },
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+        "category": "Error",
+        "code": 2797
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3910,7 +4086,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', or 'react'.": {
+    "Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'.": {
         "category": "Message",
         "code": 6080
     },
@@ -4748,6 +4924,10 @@
         "category": "Error",
         "code": 6504
     },
+    "Print names of files and the reason they are part of the compilation.": {
+        "category": "Message",
+        "code": 6505
+    },
     "Require undeclared properties from index signatures to use element accesses.": {
         "category": "Error",
         "code": 6803
@@ -4955,6 +5135,10 @@
     "The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.": {
         "category": "Error",
         "code": 7056
+    },
+    "'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.": {
+        "category": "Error",
+        "code": 7057
     },
 
     "You cannot rename this element.": {
@@ -5983,6 +6167,51 @@
         "category": "Message",
         "code": 95148
     },
+    "Return type must be inferred from a function": {
+        "category": "Message",
+        "code": 95149
+    },
+    "Could not determine function return type": {
+        "category": "Message",
+        "code": 95150
+    },
+    "Could not convert to arrow function": {
+        "category": "Message",
+        "code": 95151
+    },
+    "Could not convert to named function": {
+        "category": "Message",
+        "code": 95152
+    },
+    "Could not convert to anonymous function": {
+        "category": "Message",
+        "code": 95153
+    },
+    "Can only convert string concatenation": {
+        "category": "Message",
+        "code": 95154
+    },
+    "Selection is not a valid statement or statements": {
+        "category": "Message",
+        "code": 95155
+    },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95156
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95157
+    },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95158
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95159
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

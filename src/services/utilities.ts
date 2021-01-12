@@ -1391,7 +1391,23 @@ namespace ts {
         return isInsideJsxElementTraversal(getTokenAtPosition(sourceFile, position));
     }
 
-    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
+    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
+        const closeTokenText = tokenToString(token.kind)!;
+        const matchingTokenText = tokenToString(matchingTokenKind)!;
+        const tokenFullStart = token.getFullStart();
+        // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
+        // a good, fast approximation without too much extra work in the cases where it fails.
+        const bestGuessIndex = sourceFile.text.lastIndexOf(matchingTokenText, tokenFullStart);
+        if (bestGuessIndex === -1) {
+            return undefined; // if the token text doesn't appear in the file, there can't be a match - super fast bail
+        }
+        // we can only use the textual result directly if we didn't have to count any close tokens within the range
+        if (sourceFile.text.lastIndexOf(closeTokenText, tokenFullStart - 1) < bestGuessIndex) {
+            const nodeAtGuess = findPrecedingToken(bestGuessIndex + 1, sourceFile);
+            if (nodeAtGuess && nodeAtGuess.kind === matchingTokenKind) {
+                return nodeAtGuess;
+            }
+        }
         const tokenKind = token.kind;
         let remainingMatchingTokens = 0;
         while (true) {
@@ -1447,7 +1463,14 @@ namespace ts {
     }
 
     // Get info for an expression like `f <` that may be the start of type arguments.
-    export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+    export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+        // This is a rare case, but one that saves on a _lot_ of work if true - if the source file has _no_ `<` character,
+        // then there obviously can't be any type arguments - no expensive brace-matching backwards scanning required
+
+        if (sourceFile.text.lastIndexOf("<", tokenIn ? tokenIn.pos : sourceFile.text.length) === -1) {
+            return undefined;
+        }
+
         let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
@@ -1565,9 +1588,11 @@ namespace ts {
         return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
-    export function getNodeModifiers(node: Node): string {
-        const flags = isDeclaration(node) ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) : ModifierFlags.None;
+    export function getNodeModifiers(node: Node, excludeFlags = ModifierFlags.None): string {
         const result: string[] = [];
+        const flags = isDeclaration(node)
+            ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) & ~excludeFlags
+            : ModifierFlags.None;
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
@@ -1809,8 +1834,8 @@ namespace ts {
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
-            getCompilerOptions: () => program.getCompilerOptions(),
             getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
+            getFileIncludeReasons: () => program.getFileIncludeReasons(),
         };
     }
 

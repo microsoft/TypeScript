@@ -77,9 +77,9 @@ function isShape(s : Shapes): s is Shape {
     return !Array.isArray(s);
 >!Array.isArray(s) : boolean
 >Array.isArray(s) : boolean
->Array.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>isArray : (arg: any) => arg is any[]
 >s : Shapes
 }
 
@@ -95,7 +95,7 @@ function fail(s: Shapes) {
         if (s.kind === "circle") {
 >s.kind === "circle" : boolean
 >s.kind : "square" | "circle"
->s : Shape
+>s : Square | Circle
 >kind : "square" | "circle"
 >"circle" : "circle"
 

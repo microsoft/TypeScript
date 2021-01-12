@@ -238,8 +238,9 @@ exports.__esModule = true;
 }
 
 //// [/src/lib/solution/sub-project-2/index.d.ts]
+import { MyNominal } from '../sub-project/index';
 declare const variable: {
-    key: import("../common/nominal").Nominal<string, "MyNominal">;
+    key: MyNominal;
 };
 export declare function getVar(): keyof typeof variable;
 export {};
@@ -279,7 +280,7 @@ exports.getVar = getVar;
       },
       "../../../solution/sub-project-2/index.ts": {
         "version": "-13939373533-import { MyNominal } from '../sub-project/index';\n\nconst variable = {\n    key: 'value' as MyNominal,\n};\n\nexport function getVar(): keyof typeof variable {\n    return 'key';\n}\n",
-        "signature": "-17233212183-declare const variable: {\r\n    key: import(\"../common/nominal\").Nominal<string, \"MyNominal\">;\r\n};\r\nexport declare function getVar(): keyof typeof variable;\r\nexport {};\r\n",
+        "signature": "881159974-import { MyNominal } from '../sub-project/index';\r\ndeclare const variable: {\r\n    key: MyNominal;\r\n};\r\nexport declare function getVar(): keyof typeof variable;\r\nexport {};\r\n",
         "affectsGlobalScope": false
       }
     },
@@ -303,7 +304,7 @@ exports.getVar = getVar;
         "../common/nominal.d.ts"
       ],
       "../../../solution/sub-project-2/index.ts": [
-        "../common/nominal.d.ts"
+        "../sub-project/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [

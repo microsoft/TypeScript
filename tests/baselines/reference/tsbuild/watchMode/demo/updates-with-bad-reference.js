@@ -184,14 +184,30 @@ Output::
 [7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
+    Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
 [7m1[0m import * as A from '../animals';
 [7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
+    [7m1[0m import Animal from '.';
+    [7m [0m [96m                   ~~~[0m
+    File is included via import here.
 
 [96mcore/utilities.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
+    Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
 [7m1[0m import * as A from '../animals';
 [7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
+    [7m1[0m import Animal from '.';
+    [7m [0m [96m                   ~~~[0m
+    File is included via import here.
 
 [[90m12:00:57 AM[0m] Project 'animals/tsconfig.json' can't be built because its dependency 'core' has errors
 
@@ -225,6 +241,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/demo/core/tsconfig.json:
   {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
@@ -417,14 +435,30 @@ Output::
 [7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS6059: [0mFile '/user/username/projects/demo/animals/index.ts' is not under 'rootDir' '/user/username/projects/demo/core'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
+    Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
 [7m2[0m import * as A from '../animals';
 [7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
+    [7m1[0m import Animal from '.';
+    [7m [0m [96m                   ~~~[0m
+    File is included via import here.
 
 [96mcore/utilities.ts[0m:[93m2[0m:[93m20[0m - [91merror[0m[90m TS6307: [0mFile '/user/username/projects/demo/animals/index.ts' is not listed within the file list of project '/user/username/projects/demo/core/tsconfig.json'. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via '../animals' from file '/user/username/projects/demo/core/utilities.ts'
+    Imported via '.' from file '/user/username/projects/demo/animals/dog.ts'
 
 [7m2[0m import * as A from '../animals';
 [7m [0m [91m                   ~~~~~~~~~~~~[0m
+
+  [96manimals/dog.ts[0m:[93m1[0m:[93m20[0m
+    [7m1[0m import Animal from '.';
+    [7m [0m [96m                   ~~~[0m
+    File is included via import here.
 
 [[90m12:01:11 AM[0m] Found 7 errors. Watching for file changes.
 
@@ -446,6 +480,8 @@ Semantic diagnostics in builder refreshed for::
 WatchedFiles::
 /user/username/projects/demo/core/tsconfig.json:
   {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/demo/tsconfig-base.json:
+  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
 /user/username/projects/demo/core/utilities.ts:
   {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
 /user/username/projects/demo/animals/tsconfig.json:
