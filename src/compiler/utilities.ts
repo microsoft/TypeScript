@@ -1329,70 +1329,60 @@ namespace ts {
 
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
-    export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T | undefined {
-
-        return traverse(body);
-
-        function traverse(node: Node): T | undefined {
-            switch (node.kind) {
-                case SyntaxKind.ReturnStatement:
-                    return visitor(<ReturnStatement>node);
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.Block:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                case SyntaxKind.LabeledStatement:
-                case SyntaxKind.TryStatement:
-                case SyntaxKind.CatchClause:
-                    return forEachChild(node, traverse);
-            }
+    export function forEachReturnStatement<T>(node: Node, visitor: (stmt: ReturnStatement) => T): T | undefined {
+        switch (node.kind) {
+            case SyntaxKind.ReturnStatement:
+                return visitor(<ReturnStatement>node);
+            case SyntaxKind.CaseBlock:
+            case SyntaxKind.Block:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.WithStatement:
+            case SyntaxKind.SwitchStatement:
+            case SyntaxKind.CaseClause:
+            case SyntaxKind.DefaultClause:
+            case SyntaxKind.LabeledStatement:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.CatchClause:
+                return forEachChild(node, forEachReturnStatement, /*cbNodes*/ undefined, visitor);
         }
     }
 
-    export function forEachYieldExpression(body: Block, visitor: (expr: YieldExpression) => void): void {
-
-        return traverse(body);
-
-        function traverse(node: Node): void {
-            switch (node.kind) {
-                case SyntaxKind.YieldExpression:
-                    visitor(<YieldExpression>node);
-                    const operand = (<YieldExpression>node).expression;
-                    if (operand) {
-                        traverse(operand);
+    export function forEachYieldExpression(node: Node, visitor: (expr: YieldExpression) => void): void {
+        switch (node.kind) {
+            case SyntaxKind.YieldExpression:
+                visitor(<YieldExpression>node);
+                const operand = (<YieldExpression>node).expression;
+                if (operand) {
+                    forEachYieldExpression(operand, visitor);
+                }
+                return;
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                // These are not allowed inside a generator now, but eventually they may be allowed
+                // as local types. Regardless, skip them to avoid the work.
+                return;
+            default:
+                if (isFunctionLike(node)) {
+                    if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
+                        // Note that we will not include methods/accessors of a class because they would require
+                        // first descending into the class. This is by design.
+                        forEachYieldExpression(node.name.expression, visitor);
+                        return;
                     }
-                    return;
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                    // These are not allowed inside a generator now, but eventually they may be allowed
-                    // as local types. Regardless, skip them to avoid the work.
-                    return;
-                default:
-                    if (isFunctionLike(node)) {
-                        if (node.name && node.name.kind === SyntaxKind.ComputedPropertyName) {
-                            // Note that we will not include methods/accessors of a class because they would require
-                            // first descending into the class. This is by design.
-                            traverse(node.name.expression);
-                            return;
-                        }
-                    }
-                    else if (!isPartOfTypeNode(node)) {
-                        // This is the general case, which should include mostly expressions and statements.
-                        // Also includes NodeArrays.
-                        forEachChild(node, traverse);
-                    }
-            }
-        }
+                }
+                else if (!isPartOfTypeNode(node)) {
+                    // This is the general case, which should include mostly expressions and statements.
+                    // Also includes NodeArrays.
+                    forEachChild(node, forEachYieldExpression, /*cbNodes*/ undefined, visitor);
+                }
+    }
     }
 
     /**
