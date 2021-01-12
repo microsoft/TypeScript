@@ -80,6 +80,7 @@ namespace ts {
      * @param node a given node to visit its children
      * @param cbNode a callback to be invoked for all child nodes
      * @param cbNodes a callback to be invoked for embedded array
+     * @param state a value that is passed with each invocation of 'cbNode' and 'cbNodes'
      *
      * @remarks `forEachChild` must visit the children of a node in the order
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
@@ -566,64 +567,57 @@ namespace ts {
      * @param node a given node to visit its children
      * @param cbNode a callback to be invoked for all child nodes
      * @param cbNodes a callback to be invoked for embedded array
+     * @param state a value that is passed with each invocation of 'cbNode' and 'cbNodes'
      *
      * @remarks Unlike `forEachChild`, `forEachChildRecursively` handles recursively invoking the traversal on each child node found,
      * and while doing so, handles traversing the structure without relying on the callstack to encode the tree structure.
      */
-    export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, parent: Node) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node) => T | "skip" | undefined): T | undefined {
-
-        const stack: Node[] = [rootNode];
-        while (stack.length) {
-            const parent = stack.pop()!;
-            const res = visitAllPossibleChildren(parent, gatherPossibleChildren(parent));
-            if (res) {
-                return res;
-            }
+    export function forEachChildRecursively<T, S>(rootNode: Node, cbNode: (node: Node, parent: Node, state: S) => T | "skip" | undefined, cbNodes: ((nodes: NodeArray<Node>, parent: Node, state: S) => T | "skip" | undefined) | undefined, state: S): T | undefined;
+    /** @internal */
+    export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, parent: Node) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node) => T | "skip" | undefined): T | undefined;
+    export function forEachChildRecursively<T, S>(rootNode: Node, cbNode: (node: Node, parent: Node, state: S | undefined) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node, state: S | undefined) => T | "skip" | undefined, state?: S): T | undefined {
+        const queue: Array<Node | NodeArray<Node>> = [];
+        const parents: Node[] = []; // tracks parent references for elements in queue
+        forEachChild(rootNode, addWorkItem, addWorkItem, queue);
+        while (parents.length < queue.length) {
+            parents.push(rootNode);
         }
-
-        return;
-
-        function gatherPossibleChildren(node: Node) {
-            const children: (Node | NodeArray<Node>)[] = [];
-            forEachChild(node, addWorkItem, addWorkItem); // By using a stack above and `unshift` here, we emulate a depth-first preorder traversal
-            return children;
-
-            function addWorkItem(n: Node | NodeArray<Node>) {
-                children.unshift(n);
-            }
-        }
-
-        function visitAllPossibleChildren(parent: Node, children: readonly (Node | NodeArray<Node>)[]) {
-            for (const child of children) {
-                if (isArray(child)) {
-                    if (cbNodes) {
-                        const res = cbNodes(child, parent);
-                        if (res) {
-                            if (res === "skip") continue;
-                            return res;
-                        }
-                    }
-
-                    for (let i = child.length - 1; i >= 0; i--) {
-                        const realChild = child[i];
-                        const res = cbNode(realChild, parent);
-                        if (res) {
-                            if (res === "skip") continue;
-                            return res;
-                        }
-                        stack.push(realChild);
-                    }
-                }
-                else {
-                    stack.push(child);
-                    const res = cbNode(child, parent);
+        while (queue.length !== 0) {
+            const current = queue.pop()!;
+            const parent = parents.pop()!;
+            if (isArray(current)) {
+                if (cbNodes) {
+                    const res = cbNodes(current, parent, state);
                     if (res) {
                         if (res === "skip") continue;
                         return res;
                     }
                 }
+                for (let i = current.length - 1; i >= 0; --i) {
+                    queue.push(current[i]);
+                    parents.push(parent);
+                }
+            } else {
+                const res = cbNode(current, parent, state);
+                if (res) {
+                    if (res === 'skip') continue;
+                    return res;
+                }
+                if (current.kind >= SyntaxKind.FirstNode) {
+                    const children: Array<Node | NodeArray<Node>> = [];
+                    forEachChild(current, addWorkItem, addWorkItem, children);
+                    // add children in reverse order to the queue, so popping gives the first child
+                    for (const child of children) {
+                        queue.push(child);
+                        parents.push(current);
+                    }
+                }
             }
         }
+    }
+
+    function addWorkItem(n: Node | NodeArray<Node>, children: Array<Node | NodeArray<Node>>) {
+        children.unshift(n);
     }
 
     export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
