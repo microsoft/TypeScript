@@ -7066,4 +7066,54 @@ namespace ts {
             return false;
         }
     }
+
+    /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
+    export function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
+        let current: Node = sourceFile;
+        const getContainingChild = (child: Node) => {
+            if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+                return child;
+            }
+        };
+        while (true) {
+            const child = isSourceFileJS(sourceFile) && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+            if (!child) {
+                return current;
+            }
+            current = child;
+        }
+    }
+
+    export function nodeIsFirstNodeAtOrAfterPosition(sourceFile: SourceFile, node: Node, position: number): boolean {
+        if (node.pos === position) return true;
+        if (node.pos < position) return false;
+        let current: Node = sourceFile;
+        let next: Node | undefined;
+        const getContainingChild = (child: Node) => {
+            if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+                return child;
+            }
+            else if (!next && child.pos > position) {
+                next = child;
+            }
+        };
+        while (true) {
+            const child = isSourceFileJS(sourceFile) && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+            if (child === node || next === node) {
+                return true;
+            }
+            if (!child) {
+                if (next) {
+                    // 'position' fell between two nodes (e.g., the comma between
+                    // two ImportSpecifiers). Instead of stopping at the parent node,
+                    // shift forward to the next node and continue searching there.
+                    position = next.pos;
+                    next = undefined;
+                    continue;
+                }
+                return false;
+            }
+            current = child;
+        }
+    }
 }

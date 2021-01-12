@@ -920,7 +920,7 @@ namespace ts {
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
         let currentLineMap: readonly number[] | undefined;
-        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
+        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number }[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
         let lastNode: Node | undefined;
@@ -4490,7 +4490,7 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
+                else if (siblingNodePositionsAreComparable(previousNode, nextNode)) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenRangeEndAndRangeStart(
@@ -4509,6 +4509,28 @@ namespace ts {
                 return 1;
             }
             return format & ListFormat.MultiLine ? 1 : 0;
+        }
+
+        function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
+            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode) || previousNode.parent !== nextNode.parent) {
+                return false;
+            }
+
+            if (nextNode.pos < previousNode.end) {
+                return false;
+            }
+
+            if (!previousNode.parent || !nextNode.parent) {
+                const previousParent = getOriginalNode(previousNode).parent;
+                return previousParent && previousParent === getOriginalNode(nextNode).parent;
+            }
+
+            // Get the next specifier and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
+            if (!nodeIsFirstNodeAtOrAfterPosition(currentSourceFile!, getOriginalNode(nextNode), previousNode.end)) {
+            return false;
+            }
+
+            return true;
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
@@ -4661,7 +4683,7 @@ namespace ts {
                     const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                     return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                         neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
-                        `"${escapeNonAsciiString(text)}"`;
+                            `"${escapeNonAsciiString(text)}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
