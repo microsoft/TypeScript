@@ -1625,7 +1625,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of an 'in' expression must not be a primitive.": {
         "category": "Error",
         "code": 2361
     },
