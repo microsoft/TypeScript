@@ -35732,7 +35732,7 @@ namespace ts {
                     if (produceDiagnostics) {
                         if (node.default) {
                             seenDefault = true;
-                            checkTypeParametersNotReferenced(node.default, {typeParameters: typeParameterDeclarations, index: i});
+                            checkTypeParametersNotReferenced(node.default, { typeParameters: typeParameterDeclarations, index: i });
                         }
                         else if (seenDefault) {
                             error(node, Diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters);

@@ -85,7 +85,7 @@ namespace ts {
      * @remarks `forEachChild` must visit the children of a node in the order
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
      */
-    export function forEachChild<T, S>(node: Node, cbNode: (node: Node, state: S) => T | undefined, cbNodes: ((nodes: NodeArray<Node>, state: S) => T | undefined) | undefined, state: S): T | undefined
+    export function forEachChild<T, S>(node: Node, cbNode: (node: Node, state: S) => T | undefined, cbNodes: ((nodes: NodeArray<Node>, state: S) => T | undefined) | undefined, state: S): T | undefined;
     export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     export function forEachChild<T, S>(node: Node, cbNode: (node: Node, state: S | undefined) => T | undefined, cbNodes?: (nodes: NodeArray<Node>, state: S | undefined) => T | undefined, state?: S): T | undefined {
         if (!node || node.kind <= SyntaxKind.LastToken) {
@@ -576,7 +576,7 @@ namespace ts {
     /** @internal */
     export function forEachChildRecursively<T>(rootNode: Node, cbNode: (node: Node, parent: Node) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node) => T | "skip" | undefined): T | undefined;
     export function forEachChildRecursively<T, S>(rootNode: Node, cbNode: (node: Node, parent: Node, state: S | undefined) => T | "skip" | undefined, cbNodes?: (nodes: NodeArray<Node>, parent: Node, state: S | undefined) => T | "skip" | undefined, state?: S): T | undefined {
-        const queue: Array<Node | NodeArray<Node>> = [];
+        const queue: (Node | NodeArray<Node>)[] = [];
         const parents: Node[] = []; // tracks parent references for elements in queue
         forEachChild(rootNode, addWorkItem, addWorkItem, queue);
         while (parents.length < queue.length) {
@@ -597,14 +597,15 @@ namespace ts {
                     queue.push(current[i]);
                     parents.push(parent);
                 }
-            } else {
+            }
+            else {
                 const res = cbNode(current, parent, state);
                 if (res) {
-                    if (res === 'skip') continue;
+                    if (res === "skip") continue;
                     return res;
                 }
                 if (current.kind >= SyntaxKind.FirstNode) {
-                    const children: Array<Node | NodeArray<Node>> = [];
+                    const children: (Node | NodeArray<Node>)[] = [];
                     forEachChild(current, addWorkItem, addWorkItem, children);
                     // add children in reverse order to the queue, so popping gives the first child
                     for (const child of children) {
@@ -616,7 +617,7 @@ namespace ts {
         }
     }
 
-    function addWorkItem(n: Node | NodeArray<Node>, children: Array<Node | NodeArray<Node>>) {
+    function addWorkItem(n: Node | NodeArray<Node>, children: (Node | NodeArray<Node>)[]) {
         children.unshift(n);
     }
 

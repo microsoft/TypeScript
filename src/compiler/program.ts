@@ -1972,7 +1972,7 @@ namespace ts {
         function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
-                forEachChildRecursively(sourceFile, checkJSSyntaxOfNode, checkJSSyntaxOfNodeArray, {diagnostics, sourceFile});
+                forEachChildRecursively(sourceFile, checkJSSyntaxOfNode, checkJSSyntaxOfNodeArray, { diagnostics, sourceFile });
                 return diagnostics;
             });
         }
