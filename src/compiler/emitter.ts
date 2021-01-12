@@ -1245,25 +1245,25 @@ namespace ts {
                     if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                         return pipelineEmitWithNotification;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.Substitution:
                     if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
                         return pipelineEmitWithSubstitution;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.Comments:
                     if (!commentsDisabled && node.kind !== SyntaxKind.SourceFile) {
                         return pipelineEmitWithComments;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.SourceMaps:
                     if (!sourceMapsDisabled && node.kind !== SyntaxKind.SourceFile && !isInJsonFile(node)) {
                         return pipelineEmitWithSourceMap;
                     }
-                    // falls through
+                // falls through
 
                 case PipelinePhase.Emit:
                     return pipelineEmitWithHint;
@@ -4492,8 +4492,8 @@ namespace ts {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenRangeEndAndRangeStart(
-                                getOriginalNode(previousNode),
-                                getOriginalNode(nextNode),
+                                previousNode,
+                                nextNode,
                                 currentSourceFile!,
                                 includeComments));
                     }
@@ -4510,25 +4510,30 @@ namespace ts {
         }
 
         function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
-            if (previousNode.kind === SyntaxKind.NotEmittedStatement && nextNode.kind === SyntaxKind.NotEmittedStatement) {
-                return false;
-            }
-            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
+            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode) || previousNode.parent !== nextNode.parent) {
                 return false;
             }
 
-            // Get the position next node and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
-            const originalNextNode = getNodeAtPosition(currentSourceFile!, previousNode.end + 1);
-            if (originalNextNode.pos !== nextNode.pos) {
-                return false;
+            if (isImportSpecifier(previousNode)) {
+                const getNextSpecifier = (node: ImportSpecifier): ImportSpecifier | undefined => {
+                    if (!node.parent) {
+                        return;
+                    }
+                    for (const sibling of node.parent.elements) {
+                        if (node.pos < sibling.pos) {
+                            return sibling;
+                        }
+                    }
+                };
+
+                // Get the next specifier and compare against nextNode. If they are not equal, nodes have been rearranged and positions cannot be compared.
+                const nextSpecifier = getNextSpecifier(previousNode);
+                if (nextSpecifier && nextSpecifier !== nextNode) {
+                    return false;
+                }
             }
 
-            if (!previousNode.parent || !nextNode.parent) {
-                const previousParent = getOriginalNode(previousNode).parent;
-                return previousParent && previousParent === getOriginalNode(nextNode).parent;
-            }
-
-            return nextNode.pos >= previousNode.end;
+            return true;
         }
 
         function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
