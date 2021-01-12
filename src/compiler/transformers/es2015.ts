@@ -983,16 +983,17 @@ namespace ts {
             // In derived classes, there may be code before the necessary super() call
             // We'll remove pre-super statements to be tacked on after the rest of the body
             const existingPrologue = takeWhile(constructor.body.statements, isPrologueDirective);
-            const { bodyStatements, superCall, superStatementIndex } = splitConstructorBodyStatementsOnSuper(constructor.body.statements, existingPrologue);
+            const { superCall, superStatementIndex } = splitConstructorBodyStatementsOnSuper(constructor.body.statements, existingPrologue);
+            const postSuperStatementsStart = superStatementIndex === -1 ? existingPrologue.length : superStatementIndex + 1;
 
             // If a super call has already been synthesized,
             // we're going to assume that we should just transform everything after that.
             // The assumption is that no prior step in the pipeline has added any prologue directives.
-            let statementOffset = 0;
-            if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(bodyStatements, prologue, /*ensureUseStrict*/ false);
+            let statementOffset = postSuperStatementsStart;
+            if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, statementOffset, /*ensureUseStrict*/ false);
             addDefaultValueAssignmentsIfNeeded(statements, constructor);
             addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
-            if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(bodyStatements, statements, statementOffset, visitor);
+            if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor, /*filter*/ undefined);
 
             // If there already exists a call to `super()`, visit the statement directly
             let superCallExpression: Expression | undefined;
@@ -1008,13 +1009,13 @@ namespace ts {
             }
 
             // visit the remaining statements
-            addRange(statements, visitNodes(bodyStatements, visitor, isStatement, /*start*/ statementOffset));
+            addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
 
             factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
             if (isDerivedClass || superCallExpression) {
-                if (superCallExpression && bodyStatements.length === 0 && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+                if (superCallExpression && postSuperStatementsStart === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                     // following representation:
                     //
@@ -1125,7 +1126,6 @@ namespace ts {
                 if (superCall) {
                     // With a super() call, split the statements into pre-super() and 'body' (post-super())
                     return {
-                        bodyStatements: factory.createNodeArray(originalBodyStatements.slice(i + 1)),
                         superCall,
                         superStatementIndex: i,
                     };
@@ -1134,7 +1134,6 @@ namespace ts {
 
             // Since there was no super() call found, consider all statements to be in the main 'body' (post-super())
             return {
-                bodyStatements: factory.createNodeArray(originalBodyStatements.slice(existingPrologue.length)),
                 superStatementIndex: -1,
             };
         }
@@ -1938,7 +1937,7 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
-                statementOffset = factory.copyStandardPrologue(body.statements, prologue, /*ensureUseStrict*/ false);
+                statementOffset = factory.copyStandardPrologue(body.statements, prologue, 0, /*ensureUseStrict*/ false);
                 statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedFunction);
                 statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedVariableStatement);
             }
