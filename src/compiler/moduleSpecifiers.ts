@@ -278,7 +278,7 @@ namespace ts.moduleSpecifiers {
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         if (!preferSymlinks) {
-            // Symlinks inside node_modules/.pnpm are already filtered out of the symlink cache,
+            // Symlinks inside ignored paths are already filtered out of the symlink cache,
             // so we only need to remove them from the realpath filenames.
             const result = forEach(targets, p => !containsIgnoredPath(p) && cb(p, referenceRedirect === p));
             if (result) return result;
