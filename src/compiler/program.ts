@@ -3756,7 +3756,7 @@ namespace ts {
         }
 
         function handleDirectoryCouldBeSymlink(directory: string) {
-            if (!host.getResolvedProjectReferences()) return;
+            if (!host.getResolvedProjectReferences() || containsIgnoredPath(directory)) return;
 
             // Because we already watch node_modules, handle symlinks in there
             if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;

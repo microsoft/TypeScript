@@ -6092,7 +6092,14 @@ namespace ts {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
             setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
-            setSymlinkedDirectory: (path, directory) => (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory),
+            setSymlinkedDirectory: (path, directory) => {
+                // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
+                // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
+                // this path is never a candidate for a module specifier, we can ignore it entirely.
+                if (!containsIgnoredPath(path)) {
+                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(path, directory);
+                }
+            }
         };
     }
 
@@ -7065,5 +7072,9 @@ namespace ts {
             }
             return false;
         }
+    }
+
+    export function containsIgnoredPath(path: string) {
+        return some(ignoredPaths, p => stringContains(path, p));
     }
 }
