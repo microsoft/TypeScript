@@ -1245,25 +1245,25 @@ namespace ts {
                     if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                         return pipelineEmitWithNotification;
                     }
-                // falls through
+                    // falls through
 
                 case PipelinePhase.Substitution:
                     if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
                         return pipelineEmitWithSubstitution;
                     }
-                // falls through
+                    // falls through
 
                 case PipelinePhase.Comments:
                     if (!commentsDisabled && node.kind !== SyntaxKind.SourceFile) {
                         return pipelineEmitWithComments;
                     }
-                // falls through
+                    // falls through
 
                 case PipelinePhase.SourceMaps:
                     if (!sourceMapsDisabled && node.kind !== SyntaxKind.SourceFile && !isInJsonFile(node)) {
                         return pipelineEmitWithSourceMap;
                     }
-                // falls through
+                    // falls through
 
                 case PipelinePhase.Emit:
                     return pipelineEmitWithHint;
