@@ -65,21 +65,21 @@ function foo() {
 >C : typeof C
 
         v // Validator & Partial<OnChanges> & C
->v : Validator & Partial<OnChanges> & C
+>v : C
     }
     v // Validator & Partial<OnChanges> via subtype reduction
->v : Validator & Partial<OnChanges>
+>v : C | (Validator & Partial<OnChanges>)
 
     if (v.onChanges) {
->v.onChanges : ((changes: Record<string, unknown>) => void) | undefined
->v : Validator & Partial<OnChanges>
->onChanges : ((changes: Record<string, unknown>) => void) | undefined
+>v.onChanges : any
+>v : C | (Validator & Partial<OnChanges>)
+>onChanges : any
 
         v.onChanges({});
->v.onChanges({}) : void
->v.onChanges : (changes: Record<string, unknown>) => void
->v : Validator & Partial<OnChanges>
->onChanges : (changes: Record<string, unknown>) => void
+>v.onChanges({}) : any
+>v.onChanges : any
+>v : C | (Validator & Partial<OnChanges>)
+>onChanges : any
 >{} : {}
     }
 }

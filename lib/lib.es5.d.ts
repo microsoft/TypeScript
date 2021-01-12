@@ -1408,7 +1408,7 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): arg is any[];
+    isArray(arg: any): arg is readonly unknown[];
     readonly prototype: any[];
 }
 
