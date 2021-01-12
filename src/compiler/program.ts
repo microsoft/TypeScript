@@ -1649,6 +1649,7 @@ namespace ts {
                 getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo(),
                 getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
                 redirectTargetsMap,
+                getFileIncludeReasons: program.getFileIncludeReasons,
             };
         }
 
@@ -3180,11 +3181,6 @@ namespace ts {
                 }
             }
 
-            // Without a package name, for multiple files being bundled into a .d.ts file you basically get a file which doesn't wrk
-            if (outputFile && getEmitDeclarations(options) && getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeJs && !options.bundledPackageName) {
-                createDiagnosticForOptionName(Diagnostics.The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_declaration_emit, options.out ? "out" : "outFile");
-            }
-
             if (options.resolveJsonModule) {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
@@ -3973,7 +3969,8 @@ namespace ts {
         return res;
     }
 
-    function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: SourceFile, index: number): StringLiteralLike {
+    /* @internal */
+    export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: SourceFile, index: number): StringLiteralLike {
         if (index < imports.length) return imports[index];
         let augIndex = imports.length;
         for (const aug of moduleAugmentations) {

@@ -95,7 +95,7 @@ function fail(s: Shapes) {
         if (s.kind === "circle") {
 >s.kind === "circle" : boolean
 >s.kind : "square" | "circle"
->s : Shape
+>s : Square | Circle
 >kind : "square" | "circle"
 >"circle" : "circle"
 

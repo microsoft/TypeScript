@@ -4745,6 +4745,8 @@ namespace ts {
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
         instantiations?: ESMap<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
+        aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
+        aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
         inferredClassSymbol?: ESMap<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
         referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
@@ -5008,7 +5010,7 @@ namespace ts {
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         /* @internal */
-        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
+        NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | Object | Intersection | Instantiable,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
         IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral,
@@ -5172,6 +5174,7 @@ namespace ts {
         /* @internal */ constructSignatures?: readonly Signature[]; // Construct signatures of type
         /* @internal */ stringIndexInfo?: IndexInfo;      // String indexing info
         /* @internal */ numberIndexInfo?: IndexInfo;      // Numeric indexing info
+        /* @internal */ objectTypeWithoutAbstractConstructSignatures?: ObjectType;
     }
 
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
@@ -5295,9 +5298,11 @@ namespace ts {
 
     export interface UnionType extends UnionOrIntersectionType {
         /* @internal */
-        resolvedReducedType: Type;
+        resolvedReducedType?: Type;
         /* @internal */
-        regularType: UnionType;
+        regularType?: UnionType;
+        /* @internal */
+        origin?: Type;  // Denormalized union, intersection, or index type in which union originates
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -5505,16 +5510,21 @@ namespace ts {
     /* @internal */
     export const enum SignatureFlags {
         None = 0,
+
+        // Propagating flags
         HasRestParameter = 1 << 0,          // Indicates last parameter is rest parameter
         HasLiteralTypes = 1 << 1,           // Indicates signature is specialized
-        IsInnerCallChain = 1 << 2,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
-        IsOuterCallChain = 1 << 3,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
-        IsUntypedSignatureInJSFile = 1 << 4, // Indicates signature is from a js file and has no types
+        Abstract = 1 << 2,                  // Indicates signature comes from an abstract class, abstract construct signature, or abstract constructor type
 
-        // We do not propagate `IsInnerCallChain` to instantiated signatures, as that would result in us
+        // Non-propagating flags
+        IsInnerCallChain = 1 << 3,          // Indicates signature comes from a CallChain nested in an outer OptionalChain
+        IsOuterCallChain = 1 << 4,          // Indicates signature comes from a CallChain that is the outermost chain of an optional expression
+        IsUntypedSignatureInJSFile = 1 << 5, // Indicates signature is from a js file and has no types
+
+        // We do not propagate `IsInnerCallChain` or `IsOuterCallChain` to instantiated signatures, as that would result in us
         // attempting to add `| undefined` on each recursive call to `getReturnTypeOfSignature` when
         // instantiating the return type.
-        PropagatingFlags = HasRestParameter | HasLiteralTypes | IsUntypedSignatureInJSFile,
+        PropagatingFlags = HasRestParameter | HasLiteralTypes | Abstract | IsUntypedSignatureInJSFile,
 
         CallChainFlags = IsInnerCallChain | IsOuterCallChain,
     }
@@ -5820,7 +5830,6 @@ namespace ts {
         /** An error if set - this should only go through the -b pipeline and not actually be observed */
         /*@internal*/
         build?: boolean;
-        bundledPackageName?: string;
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
@@ -6879,7 +6888,11 @@ namespace ts {
         updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined): TypeReferenceNode;
         createFunctionTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode;
         updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): FunctionTypeNode;
+        createConstructorTypeNode(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
+        /** @deprecated */
         createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
+        updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
+        /** @deprecated */
         updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         createTypeQueryNode(exprName: EntityName): TypeQueryNode;
         updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
@@ -7944,7 +7957,7 @@ namespace ts {
         readonly redirectTargetsMap: RedirectTargetsMap;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        getCompilerOptions(): CompilerOptions;
+        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

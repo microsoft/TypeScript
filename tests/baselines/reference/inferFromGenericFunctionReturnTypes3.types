@@ -176,7 +176,7 @@ export type DiagnosticSeverity = 1 | 2 | 3 | 4;
 
 export interface Diagnostic {
 	severity?: DiagnosticSeverity;
->severity : 1 | 2 | 3 | 4 | undefined
+>severity : DiagnosticSeverity | undefined
 
 	code?: number | string;
 >code : string | number | undefined
@@ -312,10 +312,10 @@ let zz: Box<WinCondition> = box({ type: 'draw' });
 >'draw' : "draw"
 
 type WinType = 'win' | 'draw';
->WinType : "win" | "draw"
+>WinType : WinType
 
 let yy: Box<WinType> = box('draw');
->yy : Box<"win" | "draw">
+>yy : Box<WinType>
 >box('draw') : Box<"draw">
 >box : <T>(value: T) => Box<T>
 >'draw' : "draw"

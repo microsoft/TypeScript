@@ -104,8 +104,8 @@ function fn4(x: Base|Derived2) {
 		// 1.5: y: {}
 		// Want: Derived1
 		let y = x;
->y : (Base & Derived1) | (Derived2 & Derived1)
->x : (Base & Derived1) | (Derived2 & Derived1)
+>y : (Base | Derived2) & Derived1
+>x : (Base | Derived2) & Derived1
 	}
 }
 

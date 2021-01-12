@@ -1625,7 +1625,7 @@
         "category": "Error",
         "code": 2360
     },
-    "The right-hand side of an 'in' expression must be of type 'any', an object type or a type parameter.": {
+    "The right-hand side of an 'in' expression must not be a primitive.": {
         "category": "Error",
         "code": 2361
     },
@@ -3230,6 +3230,10 @@
     "It is likely that you are missing a comma to separate these two template expressions. They form a tagged template expression which cannot be invoked.": {
         "category": "Error",
         "code": 2796
+    },
+    "A mixin class that extends from a type variable containing an abstract construct signature must also be declared 'abstract'.": {
+        "category": "Error",
+        "code": 2797
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -6191,6 +6195,23 @@
         "category": "Message",
         "code": 95155
     },
+    "Add missing function declaration '{0}'": {
+        "category": "Message",
+        "code": 95156
+    },
+    "Add all missing function declarations": {
+        "category": "Message",
+        "code": 95157
+    },
+    "Method not implemented.": {
+        "category": "Message",
+        "code": 95158
+    },
+    "Function not implemented.": {
+        "category": "Message",
+        "code": 95159
+    },
+
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
