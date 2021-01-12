@@ -1957,15 +1957,43 @@ interface WaveShaperOptions extends AudioNodeOptions {
 interface WebAuthnExtensions {
 }
 
+/** Contains drawing surface attributes and is passed as the second parameter to getContext. */
 interface WebGLContextAttributes {
+    /**
+    * Whether the canvas contains an alpha (transparency) buffer. Default is true.
+    */
     alpha?: boolean;
+    /**
+    * Whether to perform antialiasing. Default is true.
+    */
     antialias?: boolean;
+    /**
+    * Whether the drawing buffer has a depth buffer of at least 16 bits. Default is true.
+    */
     depth?: boolean;
+    /**
+    * Whether the canvas paint cycle will render seperately from the DOM event loop. Default is false.
+    */
     desynchronized?: boolean;
+    /**
+    * Whether context creation will fail if potential low perfomance is detected. Default is false. 
+    */
     failIfMajorPerformanceCaveat?: boolean;
+    /**
+    * Indicates the most suitable GPU configuration to the user agent. Can be "high-performance", "low-power" or "default". Default is "default".
+    */
     powerPreference?: WebGLPowerPreference;
+    /**
+    * Whether the renderer will assume that colors have premultiplied alpha. Default is true.
+    */
     premultipliedAlpha?: boolean;
+    /**
+    * Whether to preserve the drawing buffer until manually cleared or overwritten. Default is false.
+    */
     preserveDrawingBuffer?: boolean;
+    /**
+    * Whether the drawing buffer has a stencil buffer of at least 8 bits. Default is false.
+    */
     stencil?: boolean;
 }
 
