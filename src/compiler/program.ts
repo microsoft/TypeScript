@@ -1972,195 +1972,184 @@ namespace ts {
         function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
-                walk(sourceFile, sourceFile);
-                forEachChildRecursively(sourceFile, walk, walkArray);
-
+                forEachChildRecursively(sourceFile, checkJSSyntaxOfNode, checkJSSyntaxOfNodeArray, {diagnostics, sourceFile});
                 return diagnostics;
-
-                function walk(node: Node, parent: Node) {
-                    // Return directly from the case if the given node doesnt want to visit each child
-                    // Otherwise break to visit each child
-
-                    switch (parent.kind) {
-                        case SyntaxKind.Parameter:
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.MethodDeclaration:
-                            if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
-                                return "skip";
-                            }
-                        // falls through
-                        case SyntaxKind.MethodSignature:
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.VariableDeclaration:
-                            // type annotation
-                            if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files));
-                                return "skip";
-                            }
-                    }
-
-                    switch (node.kind) {
-                        case SyntaxKind.ImportClause:
-                            if ((node as ImportClause).isTypeOnly) {
-                                diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.ExportDeclaration:
-                            if ((node as ExportDeclaration).isTypeOnly) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "export type"));
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.ImportEqualsDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
-                            return "skip";
-                        case SyntaxKind.ExportAssignment:
-                            if ((<ExportAssignment>node).isExportEquals) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.HeritageClause:
-                            const heritageClause = <HeritageClause>node;
-                            if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
-                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.InterfaceDeclaration:
-                            const interfaceKeyword = tokenToString(SyntaxKind.InterfaceKeyword);
-                            Debug.assertIsDefined(interfaceKeyword);
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, interfaceKeyword));
-                            return "skip";
-                        case SyntaxKind.ModuleDeclaration:
-                            const moduleKeyword = node.flags & NodeFlags.Namespace ? tokenToString(SyntaxKind.NamespaceKeyword) : tokenToString(SyntaxKind.ModuleKeyword);
-                            Debug.assertIsDefined(moduleKeyword);
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, moduleKeyword));
-                            return "skip";
-                        case SyntaxKind.TypeAliasDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
-                            return "skip";
-                        case SyntaxKind.EnumDeclaration:
-                            const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
-                            return "skip";
-                        case SyntaxKind.NonNullExpression:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
-                            return "skip";
-                        case SyntaxKind.AsExpression:
-                            diagnostics.push(createDiagnosticForNode((node as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
-                            return "skip";
-                        case SyntaxKind.TypeAssertionExpression:
-                            Debug.fail(); // Won't parse these in a JS file anyway, as they are interpreted as JSX.
-                    }
-                }
-
-                function walkArray(nodes: NodeArray<Node>, parent: Node) {
-                    if (parent.decorators === nodes && !options.experimentalDecorators) {
-                        diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
-                    }
-
-                    switch (parent.kind) {
-                        case SyntaxKind.ClassDeclaration:
-                        case SyntaxKind.ClassExpression:
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.Constructor:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                        case SyntaxKind.FunctionExpression:
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ArrowFunction:
-                            // Check type parameters
-                            if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
-                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
-                                return "skip";
-                            }
-                        // falls through
-
-                        case SyntaxKind.VariableStatement:
-                            // Check modifiers
-                            if (nodes === parent.modifiers) {
-                                checkModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement);
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.PropertyDeclaration:
-                            // Check modifiers of property declaration
-                            if (nodes === (<PropertyDeclaration>parent).modifiers) {
-                                for (const modifier of <NodeArray<Modifier>>nodes) {
-                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
-                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
-                                    }
-                                }
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.Parameter:
-                            // Check modifiers of parameter declaration
-                            if (nodes === (<ParameterDeclaration>parent).modifiers) {
-                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
-                                return "skip";
-                            }
-                            break;
-                        case SyntaxKind.CallExpression:
-                        case SyntaxKind.NewExpression:
-                        case SyntaxKind.ExpressionWithTypeArguments:
-                        case SyntaxKind.JsxSelfClosingElement:
-                        case SyntaxKind.JsxOpeningElement:
-                        case SyntaxKind.TaggedTemplateExpression:
-                            // Check type arguments
-                            if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
-                                diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
-                                return "skip";
-                            }
-                            break;
-                    }
-                }
-
-                function checkModifiers(modifiers: NodeArray<Modifier>, isConstValid: boolean) {
-                    for (const modifier of modifiers) {
-                        switch (modifier.kind) {
-                            case SyntaxKind.ConstKeyword:
-                                if (isConstValid) {
-                                    continue;
-                                }
-                            // to report error,
-                            // falls through
-                            case SyntaxKind.PublicKeyword:
-                            case SyntaxKind.PrivateKeyword:
-                            case SyntaxKind.ProtectedKeyword:
-                            case SyntaxKind.ReadonlyKeyword:
-                            case SyntaxKind.DeclareKeyword:
-                            case SyntaxKind.AbstractKeyword:
-                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
-                                break;
-
-                            // These are all legal modifiers.
-                            case SyntaxKind.StaticKeyword:
-                            case SyntaxKind.ExportKeyword:
-                            case SyntaxKind.DefaultKeyword:
-                        }
-                    }
-                }
-
-                function createDiagnosticForNodeArray(nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
-                    const start = nodes.pos;
-                    return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2);
-                }
-
-                // Since these are syntactic diagnostics, parent might not have been set
-                // this means the sourceFile cannot be infered from the node
-                function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
-                    return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2);
-                }
             });
+        }
+
+        function checkJSSyntaxOfNode(node: Node, parent: Node, context: {diagnostics: DiagnosticWithLocation[], sourceFile: SourceFile}) {
+            switch (parent.kind) {
+                case SyntaxKind.Parameter:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                    if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
+                        return "skip";
+                    }
+                // falls through
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.VariableDeclaration:
+                    // type annotation
+                    if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    }
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.ImportClause:
+                    if ((node as ImportClause).isTypeOnly) {
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.ExportDeclaration:
+                    if ((node as ExportDeclaration).isTypeOnly) {
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "export type"));
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.ImportEqualsDeclaration:
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
+                    return "skip";
+                case SyntaxKind.ExportAssignment:
+                    if ((<ExportAssignment>node).isExportEquals) {
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.HeritageClause:
+                    const heritageClause = <HeritageClause>node;
+                    if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.InterfaceDeclaration:
+                    const interfaceKeyword = tokenToString(SyntaxKind.InterfaceKeyword);
+                    Debug.assertIsDefined(interfaceKeyword);
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, interfaceKeyword));
+                    return "skip";
+                case SyntaxKind.ModuleDeclaration:
+                    const moduleKeyword = node.flags & NodeFlags.Namespace ? tokenToString(SyntaxKind.NamespaceKeyword) : tokenToString(SyntaxKind.ModuleKeyword);
+                    Debug.assertIsDefined(moduleKeyword);
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, moduleKeyword));
+                    return "skip";
+                case SyntaxKind.TypeAliasDeclaration:
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.Type_aliases_can_only_be_used_in_TypeScript_files));
+                    return "skip";
+                case SyntaxKind.EnumDeclaration:
+                    const enumKeyword = Debug.checkDefined(tokenToString(SyntaxKind.EnumKeyword));
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
+                    return "skip";
+                case SyntaxKind.NonNullExpression:
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
+                    return "skip";
+                case SyntaxKind.AsExpression:
+                    context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, (node as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
+                    return "skip";
+                case SyntaxKind.TypeAssertionExpression:
+                    Debug.fail(); // Won't parse these in a JS file anyway, as they are interpreted as JSX.
+            }
+        }
+
+        function checkJSSyntaxOfNodeArray(nodes: NodeArray<Node>, parent: Node, context: {diagnostics: DiagnosticWithLocation[], sourceFile: SourceFile}) {
+            if (parent.decorators === nodes && !options.experimentalDecorators) {
+                context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
+            }
+
+            switch (parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ArrowFunction:
+                    // Check type parameters
+                    if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
+                        context.diagnostics.push(createDiagnosticForNodeArray(context.sourceFile, nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    }
+                // falls through
+
+                case SyntaxKind.VariableStatement:
+                    // Check modifiers
+                    if (nodes === parent.modifiers) {
+                        checkJSSyntaxModifiers(parent.modifiers, parent.kind === SyntaxKind.VariableStatement, context);
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.PropertyDeclaration:
+                    // Check modifiers of property declaration
+                    if (nodes === (<PropertyDeclaration>parent).modifiers) {
+                        for (const modifier of <NodeArray<Modifier>>nodes) {
+                            if (modifier.kind !== SyntaxKind.StaticKeyword) {
+                                context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
+                            }
+                        }
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.Parameter:
+                    // Check modifiers of parameter declaration
+                    if (nodes === (<ParameterDeclaration>parent).modifiers) {
+                        context.diagnostics.push(createDiagnosticForNodeArray(context.sourceFile, nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    }
+                    break;
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.ExpressionWithTypeArguments:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.TaggedTemplateExpression:
+                    // Check type arguments
+                    if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
+                        context.diagnostics.push(createDiagnosticForNodeArray(context.sourceFile, nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
+                        return "skip";
+                    }
+                    break;
+            }
+        }
+
+        function checkJSSyntaxModifiers(modifiers: NodeArray<Modifier>, isConstValid: boolean, context: {diagnostics: DiagnosticWithLocation[], sourceFile: SourceFile}) {
+            for (const modifier of modifiers) {
+                switch (modifier.kind) {
+                    case SyntaxKind.ConstKeyword:
+                        if (isConstValid) {
+                            continue;
+                        }
+                    // to report error,
+                    // falls through
+                    case SyntaxKind.PublicKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.ReadonlyKeyword:
+                    case SyntaxKind.DeclareKeyword:
+                    case SyntaxKind.AbstractKeyword:
+                        context.diagnostics.push(createDiagnosticForNodeInSourceFile(context.sourceFile, modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
+                        break;
+
+                    // These are all legal modifiers.
+                    case SyntaxKind.StaticKeyword:
+                    case SyntaxKind.ExportKeyword:
+                    case SyntaxKind.DefaultKeyword:
+                }
+            }
+        }
+
+        function createDiagnosticForNodeArray(sourceFile: SourceFile, nodes: NodeArray<Node>, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): DiagnosticWithLocation {
+            const start = nodes.pos;
+            return createFileDiagnostic(sourceFile, start, nodes.end - start, message, arg0, arg1, arg2);
         }
 
         function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {

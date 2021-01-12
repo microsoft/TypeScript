@@ -11899,31 +11899,31 @@ namespace ts {
                     links.containsArgumentsReference = true;
                 }
                 else {
-                    links.containsArgumentsReference = traverse((declaration as FunctionLikeDeclaration).body!);
+                    links.containsArgumentsReference = containsArgumentsReferenceWorker((declaration as FunctionLikeDeclaration).body!);
                 }
             }
             return links.containsArgumentsReference;
+        }
 
-            function traverse(node: Node): boolean {
-                if (!node) return false;
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        return (<Identifier>node).escapedText === argumentsSymbol.escapedName && getResolvedSymbol(<Identifier>node) === argumentsSymbol;
+        function containsArgumentsReferenceWorker(node: Node): boolean {
+            if (!node) return false;
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return (<Identifier>node).escapedText === argumentsSymbol.escapedName && getResolvedSymbol(<Identifier>node) === argumentsSymbol;
 
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return (<NamedDeclaration>node).name!.kind === SyntaxKind.ComputedPropertyName
-                            && traverse((<NamedDeclaration>node).name!);
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return (<NamedDeclaration>node).name!.kind === SyntaxKind.ComputedPropertyName
+                    && containsArgumentsReferenceWorker((<NamedDeclaration>node).name!);
 
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.ElementAccessExpression:
-                        return traverse((<PropertyAccessExpression | ElementAccessExpression>node).expression);
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    return containsArgumentsReferenceWorker((<PropertyAccessExpression | ElementAccessExpression>node).expression);
 
-                    default:
-                        return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && !!forEachChild(node, traverse);
-                }
+                default:
+                    return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && !!forEachChild(node, containsArgumentsReferenceWorker);
             }
         }
 
@@ -15496,14 +15496,16 @@ namespace ts {
             if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
                 const container = tp.symbol.declarations[0].parent;
                 for (let n = node; n !== container; n = n.parent) {
-                    if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((<ConditionalTypeNode>n).extendsType, containsReference)) {
+                    if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((<ConditionalTypeNode>n).extendsType, isTypeParameterPossiblyReferencedWorker, /*cbNodes*/ undefined, tp)) {
                         return true;
                     }
                 }
-                return !!forEachChild(node, containsReference);
+                return !!forEachChild(node, isTypeParameterPossiblyReferencedWorker, /*cbNodes*/ undefined, tp);
             }
             return true;
-            function containsReference(node: Node): boolean {
+        }
+
+        function isTypeParameterPossiblyReferencedWorker(node: Node, tp: TypeParameter): boolean | undefined {
                 switch (node.kind) {
                     case SyntaxKind.ThisType:
                         return !!tp.isThisType;
@@ -15513,8 +15515,7 @@ namespace ts {
                     case SyntaxKind.TypeQuery:
                         return true;
                 }
-                return !!forEachChild(node, containsReference);
-            }
+            return forEachChild(node, isTypeParameterPossiblyReferencedWorker, /*cbNodes*/ undefined, tp);
         }
 
         function getHomomorphicTypeVariable(type: MappedType) {
@@ -23119,7 +23120,7 @@ namespace ts {
             if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
                 links.flags |= NodeCheckFlags.AssignmentsMarked;
                 if (!hasParentWithAssignmentsMarked(func)) {
-                    markParameterAssignments(func);
+                    forEachChildRecursively(func, markParameterAssignments);
                 }
             }
             return symbol.isAssigned || false;
@@ -23137,9 +23138,6 @@ namespace ts {
                         symbol.isAssigned = true;
                     }
                 }
-            }
-            else {
-                forEachChild(node, markParameterAssignments);
             }
         }
 
@@ -35734,7 +35732,7 @@ namespace ts {
                     if (produceDiagnostics) {
                         if (node.default) {
                             seenDefault = true;
-                            checkTypeParametersNotReferenced(node.default, typeParameterDeclarations, i);
+                            checkTypeParametersNotReferenced(node.default, {typeParameters: typeParameterDeclarations, index: i});
                         }
                         else if (seenDefault) {
                             error(node, Diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters);
@@ -35750,21 +35748,18 @@ namespace ts {
         }
 
         /** Check that type parameter defaults only reference previously declared type parameters */
-        function checkTypeParametersNotReferenced(root: TypeNode, typeParameters: readonly TypeParameterDeclaration[], index: number) {
-            visit(root);
-            function visit(node: Node) {
+        function checkTypeParametersNotReferenced(node: Node, tp: {typeParameters: readonly TypeParameterDeclaration[], index: number}) {
                 if (node.kind === SyntaxKind.TypeReference) {
                     const type = getTypeFromTypeReference(<TypeReferenceNode>node);
                     if (type.flags & TypeFlags.TypeParameter) {
-                        for (let i = index; i < typeParameters.length; i++) {
-                            if (type.symbol === getSymbolOfNode(typeParameters[i])) {
+                    for (let i = tp.index; i < tp.typeParameters.length; i++) {
+                        if (type.symbol === getSymbolOfNode(tp.typeParameters[i])) {
                                 error(node, Diagnostics.Type_parameter_defaults_can_only_reference_previously_declared_type_parameters);
                             }
                         }
                     }
                 }
-                forEachChild(node, visit);
-            }
+            forEachChild(node, checkTypeParametersNotReferenced, /*cbNodes*/ undefined, tp);
         }
 
         /** Check that type parameter lists are identical across multiple declarations */
@@ -38574,7 +38569,7 @@ namespace ts {
             }
 
             if (checkChildren) {
-                return !!forEachChild(node, node => isReferencedAliasDeclaration(node, checkChildren));
+                return !!forEachChild(node, isReferencedAliasDeclaration, /*cbNodes*/ undefined, checkChildren);
             }
             return false;
         }

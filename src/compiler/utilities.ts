@@ -6984,28 +6984,28 @@ namespace ts {
     export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined;
     export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined {
         if (!rootNode) return rootNode;
-        forEachChildRecursively(rootNode, isJSDocNode(rootNode) ? bindParentToChildIgnoringJSDoc : bindParentToChild);
+        forEachChildRecursively(rootNode, isJSDocNode(rootNode) ? bindParentToChildIgnoringJSDoc : bindParentToChild, /*cbNodes*/ undefined, incremental);
         return rootNode;
+    }
 
-        function bindParentToChildIgnoringJSDoc(child: Node, parent: Node): void | "skip" {
-            if (incremental && child.parent === parent) {
-                return "skip";
+    function bindParentToChildIgnoringJSDoc(child: Node, parent: Node, incremental: boolean): void | "skip" {
+        if (incremental && child.parent === parent) {
+            return "skip";
+        }
+        setParent(child, parent);
+    }
+
+    function bindJSDoc(child: Node, incremental: boolean) {
+        if (hasJSDocNodes(child)) {
+            for (const doc of child.jsDoc!) {
+                bindParentToChildIgnoringJSDoc(doc, child, incremental);
+                forEachChildRecursively(doc, bindParentToChildIgnoringJSDoc, /*cbNodes*/ undefined, incremental);
             }
-            setParent(child, parent);
         }
+    }
 
-        function bindJSDoc(child: Node) {
-            if (hasJSDocNodes(child)) {
-                for (const doc of child.jsDoc!) {
-                    bindParentToChildIgnoringJSDoc(doc, child);
-                    forEachChildRecursively(doc, bindParentToChildIgnoringJSDoc);
-                }
-            }
-        }
-
-        function bindParentToChild(child: Node, parent: Node) {
-            return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
-        }
+    function bindParentToChild(child: Node, parent: Node, incremental: boolean) {
+        return bindParentToChildIgnoringJSDoc(child, parent, incremental) || bindJSDoc(child, incremental);
     }
 
     function isPackedElement(node: Expression) {
